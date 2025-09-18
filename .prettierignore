@@ -1,0 +1,13 @@
+# deps & builds
+node_modules
+.yarn
+.turbo
+.next
+build
+dist
+.expo
+
+
+# misc
+coverage
+*\.log

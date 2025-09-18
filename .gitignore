@@ -1,8 +1,27 @@
-# Nestjs specific
-/dist
-/node_modules
-/build
-/tmp
+# Node
+node_modules
+
+# Build outputs
+.next
+build
+dist
+.expo
+
+# Yarn
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
+
+
+# Turbo
+.turbo
+
+# Expo RN native projects (generated)
+apps/mobile/ios/
+apps/mobile/android/
 
 # Logs
 logs
@@ -22,3 +41,11 @@ lerna-debug.log*
 # temp directory
 .temp
 .tmp
+.lh
+
+.DS_Store
+.vscode
+.idea
+*.swp
+*.swo
+*.swn
