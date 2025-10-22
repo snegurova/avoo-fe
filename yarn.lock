@@ -24,6 +24,14 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@avoo/store@workspace:packages/store":
+  version: 0.0.0-use.local
+  resolution: "@avoo/store@workspace:packages/store"
+  dependencies:
+    zustand: "npm:^5.0.8"
+  languageName: unknown
+  linkType: soft
+
 "@babel/code-frame@npm:7.10.4, @babel/code-frame@npm:~7.10.4":
   version: 7.10.4
   resolution: "@babel/code-frame@npm:7.10.4"
@@ -3186,7 +3194,7 @@ __metadata:
     eslint: "npm:^9.35.0"
     eslint-config-prettier: "npm:^10.1.8"
     expo: "npm:~51.0.28"
-    husky: "npm:^9.1.7"
+    husky: "npm:^8.0.0"
     lint-staged: "npm:^16.1.6"
     prettier: "npm:^3.6.2"
     react: "npm:18.2.0"
@@ -4756,6 +4764,8 @@ __metadata:
 "eslint-config-avoo@workspace:*, eslint-config-avoo@workspace:packages/eslint-config":
   version: 0.0.0-use.local
   resolution: "eslint-config-avoo@workspace:packages/eslint-config"
+  peerDependencies:
+    eslint: ^9.0.0
   languageName: unknown
   linkType: soft
 
@@ -5970,12 +5980,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"husky@npm:^9.1.7":
-  version: 9.1.7
-  resolution: "husky@npm:9.1.7"
+"husky@npm:^8.0.0":
+  version: 8.0.3
+  resolution: "husky@npm:8.0.3"
   bin:
-    husky: bin.js
-  checksum: 10c0/35bb110a71086c48906aa7cd3ed4913fb913823715359d65e32e0b964cb1e255593b0ae8014a5005c66a68e6fa66c38dcfa8056dbbdfb8b0187c0ffe7ee3a58f
+    husky: lib/bin.js
+  checksum: 10c0/6722591771c657b91a1abb082e07f6547eca79144d678e586828ae806499d90dce2a6aee08b66183fd8b085f19d20e0990a2ad396961746b4c8bd5bdb619d668
   languageName: node
   linkType: hard
 
@@ -10873,18 +10883,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ui-1fb1c2@workspace:packages/ui":
-  version: 0.0.0-use.local
-  resolution: "ui-1fb1c2@workspace:packages/ui"
-  dependencies:
-    eslint: "npm:^9.9.0"
-    eslint-config-avoo: "workspace:*"
-    typescript: "npm:^5.5.4"
-  peerDependencies:
-    react: ">=18.2.0"
-  languageName: unknown
-  linkType: soft
-
 "unbox-primitive@npm:^1.1.0":
   version: 1.1.0
   resolution: "unbox-primitive@npm:1.1.0"
@@ -11597,5 +11595,26 @@ __metadata:
   version: 3.25.76
   resolution: "zod@npm:3.25.76"
   checksum: 10c0/5718ec35e3c40b600316c5b4c5e4976f7fee68151bc8f8d90ec18a469be9571f072e1bbaace10f1e85cf8892ea12d90821b200e980ab46916a6166a4260a983c
+  languageName: node
+  linkType: hard
+
+"zustand@npm:^5.0.8":
+  version: 5.0.8
+  resolution: "zustand@npm:5.0.8"
+  peerDependencies:
+    "@types/react": ">=18.0.0"
+    immer: ">=9.0.6"
+    react: ">=18.0.0"
+    use-sync-external-store: ">=1.2.0"
+  peerDependenciesMeta:
+    "@types/react":
+      optional: true
+    immer:
+      optional: true
+    react:
+      optional: true
+    use-sync-external-store:
+      optional: true
+  checksum: 10c0/e865a6f7f1c0e03571701db5904151aaa7acefd6f85541a117085e129bf16e8f60b11f8cc82f277472de5c7ad5dcb201e1b0a89035ea0b40c9d9aab3cd24c8ad
   languageName: node
   linkType: hard
