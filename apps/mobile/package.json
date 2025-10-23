@@ -21,13 +21,13 @@
     "test": "echo \"No tests yet\""
   },
   "dependencies": {
+    "@avoo/store": "workspace:*",
     "expo": "~51.0.28",
     "expo-dev-client": "~4.0.29",
     "expo-splash-screen": "~0.27.7",
     "expo-status-bar": "~1.12.1",
-    "react": "18.2.0",
-    "react-native": "0.74.5",
-    "@avoo/store": "workspace:*"
+    "react": "^19.2.0",
+    "react-native": "0.74.5"
   },
   "devDependencies": {
     "@types/react": "^18.3.3",
