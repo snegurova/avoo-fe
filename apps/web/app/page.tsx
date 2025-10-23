@@ -1,4 +1,4 @@
-import HomeView from './HomeView';
+import { HomePage } from './_components/HomePage/HomePage';
 
 const getData = () => {
   return { message: 'Hello from server-side data fetching!' };
@@ -6,7 +6,8 @@ const getData = () => {
 
 export const Page = () => {
   const data = getData();
-  return <HomeView data={ data } />;
+  
+  return <HomePage data={data} />;
   };
 
 export default Page;  
