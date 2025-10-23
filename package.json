@@ -45,19 +45,5 @@
     "*.{json,md,css,scss}": [
       "prettier -c"
     ]
-  },
-  "resolutions": {
-    "metro": "0.80.8",
-    "metro-config": "0.80.8",
-    "metro-core": "0.80.8",
-    "metro-resolver": "0.80.8",
-    "metro-runtime": "0.80.8",
-    "metro-cache": "0.80.8",
-    "metro-minify-terser": "0.80.8"
-  },
-  "dependencies": {
-    "expo": "~51.0.28",
-    "react": "^19.2.0",
-    "react-native": "0.74.5"
   }
 }
