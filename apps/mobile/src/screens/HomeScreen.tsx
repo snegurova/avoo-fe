@@ -10,17 +10,17 @@ export const HomeScreen = () => {
   );
 
   const titleContent = (
-    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
-      <FontAwesome name="home" size={20} color="#0F172A" />
-      <Text style={{ fontSize: 17, fontWeight: '600', color: '#0F172A' }}>
+    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+      <FontAwesome name="home" size={20} color="#0F172A" style={{ marginRight: 8 }} />
+      <Text style={{ fontSize: 16, fontWeight: '600', color: '#0F172A' }}>
         Home
       </Text>
     </View>
   );
 
   const rightContent = (
-    <View style={{ flexDirection: 'row', gap: 16 }}>
-      <TouchableOpacity>
+    <View style={{ flexDirection: 'row' }}>
+      <TouchableOpacity style={{ marginRight: 16 }}>
         <FontAwesome name="bell" size={24} color="#007AFF" />
       </TouchableOpacity>
       <TouchableOpacity>

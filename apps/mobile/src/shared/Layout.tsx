@@ -114,7 +114,7 @@ const styles = StyleSheet.create({
   },
   title: {
     flex: 1, 
-    fontSize: 17,
+    fontSize: 16,
     fontWeight: '600',
     textAlign: 'center',
     justifyContent: 'center',

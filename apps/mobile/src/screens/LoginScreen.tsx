@@ -31,7 +31,7 @@ export default function LoginScreen() {
 
                     <View style={styles.form}>
                         <TextInput
-                            style={styles.input}
+                            style={[styles.input, styles.formItem]}
                             placeholder="Email"
                             placeholderTextColor="#94A3B8"
                             value={email}
@@ -41,6 +41,7 @@ export default function LoginScreen() {
                         />
 
                         <TextInputCustom
+                            style={styles.formItem}
                             placeholder="Password"
                             value={password}
                             onChangeText={setPassword}
@@ -50,6 +51,7 @@ export default function LoginScreen() {
                         />
 
                         <Button
+                            style={styles.formItem}
                             onPress={handleLogin}
                             title="Log in"
                         />
@@ -84,8 +86,10 @@ const styles = StyleSheet.create({
         width: '100%', 
     },
     form: {
-        gap: 16,
-        width: '100%', 
+        width: '100%',
+    },
+    formItem: {
+        marginBottom: 16,
     },
     input: {
         borderWidth: 1,
