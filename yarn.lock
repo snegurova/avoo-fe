@@ -24,6 +24,14 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@avoo/store@workspace:packages/store":
+  version: 0.0.0-use.local
+  resolution: "@avoo/store@workspace:packages/store"
+  dependencies:
+    zustand: "npm:^5.0.8"
+  languageName: unknown
+  linkType: soft
+
 "@babel/code-frame@npm:7.10.4, @babel/code-frame@npm:~7.10.4":
   version: 7.10.4
   resolution: "@babel/code-frame@npm:7.10.4"
@@ -4889,6 +4897,8 @@ __metadata:
 "eslint-config-avoo@workspace:*, eslint-config-avoo@workspace:packages/eslint-config":
   version: 0.0.0-use.local
   resolution: "eslint-config-avoo@workspace:packages/eslint-config"
+  peerDependencies:
+    eslint: ^9.0.0
   languageName: unknown
   linkType: soft
 
@@ -11099,18 +11109,6 @@ __metadata:
   checksum: 10c0/45dc1f7f3ce8248e0e64640d2e29c65c0ea1fc9cb105594de84af80e2a57bba4f718b9376098ca7a5b0ffe240f8995b0fa3714afa9d36861c41370a378f1a274
   languageName: node
   linkType: hard
-
-"ui-1fb1c2@workspace:packages/ui":
-  version: 0.0.0-use.local
-  resolution: "ui-1fb1c2@workspace:packages/ui"
-  dependencies:
-    eslint: "npm:^9.9.0"
-    eslint-config-avoo: "workspace:*"
-    typescript: "npm:^5.5.4"
-  peerDependencies:
-    react: ">=18.2.0"
-  languageName: unknown
-  linkType: soft
 
 "unbox-primitive@npm:^1.1.0":
   version: 1.1.0

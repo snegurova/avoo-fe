@@ -13,10 +13,6 @@
     "allowJs": false,
     "baseUrl": ".",
     "paths": {
-      "@ui/*": ["packages/ui/src/*"],
-      "@shared/*": ["packages/shared/src/*"],
-      "@env/*": ["packages/env/src/*"],
-      "@config/*": ["packages/config/*"],
       "@api-client": ["packages/api-client/src/index.ts"]
     }
   }
