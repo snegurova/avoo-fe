@@ -1,17 +1,14 @@
-import React from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import { Layout } from '../shared/Layout';
 import { FontAwesome } from '@expo/vector-icons';
 
 export const HomeScreen = () => {
-  // Левая часть хедера - кнопка меню
   const leftContent = (
     <TouchableOpacity>
       <FontAwesome name="bars" size={24} color="#007AFF" />
     </TouchableOpacity>
   );
 
-  // Кастомный заголовок с аватаром и именем
   const titleContent = (
     <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
       <FontAwesome name="home" size={20} color="#0F172A" />
@@ -21,7 +18,6 @@ export const HomeScreen = () => {
     </View>
   );
 
-  // Правая часть хедера - уведомления и настройки
   const rightContent = (
     <View style={{ flexDirection: 'row', gap: 16 }}>
       <TouchableOpacity>
@@ -34,7 +30,7 @@ export const HomeScreen = () => {
   );
 
   return (
-    <Layout 
+    <Layout
       title={titleContent}
       leftContent={leftContent}
       rightContent={rightContent}

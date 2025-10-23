@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { Text, View, TextInput, StyleSheet, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard } from "react-native";
+import { Text, View, TextInput, StyleSheet, TouchableWithoutFeedback, Keyboard } from "react-native";
 import Button from "../shared/Button";
-import { useAuthStore } from "../store/useAuthStore";
+import { useAuthStore } from "@avoo/store";
 import { TextInputCustom } from "../shared/TextInputCustom";
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { Layout } from "../shared/Layout";
@@ -38,7 +38,6 @@ export default function LoginScreen() {
                             onChangeText={setEmail}
                             autoCapitalize="none"
                             keyboardType="email-address"
-                        // editable={!isLoading}
                         />
 
                         <TextInputCustom
@@ -53,8 +52,6 @@ export default function LoginScreen() {
                         <Button
                             onPress={handleLogin}
                             title="Log in"
-                        // disabled={isLoading}
-                        // loading={isLoading}
                         />
                     </View>
                 </View>

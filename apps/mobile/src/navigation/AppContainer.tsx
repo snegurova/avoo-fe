@@ -1,12 +1,10 @@
 import { RootStackParamList } from "../types/navigation";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-// import { enableScreens } from "react-native-screens";
 import LoginScreen from "../screens/LoginScreen";
 import BottomBarNavigator from "./BottomBarNavigator";
-import { useAuthStore } from "../store/useAuthStore";
+import { useAuthStore } from "@avoo/store";
 
 
-// For smooth navigation and better performance
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 

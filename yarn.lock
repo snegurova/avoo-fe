@@ -24,7 +24,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@avoo/store@workspace:packages/store":
+"@avoo/store@workspace:*, @avoo/store@workspace:packages/store":
   version: 0.0.0-use.local
   resolution: "@avoo/store@workspace:packages/store"
   dependencies:
@@ -8038,6 +8038,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "mobile@workspace:apps/mobile"
   dependencies:
+    "@avoo/store": "workspace:*"
     "@react-navigation/bottom-tabs": "npm:^7.4.9"
     "@react-navigation/native": "npm:^7.1.18"
     "@react-navigation/native-stack": "npm:^6.9.17"
@@ -8055,7 +8056,6 @@ __metadata:
     react-native-screens: "npm:~3.29.0"
     turbo: "npm:^2.5.6"
     typescript: "npm:^5.5.4"
-    zustand: "npm:^5.0.8"
   languageName: unknown
   linkType: soft
 
@@ -11395,6 +11395,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "web@workspace:apps/web"
   dependencies:
+    "@avoo/store": "workspace:*"
     "@types/react": "npm:^18.3"
     "@types/react-dom": "npm:^18.3"
     autoprefixer: "npm:^10.4.20"
