@@ -3,6 +3,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import LoginScreen from "../screens/LoginScreen";
 import BottomBarNavigator from "./BottomBarNavigator";
 import { useAuthStore } from "@avoo/store";
+import RegisterScreen from "../screens/RegisterScreen";
 
 
 
@@ -22,6 +23,7 @@ const AppContainer = () => {
       {!isAuthenticated ? (
         <>
           <Stack.Screen name="LoginScreen" component={LoginScreen} />
+          <Stack.Screen name="RegisterScreen" component={RegisterScreen} />
         </>
       ) : (
         <>

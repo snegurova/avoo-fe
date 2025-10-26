@@ -7,14 +7,13 @@ import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { Layout } from "../shared/Layout";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { RootStackParamList } from "../types/navigation";
-import CheckBox from "../shared/CheckBox";
 
 
-export default function LoginScreen() {
+export default function RegisterScreen() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [showPassword, setShowPassword] = useState(false);
-
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const setIsAuthenticated = useAuthStore(state => state.setIsAuthenticated);
     const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
@@ -30,12 +29,24 @@ export default function LoginScreen() {
                         AVOO App
                     </Text>
                     <Text style={styles.subtitle}>
-                        Sign in to your AVOO account
+                        Create a professional account
+                    </Text>
+                    <Text style={styles.subtitle}>
+                        Create an account or login in your business
                     </Text>
 
                     <View style={styles.form}>
                         <TextInput
-                            style={[styles.input, styles.formItem]}
+                            style={styles.input}
+                            placeholder="Full Name"
+                            placeholderTextColor="#94A3B8"
+                            value={email}
+                            onChangeText={setEmail}
+                            autoCapitalize="none"
+                            keyboardType="default"
+                        />
+                        <TextInput
+                            style={styles.input}
                             placeholder="Email"
                             placeholderTextColor="#94A3B8"
                             value={email}
@@ -43,9 +54,7 @@ export default function LoginScreen() {
                             autoCapitalize="none"
                             keyboardType="email-address"
                         />
-
                         <TextInputCustom
-                            style={styles.inputText}
                             placeholder="Password"
                             value={password}
                             onChangeText={setPassword}
@@ -53,31 +62,33 @@ export default function LoginScreen() {
                             rightIcon={showPassword ? <FontAwesome name="eye" size={24} color="black" /> : <FontAwesome name="eye-slash" size={24} color="black" />}
                             onRightIconPress={() => setShowPassword(!showPassword)}
                         />
+                        <TextInputCustom
+                            placeholder="Confirm Password"
+                            value={password}
+                            onChangeText={setPassword}
+                            secureTextEntry={!showConfirmPassword}
+                            rightIcon={showConfirmPassword ? <FontAwesome name="eye" size={24} color="black" /> : <FontAwesome name="eye-slash" size={24} color="black" />}
+                            onRightIconPress={() => setShowConfirmPassword(!showConfirmPassword)}
+                        />
 
                         <Button
-                            style={styles.formItem}
                             onPress={handleLogin}
                             title="Log in"
                         />
-                        <CheckBox
-                            // checked={false}
-                            // onPress={() => setRememberMe(!rememberMe)}
-                        />
 
-                 
                         <View style={styles.signUpContainer}>
-                            <Text style={styles.navigateToSignIn}>No account?</Text>
+                            <Text style={styles.navigateToSignIn}>Having account?</Text>
                             <Pressable
                                 onPress={() => navigation.reset({
                                     index: 0,
-                                    routes: [{ name: 'RegisterScreen' }],
+                                    routes: [{ name: 'LoginScreen' }],
                                 })}
                                 accessibilityRole="button"
                                 accessibilityLabel="Sign up for a new account"
                                 accessibilityHint="Navigates to registration screen"
                                 hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
                             >
-                                <Text style={styles.signInLink}>Sign up</Text>
+                                <Text style={styles.signInLink}>Log in</Text>
                             </Pressable>
                         </View>
                     </View>
@@ -112,9 +123,7 @@ const styles = StyleSheet.create({
     },
     form: {
         width: '100%',
-    },
-    formItem: {
-        marginBottom: 16,
+        gap: 16,
     },
     input: {
         borderWidth: 1,
@@ -124,10 +133,6 @@ const styles = StyleSheet.create({
         fontSize: 18,
         backgroundColor: '#F8FAFC',
         color: '#0F172A',
-    },
-    inputText: {
-        color: '#0F172A',
-        fontSize: 18,
     },
     signUpContainer: {
         flexDirection: 'row',
