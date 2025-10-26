@@ -8,6 +8,6 @@ export type BaseResponse<T> = {
   status: string;
   errorMessage?: string;
   errors?: Error[];
-  data?: T;
+  data: T | null;
 };
 export type Category = components['schemas']['CategoryEntity'];
