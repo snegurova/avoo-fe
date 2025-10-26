@@ -6,15 +6,15 @@ Monorepo with **Next.js (web)** and **Expo/React Native (mobile)** powered by **
 
 ## Requirements
 
-* **Node.js** ≥ 18 (20 LTS recommended)
-* **Yarn 4** (Berry)
-* **Git**
+- **Node.js** ≥ 18 (20 LTS recommended)
+- **Yarn 4** (Berry)
+- **Git**
 
 **For Mobile:**
 
-* **Xcode** (for iOS Simulator) — macOS
-* **Android Studio + SDK** (for Android Emulator)
-* **Java 17 (JDK)**
+- **Xcode** (for iOS Simulator) — macOS
+- **Android Studio + SDK** (for Android Emulator)
+- **Java 17 (JDK)**
 
 ---
 
@@ -40,6 +40,12 @@ yarn install
 ---
 
 ## Development
+
+### Generate api types
+
+```bash
+yarn types
+```
 
 ### Start both Web + Mobile (Expo Go, no key presses)
 
@@ -167,36 +173,33 @@ yarn workspace web start
 
 ## Common Issues & Fixes
 
-* **Expo asks about ports / doesn’t auto-open platforms**
+- **Expo asks about ports / doesn’t auto-open platforms**
+  - We fix the port (`8081`) and run non-interactive in scripts. Ensure no second Metro is running.
 
-  * We fix the port (`8081`) and run non-interactive in scripts. Ensure no second Metro is running.
-
-* **`No Android connected device found…`**
-
-  * Start an AVD in Android Studio (**Device Manager**) or connect a real device with **USB debugging**:
+- **`No Android connected device found…`**
+  - Start an AVD in Android Studio (**Device Manager**) or connect a real device with **USB debugging**:
 
     ```bash
     adb devices
     ```
 
-* **`No development build (com.avoo.mobile)…`**
-
-  * Install a dev client:
+- **`No development build (com.avoo.mobile)…`**
+  - Install a dev client:
 
     ```bash
     cd apps/mobile
     npx expo run:android   # and/or npx expo run:ios
     ```
 
-* **`ENOSPC: no space left on device`** (macOS temp full)
-
-  * Temporary workaround:
+- **`ENOSPC: no space left on device`** (macOS temp full)
+  - Temporary workaround:
 
     ```bash
     mkdir -p ~/tmp/yarn
     export TMPDIR=~/tmp/yarn
     ```
-  * Free space: remove old simulators, AVD snapshots, caches:
+
+  - Free space: remove old simulators, AVD snapshots, caches:
 
     ```bash
     xcrun simctl delete unavailable
@@ -205,23 +208,22 @@ yarn workspace web start
     yarn cache clean
     ```
 
-* **Gradle: `path may not be null or empty string. path=''`**
-
-  * Ensure `apps/mobile/android/local.properties` contains a valid SDK path:
+- **Gradle: `path may not be null or empty string. path=''`**
+  - Ensure `apps/mobile/android/local.properties` contains a valid SDK path:
 
     ```
     sdk.dir=/Users/<you>/Library/Android/sdk
     ```
-  * Avoid empty `storeFile` in release signing config (debug signing is fine for dev).
 
-* **Android resource error** (e.g. `splashscreen_background not found`)
+  - Avoid empty `storeFile` in release signing config (debug signing is fine for dev).
 
-  * Define the color in `res/values/colors.xml` or configure splash via `expo-splash-screen` plugin in `app.config.ts`.
+- **Android resource error** (e.g. `splashscreen_background not found`)
+  - Define the color in `res/values/colors.xml` or configure splash via `expo-splash-screen` plugin in `app.config.ts`.
 
 ---
 
 ## Tips
 
-* Start from **repo root** for parallel dev (`yarn dev`, `yarn dev:client`).
-* Start from **`apps/mobile`** when you need interactive Expo commands or one-off platform runs.
-* Keep emulators open before running scripts that auto-open Android/iOS.
+- Start from **repo root** for parallel dev (`yarn dev`, `yarn dev:client`).
+- Start from **`apps/mobile`** when you need interactive Expo commands or one-off platform runs.
+- Keep emulators open before running scripts that auto-open Android/iOS.

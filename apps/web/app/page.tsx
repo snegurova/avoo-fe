@@ -1,13 +1,7 @@
-import { HomePage } from './_components/HomePage/HomePage';
-
-const getData = () => {
-  return { message: 'Hello from server-side data fetching!' };
-}
+import { HomePageServer } from './_server-components/HomePage.server';
 
 export const Page = () => {
-  const data = getData();
-  
-  return <HomePage data={data} />;
-  };
+  return <HomePageServer />;
+};
 
-export default Page;  
+export default Page;
