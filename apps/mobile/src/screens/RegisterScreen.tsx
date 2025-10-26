@@ -149,6 +149,6 @@ const styles = StyleSheet.create({
         fontSize: 16,
         color: '#2563EB',
         textDecorationLine: 'underline',
-        padding: 4, // Увеличиваем область нажатия
+        padding: 4,
     },
 });
