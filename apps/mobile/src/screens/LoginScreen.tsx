@@ -59,10 +59,7 @@ export default function LoginScreen() {
                             onPress={handleLogin}
                             title="Log in"
                         />
-                        <CheckBox
-                            // checked={false}
-                            // onPress={() => setRememberMe(!rememberMe)}
-                        />
+                     
 
                  
                         <View style={styles.signUpContainer}>

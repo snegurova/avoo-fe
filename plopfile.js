@@ -37,19 +37,14 @@ module.exports = function (plop) {
         type: 'list',
         name: 'type',
         message: 'Component type:',
-        choices: ['components', 'shared'],
+        choices: ['_components', '_server-components'],
       },
     ],
     actions: [
       {
         type: 'add',
-        path: 'apps/web/app/_components/{{name}}/{{name}}.tsx',
+        path: 'apps/web/app/{{type}}/{{name}}/{{name}}.tsx',
         templateFile: 'plop-templates/web/component.tsx.hbs',
-      },
-      {
-        type: 'add',
-        path: 'apps/web/app/_components/{{name}}/index.ts',
-        templateFile: 'plop-templates/web/index.ts.hbs',
       },
     ],
   });
