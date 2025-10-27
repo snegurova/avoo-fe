@@ -11,3 +11,7 @@ export type BaseResponse<T> = {
   data: T | null;
 };
 export type Category = components['schemas']['CategoryEntity'];
+
+export type LoginRequest = components['schemas']['LoginRequestDto'];
+export type RegisterRequest = components['schemas']['CreateUserDto'];
+export type AuthResponse = components['schemas']['UserResponseDto'];
