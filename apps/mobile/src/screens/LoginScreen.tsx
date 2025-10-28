@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Text, View, TextInput, StyleSheet, TouchableWithoutFeedback, Keyboard, Pressable } from "react-native";
+import { Text, View, TextInput, StyleSheet, TouchableWithoutFeedback, Keyboard, Pressable, Alert } from "react-native";
 import Button from "../shared/Button";
 import { useAuthStore } from "@avoo/store";
 import { TextInputCustom } from "../shared/TextInputCustom";
@@ -7,18 +7,35 @@ import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { Layout } from "../shared/Layout";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { RootStackParamList } from "../types/navigation";
+import { authApi } from "@avoo/axios";
 
 
 export default function LoginScreen() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [showPassword, setShowPassword] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     const setIsAuthenticated = useAuthStore(state => state.setIsAuthenticated);
     const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
-    const handleLogin = () => {
-        setIsAuthenticated(true);
+    const handleLogin = async () => {
+        if (!email || !password) {
+            Alert.alert("Error", "Please fill in all fields");
+            return;
+        }
+
+        setLoading(true);
+        try {
+            const response = await authApi.login({ email, password });
+            
+            setIsAuthenticated(true);
+        } catch (error: any) {
+            const errorMessage = error.response?.data?.errorMessage || "Login failed. Please try again.";
+            Alert.alert("Login Failed", errorMessage);
+        } finally {
+            setLoading(false);
+        }
     }
 
     return (
@@ -41,6 +58,7 @@ export default function LoginScreen() {
                             onChangeText={setEmail}
                             autoCapitalize="none"
                             keyboardType="email-address"
+                            editable={!loading}
                         />
 
                         <TextInputCustom
@@ -51,15 +69,16 @@ export default function LoginScreen() {
                             secureTextEntry={!showPassword}
                             rightIcon={showPassword ? <FontAwesome name="eye" size={24} color="black" /> : <FontAwesome name="eye-slash" size={24} color="black" />}
                             onRightIconPress={() => setShowPassword(!showPassword)}
+                            editable={!loading}
                         />
 
                         <Button
                             style={styles.formItem}
                             onPress={handleLogin}
-                            title="Log in"
+                            title={loading ? "Logging in..." : "Log in"}
+                            disabled={loading}
                         />
                      
-
                  
                         <View style={styles.signUpContainer}>
                             <Text style={styles.navigateToSignIn}>No account?</Text>
@@ -72,8 +91,9 @@ export default function LoginScreen() {
                                 accessibilityLabel="Sign up for a new account"
                                 accessibilityHint="Navigates to registration screen"
                                 hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+                                disabled={loading}
                             >
-                                <Text style={styles.signInLink}>Sign up</Text>
+                                <Text style={[styles.signInLink, loading && styles.disabledLink]}>Sign up</Text>
                             </Pressable>
                         </View>
                     </View>
@@ -141,5 +161,8 @@ const styles = StyleSheet.create({
         color: '#2563EB',
         textDecorationLine: 'underline',
         padding: 4,
+    },
+    disabledLink: {
+        opacity: 0.5,
     },
 });
