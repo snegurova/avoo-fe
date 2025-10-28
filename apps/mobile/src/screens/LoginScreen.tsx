@@ -98,7 +98,7 @@ export default function LoginScreen() {
                         </View>
                     </View>
                 </View>
-            </TouchableWithoutFeedback>
+            </TouchableWithoutFeedback> 
         </Layout>
     );
 }
