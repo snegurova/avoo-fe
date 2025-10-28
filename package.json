@@ -13,11 +13,13 @@
     "eslint-config-prettier": "^10.1.8",
     "husky": "^8.0.0",
     "lint-staged": "^16.1.6",
+    "plop": "^4.0.4",
     "prettier": "^3.6.2",
     "turbo": "^2.0.6",
     "typescript": "^5.5.4"
   },
   "scripts": {
+    "generate": "plop",
     "emu:ios": "open -a Simulator",
     "emu:android": "$ANDROID_HOME/emulator/emulator -avd $AVD_NAME || true",
     "dev": "concurrently -k -n web,mobile -c auto \"yarn workspace web dev\" \"yarn workspace mobile dev:both\"",

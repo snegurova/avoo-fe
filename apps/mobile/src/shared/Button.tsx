@@ -18,14 +18,9 @@ interface ButtonProps {
     textStyle?: TextStyle;
 }
 
-export default function Button({ 
-    onPress, 
-    title, 
-    disabled = false, 
-    loading = false,
-    style,
-    textStyle, 
-}: ButtonProps) {
+export default function Button(props: ButtonProps) {
+    const { onPress, title, disabled = false, loading = false, style, textStyle } = props;
+
     return (
         <Pressable
             style={({ pressed }) => [
