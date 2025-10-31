@@ -33,6 +33,18 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@avoo/hooks@workspace:*, @avoo/hooks@workspace:packages/hooks":
+  version: 0.0.0-use.local
+  resolution: "@avoo/hooks@workspace:packages/hooks"
+  dependencies:
+    "@hookform/resolvers": "npm:^3.9.1"
+    react-hook-form: "npm:^7.54.0"
+    yup: "npm:1.7.1"
+  peerDependencies:
+    react: "*"
+  languageName: unknown
+  linkType: soft
+
 "@avoo/store@workspace:*, @avoo/store@workspace:packages/store":
   version: 0.0.0-use.local
   resolution: "@avoo/store@workspace:packages/store"
@@ -1651,6 +1663,15 @@ __metadata:
   bin:
     excpretty: build/cli.js
   checksum: 10c0/e524817b2e42fb8c8914fca7e8f7c2f723f4f6d338a57b7ae97cd3e76da8108af63a22d4c7dc2e96a192a248a242f6e0f8056f0ca53bc4fb5cd2e5ae428e0891
+  languageName: node
+  linkType: hard
+
+"@hookform/resolvers@npm:^3.9.1":
+  version: 3.10.0
+  resolution: "@hookform/resolvers@npm:3.10.0"
+  peerDependencies:
+    react-hook-form: ^7.0.0
+  checksum: 10c0/7ee44533b4cdc28c4fa2a94894c735411e5a1f830f4a617c580533321a9b901df0cc8c1e2fad81ad8d55154ebc5cb844cf9c116a3148ffae2bc48758c33cbb8e
   languageName: node
   linkType: hard
 
@@ -7206,6 +7227,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "mobile@workspace:apps/mobile"
   dependencies:
+    "@avoo/hooks": "workspace:*"
     "@avoo/store": "workspace:*"
     "@react-native-community/cli-server-api": "npm:^12.3.0"
     "@react-navigation/bottom-tabs": "npm:^7.5.0"
@@ -7225,6 +7247,8 @@ __metadata:
     react-native-screens: "npm:~4.16.0"
     turbo: "npm:^2.5.6"
     typescript: "npm:^5.5.4"
+  peerDependencies:
+    react-hook-form: ^7.54.0
   languageName: unknown
   linkType: soft
 
@@ -8098,6 +8122,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"property-expr@npm:^2.0.5":
+  version: 2.0.6
+  resolution: "property-expr@npm:2.0.6"
+  checksum: 10c0/69b7da15038a1146d6447c69c445306f66a33c425271235bb20507f1846dbf9577a8f9dfafe8acbfcb66f924b270157f155248308f026a68758f35fc72265b3c
+  languageName: node
+  linkType: hard
+
 "proxy-from-env@npm:^1.1.0":
   version: 1.1.0
   resolution: "proxy-from-env@npm:1.1.0"
@@ -8190,6 +8221,15 @@ __metadata:
   peerDependencies:
     react: ">=17.0.0"
   checksum: 10c0/8f51257c261bfefff86f618e958683536248f708019632d309ee5ebdd52f25d3c130660d06fb6f0f4fdef79f00f8ec7177233a872c2321f7d46b7e77ccc522a1
+  languageName: node
+  linkType: hard
+
+"react-hook-form@npm:^7.54.0":
+  version: 7.65.0
+  resolution: "react-hook-form@npm:7.65.0"
+  peerDependencies:
+    react: ^16.8.0 || ^17 || ^18 || ^19
+  checksum: 10c0/119afeaf33510d1ed6c12109f03d22d9e88f9eb01b8e4fb3cd8f40d5fc113cbcfc6154789d1d143151de8119bd08ffc7214d504e0e550ea28a9051ed6a30ae28
   languageName: node
   linkType: hard
 
@@ -9374,6 +9414,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"tiny-case@npm:^1.0.3":
+  version: 1.0.3
+  resolution: "tiny-case@npm:1.0.3"
+  checksum: 10c0/c0cbed35884a322265e2cd61ff435168d1ea523f88bf3864ce14a238ae9169e732649776964283a66e4eb882e655992081d4daf8c865042e2233425866111b35
+  languageName: node
+  linkType: hard
+
 "tinyglobby@npm:^0.2.12, tinyglobby@npm:^0.2.15":
   version: 0.2.15
   resolution: "tinyglobby@npm:0.2.15"
@@ -9411,6 +9458,13 @@ __metadata:
   version: 1.0.1
   resolution: "toidentifier@npm:1.0.1"
   checksum: 10c0/93937279934bd66cc3270016dd8d0afec14fb7c94a05c72dc57321f8bd1fa97e5bea6d1f7c89e728d077ca31ea125b78320a616a6c6cd0e6b9cb94cb864381c1
+  languageName: node
+  linkType: hard
+
+"toposort@npm:^2.0.2":
+  version: 2.0.2
+  resolution: "toposort@npm:2.0.2"
+  checksum: 10c0/ab9ca91fce4b972ccae9e2f539d755bf799a0c7eb60da07fd985fce0f14c159ed1e92305ff55697693b5bc13e300f5417db90e2593b127d421c9f6c440950222
   languageName: node
   linkType: hard
 
@@ -9542,6 +9596,13 @@ __metadata:
   version: 0.7.1
   resolution: "type-fest@npm:0.7.1"
   checksum: 10c0/ce6b5ef806a76bf08d0daa78d65e61f24d9a0380bd1f1df36ffb61f84d14a0985c3a921923cf4b97831278cb6fa9bf1b89c751df09407e0510b14e8c081e4e0f
+  languageName: node
+  linkType: hard
+
+"type-fest@npm:^2.19.0":
+  version: 2.19.0
+  resolution: "type-fest@npm:2.19.0"
+  checksum: 10c0/a5a7ecf2e654251613218c215c7493574594951c08e52ab9881c9df6a6da0aeca7528c213c622bc374b4e0cb5c443aa3ab758da4e3c959783ce884c3194e12cb
   languageName: node
   linkType: hard
 
@@ -9796,6 +9857,7 @@ __metadata:
   resolution: "web@workspace:apps/web"
   dependencies:
     "@avoo/axios": "workspace:*"
+    "@avoo/hooks": "workspace:*"
     "@avoo/store": "workspace:*"
     "@tailwindcss/postcss": "npm:^4.1.16"
     "@types/react": "npm:^18.3"
@@ -9807,6 +9869,7 @@ __metadata:
     postcss: "npm:^8.4.41"
     react: "npm:^19.2.0"
     react-dom: "npm:^19.2.0"
+    react-hook-form: "npm:^7.54.0"
     tailwind-merge: "npm:^3.3.1"
     tailwind-variants: "npm:^3.1.1"
     tailwindcss: "npm:^4.1.16"
@@ -10121,6 +10184,18 @@ __metadata:
   version: 2.1.3
   resolution: "yoctocolors-cjs@npm:2.1.3"
   checksum: 10c0/584168ef98eb5d913473a4858dce128803c4a6cd87c0f09e954fa01126a59a33ab9e513b633ad9ab953786ed16efdd8c8700097a51635aafaeed3fef7712fa79
+  languageName: node
+  linkType: hard
+
+"yup@npm:1.7.1":
+  version: 1.7.1
+  resolution: "yup@npm:1.7.1"
+  dependencies:
+    property-expr: "npm:^2.0.5"
+    tiny-case: "npm:^1.0.3"
+    toposort: "npm:^2.0.2"
+    type-fest: "npm:^2.19.0"
+  checksum: 10c0/76b8c7fc2ba467a346935d027a25c067f9653bb0413cd60fbe0518e3d62637a56dbfca49979c4bab1a93d8e9a50843ca73d90bdc271e2f5bce1effa7734e5f28
   languageName: node
   linkType: hard
 
