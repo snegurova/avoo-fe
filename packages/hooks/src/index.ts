@@ -1,2 +1,2 @@
 export * from './authHooks';
-export * from './authValidationSchemas';
+export * from './validationSchemas';

@@ -1,102 +1,22 @@
 'use client';
 
-import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { authApi } from "@avoo/axios";
-import { useAuthStore } from "@avoo/store";
+import { authHooks } from "@avoo/hooks";
 import { Button, ButtonFit, ButtonIntent } from "../Button/Button";
 import Link from "next/link";
+import { useState } from "react";
 
 export default function RegisterForm() {
-    const [name, setName] = useState<string | null>(null);
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [confirmPassword, setConfirmPassword] = useState("");
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-    const [loading, setLoading] = useState(false);
-    const [agreeToTerms, setAgreeToTerms] = useState(false);
-
-    const [nameError, setNameError] = useState("");
-    const [emailError, setEmailError] = useState("");
-    const [passwordError, setPasswordError] = useState("");
-    const [confirmPasswordError, setConfirmPasswordError] = useState("");
-    const [termsError, setTermsError] = useState("");
-
-    const setIsAuthenticated = useAuthStore(state => state.setIsAuthenticated);
+    
     const router = useRouter();
 
-    const validateForm = () => {
-        let isValid = true;
-
-        if (!name?.trim()) {
-            setNameError("Name is required");
-            isValid = false;
-        } else if (name?.trim().length < 2) {
-            setNameError("Name must be at least 2 characters");
-            isValid = false;
-        } else {
-            setNameError("");
-        }
-
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!email.trim()) {
-            setEmailError("Email is required");
-            isValid = false;
-        } else if (!emailRegex.test(email)) {
-            setEmailError("Please enter a valid email");
-            isValid = false;
-        } else {
-            setEmailError("");
-        }
-
-        if (!password) {
-            setPasswordError("Password is required");
-            isValid = false;
-        } else if (password.length < 8) {
-            setPasswordError("Password must be at least 8 characters");
-            isValid = false;
-        } else {
-            setPasswordError("");
-        }
-
-        if (!confirmPassword) {
-            setConfirmPasswordError("Please confirm your password");
-            isValid = false;
-        } else if (confirmPassword !== password) {
-            setConfirmPasswordError("Passwords do not match");
-            isValid = false;
-        } else {
-            setConfirmPasswordError("");
-        }
-
-        if (!agreeToTerms) {
-            setTermsError("You must agree to the terms");
-            isValid = false;
-        } else {
-            setTermsError("");
-        }
-
-        return isValid;
-    };
-
-    const handleRegister = async () => {
-        if (!validateForm()) return;
-        try {
-            setLoading(true);
-            await authApi.register({
-                email,
-                password,
-                name
-            });
-            setIsAuthenticated(true);
-            router.push('/'); 
-        } catch (error) {
-            console.error(error);
-        } finally {
-            setLoading(false);
-        }
-    };
+    const { register, handleSubmit, errors, isSubmitting } = authHooks.useRegisterForm({
+        onSuccess: () => {
+            router.push('/');
+        },
+    });
 
     return (
         <div className="flex min-h-screen flex-col justify-center px-6 py-12 lg:px-8 bg-white">
@@ -112,41 +32,38 @@ export default function RegisterForm() {
                 </p>
             </div>
 
-            <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm space-y-6">
+            <form onSubmit={handleSubmit} className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm space-y-6">
                 <div>
                     <input
+                        {...register("name")}
                         type="text"
                         placeholder="Full Name"
-                        value={name ?? ""}
-                        onChange={(e) => setName(e.target.value)}
                         className={`block w-full rounded-lg border ${
-                            nameError ? 'border-red-500' : 'border-gray-200'
+                            errors.name ? 'border-red-500' : 'border-gray-200'
                         } bg-gray-50 p-4 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500`}
                     />
-                    {nameError && <p className="mt-1 text-sm text-red-500">{nameError}</p>}
+                    {errors.name && <p className="mt-1 text-sm text-red-500">{errors.name.message}</p>}
                 </div>
 
                 <div>
                     <input
+                        {...register("email")}
                         type="email"
                         placeholder="Email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
                         className={`block w-full rounded-lg border ${
-                            emailError ? 'border-red-500' : 'border-gray-200'
+                            errors.email ? 'border-red-500' : 'border-gray-200'
                         } bg-gray-50 p-4 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500`}
                     />
-                    {emailError && <p className="mt-1 text-sm text-red-500">{emailError}</p>}
+                    {errors.email && <p className="mt-1 text-sm text-red-500">{errors.email.message}</p>}
                 </div>
 
                 <div className="relative">
                     <input
+                        {...register("password")}
                         type={showPassword ? "text" : "password"}
                         placeholder="Password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
                         className={`block w-full rounded-lg border ${
-                            passwordError ? 'border-red-500' : 'border-gray-200'
+                            errors.password ? 'border-red-500' : 'border-gray-200'
                         } bg-gray-50 p-4 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500`}
                     />
                     <button
@@ -154,23 +71,18 @@ export default function RegisterForm() {
                         onClick={() => setShowPassword(!showPassword)}
                         className="absolute right-3 top-1/2 -translate-y-1/2"
                     >
-                        {showPassword ? (
-                            <p>👁️</p>
-                        ) : (
-                            <p>🫣</p>
-                        )}
+                        {showPassword ? <p>👁️</p> : <p>🫣</p>}
                     </button>
-                    {passwordError && <p className="mt-1 text-sm text-red-500">{passwordError}</p>}
+                    {errors.password && <p className="mt-1 text-sm text-red-500">{errors.password.message}</p>}
                 </div>
 
                 <div className="relative">
                     <input
+                        {...register("confirmPassword")}
                         type={showConfirmPassword ? "text" : "password"}
                         placeholder="Confirm Password"
-                        value={confirmPassword}
-                        onChange={(e) => setConfirmPassword(e.target.value)}
                         className={`block w-full rounded-lg border ${
-                            confirmPasswordError ? 'border-red-500' : 'border-gray-200'
+                            errors.confirmPassword ? 'border-red-500' : 'border-gray-200'
                         } bg-gray-50 p-4 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500`}
                     />
                     <button
@@ -178,34 +90,31 @@ export default function RegisterForm() {
                         onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                         className="absolute right-3 top-1/2 -translate-y-1/2"
                     >
-                        {showConfirmPassword ? (
-                            <p>👁️</p>
-                        ) : (
-                            <p>🫣</p>
-                        )}
+                        {showConfirmPassword ? <p>👁️</p> : <p>🫣</p>}
                     </button>
-                    {confirmPasswordError && <p className="mt-1 text-sm text-red-500">{confirmPasswordError}</p>}
+                    {errors.confirmPassword && <p className="mt-1 text-sm text-red-500">{errors.confirmPassword.message}</p>}
                 </div>
 
-                <div className="flex items-start">
-                    <div className="flex items-center h-5">
-                        <input
-                            type="checkbox"
-                            checked={agreeToTerms}
-                            onChange={(e) => setAgreeToTerms(e.target.checked)}
-                            className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300"
-                        />
+                <div>
+                    <div className="flex items-start">
+                        <div className="flex items-center h-5">
+                            <input
+                                {...register("agreeToTerms")}
+                                type="checkbox"
+                                className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300"
+                            />
+                        </div>
+                        <label className="ml-2 text-sm text-gray-600">
+                            I agree to the Privacy Policy, Terms of Service and Terms of Business.
+                        </label>
                     </div>
-                    <label className="ml-2 text-sm text-gray-600">
-                        I agree to the Privacy Policy, Terms of Service and Terms of Business.
-                    </label>
+                    {errors.agreeToTerms && <p className="mt-1 text-sm text-red-500">{errors.agreeToTerms.message}</p>}
                 </div>
-                {termsError && <p className="mt-1 text-sm text-red-500">{termsError}</p>}
 
                 <Button
-                    onClick={handleRegister}
-                    disabled={loading}
-                    loading={loading}
+                    onClick={handleSubmit}
+                    disabled={isSubmitting}
+                    loading={isSubmitting}
                     fit={ButtonFit.Fill}
                     intent={ButtonIntent.Primary}
                 >
@@ -225,7 +134,7 @@ export default function RegisterForm() {
                         Privacy Policy
                     </Link>
                 </div>
-            </div>
+            </form>
         </div>
     );
 }

@@ -8,29 +8,20 @@ import { Layout } from "../shared/Layout";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { RootStackParamList } from "../types/navigation";
 import CheckBox from "../shared/CheckBox";
-import { useRegisterForm, type RegisterFormData } from "@avoo/hooks";
+import { authHooks } from "@avoo/hooks";
 import { Controller } from "react-hook-form";
 
 
 
 
 export default function RegisterScreen() {
-    const setIsAuthenticated = useAuthStore(state => state.setIsAuthenticated);
     const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
-    const { control, handleSubmit, errors, isSubmitting } = useRegisterForm({
-        onSuccess: (data) => {
-            setIsAuthenticated(true);
-        },
-        onError: (error) => {
-            console.error(error);
-            Alert.alert('Error', 'Registration failed');
-        },
-    });
+    const { control, handleSubmit, errors, isSubmitting } = authHooks.useRegisterForm();
+
 
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-
 
     return (
         <Layout style={styles.container} >

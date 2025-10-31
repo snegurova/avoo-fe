@@ -38,10 +38,10 @@ __metadata:
   resolution: "@avoo/hooks@workspace:packages/hooks"
   dependencies:
     "@hookform/resolvers": "npm:^3.9.1"
+    react-hook-form: "npm:^7.54.0"
     yup: "npm:1.7.1"
   peerDependencies:
     react: "*"
-    react-hook-form: "*"
   languageName: unknown
   linkType: soft
 
@@ -7242,12 +7242,13 @@ __metadata:
     expo-splash-screen: "npm:~31.0.10"
     expo-status-bar: "npm:~3.0.8"
     react: "npm:19.1.0"
-    react-hook-form: "npm:^7.54.0"
     react-native: "npm:0.81.5"
     react-native-safe-area-context: "npm:~5.6.0"
     react-native-screens: "npm:~4.16.0"
     turbo: "npm:^2.5.6"
     typescript: "npm:^5.5.4"
+  peerDependencies:
+    react-hook-form: ^7.54.0
   languageName: unknown
   linkType: soft
 
