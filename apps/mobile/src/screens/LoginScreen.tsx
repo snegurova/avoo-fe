@@ -7,7 +7,6 @@ import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { Layout } from "../shared/Layout";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { RootStackParamList } from "../types/navigation";
-import CheckBox from "../shared/CheckBox";
 
 
 export default function LoginScreen() {

@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, KeyboardAvoidingView, Platform, RefreshControl } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, KeyboardAvoidingView, Platform, RefreshControl, StyleProp, ViewStyle } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
@@ -24,6 +24,7 @@ type LayoutProps = {
   onBackPress?: () => void;
   centerContent?: boolean;
   hasBottomTab?: boolean;
+  style?: StyleProp<ViewStyle>;
 };
 
 export const Layout = ({
@@ -35,13 +36,14 @@ export const Layout = ({
   onBackPress,
   centerContent = false,
   hasBottomTab = false,
+  style,
 }: LayoutProps) => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
   return (
     <SafeAreaView 
       edges={hasBottomTab ? ['top'] : undefined} 
-      style={styles.container}
+      style={[styles.container, style]}
     >
       {(title || leftContent || rightContent) && (
         <View style={styles.header}>
@@ -78,6 +80,7 @@ export const Layout = ({
       >
         <ScrollView 
           style={styles.content} 
+          showsVerticalScrollIndicator={false}
           contentContainerStyle={centerContent ? styles.centerContent : {}}
         >
           {children}

@@ -75,12 +75,12 @@ const styles = StyleSheet.create({
     borderColor: '#E2E8F0',    
     borderRadius: 8,           
     backgroundColor: '#F8FAFC',
-    padding: 16,
   },
   input: {
     flex: 1,
     fontSize: 16,              
     color: '#0F172A',
+    padding: 16,
   },
   inputError: {
     borderColor: '#EF4444',   
@@ -88,5 +88,6 @@ const styles = StyleSheet.create({
   iconContainer: {
     justifyContent: 'center',
     alignItems: 'center',
+    paddingRight: 16,
   },
 });

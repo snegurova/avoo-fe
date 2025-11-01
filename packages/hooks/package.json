@@ -1,0 +1,15 @@
+{
+    "name": "@avoo/hooks",
+    "version": "1.0.0",
+    "main": "src/index.ts",
+    "type": "module",
+    "private": true,
+    "dependencies": {
+        "@hookform/resolvers": "^3.9.1",
+        "react-hook-form": "^7.54.0",
+        "yup": "1.7.1"
+    },
+    "peerDependencies": {
+        "react": "*"
+    }
+}
