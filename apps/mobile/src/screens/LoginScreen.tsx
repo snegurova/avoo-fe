@@ -1,25 +1,21 @@
 import { useState } from "react";
-import { Text, View, TextInput, StyleSheet, TouchableWithoutFeedback, Keyboard, Pressable } from "react-native";
+import { Text, View, StyleSheet, TouchableWithoutFeedback, Keyboard, Pressable, Alert } from "react-native";
 import Button from "../shared/Button";
-import { useAuthStore } from "@avoo/store";
 import { TextInputCustom } from "../shared/TextInputCustom";
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { Layout } from "../shared/Layout";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { RootStackParamList } from "../types/navigation";
+import { authHooks } from "@avoo/hooks";
+import { Controller } from "react-hook-form";
 
 
 export default function LoginScreen() {
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [showPassword, setShowPassword] = useState(false);
-
-    const setIsAuthenticated = useAuthStore(state => state.setIsAuthenticated);
     const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+    
+    const { control, handleSubmit, errors, isSubmitting } = authHooks.useLoginForm();
 
-    const handleLogin = () => {
-        setIsAuthenticated(true);
-    }
+    const [showPassword, setShowPassword] = useState(false);
 
     return (
         <Layout centerContent={true} >
@@ -33,33 +29,56 @@ export default function LoginScreen() {
                     </Text>
 
                     <View style={styles.form}>
-                        <TextInput
-                            style={[styles.input, styles.formItem]}
-                            placeholder="Email"
-                            placeholderTextColor="#94A3B8"
-                            value={email}
-                            onChangeText={setEmail}
-                            autoCapitalize="none"
-                            keyboardType="email-address"
+                        <Controller
+                            control={control}
+                            name="email"
+                            render={({ field: { onChange, onBlur, value } }) => (
+                                <View>
+                                    <TextInputCustom
+                                        placeholder="Email"
+                                        value={value}
+                                        onChangeText={onChange}
+                                        onBlur={onBlur}
+                                        style={errors.email && styles.inputError}
+                                        keyboardType="email-address"
+                                        autoCapitalize="none"
+                                        autoCorrect={false}
+                                    />
+                                    {errors.email && <Text style={styles.errorText}>{errors.email.message}</Text>}
+                                </View>
+                            )}
                         />
 
-                        <TextInputCustom
-                            style={styles.inputText}
-                            placeholder="Password"
-                            value={password}
-                            onChangeText={setPassword}
-                            secureTextEntry={!showPassword}
-                            rightIcon={showPassword ? <FontAwesome name="eye" size={24} color="black" /> : <FontAwesome name="eye-slash" size={24} color="black" />}
-                            onRightIconPress={() => setShowPassword(!showPassword)}
+                        <Controller
+                            control={control}
+                            name="password"
+                            render={({ field: { onChange, onBlur, value } }) => (
+                                <View>
+                                    <TextInputCustom
+                                        placeholder="Password"
+                                        value={value}
+                                        onChangeText={onChange}
+                                        onBlur={onBlur}
+                                        style={errors.password && styles.inputError}
+                                        secureTextEntry={!showPassword}
+                                        rightIcon={showPassword ? <FontAwesome name="eye" size={24} color="black" /> : <FontAwesome name="eye-slash" size={24} color="black" />}
+                                        onRightIconPress={() => setShowPassword(!showPassword)}
+                                        textContentType="password"
+                                        autoComplete="off"
+                                        autoCorrect={false}
+                                    />
+                                    {errors.password && <Text style={styles.errorText}>{errors.password.message}</Text>}
+                                </View>
+                            )}
                         />
 
                         <Button
-                            style={styles.formItem}
-                            onPress={handleLogin}
+                            onPress={handleSubmit}
                             title="Log in"
+                            loading={isSubmitting}
+                            disabled={isSubmitting}
                         />
                      
-
                  
                         <View style={styles.signUpContainer}>
                             <Text style={styles.navigateToSignIn}>No account?</Text>
@@ -72,13 +91,14 @@ export default function LoginScreen() {
                                 accessibilityLabel="Sign up for a new account"
                                 accessibilityHint="Navigates to registration screen"
                                 hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+                                disabled={isSubmitting}
                             >
-                                <Text style={styles.signInLink}>Sign up</Text>
+                                <Text style={[styles.signInLink, isSubmitting && styles.disabledLink]}>Sign up</Text>
                             </Pressable>
                         </View>
                     </View>
                 </View>
-            </TouchableWithoutFeedback>
+            </TouchableWithoutFeedback> 
         </Layout>
     );
 }
@@ -89,6 +109,15 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         padding: 16,
         backgroundColor: '#FFFFFF'
+    },
+    errorText: {
+        color: '#EF4444',
+        fontSize: 12,
+        marginTop: 4,
+        marginLeft: 4,
+    },
+    inputError: {
+        borderColor: '#EF4444',
     },
     title: {
         fontSize: 32,
@@ -108,22 +137,7 @@ const styles = StyleSheet.create({
     },
     form: {
         width: '100%',
-    },
-    formItem: {
-        marginBottom: 16,
-    },
-    input: {
-        borderWidth: 1,
-        borderColor: '#E2E8F0',
-        borderRadius: 8,
-        padding: 16,
-        fontSize: 18,
-        backgroundColor: '#F8FAFC',
-        color: '#0F172A',
-    },
-    inputText: {
-        color: '#0F172A',
-        fontSize: 18,
+        gap: 16,
     },
     signUpContainer: {
         flexDirection: 'row',
@@ -141,5 +155,8 @@ const styles = StyleSheet.create({
         color: '#2563EB',
         textDecorationLine: 'underline',
         padding: 4,
+    },
+    disabledLink: {
+        opacity: 0.5,
     },
 });

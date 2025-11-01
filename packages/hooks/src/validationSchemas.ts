@@ -25,4 +25,18 @@ export const registerSchema = yup.object({
     .required('You must agree to the terms'),
 });
 
+export const loginSchema = yup.object({
+  email: yup
+    .string()
+    .required('Email is required')
+    .email('Please enter a valid email')
+    .trim(),
+  password: yup
+    .string()
+    .required('Password is required')
+    .min(8, 'Password must be at least 8 characters'),
+});
+
+
 export type RegisterFormData = yup.InferType<typeof registerSchema>;
+export type LoginFormData = yup.InferType<typeof loginSchema>;
