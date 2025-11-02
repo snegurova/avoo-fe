@@ -3,6 +3,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { registerSchema, RegisterFormData, loginSchema, LoginFormData } from './validationSchemas';
 import { authApi } from '@avoo/axios';
 import { useAuthStore } from '@avoo/store';
+import { useMutation } from '@tanstack/react-query';
 
 export const authHooks = {
   useRegisterForm: ({
@@ -33,11 +34,7 @@ export const authHooks = {
 
     const onSubmit = async (data: RegisterFormData) => {
       try {
-        await authApi.register({
-          email: data.email,
-          password: data.password,
-          name: data.name,
-        });
+    
         
         setIsAuthenticated(true);
         onSuccess?.(data);

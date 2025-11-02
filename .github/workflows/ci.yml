@@ -61,3 +61,124 @@ run: yarn prettier --check .
 
 - name: Build
 run: npx turbo run build --cache-dir=.turbo
+
+mobile_check:
+  name: Mobile app check
+  runs-on: ubuntu-latest
+  timeout-minutes: 15
+  steps:
+    - uses: actions/checkout@v4
+
+    - name: Enable Corepack (Yarn Berry)
+      run: corepack enable
+
+    - name: Use Node.js 20
+      uses: actions/setup-node@v4
+      with:
+        node-version: 20
+
+    - name: Prepare Yarn
+      run: corepack prepare yarn@4.3.1 --activate
+
+    - name: Cache Yarn
+      uses: actions/cache@v4
+      with:
+        path: |
+          .yarn/cache
+        key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock', '.yarnrc.yml') }}
+        restore-keys: |
+          ${{ runner.os }}-yarn-
+
+    - name: Install dependencies
+      run: yarn install --immutable
+
+    - name: Typecheck mobile
+      run: |
+        cd apps/mobile
+        yarn typecheck
+
+    - name: Lint mobile
+      run: |
+        cd apps/mobile
+        yarn lint
+
+    - name: Install Expo CLI
+      run: npm install -g @expo/cli@latest
+
+    - name: Verify Expo config
+      run: |
+        cd apps/mobile
+        npx expo config --type public
+
+  mobile_android_build:
+    name: Mobile Android build
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: 'gradle'
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Enable Corepack (Yarn Berry)
+        run: corepack enable
+
+      - name: Use Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Prepare Yarn
+        run: corepack prepare yarn@4.3.1 --activate
+
+      - name: Install dependencies
+        run: yarn install --immutable
+
+      - name: Install Expo CLI
+        run: npm install -g @expo/cli@latest
+
+      - name: Build Android
+        run: |
+          cd apps/mobile
+          npx expo run:android --no-build-cache
+
+  mobile_ios_build:
+    name: Mobile iOS build
+    runs-on: macos-14
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Enable Corepack (Yarn Berry)
+        run: corepack enable
+
+      - name: Use Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Prepare Yarn
+        run: corepack prepare yarn@4.3.1 --activate
+
+      - name: Install dependencies
+        run: yarn install --immutable
+
+      - name: Setup CocoaPods
+        run: |
+          sudo gem install cocoapods
+          cd apps/mobile/ios && pod install
+
+      - name: Install Expo CLI
+        run: npm install -g @expo/cli@latest
+
+      - name: Build iOS
+        run: |
+          cd apps/mobile
+          npx expo run:ios --no-build-cache

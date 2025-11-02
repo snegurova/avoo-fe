@@ -36,6 +36,7 @@
     "react-native-screens": "~4.16.0"
   },
   "peerDependencies": {
+    "@tanstack/react-query": "^5.0.0",
     "react-hook-form": "^7.54.0"
   },
   "devDependencies": {
