@@ -1,6 +1,42 @@
+import { Metadata } from "next";
 import LoginForm from "../_components/Auth/LoginForm";
+import Link from "next/link";
+
+export const metadata: Metadata = {
+    title: "Sign In - AVOO App",
+    description: "Sign in to your AVOO account",
+};
 
 export default function SignInPage() {
-    return <LoginForm />;
+    return (
+        <div className="flex min-h-screen flex-col justify-center px-6 py-12 lg:px-8 bg-white">
+            <div className="sm:mx-auto sm:w-full sm:max-w-sm">
+                <h1 className="text-center text-3xl font-bold leading-9 tracking-tight text-gray-900">
+                    AVOO App
+                </h1>
+                <h2 className="mt-2 text-center text-lg text-gray-600">
+                    Sign in to your AVOO account
+                </h2>
+            </div>
+
+            <LoginForm />
+
+            <div className="sm:mx-auto sm:w-full sm:max-w-sm mt-4">
+                <p className="text-center text-gray-600">
+                    No account?{' '}
+                    <Link href="/sign-up" className="text-blue-600 hover:underline">
+                        Sign up
+                    </Link>
+                </p>
+
+                <div className="flex justify-between items-center mt-8 text-sm text-gray-600">
+                    <span>© 2025 Avoo</span>
+                    <Link href="/privacy-policy" className="text-blue-600 hover:underline">
+                        Privacy Policy
+                    </Link>
+                </div>
+            </div>
+        </div>
+    );
 }
 

@@ -16,7 +16,6 @@ export default function RegistrationForm() {
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
     const { control, handleSubmit, errors, isSubmitting } = authHooks.useRegisterForm();
-    const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
 
     return (
@@ -74,24 +73,6 @@ export default function RegistrationForm() {
                 loading={isSubmitting}
                 disabled={isSubmitting}
             />
-
-
-            <View style={styles.signUpContainer}>
-                <Text style={styles.navigateToSignIn}>Having account?</Text>
-                <Pressable
-                    onPress={() => navigation.reset({
-                        index: 0,
-                        routes: [{ name: 'LoginScreen' }],
-                    })}
-                    accessibilityRole="button"
-                    accessibilityLabel="Sign up for a new account"
-                    accessibilityHint="Navigates to registration screen"
-                    hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-                >
-                    <Text style={styles.signInLink}>Log in</Text>
-                </Pressable>
-            </View>
-
         </View>
     );
 }
@@ -141,21 +122,6 @@ const styles = StyleSheet.create({
         backgroundColor: '#F8FAFC',
         color: '#0F172A',
     },
-    signUpContainer: {
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginTop: 16,
-        gap: 4,
-    },
-    navigateToSignIn: {
-        fontSize: 16,
-        color: '#64748B',
-    },
-    signInLink: {
-        fontSize: 16,
-        color: '#2563EB',
-        textDecorationLine: 'underline',
-        padding: 4,
-    },
+  
+
 });
