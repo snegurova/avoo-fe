@@ -4,23 +4,18 @@ import { View, Text, StyleSheet, Pressable } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
 
-interface FormCheckBoxProps<T extends FieldValues> {
+interface Props<T extends FieldValues> {
   name: Path<T>;
   control: Control<T>;
   label: string;
   error?: string;
 }
 
-export const FormCheckBox = <T extends FieldValues>({
-  name,
-  control,
-  label,
-  error,
-}: FormCheckBoxProps<T>) => {
+export const FormCheckBox = <T extends FieldValues>(props: Props<T>) => {
+  const { name, control, label, error } = props;
   const { field } = useController({
     name,
     control,
-    defaultValue: false as PathValue<T, Path<T>>,
   });
 
   return (

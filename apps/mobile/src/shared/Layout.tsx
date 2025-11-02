@@ -15,7 +15,7 @@ import { RootStackParamList } from '../types/navigation';
  * @property {boolean} centerContent - Whether to center the main content vertically and horizontally
  * @property {boolean} hasBottomTab - Whether the screen has bottom tab navigation this is used to set the safe area edges
  */
-type LayoutProps = {
+type Props = {
   children: React.ReactNode;
   title?: string | React.ReactNode;
   leftContent?: React.ReactNode;
@@ -27,17 +27,8 @@ type LayoutProps = {
   style?: StyleProp<ViewStyle>;
 };
 
-export const Layout = ({
-  children,
-  title,
-  leftContent,
-  rightContent,
-  showBack,
-  onBackPress,
-  centerContent = false,
-  hasBottomTab = false,
-  style,
-}: LayoutProps) => {
+export const Layout = (props: Props) => {
+  const { children, title, leftContent, rightContent, showBack, onBackPress, centerContent = false, hasBottomTab = false, style } = props;
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
   return (

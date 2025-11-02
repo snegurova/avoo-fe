@@ -17,7 +17,7 @@ import {
  * @property {string} error - Error message (changes border color to red)
  * @property {StyleProp<TextStyle>} style - Custom styles for the input itself
  */
-interface TextInputCustomProps extends TextInputProps {
+interface Props extends TextInputProps {
   rightIcon?: React.ReactNode;
   onRightIconPress?: () => void;
   containerStyle?: ViewStyle;
@@ -25,14 +25,16 @@ interface TextInputCustomProps extends TextInputProps {
   style?: StyleProp<TextStyle>;
 }
 
-export const TextInputCustom = React.forwardRef<TextInput | null, TextInputCustomProps>(({
-  rightIcon,
-  onRightIconPress,
-  containerStyle,
-  style,
-  error,
-  ...props
-}, ref) => {
+export const TextInputCustom = React.forwardRef<TextInput | null, Props>((props: Props, ref) => {
+  const {
+    rightIcon,
+    onRightIconPress,
+    containerStyle,
+    style,
+    error,
+    ...rest
+  } = props;
+  
   return (
     <View style={[styles.container, containerStyle]}>
       <View style={styles.inputContainer}>

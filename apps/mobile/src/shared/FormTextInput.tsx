@@ -13,14 +13,16 @@ import {
 } from 'react-native';
 
 /**
- * @property {React.ReactNode} rightIcon - Icon component to display on the right side
- * @property {() => void} onRightIconPress - Handler for right icon press (e.g., toggle password visibility)
+ * @property {React.ReactNode} accessoryRight - Icon component to display on the right side
+ * @property {() => void} onAccessoryRightPress - Handler for right icon press (e.g., toggle password visibility)
  * @property {ViewStyle} containerStyle - Custom styles for the container wrapper
  * @property {string} error - Error message (changes border color to red)
  * @property {StyleProp<TextStyle>} style - Custom styles for the input itself
+ * @property {Path<T>} name - Name of the input field
+ * @property {Control<T>} control - Control object from react-hook-form
  */
 
-interface FormTextInputProps<T extends FieldValues> extends TextInputProps {
+interface Props<T extends FieldValues> extends TextInputProps {
   accessoryRight?: React.ReactNode;
   onAccessoryRightPress?: () => void;
   containerStyle?: ViewStyle;
@@ -30,22 +32,13 @@ interface FormTextInputProps<T extends FieldValues> extends TextInputProps {
   control: Control<T>;
 }
 
-export const FormTextInput = <T extends FieldValues>({
-  name,
-  control,
-  accessoryRight,
-  onAccessoryRightPress,
-  containerStyle,
-  style,
-  error,
-  ...props
-}: FormTextInputProps<T>) => {
+export const FormTextInput = <T extends FieldValues>(props: Props<T>) => {
+  const { name, control, accessoryRight, onAccessoryRightPress, containerStyle, style, error, ...rest } = props;
   const { field } = useController({
     name,
     control,
-   });
+  });
 
-   
   return (
     <View style={[styles.container, containerStyle]}>
       <View style={styles.inputContainer}>
@@ -59,7 +52,7 @@ export const FormTextInput = <T extends FieldValues>({
           value={field.value}
           onChangeText={field.onChange}
           onBlur={field.onBlur}
-          {...props}
+          {...rest}
         />
         {accessoryRight && (
           <TouchableOpacity
