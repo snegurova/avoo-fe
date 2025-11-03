@@ -4,6 +4,7 @@ import { registerSchema, RegisterFormData, loginSchema, LoginFormData } from './
 import { authApi } from '@avoo/axios';
 import { useAuthStore } from '@avoo/store';
 import { useMutation } from '@tanstack/react-query';
+import { AuthResponse, BaseResponse } from '@avoo/axios/types/apiTypes';
 
 export const authHooks = {
   useRegisterForm: ({
@@ -34,8 +35,12 @@ export const authHooks = {
 
     const onSubmit = async (data: RegisterFormData) => {
       try {
-    
-        
+        await authApi.register({
+          name: data.name,
+          email: data.email,
+          password: data.password,
+        });
+
         setIsAuthenticated(true);
         onSuccess?.(data);
       } catch (error) {
@@ -71,27 +76,30 @@ export const authHooks = {
         password: '',
       },
     });
-  
+
     const setIsAuthenticated = useAuthStore(state => state.setIsAuthenticated);
-  
-    const onSubmit = async (data: LoginFormData) => {
-      try {
-        await authApi.login({
-          email: data.email,
-          password: data.password,
-        });
-        
+
+
+    const { mutate: login } = useMutation({
+      mutationFn: (data: LoginFormData) => authApi.login({
+        email: data.email,
+        password: data.password,
+      }),
+      onSuccess: (response) => {
         setIsAuthenticated(true);
-        onSuccess?.(data);
-      } catch (error) {
+        onSuccess?.(response.user);
+      },
+      onError: (error) => {
         onError?.(error);
-      }
-    };
-  
+      },
+    });
+
+
+
     return {
       register,
       control,
-      handleSubmit: handleSubmit(onSubmit),
+      handleSubmit: handleSubmit((data) => login(data)),
       errors,
       isSubmitting,
     };
