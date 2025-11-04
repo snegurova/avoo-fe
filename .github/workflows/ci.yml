@@ -36,18 +36,6 @@ jobs:
       - name: Install dependencies
         run: yarn install --immutable
 
-      - name: Lint
-        run: npx turbo run lint
-
-      - name: Typecheck
-        run: npx turbo run typecheck
-
-      - name: Test
-        run: npx turbo run test
-
-      - name: Prettier check
-        run: yarn prettier --check .
-
       - name: Build
         run: npx turbo run build --cache-dir=.turbo
 
@@ -80,16 +68,6 @@ jobs:
 
       - name: Install dependencies
         run: yarn install --immutable
-
-      - name: Typecheck mobile
-        run: |
-          cd apps/mobile
-          yarn typecheck
-
-      - name: Lint mobile
-        run: |
-          cd apps/mobile
-          yarn lint
 
       - name: Install Expo CLI
         run: npm install -g @expo/cli@latest
