@@ -36,6 +36,15 @@ jobs:
       - name: Install dependencies
         run: yarn install --immutable
 
+      - name: Lint
+        run: npx turbo run lint
+
+      - name: Typecheck
+        run: npx turbo run typecheck
+
+      - name: Test
+        run: npx turbo run test
+
       - name: Build
         run: npx turbo run build --cache-dir=.turbo
 
@@ -68,6 +77,15 @@ jobs:
 
       - name: Install dependencies
         run: yarn install --immutable
+
+      - name: Lint
+        run: npx turbo run lint
+
+      - name: Typecheck
+        run: npx turbo run typecheck
+
+      - name: Test
+        run: npx turbo run test
 
       - name: Install Expo CLI
         run: npm install -g @expo/cli@latest
@@ -108,8 +126,22 @@ jobs:
       - name: Install dependencies
         run: yarn install --immutable
 
+      - name: Lint
+        run: npx turbo run lint
+
+      - name: Typecheck
+        run: npx turbo run typecheck
+
+      - name: Test
+        run: npx turbo run test
+
       - name: Install Expo CLI
         run: npm install -g @expo/cli@latest
+
+      - name: Prebuild Android
+        run: |
+          cd apps/mobile
+          npx expo prebuild
 
       - name: Build Android
         run: |
@@ -119,7 +151,7 @@ jobs:
   mobile_ios_build:
     name: Mobile iOS build
     runs-on: macos-15
-    timeout-minutes: 30
+    timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4
 
@@ -136,6 +168,15 @@ jobs:
 
       - name: Install dependencies
         run: yarn install --immutable
+
+      - name: Lint
+        run: npx turbo run lint
+
+      - name: Typecheck
+        run: npx turbo run typecheck
+
+      - name: Test
+        run: npx turbo run test
 
       - name: Install Expo CLI
         run: npm install -g @expo/cli@latest
