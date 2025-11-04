@@ -8,7 +8,7 @@ import FontAwesome from '@expo/vector-icons/FontAwesome';
 export default function LoginForm() {
     const [showPassword, setShowPassword] = useState(false);
 
-    const { control, handleSubmit, errors, isSubmitting } = authHooks.useLoginForm();
+    const { control, handleSubmit, errors, isPending } = authHooks.useLoginForm();
 
     return (
         <View style={styles.form}>
@@ -36,8 +36,8 @@ export default function LoginForm() {
             <Button
                 onPress={handleSubmit}
                 title="Log in"
-                loading={isSubmitting}
-                disabled={isSubmitting}
+                loading={isPending}
+                disabled={isPending}
             />
         </View>
     );

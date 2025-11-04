@@ -1,10 +1,12 @@
-import { useForm } from 'react-hook-form';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { registerSchema, RegisterFormData, loginSchema, LoginFormData } from './validationSchemas';
 import { authApi } from '@avoo/axios';
 import { useAuthStore } from '@avoo/store';
 import { useMutation } from '@tanstack/react-query';
-import { AuthResponse, BaseResponse } from '@avoo/axios/types/apiTypes';
+import { AuthResponse, BaseResponse, LoginRequest } from '@avoo/axios/types/apiTypes';
+import { useApiStore } from '@avoo/store/src/api.store';
+import { apiStatus } from './constants';
 
 export const authHooks = {
   useRegisterForm: ({
@@ -60,14 +62,14 @@ export const authHooks = {
     onSuccess,
     onError
   }: {
-    onSuccess?: (data: LoginFormData) => void;
+    onSuccess?: () => void;
     onError?: (error: any) => void;
   } = {}) => {
     const {
       register,
       control,
       handleSubmit,
-      formState: { errors, isSubmitting },
+      formState: { errors },
     } = useForm<LoginFormData>({
       resolver: yupResolver(loginSchema),
       mode: 'onSubmit',
@@ -78,20 +80,22 @@ export const authHooks = {
     });
 
     const setIsAuthenticated = useAuthStore(state => state.setIsAuthenticated);
+    const setIsPending = useApiStore(state => state.setIsPending);
+    const isPending = useApiStore(state => state.isPending);
 
-
-    const { mutate: login } = useMutation({
-      mutationFn: (data: LoginFormData) => authApi.login({
-        email: data.email,
-        password: data.password,
-      }),
+    const { mutate: login } = useMutation<BaseResponse<AuthResponse>, Error, LoginRequest>({
+      mutationFn: (data: LoginRequest) => authApi.login(data),
+      onMutate: () => setIsPending(true),
       onSuccess: (response) => {
-        setIsAuthenticated(true);
-        onSuccess?.(response.user);
+        if (response.status === apiStatus.SUCCESS) {
+          setIsAuthenticated(true);
+          onSuccess?.();
+        }
       },
       onError: (error) => {
         onError?.(error);
       },
+      onSettled: () => setIsPending(false),
     });
 
 
@@ -99,9 +103,9 @@ export const authHooks = {
     return {
       register,
       control,
-      handleSubmit: handleSubmit((data) => login(data)),
+      isPending,
+      handleSubmit: handleSubmit((data: LoginRequest) => login(data)),
       errors,
-      isSubmitting,
     };
   },
 };

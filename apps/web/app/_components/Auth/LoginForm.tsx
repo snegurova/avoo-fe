@@ -11,7 +11,7 @@ export default function LoginForm() {
     
     const router = useRouter();
 
-    const { register, handleSubmit, errors, isSubmitting } = authHooks.useLoginForm({
+    const { register, handleSubmit, errors, isPending  } = authHooks.useLoginForm({
         onSuccess: () => {
             router.push('/');
         },
@@ -43,8 +43,8 @@ export default function LoginForm() {
 
             <Button
                 onClick={handleSubmit}
-                disabled={isSubmitting}
-                loading={isSubmitting}
+                disabled={isPending}
+                loading={isPending}
                 fit={ButtonFit.Fill}
                 intent={ButtonIntent.Primary}
             >
