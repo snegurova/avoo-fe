@@ -137,15 +137,11 @@ jobs:
       - name: Install dependencies
         run: yarn install --immutable
 
-      - name: Setup CocoaPods
-        run: |
-          sudo gem install cocoapods
-          cd apps/mobile/ios && pod install
-
       - name: Install Expo CLI
         run: npm install -g @expo/cli@latest
 
       - name: Build iOS
         run: |
           cd apps/mobile
+          npx expo prebuild --non-interactive
           npx expo run:ios --no-build-cache
