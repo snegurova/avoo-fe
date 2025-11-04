@@ -11881,7 +11881,6 @@ __metadata:
     postcss: "npm:^8.4.41"
     react: "npm:^19.2.0"
     react-dom: "npm:^19.2.0"
-    react-hook-form: "npm:^7.54.0"
     storybook: "npm:^10.0.2"
     tailwind-merge: "npm:^3.3.1"
     tailwind-variants: "npm:^3.1.1"
