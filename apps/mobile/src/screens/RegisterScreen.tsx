@@ -1,29 +1,18 @@
-import { useState } from "react";
-import { Text, View, TextInput, StyleSheet, TouchableWithoutFeedback, Keyboard, Pressable } from "react-native";
-import Button from "../shared/Button";
-import { useAuthStore } from "@avoo/store";
-import { TextInputCustom } from "../shared/TextInputCustom";
-import FontAwesome from '@expo/vector-icons/FontAwesome';
+import { Text, View, StyleSheet, TouchableWithoutFeedback, Keyboard, Pressable } from "react-native";
 import { Layout } from "../shared/Layout";
+import RegistrationForm from "../components/RegistrationForm";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { RootStackParamList } from "../types/navigation";
 
 
+
+
 export default function RegisterScreen() {
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [showPassword, setShowPassword] = useState(false);
-    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-    const setIsAuthenticated = useAuthStore(state => state.setIsAuthenticated);
     const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
-    const handleLogin = () => {
-        setIsAuthenticated(true);
-    }
-
     return (
-        <Layout centerContent={true} >
-            <TouchableWithoutFeedback onPress={Keyboard.dismiss} style={styles.container}>
+        <Layout style={styles.container} >
+            <TouchableWithoutFeedback onPress={Keyboard.dismiss} >
                 <View style={styles.wrapper}>
                     <Text style={styles.title}>
                         AVOO App
@@ -32,65 +21,34 @@ export default function RegisterScreen() {
                         Create a professional account
                     </Text>
                     <Text style={styles.subtitle}>
-                        Create an account or login in your business
+                        Create an account or login in your busines
                     </Text>
 
-                    <View style={styles.form}>
-                        <TextInput
-                            style={styles.input}
-                            placeholder="Full Name"
-                            placeholderTextColor="#94A3B8"
-                            value={email}
-                            onChangeText={setEmail}
-                            autoCapitalize="none"
-                            keyboardType="default"
-                        />
-                        <TextInput
-                            style={styles.input}
-                            placeholder="Email"
-                            placeholderTextColor="#94A3B8"
-                            value={email}
-                            onChangeText={setEmail}
-                            autoCapitalize="none"
-                            keyboardType="email-address"
-                        />
-                        <TextInputCustom
-                            placeholder="Password"
-                            value={password}
-                            onChangeText={setPassword}
-                            secureTextEntry={!showPassword}
-                            rightIcon={showPassword ? <FontAwesome name="eye" size={24} color="black" /> : <FontAwesome name="eye-slash" size={24} color="black" />}
-                            onRightIconPress={() => setShowPassword(!showPassword)}
-                        />
-                        <TextInputCustom
-                            placeholder="Confirm Password"
-                            value={password}
-                            onChangeText={setPassword}
-                            secureTextEntry={!showConfirmPassword}
-                            rightIcon={showConfirmPassword ? <FontAwesome name="eye" size={24} color="black" /> : <FontAwesome name="eye-slash" size={24} color="black" />}
-                            onRightIconPress={() => setShowConfirmPassword(!showConfirmPassword)}
-                        />
+                    <RegistrationForm />
 
-                        <Button
-                            onPress={handleLogin}
-                            title="Log in"
-                        />
+                    <View style={styles.signUpContainer}>
+                        <Text style={styles.navigateToSignIn}>Having account?</Text>
+                        <Pressable
+                            onPress={() => navigation.reset({
+                                index: 0,
+                                routes: [{ name: 'LoginScreen' }],
+                            })}
+                            accessibilityRole="button"
+                            accessibilityLabel="Sign up for a new account"
+                            accessibilityHint="Navigates to registration screen"
+                            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+                        >
+                            <Text style={styles.signInLink}>Log in</Text>
+                        </Pressable>
+                    </View>
 
-                        <View style={styles.signUpContainer}>
-                            <Text style={styles.navigateToSignIn}>Having account?</Text>
-                            <Pressable
-                                onPress={() => navigation.reset({
-                                    index: 0,
-                                    routes: [{ name: 'LoginScreen' }],
-                                })}
-                                accessibilityRole="button"
-                                accessibilityLabel="Sign up for a new account"
-                                accessibilityHint="Navigates to registration screen"
-                                hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-                            >
-                                <Text style={styles.signInLink}>Log in</Text>
-                            </Pressable>
-                        </View>
+                    <View style={styles.footer}>
+                        <Text style={styles.copyright}>© 2025 Avoo</Text>
+                        <Text
+                            style={styles.privacyLink}
+                        >
+                            Privacy Policy
+                        </Text>
                     </View>
                 </View>
             </TouchableWithoutFeedback>
@@ -105,6 +63,7 @@ const styles = StyleSheet.create({
         padding: 16,
         backgroundColor: '#FFFFFF'
     },
+
     title: {
         fontSize: 32,
         fontWeight: '700',
@@ -121,18 +80,18 @@ const styles = StyleSheet.create({
     wrapper: {
         width: '100%',
     },
-    form: {
-        width: '100%',
-        gap: 16,
+    footer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
     },
-    input: {
-        borderWidth: 1,
-        borderColor: '#E2E8F0',
-        borderRadius: 8,
-        padding: 16,
-        fontSize: 18,
-        backgroundColor: '#F8FAFC',
-        color: '#0F172A',
+    copyright: {
+        fontSize: 14,
+        color: '#64748B',
+    },
+    privacyLink: {
+        fontSize: 14,
+        color: '#2563EB',
     },
     signUpContainer: {
         flexDirection: 'row',

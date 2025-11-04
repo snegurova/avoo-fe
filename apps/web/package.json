@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@avoo/axios": "workspace:*",
+    "@avoo/hooks": "workspace:*",
     "@avoo/store": "workspace:*",
     "next": "^16.0.0",
     "react": "^19.2.0",

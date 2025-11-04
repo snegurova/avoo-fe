@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, KeyboardAvoidingView, Platform, RefreshControl } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, KeyboardAvoidingView, Platform, RefreshControl, StyleProp, ViewStyle } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
@@ -15,7 +15,7 @@ import { RootStackParamList } from '../types/navigation';
  * @property {boolean} centerContent - Whether to center the main content vertically and horizontally
  * @property {boolean} hasBottomTab - Whether the screen has bottom tab navigation this is used to set the safe area edges
  */
-type LayoutProps = {
+type Props = {
   children: React.ReactNode;
   title?: string | React.ReactNode;
   leftContent?: React.ReactNode;
@@ -24,24 +24,17 @@ type LayoutProps = {
   onBackPress?: () => void;
   centerContent?: boolean;
   hasBottomTab?: boolean;
+  style?: StyleProp<ViewStyle>;
 };
 
-export const Layout = ({
-  children,
-  title,
-  leftContent,
-  rightContent,
-  showBack,
-  onBackPress,
-  centerContent = false,
-  hasBottomTab = false,
-}: LayoutProps) => {
+export const Layout = (props: Props) => {
+  const { children, title, leftContent, rightContent, showBack, onBackPress, centerContent = false, hasBottomTab = false, style } = props;
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
   return (
     <SafeAreaView 
       edges={hasBottomTab ? ['top'] : undefined} 
-      style={styles.container}
+      style={[styles.container, style]}
     >
       {(title || leftContent || rightContent) && (
         <View style={styles.header}>
@@ -78,6 +71,7 @@ export const Layout = ({
       >
         <ScrollView 
           style={styles.content} 
+          showsVerticalScrollIndicator={false}
           contentContainerStyle={centerContent ? styles.centerContent : {}}
         >
           {children}
