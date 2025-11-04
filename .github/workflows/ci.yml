@@ -1,114 +1,103 @@
 name: CI
 on:
-push:
-branches: [ main, master ]
-pull_request:
-branches: [ main, master ]
-
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
 
 jobs:
-build:
-runs-on: ubuntu-latest
-steps:
-- uses: actions/checkout@v4
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
 
+      - name: Enable Corepack (Yarn Berry)
+        run: corepack enable
 
-- name: Enable Corepack (Yarn Berry)
-run: corepack enable
+      - name: Use Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
 
+      - name: Prepare Yarn
+        run: corepack prepare yarn@4.3.1 --activate
 
-- name: Use Node.js 20
-uses: actions/setup-node@v4
-with:
-node-version: 20
+      - name: Cache Yarn & Turbo
+        uses: actions/cache@v4
+        with:
+          path: |
+            .yarn/cache
+            .turbo
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock', '.yarnrc.yml') }}-turbo-${{ hashFiles('turbo.json') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+            ${{ runner.os }}-turbo-
 
+      - name: Install dependencies
+        run: yarn install --immutable
 
-- name: Prepare Yarn
-run: corepack prepare yarn@4.3.1 --activate
+      - name: Lint
+        run: npx turbo run lint
 
+      - name: Typecheck
+        run: npx turbo run typecheck
 
-- name: Cache Yarn & Turbo
-uses: actions/cache@v4
-with:
-path: |
-.yarn/cache
-.turbo
-key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock', '.yarnrc.yml') }}-turbo-${{ hashFiles('turbo.json') }}
-restore-keys: |
-${{ runner.os }}-yarn-
-${{ runner.os }}-turbo-
+      - name: Test
+        run: npx turbo run test
 
+      - name: Prettier check
+        run: yarn prettier --check .
 
-- name: Install dependencies
-run: yarn install --immutable
+      - name: Build
+        run: npx turbo run build --cache-dir=.turbo
 
+  mobile_check:
+    name: Mobile app check
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
 
-- name: Lint
-run: npx turbo run lint
+      - name: Enable Corepack (Yarn Berry)
+        run: corepack enable
 
+      - name: Use Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
 
-- name: Typecheck
-run: npx turbo run typecheck
+      - name: Prepare Yarn
+        run: corepack prepare yarn@4.3.1 --activate
 
+      - name: Cache Yarn
+        uses: actions/cache@v4
+        with:
+          path: |
+            .yarn/cache
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock', '.yarnrc.yml') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
 
-- name: Test
-run: npx turbo run test
+      - name: Install dependencies
+        run: yarn install --immutable
 
+      - name: Typecheck mobile
+        run: |
+          cd apps/mobile
+          yarn typecheck
 
-- name: Prettier check
-run: yarn prettier --check .
+      - name: Lint mobile
+        run: |
+          cd apps/mobile
+          yarn lint
 
+      - name: Install Expo CLI
+        run: npm install -g @expo/cli@latest
 
-- name: Build
-run: npx turbo run build --cache-dir=.turbo
-
-mobile_check:
-  name: Mobile app check
-  runs-on: ubuntu-latest
-  timeout-minutes: 15
-  steps:
-    - uses: actions/checkout@v4
-
-    - name: Enable Corepack (Yarn Berry)
-      run: corepack enable
-
-    - name: Use Node.js 20
-      uses: actions/setup-node@v4
-      with:
-        node-version: 20
-
-    - name: Prepare Yarn
-      run: corepack prepare yarn@4.3.1 --activate
-
-    - name: Cache Yarn
-      uses: actions/cache@v4
-      with:
-        path: |
-          .yarn/cache
-        key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock', '.yarnrc.yml') }}
-        restore-keys: |
-          ${{ runner.os }}-yarn-
-
-    - name: Install dependencies
-      run: yarn install --immutable
-
-    - name: Typecheck mobile
-      run: |
-        cd apps/mobile
-        yarn typecheck
-
-    - name: Lint mobile
-      run: |
-        cd apps/mobile
-        yarn lint
-
-    - name: Install Expo CLI
-      run: npm install -g @expo/cli@latest
-
-    - name: Verify Expo config
-      run: |
-        cd apps/mobile
-        npx expo config --type public
+      - name: Verify Expo config
+        run: |
+          cd apps/mobile
+          npx expo config --type public
 
   mobile_android_build:
     name: Mobile Android build
