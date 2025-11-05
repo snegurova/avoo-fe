@@ -38,13 +38,13 @@ export default defineConfig([
         },
     },
     {
-        // 👇 Дополнительный блок специально для Node-конфигов
+        
         files: ["**/*.config.js", "**/*.config.cjs", "**/*.config.mjs"],
         languageOptions: {
             globals: globals.node,
         },
         rules: {
-            "no-undef": "off", // можно даже полностью отключить для конфигов
+            "no-undef": "off", 
         },
     },
 ]);
