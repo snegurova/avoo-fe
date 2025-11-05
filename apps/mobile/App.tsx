@@ -8,7 +8,6 @@ import { queryClient } from 'packages/hooks/src';
 
 enableScreens();
 
-
 export default function App() {
   return (
     <SafeAreaProvider>

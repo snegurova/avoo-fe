@@ -33,11 +33,11 @@ const hooks = {
 };
 
 const button = tv({
-  base: 'inline-flex items-center rounded-md font-medium transition px-4 py-2 focus:outline-none focus:ring-2 focus:ring-offset-2',
+  base: 'inline-flex items-center justify-center rounded-md font-medium transition px-4 py-2 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:cursor-not-allowed',
   variants: {
     intent: {
-      primary: 'bg-blue-600 text-white hover:bg-blue-700',
-      secondary: 'bg-gray-200 text-gray-900 hover:bg-gray-300',
+      primary: 'bg-blue-600 text-white hover:bg-blue-700 disabled:bg-blue-300',
+      secondary: 'bg-gray-200 text-gray-900 hover:bg-gray-300 disabled:bg-gray-100',
     },
     fit: {
       fill: 'w-full',

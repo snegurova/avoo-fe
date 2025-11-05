@@ -1,12 +1,12 @@
-import { StyleSheet, View } from "react-native";
-import { FormTextInput } from "../shared/FormTextInput";
-import { useState } from "react";
-import Button from "../shared/Button";
-import { authHooks } from "@avoo/hooks";
+import { StyleSheet, View } from 'react-native';
+import { FormTextInput } from '../shared/FormTextInput';
+import { useState } from 'react';
+import Button from '../shared/Button/Button';
+import { authHooks } from '@avoo/hooks';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 
 export default function LoginForm() {
-    const [showPassword, setShowPassword] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
     const { control, handleSubmit, errors, isPending } = authHooks.useLoginForm();
 
@@ -44,10 +44,8 @@ export default function LoginForm() {
 }
 
 const styles = StyleSheet.create({
-    form: {
-        width: '100%',
-        gap: 16,
-    },
- 
+  form: {
+    width: '100%',
+    gap: 16,
+  },
 });
-

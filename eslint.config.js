@@ -26,6 +26,7 @@ export default defineConfig([
             globals: {
                 ...globals.browser,
                 ...globals.node,
+                __DEV__: "readonly",
             },
         },
         plugins: {
