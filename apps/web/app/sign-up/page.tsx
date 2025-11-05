@@ -34,7 +34,7 @@ export default function SignUpPage() {
 
                 <div className="flex justify-between items-center mt-8 text-sm text-gray-600">
                     <span>© 2025 Avoo</span>
-                    <Link href="/privacy-policy" className="text-blue-600 hover:underline">
+                    <Link href="#" className="text-blue-600 hover:underline">
                         Privacy Policy
                     </Link>
                 </div>
