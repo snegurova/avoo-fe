@@ -13,7 +13,7 @@ export default function App() {
     <SafeAreaProvider>
       <NavigationContainer>
         <QueryClientProvider client={queryClient}>
-          <StatusBar style="auto" />
+          <StatusBar style='auto' />
           <AppContainer />
         </QueryClientProvider>
       </NavigationContainer>

@@ -1,9 +1,9 @@
-import { StyleSheet, View } from "react-native";
-import { FormTextInput } from "../shared/FormTextInput";
-import { useState } from "react";
-import { FormCheckBox } from "../shared/FormCheckBox";
-import Button from "../shared/Button/Button";
-import { authHooks } from "packages/hooks/src";
+import { StyleSheet, View } from 'react-native';
+import { FormTextInput } from '../shared/FormTextInput';
+import { useState } from 'react';
+import { FormCheckBox } from '../shared/FormCheckBox';
+import Button from '../shared/Button/Button';
+import { authHooks } from 'packages/hooks/src';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 
 export default function RegistrationForm() {

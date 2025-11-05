@@ -3,7 +3,6 @@ import { Control, FieldValues, Path, useController } from 'react-hook-form';
 import { View, Text, StyleSheet, Pressable } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
-
 interface Props<T extends FieldValues> {
   name: Path<T>;
   control: Control<T>;
@@ -28,13 +27,13 @@ export const FormCheckBox = <T extends FieldValues>(props: Props<T>) => {
             height: 24,
             borderRadius: 6,
             borderWidth: 2,
-            borderColor: field.value ? '#2563EB' : error ? "red" : '#999',
+            borderColor: field.value ? '#2563EB' : error ? 'red' : '#999',
             alignItems: 'center',
             justifyContent: 'center',
             backgroundColor: field.value ? '#2563EB' : 'transparent',
           }}
         >
-          {field.value && <Ionicons name="checkmark" size={16} color="#fff" />}
+          {field.value && <Ionicons name='checkmark' size={16} color='#fff' />}
         </Pressable>
         <Text style={styles.label}>{label}</Text>
       </View>

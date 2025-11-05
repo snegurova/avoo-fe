@@ -20,13 +20,13 @@ export default function CheckBox(props: Props) {
           height: 24,
           borderRadius: 6,
           borderWidth: 2,
-          borderColor: isChecked ? '#2563EB' :  errors ? "red" : '#999',
+          borderColor: isChecked ? '#2563EB' : errors ? 'red' : '#999',
           alignItems: 'center',
           justifyContent: 'center',
           backgroundColor: isChecked ? '#2563EB' : 'transparent',
         }}
       >
-        {isChecked && <Ionicons name="checkmark" size={16} color="#fff" />}
+        {isChecked && <Ionicons name='checkmark' size={16} color='#fff' />}
       </Pressable>
       <Text style={styles.label}>{label}</Text>
     </View>

@@ -1,14 +1,6 @@
 import React from 'react';
 import { Pressable, Text, StyleSheet, ActivityIndicator, ViewStyle, TextStyle } from 'react-native';
 
-/**
- * @property {() => void} onPress - Function to be called when button is pressed
- * @property {string} title - Text to display inside the button
- * @property {boolean} disabled - Whether the button is disabled (grayed out and non-interactive)
- * @property {boolean} loading - Whether to show loading spinner instead of title
- * @property {ViewStyle | ViewStyle[]} style - Custom styles for the button container
- * @property {TextStyle} textStyle - Custom styles for the button text
- */
 export interface ButtonProps {
   onPress: () => void;
   title: string;

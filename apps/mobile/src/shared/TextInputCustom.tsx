@@ -10,13 +10,7 @@ import {
   StyleProp,
 } from 'react-native';
 
-/**
- * @property {React.ReactNode} rightIcon - Icon component to display on the right side
- * @property {() => void} onRightIconPress - Handler for right icon press (e.g., toggle password visibility)
- * @property {ViewStyle} containerStyle - Custom styles for the container wrapper
- * @property {string} error - Error message (changes border color to red)
- * @property {StyleProp<TextStyle>} style - Custom styles for the input itself
- */
+
 interface Props extends TextInputProps {
   rightIcon?: React.ReactNode;
   onRightIconPress?: () => void;
@@ -26,26 +20,19 @@ interface Props extends TextInputProps {
 }
 
 export const TextInputCustom = React.forwardRef<TextInput | null, Props>((props: Props, ref) => {
-  const {
-    rightIcon,
-    onRightIconPress,
-    containerStyle,
-    style,
-    error,
-    ...rest
-  } = props;
-  
+  const { rightIcon, onRightIconPress, containerStyle, style, error, ...rest } = props;
+
   return (
     <View style={[styles.container, containerStyle]}>
       <View style={styles.inputContainer}>
         <TextInput
           ref={ref}
-          style={[
-            styles.input,
-            error && styles.inputError,
-            style,
-          ].filter(Boolean) as StyleProp<TextStyle>}
-          placeholderTextColor="#94A3B8"
+          style={
+            [styles.input, error && styles.inputError, style].filter(
+              Boolean,
+            ) as StyleProp<TextStyle>
+          }
+          placeholderTextColor='#94A3B8'
           {...rest}
         />
         {rightIcon && (
@@ -65,7 +52,6 @@ export const TextInputCustom = React.forwardRef<TextInput | null, Props>((props:
 
 TextInputCustom.displayName = 'TextInputCustom';
 
-
 const styles = StyleSheet.create({
   container: {
     width: '100%',
@@ -74,18 +60,18 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: '#E2E8F0',    
-    borderRadius: 8,           
+    borderColor: '#E2E8F0',
+    borderRadius: 8,
     backgroundColor: '#F8FAFC',
   },
   input: {
     flex: 1,
-    fontSize: 16,              
+    fontSize: 16,
     color: '#0F172A',
     padding: 16,
   },
   inputError: {
-    borderColor: '#EF4444',   
+    borderColor: '#EF4444',
   },
   iconContainer: {
     justifyContent: 'center',

@@ -33,7 +33,16 @@ interface Props<T extends FieldValues> extends TextInputProps {
 }
 
 export const FormTextInput = <T extends FieldValues>(props: Props<T>) => {
-  const { name, control, accessoryRight, onAccessoryRightPress, containerStyle, style, error, ...rest } = props;
+  const {
+    name,
+    control,
+    accessoryRight,
+    onAccessoryRightPress,
+    containerStyle,
+    style,
+    error,
+    ...rest
+  } = props;
   const { field } = useController({
     name,
     control,
@@ -43,12 +52,12 @@ export const FormTextInput = <T extends FieldValues>(props: Props<T>) => {
     <View style={[styles.container, containerStyle]}>
       <View style={styles.inputContainer}>
         <TextInput
-          style={[
-            styles.input,
-            error && styles.inputError,
-            style,
-          ].filter(Boolean) as StyleProp<TextStyle>}
-          placeholderTextColor="#94A3B8"
+          style={
+            [styles.input, error && styles.inputError, style].filter(
+              Boolean,
+            ) as StyleProp<TextStyle>
+          }
+          placeholderTextColor='#94A3B8'
           value={field.value}
           onChangeText={field.onChange}
           onBlur={field.onBlur}
@@ -71,7 +80,6 @@ export const FormTextInput = <T extends FieldValues>(props: Props<T>) => {
 };
 
 FormTextInput.displayName = 'FormTextInput';
-
 
 const styles = StyleSheet.create({
   container: {
