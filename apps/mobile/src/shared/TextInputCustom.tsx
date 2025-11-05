@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import {
   View,
   TextInput,
@@ -10,8 +10,7 @@ import {
   StyleProp,
 } from 'react-native';
 
-
-interface Props extends TextInputProps {
+type Props = TextInputProps & {
   rightIcon?: React.ReactNode;
   onRightIconPress?: () => void;
   containerStyle?: ViewStyle;
@@ -19,7 +18,7 @@ interface Props extends TextInputProps {
   style?: StyleProp<TextStyle>;
 }
 
-export const TextInputCustom = React.forwardRef<TextInput | null, Props>((props: Props, ref) => {
+const TextInputCustomComponent = React.forwardRef<TextInput | null, Props>((props: Props, ref) => {
   const { rightIcon, onRightIconPress, containerStyle, style, error, ...rest } = props;
 
   return (
@@ -27,11 +26,7 @@ export const TextInputCustom = React.forwardRef<TextInput | null, Props>((props:
       <View style={styles.inputContainer}>
         <TextInput
           ref={ref}
-          style={
-            [styles.input, error && styles.inputError, style].filter(
-              Boolean,
-            ) as StyleProp<TextStyle>
-          }
+          style={[styles.input, error && styles.inputError, style]}
           placeholderTextColor='#94A3B8'
           {...rest}
         />
@@ -50,7 +45,9 @@ export const TextInputCustom = React.forwardRef<TextInput | null, Props>((props:
   );
 });
 
-TextInputCustom.displayName = 'TextInputCustom';
+TextInputCustomComponent.displayName = 'TextInputCustom';
+
+export default memo(TextInputCustomComponent);
 
 const styles = StyleSheet.create({
   container: {

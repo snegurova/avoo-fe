@@ -2,10 +2,11 @@ import { LoginFormData } from '@avoo/hooks';
 import { AuthResponse, BaseResponse, LoginRequest, RegisterRequest } from '../../types/apiTypes';
 import { apiClient } from '../apiClient';
 
-interface RegisterCustomRequest extends Omit<RegisterRequest, 'name'> {
-  name: string | null;
-}
 
+
+export type RegisterCustomRequest = Omit<RegisterRequest, 'name'> & {
+  name?: string; // Замени string на нужный тип
+};
 
 export const authApi = {
   async login(data: LoginRequest) {
@@ -14,7 +15,7 @@ export const authApi = {
   },
   async register(data: RegisterCustomRequest) {
     const response = await apiClient.post<BaseResponse<AuthResponse>>(`/sign-up`, data);
-    return response.data.data;
+    return response.data;
   },
   async logout() {
     await apiClient.post(`/logout`);

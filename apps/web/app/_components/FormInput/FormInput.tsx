@@ -1,6 +1,6 @@
 import { InputHTMLAttributes, ReactNode } from 'react';
 
-interface Props extends Omit<InputHTMLAttributes<HTMLInputElement>, 'className'> {
+type Props = Omit<InputHTMLAttributes<HTMLInputElement>, 'className'> & {
   error?: string;
   className?: string;
   accessoryRight?: ReactNode;

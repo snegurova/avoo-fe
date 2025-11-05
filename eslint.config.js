@@ -50,4 +50,10 @@ export default defineConfig([
             "no-undef": "off", 
         },
     },
+    {
+        files: ["**/.rnstorybook/**/*.ts", "**/.storybook/**/*.ts"],
+        rules: {
+            "@typescript-eslint/no-require-imports": "off",
+        },
+    },
 ]);

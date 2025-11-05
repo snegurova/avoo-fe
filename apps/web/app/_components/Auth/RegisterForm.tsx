@@ -12,7 +12,7 @@ export default function RegisterForm() {
 
   const router = useRouter();
 
-  const { register, handleSubmit, errors, isSubmitting } = authHooks.useRegisterForm({
+  const { register, handleSubmit, errors, isPending } = authHooks.useRegisterForm({
     onSuccess: () => {
       router.push('/');
     },
@@ -78,8 +78,8 @@ export default function RegisterForm() {
 
       <Button
         onClick={handleSubmit}
-        disabled={isSubmitting}
-        loading={isSubmitting}
+        disabled={isPending}
+        loading={isPending}
         fit={ButtonFit.Fill}
         intent={ButtonIntent.Primary}
       >
