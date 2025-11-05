@@ -27,8 +27,10 @@ declare global {
 
 
 const annotations = [
-  import('./preview').then(module => module.default),
-  import("@storybook/react-native/preview").then(module => module.default)
+  // @ts-ignore
+  require('./preview'),
+  // @ts-ignore
+  require("@storybook/react-native/preview")
 ];
 
 global.STORIES = normalizedStories;

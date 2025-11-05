@@ -8,7 +8,7 @@ const meta = {
   tags: ['autodocs'],
   decorators: [
     (Story) => (
-      <View style={{ flex: 1, alignItems: 'center', paddingTop: 50 }}>
+      <View className='flex-1 items-center pt-12'>
         <Story />
       </View>
     ),

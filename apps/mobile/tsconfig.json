@@ -1,8 +1,17 @@
 {
-"extends": "../../tsconfig.base.json",
-"compilerOptions": {
-"types": ["react", "react-native"]
-},
-"include": ["**/*.ts", "**/*.tsx"],
-"exclude": ["node_modules"]
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "types": [
+      "react",
+      "react-native"
+    ]
+  },
+  "include": [
+    "**/*.ts",
+    "**/*.tsx",
+    "nativewind-env.d.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }

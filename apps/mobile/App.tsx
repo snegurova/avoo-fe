@@ -6,6 +6,8 @@ import { enableScreens } from 'react-native-screens';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { queryClient } from 'packages/hooks/src';
 
+import "./global.css"
+
 enableScreens();
 
 export default function App() {

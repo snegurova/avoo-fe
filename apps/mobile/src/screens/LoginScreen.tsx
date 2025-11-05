@@ -18,7 +18,7 @@ export default function LoginScreen() {
     <Layout centerContent={true}>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss} style={styles.container}>
         <View style={styles.wrapper}>
-          <Text style={styles.title}>AVOO App</Text>
+          <Text className='text-3xl font-bold text-red-500' >AVOO App</Text>
           <Text style={styles.subtitle}>Sign in to your AVOO account</Text>
 
           <LoginForm />
