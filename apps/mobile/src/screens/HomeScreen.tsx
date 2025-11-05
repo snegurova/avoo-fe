@@ -9,6 +9,8 @@ export const HomeScreen = () => {
     </TouchableOpacity>
   );
 
+  const max = 0
+
   const titleContent = (
     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
       <FontAwesome name="home" size={20} color="#0F172A" style={{ marginRight: 8 }} />
