@@ -6,12 +6,11 @@ import { enableScreens } from 'react-native-screens';
 
 enableScreens();
 
-
 export default function App() {
   return (
     <SafeAreaProvider>
       <NavigationContainer>
-        <StatusBar style="auto" />
+        <StatusBar style='auto' />
         <AppContainer />
       </NavigationContainer>
     </SafeAreaProvider>
