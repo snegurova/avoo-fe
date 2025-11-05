@@ -37,7 +37,7 @@ jobs:
         run: yarn install --immutable
 
       - name: Lint
-        run: npx turbo run lint
+        run: yart lint
 
       - name: Typecheck
         run: npx turbo run typecheck
@@ -45,8 +45,11 @@ jobs:
       - name: Test
         run: npx turbo run test
 
-      - name: Build
-        run: npx turbo run build --cache-dir=.turbo
+      - name: Build web
+        run: yarn build:web
+
+      - name: Build mobile
+        run: yarn build:mobile
 
   mobile_check:
     name: Mobile app check
