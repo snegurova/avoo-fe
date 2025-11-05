@@ -1,10 +1,10 @@
-import { NavigatorScreenParams } from "@react-navigation/native";
+import { NavigatorScreenParams } from '@react-navigation/native';
 
 export type RootStackParamList = {
   LoginScreen: undefined;
   RegisterScreen: undefined;
   BottomBar: NavigatorScreenParams<BottomBarStackParamList>;
-
+  Storybook: undefined;
 };
 
 export type ProfileStackParamList = {
