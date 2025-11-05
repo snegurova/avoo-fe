@@ -28,6 +28,7 @@ const AppContainer = () => {
           <Stack.Screen name='BottomBar' component={BottomBarNavigator} />
         </>
       )}
+      
       {__DEV__ && <Stack.Screen name='Storybook' component={StorybookScreen} />}
     </Stack.Navigator>
   );

@@ -25,14 +25,15 @@ declare global {
   var STORIES: typeof normalizedStories;
 }
 
+
 const annotations = [
-  import('./preview'),
-  import("@storybook/react-native/preview")
+  import('./preview').then(module => module.default),
+  import("@storybook/react-native/preview").then(module => module.default)
 ];
 
 global.STORIES = normalizedStories;
- 
-// @ts-ignore - this is a valid module.hot.accept
+
+// @ts-ignore
 module?.hot?.accept?.();
 
 

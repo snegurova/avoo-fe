@@ -13,9 +13,8 @@ export function QueryProvider({ children }: { children: ReactNode }) {
       {children}
       {__DEV__ && (
         // @ts-ignore - Type compatibility issue between React versions
-        <ReactQueryDevtools initialIsOpen={false} buttonPosition="bottom-right" />
+        <ReactQueryDevtools initialIsOpen={false} buttonPosition='bottom-right' />
       )}
     </QueryClientProvider>
   );
 }
-
