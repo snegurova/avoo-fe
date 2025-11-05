@@ -46,7 +46,7 @@ export const TextInputCustom = React.forwardRef<TextInput | null, Props>((props:
             style,
           ].filter(Boolean) as StyleProp<TextStyle>}
           placeholderTextColor="#94A3B8"
-          {...props}
+          {...rest}
         />
         {rightIcon && (
           <TouchableOpacity

@@ -14,7 +14,7 @@ export default function CheckBox(props: Props) {
   return (
     <View style={styles.container}>
       <Pressable
-        onPress={() => onValueChange(!isChecked)}
+        onPress={() => onValueChange(isChecked)}
         style={{
           width: 24,
           height: 24,

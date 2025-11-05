@@ -1,3 +1,5 @@
+import React, { JSX } from 'react';
+
 import { useCallback } from 'react';
 import { tv } from 'tailwind-variants';
 

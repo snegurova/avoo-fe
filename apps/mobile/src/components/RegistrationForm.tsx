@@ -1,11 +1,9 @@
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { FormTextInput } from "../shared/FormTextInput";
 import { useState } from "react";
 import { FormCheckBox } from "../shared/FormCheckBox";
 import Button from "../shared/Button";
 import { authHooks } from "packages/hooks/src";
-import { NavigationProp, useNavigation } from "@react-navigation/native";
-import { RootStackParamList } from "../types/navigation";
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 
 

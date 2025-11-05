@@ -1,5 +1,5 @@
 import React from 'react';
-import { Control, FieldValues, Path, PathValue, useController } from 'react-hook-form';
+import { Control, FieldValues, Path, useController } from 'react-hook-form';
 import { View, Text, StyleSheet, Pressable } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
