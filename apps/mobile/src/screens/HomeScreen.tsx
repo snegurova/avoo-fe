@@ -9,7 +9,7 @@ export const HomeScreen = () => {
     </TouchableOpacity>
   );
 
-  const max = 0
+  const maxik = 0
 
   const titleContent = (
     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
