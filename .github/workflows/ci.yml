@@ -1,63 +1,189 @@
 name: CI
 on:
-push:
-branches: [ main, master ]
-pull_request:
-branches: [ main, master ]
-
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
 
 jobs:
-build:
-runs-on: ubuntu-latest
-steps:
-- uses: actions/checkout@v4
+  build_web:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Enable Corepack (Yarn Berry)
+        run: corepack enable
+
+      - name: Use Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Prepare Yarn
+        run: corepack prepare yarn@4.3.1 --activate
+
+      - name: Cache Yarn & Turbo
+        uses: actions/cache@v4
+        with:
+          path: |
+            .yarn/cache
+            .turbo
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock', '.yarnrc.yml') }}-turbo-${{ hashFiles('turbo.json') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+            ${{ runner.os }}-turbo-
+
+      - name: Install dependencies
+        run: yarn install --immutable
+
+      - name: Lint
+        run: yarn lint
+
+      - name: Typecheck
+        run: npx turbo run typecheck
+
+      - name: Test
+        run: npx turbo run test
+
+      - name: Build web
+        run: yarn build:web
 
 
-- name: Enable Corepack (Yarn Berry)
-run: corepack enable
+  mobile_check:
+    name: Mobile app check
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
 
+      - name: Enable Corepack (Yarn Berry)
+        run: corepack enable
 
-- name: Use Node.js 20
-uses: actions/setup-node@v4
-with:
-node-version: 20
+      - name: Use Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
 
+      - name: Prepare Yarn
+        run: corepack prepare yarn@4.3.1 --activate
 
-- name: Prepare Yarn
-run: corepack prepare yarn@4.3.1 --activate
+      - name: Cache Yarn
+        uses: actions/cache@v4
+        with:
+          path: |
+            .yarn/cache
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock', '.yarnrc.yml') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
 
+      - name: Install dependencies
+        run: yarn install --immutable
 
-- name: Cache Yarn & Turbo
-uses: actions/cache@v4
-with:
-path: |
-.yarn/cache
-.turbo
-key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock', '.yarnrc.yml') }}-turbo-${{ hashFiles('turbo.json') }}
-restore-keys: |
-${{ runner.os }}-yarn-
-${{ runner.os }}-turbo-
+      - name: Lint
+        run: npx turbo run lint
 
+      - name: Typecheck
+        run: npx turbo run typecheck
 
-- name: Install dependencies
-run: yarn install --immutable
+      - name: Test
+        run: npx turbo run test
 
+      - name: Install Expo CLI
+        run: npm install -g @expo/cli@latest
 
-- name: Lint
-run: npx turbo run lint
+      - name: Verify Expo config
+        run: |
+          cd apps/mobile
+          npx expo config --type public
 
+  mobile_android_build:
+    name: Mobile Android build
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
 
-- name: Typecheck
-run: npx turbo run typecheck
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: 'gradle'
 
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
 
-- name: Test
-run: npx turbo run test
+      - name: Enable Corepack (Yarn Berry)
+        run: corepack enable
 
+      - name: Use Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
 
-- name: Prettier check
-run: yarn prettier --check .
+      - name: Prepare Yarn
+        run: corepack prepare yarn@4.3.1 --activate
 
+      - name: Install dependencies
+        run: yarn install --immutable
 
-- name: Build
-run: npx turbo run build --cache-dir=.turbo
+      - name: Lint
+        run: npx turbo run lint
+
+      - name: Typecheck
+        run: npx turbo run typecheck
+
+      - name: Test
+        run: npx turbo run test
+
+      - name: Install Expo CLI
+        run: npm install -g @expo/cli@latest
+
+      - name: Prebuild Android
+        run: |
+          cd apps/mobile
+          npx expo prebuild
+
+      - name: Build Android
+        run: |
+          cd apps/mobile
+          npx expo run:android --no-build-cache
+
+  mobile_ios_build:
+    name: Mobile iOS build
+    runs-on: macos-15
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Enable Corepack (Yarn Berry)
+        run: corepack enable
+
+      - name: Use Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Prepare Yarn
+        run: corepack prepare yarn@4.3.1 --activate
+
+      - name: Install dependencies
+        run: yarn install --immutable
+
+      - name: Lint
+        run: npx turbo run lint
+
+      - name: Typecheck
+        run: npx turbo run typecheck
+
+      - name: Test
+        run: npx turbo run test
+
+      - name: Install Expo CLI
+        run: npm install -g @expo/cli@latest
+
+      - name: Build iOS
+        run: |
+          cd apps/mobile
+          npx expo prebuild --non-interactive
+          npx expo run:ios --no-build-cache

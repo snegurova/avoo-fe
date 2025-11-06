@@ -1,18 +1,16 @@
-import { Pressable, StyleSheet, Text, View } from 'react-native';
-import { FormTextInput } from '../shared/FormTextInput';
+import { StyleSheet, View } from 'react-native';
+import FormTextInput from '../shared/FormTextInput';
 import { useState } from 'react';
-import { FormCheckBox } from '../shared/FormCheckBox';
+import  FormCheckBox  from '../shared/FormCheckBox';
 import Button from '../shared/Button/Button';
 import { authHooks } from 'packages/hooks/src';
-import { NavigationProp, useNavigation } from '@react-navigation/native';
-import { RootStackParamList } from '../types/navigation';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 
 export default function RegistrationForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  const { control, handleSubmit, errors, isSubmitting } = authHooks.useRegisterForm();
+  const { control, handleSubmit, errors, isPending } = authHooks.useRegisterForm();
 
   return (
     <View style={styles.form}>
@@ -78,8 +76,8 @@ export default function RegistrationForm() {
       <Button
         onPress={handleSubmit}
         title='Create Account'
-        loading={isSubmitting}
-        disabled={isSubmitting}
+        loading={isPending}
+        disabled={isPending}
       />
     </View>
   );

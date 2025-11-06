@@ -27,7 +27,9 @@ declare global {
 
 
 const annotations = [
+  // @ts-ignore
   require('./preview'),
+  // @ts-ignore
   require("@storybook/react-native/preview")
 ];
 

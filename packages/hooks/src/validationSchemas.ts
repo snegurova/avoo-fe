@@ -3,8 +3,7 @@ import * as yup from 'yup';
 export const registerSchema = yup.object({
   name: yup
     .string()
-    .required('Name is required')
-    .min(2, 'Name must be at least 2 characters')
+    .nullable()
     .trim(),
   email: yup
     .string()

@@ -3,4 +3,10 @@
 
 cd "$(git rev-parse --show-toplevel)" || exit 1
 
-corepack yarn -s lint-staged
+echo "🔍 Running full lint before commit..."
+corepack yarn lint -- --max-warnings=10 || {
+  echo "❌ Lint failed. Commit aborted."
+  exit 1
+}
+
+echo "✅ Lint passed. Proceeding with commit..."
