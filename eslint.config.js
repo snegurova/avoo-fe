@@ -51,6 +51,12 @@ export default defineConfig([
         },
     },
     {
+        files: ["**/.rnstorybook/**/*.ts", "**/.storybook/**/*.ts"],
+        rules: {
+            "@typescript-eslint/no-require-imports": "off",
+        },
+    },
+    {
         files: ["**/.storybook/**/*", "**/.rnstorybook/**/*", "**/*.stories.tsx", "**/*.stories.ts"],
         rules: {
             "@typescript-eslint/no-require-imports": "off",

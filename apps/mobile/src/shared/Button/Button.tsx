@@ -1,7 +1,7 @@
-import React, { useCallback, memo } from 'react';
+import { useCallback, memo } from 'react';
 import { Pressable, Text, ActivityIndicator, ViewStyle, TextStyle } from 'react-native';
 
-export interface ButtonProps {
+type Props = {
   onPress: () => void;
   title: string;
   disabled?: boolean;
@@ -10,12 +10,13 @@ export interface ButtonProps {
   textStyle?: TextStyle;
 }
 
-function Button(props: ButtonProps) {
+function Button(props: Props) {
   const { onPress, title, disabled = false, loading = false, style, textStyle } = props;
 
   const handlePress = useCallback(() => {
     onPress();
   }, [onPress]);
+
 
   return (
     <Pressable
@@ -41,5 +42,6 @@ function Button(props: ButtonProps) {
     </Pressable>
   );
 }
+
 
 export default memo(Button);

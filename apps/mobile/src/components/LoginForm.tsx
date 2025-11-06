@@ -1,5 +1,5 @@
 import { StyleSheet, View } from 'react-native';
-import { FormTextInput } from '../shared/FormTextInput';
+import FormTextInput from '../shared/FormTextInput';
 import { useState } from 'react';
 import Button from '../shared/Button/Button';
 import { authHooks } from '@avoo/hooks';

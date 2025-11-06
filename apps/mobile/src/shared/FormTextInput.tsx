@@ -12,17 +12,8 @@ import {
   Text,
 } from 'react-native';
 
-/**
- * @property {React.ReactNode} accessoryRight - Icon component to display on the right side
- * @property {() => void} onAccessoryRightPress - Handler for right icon press (e.g., toggle password visibility)
- * @property {ViewStyle} containerStyle - Custom styles for the container wrapper
- * @property {string} error - Error message (changes border color to red)
- * @property {StyleProp<TextStyle>} style - Custom styles for the input itself
- * @property {Path<T>} name - Name of the input field
- * @property {Control<T>} control - Control object from react-hook-form
- */
 
-interface Props<T extends FieldValues> extends TextInputProps {
+type Props<T extends FieldValues> = TextInputProps & {
   accessoryRight?: React.ReactNode;
   onAccessoryRightPress?: () => void;
   containerStyle?: ViewStyle;
@@ -32,7 +23,7 @@ interface Props<T extends FieldValues> extends TextInputProps {
   control: Control<T>;
 }
 
-export const FormTextInput = <T extends FieldValues>(props: Props<T>) => {
+export default function FormTextInput<T extends FieldValues>(props: Props<T>) {
   const {
     name,
     control,
@@ -52,11 +43,7 @@ export const FormTextInput = <T extends FieldValues>(props: Props<T>) => {
     <View style={[styles.container, containerStyle]}>
       <View style={styles.inputContainer}>
         <TextInput
-          style={
-            [styles.input, error && styles.inputError, style].filter(
-              Boolean,
-            ) as StyleProp<TextStyle>
-          }
+          style={[styles.input, error && styles.inputError, style]}
           placeholderTextColor='#94A3B8'
           value={field.value}
           onChangeText={field.onChange}
@@ -80,6 +67,7 @@ export const FormTextInput = <T extends FieldValues>(props: Props<T>) => {
 };
 
 FormTextInput.displayName = 'FormTextInput';
+
 
 const styles = StyleSheet.create({
   container: {
