@@ -5,7 +5,7 @@ import { apiClient } from '../apiClient';
 
 
 export type RegisterCustomRequest = Omit<RegisterRequest, 'name'> & {
-  name?: string; // Замени string на нужный тип
+  name?: string;
 };
 
 export const authApi = {

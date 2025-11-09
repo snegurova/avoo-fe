@@ -7,7 +7,6 @@ const config = getDefaultConfig(__dirname);
 const { withStorybook } = require('@storybook/react-native/metro/withStorybook');
 const { withNativeWind } = require('nativewind/metro');
 
-// Объединяем: сначала Storybook, потом NativeWind
 module.exports = withNativeWind(
   withStorybook(config),
   { input: './global.css' }
