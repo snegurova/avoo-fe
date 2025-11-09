@@ -1,6 +1,7 @@
-import { Metadata } from 'next';
+import { Metadata } from 'next/types';
 import RegisterForm from '../_components/Auth/RegisterForm';
 import Link from 'next/link';
+import { routes } from '../_routes/routes';
 
 export const metadata: Metadata = {
   title: 'Sign Up - AVOO App',
@@ -25,7 +26,7 @@ export default function SignUpPage() {
       <div className='sm:mx-auto sm:w-full sm:max-w-sm mt-4'>
         <p className='text-center text-gray-600'>
           Having account?{' '}
-          <Link href='/sign-in' className='text-blue-600 hover:underline'>
+          <Link href={routes.signIn} className='text-blue-600 hover:underline'>
             Log in
           </Link>
         </p>

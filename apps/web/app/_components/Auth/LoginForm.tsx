@@ -5,6 +5,7 @@ import { authHooks } from '@avoo/hooks';
 import { Button, ButtonFit, ButtonIntent } from '../Button/Button';
 import { useState } from 'react';
 import FormInput from '../FormInput/FormInput';
+import { routes } from '../../_routes/routes';
 
 export default function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
@@ -13,7 +14,7 @@ export default function LoginForm() {
 
   const { register, handleSubmit, errors, isPending } = authHooks.useLoginForm({
     onSuccess: () => {
-      router.push('/');
+      router.push(routes.home.pathname);
     },
   });
 
