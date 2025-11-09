@@ -1,15 +1,11 @@
-import { SubmitHandler, useForm } from 'react-hook-form';
+import { utils } from './../utils/utils';
+import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { registerSchema, RegisterFormData, loginSchema, LoginFormData } from './validationSchemas';
 import { authApi } from '@avoo/axios';
 import { useAuthStore } from '@avoo/store';
 import { useMutation } from '@tanstack/react-query';
-import {
-  AuthResponse,
-  BaseResponse,
-  LoginRequest,
-  RegisterRequest,
-} from '@avoo/axios/types/apiTypes';
+import { AuthResponse, BaseResponse, LoginRequest } from '@avoo/axios/types/apiTypes';
 import { useApiStore } from '@avoo/store/src/api.store';
 import { apiStatus } from './constants';
 import { RegisterCustomRequest } from '@avoo/axios/src/modules/auth';
@@ -68,7 +64,6 @@ export const authHooks = {
       isPending,
       handleSubmit: handleSubmit((data: RegisterCustomRequest) => registerMutation(data)),
       errors,
-      
     };
   },
   useLoginForm: ({
@@ -115,7 +110,7 @@ export const authHooks = {
       register,
       control,
       isPending,
-      handleSubmit: handleSubmit((data: LoginRequest) => login(data)),
+      handleSubmit: handleSubmit(utils.submitAdapter<LoginRequest>(login)),
       errors,
     };
   },
