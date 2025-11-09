@@ -1,5 +1,5 @@
 import { useCallback, memo } from 'react';
-import { Pressable, Text, StyleSheet, ActivityIndicator, ViewStyle, TextStyle } from 'react-native';
+import { Pressable, Text, ActivityIndicator, ViewStyle, TextStyle } from 'react-native';
 
 type Props = {
   onPress: () => void;
@@ -20,10 +20,13 @@ function Button(props: Props) {
 
   return (
     <Pressable
+      className={`
+        bg-blue-600 rounded-lg p-4 items-center mt-2
+        ${disabled ? 'opacity-60' : ''}
+        ${loading ? 'opacity-60' : ''}
+      `}
       style={({ pressed }) => [
-        styles.button,
-        disabled && styles.buttonDisabled,
-        pressed && !disabled && styles.buttonPressed,
+        !disabled && !loading && pressed && { opacity: 0.8 },
         style,
       ]}
       onPress={handlePress}
@@ -32,31 +35,13 @@ function Button(props: Props) {
       {loading ? (
         <ActivityIndicator color='#FFFFFF' />
       ) : (
-        <Text style={[styles.text, textStyle]}>{title}</Text>
+        <Text className='text-white text-lg font-semibold' style={textStyle}>
+          {title}
+        </Text>
       )}
     </Pressable>
   );
 }
 
-const styles = StyleSheet.create({
-  button: {
-    backgroundColor: '#2563EB',
-    borderRadius: 8,
-    padding: 16,
-    alignItems: 'center',
-    marginTop: 8,
-  },
-  buttonDisabled: {
-    opacity: 0.6,
-  },
-  buttonPressed: {
-    opacity: 0.8,
-  },
-  text: {
-    color: '#FFFFFF',
-    fontSize: 18,
-    fontWeight: '600',
-  },
-});
 
 export default memo(Button);
