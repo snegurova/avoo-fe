@@ -1,7 +1,7 @@
-import { Route } from 'next';
+import Href from 'next';
 
-export const routes = {
-  home: { pathname: '/' as Route },
-  signIn: { pathname: '/sign-in' },
-  signUp: { pathname: '/sign-up' },
+export const routes: Record<string, Href> = {
+  home: '/',
+  signIn: '/sign-in',
+  signUp: '/sign-up',
 };
