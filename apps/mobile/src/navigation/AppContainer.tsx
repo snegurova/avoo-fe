@@ -5,6 +5,8 @@ import BottomBarNavigator from './BottomBarNavigator';
 import { useAuthStore } from '@avoo/store';
 import RegisterScreen from '../screens/RegisterScreen';
 import StorybookScreen from '../screens/Storybook';
+import ForgotPasswordScreen from '../screens/ForgotPasswordScreen';
+import ConfirmCodeScreen from '../screens/ConfirmCodeScreen';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -18,10 +20,13 @@ const AppContainer = () => {
         headerShown: false,
       }}
     >
+      
       {!isAuthenticated ? (
         <>
           <Stack.Screen name='LoginScreen' component={LoginScreen} />
           <Stack.Screen name='RegisterScreen' component={RegisterScreen} />
+          <Stack.Screen name='ForgotPasswordScreen' component={ForgotPasswordScreen} />
+          <Stack.Screen name='ConfirmCodeScreen' component={ConfirmCodeScreen} />
         </>
       ) : (
         <>

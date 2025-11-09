@@ -7,29 +7,29 @@ import {
   Pressable,
 } from 'react-native';
 import { Layout } from '../shared/Layout';
-import LoginForm from '../components/LoginForm';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { RootStackParamList } from '../types/navigation';
 import Spacer from '../shared/Spacer/Spacer';
+import ForgotPasswordForm from '../components/ForgotPasswordForm';
 
-export default function LoginScreen() {
+export default function ForgotPasswordScreen() {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
   return (
     <Layout centerContent={true}>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss} style={styles.container}>
         <View style={styles.wrapper}>
-          <Text className='text-3xl font-bold text-red-500'>AVOO App</Text>
-          <Text style={styles.subtitle}>Sign in to your AVOO account</Text>
+          <Text className='text-3xl font-bold text-center'>Reset Password</Text>
+          <Text style={styles.subtitle}>Enter your email to reset your password</Text>
 
-          <LoginForm />
+          <ForgotPasswordForm />
           <Spacer size='xl' />
           <View className='flex-row justify-between items-center '>
             <Pressable
               onPress={() =>
                 navigation.reset({
                   index: 0,
-                  routes: [{ name: 'RegisterScreen' }],
+                  routes: [{ name: 'LoginScreen' }],
                 })
               }
               accessibilityRole='button'
@@ -37,35 +37,9 @@ export default function LoginScreen() {
               accessibilityHint='Navigates to registration screen'
               hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
             >
-              <Text className='text-blue-500'>Create an account</Text>
-            </Pressable>
-            <Pressable
-              onPress={() =>
-                navigation.reset({
-                  index: 0,
-                  routes: [{ name: 'ForgotPasswordScreen' }],
-                })
-              }
-              accessibilityRole='button'
-              accessibilityLabel='Forgot password'
-              accessibilityHint='Navigates to forgot password screen'
-              hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-            >
-              <Text className='text-blue-500'>Forgot password?</Text>
+              <Text className='text-blue-500'>Back to login</Text>
             </Pressable>
           </View>
-          <Spacer size='xl' />
-          <Pressable
-            onPress={() =>
-              navigation.reset({
-                index: 0,
-                routes: [{ name: 'Storybook' }],
-              })
-            }
-            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-          >
-            <Text className='text-blue-500'>Open Storybook</Text>
-          </Pressable>
         </View>
       </TouchableWithoutFeedback>
     </Layout>

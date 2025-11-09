@@ -36,6 +36,15 @@ export const loginSchema = yup.object({
     .min(8, 'Password must be at least 8 characters'),
 });
 
+export const forgotPasswordSchema = yup.object({
+  email: yup
+    .string()
+    .required('Email is required')
+    .email('Please enter a valid email')
+    .trim(),
+});
+
 
 export type RegisterFormData = yup.InferType<typeof registerSchema>;
 export type LoginFormData = yup.InferType<typeof loginSchema>;
+export type ForgotPasswordFormData = yup.InferType<typeof forgotPasswordSchema>;

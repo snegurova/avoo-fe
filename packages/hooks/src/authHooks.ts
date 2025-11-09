@@ -1,12 +1,13 @@
-import { SubmitHandler, useForm } from 'react-hook-form';
+import {  useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { registerSchema, RegisterFormData, loginSchema, LoginFormData } from './validationSchemas';
+import { registerSchema, RegisterFormData, loginSchema, LoginFormData, forgotPasswordSchema, ForgotPasswordFormData } from './validationSchemas';
 import { authApi } from '@avoo/axios';
 import { useAuthStore } from '@avoo/store';
 import { useMutation } from '@tanstack/react-query';
 import {
   AuthResponse,
   BaseResponse,
+  ForgotPasswordRequest,
   LoginRequest,
   RegisterRequest,
 } from '@avoo/axios/types/apiTypes';
@@ -48,7 +49,7 @@ export const authHooks = {
       Error,
       RegisterCustomRequest
     >({
-      mutationFn: (data: RegisterCustomRequest) => authApi.register(data),
+      mutationFn: authApi.register,
       onMutate: () => setIsPending(true),
       onSuccess: (response) => {
         if (response.status === apiStatus.SUCCESS) {
@@ -116,6 +117,51 @@ export const authHooks = {
       control,
       isPending,
       handleSubmit: handleSubmit((data: LoginRequest) => login(data)),
+      errors,
+    };
+  },
+  useForgotPasswordForm: ({
+    onSuccess,
+    onError,
+  }: {
+    onSuccess?: (email: string) => void;
+    onError?: (error: any) => void;
+  } = {}) => {
+    const {
+      register,
+      control,
+      handleSubmit,
+      formState: { errors },
+    } = useForm<ForgotPasswordFormData>({
+      resolver: yupResolver(forgotPasswordSchema),
+      mode: 'onSubmit',
+      defaultValues: {
+        email: '',
+      },
+    });
+
+    const setIsPending = useApiStore((state) => state.setIsPending);
+    const isPending = useApiStore((state) => state.isPending);
+
+    const { mutate: forgotPassword } = useMutation<BaseResponse<{}>, Error, ForgotPasswordRequest>({
+      mutationFn: (data: ForgotPasswordRequest) => authApi.forgotPassword(data),
+      onMutate: () => setIsPending(true),
+      onSuccess: (response, variables) => {
+        if (response.status === apiStatus.SUCCESS) {
+          onSuccess?.(variables.email);
+        }
+      },
+      onError: (error) => {
+        onError?.(error);
+      },
+      onSettled: () => setIsPending(false),
+    });
+
+    return {
+      register,
+      control,
+      isPending,
+      handleSubmit: handleSubmit((data: ForgotPasswordRequest) => forgotPassword(data)),
       errors,
     };
   },
