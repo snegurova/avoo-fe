@@ -5,6 +5,7 @@ import { authHooks } from '@avoo/hooks';
 import { Button, ButtonFit, ButtonIntent } from '../Button/Button';
 import { useState } from 'react';
 import FormInput from '../FormInput/FormInput';
+import { routes } from '../../_routes/routes';
 
 export default function RegisterForm() {
   const [showPassword, setShowPassword] = useState(false);
@@ -14,7 +15,7 @@ export default function RegisterForm() {
 
   const { register, handleSubmit, errors, isPending } = authHooks.useRegisterForm({
     onSuccess: () => {
-      router.push('/');
+      router.push(routes.home);
     },
   });
 

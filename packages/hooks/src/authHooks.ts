@@ -1,15 +1,18 @@
-import {  useForm } from 'react-hook-form';
+import { utils } from './../utils/utils';
+import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { registerSchema, RegisterFormData, loginSchema, LoginFormData, forgotPasswordSchema, ForgotPasswordFormData } from './validationSchemas';
 import { authApi } from '@avoo/axios';
 import { useAuthStore } from '@avoo/store';
 import { useMutation } from '@tanstack/react-query';
+
+
 import {
   AuthResponse,
   BaseResponse,
-  ForgotPasswordRequest,
   LoginRequest,
   RegisterRequest,
+  ForgotPasswordRequest,
 } from '@avoo/axios/types/apiTypes';
 import { useApiStore } from '@avoo/store/src/api.store';
 import { apiStatus } from './constants';
@@ -69,7 +72,6 @@ export const authHooks = {
       isPending,
       handleSubmit: handleSubmit((data: RegisterCustomRequest) => registerMutation(data)),
       errors,
-      
     };
   },
   useLoginForm: ({
@@ -116,7 +118,9 @@ export const authHooks = {
       register,
       control,
       isPending,
-      handleSubmit: handleSubmit((data: LoginRequest) => login(data)),
+
+
+      handleSubmit: handleSubmit(utils.submitAdapter<LoginRequest>(login)),
       errors,
     };
   },
@@ -165,4 +169,6 @@ export const authHooks = {
       errors,
     };
   },
+
+  
 };

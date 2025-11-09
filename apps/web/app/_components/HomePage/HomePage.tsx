@@ -17,7 +17,7 @@ const hooks = {
 };
 
 export type Props = {
-  data: Category[];
+  data: Category[] | null;
 };
 
 export const HomePage = (props: Props) => {
@@ -27,7 +27,7 @@ export const HomePage = (props: Props) => {
     <div className='container mx-auto p-4'>
       <h1>Home</h1>
       <ul>
-        {data.map(({ name, description }) => {
+        {data?.map(({ name, description }) => {
           return (
             <li key={name}>
               <h2>{name}</h2>

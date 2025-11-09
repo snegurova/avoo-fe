@@ -1,8 +1,9 @@
 import React from 'react';
 import '../styles/globals.css';
 import { QueryProvider } from './_providers/QueryProvider';
+import { Metadata } from 'next/types';
 
-export const metadata = {
+export const metadata: Metadata = {
   title: 'AVOO App',
   description: 'AVOO professional platform',
 };
