@@ -1,17 +1,18 @@
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 import FormTextInput from '../shared/FormTextInput';
-import { useState } from 'react';
 import Button from '../shared/Button/Button';
-import { authHooks } from '@avoo/hooks';
-import FontAwesome from '@expo/vector-icons/FontAwesome';
+import { authHooks, usePasswordVisibility } from '@avoo/hooks';
+import { useApiStore } from 'packages/store/src/api.store';
 
 export default function LoginForm() {
-  const [showPassword, setShowPassword] = useState(false);
+  const { icon, togglePassword, secureTextEntry } = usePasswordVisibility();
 
-  const { control, handleSubmit, errors, isPending } = authHooks.useLoginForm();
+  const { control, handleSubmit, errors } = authHooks.useLoginForm();
+
+  const isPending = useApiStore((state) => state.isPending);
 
   return (
-    <View style={styles.form}>
+    <View className='w-full gap-4'>
       <FormTextInput
         name='email'
         control={control}
@@ -26,15 +27,9 @@ export default function LoginForm() {
         control={control}
         placeholder='Password'
         error={errors.password?.message}
-        secureTextEntry={!showPassword}
-        accessoryRight={
-          showPassword ? (
-            <FontAwesome name='eye' size={24} color='black' />
-          ) : (
-            <FontAwesome name='eye-slash' size={24} color='black' />
-          )
-        }
-        onAccessoryRightPress={() => setShowPassword(!showPassword)}
+        secureTextEntry={secureTextEntry}
+        accessoryRight={icon}
+        onAccessoryRightPress={togglePassword}
         textContentType='password'
         autoComplete='off'
         autoCorrect={false}
@@ -43,10 +38,3 @@ export default function LoginForm() {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  form: {
-    width: '100%',
-    gap: 16,
-  },
-});

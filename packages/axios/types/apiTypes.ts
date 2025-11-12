@@ -16,3 +16,7 @@ export type LoginRequest = components['schemas']['LoginRequestDto'];
 export type RegisterRequest = components['schemas']['CreateUserDto'];
 export type AuthResponse = components['schemas']['UserResponseDto'];
 export type ForgotPasswordRequest = components['schemas']['LoginRequestDto'];
+export type VerifyCodeRequest = components['schemas']['AuthWithCodeRequestDto'];
+export type VerifyCodeResponse = components['schemas']['UserResponseDto'];
+export type ResetPasswordRequest = components['schemas']['ResetPasswordRequestDto'];
+export type ResetPasswordResponse = components['schemas']['UserResponseDto'];

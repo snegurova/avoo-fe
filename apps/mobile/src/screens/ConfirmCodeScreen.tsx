@@ -1,33 +1,35 @@
-import { Text, TouchableOpacity, View } from 'react-native';
+import { Pressable, Text, View } from 'react-native';
 import { RootStackParamList } from '../types/navigation';
 import { RouteProp, useRoute } from '@react-navigation/native';
 import formatHooks from 'packages/hooks/src/formatHooks';
-import VerificationInput from '../components/VerificationInput';
 import { Layout } from '../shared/Layout';
-import Button from '../shared/Button/Button';
+import VerifyCodeForm from '../components/VerifyCodeForm';
 import Spacer from '../shared/Spacer/Spacer';
+import { authHooks } from 'packages/hooks/src';
 
 export default function ConfirmCodeScreen() {
   const { email } = useRoute<RouteProp<RootStackParamList, 'ConfirmCodeScreen'>>().params;
 
   const maskedEmail = formatHooks.useMaskEmail(email || '');
 
+  const { sendCode } = authHooks.useSendCode();
+
   return (
     <Layout centerContent={true}>
-      <View className='items-center'>
+      <View>
         <Text className='text-3xl font-bold text-center mb-4'>Verify your email address</Text>
         <Text className='text-sm text-gray-500 text-center mb-8'>
           We’ve sent a 6-digit verification code to your email {maskedEmail}
         </Text>
-
-        <VerificationInput onCodeComplete={() => {}} />
+        <VerifyCodeForm />
         <Spacer size='xl' />
-
-        <TouchableOpacity onPress={() => {}}>
+        <Pressable onPress={() => {
+          sendCode({
+            email,
+          });
+        }}>
           <Text className='text-sm text-blue-500 text-center'>Resend code</Text>
-        </TouchableOpacity>
-        <Spacer size='xl' />
-        <Button title='Verify' onPress={() => {}} />
+        </Pressable>
       </View>
     </Layout>
   );

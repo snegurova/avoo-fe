@@ -48,7 +48,6 @@ const BottomBarNavigator = () => {
 
       <TouchableOpacity
         style={styles.floatingButton}
-        onPress={() => console.log('plus button pressed')}
         activeOpacity={0.8}
       >
         <AntDesign name='plus' size={24} color='#FFFFFF' />

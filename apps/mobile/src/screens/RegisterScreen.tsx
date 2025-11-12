@@ -1,11 +1,4 @@
-import {
-  Text,
-  View,
-  StyleSheet,
-  TouchableWithoutFeedback,
-  Keyboard,
-  Pressable,
-} from 'react-native';
+import { Text, View, TouchableWithoutFeedback, Keyboard, Pressable } from 'react-native';
 import { Layout } from '../shared/Layout';
 import RegistrationForm from '../components/RegistrationForm';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
@@ -15,17 +8,21 @@ export default function RegisterScreen() {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
   return (
-    <Layout style={styles.container}>
+    <Layout centerContent={true}>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <View style={styles.wrapper}>
-          <Text style={styles.title}>AVOO App</Text>
-          <Text style={styles.subtitle}>Create a professional account</Text>
-          <Text style={styles.subtitle}>Create an account or login in your busines</Text>
+        <View className='w-full'>
+          <Text className='text-3xl font-bold text-center mb-2'>AVOO App</Text>
+          <Text className='text-lg text-slate-500 text-center mb-12'>
+            Create a professional account
+          </Text>
+          <Text className='text-lg text-slate-500 text-center mb-12'>
+            Create an account or login in your busines
+          </Text>
 
           <RegistrationForm />
 
-          <View style={styles.signUpContainer}>
-            <Text style={styles.navigateToSignIn}>Having account?</Text>
+          <View className='flex-row justify-center items-center mt-4 gap-1'>
+            <Text className='text-base text-slate-500'>Having account?</Text>
             <Pressable
               onPress={() =>
                 navigation.reset({
@@ -38,72 +35,16 @@ export default function RegisterScreen() {
               accessibilityHint='Navigates to registration screen'
               hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
             >
-              <Text style={styles.signInLink}>Log in</Text>
+              <Text className='text-base text-blue-600 underline p-1'>Log in</Text>
             </Pressable>
           </View>
 
-          <View style={styles.footer}>
-            <Text style={styles.copyright}>© 2025 Avoo</Text>
-            <Text style={styles.privacyLink}>Privacy Policy</Text>
+          <View className='flex-row justify-between items-center'>
+            <Text className='text-sm text-slate-500'>© 2025 Avoo</Text>
+            <Text className='text-sm text-blue-600'>Privacy Policy</Text>
           </View>
         </View>
       </TouchableWithoutFeedback>
     </Layout>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    padding: 16,
-    backgroundColor: '#FFFFFF',
-  },
-
-  title: {
-    fontSize: 32,
-    fontWeight: '700',
-    textAlign: 'center',
-    marginBottom: 8,
-    color: '#0F172A',
-  },
-  subtitle: {
-    fontSize: 18,
-    color: '#64748B',
-    textAlign: 'center',
-    marginBottom: 48,
-  },
-  wrapper: {
-    width: '100%',
-  },
-  footer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  copyright: {
-    fontSize: 14,
-    color: '#64748B',
-  },
-  privacyLink: {
-    fontSize: 14,
-    color: '#2563EB',
-  },
-  signUpContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 16,
-    gap: 4,
-  },
-  navigateToSignIn: {
-    fontSize: 16,
-    color: '#64748B',
-  },
-  signInLink: {
-    fontSize: 16,
-    color: '#2563EB',
-    textDecorationLine: 'underline',
-    padding: 4,
-  },
-});

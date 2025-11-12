@@ -1,11 +1,4 @@
-import {
-  Text,
-  View,
-  StyleSheet,
-  TouchableWithoutFeedback,
-  Keyboard,
-  Pressable,
-} from 'react-native';
+import { Text, View, TouchableWithoutFeedback, Keyboard, Pressable } from 'react-native';
 import { Layout } from '../shared/Layout';
 import LoginForm from '../components/LoginForm';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
@@ -17,10 +10,12 @@ export default function LoginScreen() {
 
   return (
     <Layout centerContent={true}>
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss} style={styles.container}>
-        <View style={styles.wrapper}>
-          <Text className='text-3xl font-bold text-red-500'>AVOO App</Text>
-          <Text style={styles.subtitle}>Sign in to your AVOO account</Text>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <View className='w-full'>
+          <Text className='text-3xl font-bold text-center'>AVOO App</Text>
+          <Text className='text-lg text-slate-500 text-center mb-12'>
+            Sign in to your AVOO account
+          </Text>
 
           <LoginForm />
           <Spacer size='xl' />
@@ -71,39 +66,3 @@ export default function LoginScreen() {
     </Layout>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    padding: 16,
-    backgroundColor: '#FFFFFF',
-  },
-  title: {
-    fontSize: 32,
-    fontWeight: '700',
-    textAlign: 'center',
-    marginBottom: 8,
-    color: '#0F172A',
-  },
-  subtitle: {
-    fontSize: 18,
-    color: '#64748B',
-    textAlign: 'center',
-    marginBottom: 48,
-  },
-  wrapper: {
-    width: '100%',
-  },
-  signUpContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 16,
-    gap: 4,
-  },
-  navigateToSignIn: {
-    fontSize: 16,
-    color: '#64748B',
-  },
-});

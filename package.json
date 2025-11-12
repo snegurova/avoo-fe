@@ -52,8 +52,5 @@
     "**/*.{json,md,css,scss,yml,yaml}": [
       "prettier --write"
     ]
-  },
-  "dependencies": {
-    "nativewind": "^4.2.1"
   }
 }

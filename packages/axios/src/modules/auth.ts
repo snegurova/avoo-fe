@@ -1,16 +1,20 @@
-import { AuthResponse, BaseResponse, LoginRequest, RegisterRequest } from '../../types/apiTypes';
+import { AuthResponse, BaseResponse, LoginRequest, RegisterRequest, ResetPasswordRequest, ResetPasswordResponse, VerifyCodeRequest, VerifyCodeResponse } from '../../types/apiTypes';
 import { apiClient } from '../apiClient';
 
 const LOGIN_ENDPOINT = '/sign-in';
 const REGISTER_ENDPOINT = '/sign-up';
 const LOGOUT_ENDPOINT = '/logout';
+const FORGOT_PASSWORD_ENDPOINT = '/forgot-password';
+const VERIFY_CODE_ENDPOINT = '/reset-password/code';
+const RESET_PASSWORD_ENDPOINT = '/reset-password';
+
 
 export type RegisterCustomRequest = Omit<RegisterRequest, 'name'> & {
   name?: string;
 };
 
-
 export type ForgotPasswordRequest = Omit<LoginRequest, 'password'>
+
 
 
 export const authApi = {
@@ -23,7 +27,15 @@ export const authApi = {
     return response.data;
   },
   async forgotPassword(data: ForgotPasswordRequest) {
-    const response = await apiClient.post<BaseResponse<{}>>(`/forgot-password`, data);
+    const response = await apiClient.post<BaseResponse<Record<string, never>>>(FORGOT_PASSWORD_ENDPOINT, data);
+    return response.data;
+  },
+  async verifyCode(data: VerifyCodeRequest) {
+    const response = await apiClient.post<BaseResponse<VerifyCodeResponse>>(VERIFY_CODE_ENDPOINT, data);
+    return response.data;
+  },
+  async resetPassword(data: ResetPasswordRequest) {
+    const response = await apiClient.post<BaseResponse<Record<string, never>>>(RESET_PASSWORD_ENDPOINT, data);
     return response.data;
   },
   async logout() {

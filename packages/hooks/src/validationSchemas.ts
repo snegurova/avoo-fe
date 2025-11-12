@@ -44,7 +44,32 @@ export const forgotPasswordSchema = yup.object({
     .trim(),
 });
 
+export const verifyCodeSchema = yup.object({
+  code: yup
+    .string()
+    .transform((value) => {
+      if (!value) return '';
+      return value.toString().replace(/\D/g, '').slice(0, 6);
+    })
+    .required('Code is required')
+    .min(6, 'Code must be 6 digits')
+    .max(6, 'Code must be 6 digits')
+    .matches(/^\d{6}$/, 'Code must be 6 digits'),
+});
+
+export const resetPasswordSchema = yup.object({
+  password: yup
+    .string()
+    .required('Password is required')
+    .min(8, 'Password must be at least 8 characters'),
+  confirmPassword: yup
+    .string()
+    .required('Please confirm your password')
+    .oneOf([yup.ref('password')], 'Passwords do not match'),
+});
 
 export type RegisterFormData = yup.InferType<typeof registerSchema>;
 export type LoginFormData = yup.InferType<typeof loginSchema>;
 export type ForgotPasswordFormData = yup.InferType<typeof forgotPasswordSchema>;
+export type VerifyCodeFormData = yup.InferType<typeof verifyCodeSchema>;
+export type ResetPasswordFormData = yup.InferType<typeof resetPasswordSchema>;

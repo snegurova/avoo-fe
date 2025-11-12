@@ -1,11 +1,4 @@
-import {
-  Text,
-  View,
-  StyleSheet,
-  TouchableWithoutFeedback,
-  Keyboard,
-  Pressable,
-} from 'react-native';
+import { Text, View, TouchableWithoutFeedback, Keyboard, Pressable } from 'react-native';
 import { Layout } from '../shared/Layout';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { RootStackParamList } from '../types/navigation';
@@ -17,14 +10,16 @@ export default function ForgotPasswordScreen() {
 
   return (
     <Layout centerContent={true}>
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss} style={styles.container}>
-        <View style={styles.wrapper}>
-          <Text className='text-3xl font-bold text-center'>Reset Password</Text>
-          <Text style={styles.subtitle}>Enter your email to reset your password</Text>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <View className='w-full'>
+          <Text className='text-3xl font-bold text-center mb-2'>Forgot Password</Text>
+          <Text className='text-lg text-slate-500 text-center mb-12'>
+            Enter your email to reset your password
+          </Text>
 
           <ForgotPasswordForm />
           <Spacer size='xl' />
-          <View className='flex-row justify-between items-center '>
+          <View className='flex-row justify-between items-center'>
             <Pressable
               onPress={() =>
                 navigation.reset({
@@ -45,39 +40,3 @@ export default function ForgotPasswordScreen() {
     </Layout>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    padding: 16,
-    backgroundColor: '#FFFFFF',
-  },
-  title: {
-    fontSize: 32,
-    fontWeight: '700',
-    textAlign: 'center',
-    marginBottom: 8,
-    color: '#0F172A',
-  },
-  subtitle: {
-    fontSize: 18,
-    color: '#64748B',
-    textAlign: 'center',
-    marginBottom: 48,
-  },
-  wrapper: {
-    width: '100%',
-  },
-  signUpContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 16,
-    gap: 4,
-  },
-  navigateToSignIn: {
-    fontSize: 16,
-    color: '#64748B',
-  },
-});

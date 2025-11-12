@@ -6381,7 +6381,6 @@ __metadata:
     eslint-config-prettier: "npm:^10.1.8"
     husky: "npm:^8.0.0"
     lint-staged: "npm:^16.1.6"
-    nativewind: "npm:^4.2.1"
     plop: "npm:^4.0.4"
     prettier: "npm:^3.6.2"
     prettier-plugin-tailwindcss: "npm:^0.5.11"
@@ -11503,6 +11502,7 @@ __metadata:
     expo-dev-client: "npm:~6.0.16"
     expo-splash-screen: "npm:~31.0.10"
     expo-status-bar: "npm:~3.0.8"
+    nativewind: "npm:^4.2.1"
     react: "npm:19.1.0"
     react-dom: "npm:19.1.0"
     react-native: "npm:0.81.5"
@@ -11514,6 +11514,7 @@ __metadata:
     react-native-web: "npm:^0.21.2"
     react-native-worklets: "npm:^0.5.2"
     storybook: "npm:^10.0.4"
+    tailwind-variants: "npm:3.1.1"
     turbo: "npm:^2.5.6"
     typescript: "npm:^5.5.4"
     vite: "npm:^7.1.12"
@@ -14600,7 +14601,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tailwind-variants@npm:^3.1.1":
+"tailwind-variants@npm:3.1.1, tailwind-variants@npm:^3.1.1":
   version: 3.1.1
   resolution: "tailwind-variants@npm:3.1.1"
   peerDependencies:

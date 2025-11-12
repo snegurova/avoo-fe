@@ -1,11 +1,12 @@
 import { View } from 'react-native';
 import FormTextInput from '../shared/FormTextInput';
-import FormCheckBox from '../shared/FormCheckBox';
 import Button from '../shared/Button/Button';
 import { authHooks, usePasswordVisibility } from 'packages/hooks/src';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
+import { RootStackParamList } from '../types/navigation';
 import { useApiStore } from 'packages/store/src/api.store';
 
-export default function RegistrationForm() {
+export default function ResetPasswordForm() {
   const { icon, togglePassword, secureTextEntry } = usePasswordVisibility();
   const {
     icon: iconConfirmPassword,
@@ -13,29 +14,21 @@ export default function RegistrationForm() {
     secureTextEntry: secureTextEntryConfirmPassword,
   } = usePasswordVisibility();
 
-  const { control, handleSubmit, errors } = authHooks.useRegisterForm();
-
   const isPending = useApiStore((state) => state.isPending);
+
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+
+  const { control, handleSubmit, errors } = authHooks.useResetPasswordForm({
+    onSuccess: () => {
+      navigation.reset({
+        index: 0,
+        routes: [{ name: 'LoginScreen' }],
+      });
+    },
+  });
 
   return (
     <View className='w-full gap-4'>
-      <FormTextInput
-        name='name'
-        control={control}
-        placeholder='Full Name'
-        error={errors.name?.message}
-        autoCapitalize='words'
-        keyboardType='default'
-      />
-      <FormTextInput
-        name='email'
-        control={control}
-        placeholder='Email'
-        error={errors.email?.message}
-        keyboardType='email-address'
-        autoCapitalize='none'
-        autoCorrect={false}
-      />
       <FormTextInput
         name='password'
         control={control}
@@ -60,15 +53,9 @@ export default function RegistrationForm() {
         autoComplete='off'
         autoCorrect={false}
       />
-      <FormCheckBox
-        name='agreeToTerms'
-        control={control}
-        label='I agree to the Privacy Policy, Terms of Service and Terms of Business.'
-        error={errors.agreeToTerms?.message}
-      />
       <Button
         onPress={handleSubmit}
-        title='Create Account'
+        title='Save New Password'
         loading={isPending}
         disabled={isPending}
       />

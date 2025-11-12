@@ -36,7 +36,9 @@ export const HomeScreen = () => {
       centerContent={true}
     >
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <Text style={{ fontSize: 24, fontWeight: 'bold', color: '#0F172A' }}>Welcome to Home! 👋</Text>
+        <Text style={{ fontSize: 24, fontWeight: 'bold', color: '#0F172A' }}>
+          Welcome to Home! 👋
+        </Text>
       </View>
     </Layout>
   );
