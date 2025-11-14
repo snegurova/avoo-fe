@@ -26,7 +26,7 @@ export default function RegisterForm() {
 
   const { register, handleSubmit, errors } = authHooks.useRegisterForm({
     onSuccess: () => {
-      router.push(routes.home);
+      router.push(routes.Home);
     },
   });
 

@@ -16,7 +16,7 @@ export default function LoginForm() {
 
   const { register, handleSubmit, errors } = authHooks.useLoginForm({
     onSuccess: () => {
-      router.push(routes.home);
+      router.push(routes.Home);
     },
   });
 
