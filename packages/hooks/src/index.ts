@@ -1,5 +1,4 @@
 export * from './formatHooks';
 export * from './authHooks';
-export * from './validationSchemas';
-export * from './queryClient';
-export * from './usePasswordVisibility';
+export * from '../schemas/validationSchemas';
+export * from '../client/queryClient';

@@ -9,6 +9,7 @@ import { routes } from '../../_routes/routes';
 import { useApiStore } from 'packages/store/src/api.store';
 import { utils } from 'packages/hooks/utils/utils';
 
+
 const AccessoryRight = memo(({ value, toggle }: { value: boolean; toggle: () => void }) => {
   return (
     <button type='button' onClick={toggle}>
@@ -19,14 +20,14 @@ const AccessoryRight = memo(({ value, toggle }: { value: boolean; toggle: () => 
 
 AccessoryRight.displayName = 'AccessoryRight';
 
-export default function RegisterForm() {
+export default function ResetPasswordForm() {
   const isPending = useApiStore((state) => state.isPending);
 
   const router = useRouter();
 
-  const { register, handleSubmit, errors } = authHooks.useRegisterForm({
+  const { register, handleSubmit, errors } = authHooks.useResetPasswordForm({
     onSuccess: () => {
-      router.push(routes.home);
+      router.push(routes.signIn);
     },
   });
 
@@ -35,20 +36,6 @@ export default function RegisterForm() {
 
   return (
     <form onSubmit={handleSubmit} className='mt-10 sm:mx-auto sm:w-full sm:max-w-sm space-y-6'>
-      <FormInput
-        {...register('name')}
-        type='text'
-        placeholder='Full Name'
-        error={errors.name?.message}
-      />
-
-      <FormInput
-        {...register('email')}
-        type='email'
-        placeholder='Email'
-        error={errors.email?.message}
-      />
-
       <FormInput
         {...register('password')}
         type={isShowPassword ? 'text' : 'password'}
@@ -69,24 +56,6 @@ export default function RegisterForm() {
         }
       />
 
-      <div>
-        <div className='flex items-start'>
-          <div className='flex items-center h-5'>
-            <input
-              {...register('agreeToTerms')}
-              type='checkbox'
-              className='w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300'
-            />
-          </div>
-          <label className='ml-2 text-sm text-gray-600'>
-            I agree to the Privacy Policy, Terms of Service and Terms of Business.
-          </label>
-        </div>
-        {errors.agreeToTerms && (
-          <p className='mt-1 text-sm text-red-500'>{errors.agreeToTerms.message}</p>
-        )}
-      </div>
-
       <Button
         onClick={handleSubmit}
         disabled={isPending}
@@ -94,8 +63,12 @@ export default function RegisterForm() {
         fit={ButtonFit.Fill}
         intent={ButtonIntent.Primary}
       >
-        Create Account
+        Save New Password
       </Button>
     </form>
   );
 }
+
+
+
+

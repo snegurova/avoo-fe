@@ -1,5 +1,5 @@
 import { useApiStore } from '@avoo/store/src/api.store';
-import { useEffect } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 export const utils = {
   submitAdapter: <T>(submitFn: (data: T) => void) => {
@@ -20,4 +20,20 @@ export const utils = {
       };
     }, [isPending, setIsPending]);
   },
-};
+  useBoolean: (initialValue: boolean = false) => {
+    const [value, setValue] = useState(initialValue);
+  
+    const toggle = useCallback(() => {
+      setValue((prev) => !prev);
+    }, []);
+  
+    return useMemo(
+      () => ({
+        value,
+        setValue,
+        toggle,
+      }),
+      [value, toggle]
+    );
+  },
+}

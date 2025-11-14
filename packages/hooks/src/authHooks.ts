@@ -12,7 +12,7 @@ import {
   VerifyCodeFormData,
   ResetPasswordFormData,
   resetPasswordSchema,
-} from './validationSchemas';
+} from '../schemas/validationSchemas';
 import { authApi } from '@avoo/axios';
 import { useAuthStore } from '@avoo/store';
 import { useMutation } from '@tanstack/react-query';
@@ -27,8 +27,7 @@ import {
   VerifyCodeResponse,
   ResetPasswordRequest,
 } from '@avoo/axios/types/apiTypes';
-import { useApiStore } from '@avoo/store/src/api.store';
-import { apiStatus } from './constants';
+import { apiStatus } from '../constants/constants';
 import {
   RegisterCustomRequest,
   ForgotPasswordRequest as ForgotPasswordRequestType,
@@ -37,10 +36,8 @@ import {
 export const authHooks = {
   useRegisterForm: ({
     onSuccess,
-    onError,
   }: {
     onSuccess?: () => void;
-    onError?: (error: any) => void;
   } = {}) => {
     const {
       register,
@@ -73,9 +70,6 @@ export const authHooks = {
           onSuccess?.();
         }
       },
-      onError: (error) => {
-        onError?.(error);
-      },
     });
 
     utils.useSetPendingApi(isPending);
@@ -89,10 +83,8 @@ export const authHooks = {
   },
   useLoginForm: ({
     onSuccess,
-    onError,
   }: {
     onSuccess?: () => void;
-    onError?: (error: any) => void;
   } = {}) => {
     const {
       register,
@@ -122,9 +114,6 @@ export const authHooks = {
           onSuccess?.();
         }
       },
-      onError: (error) => {
-        onError?.(error);
-      },
     });
 
     utils.useSetPendingApi(isPending);
@@ -137,9 +126,9 @@ export const authHooks = {
     };
   },
   useForgotPasswordForm: ({
-    sendCode,
+    sendCodeHandler,
   }: {
-    sendCode: (data: ForgotPasswordRequestType) => void;
+    sendCodeHandler: (data: ForgotPasswordRequestType) => void;
   }) => {
     const {
       register,
@@ -157,18 +146,16 @@ export const authHooks = {
     return {
       register,
       control,
-      handleSubmit: handleSubmit(utils.submitAdapter<ForgotPasswordRequestType>(sendCode)),
+      handleSubmit: handleSubmit(utils.submitAdapter<ForgotPasswordRequestType>(sendCodeHandler)),
       errors,
     };
   },
   useVerifyCodeForm: ({
     email,
     onSuccess,
-    onError,
   }: {
     email?: string;
     onSuccess?: () => void;
-    onError?: (error: any) => void;
   } = {}) => {
     const {
       register,
@@ -197,9 +184,6 @@ export const authHooks = {
           onSuccess?.();
         }
       },
-      onError: (error) => {
-        onError?.(error);
-      },
     });
 
     utils.useSetPendingApi(isPending);
@@ -223,11 +207,9 @@ export const authHooks = {
   },
   useResetPasswordForm: ({
     onSuccess,
-    onError,
   }: {
     token?: string;
     onSuccess?: () => void;
-    onError?: (error: any) => void;
   } = {}) => {
     const {
       register,
@@ -254,9 +236,6 @@ export const authHooks = {
           onSuccess?.();
         }
       },
-      onError: (error) => {
-        onError?.(error);
-      },
     });
 
     utils.useSetPendingApi(isPending);
@@ -270,12 +249,10 @@ export const authHooks = {
   },
   useSendCode: ({
     onSuccess,
-    onError,
   }: {
     onSuccess?: (email: string) => void;
-    onError?: (error: any) => void;
   } = {}) => {
-    const { mutate: sendCode, isPending } = useMutation<
+    const { mutate: sendCodeHandler, isPending } = useMutation<
       BaseResponse<{}>,
       Error,
       ForgotPasswordRequestType
@@ -286,15 +263,12 @@ export const authHooks = {
           onSuccess?.(variables.email);
         }
       },
-      onError: (error) => {
-        onError?.(error);
-      },
     });
 
     utils.useSetPendingApi(isPending);
 
     return {
-      sendCode,
+      sendCodeHandler,
       isPending,
     };
   },

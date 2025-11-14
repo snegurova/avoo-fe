@@ -10,9 +10,9 @@ import { authHooks } from 'packages/hooks/src';
 export default function ConfirmCodeScreen() {
   const { email } = useRoute<RouteProp<RootStackParamList, 'ConfirmCodeScreen'>>().params;
 
-  const maskedEmail = formatHooks.useMaskEmail(email || '');
+  const maskedEmail = formatHooks.useMaskEmail(email);
 
-  const { sendCode } = authHooks.useSendCode();
+  const { sendCodeHandler } = authHooks.useSendCode();
 
   return (
     <Layout centerContent={true}>
@@ -24,7 +24,7 @@ export default function ConfirmCodeScreen() {
         <VerifyCodeForm />
         <Spacer size='xl' />
         <Pressable onPress={() => {
-          sendCode({
+          sendCodeHandler({
             email,
           });
         }}>

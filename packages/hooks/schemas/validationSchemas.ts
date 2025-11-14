@@ -52,9 +52,7 @@ export const verifyCodeSchema = yup.object({
       return value.toString().replace(/\D/g, '').slice(0, 6);
     })
     .required('Code is required')
-    .min(6, 'Code must be 6 digits')
-    .max(6, 'Code must be 6 digits')
-    .matches(/^\d{6}$/, 'Code must be 6 digits'),
+    .length(6, 'Code must be 6 digits'),
 });
 
 export const resetPasswordSchema = yup.object({

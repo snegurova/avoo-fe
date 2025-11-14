@@ -1,18 +1,17 @@
 import { View } from 'react-native';
 import FormTextInput from '../shared/FormTextInput';
 import Button from '../shared/Button/Button';
-import { authHooks, usePasswordVisibility } from 'packages/hooks/src';
+import { authHooks } from 'packages/hooks/src';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { RootStackParamList } from '../types/navigation';
 import { useApiStore } from 'packages/store/src/api.store';
+import { utils } from 'packages/hooks/utils/utils';
+import { FontAwesome } from '@expo/vector-icons';
+
 
 export default function ResetPasswordForm() {
-  const { icon, togglePassword, secureTextEntry } = usePasswordVisibility();
-  const {
-    icon: iconConfirmPassword,
-    togglePassword: toggleConfirmPassword,
-    secureTextEntry: secureTextEntryConfirmPassword,
-  } = usePasswordVisibility();
+  const { value: isShowPassword, toggle } = utils.useBoolean(false);
+  const { value: isShowConfirmPassword, toggle: toggleConfirmPassword } = utils.useBoolean(false);
 
   const isPending = useApiStore((state) => state.isPending);
 
@@ -27,6 +26,9 @@ export default function ResetPasswordForm() {
     },
   });
 
+  const icon = <FontAwesome name={isShowPassword ? 'eye' : 'eye-slash'} size={24} color='black' />;
+  const iconConfirmPassword = <FontAwesome name={isShowConfirmPassword ? 'eye' : 'eye-slash'} size={24} color='black' />;
+
   return (
     <View className='w-full gap-4'>
       <FormTextInput
@@ -34,9 +36,9 @@ export default function ResetPasswordForm() {
         control={control}
         placeholder='Password'
         error={errors.password?.message}
-        secureTextEntry={secureTextEntry}
+        secureTextEntry={!isShowPassword}
         accessoryRight={icon}
-        onAccessoryRightPress={togglePassword}
+        onAccessoryRightPress={toggle}
         textContentType='newPassword'
         autoComplete='off'
         autoCorrect={false}
@@ -46,7 +48,7 @@ export default function ResetPasswordForm() {
         control={control}
         placeholder='Confirm Password'
         error={errors.confirmPassword?.message}
-        secureTextEntry={secureTextEntryConfirmPassword}
+        secureTextEntry={!isShowConfirmPassword}
         accessoryRight={iconConfirmPassword}
         onAccessoryRightPress={toggleConfirmPassword}
         textContentType='newPassword'

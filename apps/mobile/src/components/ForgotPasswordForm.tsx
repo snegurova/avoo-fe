@@ -12,7 +12,7 @@ export default function ForgotPasswordForm() {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
 
-  const { sendCode } = authHooks.useSendCode({
+  const { sendCodeHandler } = authHooks.useSendCode({
     onSuccess: (email: string) => {
       navigation.navigate('ConfirmCodeScreen', {
         email,
@@ -21,7 +21,7 @@ export default function ForgotPasswordForm() {
   });
 
   const { control, handleSubmit, errors } = authHooks.useForgotPasswordForm({
-    sendCode,
+    sendCodeHandler,
   });
 
   return (
