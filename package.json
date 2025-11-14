@@ -54,5 +54,9 @@
     "**/*.{json,md,css,scss,yml,yaml}": [
       "prettier --write"
     ]
+  },
+  "dependencies": {
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0"
   }
 }

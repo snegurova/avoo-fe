@@ -27,7 +27,7 @@ export default function ResetPasswordForm() {
 
   const { register, handleSubmit, errors } = authHooks.useResetPasswordForm({
     onSuccess: () => {
-      router.push(routes.signIn);
+      router.push(routes.SignIn);
     },
   });
 

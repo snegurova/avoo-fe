@@ -25,7 +25,7 @@ export default function ForgotPasswordPage() {
 
       <div className='sm:mx-auto sm:w-full sm:max-w-sm mt-4'>
         <p className='text-center text-gray-600'>
-          <Link href={routes.signIn} className='text-blue-600 hover:underline'>
+          <Link href={routes.SignIn} className='text-blue-600 hover:underline'>
             Back to login
           </Link>
         </p>

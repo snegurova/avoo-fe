@@ -59,7 +59,7 @@ export default function LoginForm() {
         Log in
       </Button>
       <div className='text-center mt-2'>
-        <Link href={routes.forgotPassword} className='text-blue-600 hover:underline text-sm'>
+        <Link href={routes.ForgotPassword} className='text-blue-600 hover:underline text-sm'>
           Forgot password?
         </Link>
       </div>

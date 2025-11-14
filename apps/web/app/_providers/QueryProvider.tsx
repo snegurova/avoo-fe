@@ -12,7 +12,6 @@ export function QueryProvider({ children }: { children: ReactNode }) {
     <QueryClientProvider client={queryClient}>
       {children}
       {__DEV__ && (
-        // @ts-ignore - Type compatibility issue between React versions
         <ReactQueryDevtools initialIsOpen={false} buttonPosition='bottom-right' />
       )}
     </QueryClientProvider>

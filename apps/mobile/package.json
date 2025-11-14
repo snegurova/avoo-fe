@@ -55,8 +55,6 @@
     "@storybook/react-native": "^10.0.1",
     "@storybook/react-native-web-vite": "^10.0.4",
     "@types/babel__core": "^7",
-    "@types/react": "^19.1.0",
-    "@types/react-dom": "^19",
     "@types/react-native": "^0.73.0",
     "@types/react-native-web": "^0",
     "babel-loader": "^8.4.1",

@@ -21,7 +21,7 @@ export default function VerifyCodeForm() {
   const { register, handleSubmit, errors } = authHooks.useVerifyCodeForm({
     email: email || '',
     onSuccess: () => {
-      router.push(routes.resetPassword);
+      router.push(routes.ResetPassword);
     },
   });
 
