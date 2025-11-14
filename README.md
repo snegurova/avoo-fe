@@ -47,6 +47,12 @@ yarn install
 yarn types
 ```
 
+### Generate next route types
+
+```bash
+yarn next-type
+```
+
 ### Start both Web + Mobile (Expo Go, no key presses)
 
 This runs Next.js and Expo and auto-opens Android & iOS if simulators/emulators are running.
