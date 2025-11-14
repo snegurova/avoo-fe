@@ -23,7 +23,7 @@ export default function SignInPage() {
       <div className='sm:mx-auto sm:w-full sm:max-w-sm mt-4'>
         <p className='text-center text-gray-600'>
           No account?{' '}
-          <Link href={routes.signUp} className='text-blue-600 hover:underline'>
+          <Link href={routes.SignUp} className='text-blue-600 hover:underline'>
             Sign up
           </Link>
         </p>

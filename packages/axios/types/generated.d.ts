@@ -52,6 +52,54 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/forgot-password": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["AuthController_forgotPassword"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/reset-password/code": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["AuthController_authWithCode"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/reset-password": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["AuthController_resetPassword"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/public/users": {
         parameters: {
             query?: never;
@@ -84,7 +132,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/users/update-avatar": {
+    "/public/users/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["UsersPublicController_findOne"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/update-avatar": {
         parameters: {
             query?: never;
             header?: never;
@@ -100,7 +164,7 @@ export interface paths {
         patch: operations["UsersController_updateUserAvatar"];
         trace?: never;
     };
-    "/services": {
+    "/password": {
         parameters: {
             query?: never;
             header?: never;
@@ -108,6 +172,54 @@ export interface paths {
             cookie?: never;
         };
         get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch: operations["UsersController_updatePasswordInProfile"];
+        trace?: never;
+    };
+    "/verify-email": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["UsersController_sendVerificationCode"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/verify-email/code": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch: operations["UsersController_verifyEmail"];
+        trace?: never;
+    };
+    "/services": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["ServicesController_findAllOwn"];
         put?: never;
         post: operations["ServicesController_create"];
         delete?: never;
@@ -159,6 +271,38 @@ export interface paths {
         put: operations["ServicesController_updateById"];
         post?: never;
         delete: operations["ServicesController_deleteById"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/services/{id}/media": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["ServicesController_getServiceMedia"];
+        put?: never;
+        post: operations["ServicesController_createServiceMedia"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/services/{id}/media/{mediaId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["ServicesController_getServiceMediaById"];
+        put?: never;
+        post?: never;
+        delete: operations["ServicesController_deleteServiceMedia"];
         options?: never;
         head?: never;
         patch?: never;
@@ -260,6 +404,38 @@ export interface paths {
         patch: operations["MastersController_updateUserAvatar"];
         trace?: never;
     };
+    "/public/masters": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["MastersPublicController_findAll"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/public/masters/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["MastersPublicController_findOne"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/public/masters/{id}/services": {
         parameters: {
             query?: never;
@@ -308,6 +484,198 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/orders": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["OrdersController_findAllOwn"];
+        put?: never;
+        post: operations["OrdersController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/orders/{id}/status": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch: operations["OrdersController_updateStatus"];
+        trace?: never;
+    };
+    "/public/orders": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["OrdersPublicController_createOrder"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/schedules": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["SchedulesController_findAll"];
+        put?: never;
+        post: operations["SchedulesController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/schedules/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["SchedulesController_findOne"];
+        put: operations["SchedulesController_update"];
+        post?: never;
+        delete: operations["SchedulesController_remove"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/schedules/{id}/working-hours": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["SchedulesController_createWorkingHours"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/schedules/{id}/working-hours/{workingHourId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put: operations["SchedulesController_updateWorkingHours"];
+        post?: never;
+        delete: operations["SchedulesController_removeWorkingHours"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/schedules/{id}/working-hours/{workingHourId}/breaks": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["SchedulesController_createBreak"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/schedules/{id}/working-hours/{workingHourId}/breaks/{breakId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put: operations["SchedulesController_updateBreak"];
+        post?: never;
+        delete: operations["SchedulesController_removeBreak"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/calendar": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["CalendarController_getCalendar"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/calendar/exceptions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["CalendarController_createException"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/public/calendar": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["CalendarPublicController_getCalendarView"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -323,6 +691,7 @@ export interface components {
             email: string;
             avatarUrl: string | null;
             avatarPreviewUrl: string | null;
+            isEmailVerify: boolean;
             phone: string | null;
         };
         UserResponseDto: {
@@ -375,11 +744,19 @@ export interface components {
             /** @example password123 */
             password: string;
         };
-        CategoryEntity: {
-            id: number;
-            name: string;
-            description: string;
-            image_url: string;
+        ForgotPasswordRequestDto: {
+            /** @example user@example.com */
+            email: string;
+        };
+        AuthWithCodeRequestDto: {
+            /** @example user@example.com */
+            email: string;
+            /** @example 123456 */
+            code: string;
+        };
+        ResetPasswordRequestDto: {
+            /** @example password123 */
+            password: string;
         };
         MasterEntity: {
             id: number;
@@ -388,25 +765,61 @@ export interface components {
             avatarUrl: string | null;
             avatarPreviewUrl: string | null;
             phone: string | null;
+            userId: number;
+        };
+        CategoryEntity: {
+            id: number;
+            name: string;
+            description: string;
+            image_url: string;
         };
         ServiceEntity: {
             id: number;
             name: string;
             description: string;
             price: number;
-            priceCurrency: string;
             category: components["schemas"]["CategoryEntity"];
             durationMinutes: number;
             isActive: boolean;
             masters: components["schemas"]["MasterEntity"][];
             user: components["schemas"]["UserEntity"];
         };
-        UpdateUserAvatarResponseDto: {
+        BusinessInfoEntity: {
+            name: string | null;
+            description: string | null;
+            address: string | null;
+            avatarUrl: string | null;
+            location_lat: number | null;
+            location_lon: number | null;
+        };
+        UserWithRelationsEntity: {
+            id: number;
+            name: string | null;
+            email: string;
+            avatarUrl: string | null;
+            avatarPreviewUrl: string | null;
+            isEmailVerify: boolean;
+            phone: string | null;
+            masters: components["schemas"]["MasterEntity"][];
+            services: components["schemas"]["ServiceEntity"][];
+            businessInfo: components["schemas"]["BusinessInfoEntity"] | null;
+        };
+        UpdateUserResponseDto: {
             user: components["schemas"]["UserEntity"];
         };
         UpdateUserAvatarDto: {
             /** Format: binary */
             file: string;
+        };
+        UpdatePasswordRequestDto: {
+            /** @example password123 */
+            oldPassword: string;
+            /** @example password123 */
+            newPassword: string;
+        };
+        CodeVerificationRequestDto: {
+            /** @example 123456 */
+            code: string;
         };
         CreateServiceDto: {
             /**
@@ -424,11 +837,6 @@ export interface components {
              * @example 25.5
              */
             price: number;
-            /**
-             * @description Currency of the service price
-             * @example EUR
-             */
-            priceCurrency: string;
             /**
              * @description ID of the category the service belongs to
              * @example 1
@@ -515,11 +923,6 @@ export interface components {
              */
             price: number;
             /**
-             * @description Currency of the service price
-             * @example EUR
-             */
-            priceCurrency: string;
-            /**
              * @description ID of the category the service belongs to
              * @example 1
              */
@@ -542,12 +945,475 @@ export interface components {
              */
             masterIds?: string[];
         };
+        MediaResponseDto: {
+            id: number;
+            /**
+             * @example SERVICE
+             * @enum {string}
+             */
+            type: "USER" | "POST" | "SERVICE";
+            typeEntityId: number;
+            url: string;
+            previewUrl?: string;
+        };
         UpdateMasterAvatarResponseDto: {
             master: components["schemas"]["MasterEntity"];
         };
         UpdateMasterAvatarDto: {
             /** Format: binary */
             file: string;
+        };
+        OrderItemEntity: {
+            id: number;
+            order: components["schemas"]["OrderEntity"];
+            service: components["schemas"]["ServiceEntity"];
+            master: components["schemas"]["MasterEntity"];
+            price: number;
+            serviceName: string;
+            duration: number;
+            /** Format: date-time */
+            date: string;
+            startTimeMinutes: number;
+        };
+        OrderEntity: {
+            id: number;
+            status: string;
+            notes: Record<string, never>;
+            customer: components["schemas"]["CustomerEntity"];
+            user: components["schemas"]["UserEntity"];
+            items: components["schemas"]["OrderItemEntity"][];
+        };
+        CustomerEntity: {
+            id: number;
+            name: Record<string, never>;
+            phone: string;
+            email: Record<string, never>;
+            notes: Record<string, never>;
+            orders: components["schemas"]["OrderEntity"][];
+            owner: components["schemas"]["UserEntity"];
+        };
+        CreateOrderDto: {
+            /**
+             * @description Status of the order
+             * @example PENDING
+             */
+            status?: string;
+            /**
+             * @description Additional notes for the order
+             * @example Please arrive 10 minutes early
+             */
+            notes?: string;
+        };
+        CreatePublicOrderItemDto: {
+            /**
+             * @description ID of the service for the order item
+             * @example 1
+             */
+            serviceId: number;
+            /**
+             * @description ID of the master assigned to the order item
+             * @example 1
+             */
+            masterId: number;
+            /**
+             * Format: date-time
+             * @description Date of the service
+             * @example 2025-12-30T00:00:00.000Z
+             */
+            date: string;
+            /**
+             * @description Start time in minutes from midnight
+             * @example 600
+             */
+            startTimeMinutes: number;
+        };
+        CreateCustomerDto: {
+            /**
+             * @description Name of the customer
+             * @example John Doe
+             */
+            name?: string;
+            /**
+             * @description Phone number of the customer
+             * @example +1234567890
+             */
+            phone: string;
+            /**
+             * @description Email address of the customer
+             * @example customer@example.com
+             */
+            email?: string;
+            /**
+             * @description Additional notes about the customer
+             * @example Preferred customer
+             */
+            notes?: string;
+            /**
+             * @description ID of the user who owns the customer
+             * @example 2
+             */
+            ownerId: number;
+        };
+        CreateFullOrderDto: {
+            orderData: components["schemas"]["CreateOrderDto"];
+            itemsData: components["schemas"]["CreatePublicOrderItemDto"][];
+            customerData?: components["schemas"]["CreateCustomerDto"];
+            customerId?: number;
+        };
+        UpdateOrderStatusDto: {
+            /**
+             * @description Status of the order
+             * @example CONFIRMED
+             */
+            status?: string;
+        };
+        CreateOrderItemDto: {
+            /**
+             * @description ID of the service for the order item
+             * @example 1
+             */
+            serviceId: number;
+            /**
+             * @description ID of the master assigned to the order item
+             * @example 1
+             */
+            masterId: number;
+            /**
+             * @description Price of the order item
+             * @example 100
+             */
+            price: number;
+            /**
+             * @description Name of the service for the order item
+             * @example Relaxing Massage
+             */
+            serviceName: string;
+            /**
+             * @description Duration of the service in minutes
+             * @example 60
+             */
+            duration: number;
+            /**
+             * Format: date-time
+             * @description Date of the service
+             * @example 2025-12-30T00:00:00.000Z
+             */
+            date: string;
+            /**
+             * @description Start time in minutes from midnight
+             * @example 600
+             */
+            startTimeMinutes: number;
+        };
+        CreatePublicCustomerDto: {
+            /**
+             * @description Name of the customer
+             * @example John Doe
+             */
+            name?: string;
+            /**
+             * @description Phone number of the customer
+             * @example +1234567890
+             */
+            phone: string;
+            /**
+             * @description Email address of the customer
+             * @example customer@example.com
+             */
+            email?: string;
+        };
+        CreateFullPublicOrderDto: {
+            itemsData: components["schemas"]["CreateOrderItemDto"][];
+            customerData: components["schemas"]["CreatePublicCustomerDto"];
+        };
+        WorkingHourBreakEntity: {
+            id: number;
+            breakStartTimeMinutes: number;
+            breakEndTimeMinutes: number;
+        };
+        WorkingHourEntity: {
+            id: number;
+            day: number;
+            startTimeMinutes: number;
+            endTimeMinutes: number;
+            breaks: components["schemas"]["WorkingHourBreakEntity"][];
+        };
+        ScheduleEntity: {
+            id: number;
+            user: components["schemas"]["UserEntity"];
+            master: components["schemas"]["MasterEntity"];
+            name: string;
+            pattern: number;
+            /** Format: date-time */
+            startAt: string;
+            /** Format: date-time */
+            endAt: string | null;
+            workingHours: components["schemas"]["WorkingHourEntity"][];
+        };
+        CreateWorkingHourBreakDto: {
+            /**
+             * @description Break start time (minutes) 780 = 13:00
+             * @example 780
+             */
+            breakStartTimeMinutes: number;
+            /**
+             * @description Break end time (minutes) 840 = 14:00
+             * @example 840
+             */
+            breakEndTimeMinutes: number;
+        };
+        CreateWorkingHourDto: {
+            /**
+             * @description Work start time (minutes) 540 = 09:00
+             * @example 540
+             */
+            startTimeMinutes: number;
+            /**
+             * @description Work end time (minutes) 1080 = 18:00
+             * @example 1080
+             */
+            endTimeMinutes: number;
+            /**
+             * @description Work day info from start date of schedule
+             * @example 1
+             */
+            day: number;
+            /** @description List of working hours breaks */
+            breaks?: components["schemas"]["CreateWorkingHourBreakDto"][];
+        };
+        CreateScheduleDto: {
+            /**
+             * @description Schedule name (optional)
+             * @example Work schedule
+             */
+            name?: Record<string, never>;
+            /**
+             * @description Schedule pattern( must be the same as working hours items count)
+             * @example 7
+             */
+            pattern: number;
+            /**
+             * Format: date-time
+             * @description Schedule start date(future date)
+             * @example 2025-10-28T00:00:00.000Z
+             */
+            startAt: string;
+            /**
+             * @description Schedule end date (optional)
+             * @example 2026-10-28T00:00:00.000Z
+             */
+            endAt?: Record<string, never>;
+            /** @description List of working hours ( Mon-Fri (Sunday, Saturday Day off)), if start date is Monday */
+            workingHours: components["schemas"]["CreateWorkingHourDto"][];
+            /**
+             * @description Array of master IDs to apply schedule. If omitted, applies to all.
+             * @example [
+             *       1
+             *     ]
+             */
+            mastersId?: string[];
+        };
+        UpdateWorkingHourBreakDto: {
+            /**
+             * @description Break start time (minutes) 780 = 13:00
+             * @example 780
+             */
+            breakStartTimeMinutes?: number;
+            /**
+             * @description Break end time (minutes) 840 = 14:00
+             * @example 840
+             */
+            breakEndTimeMinutes?: number;
+            id?: Record<string, never>;
+        };
+        UpdateWorkingHourDto: {
+            /**
+             * @description Work start time (minutes) 540 = 09:00
+             * @example 540
+             */
+            startTimeMinutes?: number;
+            /**
+             * @description Work end time (minutes) 1080 = 18:00
+             * @example 1080
+             */
+            endTimeMinutes?: number;
+            id: number;
+            /** @description List of working hours breaks */
+            breaks?: components["schemas"]["UpdateWorkingHourBreakDto"][];
+        };
+        UpdateScheduleDto: {
+            /**
+             * @description Schedule name (optional)
+             * @example Work schedule
+             */
+            name?: Record<string, never>;
+            /**
+             * @description Schedule end date (optional)
+             * @example 2026-10-28T00:00:00.000Z
+             */
+            endAt?: Record<string, never>;
+            /** @description List of working hours ( Mon-Fri (Sunday, Saturday Day off)), if start date is Monday */
+            workingHours?: components["schemas"]["UpdateWorkingHourDto"][];
+        };
+        WorkingDayDto: {
+            /**
+             * Format: date-time
+             * @description Range to date
+             * @example 2025-10-28
+             */
+            date: string;
+            /**
+             * @description Weekday
+             * @example Mon
+             */
+            weekday: string;
+            /**
+             * @description Is schedule accessible for this day(if we out of schedule range)
+             * @example true
+             */
+            isAccessible: boolean;
+            /**
+             * @description Is working day for this schedule(if salon not work on this day)
+             * @example true
+             */
+            isWorkingDay: boolean;
+            /**
+             * @description Availability
+             * @example [
+             *       null
+             *     ]
+             */
+            availability: string[];
+            /**
+             * @description Events
+             * @example [
+             *       null
+             *     ]
+             */
+            events: string[];
+            /**
+             * @description Exceptions
+             * @example [
+             *       {
+             *         "start": "2025-10-28T09:30:00.000Z",
+             *         "end": "2025-10-28T10:00:00.000Z"
+             *       }
+             *     ]
+             */
+            exceptions: string[];
+        };
+        PrivateCalendarResponseDto: {
+            /**
+             * @description User ID
+             * @example 1
+             */
+            userId: number;
+            /**
+             * @description Master ID
+             * @example 1
+             */
+            masterId?: Record<string, never>;
+            /**
+             * Format: date-time
+             * @description Range from date
+             * @example 2025-10-17T00:00:00Z
+             */
+            rangeFromDate: string;
+            /**
+             * Format: date-time
+             * @description Range to date
+             * @example 2025-10-27T00:00:00Z
+             */
+            rangeToDate: string;
+            /**
+             * @description List of working days
+             * @example [
+             *       null
+             *     ]
+             */
+            days: components["schemas"]["WorkingDayDto"][];
+        };
+        CalendarExceptionEntity: {
+            id: number;
+            userId: number;
+            masterId: Record<string, never>;
+            /** Format: date-time */
+            dateFrom: string;
+            dateTo: Record<string, never>;
+            type: string;
+            startTimeMinutes: Record<string, never>;
+            endTimeMinutes: Record<string, never>;
+            note: Record<string, never>;
+        };
+        CreateCalendarExceptionDto: {
+            /**
+             * @description Master ID
+             * @example 1
+             */
+            masterId?: number;
+            /**
+             * Format: date-time
+             * @description Range from date
+             * @example 2025-10-27T00:00:00Z
+             */
+            dateFrom: string;
+            /**
+             * Format: date-time
+             * @description Range to date
+             * @example 2025-10-28T00:00:00Z
+             */
+            dateTo: string;
+            /**
+             * @description Type of exception
+             * @example OFF
+             */
+            type: string;
+            /**
+             * @description Start time of exception in minutes
+             * @example 540
+             */
+            startTimeMinutes?: number;
+            /**
+             * @description End time of exception in minutes
+             * @example 1080
+             */
+            endTimeMinutes?: number;
+            /**
+             * @description Note
+             * @example Need to rest
+             */
+            note?: string;
+        };
+        PublicCalendarResponseDto: {
+            /**
+             * @description User ID
+             * @example 1
+             */
+            userId: number;
+            /**
+             * @description Master ID
+             * @example 1
+             */
+            masterId?: Record<string, never>;
+            /**
+             * Format: date-time
+             * @description Range from date
+             * @example 2025-10-17T00:00:00Z
+             */
+            rangeFromDate: string;
+            /**
+             * Format: date-time
+             * @description Range to date
+             * @example 2025-10-27T00:00:00Z
+             */
+            rangeToDate: string;
+            /**
+             * @description List of working days
+             * @example [
+             *       null
+             *     ]
+             */
+            days: components["schemas"]["WorkingDayDto"][];
         };
     };
     responses: never;
@@ -662,6 +1528,117 @@ export interface operations {
             };
         };
     };
+    AuthController_forgotPassword: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ForgotPasswordRequestDto"];
+            };
+        };
+        responses: {
+            /** @description Sending code for changing password */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @example success */
+                        status?: string;
+                        /** @example {} */
+                        data?: Record<string, never>;
+                    };
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    AuthController_authWithCode: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AuthWithCodeRequestDto"];
+            };
+        };
+        responses: {
+            /** @description User authenticated */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SuccessResponseDto"] & {
+                        data?: components["schemas"]["UserResponseDto"];
+                    };
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    AuthController_resetPassword: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ResetPasswordRequestDto"];
+            };
+        };
+        responses: {
+            /** @description Reset password */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @example success */
+                        status?: string;
+                        /** @example {} */
+                        data?: Record<string, never>;
+                    };
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
     UsersPublicController_findAll: {
         parameters: {
             query?: never;
@@ -679,7 +1656,7 @@ export interface operations {
                 content: {
                     "application/json": components["schemas"]["SuccessResponseDto"] & {
                         data?: {
-                            items?: components["schemas"]["UserEntity"][];
+                            items?: components["schemas"]["UserWithRelationsEntity"][];
                             pagination?: components["schemas"]["PaginationDto"];
                         };
                     };
@@ -745,6 +1722,39 @@ export interface operations {
             };
         };
     };
+    UsersPublicController_findOne: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Get user by ID */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SuccessResponseDto"] & {
+                        data?: components["schemas"]["UserWithRelationsEntity"];
+                    };
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
     UsersController_updateUserAvatar: {
         parameters: {
             query?: never;
@@ -765,7 +1775,160 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["SuccessResponseDto"] & {
-                        data?: components["schemas"]["UpdateUserAvatarResponseDto"];
+                        data?: components["schemas"]["UpdateUserResponseDto"];
+                    };
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    UsersController_updatePasswordInProfile: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdatePasswordRequestDto"];
+            };
+        };
+        responses: {
+            /** @description Password updated */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SuccessResponseDto"] & {
+                        data?: components["schemas"]["UpdateUserResponseDto"];
+                    };
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    UsersController_sendVerificationCode: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Sending code for email verification */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @example success */
+                        status?: string;
+                        /** @example {} */
+                        data?: Record<string, never>;
+                    };
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    UsersController_verifyEmail: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CodeVerificationRequestDto"];
+            };
+        };
+        responses: {
+            /** @description Email verified */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SuccessResponseDto"] & {
+                        data?: components["schemas"]["UpdateUserResponseDto"];
+                    };
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    ServicesController_findAllOwn: {
+        parameters: {
+            query?: {
+                /** @description Page number */
+                page?: number;
+                /** @description Items per page */
+                limit?: number;
+                /** @description Filter by category ID */
+                categoryId?: number;
+                /** @description Minimum price */
+                minPrice?: number;
+                /** @description Maximum price */
+                maxPrice?: number;
+                /** @description Search keyword (in name, description, user name, or master name) */
+                search?: string;
+                /** @description Filter by active status */
+                isActive?: boolean;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description List of all services */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SuccessResponseDto"] & {
+                        data?: {
+                            items?: components["schemas"]["ServiceEntity"][];
+                            pagination?: components["schemas"]["PaginationDto"];
+                        };
                     };
                 };
             };
@@ -987,6 +2150,127 @@ export interface operations {
                 content: {
                     "application/json": components["schemas"]["ErrorResponseDto"];
                 };
+            };
+        };
+    };
+    ServicesController_getServiceMedia: {
+        parameters: {
+            query: {
+                page: string;
+                limit: string;
+            };
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description All media for the service */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MediaResponseDto"][];
+                };
+            };
+            /** @description Service not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    ServicesController_createServiceMedia: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "multipart/form-data": {
+                    /** Format: binary */
+                    file: string;
+                };
+            };
+        };
+        responses: {
+            /** @description Created media for service */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MediaResponseDto"];
+                };
+            };
+        };
+    };
+    ServicesController_getServiceMediaById: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+                mediaId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description One media for the service by id */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MediaResponseDto"];
+                };
+            };
+            /** @description Media not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    ServicesController_deleteServiceMedia: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+                mediaId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Delete media by id */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Media not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
         };
     };
@@ -1217,6 +2501,73 @@ export interface operations {
             };
         };
     };
+    MastersPublicController_findAll: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description List of all masters */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SuccessResponseDto"] & {
+                        data?: {
+                            items?: components["schemas"]["MasterEntity"][];
+                            pagination?: components["schemas"]["PaginationDto"];
+                        };
+                    };
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    MastersPublicController_findOne: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Get master by ID */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SuccessResponseDto"] & {
+                        data?: components["schemas"]["MasterEntity"];
+                    };
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
     MastersPublicController_findAllServices: {
         parameters: {
             query?: {
@@ -1319,6 +2670,697 @@ export interface operations {
                 content: {
                     "application/json": components["schemas"]["SuccessResponseDto"] & {
                         data?: components["schemas"]["CategoryEntity"];
+                    };
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    OrdersController_findAllOwn: {
+        parameters: {
+            query?: {
+                /** @description Page number */
+                page?: number;
+                /** @description Items per page */
+                limit?: number;
+                /** @description Filter by status */
+                status?: string;
+                /** @description Filter by customer ID */
+                customerId?: number;
+                /** @description Filter by master ID (assigned to the order) */
+                masterId?: number;
+                /** @description Filter by start date (ISO format) */
+                dateFrom?: string;
+                /** @description Filter by end date (ISO format) */
+                dateTo?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description List of all user orders */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SuccessResponseDto"] & {
+                        data?: {
+                            items?: components["schemas"]["OrderEntity"][];
+                            pagination?: components["schemas"]["PaginationDto"];
+                        };
+                    };
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    OrdersController_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateFullOrderDto"];
+            };
+        };
+        responses: {
+            /** @description Order created successfully */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SuccessResponseDto"] & {
+                        data?: components["schemas"]["OrderEntity"];
+                    };
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    OrdersController_updateStatus: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateOrderStatusDto"];
+            };
+        };
+        responses: {
+            /** @description Order status updated successfully */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SuccessResponseDto"] & {
+                        data?: components["schemas"]["OrderEntity"];
+                    };
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    OrdersPublicController_createOrder: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateFullPublicOrderDto"];
+            };
+        };
+        responses: {
+            /** @description Order created successfully */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SuccessResponseDto"] & {
+                        data?: components["schemas"]["OrderEntity"];
+                    };
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    SchedulesController_findAll: {
+        parameters: {
+            query?: {
+                /** @description Page number */
+                page?: number;
+                /** @description Items per page */
+                limit?: number;
+                /** @description Filter by master ID */
+                masterId?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description List of schedules */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SuccessResponseDto"] & {
+                        data?: {
+                            items?: components["schemas"]["ScheduleEntity"][];
+                            pagination?: components["schemas"]["PaginationDto"];
+                        };
+                    };
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    SchedulesController_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateScheduleDto"];
+            };
+        };
+        responses: {
+            /** @description Schedule created */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SuccessResponseDto"] & {
+                        data?: {
+                            items?: components["schemas"]["ScheduleEntity"][];
+                            pagination?: components["schemas"]["PaginationDto"];
+                        };
+                    };
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    SchedulesController_findOne: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Schedule found */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SuccessResponseDto"] & {
+                        data?: components["schemas"]["ScheduleEntity"];
+                    };
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    SchedulesController_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateScheduleDto"];
+            };
+        };
+        responses: {
+            /** @description Schedule updated */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SuccessResponseDto"] & {
+                        data?: components["schemas"]["ScheduleEntity"];
+                    };
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    SchedulesController_remove: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Schedule deleted */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SuccessResponseDto"] & {
+                        data?: components["schemas"]["ScheduleEntity"];
+                    };
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    SchedulesController_createWorkingHours: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateWorkingHourDto"];
+            };
+        };
+        responses: {
+            /** @description Working hours created */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SuccessResponseDto"] & {
+                        data?: components["schemas"]["WorkingHourEntity"];
+                    };
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    SchedulesController_updateWorkingHours: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+                workingHourId: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateWorkingHourDto"];
+            };
+        };
+        responses: {
+            /** @description Working hours updated */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SuccessResponseDto"] & {
+                        data?: components["schemas"]["WorkingHourEntity"];
+                    };
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    SchedulesController_removeWorkingHours: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+                workingHourId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Working hours deleted */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SuccessResponseDto"] & {
+                        data?: components["schemas"]["WorkingHourEntity"];
+                    };
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    SchedulesController_createBreak: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+                workingHourId: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateWorkingHourBreakDto"];
+            };
+        };
+        responses: {
+            /** @description Break created */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SuccessResponseDto"] & {
+                        data?: components["schemas"]["WorkingHourBreakEntity"];
+                    };
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    SchedulesController_updateBreak: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+                workingHourId: number;
+                breakId: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateWorkingHourBreakDto"];
+            };
+        };
+        responses: {
+            /** @description Break updated */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SuccessResponseDto"] & {
+                        data?: components["schemas"]["WorkingHourBreakEntity"];
+                    };
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    SchedulesController_removeBreak: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+                workingHourId: number;
+                breakId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Break deleted */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SuccessResponseDto"] & {
+                        data?: components["schemas"]["WorkingHourBreakEntity"];
+                    };
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    CalendarController_getCalendar: {
+        parameters: {
+            query: {
+                /** @description Master ID */
+                masterId?: number;
+                /** @description View type (week, month, year) */
+                view?: string;
+                /** @description Range from date */
+                rangeFromDate: string;
+                /** @description Range to date */
+                rangeToDate: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Calendar entities */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SuccessResponseDto"] & {
+                        data?: {
+                            items?: components["schemas"]["PrivateCalendarResponseDto"][];
+                            pagination?: components["schemas"]["PaginationDto"];
+                        };
+                    };
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    CalendarController_createException: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateCalendarExceptionDto"];
+            };
+        };
+        responses: {
+            /** @description Calendar exception entities */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SuccessResponseDto"] & {
+                        data?: {
+                            items?: components["schemas"]["CalendarExceptionEntity"][];
+                            pagination?: components["schemas"]["PaginationDto"];
+                        };
+                    };
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    CalendarPublicController_getCalendarView: {
+        parameters: {
+            query: {
+                /** @description Filter by user ID */
+                userId?: number;
+                /** @description Master ID */
+                masterId?: number;
+                /** @description View type (week, month, year) */
+                view?: string;
+                /** @description Range from date */
+                rangeFromDate: string;
+                /** @description Range to date */
+                rangeToDate: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Calendar view */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SuccessResponseDto"] & {
+                        data?: components["schemas"]["PublicCalendarResponseDto"];
                     };
                 };
             };
