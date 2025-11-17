@@ -1,4 +1,4 @@
-import { useApiStore } from '@avoo/store/src/api.store';
+import { useApiStatusStore } from '@avoo/store';
 import { useCallback, useEffect, useState } from 'react';
 
 export const utils = {
@@ -8,7 +8,7 @@ export const utils = {
     };
   },
   useSetPendingApi: (isPending: boolean) => {
-    const setIsPending = useApiStore((state) => state.setIsPending);
+    const setIsPending = useApiStatusStore((state) => state.setIsPending);
 
     useEffect(() => {
       setIsPending(isPending);

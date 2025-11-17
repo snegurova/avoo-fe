@@ -3,13 +3,13 @@ import { useNavigation } from '@react-navigation/native';
 import { RootScreens } from '@/types/navigation';
 
 import { authHooks } from '@avoo/hooks';
-import { useApiStore } from '@avoo/store';
+import { useApiStatusStore } from '@avoo/store';
 
 import FormTextInput from '@/shared/FormTextInput';
 import Button from '@/shared/Button/Button';
 
 export default function ForgotPasswordForm() {
-  const isPending = useApiStore((state) => state.isPending);
+  const isPending = useApiStatusStore((state) => state.isPending);
 
   const navigation = useNavigation();
 

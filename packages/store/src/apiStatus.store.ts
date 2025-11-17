@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 
-export type ApiStore = {
+export type ApiStatusStore = {
   isPending: boolean;
   isError: boolean;
   errorMessage: string | null;
@@ -8,7 +8,7 @@ export type ApiStore = {
   setIsError: (isError: boolean) => void;
 };
 
-export const useApiStore = create<ApiStore>((set) => ({
+export const useApiStatusStore = create<ApiStatusStore>((set) => ({
   isPending: false,
   isError: false,
   errorMessage: null,

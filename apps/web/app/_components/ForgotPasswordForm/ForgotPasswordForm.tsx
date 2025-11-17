@@ -5,10 +5,10 @@ import { authHooks } from '@avoo/hooks';
 import { Button, ButtonFit, ButtonIntent } from '@/_components/Button/Button';
 import FormInput from '@/_components/FormInput/FormInput';
 import { routes } from '@/_routes/routes';
-import { useApiStore } from '@avoo/store';
+import { useApiStatusStore } from '@avoo/store';
 
 export default function ForgotPasswordForm() {
-  const isPending = useApiStore((state) => state.isPending);
+  const isPending = useApiStatusStore((state) => state.isPending);
 
   const router = useRouter();
 

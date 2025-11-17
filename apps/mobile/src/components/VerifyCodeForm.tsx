@@ -4,12 +4,12 @@ import Button from '@/shared/Button/Button';
 import { authHooks } from '@avoo/hooks';
 import { useNavigation } from '@react-navigation/native';
 import { RootScreens } from '@/types/navigation';
-import { useApiStore } from '@avoo/store';
+import { useApiStatusStore } from '@avoo/store';
 
 export default function VerifyCodeForm({ email }: { email: string }) {
   const navigation = useNavigation();
 
-  const isPending = useApiStore((state) => state.isPending);
+  const isPending = useApiStatusStore((state) => state.isPending);
 
 
   const { control, handleSubmit, errors } = authHooks.useVerifyCodeForm({

@@ -3,7 +3,7 @@ import FormTextInput from '@/shared/FormTextInput';
 import FormCheckBox from '@/shared/FormCheckBox';
 import Button from '@/shared/Button/Button';
 import { utils, authHooks } from '@avoo/hooks';
-import { useApiStore } from '@avoo/store';
+import { useApiStatusStore } from '@avoo/store';
 import { FontAwesome } from '@expo/vector-icons';
 
 export default function RegistrationForm() {
@@ -12,7 +12,7 @@ export default function RegistrationForm() {
 
   const { control, handleSubmit, errors } = authHooks.useRegisterForm();
 
-  const isPending = useApiStore((state) => state.isPending);
+  const isPending = useApiStatusStore((state) => state.isPending);
 
   const icon = <FontAwesome name={isShowPassword ? 'eye' : 'eye-slash'} size={24} color='black' />;
   const iconConfirmPassword = <FontAwesome name={isShowConfirmPassword ? 'eye' : 'eye-slash'} size={24} color='black' />;

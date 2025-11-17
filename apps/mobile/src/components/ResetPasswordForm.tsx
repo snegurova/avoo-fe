@@ -4,7 +4,7 @@ import Button from '@/shared/Button/Button';
 import { utils, authHooks } from '@avoo/hooks';
 import { useNavigation } from '@react-navigation/native';
 import { RootScreens } from '@/types/navigation';
-import { useApiStore } from '@avoo/store';
+import { useApiStatusStore } from '@avoo/store';
 import { FontAwesome } from '@expo/vector-icons';
 
 
@@ -12,7 +12,7 @@ export default function ResetPasswordForm() {
   const { value: isShowPassword, toggleValue: toggleShowPassword } = utils.useBoolean(false);
   const { value: isShowConfirmPassword, toggleValue: toggleConfirmPassword } = utils.useBoolean(false);
 
-  const isPending = useApiStore((state) => state.isPending);
+  const isPending = useApiStatusStore((state) => state.isPending);
 
   const navigation = useNavigation();
 

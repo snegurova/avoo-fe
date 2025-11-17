@@ -1,11 +1,11 @@
-import { useApiStore } from '@avoo/store';
+import { useApiStatusStore } from '@avoo/store';
 import { MutationCache, QueryClient } from '@tanstack/react-query';
 import axios from 'axios';
 
 const mutationCache = new MutationCache({
   onError: (error) => {
     if (axios.isAxiosError(error)) {
-      useApiStore.setState({ isError: true, errorMessage: error.response?.data.message });
+      useApiStatusStore.setState({ isError: true, errorMessage: error.response?.data.message });
     }
   },
 });

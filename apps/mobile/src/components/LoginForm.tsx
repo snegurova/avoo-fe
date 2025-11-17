@@ -2,7 +2,7 @@ import { View } from 'react-native';
 import FormTextInput from '@/shared/FormTextInput';
 import Button from '@/shared/Button/Button';
 import { authHooks, utils } from '@avoo/hooks';
-import { useApiStore } from '@avoo/store';
+import { useApiStatusStore } from '@avoo/store';
 import { FontAwesome } from '@expo/vector-icons';
 
 export default function LoginForm() {
@@ -10,7 +10,7 @@ export default function LoginForm() {
 
   const { control, handleSubmit, errors } = authHooks.useLoginForm();
 
-  const isPending = useApiStore((state) => state.isPending);
+  const isPending = useApiStatusStore((state) => state.isPending);
 
   const icon = <FontAwesome name={isShowPassword ? 'eye' : 'eye-slash'} size={24} color='black' />;
 

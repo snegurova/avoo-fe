@@ -5,13 +5,13 @@ import { authHooks } from '@avoo/hooks';
 import { Button, ButtonFit, ButtonIntent } from '@/_components/Button/Button';
 import FormInput from '@/_components/FormInput/FormInput';
 import { routes } from '@/_routes/routes';
-import { useApiStore } from '@avoo/store';
+import { useApiStatusStore } from '@avoo/store';
 import { utils } from '@avoo/hooks';
 import ShowPasswordToggler from '@/_components/ShowPasswordToggler/ShowPasswordToggler';
 
 
 export default function ResetPasswordForm() {
-  const isPending = useApiStore((state) => state.isPending);
+  const isPending = useApiStatusStore((state) => state.isPending);
 
   const router = useRouter();
 

@@ -5,12 +5,12 @@ import { authHooks } from '@avoo/hooks';
 import { Button, ButtonFit, ButtonIntent } from '@/_components/Button/Button';
 import FormInput from '@/_components/FormInput/FormInput';
 import { routes } from '@/_routes/routes';
-import { useApiStore } from '@avoo/store';
+import { useApiStatusStore } from '@avoo/store';
 import { formatHooks } from '@avoo/hooks';
 
 export default function VerifyCodeForm() {
-  const isPending = useApiStore((state) => state.isPending);
-  const router = useRouter();
+  const isPending = useApiStatusStore((state) => state.isPending);
+  const router = useRouter(); 
   const searchParams = useSearchParams();
   const email = searchParams.get('email') || '';
 
