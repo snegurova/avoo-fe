@@ -60,4 +60,11 @@ export default defineConfig([
       '@typescript-eslint/no-var-requires': 'off',
     },
   },
+  {
+    files: ['**/react-navigation.d.ts', 'apps/mobile/src/navigation/react-navigation.d.ts'],
+    rules: {
+      '@typescript-eslint/no-namespace': 'off',
+      '@typescript-eslint/no-empty-object-type': 'off',
+    },
+  },
 ]);

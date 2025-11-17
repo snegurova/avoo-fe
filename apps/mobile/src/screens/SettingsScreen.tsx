@@ -1,14 +1,11 @@
 import { View, Text } from 'react-native';
-import { Layout } from '../shared/Layout';
-import Button from '../shared/Button/Button';
+import { Layout } from '@/shared/Layout';
+import Button from '@/shared/Button/Button';
 import { useAuthStore } from '@avoo/store';
-import { NavigationProp, useNavigation } from '@react-navigation/native';
-import { BottomBarStackParamList } from '../types/navigation';
+import { BottomBarScreens, ProfileScreens, ProfileScreenProps } from '@/types/navigation';
 
-export const SettingsScreen = () => {
+export const SettingsScreen = ({ navigation }: ProfileScreenProps<ProfileScreens.Settings>) => {
   const setIsAuthenticated = useAuthStore((state) => state.setIsAuthenticated);
-
-  const { navigate } = useNavigation<NavigationProp<BottomBarStackParamList>>();
 
   const handleLogout = () => {
     setIsAuthenticated(false);
@@ -21,11 +18,11 @@ export const SettingsScreen = () => {
         <Button title='Logout' onPress={handleLogout} />
         <Button
           title='Navigate with 4 '
-          onPress={() => navigate('Profile', { screen: 'ExampleScreensParams', params: { id: 4 } })}
+          onPress={() => navigation.navigate(BottomBarScreens.Profile, { screen: ProfileScreens.ExampleScreensParams, params: { id: 4 } })}
         />
         <Button
           title='Navigate without params'
-          onPress={() => navigate('Profile', { screen: 'ExampleScreensParams' })}
+          onPress={() => navigation.navigate(BottomBarScreens.Profile, { screen: ProfileScreens.ExampleScreensParams })}
         />
       </View>
     </Layout>

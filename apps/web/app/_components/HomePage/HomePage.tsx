@@ -1,8 +1,8 @@
 'use client';
 import { useAuthStore } from '@avoo/store';
-import { Button, ButtonFit, ButtonIntent } from '../Button/Button';
+import { Button, ButtonFit, ButtonIntent } from '@/_components/Button/Button';
 import { useCallback } from 'react';
-import { Category } from 'packages/axios/types/apiTypes';
+import { Category } from '@avoo/axios/types/apiTypes';
 
 const hooks = {
   useHandleLogin() {

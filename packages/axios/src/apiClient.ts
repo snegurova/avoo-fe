@@ -1,3 +1,4 @@
+import { useAuthStore } from '@avoo/store';
 import axios from 'axios';
 
 export const apiClient = axios.create({
@@ -6,3 +7,12 @@ export const apiClient = axios.create({
   headers: { 'Content-Type': 'application/json' },
 });
 
+apiClient.interceptors.request.use((config) => {
+  const accessToken = useAuthStore.getState().accessToken;
+  if (accessToken) {
+    config.headers.Authorization = `Bearer ${accessToken}`;
+  } else {
+    delete config.headers.Authorization;
+  }
+  return config;
+});

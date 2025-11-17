@@ -1,5 +1,5 @@
 import { categoriesApi } from '@avoo/axios';
-import { HomePage } from '../_components/HomePage/HomePage';
+import { HomePage } from '@/_components/HomePage/HomePage';
 
 export const HomePageServer = async () => {
   const categories = await categoriesApi.getAll();

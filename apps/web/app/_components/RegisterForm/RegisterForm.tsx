@@ -2,22 +2,27 @@
 
 import { useRouter } from 'next/navigation';
 import { authHooks } from '@avoo/hooks';
-import { Button, ButtonFit, ButtonIntent } from '../Button/Button';
-import { useState } from 'react';
-import FormInput from '../FormInput/FormInput';
-import { routes } from '../../_routes/routes';
+import { Button, ButtonFit, ButtonIntent } from '@/_components/Button/Button';
+import FormInput from '@/_components/FormInput/FormInput';
+import { routes } from '@/_routes/routes';
+import { useApiStatusStore } from '@avoo/store';
+import { utils } from '@avoo/hooks';
+import ShowPasswordToggler from '@/_components/ShowPasswordToggler/ShowPasswordToggler';
+
 
 export default function RegisterForm() {
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const isPending = useApiStatusStore((state) => state.isPending);
 
   const router = useRouter();
 
-  const { register, handleSubmit, errors, isPending } = authHooks.useRegisterForm({
+  const { register, handleSubmit, errors } = authHooks.useRegisterForm({
     onSuccess: () => {
       router.push(routes.Home);
     },
   });
+
+  const { value: isShowPassword, toggleValue: toggleShowPassword } = utils.useBooleanState(false);
+  const { value: isShowConfirmPassword, toggleValue: toggleConfirmPassword } = utils.useBooleanState(false);
 
   return (
     <form onSubmit={handleSubmit} className='mt-10 sm:mx-auto sm:w-full sm:max-w-sm space-y-6'>
@@ -37,26 +42,18 @@ export default function RegisterForm() {
 
       <FormInput
         {...register('password')}
-        type={showPassword ? 'text' : 'password'}
+        type={isShowPassword ? 'text' : 'password'}
         placeholder='Password'
         error={errors.password?.message}
-        accessoryRight={
-          <button type='button' onClick={() => setShowPassword(!showPassword)}>
-            {showPassword ? <p>👁️</p> : <p>🫣</p>}
-          </button>
-        }
+        accessory={<ShowPasswordToggler value={isShowPassword} toggle={toggleShowPassword} />}
       />
 
       <FormInput
         {...register('confirmPassword')}
-        type={showConfirmPassword ? 'text' : 'password'}
+        type={isShowConfirmPassword ? 'text' : 'password'}
         placeholder='Confirm Password'
         error={errors.confirmPassword?.message}
-        accessoryRight={
-          <button type='button' onClick={() => setShowConfirmPassword(!showConfirmPassword)}>
-            {showConfirmPassword ? <p>👁️</p> : <p>🫣</p>}
-          </button>
-        }
+        accessory={<ShowPasswordToggler value={isShowConfirmPassword} toggle={toggleConfirmPassword} />}
       />
 
       <div>
@@ -89,3 +86,4 @@ export default function RegisterForm() {
     </form>
   );
 }
+

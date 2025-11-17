@@ -1,10 +1,10 @@
 import { StatusBar } from 'expo-status-bar';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { NavigationContainer } from '@react-navigation/native';
-import AppContainer from './src/navigation/AppContainer';
+import AppContainer from '@/navigation/AppContainer';
 import { enableScreens } from 'react-native-screens';
 import { QueryClientProvider } from '@tanstack/react-query';
-import { queryClient } from 'packages/hooks/src';
+import { queryClient } from '@avoo/hooks';
 
 import "./global.css"
 

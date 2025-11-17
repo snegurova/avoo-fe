@@ -1,10 +1,9 @@
 import { View, Text } from 'react-native';
-import { Layout } from '../shared/Layout';
-import { ProfileStackParamList } from '../types/navigation';
-import { RouteProp, useRoute } from '@react-navigation/native';
+import { Layout } from '@/shared/Layout';
+import { ProfileScreens, ProfileScreenProps } from '@/types/navigation';
 
-export const ExampleScreensParams = () => {
-  const { params } = useRoute<RouteProp<ProfileStackParamList, 'ExampleScreensParams'>>();
+export const ExampleScreensParams = ({ route }: ProfileScreenProps<ProfileScreens.ExampleScreensParams>) => {
+  const params = route.params;
 
   return (
     <Layout title={`Example Screens Params`} centerContent={true} showBack={true}>

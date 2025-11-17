@@ -356,6 +356,38 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/public/services/{id}/media": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["ServicesPublicController_getServiceMedia"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/public/services/{id}/media/{mediaId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["ServicesPublicController_getServiceMediaById"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/masters": {
         parameters: {
             query?: never;
@@ -806,8 +838,42 @@ export interface components {
         };
         UpdateUserResponseDto: {
             user: components["schemas"]["UserEntity"];
+            items: components["schemas"]["OrderItemEntity"][];
         };
-        UpdateUserAvatarDto: {
+        BusinessInfoEntity: {
+            name: string | null;
+            description: string | null;
+            address: string | null;
+            avatarUrl: string | null;
+            location_lat: number | null;
+            location_lon: number | null;
+        };
+        UserWithRelationsEntity: {
+            id: number;
+            name: string | null;
+            email: string;
+            avatarUrl: string | null;
+            avatarPreviewUrl: string | null;
+            isEmailVerify: boolean;
+            phone: string | null;
+            masters: components["schemas"]["MasterEntity"][];
+            services: components["schemas"]["ServiceEntity"][];
+            orders: components["schemas"]["OrderEntity"][];
+            businessInfo: components["schemas"]["BusinessInfoEntity"] | null;
+        };
+        MediaEntity: {
+            id: number;
+            /** @enum {string} */
+            type: "USER" | "POST" | "SERVICE";
+            typeEntityId: number;
+            url: string;
+            previewUrl: Record<string, never> | null;
+            /** Format: date-time */
+            createdAt: string;
+            /** Format: date-time */
+            updatedAt: string;
+        };
+        UploadFileDto: {
             /** Format: binary */
             file: string;
         };
@@ -1764,7 +1830,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "multipart/form-data": components["schemas"]["UpdateUserAvatarDto"];
+                "multipart/form-data": components["schemas"]["UploadFileDto"];
             };
         };
         responses: {
@@ -2373,6 +2439,81 @@ export interface operations {
                 content: {
                     "application/json": components["schemas"]["SuccessResponseDto"] & {
                         data?: components["schemas"]["ServiceEntity"];
+                    };
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    ServicesPublicController_getServiceMedia: {
+        parameters: {
+            query?: {
+                /** @description Page number */
+                page?: number;
+                /** @description Items per page */
+                limit?: number;
+            };
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description All media for the service */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SuccessResponseDto"] & {
+                        data?: {
+                            items?: components["schemas"]["MediaEntity"][];
+                            pagination?: components["schemas"]["PaginationDto"];
+                        };
+                    };
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    ServicesPublicController_getServiceMediaById: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+                mediaId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description One media for the service by id */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SuccessResponseDto"] & {
+                        data?: components["schemas"]["MediaEntity"];
                     };
                 };
             };
