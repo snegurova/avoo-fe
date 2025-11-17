@@ -2,21 +2,20 @@ import { Text, View } from 'react-native';
 import SixCodeInput from '@/components/SixCodeInput/SixCodeInput';
 import Button from '@/shared/Button/Button';
 import { authHooks } from '@avoo/hooks';
-import { NavigationProp, RouteProp, useNavigation, useRoute } from '@react-navigation/native';
-import { RootStackParamList } from '@/types/navigation';
+import { useNavigation } from '@react-navigation/native';
+import { RootScreens } from '@/types/navigation';
 import { useApiStore } from '@avoo/store';
 
-export default function VerifyCodeForm() {
-  const { email } = useRoute<RouteProp<RootStackParamList, 'ConfirmCodeScreen'>>().params;
-  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+export default function VerifyCodeForm({ email }: { email: string }) {
+  const navigation = useNavigation();
 
   const isPending = useApiStore((state) => state.isPending);
 
 
   const { control, handleSubmit, errors } = authHooks.useVerifyCodeForm({
-    email: email || '',
+    email,
     onSuccess: () => {
-      navigation.navigate('ResetPasswordScreen');
+      navigation.navigate(RootScreens.ResetPasswordScreen);
     },
   });
 

@@ -1,4 +1,4 @@
-import { RootStackParamList } from '@/types/navigation';
+import { RootScreens, RootStackParamList } from '@/types/navigation';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import LoginScreen from '@/screens/LoginScreen';
 import BottomBarNavigator from './BottomBarNavigator';
@@ -16,26 +16,26 @@ const AppContainer = () => {
 
   return (
     <Stack.Navigator
-      initialRouteName={isAuthenticated ? 'BottomBar' : 'LoginScreen'}
+      initialRouteName={isAuthenticated ? RootScreens.BottomBar : RootScreens.LoginScreen}
       screenOptions={{
         headerShown: false,
       }}
     >
       {!isAuthenticated ? (
         <>
-          <Stack.Screen name='LoginScreen' component={LoginScreen} />
-          <Stack.Screen name='RegisterScreen' component={RegisterScreen} />
-          <Stack.Screen name='ForgotPasswordScreen' component={ForgotPasswordScreen} />
-          <Stack.Screen name='ConfirmCodeScreen' component={ConfirmCodeScreen} />
-          <Stack.Screen name='ResetPasswordScreen' component={ResetPasswordScreen} />
+          <Stack.Screen name={RootScreens.LoginScreen} component={LoginScreen} />
+          <Stack.Screen name={RootScreens.RegisterScreen} component={RegisterScreen} />
+          <Stack.Screen name={RootScreens.ForgotPasswordScreen} component={ForgotPasswordScreen} />
+          <Stack.Screen name={RootScreens.ConfirmCodeScreen} component={ConfirmCodeScreen} />
+          <Stack.Screen name={RootScreens.ResetPasswordScreen} component={ResetPasswordScreen} />
         </>
       ) : (
         <>
-          <Stack.Screen name='BottomBar' component={BottomBarNavigator} />
+          <Stack.Screen name={RootScreens.BottomBar} component={BottomBarNavigator} />
         </>
       )}
 
-      {__DEV__ && <Stack.Screen name='Storybook' component={StorybookScreen} />}
+      {__DEV__ && <Stack.Screen name={RootScreens.Storybook} component={StorybookScreen} />}
     </Stack.Navigator>
   );
 };

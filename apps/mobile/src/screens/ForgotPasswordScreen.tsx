@@ -1,11 +1,9 @@
 import { Text, View, TouchableWithoutFeedback, Keyboard, Pressable } from 'react-native';
 import { Layout } from '@/shared/Layout';
-import { NavigationProp, useNavigation } from '@react-navigation/native';
-import { RootStackParamList } from '@/types/navigation';
+import { RootScreens, RootStackScreenProps } from '@/types/navigation';
 import ForgotPasswordForm from '@/components/ForgotPasswordForm';
 
-export default function ForgotPasswordScreen() {
-  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+export default function ForgotPasswordScreen({ navigation }: RootStackScreenProps<RootScreens.ForgotPasswordScreen>) {
 
   return (
     <Layout centerContent={true}>
@@ -23,7 +21,7 @@ export default function ForgotPasswordScreen() {
               onPress={() =>
                 navigation.reset({
                   index: 0,
-                  routes: [{ name: 'LoginScreen' }],
+                  routes: [{ name: RootScreens.LoginScreen }],
                 })
               }
               accessibilityRole='button'

@@ -11,8 +11,7 @@ import {
   ViewStyle,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { NavigationProp, useNavigation } from '@react-navigation/native';
-import { RootStackParamList } from '@/types/navigation';
+import { useNavigation } from '@react-navigation/native';
 
 type Props = {
   children: React.ReactNode;
@@ -38,7 +37,7 @@ export const Layout = (props: Props) => {
     hasBottomTab = false,
     style,
   } = props;
-  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+  const navigation = useNavigation();
 
   return (
     <SafeAreaView edges={hasBottomTab ? ['top'] : undefined} style={[styles.container, style]}>

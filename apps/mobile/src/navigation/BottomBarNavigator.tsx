@@ -1,6 +1,6 @@
 import { Text, TouchableOpacity, View, StyleSheet } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { BottomBarStackParamList } from '@/types/navigation';
+import { BottomBarScreens, BottomBarStackParamList, ProfileScreens, ProfileStackParamList } from '@/types/navigation';
 import { AntDesign } from '@expo/vector-icons';
 import { HomeScreen } from '@/screens/HomeScreen';
 import { SettingsScreen } from '@/screens/SettingsScreen';
@@ -8,18 +8,18 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { ExampleScreensParams } from '@/screens/ExampleScreensParams';
 
 const BottomTab = createBottomTabNavigator<BottomBarStackParamList>();
-const ProfileStack = createNativeStackNavigator();
+const ProfileStack = createNativeStackNavigator<ProfileStackParamList>();
 
 export const ProfileStackNavigator = () => {
   return (
     <ProfileStack.Navigator
-      initialRouteName='Settings'
+      initialRouteName={ProfileScreens.Settings}
       screenOptions={{
         headerShown: false,
       }}
     >
-      <ProfileStack.Screen name='Settings' component={SettingsScreen} />
-      <ProfileStack.Screen name='ExampleScreensParams' component={ExampleScreensParams} />
+      <ProfileStack.Screen name={ProfileScreens.Settings} component={SettingsScreen} />
+      <ProfileStack.Screen name={ProfileScreens.ExampleScreensParams} component={ExampleScreensParams} />
     </ProfileStack.Navigator>
   );
 };
@@ -27,9 +27,9 @@ export const ProfileStackNavigator = () => {
 const BottomBarNavigator = () => {
   return (
     <View style={styles.container}>
-      <BottomTab.Navigator initialRouteName='Home'>
+      <BottomTab.Navigator initialRouteName={BottomBarScreens.Home}>
         <BottomTab.Screen
-          name='Home'
+          name={BottomBarScreens.Home}
           component={HomeScreen}
           options={{
             headerShown: false,
@@ -37,7 +37,7 @@ const BottomBarNavigator = () => {
           }}
         />
         <BottomTab.Screen
-          name='Profile'
+          name={BottomBarScreens.Profile}
           component={ProfileStackNavigator}
           options={{
             headerShown: false,

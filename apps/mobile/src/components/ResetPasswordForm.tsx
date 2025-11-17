@@ -2,8 +2,8 @@ import { View } from 'react-native';
 import FormTextInput from '@/shared/FormTextInput';
 import Button from '@/shared/Button/Button';
 import { utils, authHooks } from '@avoo/hooks';
-import { NavigationProp, useNavigation } from '@react-navigation/native';
-import { RootStackParamList } from '@/types/navigation';
+import { useNavigation } from '@react-navigation/native';
+import { RootScreens } from '@/types/navigation';
 import { useApiStore } from '@avoo/store';
 import { FontAwesome } from '@expo/vector-icons';
 
@@ -14,13 +14,13 @@ export default function ResetPasswordForm() {
 
   const isPending = useApiStore((state) => state.isPending);
 
-  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+  const navigation = useNavigation();
 
   const { control, handleSubmit, errors } = authHooks.useResetPasswordForm({
     onSuccess: () => {
       navigation.reset({
         index: 0,
-        routes: [{ name: 'LoginScreen' }],
+        routes: [{ name: RootScreens.LoginScreen }],
       });
     },
   });

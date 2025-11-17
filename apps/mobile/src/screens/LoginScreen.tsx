@@ -1,11 +1,9 @@
 import { Text, View, TouchableWithoutFeedback, Keyboard, Pressable } from 'react-native';
 import { Layout } from '@/shared/Layout';
 import LoginForm from '@/components/LoginForm';
-import { NavigationProp, useNavigation } from '@react-navigation/native';
-import { RootStackParamList } from '@/types/navigation';
+import { RootScreens, RootStackScreenProps } from '@/types/navigation';
 
-export default function LoginScreen() {
-  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+export default function LoginScreen({ navigation }: RootStackScreenProps<RootScreens.LoginScreen>) {
 
   return (
     <Layout centerContent={true}>
@@ -23,7 +21,7 @@ export default function LoginScreen() {
               onPress={() =>
                 navigation.reset({
                   index: 0,
-                  routes: [{ name: 'RegisterScreen' }],
+                  routes: [{ name: RootScreens.RegisterScreen }],
                 })
               }
               accessibilityRole='button'
@@ -37,7 +35,7 @@ export default function LoginScreen() {
               onPress={() =>
                 navigation.reset({
                   index: 0,
-                  routes: [{ name: 'ForgotPasswordScreen' }],
+                  routes: [{ name: RootScreens.ForgotPasswordScreen }],
                 })
               }
               accessibilityRole='button'
@@ -53,7 +51,7 @@ export default function LoginScreen() {
             onPress={() =>
               navigation.reset({
                 index: 0,
-                routes: [{ name: 'Storybook' }],
+                routes: [{ name: RootScreens.Storybook }],
               })
             }
             hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}

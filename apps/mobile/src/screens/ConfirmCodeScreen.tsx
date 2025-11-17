@@ -1,13 +1,12 @@
 import { Pressable, Text, View } from 'react-native';
-import { RootStackParamList } from '@/types/navigation';
-import { RouteProp, useRoute } from '@react-navigation/native';
+import { RootScreens, RootStackScreenProps } from '@/types/navigation';
 import { formatHooks } from '@avoo/hooks';
 import { Layout } from '@/shared/Layout';
 import VerifyCodeForm from '@/components/VerifyCodeForm';
 import { authHooks } from '@avoo/hooks';
 
-export default function ConfirmCodeScreen() {
-  const { email } = useRoute<RouteProp<RootStackParamList, 'ConfirmCodeScreen'>>().params;
+export default function ConfirmCodeScreen({ route }: RootStackScreenProps<RootScreens.ConfirmCodeScreen>) {
+  const { email } = route.params;
 
   const maskedEmail = formatHooks.useMaskEmail(email);
 
@@ -20,7 +19,7 @@ export default function ConfirmCodeScreen() {
         <Text className='text-sm text-gray-500 text-center mb-8'>
           We’ve sent a 6-digit verification code to your email {maskedEmail}
         </Text>
-        <VerifyCodeForm />
+        <VerifyCodeForm email={email} />
         <View className='mt-6'/>
         <Pressable onPress={() => {
           sendCodeHandler({

@@ -19,7 +19,7 @@ export default function VerifyCodeForm() {
   const { sendCodeHandler } = authHooks.useSendCode();
 
   const { register, handleSubmit, errors } = authHooks.useVerifyCodeForm({
-    email: email || '',
+    email,
     onSuccess: () => {
       router.push(routes.ResetPassword);
     },

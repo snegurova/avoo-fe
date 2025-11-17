@@ -1,6 +1,6 @@
 import { View } from 'react-native';
-import { NavigationProp, useNavigation } from '@react-navigation/native';
-import { RootStackParamList } from '@/types/navigation';
+import { useNavigation } from '@react-navigation/native';
+import { RootScreens } from '@/types/navigation';
 
 import { authHooks } from '@avoo/hooks';
 import { useApiStore } from '@avoo/store';
@@ -11,12 +11,12 @@ import Button from '@/shared/Button/Button';
 export default function ForgotPasswordForm() {
   const isPending = useApiStore((state) => state.isPending);
 
-  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+  const navigation = useNavigation();
 
 
   const { sendCodeHandler } = authHooks.useSendCode({
     onSuccess: (email: string) => {
-      navigation.navigate('ConfirmCodeScreen', {
+      navigation.navigate(RootScreens.ConfirmCodeScreen, {
         email,
       });
     },
