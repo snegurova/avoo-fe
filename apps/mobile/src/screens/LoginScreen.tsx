@@ -1,9 +1,8 @@
 import { Text, View, TouchableWithoutFeedback, Keyboard, Pressable } from 'react-native';
-import { Layout } from '../shared/Layout';
-import LoginForm from '../components/LoginForm';
+import { Layout } from '@/shared/Layout';
+import LoginForm from '@/components/LoginForm';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
-import { RootStackParamList } from '../types/navigation';
-import Spacer from '../shared/Spacer/Spacer';
+import { RootStackParamList } from '@/types/navigation';
 
 export default function LoginScreen() {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
@@ -18,7 +17,7 @@ export default function LoginScreen() {
           </Text>
 
           <LoginForm />
-          <Spacer size='xl' />
+          <View className='mt-6'/>
           <View className='flex-row justify-between items-center '>
             <Pressable
               onPress={() =>
@@ -49,7 +48,7 @@ export default function LoginScreen() {
               <Text className='text-blue-500'>Forgot password?</Text>
             </Pressable>
           </View>
-          <Spacer size='xl' />
+          <View className='mt-6'/>
           <Pressable
             onPress={() =>
               navigation.reset({

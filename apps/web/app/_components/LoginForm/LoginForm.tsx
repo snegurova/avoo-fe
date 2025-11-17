@@ -3,11 +3,12 @@
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { authHooks } from '@avoo/hooks';
-import { Button, ButtonFit, ButtonIntent } from '../Button/Button';
-import FormInput from '../FormInput/FormInput';
-import { routes } from '../../_routes/routes';
-import { useApiStore } from 'packages/store/src/api.store';
-import { utils } from 'packages/hooks/utils/utils';
+import { Button, ButtonFit, ButtonIntent } from '@/_components/Button/Button';
+import FormInput from '@/_components/FormInput/FormInput';
+import { routes } from '@/_routes/routes';
+import { useApiStore } from '@avoo/store';
+import { utils } from '@avoo/hooks';
+import ShowPasswordToggler from '@/_components/ShowPasswordToggler/ShowPasswordToggler';
 
 export default function LoginForm() {
   const isPending = useApiStore((state) => state.isPending);
@@ -20,15 +21,8 @@ export default function LoginForm() {
     },
   });
 
-  const { value: isShowPassword, toggle } = utils.useBoolean(false);
+  const { value: isShowPassword, toggleValue: toggleShowPassword } = utils.useBoolean(false);
 
-  const AccessoryRight = () => {
-    return (
-      <button type='button' onClick={toggle}>
-        {isShowPassword ? <p>👁️</p> : <p>🫣</p>}
-      </button>
-    );
-  };
 
   return (
     <form onSubmit={handleSubmit} className='mt-10 sm:mx-auto sm:w-full sm:max-w-sm space-y-6'>
@@ -44,9 +38,7 @@ export default function LoginForm() {
         type={isShowPassword ? 'text' : 'password'}
         placeholder='Password'
         error={errors.password?.message}
-        accessoryRight={
-          <AccessoryRight />
-        }
+        accessory={<ShowPasswordToggler value={isShowPassword} toggle={toggleShowPassword} />}
       />
 
       <Button
@@ -66,3 +58,4 @@ export default function LoginForm() {
     </form>
   );
 }
+

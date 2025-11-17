@@ -1,10 +1,12 @@
 import { View } from 'react-native';
-import FormTextInput from '../shared/FormTextInput';
-import Button from '../shared/Button/Button';
-import { authHooks } from '@avoo/hooks';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
-import { RootStackParamList } from '../types/navigation';
-import { useApiStore } from 'packages/store/src/api.store';
+import { RootStackParamList } from '@/types/navigation';
+
+import { authHooks } from '@avoo/hooks';
+import { useApiStore } from '@avoo/store';
+
+import FormTextInput from '@/shared/FormTextInput';
+import Button from '@/shared/Button/Button';
 
 export default function ForgotPasswordForm() {
   const isPending = useApiStore((state) => state.isPending);

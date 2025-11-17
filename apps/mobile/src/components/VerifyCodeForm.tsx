@@ -1,11 +1,10 @@
 import { Text, View } from 'react-native';
-import SixCodeInput from './SixCodeInput/SixCodeInput';
-import Spacer from '../shared/Spacer/Spacer';
-import Button from '../shared/Button/Button';
-import { authHooks } from 'packages/hooks/src';
+import SixCodeInput from '@/components/SixCodeInput/SixCodeInput';
+import Button from '@/shared/Button/Button';
+import { authHooks } from '@avoo/hooks';
 import { NavigationProp, RouteProp, useNavigation, useRoute } from '@react-navigation/native';
-import { RootStackParamList } from '../types/navigation';
-import { useApiStore } from 'packages/store/src/api.store';
+import { RootStackParamList } from '@/types/navigation';
+import { useApiStore } from '@avoo/store';
 
 export default function VerifyCodeForm() {
   const { email } = useRoute<RouteProp<RootStackParamList, 'ConfirmCodeScreen'>>().params;
@@ -25,7 +24,7 @@ export default function VerifyCodeForm() {
     <View>
       <SixCodeInput control={control} name='code' />
       {errors.code && <Text className='text-red-500 text-center'>{errors.code.message}</Text>}
-      <Spacer size='xl' />
+      <View className='mt-6'/>
       <Button onPress={handleSubmit} title='Verify' loading={isPending} disabled={isPending} />
     </View>
   );

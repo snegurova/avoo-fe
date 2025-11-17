@@ -4,6 +4,10 @@
     "incremental": true,
     "isolatedModules": true,
     "jsx": "preserve",
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./app/*"]
+    },
     "plugins": [
       {
         "name": "next"

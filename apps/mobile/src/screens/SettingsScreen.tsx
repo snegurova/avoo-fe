@@ -1,9 +1,9 @@
 import { View, Text } from 'react-native';
-import { Layout } from '../shared/Layout';
-import Button from '../shared/Button/Button';
+import { Layout } from '@/shared/Layout';
+import Button from '@/shared/Button/Button';
 import { useAuthStore } from '@avoo/store';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
-import { BottomBarStackParamList } from '../types/navigation';
+import { BottomBarStackParamList } from '@/types/navigation';
 
 export const SettingsScreen = () => {
   const setIsAuthenticated = useAuthStore((state) => state.setIsAuthenticated);

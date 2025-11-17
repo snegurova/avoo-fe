@@ -1,15 +1,14 @@
 import { View } from 'react-native';
-import FormTextInput from '../shared/FormTextInput';
-import FormCheckBox from '../shared/FormCheckBox';
-import Button from '../shared/Button/Button';
-import { authHooks } from 'packages/hooks/src';
-import { useApiStore } from 'packages/store/src/api.store';
-import { utils } from 'packages/hooks/utils/utils';
+import FormTextInput from '@/shared/FormTextInput';
+import FormCheckBox from '@/shared/FormCheckBox';
+import Button from '@/shared/Button/Button';
+import { utils, authHooks } from '@avoo/hooks';
+import { useApiStore } from '@avoo/store';
 import { FontAwesome } from '@expo/vector-icons';
 
 export default function RegistrationForm() {
-  const { value: isShowPassword, toggle } = utils.useBoolean(false);
-  const { value: isShowConfirmPassword, toggle: toggleConfirmPassword } = utils.useBoolean(false);
+  const { value: isShowPassword, toggleValue: toggleShowPassword } = utils.useBoolean(false);
+  const { value: isShowConfirmPassword, toggleValue: toggleConfirmPassword } = utils.useBoolean(false);
 
   const { control, handleSubmit, errors } = authHooks.useRegisterForm();
 
@@ -44,7 +43,7 @@ export default function RegistrationForm() {
         error={errors.password?.message}
         secureTextEntry={!isShowPassword}
         accessoryRight={icon}
-        onAccessoryRightPress={toggle}
+        onAccessoryRightPress={toggleShowPassword}
         textContentType='newPassword'
         autoComplete='off'
         autoCorrect={false}

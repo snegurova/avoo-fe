@@ -1,8 +1,8 @@
 import { Text, View, TouchableWithoutFeedback, Keyboard, Pressable } from 'react-native';
-import { Layout } from '../shared/Layout';
-import RegistrationForm from '../components/RegistrationForm';
+import { Layout } from '@/shared/Layout';
+import RegistrationForm from '@/components/RegistrationForm';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
-import { RootStackParamList } from '../types/navigation';
+import { RootStackParamList } from '@/types/navigation';
 
 export default function RegisterScreen() {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();

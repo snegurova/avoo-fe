@@ -1,13 +1,12 @@
 import { View } from 'react-native';
-import FormTextInput from '../shared/FormTextInput';
-import Button from '../shared/Button/Button';
-import { authHooks } from '@avoo/hooks';
-import { useApiStore } from 'packages/store/src/api.store';
-import { utils } from 'packages/hooks/utils/utils';
+import FormTextInput from '@/shared/FormTextInput';
+import Button from '@/shared/Button/Button';
+import { authHooks, utils } from '@avoo/hooks';
+import { useApiStore } from '@avoo/store';
 import { FontAwesome } from '@expo/vector-icons';
 
 export default function LoginForm() {
-  const { value: isShowPassword, toggle } = utils.useBoolean(false);
+  const { value: isShowPassword, toggleValue: toggleShowPassword } = utils.useBoolean(false);
 
   const { control, handleSubmit, errors } = authHooks.useLoginForm();
 
@@ -33,7 +32,7 @@ export default function LoginForm() {
         error={errors.password?.message}
         secureTextEntry={!isShowPassword}
         accessoryRight={icon}
-        onAccessoryRightPress={toggle}
+        onAccessoryRightPress={toggleShowPassword}
         textContentType='password'
         autoComplete='off'
         autoCorrect={false}

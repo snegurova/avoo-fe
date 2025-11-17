@@ -1,13 +1,13 @@
-import { RootStackParamList } from '../types/navigation';
+import { RootStackParamList } from '@/types/navigation';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import LoginScreen from '../screens/LoginScreen';
+import LoginScreen from '@/screens/LoginScreen';
 import BottomBarNavigator from './BottomBarNavigator';
 import { useAuthStore } from '@avoo/store';
-import RegisterScreen from '../screens/RegisterScreen';
-import StorybookScreen from '../screens/Storybook';
-import ForgotPasswordScreen from '../screens/ForgotPasswordScreen';
-import ConfirmCodeScreen from '../screens/ConfirmCodeScreen';
-import ResetPasswordScreen from '../screens/ResetPasswordScreen';
+import RegisterScreen from '@/screens/RegisterScreen';
+import StorybookScreen from '@/screens/Storybook';
+import ForgotPasswordScreen from '@/screens/ForgotPasswordScreen';
+import ConfirmCodeScreen from '@/screens/ConfirmCodeScreen';
+import ResetPasswordScreen from '@/screens/ResetPasswordScreen';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 

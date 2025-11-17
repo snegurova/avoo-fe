@@ -1,5 +1,5 @@
 import { View, Text, TouchableOpacity } from 'react-native';
-import { Layout } from '../shared/Layout';
+import { Layout } from '@/shared/Layout';
 import { FontAwesome } from '@expo/vector-icons';
 
 export const HomeScreen = () => {

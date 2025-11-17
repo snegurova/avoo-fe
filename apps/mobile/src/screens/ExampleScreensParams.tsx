@@ -1,6 +1,6 @@
 import { View, Text } from 'react-native';
-import { Layout } from '../shared/Layout';
-import { ProfileStackParamList } from '../types/navigation';
+import { Layout } from '@/shared/Layout';
+import { ProfileStackParamList } from '@/types/navigation';
 import { RouteProp, useRoute } from '@react-navigation/native';
 
 export const ExampleScreensParams = () => {

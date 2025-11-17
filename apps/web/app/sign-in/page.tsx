@@ -1,7 +1,7 @@
 import { Metadata } from 'next/types';
-import LoginForm from '../_components/Auth/LoginForm';
+import LoginForm from '@/_components/LoginForm/LoginForm';
 import Link from 'next/link';
-import { routes } from '../_routes/routes';
+import { routes } from '@/_routes/routes';
 
 export const metadata: Metadata = {
   title: 'Sign In - AVOO App',

@@ -1,8 +1,8 @@
 import { Metadata } from 'next/types';
 import { Suspense } from 'react';
-import VerifyCodeForm from '../_components/Auth/VerifyCodeForm';
+import VerifyCodeForm from '@/_components/VerifyCodeForm/VerifyCodeForm';
 import Link from 'next/link';
-import { routes } from '../_routes/routes';
+import { routes } from '@/_routes/routes';
 
 export const metadata: Metadata = {
   title: 'Verify Code - AVOO App',

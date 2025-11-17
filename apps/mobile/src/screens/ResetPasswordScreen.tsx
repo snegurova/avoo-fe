@@ -1,6 +1,6 @@
 import { Text, View, TouchableWithoutFeedback, Keyboard } from 'react-native';
-import { Layout } from '../shared/Layout';
-import ResetPasswordForm from '../components/ResetPasswordForm';
+import { Layout } from '@/shared/Layout';
+import ResetPasswordForm from '@/components/ResetPasswordForm';
 
 export default function ResetPasswordScreen() {
   return (

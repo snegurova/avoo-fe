@@ -2,11 +2,11 @@
 
 import { useRouter, useSearchParams } from 'next/navigation';
 import { authHooks } from '@avoo/hooks';
-import { Button, ButtonFit, ButtonIntent } from '../Button/Button';
-import FormInput from '../FormInput/FormInput';
-import { routes } from '../../_routes/routes';
-import { useApiStore } from 'packages/store/src/api.store';
-import formatHooks from 'packages/hooks/src/formatHooks';
+import { Button, ButtonFit, ButtonIntent } from '@/_components/Button/Button';
+import FormInput from '@/_components/FormInput/FormInput';
+import { routes } from '@/_routes/routes';
+import { useApiStore } from '@avoo/store';
+import { formatHooks } from '@avoo/hooks';
 
 export default function VerifyCodeForm() {
   const isPending = useApiStore((state) => state.isPending);
@@ -50,15 +50,15 @@ export default function VerifyCodeForm() {
           Verify
         </Button>
       </form>
-      <button
-        type='button'
+      <Button
         onClick={() => {
           sendCodeHandler({ email });
         }}
-        className='text-sm text-blue-500 hover:underline text-center w-full'
+        fit={ButtonFit.Fill}
+        intent={ButtonIntent.Primary}
       >
-        Resend code
-      </button>
+        Resend code 
+      </Button>
     </div>
   );
 }

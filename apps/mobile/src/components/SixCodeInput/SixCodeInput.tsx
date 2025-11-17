@@ -1,7 +1,7 @@
 import { useRef } from 'react';
 import { Control, FieldValues, Path, useController } from 'react-hook-form';
 import { Pressable, TextInput, TextInputProps } from 'react-native';
-import SixCodeInputBoxes from './SixCodeInputBoxes';
+import SixCodeInputBoxes from '@/components/SixCodeInput/SixCodeInputBoxes';
 
 type Props<T extends FieldValues> = TextInputProps & {
   control: Control<T>;

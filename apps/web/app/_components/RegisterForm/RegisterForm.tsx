@@ -2,22 +2,13 @@
 
 import { useRouter } from 'next/navigation';
 import { authHooks } from '@avoo/hooks';
-import { Button, ButtonFit, ButtonIntent } from '../Button/Button';
-import { memo } from 'react';
-import FormInput from '../FormInput/FormInput';
-import { routes } from '../../_routes/routes';
-import { useApiStore } from 'packages/store/src/api.store';
-import { utils } from 'packages/hooks/utils/utils';
+import { Button, ButtonFit, ButtonIntent } from '@/_components/Button/Button';
+import FormInput from '@/_components/FormInput/FormInput';
+import { routes } from '@/_routes/routes';
+import { useApiStore } from '@avoo/store';
+import { utils } from '@avoo/hooks';
+import ShowPasswordToggler from '@/_components/ShowPasswordToggler/ShowPasswordToggler';
 
-const AccessoryRight = memo(({ value, toggle }: { value: boolean; toggle: () => void }) => {
-  return (
-    <button type='button' onClick={toggle}>
-      {value ? <p>👁️</p> : <p>🫣</p>}
-    </button>
-  );
-});
-
-AccessoryRight.displayName = 'AccessoryRight';
 
 export default function RegisterForm() {
   const isPending = useApiStore((state) => state.isPending);
@@ -30,8 +21,8 @@ export default function RegisterForm() {
     },
   });
 
-  const { value: isShowPassword, toggle } = utils.useBoolean(false);
-  const { value: isShowConfirmPassword, toggle: toggleConfirmPassword } = utils.useBoolean(false);
+  const { value: isShowPassword, toggleValue: toggleShowPassword } = utils.useBoolean(false);
+  const { value: isShowConfirmPassword, toggleValue: toggleConfirmPassword } = utils.useBoolean(false);
 
   return (
     <form onSubmit={handleSubmit} className='mt-10 sm:mx-auto sm:w-full sm:max-w-sm space-y-6'>
@@ -54,9 +45,7 @@ export default function RegisterForm() {
         type={isShowPassword ? 'text' : 'password'}
         placeholder='Password'
         error={errors.password?.message}
-        accessoryRight={
-          <AccessoryRight value={isShowPassword} toggle={toggle} />
-        }
+        accessory={<ShowPasswordToggler value={isShowPassword} toggle={toggleShowPassword} />}
       />
 
       <FormInput
@@ -64,9 +53,7 @@ export default function RegisterForm() {
         type={isShowConfirmPassword ? 'text' : 'password'}
         placeholder='Confirm Password'
         error={errors.confirmPassword?.message}
-        accessoryRight={
-          <AccessoryRight value={isShowConfirmPassword} toggle={toggleConfirmPassword} />
-        }
+        accessory={<ShowPasswordToggler value={isShowConfirmPassword} toggle={toggleConfirmPassword} />}
       />
 
       <div>
@@ -99,3 +86,4 @@ export default function RegisterForm() {
     </form>
   );
 }
+

@@ -1,11 +1,11 @@
 import { Text, TouchableOpacity, View, StyleSheet } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { BottomBarStackParamList } from '../types/navigation';
+import { BottomBarStackParamList } from '@/types/navigation';
 import { AntDesign } from '@expo/vector-icons';
-import { HomeScreen } from '../screens/HomeScreen';
-import { SettingsScreen } from '../screens/SettingsScreen';
+import { HomeScreen } from '@/screens/HomeScreen';
+import { SettingsScreen } from '@/screens/SettingsScreen';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { ExampleScreensParams } from '../screens/ExampleScreensParams';
+import { ExampleScreensParams } from '@/screens/ExampleScreensParams';
 
 const BottomTab = createBottomTabNavigator<BottomBarStackParamList>();
 const ProfileStack = createNativeStackNavigator();

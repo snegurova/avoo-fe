@@ -1,9 +1,8 @@
 import { Text, View, TouchableWithoutFeedback, Keyboard, Pressable } from 'react-native';
-import { Layout } from '../shared/Layout';
+import { Layout } from '@/shared/Layout';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
-import { RootStackParamList } from '../types/navigation';
-import Spacer from '../shared/Spacer/Spacer';
-import ForgotPasswordForm from '../components/ForgotPasswordForm';
+import { RootStackParamList } from '@/types/navigation';
+import ForgotPasswordForm from '@/components/ForgotPasswordForm';
 
 export default function ForgotPasswordScreen() {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
@@ -18,7 +17,7 @@ export default function ForgotPasswordScreen() {
           </Text>
 
           <ForgotPasswordForm />
-          <Spacer size='xl' />
+          <View className='mt-6'/>
           <View className='flex-row justify-between items-center'>
             <Pressable
               onPress={() =>

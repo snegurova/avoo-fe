@@ -21,9 +21,7 @@ import {
   AuthResponse,
   BaseResponse,
   LoginRequest,
-  ForgotPasswordRequest,
   VerifyCodeRequest,
-  ResetPasswordResponse,
   VerifyCodeResponse,
   ResetPasswordRequest,
 } from '@avoo/axios/types/apiTypes';
@@ -33,12 +31,34 @@ import {
   ForgotPasswordRequest as ForgotPasswordRequestType,
 } from '@avoo/axios/src/modules/auth';
 
+type UseRegisterFormParams = {
+  onSuccess?: () => void;
+};
+
+type UseLoginFormParams = {
+  onSuccess?: () => void;
+};
+
+type UseForgotPasswordFormParams = {
+  sendCodeHandler: (data: ForgotPasswordRequestType) => void;
+};
+
+type UseVerifyCodeFormParams = {
+  email?: string;
+  onSuccess?: () => void;
+};
+
+type UseResetPasswordFormParams = {
+  token?: string;
+  onSuccess?: () => void;
+};
+
+type UseSendCodeParams = {
+  onSuccess?: (email: string) => void;
+};
+
 export const authHooks = {
-  useRegisterForm: ({
-    onSuccess,
-  }: {
-    onSuccess?: () => void;
-  } = {}) => {
+  useRegisterForm: ({ onSuccess }: UseRegisterFormParams = {}) => {
     const {
       register,
       control,
@@ -81,11 +101,7 @@ export const authHooks = {
       errors,
     };
   },
-  useLoginForm: ({
-    onSuccess,
-  }: {
-    onSuccess?: () => void;
-  } = {}) => {
+  useLoginForm: ({ onSuccess }: UseLoginFormParams = {}) => {
     const {
       register,
       control,
@@ -125,11 +141,7 @@ export const authHooks = {
       errors,
     };
   },
-  useForgotPasswordForm: ({
-    sendCodeHandler,
-  }: {
-    sendCodeHandler: (data: ForgotPasswordRequestType) => void;
-  }) => {
+  useForgotPasswordForm: ({ sendCodeHandler }: UseForgotPasswordFormParams) => {
     const {
       register,
       control,
@@ -150,13 +162,7 @@ export const authHooks = {
       errors,
     };
   },
-  useVerifyCodeForm: ({
-    email,
-    onSuccess,
-  }: {
-    email?: string;
-    onSuccess?: () => void;
-  } = {}) => {
+  useVerifyCodeForm: ({ email, onSuccess }: UseVerifyCodeFormParams = {}) => {
     const {
       register,
       control,
@@ -205,12 +211,7 @@ export const authHooks = {
       errors,
     };
   },
-  useResetPasswordForm: ({
-    onSuccess,
-  }: {
-    token?: string;
-    onSuccess?: () => void;
-  } = {}) => {
+  useResetPasswordForm: ({ token, onSuccess }: UseResetPasswordFormParams = {}) => {
     const {
       register,
       control,
@@ -247,11 +248,7 @@ export const authHooks = {
       errors,
     };
   },
-  useSendCode: ({
-    onSuccess,
-  }: {
-    onSuccess?: (email: string) => void;
-  } = {}) => {
+  useSendCode: ({ onSuccess }: UseSendCodeParams = {}) => {
     const { mutate: sendCodeHandler, isPending } = useMutation<
       BaseResponse<{}>,
       Error,

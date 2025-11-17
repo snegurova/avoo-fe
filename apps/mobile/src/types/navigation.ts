@@ -11,7 +11,7 @@ export type RootStackParamList = {
 };
 
 export type ProfileStackParamList = {
-  Settings: null;
+  Settings: undefined;
   ExampleScreensParams: { id: number } | undefined;
 };
 
