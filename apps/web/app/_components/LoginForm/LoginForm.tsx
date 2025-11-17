@@ -21,7 +21,7 @@ export default function LoginForm() {
     },
   });
 
-  const { value: isShowPassword, toggleValue: toggleShowPassword } = utils.useBoolean(false);
+  const { value: isShowPassword, toggleValue: toggleShowPassword } = utils.useBooleanState(false);
 
 
   return (

@@ -21,8 +21,8 @@ export default function ResetPasswordForm() {
     },
   });
 
-  const { value: isShowPassword, toggleValue: toggleShowPassword } = utils.useBoolean(false);
-  const { value: isShowConfirmPassword, toggleValue: toggleConfirmPassword } = utils.useBoolean(false);
+  const { value: isShowPassword, toggleValue: toggleShowPassword } = utils.useBooleanState(false);
+  const { value: isShowConfirmPassword, toggleValue: toggleConfirmPassword } = utils.useBooleanState(false);
 
   return (
     <form onSubmit={handleSubmit} className='mt-10 sm:mx-auto sm:w-full sm:max-w-sm space-y-6'>
