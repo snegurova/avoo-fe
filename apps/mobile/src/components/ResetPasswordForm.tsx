@@ -9,8 +9,8 @@ import { FontAwesome } from '@expo/vector-icons';
 
 
 export default function ResetPasswordForm() {
-  const { value: isShowPassword, toggleValue: toggleShowPassword } = utils.useBoolean(false);
-  const { value: isShowConfirmPassword, toggleValue: toggleConfirmPassword } = utils.useBoolean(false);
+  const { value: isShowPassword, toggleValue: toggleShowPassword } = utils.useBooleanState(false);
+  const { value: isShowConfirmPassword, toggleValue: toggleConfirmPassword } = utils.useBooleanState(false);
 
   const isPending = useApiStatusStore((state) => state.isPending);
 

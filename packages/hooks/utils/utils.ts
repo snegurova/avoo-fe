@@ -14,7 +14,7 @@ export const utils = {
       setIsPending(isPending);
     }, [isPending, setIsPending]);
   },
-  useBoolean: (initialValue: boolean = false) => {
+  useBooleanState: (initialValue: boolean = false) => {
     const [value, setValue] = useState(initialValue);
   
     const toggleValue = useCallback(() => {

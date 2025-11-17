@@ -6,7 +6,7 @@ import { useApiStatusStore } from '@avoo/store';
 import { FontAwesome } from '@expo/vector-icons';
 
 export default function LoginForm() {
-  const { value: isShowPassword, toggleValue: toggleShowPassword } = utils.useBoolean(false);
+  const { value: isShowPassword, toggleValue: toggleShowPassword } = utils.useBooleanState(false);
 
   const { control, handleSubmit, errors } = authHooks.useLoginForm();
 
