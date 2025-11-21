@@ -148,6 +148,38 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/public/users/{id}/media": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["UsersPublicController_getUserMedia"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/public/users/{id}/media/{mediaId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["UsersPublicController_getUserMediaById"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/update-avatar": {
         parameters: {
             query?: never;
@@ -210,6 +242,54 @@ export interface paths {
         options?: never;
         head?: never;
         patch: operations["UsersController_verifyEmail"];
+        trace?: never;
+    };
+    "/profile": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["UsersController_getProfile"];
+        put: operations["UsersController_updateProfile"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/media": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["UsersController_getUserMedia"];
+        put?: never;
+        post: operations["UsersController_createUserMedia"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/media/{mediaId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["UsersController_getUserMediaById"];
+        put?: never;
+        post?: never;
+        delete: operations["UsersController_deleteUserMedia"];
+        options?: never;
+        head?: never;
+        patch?: never;
         trace?: never;
     };
     "/services": {
@@ -397,8 +477,24 @@ export interface paths {
         };
         get: operations["MastersController_findAll"];
         put?: never;
-        post?: never;
+        post: operations["MastersController_create"];
         delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/masters/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["MastersController_findOne"];
+        put: operations["MastersController_updateProfile"];
+        post?: never;
+        delete: operations["MastersController_deleteById"];
         options?: never;
         head?: never;
         patch?: never;
@@ -719,12 +815,10 @@ export interface components {
         };
         UserEntity: {
             id: number;
-            name: string | null;
             email: string;
             avatarUrl: string | null;
             avatarPreviewUrl: string | null;
             isEmailVerify: boolean;
-            phone: string | null;
         };
         UserResponseDto: {
             token: string;
@@ -794,10 +888,17 @@ export interface components {
             id: number;
             name: string | null;
             email: string;
+            phone: string | null;
             avatarUrl: string | null;
             avatarPreviewUrl: string | null;
-            phone: string | null;
-            userId: number;
+            /**
+             * @example [
+             *       "pl",
+             *       "en"
+             *     ]
+             */
+            languages: ("ar" | "bn" | "da" | "de" | "en" | "es" | "fi" | "fr" | "hr" | "hi" | "is" | "it" | "ja" | "ko" | "la" | "lv" | "nl" | "no" | "pl" | "pt" | "ro" | "sv" | "tr" | "uk" | "vi" | "zh" | "fa")[] | null;
+            bio?: string | null;
         };
         CategoryEntity: {
             id: number;
@@ -816,46 +917,62 @@ export interface components {
             masters: components["schemas"]["MasterEntity"][];
             user: components["schemas"]["UserEntity"];
         };
-        BusinessInfoEntity: {
-            name: string | null;
-            description: string | null;
-            address: string | null;
-            avatarUrl: string | null;
-            location_lat: number | null;
-            location_lon: number | null;
-        };
-        UserWithRelationsEntity: {
+        CombinationEntity: {
             id: number;
-            name: string | null;
-            email: string;
-            avatarUrl: string | null;
-            avatarPreviewUrl: string | null;
-            isEmailVerify: boolean;
-            phone: string | null;
-            masters: components["schemas"]["MasterEntity"][];
-            services: components["schemas"]["ServiceEntity"][];
-            businessInfo: components["schemas"]["BusinessInfoEntity"] | null;
+            name: string;
+            durationMinutes: number;
+            services: components["schemas"]["ServiceEntity"];
+            master: components["schemas"]["MasterEntity"];
         };
-        UpdateUserResponseDto: {
+        CustomerEntity: {
+            id: number;
+            name: Record<string, never>;
+            phone: string;
+            email: Record<string, never>;
+            notes: Record<string, never>;
+            orders: components["schemas"]["OrderEntity"][];
+            owner: components["schemas"]["UserEntity"];
+        };
+        OrderEntity: {
+            id: number;
+            status: string;
+            notes: Record<string, never>;
+            duration: number;
+            /** Format: date-time */
+            date: string;
+            startTimeMinutes: number;
+            price: number;
+            name: string;
+            type: string;
+            service: components["schemas"]["ServiceEntity"] | null;
+            combination: components["schemas"]["CombinationEntity"] | null;
+            master: components["schemas"]["MasterEntity"];
+            customer: components["schemas"]["CustomerEntity"];
             user: components["schemas"]["UserEntity"];
-            items: components["schemas"]["OrderItemEntity"][];
         };
         BusinessInfoEntity: {
             name: string | null;
             description: string | null;
+            phone: string | null;
             address: string | null;
             avatarUrl: string | null;
+            /**
+             * @example [
+             *       "pl",
+             *       "en",
+             *       "uk"
+             *     ]
+             */
+            languages: ("ar" | "bn" | "da" | "de" | "en" | "es" | "fi" | "fr" | "hr" | "hi" | "is" | "it" | "ja" | "ko" | "la" | "lv" | "nl" | "no" | "pl" | "pt" | "ro" | "sv" | "tr" | "uk" | "vi" | "zh" | "fa")[] | null;
             location_lat: number | null;
             location_lon: number | null;
         };
         UserWithRelationsEntity: {
             id: number;
-            name: string | null;
             email: string;
             avatarUrl: string | null;
             avatarPreviewUrl: string | null;
             isEmailVerify: boolean;
-            phone: string | null;
             masters: components["schemas"]["MasterEntity"][];
             services: components["schemas"]["ServiceEntity"][];
             orders: components["schemas"]["OrderEntity"][];
@@ -886,6 +1003,54 @@ export interface components {
         CodeVerificationRequestDto: {
             /** @example 123456 */
             code: string;
+        };
+        UserProfileEntity: {
+            id: number;
+            email: string;
+            avatarUrl: string | null;
+            avatarPreviewUrl: string | null;
+            isEmailVerify: boolean;
+            businessInfo: components["schemas"]["BusinessInfoEntity"] | null;
+        };
+        UpdateProfileDto: {
+            /**
+             * @description Business name
+             * @example My Beauty Salon
+             */
+            name?: string;
+            /**
+             * @description User phone
+             * @example +1234567890
+             */
+            phone?: string;
+            /**
+             * @description Business description
+             * @example Professional beauty services
+             */
+            description?: string;
+            /**
+             * @description Business address
+             * @example 123 Main St, City, Country
+             */
+            address?: string;
+            /**
+             * @description Business latitude coordinate
+             * @example 46.43742825867853
+             */
+            location_lat?: number;
+            /**
+             * @description Business longitude coordinate
+             * @example 30.718815628384387
+             */
+            location_lon?: number;
+            /**
+             * @description Languages spoken by the master
+             * @example [
+             *       "pl",
+             *       "uk"
+             *     ]
+             */
+            languages: ("ar" | "bn" | "da" | "de" | "en" | "es" | "fi" | "fr" | "hr" | "hi" | "is" | "it" | "ja" | "ko" | "la" | "lv" | "nl" | "no" | "pl" | "pt" | "ro" | "sv" | "tr" | "uk" | "vi" | "zh" | "fa")[];
         };
         CreateServiceDto: {
             /**
@@ -926,12 +1091,6 @@ export interface components {
              */
             masterIds?: string[];
         };
-        CombinationEntity: {
-            id: number;
-            name: string;
-            durationMinutes: number;
-            services: components["schemas"]["ServiceEntity"];
-        };
         CreateCombinationDto: {
             /**
              * @description Name of the service combination
@@ -951,6 +1110,11 @@ export interface components {
              *     ]
              */
             serviceIds: string[];
+            /**
+             * @description ID of the master associated with the combination
+             * @example 1
+             */
+            masterId: number;
         };
         UpdateCombinationDto: {
             /**
@@ -1011,52 +1175,72 @@ export interface components {
              */
             masterIds?: string[];
         };
-        MediaResponseDto: {
-            id: number;
-            /**
-             * @example SERVICE
-             * @enum {string}
-             */
-            type: "USER" | "POST" | "SERVICE";
-            typeEntityId: number;
-            url: string;
-            previewUrl?: string;
-        };
         UpdateMasterAvatarResponseDto: {
             master: components["schemas"]["MasterEntity"];
+        };
+        CreateMasterDto: {
+            /**
+             * @description Master email address (must be unique)
+             * @example master@example.com
+             */
+            email: string;
+            /**
+             * @description Master name (required)
+             * @example Jane Smith
+             */
+            name?: Record<string, never>;
+            /**
+             * @description Master bio/description
+             * @example Professional stylist with expertise in modern haircuts and coloring.
+             */
+            bio?: Record<string, never>;
+            /**
+             * @description Master phone number
+             * @example +45112233
+             */
+            phone?: Record<string, never>;
+            /**
+             * @description Languages spoken by the master
+             * @example [
+             *       "pl",
+             *       "uk"
+             *     ]
+             */
+            languages?: Record<string, never>;
+        };
+        UpdateMasterDto: {
+            /**
+             * @description Master email address
+             * @example master@example.com
+             */
+            email: string;
+            /**
+             * @description Master name (required)
+             * @example John Doe
+             */
+            name: string;
+            /**
+             * @description Master bio/description
+             * @example Professional hair stylist with 5+ years of experience...
+             */
+            bio?: string;
+            /**
+             * @description Master phone number
+             * @example +45112233
+             */
+            phone?: Record<string, never>;
+            /**
+             * @description Languages spoken by the master
+             * @example [
+             *       "pl",
+             *       "uk"
+             *     ]
+             */
+            languages: ("ar" | "bn" | "da" | "de" | "en" | "es" | "fi" | "fr" | "hr" | "hi" | "is" | "it" | "ja" | "ko" | "la" | "lv" | "nl" | "no" | "pl" | "pt" | "ro" | "sv" | "tr" | "uk" | "vi" | "zh" | "fa")[];
         };
         UpdateMasterAvatarDto: {
             /** Format: binary */
             file: string;
-        };
-        OrderItemEntity: {
-            id: number;
-            order: components["schemas"]["OrderEntity"];
-            service: components["schemas"]["ServiceEntity"];
-            master: components["schemas"]["MasterEntity"];
-            price: number;
-            serviceName: string;
-            duration: number;
-            /** Format: date-time */
-            date: string;
-            startTimeMinutes: number;
-        };
-        OrderEntity: {
-            id: number;
-            status: string;
-            notes: Record<string, never>;
-            customer: components["schemas"]["CustomerEntity"];
-            user: components["schemas"]["UserEntity"];
-            items: components["schemas"]["OrderItemEntity"][];
-        };
-        CustomerEntity: {
-            id: number;
-            name: Record<string, never>;
-            phone: string;
-            email: Record<string, never>;
-            notes: Record<string, never>;
-            orders: components["schemas"]["OrderEntity"][];
-            owner: components["schemas"]["UserEntity"];
         };
         CreateOrderDto: {
             /**
@@ -1069,18 +1253,11 @@ export interface components {
              * @example Please arrive 10 minutes early
              */
             notes?: string;
-        };
-        CreatePublicOrderItemDto: {
             /**
-             * @description ID of the service for the order item
-             * @example 1
+             * @description Type of the order: SERVICE or COMBINATION
+             * @example SERVICE
              */
-            serviceId: number;
-            /**
-             * @description ID of the master assigned to the order item
-             * @example 1
-             */
-            masterId: number;
+            type: string;
             /**
              * Format: date-time
              * @description Date of the service
@@ -1092,6 +1269,21 @@ export interface components {
              * @example 600
              */
             startTimeMinutes: number;
+            /**
+             * @description ID of the master assigned to the order
+             * @example 1
+             */
+            masterId: number;
+            /**
+             * @description ID of the service for the order (required if type is SERVICE)
+             * @example 2
+             */
+            serviceId?: number;
+            /**
+             * @description ID of the combination for the order (required if type is COMBINATION)
+             * @example 3
+             */
+            combinationId?: number;
         };
         CreateCustomerDto: {
             /**
@@ -1120,9 +1312,8 @@ export interface components {
              */
             ownerId: number;
         };
-        CreateFullOrderDto: {
-            orderData: components["schemas"]["CreateOrderDto"];
-            itemsData: components["schemas"]["CreatePublicOrderItemDto"][];
+        CreateManyOrdersDto: {
+            ordersData: components["schemas"]["CreateOrderDto"][];
             customerData?: components["schemas"]["CreateCustomerDto"];
             customerId?: number;
         };
@@ -1132,44 +1323,6 @@ export interface components {
              * @example CONFIRMED
              */
             status?: string;
-        };
-        CreateOrderItemDto: {
-            /**
-             * @description ID of the service for the order item
-             * @example 1
-             */
-            serviceId: number;
-            /**
-             * @description ID of the master assigned to the order item
-             * @example 1
-             */
-            masterId: number;
-            /**
-             * @description Price of the order item
-             * @example 100
-             */
-            price: number;
-            /**
-             * @description Name of the service for the order item
-             * @example Relaxing Massage
-             */
-            serviceName: string;
-            /**
-             * @description Duration of the service in minutes
-             * @example 60
-             */
-            duration: number;
-            /**
-             * Format: date-time
-             * @description Date of the service
-             * @example 2025-12-30T00:00:00.000Z
-             */
-            date: string;
-            /**
-             * @description Start time in minutes from midnight
-             * @example 600
-             */
-            startTimeMinutes: number;
         };
         CreatePublicCustomerDto: {
             /**
@@ -1188,8 +1341,8 @@ export interface components {
              */
             email?: string;
         };
-        CreateFullPublicOrderDto: {
-            itemsData: components["schemas"]["CreateOrderItemDto"][];
+        CreateManyPublicOrdersDto: {
+            ordersData: components["schemas"]["CreateOrderDto"][];
             customerData: components["schemas"]["CreatePublicCustomerDto"];
         };
         WorkingHourBreakEntity: {
@@ -1321,42 +1474,78 @@ export interface components {
             /** @description List of working hours ( Mon-Fri (Sunday, Saturday Day off)), if start date is Monday */
             workingHours?: components["schemas"]["UpdateWorkingHourDto"][];
         };
-        WorkingDayDto: {
+        AvailabilityDto: {
+            /**
+             * Format: date-time
+             * @example 2025-10-28T09:00:00.000Z
+             */
+            start: string;
+            /**
+             * Format: date-time
+             * @example 2025-10-28T13:00:00.000Z
+             */
+            end: string;
+        };
+        PrivateEventDto: {
+            /** @example 101 */
+            id?: number;
+            /** @example Client appointment */
+            title?: string;
+            /**
+             * @description Type of the order
+             * @example SERVICE
+             */
+            type?: string;
+            /**
+             * Format: date-time
+             * @example 2025-10-28T09:30:00.000Z
+             */
+            start?: string;
+            /**
+             * Format: date-time
+             * @example 2025-10-28T10:00:00.000Z
+             */
+            end?: string;
+            /** @example 15 */
+            price: number;
+            /** @example 60 */
+            duration: number;
+            /**
+             * @description Status
+             * @example PENDING
+             */
+            status: string;
+            /** @example First appointment */
+            notes: Record<string, never>;
+            /** @example John Doe */
+            customerName: Record<string, never>;
+            /** @example 1 */
+            customerId: number;
+        };
+        PrivateWorkingDayDto: {
             /**
              * Format: date-time
              * @description Range to date
              * @example 2025-10-28
              */
-            date: string;
+            date?: string;
             /**
              * @description Weekday
              * @example Mon
              */
-            weekday: string;
+            weekday?: string;
             /**
              * @description Is schedule accessible for this day(if we out of schedule range)
              * @example true
              */
-            isAccessible: boolean;
+            isAccessible?: boolean;
             /**
              * @description Is working day for this schedule(if salon not work on this day)
              * @example true
              */
-            isWorkingDay: boolean;
-            /**
-             * @description Availability
-             * @example [
-             *       null
-             *     ]
-             */
-            availability: string[];
-            /**
-             * @description Events
-             * @example [
-             *       null
-             *     ]
-             */
-            events: string[];
+            isWorkingDay?: boolean;
+            /** @description Availability */
+            availability?: components["schemas"]["AvailabilityDto"][];
             /**
              * @description Exceptions
              * @example [
@@ -1366,7 +1555,9 @@ export interface components {
              *       }
              *     ]
              */
-            exceptions: string[];
+            exceptions?: string[];
+            /** @description Events */
+            events: components["schemas"]["PrivateEventDto"][];
         };
         PrivateCalendarResponseDto: {
             /**
@@ -1391,13 +1582,12 @@ export interface components {
              * @example 2025-10-27T00:00:00Z
              */
             rangeToDate: string;
-            /**
-             * @description List of working days
-             * @example [
-             *       null
-             *     ]
-             */
-            days: components["schemas"]["WorkingDayDto"][];
+            /** @example 1 */
+            serviceId?: number;
+            /** @example 1 */
+            combinationId?: number;
+            /** @description List of working days */
+            days: components["schemas"]["PrivateWorkingDayDto"][];
         };
         CalendarExceptionEntity: {
             id: number;
@@ -1450,6 +1640,64 @@ export interface components {
              */
             note?: string;
         };
+        PublicEventDto: {
+            /** @example 101 */
+            id?: number;
+            /** @example Client appointment */
+            title?: string;
+            /**
+             * @description Type of the order
+             * @example SERVICE
+             */
+            type?: string;
+            /**
+             * Format: date-time
+             * @example 2025-10-28T09:30:00.000Z
+             */
+            start?: string;
+            /**
+             * Format: date-time
+             * @example 2025-10-28T10:00:00.000Z
+             */
+            end?: string;
+        };
+        PublicWorkingDayDto: {
+            /**
+             * Format: date-time
+             * @description Range to date
+             * @example 2025-10-28
+             */
+            date?: string;
+            /**
+             * @description Weekday
+             * @example Mon
+             */
+            weekday?: string;
+            /**
+             * @description Is schedule accessible for this day(if we out of schedule range)
+             * @example true
+             */
+            isAccessible?: boolean;
+            /**
+             * @description Is working day for this schedule(if salon not work on this day)
+             * @example true
+             */
+            isWorkingDay?: boolean;
+            /** @description Availability */
+            availability?: components["schemas"]["AvailabilityDto"][];
+            /**
+             * @description Exceptions
+             * @example [
+             *       {
+             *         "start": "2025-10-28T09:30:00.000Z",
+             *         "end": "2025-10-28T10:00:00.000Z"
+             *       }
+             *     ]
+             */
+            exceptions?: string[];
+            /** @description Events */
+            events: components["schemas"]["PublicEventDto"][];
+        };
         PublicCalendarResponseDto: {
             /**
              * @description User ID
@@ -1460,7 +1708,7 @@ export interface components {
              * @description Master ID
              * @example 1
              */
-            masterId?: Record<string, never>;
+            masterId: number;
             /**
              * Format: date-time
              * @description Range from date
@@ -1473,13 +1721,33 @@ export interface components {
              * @example 2025-10-27T00:00:00Z
              */
             rangeToDate: string;
+            /** @example 1 */
+            serviceId?: number;
+            /** @example 1 */
+            combinationId?: number;
+            /** @description List of working days */
+            days: components["schemas"]["PublicWorkingDayDto"][];
+        };
+        BaseEventDto: {
+            /** @example 101 */
+            id: number;
+            /** @example Client appointment */
+            title: string;
             /**
-             * @description List of working days
-             * @example [
-             *       null
-             *     ]
+             * @description Type of the order
+             * @example SERVICE
              */
-            days: components["schemas"]["WorkingDayDto"][];
+            type: string;
+            /**
+             * Format: date-time
+             * @example 2025-10-28T09:30:00.000Z
+             */
+            start: string;
+            /**
+             * Format: date-time
+             * @example 2025-10-28T10:00:00.000Z
+             */
+            end: string;
         };
     };
     responses: never;
@@ -1821,6 +2089,81 @@ export interface operations {
             };
         };
     };
+    UsersPublicController_getUserMedia: {
+        parameters: {
+            query?: {
+                /** @description Page number */
+                page?: number;
+                /** @description Items per page */
+                limit?: number;
+            };
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description All media for user */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SuccessResponseDto"] & {
+                        data?: {
+                            items?: components["schemas"]["MediaEntity"][];
+                            pagination?: components["schemas"]["PaginationDto"];
+                        };
+                    };
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    UsersPublicController_getUserMediaById: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+                mediaId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description One media for user by id */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SuccessResponseDto"] & {
+                        data?: components["schemas"]["MediaEntity"];
+                    };
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
     UsersController_updateUserAvatar: {
         parameters: {
             query?: never;
@@ -1841,7 +2184,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["SuccessResponseDto"] & {
-                        data?: components["schemas"]["UpdateUserResponseDto"];
+                        data?: components["schemas"]["UserEntity"];
                     };
                 };
             };
@@ -1876,7 +2219,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["SuccessResponseDto"] & {
-                        data?: components["schemas"]["UpdateUserResponseDto"];
+                        data?: components["schemas"]["UserEntity"];
                     };
                 };
             };
@@ -1945,7 +2288,204 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["SuccessResponseDto"] & {
-                        data?: components["schemas"]["UpdateUserResponseDto"];
+                        data?: components["schemas"]["UserEntity"];
+                    };
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    UsersController_getProfile: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Get user profile with business info */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SuccessResponseDto"] & {
+                        data?: components["schemas"]["UserProfileEntity"];
+                    };
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    UsersController_updateProfile: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateProfileDto"];
+            };
+        };
+        responses: {
+            /** @description User and business info updated */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SuccessResponseDto"] & {
+                        data?: components["schemas"]["UserProfileEntity"];
+                    };
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    UsersController_getUserMedia: {
+        parameters: {
+            query?: {
+                /** @description Page number */
+                page?: number;
+                /** @description Items per page */
+                limit?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description All media for user */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SuccessResponseDto"] & {
+                        data?: {
+                            items?: components["schemas"]["MediaEntity"][];
+                            pagination?: components["schemas"]["PaginationDto"];
+                        };
+                    };
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    UsersController_createUserMedia: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "multipart/form-data": components["schemas"]["UploadFileDto"];
+            };
+        };
+        responses: {
+            /** @description Created media for user */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SuccessResponseDto"] & {
+                        data?: components["schemas"]["MediaEntity"];
+                    };
+                };
+            };
+        };
+    };
+    UsersController_getUserMediaById: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                mediaId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description One media for user by id */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SuccessResponseDto"] & {
+                        data?: components["schemas"]["MediaEntity"];
+                    };
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    UsersController_deleteUserMedia: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                mediaId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Delete media by id */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SuccessResponseDto"] & {
+                        data?: components["schemas"]["MediaEntity"];
                     };
                 };
             };
@@ -2221,9 +2761,11 @@ export interface operations {
     };
     ServicesController_getServiceMedia: {
         parameters: {
-            query: {
-                page: string;
-                limit: string;
+            query?: {
+                /** @description Page number */
+                page?: number;
+                /** @description Items per page */
+                limit?: number;
             };
             header?: never;
             path: {
@@ -2239,15 +2781,22 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["MediaResponseDto"][];
+                    "application/json": components["schemas"]["SuccessResponseDto"] & {
+                        data?: {
+                            items?: components["schemas"]["MediaEntity"][];
+                            pagination?: components["schemas"]["PaginationDto"];
+                        };
+                    };
                 };
             };
-            /** @description Service not found */
-            404: {
+            /** @description Bad Request */
+            400: {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
             };
         };
     };
@@ -2262,10 +2811,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "multipart/form-data": {
-                    /** Format: binary */
-                    file: string;
-                };
+                "multipart/form-data": components["schemas"]["UploadFileDto"];
             };
         };
         responses: {
@@ -2275,7 +2821,18 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["MediaResponseDto"];
+                    "application/json": components["schemas"]["SuccessResponseDto"] & {
+                        data?: components["schemas"]["MediaEntity"];
+                    };
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
                 };
             };
         };
@@ -2298,15 +2855,19 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["MediaResponseDto"];
+                    "application/json": components["schemas"]["SuccessResponseDto"] & {
+                        data?: components["schemas"]["MediaEntity"];
+                    };
                 };
             };
-            /** @description Media not found */
-            404: {
+            /** @description Bad Request */
+            400: {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
             };
         };
     };
@@ -2322,21 +2883,25 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
-            /** @description Delete media by id */
+            /** @description Deleted media entity */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": unknown;
+                    "application/json": components["schemas"]["SuccessResponseDto"] & {
+                        data?: components["schemas"]["MediaEntity"];
+                    };
                 };
             };
-            /** @description Media not found */
-            404: {
+            /** @description Bad Request */
+            400: {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
             };
         };
     };
@@ -2552,6 +3117,144 @@ export interface operations {
                 };
             };
             /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    MastersController_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateMasterDto"];
+            };
+        };
+        responses: {
+            /** @description Master created successfully */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SuccessResponseDto"] & {
+                        data?: components["schemas"]["MasterEntity"];
+                    };
+                };
+            };
+            /** @description Bad Request - Email already exists or validation failed */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    MastersController_findOne: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Get master by ID */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SuccessResponseDto"] & {
+                        data?: components["schemas"]["MasterEntity"];
+                    };
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    MastersController_updateProfile: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateMasterDto"];
+            };
+        };
+        responses: {
+            /** @description Master profile updated successfully */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SuccessResponseDto"] & {
+                        data?: components["schemas"]["MasterEntity"];
+                    };
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    MastersController_deleteById: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Master deleted successfully */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SuccessResponseDto"] & {
+                        data?: components["schemas"]["MasterEntity"];
+                    };
+                };
+            };
+            /** @description Bad Request - Cannot delete last master or master not found */
             400: {
                 headers: {
                     [name: string]: unknown;
@@ -2883,7 +3586,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["CreateFullOrderDto"];
+                "application/json": components["schemas"]["CreateManyOrdersDto"];
             };
         };
         responses: {
@@ -2964,7 +3667,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["CreateFullPublicOrderDto"];
+                "application/json": components["schemas"]["CreateManyPublicOrdersDto"];
             };
         };
         responses: {
@@ -3404,6 +4107,10 @@ export interface operations {
                 rangeFromDate: string;
                 /** @description Range to date */
                 rangeToDate: string;
+                /** @description Service ID */
+                serviceId?: number;
+                /** @description Combination ID */
+                combinationId?: number;
             };
             header?: never;
             path?: never;
@@ -3418,10 +4125,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["SuccessResponseDto"] & {
-                        data?: {
-                            items?: components["schemas"]["PrivateCalendarResponseDto"][];
-                            pagination?: components["schemas"]["PaginationDto"];
-                        };
+                        data?: components["schemas"]["PrivateCalendarResponseDto"];
                     };
                 };
             };
@@ -3478,7 +4182,7 @@ export interface operations {
         parameters: {
             query: {
                 /** @description Filter by user ID */
-                userId?: number;
+                userId: number;
                 /** @description Master ID */
                 masterId?: number;
                 /** @description View type (week, month, year) */
@@ -3487,6 +4191,10 @@ export interface operations {
                 rangeFromDate: string;
                 /** @description Range to date */
                 rangeToDate: string;
+                /** @description Service ID */
+                serviceId?: number;
+                /** @description Combination ID */
+                combinationId?: number;
             };
             header?: never;
             path?: never;

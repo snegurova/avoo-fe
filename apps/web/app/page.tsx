@@ -1,7 +1,24 @@
-import { HomePageServer } from '@/_server-components/HomePage.server';
+'use client';
 
-export const Page = () => {
-  return <HomePageServer />;
-};
+import { AuthGuard } from '@/_components/AuthGuard/AuthGuard';
+import { ProfileInfo } from '@/_components/ProfileInfo/ProfileInfo';
+import { ProfileMaster } from '@/_components/ProfileMaster/ProfileMaster';
+import { ProfilePosts } from '@/_components/ProfilePosts/ProfilePosts';
+import { ProfileGallery } from '@/_components/ProfileGallery/ProfileGallery';
+import { ProfileSchedule } from '@/_components/ProfileSchedule/ProfileSchedule';
 
-export default Page;
+export default function Page() {
+  return (
+    <AuthGuard requireAuth={true}>
+      <div className='container mx-auto p-4 max-w-4xl space-y-6'>
+        <h1 className='text-3xl font-bold mb-6'>Profile</h1>
+
+        <ProfileInfo />
+        <ProfileMaster />
+        <ProfilePosts />
+        <ProfileGallery />
+        <ProfileSchedule />
+      </div>
+    </AuthGuard>
+  );
+}

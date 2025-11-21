@@ -1,5 +1,5 @@
-import { AuthResponse, BaseResponse, LoginRequest, RegisterRequest, ResetPasswordRequest, ResetPasswordResponse, VerifyCodeRequest, VerifyCodeResponse } from '../../types/apiTypes';
-import { apiClient } from '../apiClient';
+import { AuthResponse, BaseResponse, LoginRequest, RegisterRequest, ResetPasswordRequest, VerifyCodeRequest, VerifyCodeResponse } from '@avoo/axios/types/apiTypes';
+import { apiClient } from '@avoo/axios/src/apiClient';
 
 const LOGIN_ENDPOINT = '/sign-in';
 const REGISTER_ENDPOINT = '/sign-up';

@@ -117,6 +117,7 @@ export const authHooks = {
     });
 
     const setIsAuthenticated = useAuthStore((state) => state.setIsAuthenticated);
+    const setAccessToken = useAuthStore((state) => state.setAccessToken);
 
     const { mutate: login, isPending } = useMutation<
       BaseResponse<AuthResponse>,
@@ -127,6 +128,7 @@ export const authHooks = {
       onSuccess: (response) => {
         if (response.status === apiStatus.SUCCESS) {
           setIsAuthenticated(true);
+          setAccessToken(response.data?.token);
           onSuccess?.();
         }
       },
@@ -266,7 +268,6 @@ export const authHooks = {
 
     return {
       sendCodeHandler,
-      isPending,
     };
   },
 };

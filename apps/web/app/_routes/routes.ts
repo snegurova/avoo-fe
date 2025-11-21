@@ -5,4 +5,11 @@ export enum routes {
   ForgotPassword = '/forgot-password',
   VerifyCode = '/verify-code',
   ResetPassword = '/reset-password',
+  EditProfile = '/edit-profile',
+  EditLanguages = '/edit-languages',
+  Masters = '/masters',
+  Certificates = '/certificates',
+  WorkingHours = '/working-hours',
+  Posts = '/posts',
+  Gallery = '/gallery',
 }
