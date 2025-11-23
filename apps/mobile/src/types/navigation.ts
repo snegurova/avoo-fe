@@ -1,6 +1,6 @@
 import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import { CompositeScreenProps, NavigatorScreenParams } from '@react-navigation/native';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { NativeStackNavigationProp, NativeStackScreenProps } from '@react-navigation/native-stack';
 
 export enum RootScreens {
   LoginScreen = 'LoginScreen',
@@ -60,6 +60,9 @@ export type RootStackScreenProps<T extends keyof RootStackParamList> = NativeSta
   RootStackParamList,
   T
 >;
+
+export type RootNavigationProp = NativeStackNavigationProp<RootStackParamList>;
+
 
 export type BottomBarScreenProps<T extends keyof BottomBarStackParamList> = CompositeScreenProps<
   BottomTabScreenProps<BottomBarStackParamList, T>,

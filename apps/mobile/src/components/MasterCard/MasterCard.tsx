@@ -8,7 +8,9 @@ type Props = {
   master: MasterEntity;
 };
 
-export const MasterCard = ({ master }: Props) => {
+export const MasterCard = (props: Props) => {
+  const { master } = props;
+
   return (
     <View className='items-center w-[30%]'>
       <View className='relative'>

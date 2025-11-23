@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { IconButton } from './IconButton';
+import { IconButton, IconButtonRounded, IconButtonSize, IconButtonVariant } from './IconButton';
 
 const meta: Meta<typeof IconButton> = {
   title: 'Components/IconButton',
@@ -49,7 +49,7 @@ export const Default: Story = {
 export const Small: Story = {
   args: {
     icon: '✏️',
-    size: 'small',
+    size: IconButtonSize.Small,
     ariaLabel: 'Edit',
   },
 };
@@ -57,7 +57,7 @@ export const Small: Story = {
 export const Medium: Story = {
   args: {
     icon: '✏️',
-    size: 'medium',
+    size: IconButtonSize.Medium,
     ariaLabel: 'Edit',
   },
 };
@@ -65,7 +65,7 @@ export const Medium: Story = {
 export const Large: Story = {
   args: {
     icon: '✏️',
-    size: 'large',
+    size: IconButtonSize.Large,
     ariaLabel: 'Edit',
   },
 };
@@ -73,7 +73,7 @@ export const Large: Story = {
 export const RoundedFull: Story = {
   args: {
     icon: '✏️',
-    rounded: 'full',
+    rounded: IconButtonRounded.Full,
     ariaLabel: 'Edit',
   },
 };
@@ -81,7 +81,7 @@ export const RoundedFull: Story = {
 export const Primary: Story = {
   args: {
     icon: '✏️',
-    variant: 'primary',
+    variant: IconButtonVariant.Primary,
     ariaLabel: 'Edit',
   },
 };
@@ -89,7 +89,7 @@ export const Primary: Story = {
 export const Secondary: Story = {
   args: {
     icon: '✏️',
-    variant: 'secondary',
+    variant: IconButtonVariant.Secondary,
     ariaLabel: 'Edit',
   },
 };
@@ -105,9 +105,9 @@ export const Disabled: Story = {
 export const AllSizes: Story = {
   render: () => (
     <div className='flex gap-4 items-center'>
-      <IconButton icon='✏️' size='small' ariaLabel='Small' />
-      <IconButton icon='✏️' size='medium' ariaLabel='Medium' />
-      <IconButton icon='✏️' size='large' ariaLabel='Large' />
+      <IconButton icon='✏️' size={IconButtonSize.Small} ariaLabel='Small' />
+      <IconButton icon='✏️' size={IconButtonSize.Medium} ariaLabel='Medium' />
+      <IconButton icon='✏️' size={IconButtonSize.Large} ariaLabel='Large' />
     </div>
   ),
 };
@@ -115,11 +115,11 @@ export const AllSizes: Story = {
 export const AllRounded: Story = {
   render: () => (
     <div className='flex gap-4 items-center'>
-      <IconButton icon='✏️' rounded='none' ariaLabel='None' />
-      <IconButton icon='✏️' rounded='sm' ariaLabel='Small' />
-      <IconButton icon='✏️' rounded='md' ariaLabel='Medium' />
-      <IconButton icon='✏️' rounded='lg' ariaLabel='Large' />
-      <IconButton icon='✏️' rounded='full' ariaLabel='Full' />
+      <IconButton icon='✏️' rounded={IconButtonRounded.None} ariaLabel='None' />
+      <IconButton icon='✏️' rounded={IconButtonRounded.Sm} ariaLabel='Small' />
+      <IconButton icon='✏️' rounded={IconButtonRounded.Md} ariaLabel='Medium' />
+      <IconButton icon='✏️' rounded={IconButtonRounded.Lg} ariaLabel='Large' />
+      <IconButton icon='✏️' rounded={IconButtonRounded.Full} ariaLabel='Full' />
     </div>
   ),
 };

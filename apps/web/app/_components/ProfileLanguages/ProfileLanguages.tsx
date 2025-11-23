@@ -12,7 +12,7 @@ export const ProfileLanguages = (props: Props) => {
   const { languages } = props;
   const router = useRouter();
 
-  const handleEdit = () => {
+  const handleNavigate = () => {
     router.push(routes.EditLanguages);
   };
 
@@ -23,7 +23,7 @@ export const ProfileLanguages = (props: Props) => {
           {languages?.join(' ') ?? 'Languages not set'}
         </span>
       </div>
-      <IconButton icon='✏️' onClick={handleEdit} ariaLabel='Edit Languages' />
+      <IconButton icon='✏️' onClick={handleNavigate} ariaLabel='Edit Languages' />
     </div>
   );
 };

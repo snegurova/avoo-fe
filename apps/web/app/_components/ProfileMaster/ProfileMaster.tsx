@@ -10,15 +10,15 @@ export const ProfileMaster = () => {
   const mastersInfo = masterHooks.useGetMastersProfileInfo();
   const router = useRouter();
 
-  const handleEdit = () => {
+  const handleNavigate = () => {
     router.push(routes.Masters);
   };
 
   return (
     <div className='px-5 py-4'>
-      <SectionHeader title='Masters' onEdit={handleEdit} />
+      <SectionHeader title='Masters' onEdit={handleNavigate} />
       <div className='flex flex-wrap gap-4'>
-        {mastersInfo.map((master) => (
+        {mastersInfo?.map((master) => (
           <div key={master.id} className='w-[30%]'>
             <Avatar name={master.name ?? 'No name'} size='medium' />
           </div>

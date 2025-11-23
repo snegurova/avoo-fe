@@ -10,17 +10,17 @@ export const ProfileSchedule = () => {
   const hasSchedules = schedules?.items && schedules.items.length > 0;
   const router = useRouter();
 
-  const handleEdit = () => {
+  const handleNavigate = () => {
     router.push(routes.WorkingHours);
   };
 
   if (!hasSchedules) {
     return (
       <div className='px-5 py-4 border-t border-gray-200'>
-        <SectionHeader title='Working hours' onEdit={handleEdit} />
+        <SectionHeader title='Working hours' onEdit={handleNavigate} />
         <p className='text-sm text-slate-500'>
           Set up your working hours{' '}
-          <button onClick={handleEdit} className='text-blue-600 underline'>
+          <button onClick={handleNavigate} className='text-blue-600 underline'>
             Calendar Settings
           </button>
         </p>
@@ -30,7 +30,7 @@ export const ProfileSchedule = () => {
 
   return (
     <div className='px-5 py-4 border-t border-gray-200'>
-      <SectionHeader title='Working hours' onEdit={handleEdit} />
+      <SectionHeader title='Working hours' onEdit={handleNavigate} />
       <div className='space-y-2'>
         {schedules.items.map((item, index) => (
           <div key={index} className='flex items-center justify-between'>

@@ -2,7 +2,11 @@ import { View } from 'react-native';
 import { Layout } from '@/shared/Layout';
 import { RootStackScreenProps, RootScreens } from '@/types/navigation';
 
-export const GalleryScreen = ({ navigation }: RootStackScreenProps<RootScreens.GalleryScreen>) => {
+type Props = RootStackScreenProps<RootScreens.GalleryScreen>;
+
+export const GalleryScreen = (props: Props) => {
+  const { navigation } = props;
+
   return (
     <Layout title='Gallery' showBack={true} onBackPress={() => navigation.goBack()}>
       <View />

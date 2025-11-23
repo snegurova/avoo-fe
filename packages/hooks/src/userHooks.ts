@@ -1,5 +1,4 @@
 import { utils } from './../utils/utils';
-
 import { userApi } from '@avoo/axios';
 import { useQuery } from '@tanstack/react-query';
 
@@ -17,9 +16,22 @@ export const userHooks = {
 
     utils.useSetPendingApi(isPending);
 
-    if (userProfileData?.status === apiStatus.SUCCESS) {
-      return userProfileData.data;
-    }
+    const profileInfo = userProfileData?.status === apiStatus.SUCCESS ? userProfileData.data : undefined;
+
+    const visualProfileInfo = {
+      name: profileInfo?.businessInfo?.name ?? 'Salon Name not set',
+      description: profileInfo?.businessInfo?.description ?? 'Some description about the salon',
+      address: profileInfo?.businessInfo?.address ?? 'Salon address not set',
+      email: profileInfo?.email ?? 'Email not set',
+      phone: profileInfo?.businessInfo?.phone ?? 'Phone not set',
+    };
+
+    const visualLanguages = profileInfo?.businessInfo?.languages ?? null;
+
+    return {
+      visualProfileInfo,
+      visualLanguages,
+    };
   },
   useGetUserMedia: () => {
     const { data: userMediaData, isPending } = useQuery<BaseResponse<UserMediaResponse>, Error>({

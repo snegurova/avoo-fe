@@ -2,7 +2,11 @@ import { View } from 'react-native';
 import { Layout } from '@/shared/Layout';
 import { RootStackScreenProps, RootScreens } from '@/types/navigation';
 
-export const MastersScreen = ({ navigation }: RootStackScreenProps<RootScreens.MastersScreen>) => {
+type Props = RootStackScreenProps<RootScreens.MastersScreen>;
+
+export const MastersScreen = (props: Props) => {
+  const { navigation } = props;
+
   return (
     <Layout
       title='Edit Masters section/ with data'

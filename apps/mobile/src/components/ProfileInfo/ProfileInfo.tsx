@@ -3,40 +3,22 @@ import { useNavigation } from '@react-navigation/native';
 import { ProfileLanguages } from '../ProfileLanguages/ProfileLanguages';
 import { ProfileCertificates } from '../ProfileCertificates/ProfileCertificates';
 import { userHooks } from '@avoo/hooks';
-import { useMemo } from 'react';
 import { FontAwesome } from '@expo/vector-icons';
-import { RootScreens } from '@/types/navigation';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { RootStackParamList } from '@/types/navigation';
+import { RootNavigationProp, RootScreens } from '@/types/navigation';
 
-type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
 export function ProfileInfo() {
-  const profileInfo = userHooks.useGetUserProfile();
-  const navigation = useNavigation<NavigationProp>();
+  const { visualProfileInfo, visualLanguages } = userHooks.useGetUserProfile();
+  const navigation = useNavigation<RootNavigationProp>();
 
-  const visualProfileInfo = useMemo(() => {
-    return {
-      name: profileInfo?.businessInfo?.name ?? 'Salon Name not set',
-      description: profileInfo?.businessInfo?.description ?? 'Some description about the salon',
-      address: profileInfo?.businessInfo?.address ?? 'Salon address not set',
-      email: profileInfo?.email ?? 'Email not set',
-      phone: profileInfo?.businessInfo?.phone ?? 'Phone not set',
-    };
-  }, [profileInfo]);
-
-  const visualLanguages = useMemo(() => {
-    return profileInfo?.businessInfo?.languages ?? null;
-  }, [profileInfo]);
-
-  const handleEdit = () => {
+  const handleNavigate = () => {
     navigation.navigate(RootScreens.EditProfileScreen);
   };
 
   return (
     <>
       <View className='bg-white border border-blue-500 rounded-xl p-4 mx-5 mb-4 relative'>
-        <Pressable className='absolute top-4 right-4 p-1' onPress={handleEdit}>
+        <Pressable className='absolute top-4 right-4 p-1' onPress={handleNavigate}>
           <FontAwesome name='pencil' size={14} color='#64748b' />
         </Pressable>
         <View className='flex-1 pr-8'>

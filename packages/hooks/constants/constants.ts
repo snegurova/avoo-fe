@@ -1,4 +1,4 @@
-export const apiStatus = {
-  SUCCESS: 'success',
-  ERROR: 'error',
-};
+export enum apiStatus {
+  SUCCESS = 'success',
+  ERROR = 'error',
+}

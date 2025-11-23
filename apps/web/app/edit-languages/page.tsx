@@ -8,14 +8,14 @@ import { IconButton } from '@/_components/IconButton/IconButton';
 export default function EditLanguagesPage() {
   const router = useRouter();
 
-  const handleBack = () => {
+  const handleBackClick = () => {
     router.back();
   };
 
   return (
     <AuthGuard requireAuth={true}>
       <div className='container mx-auto p-4 max-w-4xl'>
-        <IconButton icon='⬅' onClick={handleBack} ariaLabel='Back' />
+        <IconButton icon='⬅' onClick={handleBackClick} ariaLabel='Back' />
         <SectionHeader title='Edit Languages' />
         <div className='bg-white border border-gray-200 rounded-lg p-6'>
           <p className='text-gray-500'>Edit languages content will be here</p>

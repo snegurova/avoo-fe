@@ -2,7 +2,6 @@ import { Metadata } from 'next/types';
 import RegisterForm from '@/_components/RegisterForm/RegisterForm';
 import Link from 'next/link';
 import { routes } from '@/_routes/routes';
-import { AuthGuard } from '@/_components/AuthGuard/AuthGuard';
 
 export const metadata: Metadata = {
   title: 'Sign Up - AVOO App',
@@ -11,7 +10,6 @@ export const metadata: Metadata = {
 
 export default function SignUpPage() {
   return (
-    <AuthGuard requireAuth={false}>
       <div className='flex min-h-screen flex-col justify-center px-6 py-12 lg:px-8 bg-white'>
         <div className='sm:mx-auto sm:w-full sm:max-w-sm'>
           <h1 className='text-center text-3xl font-bold leading-9 tracking-tight text-gray-900'>
@@ -41,6 +39,5 @@ export default function SignUpPage() {
           </div>
         </div>
       </div>
-    </AuthGuard>
   );
 }

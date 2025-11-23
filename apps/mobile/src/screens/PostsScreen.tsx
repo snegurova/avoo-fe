@@ -2,7 +2,10 @@ import { View } from 'react-native';
 import { Layout } from '@/shared/Layout';
 import { RootStackScreenProps, RootScreens } from '@/types/navigation';
 
-export const PostsScreen = ({ navigation }: RootStackScreenProps<RootScreens.PostsScreen>) => {
+type Props = RootStackScreenProps<RootScreens.PostsScreen>;
+
+export const PostsScreen = (props: Props) => {
+  const { navigation } = props;
   return (
     <Layout title='Posts' showBack={true} onBackPress={() => navigation.goBack()}>
       <View />

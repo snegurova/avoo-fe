@@ -3,6 +3,26 @@
 import React, { ReactNode, useCallback } from 'react';
 import { tv } from 'tailwind-variants';
 
+export enum IconButtonSize {
+  Small = 'small',
+  Medium = 'medium',
+  Large = 'large',
+}
+
+export enum IconButtonRounded {
+  None = 'none',
+  Sm = 'sm',
+  Md = 'md',
+  Lg = 'lg',
+  Full = 'full',
+}
+
+export enum IconButtonVariant {
+  Default = 'default',
+  Primary = 'primary',
+  Secondary = 'secondary',
+}
+
 type UseOnClickParams = {
   disabled?: boolean;
   onClick?: React.MouseEventHandler;
@@ -25,36 +45,36 @@ const iconButton = tv({
   base: 'inline-flex items-center justify-center transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer',
   variants: {
     size: {
-      small: 'p-1 text-xs',
-      medium: 'p-1 text-sm',
-      large: 'p-2 text-base',
+      [IconButtonSize.Small]: 'p-1 text-xs',
+      [IconButtonSize.Medium]: 'p-1 text-sm',
+      [IconButtonSize.Large]: 'p-2 text-base',
     },
     rounded: {
-      none: 'rounded-none',
-      sm: 'rounded-sm',
-      md: 'rounded-md',
-      lg: 'rounded-lg',
-      full: 'rounded-full',
+      [IconButtonRounded.None]: 'rounded-none',
+      [IconButtonRounded.Sm]: 'rounded-sm',
+      [IconButtonRounded.Md]: 'rounded-md',
+      [IconButtonRounded.Lg]: 'rounded-lg',
+      [IconButtonRounded.Full]: 'rounded-full',
     },
     variant: {
-      default: 'text-slate-500 hover:text-slate-700',
-      primary: 'text-blue-600 hover:text-blue-700',
-      secondary: 'text-gray-600 hover:text-gray-700',
+      [IconButtonVariant.Default]: 'text-slate-500 hover:text-slate-700',
+      [IconButtonVariant.Primary]: 'text-blue-600 hover:text-blue-700',
+      [IconButtonVariant.Secondary]: 'text-gray-600 hover:text-gray-700',
     },
   },
   defaultVariants: {
-    size: 'medium',
-    rounded: 'md',
-    variant: 'default',
+    size: IconButtonSize.Medium,
+    rounded: IconButtonRounded.Md,
+    variant: IconButtonVariant.Default,
   },
 });
 
 type Props = {
   icon: ReactNode | string;
   onClick?: React.MouseEventHandler;
-  size?: 'small' | 'medium' | 'large';
-  rounded?: 'none' | 'sm' | 'md' | 'lg' | 'full';
-  variant?: 'default' | 'primary' | 'secondary';
+  size?: IconButtonSize;
+  rounded?: IconButtonRounded;
+  variant?: IconButtonVariant;
   className?: string;
   ariaLabel?: string;
   disabled?: boolean;

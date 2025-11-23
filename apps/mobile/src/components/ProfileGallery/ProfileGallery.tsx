@@ -2,23 +2,20 @@ import { View, Text, FlatList, Pressable } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { userHooks } from '@avoo/hooks';
 import { SectionHeader } from '@/shared/SectionHeader/SectionHeader';
-import { RootScreens } from '@/types/navigation';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { RootStackParamList } from '@/types/navigation';
+import { RootNavigationProp, RootScreens } from '@/types/navigation';
 
-type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
 export const ProfileGallery = () => {
   const userMedia = userHooks.useGetUserMedia();
-  const navigation = useNavigation<NavigationProp>();
+  const navigation = useNavigation<RootNavigationProp>();
 
-  const handleEdit = () => {
+  const handleNavigate = () => {
     navigation.navigate(RootScreens.GalleryScreen);
   };
 
   return (
     <View className='px-5 py-4 border-t border-gray-200'>
-      <SectionHeader title='Gallery' onEdit={handleEdit} />
+      <SectionHeader title='Gallery' onEdit={handleNavigate} />
 
       <FlatList
         horizontal
@@ -31,7 +28,7 @@ export const ProfileGallery = () => {
             <Text className='text-sm text-slate-500 text-center mb-2'>
               Show clients your place and service
             </Text>
-            <Pressable onPress={handleEdit}>
+            <Pressable onPress={handleNavigate}>
               <Text className='text-sm text-blue-600 underline' >Add gallery</Text>
             </Pressable>
           </View>

@@ -1,11 +1,8 @@
 import { View, Text, Pressable } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
-import { RootScreens } from '@/types/navigation';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { RootStackParamList } from '@/types/navigation';
+import { RootNavigationProp, RootScreens } from '@/types/navigation';
 
-type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
 type Props = {
   languages: string[] | null;
@@ -13,9 +10,9 @@ type Props = {
 
 export const ProfileLanguages = (props: Props) => {
   const { languages } = props;
-  const navigation = useNavigation<NavigationProp>();
+  const navigation = useNavigation<RootNavigationProp>();
 
-  const handleEdit = () => {
+  const handleNavigate = () => {
     navigation.navigate(RootScreens.EditLanguagesScreen);
   };
 
@@ -26,7 +23,7 @@ export const ProfileLanguages = (props: Props) => {
           {languages?.join(' ') ?? 'Languages not set'}
         </Text>
       </View>
-      <Pressable className='p-1' onPress={handleEdit}>
+      <Pressable className='p-1' onPress={handleNavigate}>
         <FontAwesome name='pencil' size={14} color='#64748b' />
       </Pressable>
     </View>

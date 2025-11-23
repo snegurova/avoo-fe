@@ -3,7 +3,10 @@ import { Layout } from '@/shared/Layout';
 import LoginForm from '@/components/LoginForm';
 import { RootScreens, RootStackScreenProps } from '@/types/navigation';
 
-export default function LoginScreen({ navigation }: RootStackScreenProps<RootScreens.LoginScreen>) {
+type Props = RootStackScreenProps<RootScreens.LoginScreen>;
+
+export default function LoginScreen(props: Props) {
+  const { navigation } = props;
 
   return (
     <Layout centerContent={true}>
@@ -15,7 +18,7 @@ export default function LoginScreen({ navigation }: RootStackScreenProps<RootScr
           </Text>
 
           <LoginForm />
-          <View className='mt-6'/>
+          <View className='mt-6' />
           <View className='flex-row justify-between items-center '>
             <Pressable
               onPress={() =>
@@ -46,7 +49,7 @@ export default function LoginScreen({ navigation }: RootStackScreenProps<RootScr
               <Text className='text-blue-500'>Forgot password?</Text>
             </Pressable>
           </View>
-          <View className='mt-6'/>
+          <View className='mt-6' />
           <Pressable
             onPress={() =>
               navigation.reset({

@@ -7,7 +7,7 @@ import { IconButton } from '@/_components/IconButton/IconButton';
 export const ProfileCertificates = () => {
   const router = useRouter();
 
-  const handleEdit = () => {
+  const handleNavigate = () => {
     router.push(routes.Certificates);
   };
 
@@ -16,7 +16,7 @@ export const ProfileCertificates = () => {
       <div className='flex items-center gap-2'>
         <span className='text-base text-slate-900'>Certificates</span>
       </div>
-      <IconButton icon='✏️' onClick={handleEdit} ariaLabel='Edit Certificates' />
+      <IconButton icon='✏️' onClick={handleNavigate} ariaLabel='Edit Certificates' />
     </div>
   );
 };

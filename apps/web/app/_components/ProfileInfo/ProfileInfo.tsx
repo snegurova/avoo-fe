@@ -1,7 +1,6 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { useMemo } from 'react';
 import { routes } from '@/_routes/routes';
 import { userHooks } from '@avoo/hooks';
 import { ProfileLanguages } from '@/_components/ProfileLanguages/ProfileLanguages';
@@ -11,23 +10,9 @@ import { IconButton } from '@/_components/IconButton/IconButton';
 
 export const ProfileInfo = () => {
   const router = useRouter();
-  const profileInfo = userHooks.useGetUserProfile();
+  const { visualProfileInfo, visualLanguages } = userHooks.useGetUserProfile();
 
-  const visualProfileInfo = useMemo(() => {
-    return {
-      name: profileInfo?.businessInfo?.name ?? 'Salon Name not set',
-      description: profileInfo?.businessInfo?.description ?? 'Some description about the salon',
-      address: profileInfo?.businessInfo?.address ?? 'Salon address not set',
-      email: profileInfo?.email ?? 'Email not set',
-      phone: profileInfo?.businessInfo?.phone ?? 'Phone not set',
-    };
-  }, [profileInfo]);
-
-  const visualLanguages = useMemo(() => {
-    return profileInfo?.businessInfo?.languages ?? null;
-  }, [profileInfo]);
-
-  const handleEditProfile = () => {
+  const handleNavigate = () => {
     router.push(routes.EditProfile);
   };
 
@@ -39,7 +24,7 @@ export const ProfileInfo = () => {
 
       <div className='bg-white border border-blue-500 rounded-xl p-4 mx-5 mb-4 relative'>
         <div className='absolute top-4 right-4'>
-          <IconButton icon='✏️' onClick={handleEditProfile} ariaLabel='Edit Profile' />
+          <IconButton icon='✏️' onClick={handleNavigate} ariaLabel='Edit Profile' />
         </div>
         <div className='pr-8'>
           <h2 className='text-2xl font-bold text-slate-900 mb-2'>{visualProfileInfo.name}</h2>

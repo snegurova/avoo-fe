@@ -2,9 +2,11 @@ import { View } from 'react-native';
 import { Layout } from '@/shared/Layout';
 import { RootStackScreenProps, RootScreens } from '@/types/navigation';
 
-export const EditProfileScreen = ({
-  navigation,
-}: RootStackScreenProps<RootScreens.EditProfileScreen>) => {
+type Props = RootStackScreenProps<RootScreens.EditProfileScreen>;
+
+export const EditProfileScreen = (props: Props) => {
+  const { navigation } = props;
+
   return (
     <Layout title='EditProfile' showBack={true} onBackPress={() => navigation.goBack()}>
       <View />
@@ -13,4 +15,3 @@ export const EditProfileScreen = ({
 };
 
 export default EditProfileScreen;
-

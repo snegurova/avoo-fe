@@ -3,26 +3,23 @@ import { useNavigation } from '@react-navigation/native';
 import { masterHooks } from '@avoo/hooks';
 import { MasterCard } from '@/components/MasterCard/MasterCard';
 import { SectionHeader } from '@/shared/SectionHeader/SectionHeader';
-import { RootScreens } from '@/types/navigation';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { RootStackParamList } from '@/types/navigation';
+import { RootNavigationProp, RootScreens } from '@/types/navigation';
 
-type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
 export const ProfileMaster = () => {
   const mastersInfo = masterHooks.useGetMastersProfileInfo();
-  const navigation = useNavigation<NavigationProp>();
+  const navigation = useNavigation<RootNavigationProp>();
 
-  const handleEdit = () => {
+  const handleNavigate = () => {
     navigation.navigate(RootScreens.MastersScreen);
   };
 
   return (
     <View className='px-5 py-4'>
-      <SectionHeader title='Masters' onEdit={handleEdit} />
+      <SectionHeader title='Masters' onEdit={handleNavigate} />
 
       <View className='flex-row flex-wrap gap-4'>
-        {mastersInfo.map((master) => (
+        {mastersInfo?.map((master) => (
           <MasterCard key={master.id} master={master} />
         ))}
       </View>

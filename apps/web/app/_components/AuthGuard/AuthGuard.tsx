@@ -5,20 +5,26 @@ import { useAuthStore } from '@avoo/store';
 import { useEffect, ReactNode } from 'react';
 import { routes } from '@/_routes/routes';
 
-type AuthGuardProps = {
+type Props = {
   children: ReactNode;
   requireAuth?: boolean;
 };
 
-export const AuthGuard = ({ children, requireAuth = true }: AuthGuardProps) => {
+export const AuthGuard = (props: Props) => {
+  const { children, requireAuth = true } = props;
+
   const router = useRouter();
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
 
   useEffect(() => {
     if (requireAuth && !isAuthenticated) {
       router.push(routes.SignIn);
-    } else if (!requireAuth && isAuthenticated) {
+      return;
+    }
+    
+    if (!requireAuth && isAuthenticated) {
       router.push(routes.Home);
+      return;
     }
   }, [isAuthenticated, requireAuth, router]);
 

@@ -7,7 +7,13 @@ import { ReactNode } from 'react';
 
 const __DEV__ = process.env.NODE_ENV === 'development';
 
-export function QueryProvider({ children }: { children: ReactNode }) {
+type Props = {
+  children: ReactNode;
+};
+
+export function QueryProvider(props: Props) {
+  const { children } = props;
+
   return (
     <QueryClientProvider client={queryClient}>
       {children}

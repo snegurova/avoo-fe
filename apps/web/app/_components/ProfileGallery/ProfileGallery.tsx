@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { userHooks } from '@avoo/hooks';
 import { routes } from '@/_routes/routes';
@@ -9,33 +10,32 @@ export const ProfileGallery = () => {
   const userMedia = userHooks.useGetUserMedia();
   const router = useRouter();
 
-  const handleEdit = () => {
+  const handleNavigate = () => {
     router.push(routes.Gallery);
   };
 
-  if (!userMedia?.items || userMedia.items.length === 0) {
-    return (
-      <>
-        <SectionHeader title='Gallery' onEdit={handleEdit} />
-        <div className='text-center py-8'>
-          <p className='text-sm text-slate-500 mb-2'>Show clients your place and service</p>
-          <button onClick={handleEdit} className='text-sm text-blue-600 underline'>
-            Add gallery
-          </button>
-        </div>
-      </>
-    );
-  }
+  const hasItems = userMedia?.items && userMedia.items.length > 0;
 
   return (
     <div className='px-5 py-4 border-t border-gray-200'>
-      <SectionHeader title='Gallery' onEdit={handleEdit} />
+      <SectionHeader title='Gallery' onEdit={handleNavigate} />
 
-      <div className='flex gap-3 overflow-x-auto'>
-        {userMedia.items.map((item) => (
-          <div key={item.id} className='bg-gray-200 rounded-lg w-20 h-20 flex-shrink-0' />
-        ))}
-      </div>
+      {hasItems && (
+        <div className='flex gap-3 overflow-x-auto'>
+          {userMedia.items.map((item) => (
+            <div key={item.id} className='bg-gray-200 rounded-lg w-20 h-20 flex-shrink-0' />
+          ))}
+        </div>
+      )}
+
+      {!hasItems && (
+        <div className='text-center py-8'>
+          <p className='text-sm text-slate-500 mb-2'>Show clients your place and service</p>
+          <Link href={routes.Gallery} className='text-sm text-blue-600 underline'>
+            Add gallery
+          </Link>
+        </div>
+      )}
     </div>
   );
 };
