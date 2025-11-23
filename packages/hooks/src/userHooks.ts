@@ -3,7 +3,7 @@ import { userApi } from '@avoo/axios';
 import { useQuery } from '@tanstack/react-query';
 
 import { BaseResponse, UserMediaResponse, UserProfileResponse } from '@avoo/axios/types/apiTypes';
-import { apiStatus } from '../constants/constants';
+import { apiStatus } from '../types/apiTypes';
 
 export const userHooks = {
   useGetUserProfile: () => {
@@ -16,7 +16,7 @@ export const userHooks = {
 
     utils.useSetPendingApi(isPending);
 
-    const profileInfo = userProfileData?.status === apiStatus.SUCCESS ? userProfileData.data : undefined;
+    const profileInfo = userProfileData?.status === apiStatus.SUCCESS ? userProfileData.data : null;
 
     const visualProfileInfo = {
       name: profileInfo?.businessInfo?.name ?? 'Salon Name not set',
@@ -43,6 +43,10 @@ export const userHooks = {
 
     if (userMediaData?.status === apiStatus.SUCCESS) {
       return userMediaData.data;
+    }
+    
+    if (userMediaData?.status === apiStatus.SUCCESS && !userMediaData.data) {
+      return null;
     }
   },
 };

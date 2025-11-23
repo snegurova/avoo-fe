@@ -5,7 +5,7 @@ import { routes } from '@/_routes/routes';
 import { userHooks } from '@avoo/hooks';
 import { ProfileLanguages } from '@/_components/ProfileLanguages/ProfileLanguages';
 import { ProfileCertificates } from '@/_components/ProfileCertificates/ProfileCertificates';
-import { Avatar } from '@/_components/Avatar/Avatar';
+import { Avatar, AvatarSize } from '@/_components/Avatar/Avatar';
 import { IconButton } from '@/_components/IconButton/IconButton';
 
 export const ProfileInfo = () => {
@@ -19,7 +19,7 @@ export const ProfileInfo = () => {
   return (
     <>
       <div className='flex justify-center mb-4'>
-        <Avatar name={visualProfileInfo.name} size='large' />
+        <Avatar name={visualProfileInfo.name} size={AvatarSize.Large} />
       </div>
 
       <div className='bg-white border border-blue-500 rounded-xl p-4 mx-5 mb-4 relative'>

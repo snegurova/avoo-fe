@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { Avatar } from './Avatar';
+import { Avatar, AvatarSize } from './Avatar';
 
 const meta: Meta<typeof Avatar> = {
   title: 'Components/Avatar',
@@ -11,7 +11,7 @@ const meta: Meta<typeof Avatar> = {
   argTypes: {
     size: {
       control: 'select',
-      options: ['small', 'medium', 'large'],
+      options: [AvatarSize.Small, AvatarSize.Medium, AvatarSize.Large],
       description: 'Size of the avatar',
     },
     name: {
@@ -26,37 +26,37 @@ type Story = StoryObj<typeof meta>;
 
 export const Small: Story = {
   args: {
-    size: 'small',
+    size: AvatarSize.Small,
     name: 'John Doe',
   },
 };
 
 export const Medium: Story = {
   args: {
-    size: 'medium',
+    size: AvatarSize.Medium,
     name: 'Jane Smith',
   },
 };
 
 export const Large: Story = {
   args: {
-    size: 'large',
+    size: AvatarSize.Large,
     name: 'Bob Johnson',
   },
 };
 
 export const WithoutName: Story = {
   args: {
-    size: 'medium',
+    size: AvatarSize.Medium,
   },
 };
 
 export const AllSizes: Story = {
   render: () => (
     <div className='flex gap-8 items-end'>
-      <Avatar size='small' name='Small' />
-      <Avatar size='medium' name='Medium' />
-      <Avatar size='large' name='Large' />
+      <Avatar size={AvatarSize.Small} name='Small' />
+      <Avatar size={AvatarSize.Medium} name='Medium' />
+      <Avatar size={AvatarSize.Large} name='Large' />
     </div>
   ),
 };

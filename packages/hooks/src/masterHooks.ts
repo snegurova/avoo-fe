@@ -4,7 +4,7 @@ import { masterApi } from '@avoo/axios';
 import { useQuery } from '@tanstack/react-query';
 
 import { BaseResponse, MasterWithRelationsEntityResponse } from '@avoo/axios/types/apiTypes';
-import { apiStatus } from '@avoo/hooks/constants/constants';
+import { apiStatus } from '@avoo/hooks/types/apiTypes';
 
 export const masterHooks = {
   useGetMastersProfileInfo: () => {
@@ -20,6 +20,10 @@ export const masterHooks = {
 
     if (profileInfoData?.status === apiStatus.SUCCESS && profileInfoData.data) {
       return profileInfoData.data;
+    }
+
+    if (profileInfoData?.status === apiStatus.SUCCESS && !profileInfoData.data) {
+      return null;
     }
   },
 };

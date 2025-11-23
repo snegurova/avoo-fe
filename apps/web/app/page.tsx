@@ -9,7 +9,7 @@ import { ProfileSchedule } from '@/_components/ProfileSchedule/ProfileSchedule';
 
 export default function Page() {
   return (
-    <AuthGuard requireAuth={true}>
+    <AuthGuard>
       <div className='container mx-auto p-4 max-w-4xl space-y-6'>
         <h1 className='text-3xl font-bold mb-6'>Profile</h1>
 

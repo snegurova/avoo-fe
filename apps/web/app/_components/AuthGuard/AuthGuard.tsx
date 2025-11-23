@@ -7,28 +7,21 @@ import { routes } from '@/_routes/routes';
 
 type Props = {
   children: ReactNode;
-  requireAuth?: boolean;
 };
 
 export const AuthGuard = (props: Props) => {
-  const { children, requireAuth = true } = props;
+  const { children } = props;
 
   const router = useRouter();
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
 
   useEffect(() => {
-    if (requireAuth && !isAuthenticated) {
+    if (!isAuthenticated) {
       router.push(routes.SignIn);
-      return;
     }
-    
-    if (!requireAuth && isAuthenticated) {
-      router.push(routes.Home);
-      return;
-    }
-  }, [isAuthenticated, requireAuth, router]);
+  }, [isAuthenticated, router]);
 
-  if (requireAuth && !isAuthenticated) {
+  if (!isAuthenticated) {
     return null;
   }
 

@@ -1,16 +1,22 @@
 'use client';
 
+export enum AvatarSize {
+  Small = 'small',
+  Medium = 'medium',
+  Large = 'large',
+}
+
 type Props = {
   name: string;
-  size?: 'small' | 'medium' | 'large';
+  size?: AvatarSize;
 };
 
 export const Avatar = (props : Props) => {
-  const { name, size = 'medium' } = props;
+  const { name, size = AvatarSize.Medium } = props;
   const sizeClasses = {
-    small: 'w-12 h-12',
-    medium: 'w-20 h-20',
-    large: 'w-32 h-32',
+    [AvatarSize.Small]: 'w-12 h-12',
+    [AvatarSize.Medium]: 'w-20 h-20',
+    [AvatarSize.Large]: 'w-32 h-32',
   };
 
   return (

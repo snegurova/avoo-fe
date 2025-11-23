@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation';
 import { masterHooks } from '@avoo/hooks';
 import { routes } from '@/_routes/routes';
 import { SectionHeader } from '@/_components/SectionHeader/SectionHeader';
-import { Avatar } from '@/_components/Avatar/Avatar';
+import { Avatar, AvatarSize } from '@/_components/Avatar/Avatar';
 
 export const ProfileMaster = () => {
   const mastersInfo = masterHooks.useGetMastersProfileInfo();
@@ -20,7 +20,7 @@ export const ProfileMaster = () => {
       <div className='flex flex-wrap gap-4'>
         {mastersInfo?.map((master) => (
           <div key={master.id} className='w-[30%]'>
-            <Avatar name={master.name ?? 'No name'} size='medium' />
+            <Avatar name={master.name ?? 'No name'} size={AvatarSize.Medium} />
           </div>
         ))}
       </div>
