@@ -3,10 +3,10 @@
 import { SectionHeader } from '@/_components/SectionHeader/SectionHeader';
 import { AuthGuard } from '@/_components/AuthGuard/AuthGuard';
 import { IconButton } from '@/_components/IconButton/IconButton';
-import { useNavigation } from '@/_hooks/useNavigation';
+import { navigationHooks } from '@/_hooks/navigationHooks';
 
 export default function GalleryPage() {
-  const { handleBackClick } = useNavigation();
+  const handleBackClick = navigationHooks.useHandleBackClick();
 
   return (
     <AuthGuard>

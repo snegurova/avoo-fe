@@ -3,7 +3,7 @@ import { FontAwesome } from '@expo/vector-icons';
 
 type Props = {
   size?: number;
-  imageUri?: string | ImageSourcePropType;
+  imageUri?: string | ImageSourcePropType | null;
   iconName?: keyof typeof FontAwesome.glyphMap;
   iconColor?: string;
   iconSize?: number;
@@ -18,7 +18,7 @@ export const Avatar = (props: Props) => {
     iconColor = '#64748b',
     iconSize = 30,
   } = props;
-  const displayUri = typeof imageUri === 'string' ? imageUri : undefined;
+  const displayUri = typeof imageUri === 'string' ? imageUri : null;
 
   return (
     <View

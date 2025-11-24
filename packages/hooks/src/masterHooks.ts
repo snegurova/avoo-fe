@@ -22,8 +22,6 @@ export const masterHooks = {
       return profileInfoData.data;
     }
 
-    if (profileInfoData?.status === apiStatus.SUCCESS && !profileInfoData.data) {
-      return null;
-    }
+    return null;
   },
 };

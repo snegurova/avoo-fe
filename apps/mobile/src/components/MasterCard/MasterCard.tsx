@@ -16,7 +16,7 @@ export const MasterCard = (props: Props) => {
       <View className='relative'>
         <Avatar
           size={80}
-          imageUri={master.avatarUrl ?? undefined}
+          imageUri={master.avatarUrl ?? null}
           iconName='user'
           iconColor='#64748b'
           iconSize={30}
