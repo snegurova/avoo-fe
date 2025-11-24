@@ -44,9 +44,7 @@ export const userHooks = {
     if (userMediaData?.status === apiStatus.SUCCESS) {
       return userMediaData.data;
     }
-    
-    if (userMediaData?.status === apiStatus.SUCCESS && !userMediaData.data) {
-      return null;
-    }
+
+    return null;
   },
 };

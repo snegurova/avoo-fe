@@ -18,8 +18,6 @@ export const scheduleHooks = {
       return schedulesData.data;
     }
 
-    if (schedulesData?.status === apiStatus.SUCCESS && !schedulesData.data) {
-      return null;
-    }
+    return null;
   },
 };
