@@ -3,7 +3,10 @@ import { Layout } from '@/shared/Layout';
 import RegistrationForm from '@/components/RegistrationForm';
 import { RootScreens, RootStackScreenProps } from '@/types/navigation';
 
-export default function RegisterScreen({ navigation }: RootStackScreenProps<RootScreens.RegisterScreen>) {
+type Props = RootStackScreenProps<RootScreens.RegisterScreen>;
+
+export default function RegisterScreen(props: Props) {
+  const { navigation } = props;
 
   return (
     <Layout centerContent={true}>

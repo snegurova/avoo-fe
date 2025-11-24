@@ -3,7 +3,10 @@ import { Layout } from '@/shared/Layout';
 import { RootScreens, RootStackScreenProps } from '@/types/navigation';
 import ForgotPasswordForm from '@/components/ForgotPasswordForm';
 
-export default function ForgotPasswordScreen({ navigation }: RootStackScreenProps<RootScreens.ForgotPasswordScreen>) {
+type Props = RootStackScreenProps<RootScreens.ForgotPasswordScreen>;
+
+export default function ForgotPasswordScreen(props: Props) {
+  const { navigation } = props;
 
   return (
     <Layout centerContent={true}>
@@ -15,7 +18,7 @@ export default function ForgotPasswordScreen({ navigation }: RootStackScreenProp
           </Text>
 
           <ForgotPasswordForm />
-          <View className='mt-6'/>
+          <View className='mt-6' />
           <View className='flex-row justify-between items-center'>
             <Pressable
               onPress={() =>

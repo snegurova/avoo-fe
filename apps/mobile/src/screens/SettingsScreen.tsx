@@ -4,7 +4,11 @@ import Button from '@/shared/Button/Button';
 import { useAuthStore } from '@avoo/store';
 import { BottomBarScreens, ProfileScreens, ProfileScreenProps } from '@/types/navigation';
 
-export const SettingsScreen = ({ navigation }: ProfileScreenProps<ProfileScreens.Settings>) => {
+type Props = ProfileScreenProps<ProfileScreens.Settings>;
+
+export const SettingsScreen = (props: Props) => {
+  const { navigation } = props;
+
   const setIsAuthenticated = useAuthStore((state) => state.setIsAuthenticated);
 
   const handleLogout = () => {

@@ -6,7 +6,13 @@ import { useNavigation } from '@react-navigation/native';
 import { RootScreens } from '@/types/navigation';
 import { useApiStatusStore } from '@avoo/store';
 
-export default function VerifyCodeForm({ email }: { email: string }) {
+type Props = {
+  email: string;
+};
+
+export default function VerifyCodeForm(props: Props) {
+  const { email } = props;
+
   const navigation = useNavigation();
 
   const isPending = useApiStatusStore((state) => state.isPending);

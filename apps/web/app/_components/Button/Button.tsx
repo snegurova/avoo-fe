@@ -20,7 +20,9 @@ type UseOnClickParams = {
 };
 
 const hooks = {
-  useOnClick({ disabled, loading, onClick }: UseOnClickParams) {
+  useOnClick(props: UseOnClickParams) {
+    const { disabled, loading, onClick } = props;
+
     return useCallback(
       (event: React.MouseEvent) => {
         if (onClick && !disabled && !loading) {

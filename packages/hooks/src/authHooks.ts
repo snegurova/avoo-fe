@@ -25,7 +25,7 @@ import {
   VerifyCodeResponse,
   ResetPasswordRequest,
 } from '@avoo/axios/types/apiTypes';
-import { apiStatus } from '../constants/constants';
+import { apiStatus } from '../types/apiTypes';
 import {
   RegisterCustomRequest,
   ForgotPasswordRequest as ForgotPasswordRequestType,
@@ -117,6 +117,7 @@ export const authHooks = {
     });
 
     const setIsAuthenticated = useAuthStore((state) => state.setIsAuthenticated);
+    const setAccessToken = useAuthStore((state) => state.setAccessToken);
 
     const { mutate: login, isPending } = useMutation<
       BaseResponse<AuthResponse>,
@@ -127,6 +128,7 @@ export const authHooks = {
       onSuccess: (response) => {
         if (response.status === apiStatus.SUCCESS) {
           setIsAuthenticated(true);
+          setAccessToken(response.data?.token);
           onSuccess?.();
         }
       },
@@ -266,7 +268,6 @@ export const authHooks = {
 
     return {
       sendCodeHandler,
-      isPending,
     };
   },
 };

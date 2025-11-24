@@ -5,7 +5,11 @@ import { Layout } from '@/shared/Layout';
 import VerifyCodeForm from '@/components/VerifyCodeForm';
 import { authHooks } from '@avoo/hooks';
 
-export default function ConfirmCodeScreen({ route }: RootStackScreenProps<RootScreens.ConfirmCodeScreen>) {
+type Props = RootStackScreenProps<RootScreens.ConfirmCodeScreen>;
+
+export default function ConfirmCodeScreen(props: Props) {
+  const { route } = props;
+
   const { email } = route.params;
 
   const maskedEmail = formatHooks.useMaskEmail(email);
@@ -20,12 +24,14 @@ export default function ConfirmCodeScreen({ route }: RootStackScreenProps<RootSc
           We’ve sent a 6-digit verification code to your email {maskedEmail}
         </Text>
         <VerifyCodeForm email={email} />
-        <View className='mt-6'/>
-        <Pressable onPress={() => {
-          sendCodeHandler({
-            email,
-          });
-        }}>
+        <View className='mt-6' />
+        <Pressable
+          onPress={() => {
+            sendCodeHandler({
+              email,
+            });
+          }}
+        >
           <Text className='text-sm text-blue-500 text-center'>Resend code</Text>
         </Pressable>
       </View>

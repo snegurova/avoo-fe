@@ -2,7 +2,11 @@ import { View, Text } from 'react-native';
 import { Layout } from '@/shared/Layout';
 import { ProfileScreens, ProfileScreenProps } from '@/types/navigation';
 
-export const ExampleScreensParams = ({ route }: ProfileScreenProps<ProfileScreens.ExampleScreensParams>) => {
+type Props = ProfileScreenProps<ProfileScreens.ExampleScreensParams>;
+
+export const ExampleScreensParams = (props: Props) => {
+  const { route } = props;
+
   const params = route.params;
 
   return (

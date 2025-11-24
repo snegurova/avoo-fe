@@ -1,5 +1,5 @@
-import { Category, BaseResponse } from '../../types/apiTypes';
-import { apiClient } from '../apiClient';
+import { Category, BaseResponse } from '@avoo/axios/types/apiTypes';
+import { apiClient } from '@avoo/axios/src/apiClient';
 
 const CATEGORIES_ENDPOINT = '/public/categories';
 
