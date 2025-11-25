@@ -1,48 +1,60 @@
-import { createJSONStorage, PersistStorage, StorageValue } from 'zustand/middleware';
+import type { StateStorage, StorageValue, PersistStorage } from "zustand/middleware";
 
-export { createJSONStorage };
+export const getPlatformStorage = (): StateStorage => {
+  
+  if (typeof navigator !== "undefined" && navigator.product === "ReactNative") {
+    const AsyncStorage = require("@react-native-async-storage/async-storage").default;
 
-let customStorage: PersistStorage<unknown> | null = null;
-let defaultBrowserStorage: PersistStorage<unknown> | null = null;
-
-export const setStorage = <T = unknown>(storage: PersistStorage<T>) => {
-  customStorage = storage as PersistStorage<unknown>;
-};
-
-const getActualStorage = <T = unknown>(): PersistStorage<T> => {
-  if (customStorage) {
-    return customStorage as PersistStorage<T>;
+    return {
+      getItem: async (name) => {
+        const value = await AsyncStorage.getItem(name);
+        return value ?? null;
+      },
+      setItem: async (name, value) => {
+        await AsyncStorage.setItem(name, value);
+      },
+      removeItem: async (name) => {
+        await AsyncStorage.removeItem(name);
+      },
+    };
   }
 
-  if (!defaultBrowserStorage) {
-    defaultBrowserStorage = createJSONStorage(() => {
-      if (typeof window !== 'undefined' && window.localStorage) {
-        return window.localStorage;
-      }
-      return {
-        getItem: () => null,
-        setItem: () => {},
-        removeItem: () => {},
-      };
-    });
+  if (typeof window !== "undefined" && window.localStorage) {
+    return {
+      getItem: (name) => window.localStorage.getItem(name),
+      setItem: (name, value) => window.localStorage.setItem(name, value),
+      removeItem: (name) => window.localStorage.removeItem(name),
+    };
   }
 
-  return defaultBrowserStorage as PersistStorage<T>;
-};
-
-export const getStorage = <T = unknown>(): PersistStorage<T> => {
+  let mem: Record<string, string> = {};
   return {
-    getItem: (name: string) => {
-      const storage = getActualStorage<T>();
-      return storage.getItem(name);
-    },
-    setItem: (name: string, value: StorageValue<T>) => {
-      const storage = getActualStorage<T>();
-      return storage.setItem(name, value);
-    },
-    removeItem: (name: string) => {
-      const storage = getActualStorage<T>();
-      return storage.removeItem(name);
-    },
+    getItem: (name) => mem[name] ?? null,
+    setItem: (name, value) => (mem[name] = value),
+    removeItem: (name) => delete mem[name],
   };
 };
+
+export function createZustandStorage<T>(storage: StateStorage): PersistStorage<T> {
+  return {
+    getItem: async (name): Promise<StorageValue<T> | null> => {
+      const str = await storage.getItem(name);
+      if (!str) return null;
+
+      try {
+        return JSON.parse(str);
+      } catch {
+        return null;
+      }
+    },
+
+    setItem: async (name, value): Promise<void> => {
+      await storage.setItem(name, JSON.stringify(value));
+    },
+
+    removeItem: async (name): Promise<void> => {
+      await storage.removeItem(name);
+    },
+  };
+}
+
