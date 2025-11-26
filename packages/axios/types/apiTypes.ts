@@ -12,7 +12,6 @@ export type BaseResponse<T> = {
 };
 export type Category = components['schemas']['CategoryEntity'];
 
-
 /** Auth */
 export type LoginRequest = components['schemas']['LoginRequestDto'];
 export type RegisterRequest = components['schemas']['CreateUserDto'];
@@ -33,9 +32,11 @@ export type UserMediaResponse = {
 /** Master */
 export type MasterWithRelationsEntityResponse = components['schemas']['MasterEntity'][];
 
-
 /** Schedule */
 export type GetSchedulesResponse = {
   items: components['schemas']['ScheduleEntity'][];
   pagination: components['schemas']['PaginationDto'];
 };
+
+export type ScheduleEntity = components['schemas']['ScheduleEntity'];
+export type ScheduleUpdateResponse = components['schemas']['UpdateScheduleDto'];

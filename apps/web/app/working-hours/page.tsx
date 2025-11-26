@@ -8,10 +8,11 @@ import { scheduleHooks } from '@avoo/hooks';
 import { useRouter } from 'next/navigation';
 import { routes } from '@/_routes/routes';
 import { useState } from 'react';
-import { Modal } from '@/_components/Modal/Modal';
+import { ScheduleEditModal } from '@/_components/ScheduleEditModal/ScheduleEditModal';
+import { Button, ButtonFit, ButtonIntent } from '@/_components/Button/Button';
 
 export default function WorkingHoursPage() {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [activeScheduleId, setActiveScheduleId] = useState<number | null>(null);
 
   const schedules = scheduleHooks.useGetSchedules();
   const hasSchedules = schedules?.items && schedules.items.length > 0;
@@ -31,16 +32,6 @@ export default function WorkingHoursPage() {
   return (
     <AuthGuard>
       <div className='container mx-auto p-4 max-w-4xl'>
-        <button
-          onClick={() => setIsModalOpen(true)}
-          className='mt-4 p-2 bg-blue-500 text-white rounded'
-        >
-          Open Modal
-        </button>
-        <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
-          <h2 className='text-xl mb-4'>My Modal Content</h2>
-          <p>This is a custom modal built with React Portals.</p>
-        </Modal>
         <IconButton icon='⬅' onClick={handleBackClick} ariaLabel='Back' />
         <SectionHeader title='Working hours' />
         <div className='bg-white border border-gray-200 rounded-lg p-6'>
@@ -66,34 +57,41 @@ export default function WorkingHoursPage() {
                     <p>{breaks?.breakStartTimeMinutes + ' - ' + breaks?.breakEndTimeMinutes}</p>
                   </div>
                   <div className='flex justify-end'>
-                    <button
-                      onClick={handleNavigate}
-                      className='text-black outline-1 outline-black px-2 py-1 rounded'
+                    <Button
+                      intent={ButtonIntent.Primary}
+                      fit={ButtonFit.Inline}
+                      onClick={() => setActiveScheduleId(schedule.id)}
                     >
                       Edit
-                    </button>
+                    </Button>
                   </div>
                 </div>
               ))}
+              <ScheduleEditModal
+                scheduleId={activeScheduleId}
+                isOpen={true}
+                onClose={() => setActiveScheduleId(null)}
+              />
             </>
           )}
 
           {hasSchedules ? (
             <div className='flex justify-end mt-4'>
-              <button onClick={handleNavigate} className='text-white bg-black px-2 py-1 rounded'>
+              <Button intent={ButtonIntent.Primary} fit={ButtonFit.Inline} onClick={handleNavigate}>
                 Add new schedule
-              </button>
+              </Button>
             </div>
           ) : (
             <>
               <p className='text-gray-500'>No schedules found</p>
               <div className='flex justify-end mt-4'>
-                <button
+                <Button
+                  intent={ButtonIntent.Primary}
+                  fit={ButtonFit.Inline}
                   onClick={handleNavigate}
-                  className='text-black outline-1 outline-black px-2 py-1 rounded'
                 >
                   Setup
-                </button>
+                </Button>
               </div>
             </>
           )}

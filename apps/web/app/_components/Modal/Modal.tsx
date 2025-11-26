@@ -42,7 +42,10 @@ export const Modal = ({ isOpen, onClose, children }: Props) => {
       className='fixed inset-0 bg-gray-900/50 flex items-center justify-center z-50'
       onClick={handleOverlayClick}
     >
-      <div className='bg-white p-6 rounded-lg shadow-lg max-w-sm w-full' ref={modalRef}>
+      <div
+        className='bg-white p-6 rounded-lg shadow-lg max-w-sm w-full max-h-[90vh] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200'
+        ref={modalRef}
+      >
         <button
           onClick={onClose}
           className='float-right text-gray-600 hover:text-gray-800 cursor-pointer'

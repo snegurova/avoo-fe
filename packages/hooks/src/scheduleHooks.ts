@@ -1,9 +1,24 @@
 import { utils } from '@avoo/hooks/utils/utils';
 import { scheduleApi } from '@avoo/axios';
 
-import { BaseResponse, GetSchedulesResponse } from '@avoo/axios/types/apiTypes';
+import {
+  BaseResponse,
+  GetSchedulesResponse,
+  ScheduleEntity,
+  ScheduleUpdateResponse,
+} from '@avoo/axios/types/apiTypes';
 import { apiStatus } from '@avoo/hooks/types/apiTypes';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import {
+  scheduleUpdateSchema,
+  ScheduleUpdateFormData,
+} from '../schemas/schedulesValidationSchemas';
+
+type UseUpdateScheduleFormParams = {
+  onSuccess?: () => void;
+};
 
 export const scheduleHooks = {
   useGetSchedules: () => {
@@ -19,5 +34,55 @@ export const scheduleHooks = {
     }
 
     return null;
+  },
+  useGetScheduleById: (id: number) => {
+    const { data: scheduleData, isPending } = useQuery<BaseResponse<ScheduleEntity>, Error>({
+      queryKey: ['schedule', id],
+      queryFn: () => scheduleApi.getScheduleById(id),
+      enabled: !!id,
+    });
+
+    utils.useSetPendingApi(isPending);
+
+    if (scheduleData?.status === apiStatus.SUCCESS && scheduleData.data) {
+      return scheduleData.data;
+    }
+
+    return null;
+  },
+  useUpdateScheduleForm: ({ onSuccess }: UseUpdateScheduleFormParams = {}) => {
+    const {
+      register,
+      control,
+      handleSubmit,
+      formState: { errors },
+    } = useForm<ScheduleUpdateFormData>({
+      resolver: yupResolver(scheduleUpdateSchema),
+      mode: 'onSubmit',
+    });
+
+    const { mutate: updateSchedule, isPending } = useMutation<
+      BaseResponse<ScheduleUpdateResponse>,
+      Error,
+      ScheduleUpdateFormData
+    >({
+      mutationFn: scheduleApi.updateSchedule,
+      onSuccess: (response) => {
+        if (response.status === apiStatus.SUCCESS) {
+          onSuccess?.();
+        }
+      },
+    });
+
+    utils.useSetPendingApi(isPending);
+
+    return {
+      register,
+      control,
+      handleSubmit,
+      errors,
+      updateSchedule,
+      isPending,
+    };
   },
 };

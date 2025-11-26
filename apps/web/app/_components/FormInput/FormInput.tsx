@@ -57,6 +57,7 @@ const errorText = tv({
 });
 
 type Props = Omit<InputHTMLAttributes<HTMLInputElement>, 'className'> & {
+  label?: string;
   error?: string;
   className?: string;
   accessory?: ReactNode;
@@ -66,15 +67,18 @@ type Props = Omit<InputHTMLAttributes<HTMLInputElement>, 'className'> & {
     input?: string;
     error?: string;
   };
+  name: string;
 };
 
 export default function FormInput(props: Props) {
   const {
+    label,
     error,
     className = '',
     classNames,
     accessory,
     accessoryPosition = AccessoryPosition.Right,
+    name,
     ...rest
   } = props;
 
@@ -96,8 +100,13 @@ export default function FormInput(props: Props) {
 
   return (
     <div className={containerClassName}>
+      {label && (
+        <label htmlFor={`input-${name}`} className='text-sm font-medium text-gray-700'>
+          {label}
+        </label>
+      )}
       <div className={wrapperClassName}>
-        <input {...rest} className={inputClassName} />
+        <input name={name} id={`input-${name}`} {...rest} className={inputClassName} />
         {accessory && <div className={accessoryClassName}>{accessory}</div>}
       </div>
       {error && <p className={errorClassName}>{error}</p>}
