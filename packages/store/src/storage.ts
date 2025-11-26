@@ -21,17 +21,17 @@ export const getPlatformStorage = (): StateStorage => {
 
   if (typeof window !== "undefined" && window.localStorage) {
     return {
-      getItem: (name) => window.localStorage.getItem(name),
-      setItem: (name, value) => window.localStorage.setItem(name, value),
-      removeItem: (name) => window.localStorage.removeItem(name),
+      getItem: async (name) => window.localStorage.getItem(name),
+      setItem: async (name, value) => window.localStorage.setItem(name, value),
+      removeItem: async (name) => window.localStorage.removeItem(name),
     };
   }
 
-  let mem: Record<string, string> = {};
+  let tempSSRStorage: Record<string, string> = {};
   return {
-    getItem: (name) => mem[name] ?? null,
-    setItem: (name, value) => (mem[name] = value),
-    removeItem: (name) => delete mem[name],
+    getItem: (name) => tempSSRStorage[name] ?? null,
+    setItem: (name, value) => (tempSSRStorage[name] = value),
+    removeItem: (name) => delete tempSSRStorage[name],
   };
 };
 

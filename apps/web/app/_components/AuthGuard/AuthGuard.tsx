@@ -1,7 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { useAuthStore } from '@avoo/store';
+import { useAuthStore, useHydrationStore } from '@avoo/store';
 import { useEffect, ReactNode } from 'react';
 import { routes } from '@/_routes/routes';
 
@@ -14,7 +14,7 @@ export const AuthGuard = (props: Props) => {
 
   const router = useRouter();
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
-  const hasHydrated = useAuthStore((state) => state._hasHydrated);
+  const hasHydrated = useHydrationStore((state) => state.hasHydrated);
 
   useEffect(() => {
     if (!hasHydrated) {
