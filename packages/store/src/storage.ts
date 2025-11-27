@@ -21,9 +21,12 @@ export const getPlatformStorage = (): StateStorage => {
 
   if (typeof window !== "undefined" && window.localStorage) {
     return {
-      getItem: async (name) => window.localStorage.getItem(name),
-      setItem: async (name, value) => window.localStorage.setItem(name, value),
-      removeItem: async (name) => window.localStorage.removeItem(name),
+      getItem: (name) =>
+        Promise.resolve(window.localStorage.getItem(name)),
+      setItem: (name, value) =>
+        Promise.resolve(window.localStorage.setItem(name, value)),
+      removeItem: (name) =>
+        Promise.resolve(window.localStorage.removeItem(name)),
     };
   }
 
