@@ -2,6 +2,7 @@ import React from 'react';
 import '../styles/globals.css';
 import { QueryProvider } from '@/_providers/QueryProvider';
 import { Metadata } from 'next/types';
+import { MUIThemeProvider } from '@/_providers/ThemeProvider';
 
 export const metadata: Metadata = {
   title: 'AVOO App',
@@ -18,7 +19,9 @@ export default function RootLayout(props: Props) {
   return (
     <html lang='en'>
       <body>
-        <QueryProvider>{children}</QueryProvider>
+        <MUIThemeProvider>
+          <QueryProvider>{children}</QueryProvider>
+        </MUIThemeProvider>
       </body>
     </html>
   );
