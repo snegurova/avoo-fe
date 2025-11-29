@@ -2,35 +2,18 @@ import { Alert } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { permissionsHooks } from './permissionsHooks';
 import { UploadFile } from '@avoo/axios/types/apiTypes';
-
-enum MediaType {
-  Images = 'images',
-}
-
-type ImagePickerOptions = {
-  allowsEditing?: boolean;
-  aspect?: [number, number];
-  quality?: number;
-  mediaTypes?: ImagePicker.MediaType;
-};
+import {
+  ImagePickerOptions,
+  MediaType,
+  pickImageOptions,
+  Source,
+} from '../types/imagePicker';
 
 const defaultOptions: ImagePickerOptions = {
   allowsEditing: true,
   aspect: [1, 1],
   quality: 0.8,
   mediaTypes: MediaType.Images,
-};
-
-enum Source {
-  Camera = 'camera',
-  Gallery = 'gallery',
-}
-
-type SourceType = Source.Camera | Source.Gallery;
-
-type pickImageOptions = {
-  source: SourceType;
-  options: ImagePickerOptions;
 };
 
 export const imagePickerHooks = {

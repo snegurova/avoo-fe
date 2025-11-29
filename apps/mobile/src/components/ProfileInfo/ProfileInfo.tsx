@@ -6,7 +6,6 @@ import { userHooks } from '@avoo/hooks';
 import { FontAwesome } from '@expo/vector-icons';
 import { RootNavigationProp, RootScreens } from '@/types/navigation';
 import AvatarUpload from '../Avatar/AvatarUpload';
-import { UploadFile } from '@avoo/axios/types/apiTypes';
 
 export function ProfileInfo() {
   const { visualProfileInfo, visualLanguages } = userHooks.useGetUserProfile();
@@ -17,10 +16,6 @@ export function ProfileInfo() {
     navigation.navigate(RootScreens.EditProfileScreen);
   };
 
-  const handleAvatarSelected = (file: UploadFile) => {
-    handleUpdateAvatar(file);
-  };
-
   return (
     <>
       <View className='items-center justify-center p-6'>
@@ -28,7 +23,7 @@ export function ProfileInfo() {
           size={80}
           iconSize={40}
           imageUri={visualProfileInfo.avatarUrl}
-          onImageSelected={handleAvatarSelected}
+          onImageSelected={handleUpdateAvatar}
         />
       </View>
       <View className='bg-white border border-blue-500 rounded-xl p-4 mx-5 mb-4 relative flex-1'>
