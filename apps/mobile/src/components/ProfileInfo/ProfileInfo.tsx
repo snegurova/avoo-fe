@@ -3,7 +3,7 @@ import { useNavigation } from '@react-navigation/native';
 import { ProfileLanguages } from '../ProfileLanguages/ProfileLanguages';
 import { ProfileCertificates } from '../ProfileCertificates/ProfileCertificates';
 import { userHooks } from '@avoo/hooks';
-import { FontAwesome } from '@expo/vector-icons';
+import { MaterialIcons } from '@/shared/icons';
 import { RootNavigationProp, RootScreens } from '@/types/navigation';
 
 
@@ -19,7 +19,7 @@ export function ProfileInfo() {
     <>
       <View className='bg-white border border-blue-500 rounded-xl p-4 mx-5 mb-4 relative flex-1'>
         <Pressable className='absolute top-4 right-4 p-1' onPress={handleNavigate}>
-          <FontAwesome name='pencil' size={14} color='#64748b' />
+          <MaterialIcons name='edit' size={14} color='#64748b' />
         </Pressable>
         <View className='flex-1 pr-8'>
           <Text className='text-2xl font-bold text-slate-900 mb-2'>{visualProfileInfo.name}</Text>

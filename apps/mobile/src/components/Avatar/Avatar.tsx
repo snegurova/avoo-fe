@@ -1,10 +1,10 @@
 import { View, Image, ImageSourcePropType } from 'react-native';
-import { FontAwesome } from '@expo/vector-icons';
+import { MaterialIcons } from '@/shared/icons';
 
 type Props = {
   size?: number;
   imageUri?: string | ImageSourcePropType | null;
-  iconName?: keyof typeof FontAwesome.glyphMap;
+  iconName?: keyof typeof MaterialIcons.glyphMap;
   iconColor?: string;
   iconSize?: number;
   editable?: boolean;
@@ -14,7 +14,7 @@ export const Avatar = (props: Props) => {
   const {
     size = 80,
     imageUri,
-    iconName = 'user',
+    iconName = 'person',
     iconColor = '#64748b',
     iconSize = 30,
   } = props;
@@ -28,7 +28,7 @@ export const Avatar = (props: Props) => {
       {displayUri ? (
         <Image source={{ uri: displayUri }} className='w-full h-full' />
       ) : (
-        <FontAwesome name={iconName} size={iconSize} color={iconColor} />
+        <MaterialIcons name={iconName} size={iconSize} color={iconColor} />
       )}
     
     </View>
