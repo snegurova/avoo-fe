@@ -4,18 +4,13 @@ import { MaterialIcons } from '@/shared/icons';
 type Props = {
   size?: number;
   imageUri?: string | ImageSourcePropType | null;
-  iconName?: keyof typeof MaterialIcons.glyphMap;
-  iconColor?: string;
   iconSize?: number;
-  editable?: boolean;
 };
 
-export const Avatar = (props: Props) => {
+export const AvatarDisplay = (props: Props) => {
   const {
     size = 80,
     imageUri,
-    iconName = 'person',
-    iconColor = '#64748b',
     iconSize = 30,
   } = props;
   const displayUri = typeof imageUri === 'string' ? imageUri : null;
@@ -28,11 +23,10 @@ export const Avatar = (props: Props) => {
       {displayUri ? (
         <Image source={{ uri: displayUri }} className='w-full h-full' />
       ) : (
-        <MaterialIcons name={iconName} size={iconSize} color={iconColor} />
+        <MaterialIcons name='person' size={iconSize} color='#64748b' />
       )}
-    
     </View>
   );
 };
 
-  export default Avatar;
+export default AvatarDisplay;

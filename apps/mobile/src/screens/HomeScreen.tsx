@@ -1,6 +1,5 @@
-import { View, Pressable } from 'react-native';
+import { Pressable } from 'react-native';
 import { Layout } from '@/shared/Layout';
-import Avatar from '@/components/Avatar/Avatar';
 import ProfileInfo from '@/components/ProfileInfo/ProfileInfo';
 import { MaterialIcons } from '@/shared/icons';
 import { ProfilePosts } from '@/components/ProfilePosts/ProfilePosts';
@@ -23,9 +22,6 @@ export const HomeScreen = () => {
 
   return (
     <Layout title='AVOO' leftContent={leftContent} rightContent={rightContent} hasBottomTab={true}>
-      <View className='items-center justify-center p-6'>
-        <Avatar size={80} iconName='person' iconColor='black' iconSize={40} editable={true} />
-      </View>
       <ProfileInfo />
       <ProfilePosts />
       <ProfileGallery />
