@@ -1,5 +1,5 @@
-import { ActivityIndicator, Pressable } from 'react-native';
-import { Suspense } from 'react';
+
+import { View, Pressable } from 'react-native';
 import { Layout } from '@/shared/Layout';
 import ProfileInfo from '@/components/ProfileInfo/ProfileInfo';
 import { FontAwesome } from '@expo/vector-icons';
@@ -23,9 +23,10 @@ export const HomeScreen = () => {
 
   return (
     <Layout title='AVOO' leftContent={leftContent} rightContent={rightContent} hasBottomTab={true}>
-      <Suspense fallback={<ActivityIndicator size='large' className='p-6' />}>
-        <ProfileInfo />
-      </Suspense>
+      <View className='items-center justify-center p-6'>
+        <Avatar size={80} iconName='user' iconColor='black' iconSize={40} editable={true} />
+      </View>
+      <ProfileInfo />
       <ProfilePosts />
       <ProfileGallery />
       <ProfileMaster />
