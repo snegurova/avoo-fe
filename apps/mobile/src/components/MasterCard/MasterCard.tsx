@@ -1,5 +1,5 @@
 import { View, Text } from 'react-native';
-import { Avatar } from '@/components/Avatar/Avatar';
+import { AvatarDisplay } from '@/components/Avatar/AvatarDisplay';
 import { components } from '@avoo/axios/types/generated';
 
 type MasterEntity = components['schemas']['MasterEntity'];
@@ -14,13 +14,10 @@ export const MasterCard = (props: Props) => {
   return (
     <View className='items-center w-[30%]'>
       <View className='relative'>
-        <Avatar
+        <AvatarDisplay
           size={80}
-          imageUri={master.avatarUrl ?? null}
-          iconName='user'
-          iconColor='#64748b'
+          imageUri={master.avatarUrl}
           iconSize={30}
-          editable={false}
         />
       </View>
       <Text className='text-sm font-semibold text-slate-900 mt-2 text-center'>

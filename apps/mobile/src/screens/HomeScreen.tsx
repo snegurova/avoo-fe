@@ -1,6 +1,6 @@
+
 import { View, Pressable } from 'react-native';
 import { Layout } from '@/shared/Layout';
-import Avatar from '@/components/Avatar/Avatar';
 import ProfileInfo from '@/components/ProfileInfo/ProfileInfo';
 import { FontAwesome } from '@expo/vector-icons';
 import { ProfilePosts } from '@/components/ProfilePosts/ProfilePosts';

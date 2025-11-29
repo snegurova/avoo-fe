@@ -1,8 +1,13 @@
 import { utils } from './../utils/utils';
 import { userApi } from '@avoo/axios';
-import { useQuery } from '@tanstack/react-query';
-
-import { BaseResponse, UserMediaResponse, UserProfileResponse } from '@avoo/axios/types/apiTypes';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import {
+  BaseResponse,
+  FileInput,
+  UserMediaResponse,
+  UserProfileResponse,
+  UserUpdateAvatarResponse,
+} from '@avoo/axios/types/apiTypes';
 import { apiStatus } from '../types/apiTypes';
 
 export const userHooks = {
@@ -11,6 +16,7 @@ export const userHooks = {
       {
         queryKey: ['userProfile'],
         queryFn: userApi.getUserProfile,
+        refetchOnMount: true,
       },
     );
 
@@ -24,6 +30,7 @@ export const userHooks = {
       address: profileInfo?.businessInfo?.address ?? 'Salon address not set',
       email: profileInfo?.email ?? 'Email not set',
       phone: profileInfo?.businessInfo?.phone ?? 'Phone not set',
+      avatarUrl: profileInfo?.avatarPreviewUrl ?? profileInfo?.avatarUrl ?? null,
     };
 
     const visualLanguages = profileInfo?.businessInfo?.languages ?? null;
@@ -46,5 +53,25 @@ export const userHooks = {
     }
 
     return null;
+  },
+  usePatchUserProfileAvatar: () => {
+    const queryClient = useQueryClient();
+
+    const { mutate: handleUpdateAvatar, isPending } = useMutation<
+      BaseResponse<UserUpdateAvatarResponse>,
+      Error,
+      FileInput
+    >({
+      mutationFn: userApi.updateAvatar,
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: ['userProfile'] });
+      },
+    });
+
+    utils.useSetPendingApi(isPending);
+
+    return {
+      handleUpdateAvatar,
+    };
   },
 };
