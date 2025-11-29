@@ -17,7 +17,7 @@ export function ProfileInfo() {
 
   return (
     <>
-      <View className='bg-white border border-blue-500 rounded-xl p-4 mx-5 mb-4 relative'>
+      <View className='bg-white border border-blue-500 rounded-xl p-4 mx-5 mb-4 relative flex-1'>
         <Pressable className='absolute top-4 right-4 p-1' onPress={handleNavigate}>
           <FontAwesome name='pencil' size={14} color='#64748b' />
         </Pressable>
