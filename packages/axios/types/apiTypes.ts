@@ -30,6 +30,15 @@ export type UserMediaResponse = {
   pagination: components['schemas']['PaginationDto'];
 };
 
+export type UploadFile = {
+  uri: string;
+  type?: string | null;
+  name?: string | null;
+};
+
+export type FileInput = File | UploadFile;
+export type UserUpdateAvatarResponse = components['schemas']['UserEntity'];
+
 /** Master */
 export type MasterWithRelationsEntityResponse = components['schemas']['MasterEntity'][];
 
