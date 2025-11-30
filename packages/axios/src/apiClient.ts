@@ -1,6 +1,5 @@
 import { useAuthStore } from '@avoo/store';
 import { queryClient } from '@avoo/hooks';
-import { authApi } from '@avoo/axios/src/modules/auth';
 import axios from 'axios';
 
 export const apiClient = axios.create({
@@ -28,5 +27,5 @@ apiClient.interceptors.response.use(
       queryClient.clear();
     }
     return Promise.reject(error);
-  }
+  },
 );

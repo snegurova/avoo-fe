@@ -270,4 +270,19 @@ export const authHooks = {
       sendCodeHandler,
     };
   },
+  useLogout: () => {
+    const { mutate: logout, isPending } = useMutation<
+      BaseResponse<Record<string, never>>,
+      Error,
+      void
+    >({
+      mutationFn: authApi.logout,
+    });
+
+    utils.useSetPendingApi(isPending);
+
+    return {
+      logout,
+    };
+  },
 };
