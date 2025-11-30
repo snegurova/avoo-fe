@@ -1,11 +1,10 @@
-import React from 'react';
 import { FormSelect } from '../FormSelect/FormSelect';
+import React from 'react';
 
 interface WorkingHoursSettingsProps {
   name: string;
   label?: string;
-  value?: string;
-  defaultValue?: string;
+  workingHour: { startTimeMinutes: number; endTimeMinutes: number; id?: number };
   disabled?: boolean;
   error?: string | boolean;
   onChange?: (value: string) => void;
@@ -14,7 +13,7 @@ interface WorkingHoursSettingsProps {
 export const WorkingHoursDaySettings = ({
   name,
   label,
-  defaultValue,
+  workingHour,
   disabled,
   error,
   onChange,
@@ -30,15 +29,21 @@ export const WorkingHoursDaySettings = ({
             .padStart(2, '0')}:30`,
     value: i * 30,
   }));
-  const [isChecked, setIsChecked] = React.useState(false);
+  const isWorkingHoursEnabled =
+    workingHour.startTimeMinutes !== 0 || workingHour.endTimeMinutes !== 0;
+  const [isChecked, setIsChecked] = React.useState(isWorkingHoursEnabled);
   return (
     <div className='flex flex-row gap-1'>
-      <input type='checkbox' checked={isChecked} onChange={() => setIsChecked(!isChecked)} />
+      <input
+        type='checkbox'
+        checked={isChecked}
+        onChange={() => setIsChecked(!isChecked)}
+      />
       <FormSelect
         label={label}
         name={`${name}-start-time-minutes`}
         options={workingHours}
-        defaultValue={defaultValue}
+        defaultValue={workingHour.startTimeMinutes}
         disabled={disabled}
         error={error}
         onChange={onChange}
@@ -48,7 +53,7 @@ export const WorkingHoursDaySettings = ({
         label={label}
         name={`${name}-end-time-minutes`}
         options={workingHours}
-        defaultValue={defaultValue}
+        defaultValue={workingHour.endTimeMinutes}
         disabled={disabled}
         error={error}
         onChange={onChange}

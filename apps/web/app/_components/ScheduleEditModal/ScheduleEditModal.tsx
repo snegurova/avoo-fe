@@ -81,8 +81,8 @@ export const ScheduleEditModal = (props: Props) => {
           label='Start date'
           defaultValue={convertDateToStringDateFormat(new Date(schedule.startAt))}
         />
-        {Array.from({ length: schedule.pattern }).map((_, index) => (
-          <WorkingHoursDaySettings key={index} name='workingHours' label='Working hours' />
+        {schedule.workingHours.map((workingHour, index) => (
+          <WorkingHoursDaySettings key={index} name='workingHours' workingHour={workingHour} />
         ))}
         <DateTimeSelect
           name='endDate'

@@ -14,7 +14,7 @@ export enum SelectSize {
   Sm = 'sm',
 }
 
-export type FormMultiSelectProps = {
+export type Props = {
   id?: string;
   name: string;
   label?: string;
@@ -77,7 +77,7 @@ export const FormMultiSelect = ({
   placeholder = 'Select…',
   intent = SelectIntent.Primary,
   size = SelectSize.Md,
-}: FormMultiSelectProps) => {
+}: Props) => {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
@@ -158,7 +158,6 @@ export const FormMultiSelect = ({
                 <input
                   type='checkbox'
                   checked={selectedValues.includes(o.value)}
-                  onChange={() => toggleValue(o.value)}
                 />
                 <span>{o.label}</span>
               </div>
