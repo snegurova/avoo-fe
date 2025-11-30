@@ -1,11 +1,14 @@
 import { View } from 'react-native';
 import FormTextInput from '@/shared/FormTextInput';
-import Button from '@/shared/Button/Button';
+// import Button from '@/shared/Button/Button';
 import { authHooks, utils } from '@avoo/hooks';
 import { useApiStatusStore } from '@avoo/store';
 import { MaterialIcons } from '@/shared/icons';
+import { Button, useTheme } from 'react-native-paper';
 
 export default function LoginForm() {
+  const theme = useTheme();
+  
   const { value: isShowPassword, toggleValue: toggleShowPassword } = utils.useBooleanState(false);
 
   const { control, handleSubmit, errors } = authHooks.useLoginForm();
@@ -37,7 +40,15 @@ export default function LoginForm() {
         autoComplete='off'
         autoCorrect={false}
       />
-      <Button onPress={handleSubmit} title='Log in' loading={isPending} disabled={isPending} />
+      <Button 
+        onPress={handleSubmit} 
+        loading={isPending} 
+        disabled={isPending}
+        mode="contained"
+        buttonColor={theme.colors.secondary}
+      >
+        Log in
+      </Button>
     </View>
   );
 }

@@ -6,6 +6,7 @@ import { enableScreens } from 'react-native-screens';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { queryClient } from '@avoo/hooks';
 import { PaperProvider } from 'react-native-paper';
+import paperTheme from '@/theme/paper-theme';
 
 import './global.css';
 
@@ -17,7 +18,7 @@ export default function App() {
       <NavigationContainer>
         <QueryClientProvider client={queryClient}>
           <StatusBar style='auto' />
-          <PaperProvider>
+          <PaperProvider theme={paperTheme}>
             <AppContainer />
           </PaperProvider>
         </QueryClientProvider>
