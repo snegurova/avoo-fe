@@ -270,26 +270,4 @@ export const authHooks = {
       sendCodeHandler,
     };
   },
-  useLogout: () => {
-    const queryClient = useQueryClient();
-    const logoutStore = useAuthStore((state) => state.logout);
-
-    const { mutate: logout, isPending } = useMutation<
-      BaseResponse<Record<string, never>>,
-      Error,
-      void
-    >({
-      mutationFn: authApi.logout,
-      onSettled: () => {
-        logoutStore();
-        queryClient.clear();
-      },
-    });
-
-    utils.useSetPendingApi(isPending);
-
-    return {
-      logout,
-    };
-  },
 };
