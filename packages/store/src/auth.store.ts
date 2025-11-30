@@ -8,7 +8,7 @@ export type AuthStore = {
   accessToken: string | null;
   setIsAuthenticated: (isAuthenticated: boolean) => void;
   setAccessToken: (accessToken: string) => void;
-  logout: () => void;
+  logoutStore: () => void;
 };
 
 export const useAuthStore = create<AuthStore>()(
@@ -18,7 +18,7 @@ export const useAuthStore = create<AuthStore>()(
       accessToken: null,
       setIsAuthenticated: (isAuthenticated) => set({ isAuthenticated }),
       setAccessToken: (accessToken) => set({ accessToken }),
-      logout: () => set({ isAuthenticated: false, accessToken: null }),
+      logoutStore: () => set({ isAuthenticated: false, accessToken: null }),
     }),
     {
       name: "auth-storage",

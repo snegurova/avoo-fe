@@ -271,18 +271,23 @@ export const authHooks = {
     };
   },
   useLogout: () => {
-    const { mutate: logout, isPending } = useMutation<
+    const queryClient = useQueryClient();
+    const { mutate: logoutMutation, isPending } = useMutation<
       BaseResponse<Record<string, never>>,
       Error,
       void
     >({
       mutationFn: authApi.logout,
+      onSettled: () => {
+        useAuthStore.getState().logoutStore();
+        queryClient.clear();
+      },
     });
 
     utils.useSetPendingApi(isPending);
 
     return {
-      logout,
+      logoutMutation,
     };
   },
 };

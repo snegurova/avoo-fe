@@ -8,25 +8,21 @@ import { ProfileGallery } from '@/_components/ProfileGallery/ProfileGallery';
 import { ProfileSchedule } from '@/_components/ProfileSchedule/ProfileSchedule';
 import { Button, ButtonIntent, ButtonFit } from '@/_components/Button/Button';
 import { authHooks } from '@avoo/hooks';
-import { useQueryClient } from '@tanstack/react-query';
-import { useAuthStore } from '@avoo/store';
 
 export default function Page() {
-  const queryClient = useQueryClient();
-  const logout = useAuthStore((state) => state.logout);
-  const { logout: logoutApi } = authHooks.useLogout();
+  const { logoutMutation } = authHooks.useLogout();
 
   const handleLogout = () => {
-    logout();
-    queryClient.clear();
-    logoutApi();
+    logoutMutation();
   };
-  
+
   return (
     <AuthGuard>
       <div className='container mx-auto p-4 max-w-4xl space-y-6'>
         <h1 className='text-3xl font-bold mb-6'>Profile</h1>
-        <Button onClick={handleLogout} fit={ButtonFit.Fill} intent={ButtonIntent.Primary}>Logout</Button>
+        <Button onClick={handleLogout} fit={ButtonFit.Fill} intent={ButtonIntent.Primary}>
+          Logout
+        </Button>
         <ProfileInfo />
         <ProfileMaster />
         <ProfilePosts />
