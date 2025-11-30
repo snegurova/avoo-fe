@@ -1,6 +1,5 @@
 import { View } from 'react-native';
 import FormTextInput from '@/shared/FormTextInput';
-// import Button from '@/shared/Button/Button';
 import { authHooks, utils } from '@avoo/hooks';
 import { useApiStatusStore } from '@avoo/store';
 import { MaterialIcons } from '@/shared/icons';
