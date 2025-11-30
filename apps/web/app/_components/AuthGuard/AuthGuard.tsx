@@ -3,7 +3,7 @@
 import { useRouter } from 'next/navigation';
 import { useAuthStore, useHydrationStore } from '@avoo/store';
 import { useEffect, ReactNode } from 'react';
-import { routes } from '@/_routes/routes';
+import { appRoutes } from '@/_routes/routes';
 
 type Props = {
   children: ReactNode;
@@ -22,7 +22,7 @@ export const AuthGuard = (props: Props) => {
     }
 
     if (!isAuthenticated) {
-      router.push(routes.SignIn);
+      router.push(appRoutes.SignIn);
     }
   }, [isAuthenticated, hasHydrated, router]);
 

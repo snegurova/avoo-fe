@@ -1,6 +1,6 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import { useCallback } from 'react';
 
 export const navigationHooks = {
@@ -11,5 +11,9 @@ export const navigationHooks = {
       router.back();
     }, [router]);
   },
-};
+  useIsActivePage: (pagePath: string) => {
+    const pathname = usePathname();
 
+    return pathname === pagePath;
+  },
+};

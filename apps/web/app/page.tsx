@@ -1,24 +1,13 @@
 'use client';
+import Link from 'next/link';
 
-import { AuthGuard } from '@/_components/AuthGuard/AuthGuard';
-import { ProfileInfo } from '@/_components/ProfileInfo/ProfileInfo';
-import { ProfileMaster } from '@/_components/ProfileMaster/ProfileMaster';
-import { ProfilePosts } from '@/_components/ProfilePosts/ProfilePosts';
-import { ProfileGallery } from '@/_components/ProfileGallery/ProfileGallery';
-import { ProfileSchedule } from '@/_components/ProfileSchedule/ProfileSchedule';
-
-export default function Page() {
+export default function HomePage() {
   return (
-    <AuthGuard>
-      <div className='container mx-auto p-4 max-w-4xl space-y-6'>
-        <h1 className='text-3xl font-bold mb-6'>Profile</h1>
-
-        <ProfileInfo />
-        <ProfileMaster />
-        <ProfilePosts />
-        <ProfileGallery />
-        <ProfileSchedule />
-      </div>
-    </AuthGuard>
+    <div className='container flex flex-col items-center gap-10'>
+      Home Public Page
+      <Link href='/app' className='bg-dark text-white py-2.5 px-4 rounded-2xl'>
+        Go to App
+      </Link>
+    </div>
   );
 }
