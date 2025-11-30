@@ -22,7 +22,7 @@ apiClient.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
-      useAuthStore.getState().logout();
+      useAuthStore.getState().logoutStore();
       queryClient.clear();
     }
     return Promise.reject(error);
