@@ -1,6 +1,6 @@
 import { useCallback, memo } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { MaterialIcons } from '@/shared/icons';
 
 type Props = {
   label: string;
@@ -28,7 +28,7 @@ function CheckBox(props: Props) {
           },
         ]}
       >
-        {isChecked && <Ionicons name='checkmark' size={16} color='#fff' />}
+        {isChecked && <MaterialIcons name='check' size={16} color='#fff' />}
       </Pressable>
       <Text style={styles.label}>{label}</Text>
     </View>
