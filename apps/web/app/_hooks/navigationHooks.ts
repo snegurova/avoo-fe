@@ -2,14 +2,13 @@
 
 import { useRouter } from 'next/navigation';
 import { useCallback } from 'react';
+import { routes } from '@/_routes/routes';
 
 export const navigationHooks = {
-  useHandleBackClick: () => {
+  useHandleNavigateToHomeClick: () => {
     const router = useRouter();
-
     return useCallback(() => {
-      router.back();
+      router.push(routes.Home);
     }, [router]);
   },
 };
-

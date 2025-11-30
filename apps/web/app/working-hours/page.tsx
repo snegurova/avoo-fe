@@ -6,7 +6,7 @@ import { IconButton } from '@/_components/IconButton/IconButton';
 import { navigationHooks } from '@/_hooks/navigationHooks';
 
 export default function WorkingHoursPage() {
-  const handleBackClick = navigationHooks.useHandleBackClick();
+  const handleBackClick = navigationHooks.useHandleNavigateToHomeClick();
 
   return (
     <AuthGuard>

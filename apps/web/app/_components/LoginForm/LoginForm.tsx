@@ -1,23 +1,34 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { authHooks } from '@avoo/hooks';
 import { Button, ButtonFit, ButtonIntent } from '@/_components/Button/Button';
 import FormInput from '@/_components/FormInput/FormInput';
-import { routes } from '@/_routes/routes';
+import { routes, isValidRoute } from '@/_routes/routes';
 import { useApiStatusStore } from '@avoo/store';
 import { utils } from '@avoo/hooks';
 import ShowPasswordToggler from '@/_components/ShowPasswordToggler/ShowPasswordToggler';
+import { useEffect, useState } from 'react';
 
 export default function LoginForm() {
   const isPending = useApiStatusStore((state) => state.isPending);
-
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const [returnUrl, setReturnUrl] = useState<string | null>(null);
+
+  useEffect(() => {
+    const url = searchParams.get('returnUrl');
+    if (url) {
+      setReturnUrl(decodeURIComponent(url));
+      router.replace('/sign-in');
+    }
+  }, [searchParams, router]);
 
   const { register, handleSubmit, errors } = authHooks.useLoginForm({
     onSuccess: () => {
-      router.push(routes.Home);
+      const targetUrl = isValidRoute(returnUrl) ? returnUrl : routes.Home;
+      router.replace(targetUrl);
     },
   });
 
