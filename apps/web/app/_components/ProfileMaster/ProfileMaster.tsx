@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import { masterHooks } from '@avoo/hooks';
-import { routes } from '@/_routes/routes';
+import { appRoutes } from '@/_routes/routes';
 import { SectionHeader } from '@/_components/SectionHeader/SectionHeader';
 import { Avatar, AvatarSize } from '@/_components/Avatar/Avatar';
 
@@ -11,7 +11,7 @@ export const ProfileMaster = () => {
   const router = useRouter();
 
   const handleNavigate = () => {
-    router.push(routes.Masters);
+    router.push(appRoutes.Masters);
   };
 
   return (

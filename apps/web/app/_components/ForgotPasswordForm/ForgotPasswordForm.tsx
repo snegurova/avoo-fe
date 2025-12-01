@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation';
 import { authHooks } from '@avoo/hooks';
 import { Button, ButtonFit, ButtonIntent } from '@/_components/Button/Button';
 import FormInput from '@/_components/FormInput/FormInput';
-import { routes } from '@/_routes/routes';
+import { appRoutes } from '@/_routes/routes';
 import { useApiStatusStore } from '@avoo/store';
 
 export default function ForgotPasswordForm() {
@@ -14,7 +14,7 @@ export default function ForgotPasswordForm() {
 
   const { sendCodeHandler } = authHooks.useSendCode({
     onSuccess: (email: string) => {
-      router.push(`${routes.VerifyCode}?email=${encodeURIComponent(email)}`);
+      router.push(`${appRoutes.VerifyCode}?email=${encodeURIComponent(email)}`);
     },
   });
 
@@ -43,4 +43,3 @@ export default function ForgotPasswordForm() {
     </form>
   );
 }
-

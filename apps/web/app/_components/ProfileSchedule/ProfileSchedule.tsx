@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import { scheduleHooks } from '@avoo/hooks';
-import { routes } from '@/_routes/routes';
+import { appRoutes } from '@/_routes/routes';
 import { SectionHeader } from '@/_components/SectionHeader/SectionHeader';
 
 export const ProfileSchedule = () => {
@@ -11,13 +11,13 @@ export const ProfileSchedule = () => {
   const router = useRouter();
 
   const handleNavigate = () => {
-    router.push(routes.WorkingHours);
+    router.push(appRoutes.WorkingHours);
   };
 
   return (
     <div className='px-5 py-4 border-t border-gray-200'>
       <SectionHeader title='Working hours' onEdit={handleNavigate} />
-      
+
       {!hasSchedules && (
         <p className='text-sm text-slate-500'>
           Set up your working hours{' '}

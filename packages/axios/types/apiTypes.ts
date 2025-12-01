@@ -12,7 +12,6 @@ export type BaseResponse<T> = {
 };
 export type Category = components['schemas']['CategoryEntity'];
 
-
 /** Auth */
 export type LoginRequest = components['schemas']['LoginRequestDto'];
 export type RegisterRequest = components['schemas']['CreateUserDto'];
@@ -26,7 +25,7 @@ export type ResetPasswordResponse = components['schemas']['UserResponseDto'];
 /** User */
 export type UserProfileResponse = components['schemas']['UserProfileEntity'];
 export type UserMediaResponse = {
-  items: components['schemas']['MediaEntity'][] | [];
+  items: components['schemas']['MediaEntity'][];
   pagination: components['schemas']['PaginationDto'];
 };
 
@@ -42,9 +41,14 @@ export type UserUpdateAvatarResponse = components['schemas']['UserEntity'];
 /** Master */
 export type MasterWithRelationsEntityResponse = components['schemas']['MasterEntity'][];
 
-
 /** Schedule */
 export type GetSchedulesResponse = {
   items: components['schemas']['ScheduleEntity'][];
+  pagination: components['schemas']['PaginationDto'];
+};
+
+/** Calendar */
+export type GetCalendarResponse = {
+  items: components['schemas']['PrivateCalendarResponseDto'][];
   pagination: components['schemas']['PaginationDto'];
 };

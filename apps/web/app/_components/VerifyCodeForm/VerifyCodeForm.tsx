@@ -4,13 +4,13 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { authHooks } from '@avoo/hooks';
 import { Button, ButtonFit, ButtonIntent } from '@/_components/Button/Button';
 import FormInput from '@/_components/FormInput/FormInput';
-import { routes } from '@/_routes/routes';
+import { appRoutes } from '@/_routes/routes';
 import { useApiStatusStore } from '@avoo/store';
 import { formatHooks } from '@avoo/hooks';
 
 export default function VerifyCodeForm() {
   const isPending = useApiStatusStore((state) => state.isPending);
-  const router = useRouter(); 
+  const router = useRouter();
   const searchParams = useSearchParams();
   const email = searchParams.get('email') || '';
 
@@ -21,7 +21,7 @@ export default function VerifyCodeForm() {
   const { register, handleSubmit, errors } = authHooks.useVerifyCodeForm({
     email,
     onSuccess: () => {
-      router.push(routes.ResetPassword);
+      router.push(appRoutes.ResetPassword);
     },
   });
 
@@ -57,9 +57,8 @@ export default function VerifyCodeForm() {
         fit={ButtonFit.Fill}
         intent={ButtonIntent.Primary}
       >
-        Resend code 
+        Resend code
       </Button>
     </div>
   );
 }
-

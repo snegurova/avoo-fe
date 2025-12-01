@@ -1,7 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { routes } from '@/_routes/routes';
+import { appRoutes } from '@/_routes/routes';
 import { userHooks } from '@avoo/hooks';
 import { ProfileLanguages } from '@/_components/ProfileLanguages/ProfileLanguages';
 import { ProfileCertificates } from '@/_components/ProfileCertificates/ProfileCertificates';
@@ -13,7 +13,7 @@ export const ProfileInfo = () => {
   const { visualProfileInfo, visualLanguages } = userHooks.useGetUserProfile();
 
   const handleNavigate = () => {
-    router.push(routes.EditProfile);
+    router.push(appRoutes.EditProfile);
   };
 
   return (
