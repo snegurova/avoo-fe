@@ -10,40 +10,39 @@ import BookIcon from '@/_icons/BookIcon';
 import AddPhotoIcon from '@/_icons/AddPhotoIcon';
 import CoPresentIcon from '@/_icons/CoPresentIcon';
 
-const items = [
-  {
-    href: appRoutes.Home,
-    icon: <HomeIcon />,
-    label: 'Home',
-  },
-  {
-    href: appRoutes.Calendar,
-    icon: <CalendarIcon />,
-    label: 'Calendar',
-  },
-  {
-    href: appRoutes.Clietns,
-    icon: <CoPresentIcon />,
-    label: 'Clients',
-  },
-  {
-    href: appRoutes.Services,
-    icon: <BookIcon />,
-    label: 'Services',
-  },
-  {
-    href: appRoutes.Masters,
-    icon: <GroupsIcon />,
-    label: 'Master',
-  },
-  {
-    href: appRoutes.AddPost,
-    icon: <AddPhotoIcon />,
-    label: 'Add post',
-  },
-];
-
 export default function AppNavigation() {
+  const items = [
+    {
+      href: appRoutes.Home,
+      icon: <HomeIcon />,
+      label: 'Home',
+    },
+    {
+      href: appRoutes.Calendar,
+      icon: <CalendarIcon />,
+      label: 'Calendar',
+    },
+    {
+      href: appRoutes.Clietns,
+      icon: <CoPresentIcon />,
+      label: 'Clients',
+    },
+    {
+      href: appRoutes.Services,
+      icon: <BookIcon />,
+      label: 'Services',
+    },
+    {
+      href: appRoutes.Masters,
+      icon: <GroupsIcon />,
+      label: 'Masters',
+    },
+    {
+      href: appRoutes.Posts,
+      icon: <AddPhotoIcon />,
+      label: 'Posts',
+    },
+  ];
   return (
     <aside className='h-full min-w-55 border-r border-border'>
       <nav className='flex flex-col py-7 gap-15'>

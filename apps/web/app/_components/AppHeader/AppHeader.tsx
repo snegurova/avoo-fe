@@ -11,21 +11,11 @@ import SelectButton from '../SelectButton/SelectButton';
 const options = [
   {
     label: 'New Booking',
-    handler: () => {
-      console.log('New Booking clicked');
-    },
+    handler: () => {},
   },
   {
-    label: 'New Service',
-    handler: () => {
-      console.log('New Service clicked');
-    },
-  },
-  {
-    label: 'New Master',
-    handler: () => {
-      console.log('New Master clicked');
-    },
+    label: 'New Post',
+    handler: () => {},
   },
 ];
 
