@@ -5,7 +5,6 @@ import { MaterialIcons } from '@/shared/icons';
 import { HomeScreen } from '@/screens/HomeScreen';
 import { SettingsScreen } from '@/screens/SettingsScreen';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { ExampleScreensParams } from '@/screens/ExampleScreensParams';
 
 const BottomTab = createBottomTabNavigator<BottomBarStackParamList>();
 const ProfileStack = createNativeStackNavigator<ProfileStackParamList>();
@@ -19,7 +18,6 @@ export const ProfileStackNavigator = () => {
       }}
     >
       <ProfileStack.Screen name={ProfileScreens.Settings} component={SettingsScreen} />
-      <ProfileStack.Screen name={ProfileScreens.ExampleScreensParams} component={ExampleScreensParams} />
     </ProfileStack.Navigator>
   );
 };
