@@ -3,10 +3,10 @@
 import { SectionHeader } from '@/_components/SectionHeader/SectionHeader';
 import { AuthGuard } from '@/_components/AuthGuard/AuthGuard';
 import { IconButton } from '@/_components/IconButton/IconButton';
-import { navigationHooks } from '@/_hooks/navigationHooks';
+import { routerHooks } from '@/_hooks/routerHooks';
 
 export default function EditProfilePage() {
-  const handleBackClick = navigationHooks.useHandleNavigateToHomeClick();
+  const handleBackClick = routerHooks.useHandleNavigateToHomeClick();
 
   return (
     <AuthGuard>
