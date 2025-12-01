@@ -7,7 +7,7 @@ import HomeIcon from '@/_icons/HomeIcon';
 import CalendarIcon from '@/_icons/CalendarIcon';
 import GroupsIcon from '@/_icons/GroupsIcon';
 import BookIcon from '@/_icons/BookIcon';
-import AddPhotoIcon from '@/_icons/AddPhotoIcon';
+import MosaicIcon from '@/_icons/MosaicIcon';
 import CoPresentIcon from '@/_icons/CoPresentIcon';
 
 export default function AppNavigation() {
@@ -39,7 +39,7 @@ export default function AppNavigation() {
     },
     {
       href: appRoutes.Posts,
-      icon: <AddPhotoIcon />,
+      icon: <MosaicIcon />,
       label: 'Posts',
     },
   ];

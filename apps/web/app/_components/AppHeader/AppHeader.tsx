@@ -1,25 +1,30 @@
 'use client';
 
 import React from 'react';
-import AppProfileLink from '@/_components/AppProfileLink/AppProfileLink';
+import AppProfileSelect from '@/_components/AppProfileSelect/AppProfileSelect';
 import NotificationsIcon from '@/_icons/NotificationsIcon';
 import ShareIcon from '@/_icons/ShareIcon';
 import IconLink from '@/_components/IconLink/IconLink';
 import { appRoutes } from '@/_routes/routes';
 import SelectButton from '../SelectButton/SelectButton';
-
-const options = [
-  {
-    label: 'New Booking',
-    handler: () => {},
-  },
-  {
-    label: 'New Post',
-    handler: () => {},
-  },
-];
+import { useRouter } from 'next/navigation';
 
 export default function AppHeader() {
+  const router = useRouter();
+
+  const options = [
+    {
+      label: 'New Booking',
+      handler: () => {},
+    },
+    {
+      label: 'New Post',
+      handler: () => {
+        router.push(appRoutes.AddPost);
+      },
+    },
+  ];
+
   return (
     <header className='flex items-center justify-between gap-30'>
       <div className='bg-secondary rounded-2xl px-4 py-3.5 font-medium grow'>
@@ -36,7 +41,7 @@ export default function AppHeader() {
             icon={<NotificationsIcon className='transition-colors' />}
             label='Notifications'
           />
-          <AppProfileLink />
+          <AppProfileSelect />
         </div>
       </div>
     </header>

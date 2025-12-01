@@ -1,6 +1,7 @@
 import ArrowDownIcon from '@/_icons/ArrowDownIcon';
-import React, { useEffect, useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { tv } from 'tailwind-variants';
+import DropdownList from '@/_components/DropdownList/DropdownList';
 
 type Props = {
   label: string;
@@ -36,6 +37,10 @@ export default function SelectButton(props: Props) {
     setIsOpen((prev) => !prev);
   };
 
+  const closeDropdown = useCallback(() => {
+    setIsOpen(false);
+  }, []);
+
   return (
     <div className='relative select-button-container'>
       <button
@@ -45,23 +50,7 @@ export default function SelectButton(props: Props) {
         <span>{label}</span>
         <ArrowDownIcon className={selectButton({ open: isOpen })} />
       </button>
-      {isOpen && (
-        <ul className='absolute top-full left-0 min-w-max translate-y-1 overflow-hidden rounded-2xl'>
-          {options.map((option, index) => (
-            <li key={index}>
-              <button
-                className='text-white bg-black px-6 py-2.5 w-full cursor-pointer text-start'
-                onClick={() => {
-                  option.handler();
-                  setIsOpen(false);
-                }}
-              >
-                {option.label}
-              </button>
-            </li>
-          ))}
-        </ul>
-      )}
+      {isOpen && <DropdownList options={options} closeDropdown={closeDropdown} />}
     </div>
   );
 }

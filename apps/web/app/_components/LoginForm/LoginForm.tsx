@@ -22,7 +22,7 @@ export default function LoginForm() {
     const url = searchParams.get('returnUrl');
     if (url) {
       setReturnUrl(decodeURIComponent(url));
-      router.replace('/sign-in');
+      router.replace(appRoutes.SignIn);
     }
   }, [searchParams, router]);
 
