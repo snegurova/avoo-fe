@@ -3,12 +3,13 @@ import { useNavigation } from '@react-navigation/native';
 import { ProfileLanguages } from '../ProfileLanguages/ProfileLanguages';
 import { ProfileCertificates } from '../ProfileCertificates/ProfileCertificates';
 import { userHooks } from '@avoo/hooks';
-import { FontAwesome } from '@expo/vector-icons';
+import { MaterialIcons } from '@/shared/icons';
 import { RootNavigationProp, RootScreens } from '@/types/navigation';
-
+import AvatarUpload from '../Avatar/AvatarUpload';
 
 export function ProfileInfo() {
   const { visualProfileInfo, visualLanguages } = userHooks.useGetUserProfile();
+  const { handleUpdateAvatar } = userHooks.usePatchUserProfileAvatar();
   const navigation = useNavigation<RootNavigationProp>();
 
   const handleNavigate = () => {
@@ -17,9 +18,17 @@ export function ProfileInfo() {
 
   return (
     <>
-      <View className='bg-white border border-blue-500 rounded-xl p-4 mx-5 mb-4 relative'>
+      <View className='items-center justify-center p-6'>
+        <AvatarUpload
+          size={80}
+          iconSize={40}
+          imageUri={visualProfileInfo.avatarUrl}
+          onImageSelected={handleUpdateAvatar}
+        />
+      </View>
+      <View className='bg-white border border-blue-500 rounded-xl p-4 mx-5 mb-4 relative flex-1'>
         <Pressable className='absolute top-4 right-4 p-1' onPress={handleNavigate}>
-          <FontAwesome name='pencil' size={14} color='#64748b' />
+          <MaterialIcons name='edit' size={14} color='#64748b' />
         </Pressable>
         <View className='flex-1 pr-8'>
           <Text className='text-2xl font-bold text-slate-900 mb-2'>{visualProfileInfo.name}</Text>

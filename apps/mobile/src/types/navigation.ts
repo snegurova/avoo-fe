@@ -26,12 +26,10 @@ export enum BottomBarScreens {
 
 export enum ProfileScreens {
   Settings = 'Settings',
-  ExampleScreensParams = 'ExampleScreensParams',
 }
 
 export type ProfileStackParamList = {
   [ProfileScreens.Settings]: undefined;
-  [ProfileScreens.ExampleScreensParams]: { id: number } | undefined;
 };
 
 export type BottomBarStackParamList = {

@@ -2,10 +2,10 @@
 
 import { SectionHeader } from '@/_components/SectionHeader/SectionHeader';
 import { IconButton } from '@/_components/IconButton/IconButton';
-import { navigationHooks } from '@/_hooks/navigationHooks';
+import { routerHooks } from '@/_hooks/routerHooks';
 
 export default function PostsPage() {
-  const handleBackClick = navigationHooks.useHandleBackClick();
+  const handleBackClick = routerHooks.useHandleNavigateToHomeClick();
 
   return (
     <div className='container mx-auto p-4 max-w-4xl'>

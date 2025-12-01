@@ -1,6 +1,6 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import { useAuthStore, useHydrationStore } from '@avoo/store';
 import { useEffect, ReactNode } from 'react';
 import { appRoutes } from '@/_routes/routes';
@@ -13,6 +13,7 @@ export const AuthGuard = (props: Props) => {
   const { children } = props;
 
   const router = useRouter();
+  const pathname = usePathname();
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
   const hasHydrated = useHydrationStore((state) => state.hasHydrated);
 
@@ -21,10 +22,11 @@ export const AuthGuard = (props: Props) => {
       return;
     }
 
-    if (!isAuthenticated) {
-      router.push(appRoutes.SignIn);
+    if (!isAuthenticated && pathname) {
+      const returnUrl = encodeURIComponent(pathname);
+      router.push(`${appRoutes.SignIn}?returnUrl=${returnUrl}`);
     }
-  }, [isAuthenticated, hasHydrated, router]);
+  }, [isAuthenticated, hasHydrated, router, pathname]);
 
   if (!hasHydrated) {
     return null;

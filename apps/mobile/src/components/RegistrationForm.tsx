@@ -4,7 +4,7 @@ import FormCheckBox from '@/shared/FormCheckBox';
 import Button from '@/shared/Button/Button';
 import { utils, authHooks } from '@avoo/hooks';
 import { useApiStatusStore } from '@avoo/store';
-import { FontAwesome } from '@expo/vector-icons';
+import { MaterialIcons } from '@/shared/icons';
 
 export default function RegistrationForm() {
   const { value: isShowPassword, toggleValue: toggleShowPassword } = utils.useBooleanState(false);
@@ -14,8 +14,8 @@ export default function RegistrationForm() {
 
   const isPending = useApiStatusStore((state) => state.isPending);
 
-  const icon = <FontAwesome name={isShowPassword ? 'eye' : 'eye-slash'} size={24} color='black' />;
-  const iconConfirmPassword = <FontAwesome name={isShowConfirmPassword ? 'eye' : 'eye-slash'} size={24} color='black' />;
+  const icon = <MaterialIcons name={isShowPassword ? 'visibility' : 'visibility-off'} size={24} color='black' />;
+  const iconConfirmPassword = <MaterialIcons name={isShowConfirmPassword ? 'visibility' : 'visibility-off'} size={24} color='black' />;
 
   return (
     <View className='w-full gap-4'>

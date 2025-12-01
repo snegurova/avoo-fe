@@ -1,11 +1,10 @@
 import { Text, TouchableOpacity, View, StyleSheet } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { BottomBarScreens, BottomBarStackParamList, ProfileScreens, ProfileStackParamList } from '@/types/navigation';
-import { AntDesign } from '@expo/vector-icons';
+import { MaterialIcons } from '@/shared/icons';
 import { HomeScreen } from '@/screens/HomeScreen';
 import { SettingsScreen } from '@/screens/SettingsScreen';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { ExampleScreensParams } from '@/screens/ExampleScreensParams';
 
 const BottomTab = createBottomTabNavigator<BottomBarStackParamList>();
 const ProfileStack = createNativeStackNavigator<ProfileStackParamList>();
@@ -19,7 +18,6 @@ export const ProfileStackNavigator = () => {
       }}
     >
       <ProfileStack.Screen name={ProfileScreens.Settings} component={SettingsScreen} />
-      <ProfileStack.Screen name={ProfileScreens.ExampleScreensParams} component={ExampleScreensParams} />
     </ProfileStack.Navigator>
   );
 };
@@ -50,7 +48,7 @@ const BottomBarNavigator = () => {
         style={styles.floatingButton}
         activeOpacity={0.8}
       >
-        <AntDesign name='plus' size={24} color='#FFFFFF' />
+        <MaterialIcons name='add' size={24} color='#FFFFFF' />
       </TouchableOpacity>
     </View>
   );

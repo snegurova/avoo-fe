@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { navigationHooks } from '@/_hooks/navigationHooks';
+import { routerHooks } from '@/_hooks/routerHooks';
 import { tv } from 'tailwind-variants';
 
 type Props = {
@@ -22,7 +22,7 @@ const iconLink = tv({
 
 export default function IconLink(props: Props) {
   const { href, icon, label } = props;
-  const isActive = navigationHooks.useIsActivePage(href);
+  const isActive = routerHooks.useIsActivePage(href);
   return (
     <Link
       href={href}
