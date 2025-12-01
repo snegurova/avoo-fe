@@ -15,7 +15,7 @@ import {
 } from '../schemas/validationSchemas';
 import { authApi } from '@avoo/axios';
 import { useAuthStore } from '@avoo/store';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import {
   AuthResponse,
@@ -268,6 +268,26 @@ export const authHooks = {
 
     return {
       sendCodeHandler,
+    };
+  },
+  useLogout: () => {
+    const queryClient = useQueryClient();
+    const { mutate: logoutMutation, isPending } = useMutation<
+      BaseResponse<Record<string, never>>,
+      Error,
+      void
+    >({
+      mutationFn: authApi.logout,
+      onSettled: () => {
+        useAuthStore.getState().logoutStore();
+        queryClient.clear();
+      },
+    });
+
+    utils.useSetPendingApi(isPending);
+
+    return {
+      logoutMutation,
     };
   },
 };
