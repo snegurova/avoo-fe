@@ -1,14 +1,14 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { routes } from '@/_routes/routes';
+import { appRoutes } from '@/_routes/routes';
 import { IconButton } from '@/_components/IconButton/IconButton';
 
 export const ProfileCertificates = () => {
   const router = useRouter();
 
   const handleNavigate = () => {
-    router.push(routes.Certificates);
+    router.push(appRoutes.Certificates);
   };
 
   return (

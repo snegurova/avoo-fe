@@ -1,5 +1,5 @@
 import { View, Text, Pressable } from 'react-native';
-import { FontAwesome } from '@expo/vector-icons';
+import { MaterialIcons } from '@/shared/icons';
 import { useNavigation } from '@react-navigation/native';
 import { RootNavigationProp, RootScreens } from '@/types/navigation';
 
@@ -24,7 +24,7 @@ export const ProfileLanguages = (props: Props) => {
         </Text>
       </View>
       <Pressable className='p-1' onPress={handleNavigate}>
-        <FontAwesome name='pencil' size={14} color='#64748b' />
+        <MaterialIcons name='edit' size={14} color='#64748b' />
       </Pressable>
     </View>
   );

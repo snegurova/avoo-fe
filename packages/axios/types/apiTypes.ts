@@ -25,7 +25,7 @@ export type ResetPasswordResponse = components['schemas']['UserResponseDto'];
 /** User */
 export type UserProfileResponse = components['schemas']['UserProfileEntity'];
 export type UserMediaResponse = {
-  items: components['schemas']['MediaEntity'][] | [];
+  items: components['schemas']['MediaEntity'][];
   pagination: components['schemas']['PaginationDto'];
 };
 
@@ -49,3 +49,10 @@ export type GetSchedulesResponse = {
 
 export type ScheduleEntity = components['schemas']['ScheduleEntity'];
 export type ScheduleUpdateResponse = components['schemas']['UpdateScheduleDto'];
+
+
+/** Calendar */
+export type GetCalendarResponse = {
+  items: components['schemas']['PrivateCalendarResponseDto'][];
+  pagination: components['schemas']['PaginationDto'];
+};

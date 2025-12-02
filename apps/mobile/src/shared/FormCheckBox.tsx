@@ -1,6 +1,6 @@
 import { Control, FieldValues, Path, useController } from 'react-hook-form';
 import { View, Text, StyleSheet, Pressable } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { MaterialIcons } from '@/shared/icons';
 
 type Props<T extends FieldValues> = {
   name: Path<T>;
@@ -31,7 +31,7 @@ export default function FormCheckBox<T extends FieldValues>(props: Props<T>) {
             },
           ]}
         >
-          {field.value && <Ionicons name='checkmark' size={16} color='#fff' />}
+          {field.value && <MaterialIcons name='check' size={16} color='#fff' />}
         </Pressable>
         <Text style={styles.label}>{label}</Text>
       </View>

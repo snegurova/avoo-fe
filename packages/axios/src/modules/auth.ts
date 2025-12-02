@@ -39,6 +39,7 @@ export const authApi = {
     return response.data;
   },
   async logout() {
-    await apiClient.post(LOGOUT_ENDPOINT);
+    const response = await apiClient.post<BaseResponse<Record<string, never>>>(LOGOUT_ENDPOINT);
+    return response.data;
   },
 };
