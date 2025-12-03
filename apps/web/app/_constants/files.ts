@@ -1,0 +1,1 @@
+export const AVATAR_DOWNLOAD_FORMATS = 'image/jpeg,image/jpg,image/png,image/webp';
