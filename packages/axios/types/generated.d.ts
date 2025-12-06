@@ -292,6 +292,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/languages": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["UsersController_getProfileLanguages"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/services": {
         parameters: {
             query?: never;
@@ -660,6 +676,54 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/calendar": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["CalendarController_getCalendar"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/calendar/exceptions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["CalendarController_createException"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/public/calendar": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["CalendarPublicController_getCalendarView"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/schedules": {
         parameters: {
             query?: never;
@@ -756,23 +820,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/calendar": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["CalendarController_getCalendar"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/calendar/exceptions": {
+    "/posts": {
         parameters: {
             query?: never;
             header?: never;
@@ -781,23 +829,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["CalendarController_createException"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/public/calendar": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["CalendarPublicController_getCalendarView"];
-        put?: never;
-        post?: never;
+        post: operations["PostsController_create"];
         delete?: never;
         options?: never;
         head?: never;
@@ -823,16 +855,6 @@ export interface components {
         UserResponseDto: {
             token: string;
             user: components["schemas"]["UserEntity"];
-        };
-        PaginationDto: {
-            /** @example 100 */
-            total: number;
-            /** @example 1 */
-            currentPage: number;
-            /** @example 10 */
-            totalPages: number;
-            /** @example 10 */
-            perPage: number;
         };
         LoginRequestDto: {
             /** @example user@example.com */
@@ -924,14 +946,12 @@ export interface components {
             services: components["schemas"]["ServiceEntity"];
             master: components["schemas"]["MasterEntity"];
         };
-        CustomerEntity: {
+        CustomerInfoDto: {
             id: number;
-            name: Record<string, never>;
+            email: string;
+            name: string;
             phone: string;
-            email: Record<string, never>;
-            notes: Record<string, never>;
-            orders: components["schemas"]["OrderEntity"][];
-            owner: components["schemas"]["UserEntity"];
+            notes?: Record<string, never>;
         };
         OrderEntity: {
             id: number;
@@ -947,7 +967,7 @@ export interface components {
             service: components["schemas"]["ServiceEntity"] | null;
             combination: components["schemas"]["CombinationEntity"] | null;
             master: components["schemas"]["MasterEntity"];
-            customer: components["schemas"]["CustomerEntity"];
+            customer: components["schemas"]["CustomerInfoDto"];
             user: components["schemas"]["UserEntity"];
         };
         BusinessInfoEntity: {
@@ -977,6 +997,16 @@ export interface components {
             services: components["schemas"]["ServiceEntity"][];
             orders: components["schemas"]["OrderEntity"][];
             businessInfo: components["schemas"]["BusinessInfoEntity"] | null;
+        };
+        PaginationDto: {
+            /** @example 100 */
+            total: number;
+            /** @example 1 */
+            currentPage: number;
+            /** @example 10 */
+            totalPages: number;
+            /** @example 10 */
+            perPage: number;
         };
         MediaEntity: {
             id: number;
@@ -1020,7 +1050,7 @@ export interface components {
             name?: string;
             /**
              * @description User phone
-             * @example +1234567890
+             * @example +48512345678
              */
             phone?: string;
             /**
@@ -1051,6 +1081,14 @@ export interface components {
              *     ]
              */
             languages: ("ar" | "bn" | "da" | "de" | "en" | "es" | "fi" | "fr" | "hr" | "hi" | "is" | "it" | "ja" | "ko" | "la" | "lv" | "nl" | "no" | "pl" | "pt" | "ro" | "sv" | "tr" | "uk" | "vi" | "zh" | "fa")[];
+        };
+        ShortMasterInfoDto: {
+            id: number;
+            avatarPreviewUrl: string | null;
+        };
+        GetProfileLanguagesDto: {
+            language: string;
+            masters: components["schemas"]["ShortMasterInfoDto"][];
         };
         CreateServiceDto: {
             /**
@@ -1242,22 +1280,27 @@ export interface components {
             /** Format: binary */
             file: string;
         };
-        CreateOrderDto: {
-            /**
-             * @description Status of the order
-             * @example PENDING
-             */
-            status?: string;
-            /**
-             * @description Additional notes for the order
-             * @example Please arrive 10 minutes early
-             */
-            notes?: string;
+        CreatePrivateOrderDto: {
             /**
              * @description Type of the order: SERVICE or COMBINATION
              * @example SERVICE
              */
             type: string;
+            /**
+             * @description ID of the service for the order (required if type is SERVICE)
+             * @example 2
+             */
+            serviceId?: number;
+            /**
+             * @description ID of the combination for the order (required if type is COMBINATION)
+             * @example 3
+             */
+            combinationId?: number;
+            /**
+             * @description ID of the master assigned to the order
+             * @example 1
+             */
+            masterId: number;
             /**
              * Format: date-time
              * @description Date of the service
@@ -1270,22 +1313,13 @@ export interface components {
              */
             startTimeMinutes: number;
             /**
-             * @description ID of the master assigned to the order
-             * @example 1
+             * @description Additional notes for the order
+             * @example Please arrive 10 minutes early
              */
-            masterId: number;
-            /**
-             * @description ID of the service for the order (required if type is SERVICE)
-             * @example 2
-             */
-            serviceId?: number;
-            /**
-             * @description ID of the combination for the order (required if type is COMBINATION)
-             * @example 3
-             */
-            combinationId?: number;
+            notes?: string;
         };
         CreateCustomerDto: {
+            id?: number;
             /**
              * @description Name of the customer
              * @example John Doe
@@ -1293,7 +1327,7 @@ export interface components {
             name?: string;
             /**
              * @description Phone number of the customer
-             * @example +1234567890
+             * @example +48512345678
              */
             phone: string;
             /**
@@ -1306,16 +1340,10 @@ export interface components {
              * @example Preferred customer
              */
             notes?: string;
-            /**
-             * @description ID of the user who owns the customer
-             * @example 2
-             */
-            ownerId: number;
         };
-        CreateManyOrdersDto: {
-            ordersData: components["schemas"]["CreateOrderDto"][];
+        CreatePrivateOrdersDto: {
+            ordersData: components["schemas"]["CreatePrivateOrderDto"][];
             customerData?: components["schemas"]["CreateCustomerDto"];
-            customerId?: number;
         };
         UpdateOrderStatusDto: {
             /**
@@ -1324,155 +1352,61 @@ export interface components {
              */
             status?: string;
         };
+        CreatePublicOrderDto: {
+            /**
+             * @description Type of the order: SERVICE or COMBINATION
+             * @example SERVICE
+             */
+            type: string;
+            /**
+             * @description ID of the service for the order (required if type is SERVICE)
+             * @example 2
+             */
+            serviceId?: number;
+            /**
+             * @description ID of the combination for the order (required if type is COMBINATION)
+             * @example 3
+             */
+            combinationId?: number;
+            /**
+             * @description ID of the master assigned to the order
+             * @example 1
+             */
+            masterId: number;
+            /**
+             * Format: date-time
+             * @description Date of the service
+             * @example 2025-12-30T00:00:00.000Z
+             */
+            date: string;
+            /**
+             * @description Start time in minutes from midnight
+             * @example 600
+             */
+            startTimeMinutes: number;
+        };
         CreatePublicCustomerDto: {
             /**
              * @description Name of the customer
              * @example John Doe
              */
-            name?: string;
+            name: string;
             /**
              * @description Phone number of the customer
-             * @example +1234567890
+             * @example +48512345678
              */
             phone: string;
             /**
              * @description Email address of the customer
              * @example customer@example.com
              */
-            email?: string;
+            email: string;
         };
-        CreateManyPublicOrdersDto: {
-            ordersData: components["schemas"]["CreateOrderDto"][];
+        CreatePublicOrdersDto: {
+            ordersData: components["schemas"]["CreatePublicOrderDto"][];
             customerData: components["schemas"]["CreatePublicCustomerDto"];
-        };
-        WorkingHourBreakEntity: {
-            id: number;
-            breakStartTimeMinutes: number;
-            breakEndTimeMinutes: number;
-        };
-        WorkingHourEntity: {
-            id: number;
-            day: number;
-            startTimeMinutes: number;
-            endTimeMinutes: number;
-            breaks: components["schemas"]["WorkingHourBreakEntity"][];
-        };
-        ScheduleEntity: {
-            id: number;
-            user: components["schemas"]["UserEntity"];
-            master: components["schemas"]["MasterEntity"];
-            name: string;
-            pattern: number;
-            /** Format: date-time */
-            startAt: string;
-            /** Format: date-time */
-            endAt: string | null;
-            workingHours: components["schemas"]["WorkingHourEntity"][];
-        };
-        CreateWorkingHourBreakDto: {
-            /**
-             * @description Break start time (minutes) 780 = 13:00
-             * @example 780
-             */
-            breakStartTimeMinutes: number;
-            /**
-             * @description Break end time (minutes) 840 = 14:00
-             * @example 840
-             */
-            breakEndTimeMinutes: number;
-        };
-        CreateWorkingHourDto: {
-            /**
-             * @description Work start time (minutes) 540 = 09:00
-             * @example 540
-             */
-            startTimeMinutes: number;
-            /**
-             * @description Work end time (minutes) 1080 = 18:00
-             * @example 1080
-             */
-            endTimeMinutes: number;
-            /**
-             * @description Work day info from start date of schedule
-             * @example 1
-             */
-            day: number;
-            /** @description List of working hours breaks */
-            breaks?: components["schemas"]["CreateWorkingHourBreakDto"][];
-        };
-        CreateScheduleDto: {
-            /**
-             * @description Schedule name (optional)
-             * @example Work schedule
-             */
-            name?: Record<string, never>;
-            /**
-             * @description Schedule pattern( must be the same as working hours items count)
-             * @example 7
-             */
-            pattern: number;
-            /**
-             * Format: date-time
-             * @description Schedule start date(future date)
-             * @example 2025-10-28T00:00:00.000Z
-             */
-            startAt: string;
-            /**
-             * @description Schedule end date (optional)
-             * @example 2026-10-28T00:00:00.000Z
-             */
-            endAt?: Record<string, never>;
-            /** @description List of working hours ( Mon-Fri (Sunday, Saturday Day off)), if start date is Monday */
-            workingHours: components["schemas"]["CreateWorkingHourDto"][];
-            /**
-             * @description Array of master IDs to apply schedule. If omitted, applies to all.
-             * @example [
-             *       1
-             *     ]
-             */
-            mastersId?: string[];
-        };
-        UpdateWorkingHourBreakDto: {
-            /**
-             * @description Break start time (minutes) 780 = 13:00
-             * @example 780
-             */
-            breakStartTimeMinutes?: number;
-            /**
-             * @description Break end time (minutes) 840 = 14:00
-             * @example 840
-             */
-            breakEndTimeMinutes?: number;
-            id?: Record<string, never>;
-        };
-        UpdateWorkingHourDto: {
-            /**
-             * @description Work start time (minutes) 540 = 09:00
-             * @example 540
-             */
-            startTimeMinutes?: number;
-            /**
-             * @description Work end time (minutes) 1080 = 18:00
-             * @example 1080
-             */
-            endTimeMinutes?: number;
-            id: number;
-            /** @description List of working hours breaks */
-            breaks?: components["schemas"]["UpdateWorkingHourBreakDto"][];
-        };
-        UpdateScheduleDto: {
-            /**
-             * @description Schedule name (optional)
-             * @example Work schedule
-             */
-            name?: Record<string, never>;
-            /**
-             * @description Schedule end date (optional)
-             * @example 2026-10-28T00:00:00.000Z
-             */
-            endAt?: Record<string, never>;
-            /** @description List of working hours ( Mon-Fri (Sunday, Saturday Day off)), if start date is Monday */
-            workingHours?: components["schemas"]["UpdateWorkingHourDto"][];
+            /** @example 59BCEF4C */
+            referralCode?: Record<string, never>;
         };
         AvailabilityDto: {
             /**
@@ -1748,6 +1682,158 @@ export interface components {
              * @example 2025-10-28T10:00:00.000Z
              */
             end: string;
+        };
+        WorkingHourBreakEntity: {
+            id: number;
+            breakStartTimeMinutes: number;
+            breakEndTimeMinutes: number;
+        };
+        WorkingHourEntity: {
+            id: number;
+            day: number;
+            startTimeMinutes: number;
+            endTimeMinutes: number;
+            breaks: components["schemas"]["WorkingHourBreakEntity"][];
+        };
+        ScheduleEntity: {
+            id: number;
+            master: components["schemas"]["MasterEntity"];
+            name: string;
+            pattern: number;
+            /** Format: date-time */
+            startAt: string;
+            /** Format: date-time */
+            endAt: string | null;
+            workingHours: components["schemas"]["WorkingHourEntity"][];
+        };
+        CreateWorkingHourBreakDto: {
+            /**
+             * @description Break start time (minutes) 780 = 13:00
+             * @example 780
+             */
+            breakStartTimeMinutes: number;
+            /**
+             * @description Break end time (minutes) 840 = 14:00
+             * @example 840
+             */
+            breakEndTimeMinutes: number;
+        };
+        CreateWorkingHourDto: {
+            /**
+             * @description Work start time (minutes) 540 = 09:00
+             * @example 540
+             */
+            startTimeMinutes: number;
+            /**
+             * @description Work end time (minutes) 1080 = 18:00
+             * @example 1080
+             */
+            endTimeMinutes: number;
+            /**
+             * @description Work day info from start date of schedule
+             * @example 1
+             */
+            day: number;
+            /** @description List of working hours breaks */
+            breaks?: components["schemas"]["CreateWorkingHourBreakDto"][];
+        };
+        CreateScheduleDto: {
+            /**
+             * @description Schedule name (optional)
+             * @example Work schedule
+             */
+            name?: Record<string, never>;
+            /**
+             * @description Schedule pattern( must be the same as working hours items count)
+             * @example 7
+             */
+            pattern: number;
+            /**
+             * Format: date-time
+             * @description Schedule start date(future date)
+             * @example 2025-10-28T00:00:00.000Z
+             */
+            startAt: string;
+            /**
+             * @description Schedule end date (optional)
+             * @example 2026-10-28T00:00:00.000Z
+             */
+            endAt?: Record<string, never>;
+            /** @description List of working hours ( Mon-Fri (Sunday, Saturday Day off)), if start date is Monday */
+            workingHours: components["schemas"]["CreateWorkingHourDto"][];
+            /**
+             * @description Array of master IDs to apply schedule. If omitted, applies to all.
+             * @example [
+             *       1
+             *     ]
+             */
+            mastersId?: string[];
+        };
+        UpdateWorkingHourBreakDto: {
+            /**
+             * @description Break start time (minutes) 780 = 13:00
+             * @example 780
+             */
+            breakStartTimeMinutes?: number;
+            /**
+             * @description Break end time (minutes) 840 = 14:00
+             * @example 840
+             */
+            breakEndTimeMinutes?: number;
+            id?: Record<string, never>;
+        };
+        UpdateWorkingHourDto: {
+            /**
+             * @description Work start time (minutes) 540 = 09:00
+             * @example 540
+             */
+            startTimeMinutes?: number;
+            /**
+             * @description Work end time (minutes) 1080 = 18:00
+             * @example 1080
+             */
+            endTimeMinutes?: number;
+            id: number;
+            /** @description List of working hours breaks */
+            breaks?: components["schemas"]["UpdateWorkingHourBreakDto"][];
+        };
+        UpdateScheduleDto: {
+            /**
+             * @description Schedule name (optional)
+             * @example Work schedule
+             */
+            name?: Record<string, never>;
+            /**
+             * @description Schedule end date (optional)
+             * @example 2026-10-28T00:00:00.000Z
+             */
+            endAt?: Record<string, never>;
+            /** @description List of working hours ( Mon-Fri (Sunday, Saturday Day off)), if start date is Monday */
+            workingHours?: components["schemas"]["UpdateWorkingHourDto"][];
+        };
+        PostEntity: {
+            id: number;
+            description: string | null;
+            user: components["schemas"]["UserEntity"];
+            master: components["schemas"]["MasterEntity"];
+            service: components["schemas"]["ServiceEntity"];
+        };
+        CreatePostDto: {
+            /**
+             * @description Description of the post
+             * @example This is a sample post description.
+             */
+            description?: string;
+            /**
+             * @description ID of the master associated with the post
+             * @example 1
+             */
+            masterId: number;
+            /**
+             * @description ID of the service associated with the post
+             * @example 1
+             */
+            serviceId: number;
         };
     };
     responses: never;
@@ -2486,6 +2572,37 @@ export interface operations {
                 content: {
                     "application/json": components["schemas"]["SuccessResponseDto"] & {
                         data?: components["schemas"]["MediaEntity"];
+                    };
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    UsersController_getProfileLanguages: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Get languages grouped by master */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SuccessResponseDto"] & {
+                        data?: components["schemas"]["GetProfileLanguagesDto"][];
                     };
                 };
             };
@@ -3477,10 +3594,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["SuccessResponseDto"] & {
-                        data?: {
-                            items?: components["schemas"]["CategoryEntity"][];
-                            pagination?: components["schemas"]["PaginationDto"];
-                        };
+                        data?: components["schemas"]["CategoryEntity"][];
                     };
                 };
             };
@@ -3586,7 +3700,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["CreateManyOrdersDto"];
+                "application/json": components["schemas"]["CreatePrivateOrdersDto"];
             };
         };
         responses: {
@@ -3597,7 +3711,10 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["SuccessResponseDto"] & {
-                        data?: components["schemas"]["OrderEntity"];
+                        data?: {
+                            items?: components["schemas"]["OrderEntity"][];
+                            pagination?: components["schemas"]["PaginationDto"];
+                        };
                     };
                 };
             };
@@ -3667,7 +3784,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["CreateManyPublicOrdersDto"];
+                "application/json": components["schemas"]["CreatePublicOrdersDto"];
             };
         };
         responses: {
@@ -3679,6 +3796,134 @@ export interface operations {
                 content: {
                     "application/json": components["schemas"]["SuccessResponseDto"] & {
                         data?: components["schemas"]["OrderEntity"];
+                    };
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    CalendarController_getCalendar: {
+        parameters: {
+            query: {
+                /** @description Master ID */
+                masterId?: number;
+                /** @description View type (week, month, year) */
+                view?: string;
+                /** @description Range from date */
+                rangeFromDate: string;
+                /** @description Range to date */
+                rangeToDate: string;
+                /** @description Service ID */
+                serviceId?: number;
+                /** @description Combination ID */
+                combinationId?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Calendar entities */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SuccessResponseDto"] & {
+                        data?: components["schemas"]["PrivateCalendarResponseDto"][];
+                    };
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    CalendarController_createException: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateCalendarExceptionDto"];
+            };
+        };
+        responses: {
+            /** @description Calendar exception entities */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SuccessResponseDto"] & {
+                        data?: {
+                            items?: components["schemas"]["CalendarExceptionEntity"][];
+                            pagination?: components["schemas"]["PaginationDto"];
+                        };
+                    };
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    CalendarPublicController_getCalendarView: {
+        parameters: {
+            query: {
+                /** @description Filter by user ID */
+                userId: number;
+                /** @description Master ID */
+                masterId?: number;
+                /** @description View type (week, month, year) */
+                view?: string;
+                /** @description Range from date */
+                rangeFromDate: string;
+                /** @description Range to date */
+                rangeToDate: string;
+                /** @description Service ID */
+                serviceId?: number;
+                /** @description Combination ID */
+                combinationId?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Calendar view */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SuccessResponseDto"] & {
+                        data?: components["schemas"]["PublicCalendarResponseDto"][];
                     };
                 };
             };
@@ -3747,17 +3992,14 @@ export interface operations {
             };
         };
         responses: {
-            /** @description Schedule created */
+            /** @description Schedules created */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
                     "application/json": components["schemas"]["SuccessResponseDto"] & {
-                        data?: {
-                            items?: components["schemas"]["ScheduleEntity"][];
-                            pagination?: components["schemas"]["PaginationDto"];
-                        };
+                        data?: components["schemas"]["ScheduleEntity"][];
                     };
                 };
             };
@@ -4096,51 +4338,7 @@ export interface operations {
             };
         };
     };
-    CalendarController_getCalendar: {
-        parameters: {
-            query: {
-                /** @description Master ID */
-                masterId?: number;
-                /** @description View type (week, month, year) */
-                view?: string;
-                /** @description Range from date */
-                rangeFromDate: string;
-                /** @description Range to date */
-                rangeToDate: string;
-                /** @description Service ID */
-                serviceId?: number;
-                /** @description Combination ID */
-                combinationId?: number;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Calendar entities */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["SuccessResponseDto"] & {
-                        data?: components["schemas"]["PrivateCalendarResponseDto"];
-                    };
-                };
-            };
-            /** @description Bad Request */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-        };
-    };
-    CalendarController_createException: {
+    PostsController_create: {
         parameters: {
             query?: never;
             header?: never;
@@ -4149,67 +4347,18 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["CreateCalendarExceptionDto"];
+                "application/json": components["schemas"]["CreatePostDto"];
             };
         };
         responses: {
-            /** @description Calendar exception entities */
+            /** @description Post was created successfully */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
                     "application/json": components["schemas"]["SuccessResponseDto"] & {
-                        data?: {
-                            items?: components["schemas"]["CalendarExceptionEntity"][];
-                            pagination?: components["schemas"]["PaginationDto"];
-                        };
-                    };
-                };
-            };
-            /** @description Bad Request */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-        };
-    };
-    CalendarPublicController_getCalendarView: {
-        parameters: {
-            query: {
-                /** @description Filter by user ID */
-                userId: number;
-                /** @description Master ID */
-                masterId?: number;
-                /** @description View type (week, month, year) */
-                view?: string;
-                /** @description Range from date */
-                rangeFromDate: string;
-                /** @description Range to date */
-                rangeToDate: string;
-                /** @description Service ID */
-                serviceId?: number;
-                /** @description Combination ID */
-                combinationId?: number;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Calendar view */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["SuccessResponseDto"] & {
-                        data?: components["schemas"]["PublicCalendarResponseDto"];
+                        data?: components["schemas"]["PostEntity"];
                     };
                 };
             };
