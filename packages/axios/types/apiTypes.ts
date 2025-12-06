@@ -48,7 +48,13 @@ export type GetSchedulesResponse = {
 };
 
 /** Calendar */
-export type GetCalendarResponse = {
-  items: components['schemas']['PrivateCalendarResponseDto'][];
-  pagination: components['schemas']['PaginationDto'];
+export type GetCalendarResponse = components['schemas']['PrivateCalendarResponseDto'][];
+
+export type PrivateCalendarQueryParams = {
+  masterId?: number;
+  view?: 'week' | 'month' | 'year';
+  rangeFromDate: string; // ISO string
+  rangeToDate: string; // ISO string
+  serviceId?: number;
+  combinationId?: number;
 };
