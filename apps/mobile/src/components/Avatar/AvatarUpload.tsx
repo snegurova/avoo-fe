@@ -1,7 +1,6 @@
 import { View, Image, ImageSourcePropType, Pressable, ActivityIndicator } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
-import { imagePickerHooks } from '@/hooks/imagePickerHooks';
-import { UploadFile } from '@avoo/axios/types/apiTypes';
+import { imagePickerHooks, UploadFile } from '@/hooks/imagePickerHooks';
 import { useApiStatusStore } from '@avoo/store';
 
 type Props = {
@@ -12,12 +11,7 @@ type Props = {
 };
 
 export const AvatarUpload = (props: Props) => {
-  const {
-    size = 80,
-    imageUri,
-    iconSize = 30,
-    onImageSelected,
-  } = props;
+  const { size = 80, imageUri, iconSize = 30, onImageSelected } = props;
 
   const isPending = useApiStatusStore((state) => state.isPending);
 
@@ -52,6 +46,5 @@ export const AvatarUpload = (props: Props) => {
     </Pressable>
   );
 };
-
 
 export default AvatarUpload;
