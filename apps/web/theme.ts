@@ -143,6 +143,9 @@ const theme = createTheme({
             color: theme.palette.text.white,
           }),
         }),
+        label: {
+          fontWeight: typography.fontWeight.medium,
+        },
       },
     },
   },
