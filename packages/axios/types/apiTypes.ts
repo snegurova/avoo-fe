@@ -1,4 +1,4 @@
-import type { components } from './generated';
+import type { components, operations } from './generated';
 
 export type Error = {
   field: string;
@@ -29,13 +29,6 @@ export type UserMediaResponse = {
   pagination: components['schemas']['PaginationDto'];
 };
 
-export type UploadFile = {
-  uri: string;
-  type?: string | null;
-  name?: string | null;
-};
-
-export type FileInput = File | UploadFile;
 export type UserUpdateAvatarResponse = components['schemas']['UserEntity'];
 
 /** Master */
@@ -50,11 +43,13 @@ export type GetSchedulesResponse = {
 /** Calendar */
 export type GetCalendarResponse = components['schemas']['PrivateCalendarResponseDto'][];
 
-export type PrivateCalendarQueryParams = {
-  masterId?: number;
-  view?: 'week' | 'month' | 'year';
-  rangeFromDate: string; // ISO string
-  rangeToDate: string; // ISO string
-  serviceId?: number;
-  combinationId?: number;
-};
+export enum CalendarView {
+  Week = 'week',
+  Month = 'month',
+  Year = 'year',
+}
+
+export type PrivateCalendarQueryParams = Omit<
+  operations['CalendarController_getCalendar']['parameters']['query'],
+  'view'
+> & { view?: CalendarView };
