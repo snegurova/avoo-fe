@@ -40,6 +40,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@avoo/design-tokens@workspace:*, @avoo/design-tokens@workspace:packages/design-tokens":
+  version: 0.0.0-use.local
+  resolution: "@avoo/design-tokens@workspace:packages/design-tokens"
+  languageName: unknown
+  linkType: soft
+
 "@avoo/hooks@workspace:*, @avoo/hooks@workspace:packages/hooks":
   version: 0.0.0-use.local
   resolution: "@avoo/hooks@workspace:packages/hooks"
@@ -16209,6 +16215,7 @@ __metadata:
   resolution: "web@workspace:apps/web"
   dependencies:
     "@avoo/axios": "workspace:*"
+    "@avoo/design-tokens": "workspace:*"
     "@avoo/hooks": "workspace:*"
     "@avoo/store": "workspace:*"
     "@chromatic-com/storybook": "npm:^4.1.2"
