@@ -142,7 +142,9 @@ const theme = createTheme({
             backgroundColor: theme.palette.outOfSchedule.main,
             color: theme.palette.text.white,
           }),
+          padding: '4px 6px',
         }),
+
         label: {
           fontWeight: typography.fontWeight.medium,
         },
