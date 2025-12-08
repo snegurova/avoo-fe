@@ -31,6 +31,7 @@ export const userHooks = {
       email: profileInfo?.email ?? 'Email not set',
       phone: profileInfo?.businessInfo?.phone ?? 'Phone not set',
       avatarUrl: profileInfo?.avatarPreviewUrl ?? profileInfo?.avatarUrl ?? null,
+      avatarPreviewUrl: profileInfo?.avatarPreviewUrl ?? null,
     };
 
     const visualLanguages = profileInfo?.businessInfo?.languages ?? null;

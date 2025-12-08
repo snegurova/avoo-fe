@@ -1,9 +1,10 @@
 'use client';
 import { createTheme } from '@mui/material/styles';
 import { Roboto } from 'next/font/google';
+import { colors, radius, typography } from '@avoo/design-tokens';
 
 const roboto = Roboto({
-  weight: ['300', '400', '500', '700'],
+  weight: ['400', '500', '700'],
   subsets: ['latin'],
   display: 'swap',
 });
@@ -13,12 +14,141 @@ const theme = createTheme({
   cssVariables: true,
   typography: {
     fontFamily: roboto.style.fontFamily,
+    fontWeightRegular: Number(typography.fontWeight.regular),
+    fontWeightMedium: Number(typography.fontWeight.medium),
+    fontWeightBold: Number(typography.fontWeight.bold),
+    h1: {
+      fontSize: typography.fontSize['2xl'],
+      fontWeight: typography.fontWeight.bold,
+      lineHeight: 1.1,
+    },
+    h2: {
+      fontSize: typography.fontSize.xl,
+      fontWeight: typography.fontWeight.bold,
+      lineHeight: 1.15,
+    },
+    h3: {
+      fontSize: typography.fontSize.lg,
+      fontWeight: typography.fontWeight.bold,
+      lineHeight: 1.2,
+    },
+    h4: {
+      fontSize: typography.fontSize.md,
+      fontWeight: typography.fontWeight.medium,
+    },
+    h5: {
+      fontSize: typography.fontSize.md,
+      fontWeight: typography.fontWeight.medium,
+    },
+    h6: {
+      fontSize: typography.fontSize.md,
+      fontWeight: typography.fontWeight.medium,
+    },
+
+    subtitle1: {
+      fontSize: typography.fontSize.md,
+      fontWeight: typography.fontWeight.medium,
+    },
+    subtitle2: {
+      fontSize: typography.fontSize.sm,
+      fontWeight: typography.fontWeight.bold,
+    },
+
+    body1: {
+      fontSize: typography.fontSize.sm,
+      fontWeight: typography.fontWeight.regular,
+    },
+    body2: {
+      fontSize: typography.fontSize.xs,
+      fontWeight: typography.fontWeight.regular,
+    },
+
+    button: {
+      fontSize: typography.fontSize.md,
+      fontWeight: typography.fontWeight.medium,
+      textTransform: 'none',
+    },
+
+    caption: {
+      fontSize: typography.fontSize.xs,
+      fontWeight: typography.fontWeight.regular,
+    },
+
+    overline: {
+      fontSize: typography.fontSize.xs,
+      fontWeight: typography.fontWeight.medium,
+      textTransform: 'uppercase',
+    },
   },
   palette: {
     primary: {
-      light: '#F8F6FC',
-      main: '#E8DEEE',
-      dark: '#BB94CE',
+      main: colors.primary[500],
+      light: colors.primary[100],
+      dark: colors.primary[800],
+    },
+    secondary: {
+      main: colors.black,
+    },
+    pending: {
+      main: colors.orange[500],
+      light: colors.orange[50],
+      dark: colors.orange[700],
+    },
+    outOfSchedule: {
+      main: colors.red[700],
+      light: colors.red[50],
+      dark: colors.red[700],
+    },
+    confirmed: {
+      main: colors.blue[700],
+      light: colors.blue[50],
+      dark: colors.blue[700],
+    },
+    info: {
+      main: colors.primary[100],
+      light: colors.primary[100],
+      dark: colors.primary[800],
+    },
+    text: {
+      primary: colors.black,
+      secondary: colors.gray[500],
+      info: colors.primary[800],
+      white: colors.white,
+    },
+    background: {
+      default: colors.primary[50],
+      paper: colors.white,
+      info: colors.primary[100],
+      pending: colors.orange[50],
+      confirmed: colors.blue[50],
+    },
+  },
+  shape: {
+    borderRadius: radius.md,
+    borderRadiusSm: radius.sm,
+    borderRadiusMd: radius.md,
+    borderRadiusLg: radius.lg,
+    borderRadiusXl: radius.xl,
+  },
+  components: {
+    MuiChip: {
+      styleOverrides: {
+        root: ({ theme, ownerState }) => ({
+          ...(ownerState.color === 'pending' && {
+            backgroundColor: theme.palette.pending.main,
+            color: theme.palette.text.white,
+          }),
+          ...(ownerState.color === 'outOfSchedule' && {
+            backgroundColor: theme.palette.outOfSchedule.main,
+            color: theme.palette.text.white,
+          }),
+          padding: '4px 6px',
+        }),
+
+        label: {
+          fontWeight: typography.fontWeight.medium,
+        },
+      },
     },
   },
 });
