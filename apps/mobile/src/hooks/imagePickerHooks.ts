@@ -1,24 +1,26 @@
 import { Alert } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { permissionsHooks } from './permissionsHooks';
-import { UploadFile } from '@avoo/axios/types/apiTypes';
-import {
-  ImagePickerOptions,
-  MediaType,
-  pickImageOptions,
-  Source,
-} from '../types/imagePicker';
+import { ImagePickerOptions, MediaType, pickImageOptions, Source } from '../types/imagePicker';
 
-const defaultOptions: ImagePickerOptions = {
-  allowsEditing: true,
-  aspect: [1, 1],
-  quality: 0.8,
-  mediaTypes: MediaType.Images,
+export type UploadFile = {
+  uri: string;
+  type?: string | null;
+  name?: string | null;
 };
+
+export type FileInput = File | UploadFile;
 
 export const imagePickerHooks = {
   pickImage: async (props: pickImageOptions): Promise<UploadFile | null> => {
     const { source, options } = props;
+
+    const defaultOptions: ImagePickerOptions = {
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 0.8,
+      mediaTypes: MediaType.Images,
+    };
 
     const hasPermission = await permissionsHooks.requestPermissions();
     if (!hasPermission) return null;
@@ -29,7 +31,7 @@ export const imagePickerHooks = {
 
     if (source === Source.Camera) {
       result = await ImagePicker.launchCameraAsync(pickerOptions);
-    } 
+    }
 
     if (source === Source.Gallery) {
       result = await ImagePicker.launchImageLibraryAsync(pickerOptions);
@@ -74,4 +76,3 @@ export const imagePickerHooks = {
     );
   },
 };
-
