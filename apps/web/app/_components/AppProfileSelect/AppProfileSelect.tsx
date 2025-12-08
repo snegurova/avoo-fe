@@ -6,6 +6,7 @@ import DropdownList from '@/_components/DropdownList/DropdownList';
 import { useRouter } from 'next/navigation';
 import { appRoutes } from '@/_routes/routes';
 import { authHooks } from '@avoo/hooks';
+import { Avatar, AvatarSize } from '@/_components/Avatar/Avatar';
 
 export default function AppProfileSelect() {
   const [isOpen, setIsOpen] = useState(false);
@@ -48,15 +49,10 @@ export default function AppProfileSelect() {
     setIsOpen(false);
   }, []);
 
-  const firstLetter = visualProfileInfo?.name ? visualProfileInfo.name.charAt(0) : '';
-
   return (
     <div className='relative select-profile-container'>
-      <button
-        className='rounded-full bg-avatar w-10 h-10 flex items-center justify-center text-xl font-medium cursor-pointer'
-        onClick={toggleOpen}
-      >
-        <span className='uppercase'>{firstLetter}</span>
+      <button className='rounded-full cursor-pointer' onClick={toggleOpen}>
+        <Avatar name={visualProfileInfo?.name} size={AvatarSize.Small} />
       </button>
       {isOpen && <DropdownList options={options} closeDropdown={closeDropdown} isRight />}
     </div>

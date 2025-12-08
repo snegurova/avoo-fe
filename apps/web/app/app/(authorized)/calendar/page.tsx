@@ -1,28 +1,17 @@
 'use client';
-import React, { useState } from 'react';
+import React from 'react';
 import AppWrapper from '@/_components/AppWrapper/AppWrapper';
-import { calendarHooks } from '@avoo/hooks';
-import { PrivateCalendarQueryParams } from '@avoo/axios/types/apiTypes';
+import { Typography } from '@mui/material';
+import Calendar from '@/_components/Calendar/Calendar';
 
 export default function CalendarPage() {
-  const [params, setParams] = useState<PrivateCalendarQueryParams>({
-    rangeFromDate: new Date().toISOString(),
-    rangeToDate: new Date(new Date().setDate(new Date().getDate() + 2)).toISOString(),
-  });
-  const calendar = calendarHooks.useGetCalendar(params);
-
   return (
     <AppWrapper>
       <div className='p-4 flex justify-between items-center'>
-        <h1>Calendar</h1>
+        <Typography component='h1'>Calendar</Typography>
         <div className=''></div>
       </div>
-      <div className='pb-4'>
-        {calendar &&
-          calendar.map((schedule) => (
-            <div key={`${schedule.userId} ${schedule.masterId || 'common'}`}>{schedule.userId}</div>
-          ))}
-      </div>
+      <Calendar />
     </AppWrapper>
   );
 }

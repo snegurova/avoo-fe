@@ -6,19 +6,35 @@ import DropdownList from '@/_components/DropdownList/DropdownList';
 type Props = {
   label: string;
   options: { label: string; handler: () => void }[];
+  type?: 'solid' | 'outline';
 };
 
 const selectButton = tv({
-  base: 'fill-white transition-transform',
+  base: 'rounded-2xl cursor-pointer flex items-center',
+  variants: {
+    type: {
+      solid: 'text-white bg-black gap-6 px-6 py-2.5',
+      outline:
+        'text-contorlsText border border-controlsBorder bg-transparent gap-4 px-3 py-2.5 text-sm leading-none',
+    },
+  },
+});
+
+const selectIcon = tv({
+  base: 'transition-transform',
   variants: {
     open: {
       true: '-scale-y-100',
+    },
+    type: {
+      outline: 'fill-contorlsText w-3.5 h-3.5',
+      solid: 'fill-white',
     },
   },
 });
 
 export default function SelectButton(props: Props) {
-  const { label, options } = props;
+  const { label, options, type = 'solid' } = props;
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleOpen = () => {
@@ -43,14 +59,11 @@ export default function SelectButton(props: Props) {
 
   return (
     <div className='relative select-button-container'>
-      <button
-        className='px-6 py-2.5 rounded-2xl text-white bg-black cursor-pointer flex gap-6 items-center'
-        onClick={toggleOpen}
-      >
-        <span>{label}</span>
-        <ArrowDownIcon className={selectButton({ open: isOpen })} />
+      <button className={selectButton({ type })} onClick={toggleOpen}>
+        <span className='capitalize'>{label}</span>
+        <ArrowDownIcon className={selectIcon({ open: isOpen, type })} />
       </button>
-      {isOpen && <DropdownList options={options} closeDropdown={closeDropdown} />}
+      {isOpen && <DropdownList options={options} closeDropdown={closeDropdown} type={type} />}
     </div>
   );
 }

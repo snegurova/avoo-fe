@@ -41,6 +41,8 @@ export type UserUpdateAvatarResponse = components['schemas']['UserEntity'];
 /** Master */
 export type MasterWithRelationsEntityResponse = components['schemas']['MasterEntity'][];
 
+export type MasterWithRelationsEntity = components['schemas']['MasterEntity'];
+
 /** Schedule */
 export type GetSchedulesResponse = {
   items: components['schemas']['ScheduleEntity'][];
@@ -50,6 +52,8 @@ export type GetSchedulesResponse = {
 /** Calendar */
 export type GetCalendarResponse = components['schemas']['PrivateCalendarResponseDto'][];
 
+export type CalendarItem = components['schemas']['PrivateCalendarResponseDto'];
+
 export type PrivateCalendarQueryParams = {
   masterId?: number;
   view?: 'week' | 'month' | 'year';
@@ -58,3 +62,5 @@ export type PrivateCalendarQueryParams = {
   serviceId?: number;
   combinationId?: number;
 };
+
+export type PrivateEvent = components['schemas']['PrivateEventDto'];

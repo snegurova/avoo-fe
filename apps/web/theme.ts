@@ -1,6 +1,7 @@
 'use client';
 import { createTheme } from '@mui/material/styles';
 import { Roboto } from 'next/font/google';
+import type {} from '@mui/x-date-pickers/themeAugmentation';
 
 const roboto = Roboto({
   weight: ['300', '400', '500', '700'],
@@ -19,6 +20,11 @@ const theme = createTheme({
       light: '#F8F6FC',
       main: '#E8DEEE',
       dark: '#BB94CE',
+    },
+  },
+  components: {
+    MuiDatePicker: {
+      defaultProps: {},
     },
   },
 });
