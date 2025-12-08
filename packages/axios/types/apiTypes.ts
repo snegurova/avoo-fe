@@ -49,6 +49,7 @@ export type GetSchedulesResponse = {
 
 export type ScheduleEntity = components['schemas']['ScheduleEntity'];
 export type ScheduleUpdateResponse = components['schemas']['UpdateScheduleDto'];
+export type ScheduleCreateResponse = components['schemas']['CreateScheduleDto'];
 
 
 /** Calendar */

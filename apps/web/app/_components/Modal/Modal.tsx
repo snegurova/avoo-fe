@@ -1,51 +1,33 @@
-import React, { useState, useEffect, ReactNode, useRef } from 'react';
-import { createPortal } from 'react-dom';
-
+import React, { ReactNode } from 'react';
+import MuiModal from '@mui/material/Modal';
+import Box from '@mui/material/Box';
 export type Props = {
   isOpen: boolean;
   onClose: () => void;
   children: ReactNode;
 };
-
-export const Modal = ({ isOpen, onClose, children }: Props) => {
-  const [mounted, setMounted] = useState(false);
-  const modalRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    setMounted(true);
-    return () => setMounted(false);
-  }, []);
-
-  useEffect(() => {
-    if (!isOpen) return;
-
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        onClose();
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isOpen, onClose]);
-
-  const handleOverlayClick = (e: React.MouseEvent) => {
-    if (modalRef.current && !modalRef.current.contains(e.target as Node)) {
-      onClose();
-    }
-  };
-
-  if (!mounted || !isOpen) return null;
-
-  return createPortal(
-    <div
-      className='fixed inset-0 bg-gray-900/50 flex items-center justify-center z-50'
-      onClick={handleOverlayClick}
+const style = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  bgcolor: 'background.paper',
+  p: 4,
+  borderRadius: 2,
+  maxHeight: '90%',
+  overflowY: 'auto',
+};
+export const Modal = (props: Props) => {
+  const { isOpen, onClose, children } = props;
+  return (
+    <MuiModal
+      open={isOpen}
+      onClose={onClose}
+      aria-labelledby='modal-modal-title'
+      aria-describedby='modal-modal-description'
     >
-      <div
-        className='bg-white p-6 rounded-lg shadow-lg max-w-sm w-full max-h-[90vh] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200'
-        ref={modalRef}
-      >
+      <Box sx={style}>
         <button
           onClick={onClose}
           className='float-right text-gray-600 hover:text-gray-800 cursor-pointer'
@@ -53,8 +35,7 @@ export const Modal = ({ isOpen, onClose, children }: Props) => {
           &times;
         </button>
         {children}
-      </div>
-    </div>,
-    document.body,
+      </Box>
+    </MuiModal>
   );
 };

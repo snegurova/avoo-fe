@@ -4,7 +4,6 @@ import { masterHooks, scheduleHooks } from '@avoo/hooks';
 import { Modal } from '../Modal/Modal';
 import FormInput from '../FormInput/FormInput';
 import { Button, ButtonFit, ButtonIntent } from '../Button/Button';
-import { routes } from '@/_routes/routes';
 import { useRouter } from 'next/navigation';
 import { FormSelect } from '../FormSelect/FormSelect';
 import { FormMultiSelect } from '../FormMultiSelect/FormMultiSelect';
@@ -17,7 +16,6 @@ type Props = {
 };
 
 export const ScheduleEditModal = (props: Props) => {
-  const router = useRouter();
   const { scheduleId, isOpen, onClose } = props;
   if (!scheduleId) return null;
 
@@ -25,7 +23,7 @@ export const ScheduleEditModal = (props: Props) => {
 
   const { register, handleSubmit, errors } = scheduleHooks.useUpdateScheduleForm({
     onSuccess: () => {
-      router.push(routes.WorkingHours);
+      console.log('Schedule updated successfully');
     },
   });
   const TYPE_OF_SCHEDULE = [
@@ -62,7 +60,7 @@ export const ScheduleEditModal = (props: Props) => {
           error={errors.name?.message}
           defaultValue={schedule.name}
         />
-        <FormSelect
+        {/* <FormSelect
           label='Type of schedule'
           id={schedule.id.toString()}
           name='type'
@@ -80,7 +78,7 @@ export const ScheduleEditModal = (props: Props) => {
           name='startDate'
           label='Start date'
           defaultValue={convertDateToStringDateFormat(new Date(schedule.startAt))}
-        />
+        /> */}
         {schedule.workingHours.map((workingHour, index) => (
           <WorkingHoursDaySettings key={index} name='workingHours' workingHour={workingHour} />
         ))}
@@ -101,7 +99,6 @@ export const ScheduleEditModal = (props: Props) => {
           </Button>
           <Button
             onClick={handleSubmit}
-            disabled={true}
             loading={false}
             fit={ButtonFit.Inline}
             intent={ButtonIntent.Primary}

@@ -78,10 +78,11 @@ type Props = {
   className?: string;
   ariaLabel?: string;
   disabled?: boolean;
+  type?: 'button' | 'submit' | 'reset';
 };
 
 export const IconButton = (props: Props) => {
-  const { icon, onClick, size, rounded, variant, className, ariaLabel, disabled } = props;
+  const { icon, onClick, size, rounded, variant, className, ariaLabel, disabled, ...rest } = props;
 
   const handleClick = hooks.useOnClick({ disabled, onClick });
 
@@ -91,6 +92,7 @@ export const IconButton = (props: Props) => {
       disabled={disabled}
       className={iconButton({ size, rounded, variant, className })}
       aria-label={ariaLabel}
+      {...rest}
     >
       {typeof icon === 'string' ? <span>{icon}</span> : icon}
     </button>

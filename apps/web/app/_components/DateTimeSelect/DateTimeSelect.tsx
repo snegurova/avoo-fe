@@ -1,40 +1,40 @@
 import React from 'react';
+import { InputHTMLAttributes } from 'react';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import dayjs from 'dayjs';
+import { MobileDatePicker, StaticDatePicker } from '@mui/x-date-pickers';
 
-interface DateTimeSelectProps {
+type Props = Omit<InputHTMLAttributes<HTMLInputElement>, 'className'> & {
   name: string;
   label?: string;
-  value?: string;
+  value: dayjs.Dayjs | null;
   defaultValue?: string;
   disabled?: boolean;
-  error?: string | boolean;
+  error?: string | null;
   onChange?: (value: string) => void;
-}
+};
 
-export const DateTimeSelect = ({
-  name,
-  label,
-  value,
-  defaultValue,
-  disabled,
-  error,
-  onChange,
-}: DateTimeSelectProps) => {
+export const DateTimeSelect = (props: Props) => {
+  const { name, label, value, defaultValue, disabled, error = null, onChange, ...rest } = props;
   return (
-    <div className='flex flex-col gap-1'>
-      <label className='text-sm font-medium text-gray-700'>
-        {label}
-        <input
-          type='date'
-          id={name}
-          name={name}
-          value={value}
-          defaultValue={defaultValue}
-          disabled={disabled}
-          onChange={(e) => onChange?.(e.target.value)}
-          className='w-full rounded-md border transition px-3 py-2 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60'
+    <>
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <DatePicker
+          value={value ?? (defaultValue ? dayjs(defaultValue) : null)}
+          format='MMMM D, YYYY'
+          onChange={onChange}
+          slotProps={{
+            textField: {
+              fullWidth: true,
+              size: 'small',
+            },
+          }}
+          sx={{ pb: 1, pt: 1 }}
         />
-      </label>
+      </LocalizationProvider>
       {error && <p className='text-sm text-red-600'>{error}</p>}
-    </div>
+    </>
   );
 };
