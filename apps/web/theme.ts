@@ -82,7 +82,7 @@ const theme = createTheme({
   },
   palette: {
     primary: {
-      main: colors.primary[200],
+      main: colors.primary[500],
       light: colors.primary[100],
       dark: colors.primary[800],
     },

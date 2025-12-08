@@ -1,5 +1,7 @@
+import { Secondary } from '../../../apps/web/app/_components/IconButton/IconButton.stories';
+
 export const colors = {
-  black: '#141a23',
+  black: '#0C1015',
   white: '#ffffff',
 
   gray: {
