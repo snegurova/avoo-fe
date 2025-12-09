@@ -9,7 +9,6 @@ import {
   useWatch,
 } from 'react-hook-form';
 import { FormTimeSelect } from '../FormTimeSelect/FormTimeSelect';
-import { IconButton } from '../IconButton/IconButton';
 import React from 'react';
 import { ScheduleCreateFormData } from '@avoo/hooks/schemas/schedulesValidationSchemas';
 import {
@@ -18,7 +17,12 @@ import {
   END_MINUTE,
   ScheduleKey,
   START_MINUTE,
-} from '@/_utils/_common/schedule.common';
+  WORKING_HOURS_OPTIONS,
+  DAYS_NAME,
+} from '@/_utils/common/schedule.common';
+import AddOutlinedIcon from '@/_icons/AddOutlinedIcon';
+import RemoveOutlinedIcon from '@/_icons/RemoveOutlinedIcon';
+import IconButton from '@mui/material/IconButton';
 
 type Props = {
   index: number;
@@ -27,20 +31,6 @@ type Props = {
   setValue: UseFormSetValue<ScheduleCreateFormData>;
   scheduleType?: ScheduleKey;
 };
-
-const DAYS_NAME = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-
-const WORKING_HOURS_OPTIONS = Array.from({ length: 48 }, (_, i) => ({
-  label:
-    i % 2 === 0
-      ? `${Math.floor(i / 2)
-          .toString()
-          .padStart(2, '0')}:00`
-      : `${Math.floor(i / 2)
-          .toString()
-          .padStart(2, '0')}:30`,
-  value: String(i * 30),
-}));
 
 export const WorkingDayRow = (props: Props) => {
   const { index, control, watch, setValue, scheduleType } = props;
@@ -86,7 +76,7 @@ export const WorkingDayRow = (props: Props) => {
 
   return (
     <>
-      <div className='flex flex-row gap-1 mb-1 justify-between items-center'>
+      <div className='flex flex-row gap-1 justify-between  mb-px items-center'>
         <div className='flex justify-end items-center'>
           <Controller
             name={`workingHours.${index}.enabled`}
@@ -114,6 +104,7 @@ export const WorkingDayRow = (props: Props) => {
                 value={String(field.value)}
                 options={WORKING_HOURS_OPTIONS}
                 onChange={(val) => field.onChange(Number(val))}
+                disabled={!enabled}
               />
             )}
           />
@@ -127,6 +118,7 @@ export const WorkingDayRow = (props: Props) => {
                 value={String(field.value)}
                 options={WORKING_HOURS_OPTIONS}
                 onChange={(val) => field.onChange(Number(val))}
+                disabled={!enabled}
               />
             )}
           />
@@ -161,27 +153,24 @@ export const WorkingDayRow = (props: Props) => {
               />
             )}
           />
-          <IconButton
-            icon='➖'
-            ariaLabel='Remove break'
-            type='button'
-            onClick={() => removeBreak(brIndex)}
-          />
+
+          <IconButton onClick={() => removeBreak(brIndex)}>
+            <RemoveOutlinedIcon />
+          </IconButton>
         </div>
       ))}
       {enabled && (
         <div className='flex flex-row gap-1 justify-center items-center mb-px'>
           <IconButton
-            icon='➕'
-            ariaLabel='Add break'
-            type='button'
             onClick={() =>
               appendBreak({
                 breakStartTimeMinutes: BREAK_START_MINUTES,
                 breakEndTimeMinutes: BREAK_END_MINUTES,
               })
             }
-          />
+          >
+            <AddOutlinedIcon />
+          </IconButton>
           <Typography variant='body2' color='secondary'>
             Add break
           </Typography>

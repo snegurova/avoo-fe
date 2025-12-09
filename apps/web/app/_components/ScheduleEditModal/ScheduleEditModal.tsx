@@ -8,9 +8,9 @@ import { Modal } from '../Modal/Modal';
 import FormInput from '../FormInput/FormInput';
 import { FormMultiSelect } from '../FormMultiSelect/FormMultiSelect';
 import { DateSelect } from '../DateSelect/DateSelect';
-import { Button, ButtonFit, ButtonIntent } from '../Button/Button';
 import { convertToMidnightDate } from '@/_utils/date.utils';
 import { getAllErrorMessages } from '@/_utils/formError.utils';
+import { Button } from '@mui/material';
 
 type Props = {
   scheduleId: number | null;
@@ -77,17 +77,12 @@ export const ScheduleEditModal = (props: Props) => {
               />
             )}
           />
-          <div className='flex justify-between'>
-            <Button
-              onClick={onClose}
-              loading={isPending}
-              fit={ButtonFit.Inline}
-              intent={ButtonIntent.Secondary}
-            >
+          <div className='flex justify-between mt-2'>
+            <Button onClick={onClose} loading={isPending} color='secondary' variant='outlined'>
               Cancel
             </Button>
-            <Button loading={isPending} fit={ButtonFit.Inline} intent={ButtonIntent.Primary}>
-              Create
+            <Button loading={isPending} color='secondary' variant='contained'>
+              Update
             </Button>
           </div>
           {errorsList.length > 0 && (

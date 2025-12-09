@@ -23,3 +23,8 @@ export const convertToMidnightDate = (date: Date) => {
   result.setHours(0, 0, 0, 0);
   return result;
 };
+
+export const toDisplayDate = (date: Date) => {
+  const result = new Date(date);
+  return result.toLocaleDateString();
+};

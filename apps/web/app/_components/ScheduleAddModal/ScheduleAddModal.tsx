@@ -7,7 +7,6 @@ import { Modal } from '../Modal/Modal';
 import { FormSelect } from '../FormSelect/FormSelect';
 import { FormMultiSelect } from '../FormMultiSelect/FormMultiSelect';
 import { DateSelect } from '../DateSelect/DateSelect';
-import { Button, ButtonFit, ButtonIntent } from '../Button/Button';
 import FormInput from '../FormInput/FormInput';
 import { getAllErrorMessages } from '@/_utils/formError.utils';
 import { convertToMidnightDate, getNextMonday } from '@/_utils/date.utils';
@@ -19,7 +18,8 @@ import {
   ScheduleKey,
   START_MINUTE,
   TYPE_OF_SCHEDULE,
-} from '@/_utils/_common/schedule.common';
+} from '@/_utils/common/schedule.common';
+import { Button } from '@mui/material';
 
 type Props = {
   isOpen: boolean;
@@ -119,7 +119,7 @@ export const ScheduleAddModal = (props: Props) => {
               label='Apply to'
               options={mastersOptions}
               selected={((field.value ?? []) as number[]).map((v) => v.toString())}
-              onChange={(vals) => field.onChange(vals.map((v) => Number(v)))}
+              onChange={(values) => field.onChange(values.map((v) => Number(v)))}
             />
           )}
         />
@@ -165,16 +165,11 @@ export const ScheduleAddModal = (props: Props) => {
           )}
         />
 
-        <div className='flex justify-between'>
-          <Button
-            onClick={onClose}
-            loading={isPending}
-            fit={ButtonFit.Inline}
-            intent={ButtonIntent.Secondary}
-          >
+        <div className='flex justify-between mt-2'>
+          <Button onClick={onClose} loading={isPending} color='secondary' variant='outlined'>
             Cancel
           </Button>
-          <Button loading={isPending} fit={ButtonFit.Inline} intent={ButtonIntent.Primary}>
+          <Button loading={isPending} color='secondary' variant='contained'>
             Create
           </Button>
         </div>

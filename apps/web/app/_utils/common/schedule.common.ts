@@ -12,3 +12,25 @@ export const START_MINUTE = 9 * 60;
 export const END_MINUTE = 18 * 60;
 export const BREAK_START_MINUTES = 13 * 60;
 export const BREAK_END_MINUTES = 14 * 60;
+
+export const DAYS_NAME = [
+  'Monday',
+  'Tuesday',
+  'Wednesday',
+  'Thursday',
+  'Friday',
+  'Saturday',
+  'Sunday',
+];
+
+export const WORKING_HOURS_OPTIONS = Array.from({ length: 48 }, (_, i) => ({
+  label:
+    i % 2 === 0
+      ? `${Math.floor(i / 2)
+          .toString()
+          .padStart(2, '0')}:00`
+      : `${Math.floor(i / 2)
+          .toString()
+          .padStart(2, '0')}:30`,
+  value: String(i * 30),
+}));

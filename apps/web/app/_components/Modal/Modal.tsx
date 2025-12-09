@@ -1,6 +1,8 @@
 import React, { ReactNode } from 'react';
 import MuiModal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
+import CloseIcon from '@/_icons/CloseIcon';
+import { IconButton } from '@mui/material';
 export type Props = {
   isOpen: boolean;
   onClose: () => void;
@@ -28,12 +30,16 @@ export const Modal = (props: Props) => {
       aria-describedby='modal-modal-description'
     >
       <Box sx={style}>
-        <button
+        <IconButton
           onClick={onClose}
-          className='float-right text-gray-600 hover:text-gray-800 cursor-pointer'
+          sx={{
+            position: 'absolute',
+            top: 8,
+            right: 8,
+          }}
         >
-          &times;
-        </button>
+          <CloseIcon />
+        </IconButton>
         {children}
       </Box>
     </MuiModal>

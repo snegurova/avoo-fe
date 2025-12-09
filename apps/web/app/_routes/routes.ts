@@ -13,7 +13,7 @@ export enum appRoutes {
   Posts = '/app/profile/posts',
   Gallery = '/app/profile/gallery',
   Calendar = '/app/calendar',
-  Clietns = '/app/clients',
+  Clients = '/app/clients',
   Services = '/app/services',
   AddPost = '/app/add-post',
   Profile = '/app/profile',

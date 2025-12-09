@@ -30,7 +30,6 @@ export const DateSelect = (props: Props) => {
               size: 'small',
             },
           }}
-          sx={{ pb: 1, pt: 1 }}
         />
       </LocalizationProvider>
       {error && <p className='text-sm text-red-600'>{error}</p>}

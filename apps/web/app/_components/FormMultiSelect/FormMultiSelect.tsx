@@ -12,6 +12,7 @@ export type Props = {
   id?: string;
   name: string;
   label?: string;
+  className?: string;
   options: Option[];
   selected: string[];
   placeholder?: string;
@@ -24,7 +25,17 @@ export type Props = {
 };
 
 export const FormMultiSelect = (props: Props) => {
-  const { id, name, label, options, size = 'small', selected, onChange } = props;
+  const {
+    id,
+    name,
+    label,
+    options,
+    size = 'small',
+    selected,
+    onChange,
+    disabled,
+    className,
+  } = props;
   const handleChange = (event: SelectChangeEvent<string[]>) => {
     const {
       target: { value },
@@ -35,8 +46,8 @@ export const FormMultiSelect = (props: Props) => {
   const ITEM_PADDING_TOP = 8;
 
   return (
-    <div>
-      <FormControl size={size} fullWidth sx={{ mt: 2 }}>
+    <div className={className}>
+      <FormControl size={size} fullWidth sx={{ mt: 2 }} disabled={disabled}>
         <InputLabel id={`multiple-${name}-label`}>{label}</InputLabel>
         <Select
           labelId={`multiple-${name}-label`}

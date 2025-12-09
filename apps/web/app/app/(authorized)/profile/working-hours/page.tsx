@@ -4,11 +4,14 @@ import { useState } from 'react';
 import { scheduleHooks } from '@avoo/hooks';
 import { SectionHeader } from '@/_components/SectionHeader/SectionHeader';
 import { AuthGuard } from '@/_components/AuthGuard/AuthGuard';
-import { IconButton } from '@/_components/IconButton/IconButton';
 import { ScheduleEditModal } from '@/_components/ScheduleEditModal/ScheduleEditModal';
-import { Button, ButtonFit, ButtonIntent } from '@/_components/Button/Button';
 import { ScheduleAddModal } from '@/_components/ScheduleAddModal/ScheduleAddModal';
 import { routerHooks } from '@/_hooks/routerHooks';
+import { Button, IconButton } from '@mui/material';
+import ArrowReturnBackIcon from '@/_icons/ArrowReturnBackIcon';
+import { toDisplayDate } from '@/_utils/date.utils';
+import InfinityIcon from '@/_icons/InfinityIcon';
+import { colors } from '@avoo/design-tokens';
 
 export default function WorkingHoursPage() {
   const [activeScheduleId, setActiveScheduleId] = useState<number | null>(null);
@@ -28,7 +31,9 @@ export default function WorkingHoursPage() {
   return (
     <AuthGuard>
       <div className='container mx-auto p-4 max-w-4xl'>
-        <IconButton icon='⬅' onClick={handleBackClick} ariaLabel='Back' />
+        <IconButton onClick={handleBackClick}>
+          <ArrowReturnBackIcon />
+        </IconButton>
         <SectionHeader title='Working hours' />
         <div className='bg-white border border-gray-200 rounded-lg p-6'>
           {hasActiveSchedule && (
@@ -38,8 +43,13 @@ export default function WorkingHoursPage() {
                 <div key={schedule.id} className='mt-4 space-y-2 border border-gray-200 p-2'>
                   <div className='flex justify-between'>
                     <h5 className='font-bold text-sm'>{schedule.name}</h5>
-                    <span className='text-gray-500 bg-gray-200 px-2 py-1 rounded'>
-                      {schedule.startAt} - {schedule.endAt}
+                    <span className='text-gray-500 bg-gray-200 px-2 py-1 rounded flex items-center gap-2'>
+                      {toDisplayDate(new Date(schedule.startAt))} {'-'}
+                      {schedule.endAt ? (
+                        toDisplayDate(new Date(schedule.endAt))
+                      ) : (
+                        <InfinityIcon fill={colors.gray['500']} />
+                      )}
                     </span>
                   </div>
                   <div className='flex justify-start gap-2'>
@@ -54,8 +64,8 @@ export default function WorkingHoursPage() {
                   </div>
                   <div className='flex justify-end'>
                     <Button
-                      intent={ButtonIntent.Primary}
-                      fit={ButtonFit.Inline}
+                      color='secondary'
+                      variant='outlined'
                       onClick={() => setActiveScheduleId(schedule.id)}
                     >
                       Edit
@@ -75,11 +85,7 @@ export default function WorkingHoursPage() {
 
           {hasSchedules ? (
             <div className='flex justify-end mt-4'>
-              <Button
-                intent={ButtonIntent.Primary}
-                fit={ButtonFit.Inline}
-                onClick={() => setIsAddModalOpen(true)}
-              >
+              <Button color='secondary' variant='contained' onClick={() => setIsAddModalOpen(true)}>
                 Add new schedule
               </Button>
             </div>
@@ -88,8 +94,8 @@ export default function WorkingHoursPage() {
               <p className='text-gray-500'>No schedules found</p>
               <div className='flex justify-end mt-4'>
                 <Button
-                  intent={ButtonIntent.Primary}
-                  fit={ButtonFit.Inline}
+                  color='secondary'
+                  variant='contained'
                   onClick={() => setIsAddModalOpen(true)}
                 >
                   Setup
