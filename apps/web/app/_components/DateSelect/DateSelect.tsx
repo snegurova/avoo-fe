@@ -1,30 +1,29 @@
 import React from 'react';
-import { InputHTMLAttributes } from 'react';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs from 'dayjs';
-import { MobileDatePicker, StaticDatePicker } from '@mui/x-date-pickers';
 
-type Props = Omit<InputHTMLAttributes<HTMLInputElement>, 'className'> & {
+type Props = {
   name: string;
   label?: string;
   value: dayjs.Dayjs | null;
   defaultValue?: string;
-  disabled?: boolean;
   error?: string | null;
   onChange?: (value: string) => void;
 };
 
-export const DateTimeSelect = (props: Props) => {
-  const { name, label, value, defaultValue, disabled, error = null, onChange, ...rest } = props;
+export const DateSelect = (props: Props) => {
+  const { name, label, value, defaultValue, error = null, onChange } = props;
   return (
     <>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <DatePicker
+          name={name}
+          label={label}
           value={value ?? (defaultValue ? dayjs(defaultValue) : null)}
           format='MMMM D, YYYY'
-          onChange={onChange}
+          onChange={(newValue) => onChange?.(newValue ? newValue.toISOString() : '')}
           slotProps={{
             textField: {
               fullWidth: true,

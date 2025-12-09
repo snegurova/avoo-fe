@@ -1,14 +1,17 @@
 'use client';
 
+import { Controller } from 'react-hook-form';
+import dayjs from 'dayjs';
+import { useApiStatusStore } from '@avoo/store';
 import { masterHooks, scheduleHooks } from '@avoo/hooks';
 import { Modal } from '../Modal/Modal';
 import FormInput from '../FormInput/FormInput';
-import { Button, ButtonFit, ButtonIntent } from '../Button/Button';
-import { useRouter } from 'next/navigation';
-import { FormSelect } from '../FormSelect/FormSelect';
 import { FormMultiSelect } from '../FormMultiSelect/FormMultiSelect';
-import { DateTimeSelect } from '../DateTimeSelect/DateTimeSelect';
-import { WorkingHoursDaySettings } from '../WorkingHoursDaySettings/WorkingHoursDaySettings';
+import { DateSelect } from '../DateSelect/DateSelect';
+import { Button, ButtonFit, ButtonIntent } from '../Button/Button';
+import { convertToMidnightDate } from '@/_utils/date.utils';
+import { getAllErrorMessages } from '@/_utils/formError.utils';
+
 type Props = {
   scheduleId: number | null;
   isOpen: boolean;
@@ -18,97 +21,86 @@ type Props = {
 export const ScheduleEditModal = (props: Props) => {
   const { scheduleId, isOpen, onClose } = props;
   if (!scheduleId) return null;
-
   const schedule = scheduleHooks.useGetScheduleById(scheduleId);
+  const isPending = useApiStatusStore((state) => state.isPending);
 
-  const { register, handleSubmit, errors } = scheduleHooks.useUpdateScheduleForm({
+  const { register, errors, control } = scheduleHooks.useUpdateScheduleForm({
     onSuccess: () => {
-      console.log('Schedule updated successfully');
+      alert('Schedule updated successfully');
     },
   });
-  const TYPE_OF_SCHEDULE = [
-    { label: 'Weekly', value: 7 },
-    { label: '2 on / 2 off', value: 4 },
-    { label: '3 on / 2 off', value: 5 },
-    { label: '2 on / 1 off', value: 3 },
-    { label: 'Custom', value: 1 },
-  ];
+
   const mastersInfo = masterHooks.useGetMastersProfileInfo();
   const mastersOptions =
-    mastersInfo?.map((master) => ({
-      label: master.name ?? 'Master #' + master.id,
-      value: master.id,
-    })) || [];
+    mastersInfo?.map((m) => ({
+      label: m.name ?? `Master #${m.id}`,
+      value: m.id.toString(),
+    })) ?? [];
 
-  const selectedMasters = schedule?.master?.id
-    ? [schedule.master.id]
-    : mastersOptions.map((m) => m.value);
+  const errorsList = getAllErrorMessages(errors);
 
-  const convertDateToStringDateFormat = (date: Date) => {
-    return date.toISOString().split('T')[0];
-  };
-  return schedule ? (
+  return (
     <Modal isOpen={isOpen} onClose={onClose}>
-      <form onSubmit={handleSubmit} className='mt-10 sm:mx-auto sm:w-full sm:max-w-sm space-y-6'>
-        <FormInput
-          {...register('name')}
-          type='text'
-          name='name'
-          label='Name of schedule'
-          placeholder='Name of schedule'
-          autoComplete='false'
-          error={errors.name?.message}
-          defaultValue={schedule.name}
-        />
-        {/* <FormSelect
-          label='Type of schedule'
-          id={schedule.id.toString()}
-          name='type'
-          options={TYPE_OF_SCHEDULE}
-          defaultValue={schedule.pattern}
-        />
-
-        <FormMultiSelect
-          label='Apply to'
-          name='mastersIds'
-          options={mastersOptions}
-          selected={selectedMasters}
-        />
-        <DateTimeSelect
-          name='startDate'
-          label='Start date'
-          defaultValue={convertDateToStringDateFormat(new Date(schedule.startAt))}
-        /> */}
-        {schedule.workingHours.map((workingHour, index) => (
-          <WorkingHoursDaySettings key={index} name='workingHours' workingHour={workingHour} />
-        ))}
-        <DateTimeSelect
-          name='endDate'
-          label='End date'
-          defaultValue={convertDateToStringDateFormat(new Date(schedule.endAt || new Date()))}
-        />
-        {/* <DateTimeSelect /> */}
-        <div className='flex justify-between'>
-          <Button
-            onClick={onClose}
-            loading={false}
-            fit={ButtonFit.Inline}
-            intent={ButtonIntent.Secondary}
-          >
-            Cancel
-          </Button>
-          <Button
-            onClick={handleSubmit}
-            loading={false}
-            fit={ButtonFit.Inline}
-            intent={ButtonIntent.Primary}
-          >
-            Update schedule
-          </Button>
-        </div>
-      </form>
+      {schedule && !isPending ? (
+        <form className='space-y-6'>
+          <FormInput
+            {...register('name')}
+            className='border p-2 w-full'
+            placeholder='Schedule name'
+            label='Name'
+            value={schedule.name}
+          />
+          <Controller
+            name='mastersIds'
+            control={control}
+            render={({ field }) => (
+              <FormMultiSelect
+                name='mastersIds'
+                label='Apply to'
+                options={mastersOptions}
+                selected={((field.value ?? []) as number[]).map((v) => v.toString())}
+                onChange={(vals) => field.onChange(vals.map((v) => Number(v)))}
+              />
+            )}
+          />
+          <Controller
+            name='endAt'
+            control={control}
+            render={({ field }) => (
+              <DateSelect
+                name='startAt'
+                label='End date'
+                value={field.value ? dayjs(field.value) : null}
+                onChange={(date) =>
+                  field.onChange(date ? convertToMidnightDate(new Date(date)).toISOString() : null)
+                }
+              />
+            )}
+          />
+          <div className='flex justify-between'>
+            <Button
+              onClick={onClose}
+              loading={isPending}
+              fit={ButtonFit.Inline}
+              intent={ButtonIntent.Secondary}
+            >
+              Cancel
+            </Button>
+            <Button loading={isPending} fit={ButtonFit.Inline} intent={ButtonIntent.Primary}>
+              Create
+            </Button>
+          </div>
+          {errorsList.length > 0 && (
+            <div className='text-red-600 text-sm space-y-1'>
+              {errorsList.map((msg, idx) => (
+                <p key={idx}>{msg}</p>
+              ))}
+            </div>
+          )}
+        </form>
+      ) : (
+        <>Loading...</>
+      )}
     </Modal>
-  ) : (
-    <div>Not found by id: {scheduleId}</div>
   );
 };

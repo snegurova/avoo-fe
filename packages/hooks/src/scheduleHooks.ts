@@ -18,12 +18,15 @@ import {
   ScheduleCreateFormData,
   scheduleCreateSchema,
 } from '../schemas/schedulesValidationSchemas';
+import { convertToMidnightDate, getNextMonday } from '../../../apps/web/app/_utils/date.utils';
 
 type UseCreateScheduleFormParams = {
   onSuccess?: () => void;
+  onError?: () => void;
 };
 type UseUpdateScheduleFormParams = {
   onSuccess?: () => void;
+  defaultValues?: ScheduleUpdateFormData;
 };
 
 export const scheduleHooks = {
@@ -41,11 +44,10 @@ export const scheduleHooks = {
 
     return null;
   },
-  useGetScheduleById: (id: number) => {
+  useGetScheduleById: (id: number): ScheduleEntity => {
     const { data: scheduleData, isPending } = useQuery<BaseResponse<ScheduleEntity>, Error>({
       queryKey: ['schedule', id],
       queryFn: () => scheduleApi.getScheduleById(id),
-      enabled: !!id,
     });
 
     utils.useSetPendingApi(isPending);
@@ -56,15 +58,37 @@ export const scheduleHooks = {
 
     return null;
   },
-  useCreateScheduleForm: ({ onSuccess }: UseCreateScheduleFormParams = {}) => {
+  useCreateScheduleForm: ({ onSuccess, onError }: UseCreateScheduleFormParams = {}) => {
     const {
       register,
       control,
       handleSubmit,
+      setValue,
+      watch,
       formState: { errors },
     } = useForm<ScheduleCreateFormData>({
       resolver: yupResolver(scheduleCreateSchema),
       mode: 'onSubmit',
+      defaultValues: {
+        name: 'Default working schedule',
+        pattern: 7,
+        patternType: 'weekly',
+        mastersIds: [],
+        startAt: convertToMidnightDate(getNextMonday(new Date())).toISOString(),
+        endAt: null,
+        workingHours: Array.from({ length: 7 }).map((_, i) => ({
+          enabled: i < 5,
+          day: i + 1,
+          startTimeMinutes: 9 * 60,
+          endTimeMinutes: 18 * 60,
+          breaks: [
+            {
+              breakStartTimeMinutes: i < 5 ? 13 * 60 : 0,
+              breakEndTimeMinutes: i < 5 ? 14 * 60 : 0,
+            },
+          ],
+        })),
+      },
     });
 
     const { mutate: createSchedule, isPending } = useMutation<
@@ -78,6 +102,9 @@ export const scheduleHooks = {
           onSuccess?.();
         }
       },
+      onError: () => {
+        onError?.();
+      },
     });
 
     utils.useSetPendingApi(isPending);
@@ -87,6 +114,8 @@ export const scheduleHooks = {
       control,
       handleSubmit: handleSubmit(utils.submitAdapter<ScheduleCreateFormData>(createSchedule)),
       errors,
+      watch,
+      setValue,
       createSchedule,
       isPending,
     };
@@ -96,6 +125,8 @@ export const scheduleHooks = {
       register,
       control,
       handleSubmit,
+      watch,
+      setValue,
       formState: { errors },
     } = useForm<ScheduleUpdateFormData>({
       resolver: yupResolver(scheduleUpdateSchema),
@@ -122,6 +153,8 @@ export const scheduleHooks = {
       control,
       handleSubmit,
       errors,
+      watch,
+      setValue,
       updateSchedule,
       isPending,
     };

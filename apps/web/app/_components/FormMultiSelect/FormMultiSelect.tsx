@@ -62,15 +62,7 @@ export const FormMultiSelect = (props: Props) => {
         >
           {options.map((option) => (
             <MenuItem key={option.label} value={option.value}>
-              <Checkbox
-                checked={selected.includes(option.value)}
-                sx={{
-                  color: '#BB94CE', // TODO: change color from theme variables
-                  '&.Mui-checked': {
-                    color: '#BBB0D8',
-                  },
-                }}
-              />
+              <Checkbox checked={selected.includes(option.value)} />
               <ListItemText primary={option.label} />
             </MenuItem>
           ))}

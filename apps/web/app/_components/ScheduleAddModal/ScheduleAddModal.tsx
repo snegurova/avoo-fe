@@ -1,17 +1,26 @@
-'use client';
-
+import React, { useEffect } from 'react';
+import { Controller, useFieldArray } from 'react-hook-form';
+import dayjs from 'dayjs';
 import { masterHooks, scheduleHooks } from '@avoo/hooks';
+import { useApiStatusStore } from '@avoo/store';
 import { Modal } from '../Modal/Modal';
-import FormInput from '../FormInput/FormInput';
-import { Button, ButtonFit, ButtonIntent } from '../Button/Button';
 import { FormSelect } from '../FormSelect/FormSelect';
 import { FormMultiSelect } from '../FormMultiSelect/FormMultiSelect';
-import { DateTimeSelect } from '../DateTimeSelect/DateTimeSelect';
-import { WorkingHoursDaySettings } from '../WorkingHoursDaySettings/WorkingHoursDaySettings';
-import { useState } from 'react';
-import { useApiStatusStore } from '@avoo/store';
-import { Controller } from 'react-hook-form';
-import dayjs from 'dayjs';
+import { DateSelect } from '../DateSelect/DateSelect';
+import { Button, ButtonFit, ButtonIntent } from '../Button/Button';
+import FormInput from '../FormInput/FormInput';
+import { getAllErrorMessages } from '@/_utils/formError.utils';
+import { convertToMidnightDate, getNextMonday } from '@/_utils/date.utils';
+import { WorkingDayRow } from '../WorkingDayRow/WorkingDayRow';
+import {
+  BREAK_END_MINUTES,
+  BREAK_START_MINUTES,
+  END_MINUTE,
+  ScheduleKey,
+  START_MINUTE,
+  TYPE_OF_SCHEDULE,
+} from '@/_utils/_common/schedule.common';
+
 type Props = {
   isOpen: boolean;
   onClose: () => void;
@@ -21,176 +30,161 @@ export const ScheduleAddModal = (props: Props) => {
   const { isOpen, onClose } = props;
   const isPending = useApiStatusStore((state) => state.isPending);
 
-  const [selectedMasters, setSelectedMasters] = useState<string[]>([]);
+  const { control, register, handleSubmit, setValue, watch, errors } =
+    scheduleHooks.useCreateScheduleForm({
+      onSuccess: () => {
+        alert('Schedule added successfully');
+      },
+      onError: () => {
+        alert('Schedule add failed');
+      },
+    });
 
-  const { control, register, handleSubmit, errors } = scheduleHooks.useCreateScheduleForm({
-    onSuccess: () => {
-      console.log('Schedule updated successfully');
-    },
+  const { fields, replace } = useFieldArray({
+    control,
+    name: 'workingHours',
   });
 
-  const TYPE_OF_SCHEDULE = {
-    weekly: { name: 'Weekly', pattern: 7, workingDaysCount: 5 },
-    '2x2': { name: '2 on / 2 off', pattern: 4, workingDaysCount: 2 },
-    '3x2': { name: '3 on / 2 off', pattern: 5, workingDaysCount: 3 },
-    '2x1': { name: '2 on / 1 off', pattern: 3, workingDaysCount: 2 },
-    custom: { name: 'Custom', pattern: 1, workingDaysCount: 1 },
-  } as const;
+  const masters = masterHooks.useGetMastersProfileInfo();
 
-  type ScheduleKey = keyof typeof TYPE_OF_SCHEDULE;
-
+  const scheduleType = watch('patternType') as ScheduleKey;
   const scheduleOptions = (Object.keys(TYPE_OF_SCHEDULE) as ScheduleKey[]).map((key) => ({
     label: TYPE_OF_SCHEDULE[key].name,
     value: key,
   }));
 
-  const DEFAULT_WORKING_HOURS = {
-    startTimeMinutes: 540,
-    endTimeMinutes: 1080,
-  };
-  const DEFAULT_WORKING_HOURS_BREAKS = [
-    {
-      breakStartTimeMinutes: 780,
-      breakEndTimeMinutes: 840,
-    },
-  ];
-  const [selectedType, setSelectedType] = useState<ScheduleKey>('weekly');
-  const mastersInfo = masterHooks.useGetMastersProfileInfo();
   const mastersOptions =
-    mastersInfo?.map((master) => ({
-      label: master.name ?? 'Master #' + master.id,
-      value: String(master.id),
-    })) || [];
+    masters?.map((m) => ({
+      label: m.name ?? `Master #${m.id}`,
+      value: m.id.toString(),
+    })) ?? [];
 
-  const convertDateToStringDateFormat = (date: Date) => {
-    return date.toISOString().split('T')[0];
-  };
-  const addDaysToDate = (date: Date, days: number) => {
-    const result = new Date(date);
-    result.setDate(result.getDate() + days);
-    return result;
-  };
-  const getNextMonday = (date: Date) => {
-    const result = new Date(date);
-    const day = result.getDay(); // 0 = Sun, 1 = Mon, ..., 6 = Sat
+  useEffect(() => {
+    if (!scheduleType) return;
 
-    const daysToAdd = (8 - day) % 7 || 7;
-    result.setDate(result.getDate() + daysToAdd);
-    return result;
-  };
+    const config = TYPE_OF_SCHEDULE[scheduleType];
+    setValue('pattern', config.pattern);
+    const newDays = Array.from({ length: config.pattern }).map((_, index) => ({
+      day: index + 1,
+      enabled: index < config.workingDaysCount,
+      startTimeMinutes: index < config.workingDaysCount ? START_MINUTE : 0,
+      endTimeMinutes: index < config.workingDaysCount ? END_MINUTE : 0,
+      breaks:
+        index < config.workingDaysCount
+          ? [{ breakStartTimeMinutes: BREAK_START_MINUTES, breakEndTimeMinutes: BREAK_END_MINUTES }]
+          : [],
+    }));
 
-  const handleScheduleTypeChange = (value: string) => {
-    const newType = value as ScheduleKey;
-    setSelectedType(newType);
-  };
+    replace(newDays);
+  }, [scheduleType]);
 
-  // const { fields, append, replace } = useFieldArray({
-  //   name: 'workingHours',
-  //   control,
-  // });
-
-  const handleSelectedMasters = (values: string[]) => {
-    setSelectedMasters(values);
-  };
+  const errorsList = getAllErrorMessages(errors);
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
-      <form onSubmit={handleSubmit} className='mt-2 sm:mx-auto sm:w-full sm:max-w-sm space-y-6'>
+      <form className='space-y-6' onSubmit={handleSubmit}>
         <FormInput
           {...register('name')}
-          type='text'
-          name='name'
-          label='Name of schedule'
-          placeholder='Name of schedule'
-          autoComplete='false'
-          error={errors.name?.message}
-        />
-        <FormSelect
-          {...register('pattern')}
-          label='Type of schedule'
-          name='type'
-          options={scheduleOptions}
-          value={selectedType}
-          onChange={handleScheduleTypeChange}
+          className='border p-2 w-full'
+          placeholder='Schedule name'
+          label='Name'
         />
 
-        <FormMultiSelect
-          {...register('mastersIds')}
-          label='Apply to'
-          name='mastersIds'
-          options={mastersOptions}
-          selected={selectedMasters}
-          onChange={handleSelectedMasters}
-        />
         <Controller
-          name='startAt'
+          name='patternType'
           control={control}
+          defaultValue='weekly'
           render={({ field }) => (
-            <DateTimeSelect
-              name='startAt'
-              label='Start date'
-              value={field.value ? dayjs(field.value) : null}
-              onChange={(date) => field.onChange(date?.toISOString())}
-              defaultValue={convertDateToStringDateFormat(getNextMonday(new Date()))}
-              error={errors.startAt?.message}
+            <FormSelect
+              name='patternType'
+              label='Type'
+              options={scheduleOptions}
+              value={field.value}
+              onChange={(v) => {
+                const key = v as ScheduleKey;
+                field.onChange(key);
+                const numericPattern = TYPE_OF_SCHEDULE[key].pattern;
+                setValue('pattern', numericPattern);
+              }}
             />
           )}
         />
-        {/* 
-        <DateTimeSelect
+
+        <Controller
+          name='mastersIds'
+          control={control}
+          render={({ field }) => (
+            <FormMultiSelect
+              name='mastersIds'
+              label='Apply to'
+              options={mastersOptions}
+              selected={((field.value ?? []) as number[]).map((v) => v.toString())}
+              onChange={(vals) => field.onChange(vals.map((v) => Number(v)))}
+            />
+          )}
+        />
+
+        <Controller
           name='startAt'
-          label='Start date'
-          defaultValue={convertDateToStringDateFormat(getNextMonday(new Date()))}
-          error={errors.startAt?.message}
-        /> */}
-        {Array.from({ length: TYPE_OF_SCHEDULE[selectedType].pattern }).map((_, index) => (
-          <WorkingHoursDaySettings
-            key={`workingHoursDay-${index}-${selectedType}`}
-            name='workingHours'
-            day={index}
-            showType={TYPE_OF_SCHEDULE[selectedType].pattern === 7 ? 'string' : 'number'}
-            workingHour={DEFAULT_WORKING_HOURS}
-            workingHoursBreaks={DEFAULT_WORKING_HOURS_BREAKS}
-            disabled={index >= TYPE_OF_SCHEDULE[selectedType].workingDaysCount}
-            register={register}
+          control={control}
+          defaultValue={convertToMidnightDate(getNextMonday(new Date())).toISOString()}
+          render={({ field }) => (
+            <DateSelect
+              name='startAt'
+              label='Start date'
+              value={dayjs(field.value)}
+              onChange={(date) =>
+                field.onChange(date ? convertToMidnightDate(new Date(date)).toISOString() : null)
+              }
+            />
+          )}
+        />
+        {fields.map((field, index) => (
+          <WorkingDayRow
+            key={field.id}
+            index={index}
+            control={control}
+            watch={watch}
+            scheduleType={scheduleType}
+            setValue={setValue}
           />
         ))}
+
         <Controller
           name='endAt'
           control={control}
           render={({ field }) => (
-            <DateTimeSelect
-              name='endAt'
+            <DateSelect
+              name='startAt'
               label='End date'
-              defaultValue={convertDateToStringDateFormat(
-                addDaysToDate(new Date(), TYPE_OF_SCHEDULE[selectedType].pattern * 56),
-              )}
               value={field.value ? dayjs(field.value) : null}
-              onChange={(date) => field.onChange(date?.toISOString())}
-              error={errors.endAt?.message}
+              onChange={(date) =>
+                field.onChange(date ? convertToMidnightDate(new Date(date)).toISOString() : null)
+              }
             />
           )}
         />
+
         <div className='flex justify-between'>
           <Button
             onClick={onClose}
             loading={isPending}
-            disabled={isPending}
             fit={ButtonFit.Inline}
             intent={ButtonIntent.Secondary}
           >
             Cancel
           </Button>
-          <Button
-            onClick={handleSubmit}
-            loading={isPending}
-            disabled={isPending}
-            fit={ButtonFit.Inline}
-            intent={ButtonIntent.Primary}
-          >
-            Create schedule
+          <Button loading={isPending} fit={ButtonFit.Inline} intent={ButtonIntent.Primary}>
+            Create
           </Button>
         </div>
+        {errorsList.length > 0 && (
+          <div className='text-red-600 text-sm space-y-1'>
+            {errorsList.map((msg, idx) => (
+              <p key={idx}>{msg}</p>
+            ))}
+          </div>
+        )}
       </form>
     </Modal>
   );

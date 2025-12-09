@@ -1,7 +1,6 @@
 import React from 'react';
 import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
 import { SelectChangeEvent } from 'node_modules/@mui/material';
-import { UseFormRegisterReturn } from 'react-hook-form';
 
 export type Option = { label: string; value: string };
 
@@ -14,29 +13,17 @@ export type Props = {
   disabled?: boolean;
   error?: string | boolean;
   onChange: (value: string) => void;
-  registerProps?: UseFormRegisterReturn;
 };
 
 export const FormTimeSelect = (props: Props) => {
-  const {
-    id,
-    name,
-    label,
-    value,
-    options,
-    disabled = false,
-    error,
-    onChange,
-    registerProps,
-  } = props;
+  const { id, name, label, value, options, disabled = false, error, onChange } = props;
 
   const handleChange = (event: SelectChangeEvent) => {
-    registerProps?.onChange(event);
     onChange(event.target.value as string);
   };
   const sx = {
     '& label + .MuiInputBase-root': {
-      marginTop: '8px',
+      marginTop: '4px',
     },
     '& .MuiInputBase-root::before': {
       borderBottom: 'none',
@@ -57,7 +44,6 @@ export const FormTimeSelect = (props: Props) => {
         value={value}
         label={label}
         onChange={handleChange}
-        {...registerProps}
       >
         {options.map((option) => (
           <MenuItem key={option.value} value={option.value}>

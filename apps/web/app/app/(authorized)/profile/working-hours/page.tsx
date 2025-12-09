@@ -1,15 +1,14 @@
 'use client';
 
+import { useState } from 'react';
+import { scheduleHooks } from '@avoo/hooks';
 import { SectionHeader } from '@/_components/SectionHeader/SectionHeader';
 import { AuthGuard } from '@/_components/AuthGuard/AuthGuard';
 import { IconButton } from '@/_components/IconButton/IconButton';
-import { scheduleHooks } from '@avoo/hooks';
-import { useState } from 'react';
 import { ScheduleEditModal } from '@/_components/ScheduleEditModal/ScheduleEditModal';
 import { Button, ButtonFit, ButtonIntent } from '@/_components/Button/Button';
-import { routerHooks } from '@/_hooks/routerHooks';
 import { ScheduleAddModal } from '@/_components/ScheduleAddModal/ScheduleAddModal';
-import { DateTimeSelect } from '@/_components/DateTimeSelect/DateTimeSelect';
+import { routerHooks } from '@/_hooks/routerHooks';
 
 export default function WorkingHoursPage() {
   const [activeScheduleId, setActiveScheduleId] = useState<number | null>(null);
@@ -29,7 +28,6 @@ export default function WorkingHoursPage() {
   return (
     <AuthGuard>
       <div className='container mx-auto p-4 max-w-4xl'>
-        <DateTimeSelect name='startAt' label='Start date' />
         <IconButton icon='⬅' onClick={handleBackClick} ariaLabel='Back' />
         <SectionHeader title='Working hours' />
         <div className='bg-white border border-gray-200 rounded-lg p-6'>
@@ -65,11 +63,13 @@ export default function WorkingHoursPage() {
                   </div>
                 </div>
               ))}
-              <ScheduleEditModal
-                scheduleId={activeScheduleId}
-                isOpen={!!activeScheduleId}
-                onClose={() => setActiveScheduleId(null)}
-              />
+              {activeScheduleId && (
+                <ScheduleEditModal
+                  scheduleId={activeScheduleId}
+                  isOpen={!!activeScheduleId}
+                  onClose={() => setActiveScheduleId(null)}
+                />
+              )}
             </>
           )}
 

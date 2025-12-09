@@ -6,7 +6,7 @@ export const scheduleUpdateSchema = yup.object({
 
   endAt: yup
     .string()
-    .required('endAt is required')
+    .nullable()
     .matches(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/, 'endAt must be a valid ISO datetime'),
 
   workingHours: yup
@@ -17,7 +17,7 @@ export const scheduleUpdateSchema = yup.object({
 
         endTimeMinutes: yup
           .number()
-          .required()
+          .nullable()
           .min(0)
           .max(1440)
           .moreThan(yup.ref('startTimeMinutes'), 'endTimeMinutes must be > startTimeMinutes'),
@@ -47,6 +47,7 @@ export const scheduleUpdateSchema = yup.object({
       }),
     )
     .required(),
+  mastersIds: yup.array().of(yup.number()),
 });
 
 export type ScheduleUpdateFormData = yup.InferType<typeof scheduleUpdateSchema>;
@@ -54,6 +55,7 @@ export type ScheduleUpdateFormData = yup.InferType<typeof scheduleUpdateSchema>;
 export const scheduleCreateSchema = yup.object({
   name: yup.string().required('Name is required').trim(),
   pattern: yup.number().required(),
+  patternType: yup.string().oneOf(['weekly', '2x2', '3x2', '2x1', 'custom']).required(),
 
   startAt: yup
     .string()
@@ -65,13 +67,15 @@ export const scheduleCreateSchema = yup.object({
 
   endAt: yup
     .string()
-    .required('endAt is required')
+    .nullable()
     .matches(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/, 'endAt must be a valid ISO datetime'),
 
   workingHours: yup
     .array()
     .of(
       yup.object({
+        enabled: yup.boolean(),
+        day: yup.number().required(),
         startTimeMinutes: yup.number().required().min(0).max(1440),
 
         endTimeMinutes: yup
@@ -79,8 +83,11 @@ export const scheduleCreateSchema = yup.object({
           .required()
           .min(0)
           .max(1440)
-          .moreThan(yup.ref('startTimeMinutes'), 'endTimeMinutes must be > startTimeMinutes'),
-
+          .test('end-after-start', 'endTimeMinutes must be > startTimeMinutes', function (value) {
+            const start = this.parent.startTimeMinutes;
+            if (start === 0 && value === 0) return true;
+            return value > start;
+          }),
         breaks: yup
           .array()
           .of(
@@ -103,7 +110,7 @@ export const scheduleCreateSchema = yup.object({
     )
     .required(),
 
-  mastersIds: yup.array().of(yup.number()).required(),
+  mastersIds: yup.array().of(yup.number()),
 });
 
 export type ScheduleCreateFormData = yup.InferType<typeof scheduleCreateSchema>;
