@@ -308,6 +308,38 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/certificates": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["UsersController_getAllCertificates"];
+        put?: never;
+        post: operations["UsersController_createCertificate"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/certificates/{certificateId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["UsersController_getOneCertificate"];
+        put?: never;
+        post?: never;
+        delete: operations["UsersController_deleteUserCertificate"];
+        options?: never;
+        head?: never;
+        patch: operations["UsersController_updateUserCertificate"];
+        trace?: never;
+    };
     "/services": {
         parameters: {
             query?: never;
@@ -1089,6 +1121,60 @@ export interface components {
         GetProfileLanguagesDto: {
             language: string;
             masters: components["schemas"]["ShortMasterInfoDto"][];
+        };
+        CertificateEntity: {
+            id: number;
+            /** @description Certificate title */
+            title: string;
+            /** @description Certificate description */
+            description?: Record<string, never>;
+            /**
+             * Format: date-time
+             * @description Certificate issue date
+             */
+            issueDate: string;
+            /** @description Certificate file URL */
+            url: string;
+            /** @description Certificate preview URL */
+            previewUrl?: Record<string, never>;
+            /** @description Salon (user) ID */
+            userId: number;
+            /** @description Master ID (optional) */
+            masterId?: Record<string, never>;
+            /** Format: date-time */
+            createdAt: string;
+            /** Format: date-time */
+            updatedAt: string;
+        };
+        UploadCertificateFormDto: {
+            /** @description Master ID (optional). If omitted certificate will be for whole salon */
+            masterId?: number;
+            /** @description Certificate title */
+            title: string;
+            /** @description Certificate description */
+            description?: string;
+            /**
+             * @description Issue date (YYYY-MM-DD)
+             * @example 2025-11-23
+             */
+            issueDate: string;
+            /** Format: binary */
+            file: string;
+        };
+        UploadCertificateDto: {
+            /** @description Master ID (optional). If omitted certificate will be for whole salon */
+            masterId?: number;
+            /** @description Certificate title */
+            title: string;
+            /** @description Certificate description */
+            description?: string;
+            /**
+             * @description Issue date (YYYY-MM-DD)
+             * @example 2025-11-23
+             */
+            issueDate: string;
+            files: string[];
+            folder: string;
         };
         CreateServiceDto: {
             /**
@@ -2603,6 +2689,175 @@ export interface operations {
                 content: {
                     "application/json": components["schemas"]["SuccessResponseDto"] & {
                         data?: components["schemas"]["GetProfileLanguagesDto"][];
+                    };
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    UsersController_getAllCertificates: {
+        parameters: {
+            query?: {
+                /** @description Master ID to filter by (optional). If omitted, returns salon-level certificates */
+                masterId?: number;
+                page?: number;
+                limit?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description All certificates */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SuccessResponseDto"] & {
+                        data?: {
+                            items?: components["schemas"]["CertificateEntity"][];
+                            pagination?: components["schemas"]["PaginationDto"];
+                        };
+                    };
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    UsersController_createCertificate: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "multipart/form-data": components["schemas"]["UploadCertificateFormDto"];
+            };
+        };
+        responses: {
+            /** @description Created certificate */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SuccessResponseDto"] & {
+                        data?: components["schemas"]["CertificateEntity"];
+                    };
+                };
+            };
+        };
+    };
+    UsersController_getOneCertificate: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                certificateId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description One certificate by id */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SuccessResponseDto"] & {
+                        data?: components["schemas"]["CertificateEntity"];
+                    };
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    UsersController_deleteUserCertificate: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                certificateId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Delete certificate by id */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SuccessResponseDto"] & {
+                        data?: components["schemas"]["CertificateEntity"];
+                    };
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    UsersController_updateUserCertificate: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                certificateId: number;
+            };
+            cookie?: never;
+        };
+        /** @description Fields to update (partial) */
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["UploadCertificateDto"];
+            };
+        };
+        responses: {
+            /** @description Updated certificate */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SuccessResponseDto"] & {
+                        data?: components["schemas"]["CertificateEntity"];
                     };
                 };
             };

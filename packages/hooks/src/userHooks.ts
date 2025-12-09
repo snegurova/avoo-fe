@@ -75,4 +75,31 @@ export const userHooks = {
       handleUpdateAvatar,
     };
   },
+  usePostCertificate: () => {
+    const queryClient = useQueryClient();
+
+    const { mutate: handleAddCertificate, isPending } = useMutation<
+      BaseResponse<any>,
+      Error,
+      {
+        title: string;
+        issueDate: string;
+        description?: string;
+        masterId?: number;
+        file?: File | Blob;
+      }
+    >({
+      mutationFn: (payload) => userApi.createCertificate(payload),
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: ['userProfile'] });
+        queryClient.invalidateQueries({ queryKey: ['userCertificates'] });
+      },
+    });
+
+    utils.useSetPendingApi(isPending);
+
+    return {
+      handleAddCertificate,
+    };
+  },
 };
