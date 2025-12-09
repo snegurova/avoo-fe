@@ -6,6 +6,7 @@ import { BaseResponse, GetCalendarResponse } from '@avoo/axios/types/apiTypes';
 import { apiStatus } from '@avoo/hooks/types/apiTypes';
 import { useQuery } from '@tanstack/react-query';
 import { useMemo } from 'react';
+import { queryKeys } from './queryKeys';
 
 export const calendarHooks = {
   useGetCalendar: ({
@@ -29,7 +30,7 @@ export const calendarHooks = {
     );
 
     const { data: calendarData, isPending } = useQuery<BaseResponse<GetCalendarResponse>, Error>({
-      queryKey: ['calendar', memoParams],
+      queryKey: queryKeys.calendar.byParams(memoParams),
       queryFn: () => calendarApi.getCalendar(memoParams),
     });
 

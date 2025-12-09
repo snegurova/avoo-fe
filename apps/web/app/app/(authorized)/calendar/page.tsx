@@ -5,6 +5,7 @@ import { calendarHooks } from '@avoo/hooks';
 import { PrivateCalendarQueryParams } from '@avoo/axios/types/apiTypes';
 
 export default function CalendarPage() {
+  /* eslint-disable @typescript-eslint/no-unused-vars */
   const [params, setParams] = useState<PrivateCalendarQueryParams>({
     rangeFromDate: new Date().toISOString(),
     rangeToDate: new Date(new Date().setDate(new Date().getDate() + 2)).toISOString(),
