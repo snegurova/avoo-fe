@@ -3,11 +3,11 @@ import { userApi } from '@avoo/axios';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import {
   BaseResponse,
-  FileInput,
   UserMediaResponse,
   UserProfileResponse,
   UserUpdateAvatarResponse,
 } from '@avoo/axios/types/apiTypes';
+import { FileInput } from '@avoo/shared';
 import { apiStatus } from '../types/apiTypes';
 import { queryKeys } from './queryKeys';
 
