@@ -9,7 +9,7 @@ type Props = {
 };
 
 const dropdownList = tv({
-  base: 'absolute top-full min-w-max translate-y-1 overflow-hidden rounded-2xl z-3',
+  base: 'absolute top-full min-w-max translate-y-1 overflow-hidden rounded-2xl z-15',
   variants: {
     right: {
       true: 'right-0',

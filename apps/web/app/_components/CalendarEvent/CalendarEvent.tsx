@@ -3,15 +3,14 @@ import { timeUtils } from '@/_utils/timeUtils';
 import { PrivateEvent } from '@avoo/axios/types/apiTypes';
 import { tv } from 'tailwind-variants';
 import { orderStatus } from '@avoo/hooks/types/orderStatus';
+import { PX_IN_MINUTE } from '@/_constants/time';
 
 type Props = {
   event: PrivateEvent;
 };
 
-const PX_IN_MINUTE = 96 / 60;
-
 const eventItem = tv({
-  base: 'border rounded-[3px] overflow-hidden h-full p-1 relative w-full flex flex-col items-start gap-0.5',
+  base: 'border rounded-[3px] overflow-hidden h-full p-1 relative w-full flex flex-col items-start gap-0.5 cursor-pointer',
   variants: {
     status: {
       [orderStatus.PENDING]: 'border-pending bg-pendingBg text-pendingText',
@@ -34,18 +33,29 @@ const eventLabel = tv({
 export default function CalendarEvent(props: Props) {
   const { event } = props;
 
+  const onEventClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    alert(`Event clicked: ${event.title}`);
+  };
+
   return (
     <>
-      {event.start && event.end && event.status ? (
+      {event.status === orderStatus.PENDING ||
+      event.status === orderStatus.CONFIRMED ||
+      event.status === orderStatus.COMPLETED ? (
         <div
           key={event.id}
-          className='absolute left-0 right-0 p-0.5'
+          className='absolute left-0 right-0 p-0.5 z-6'
           style={{
             top: `${timeUtils.getMinutesInDay(event.start) * PX_IN_MINUTE}px`,
             height: `${(timeUtils.getMinutesInDay(event.end) - timeUtils.getMinutesInDay(event.start)) * PX_IN_MINUTE}px`,
           }}
         >
-          <button type='button' className={eventItem({ status: event.status })}>
+          <button
+            type='button'
+            className={eventItem({ status: event.status })}
+            onClick={onEventClick}
+          >
             {event.status === orderStatus.PENDING && (
               <div className={eventLabel({ status: event.status })}>
                 {event.status.toLocaleLowerCase()}

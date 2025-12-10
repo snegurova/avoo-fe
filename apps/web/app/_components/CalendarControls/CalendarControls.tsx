@@ -1,5 +1,5 @@
 'use client';
-import React from 'react';
+import React, { useEffect } from 'react';
 import SelectButton from '@/_components/SelectButton/SelectButton';
 import ArrowBackIcon from '@/_icons/ArrowBackIcon';
 import ArrowForwardIcon from '@/_icons/ArrowForwardIcon';
@@ -9,7 +9,6 @@ import { tv } from 'tailwind-variants';
 import { DatePicker } from '@mui/x-date-pickers';
 import dayjs from 'dayjs';
 import { calendarViewType } from '@avoo/hooks/types/calendarViewType';
-import CalendarEventIcon from '@/_icons/CalendarEventIcon';
 import { timeUtils } from '@/_utils/timeUtils';
 
 type Props = {
@@ -17,6 +16,8 @@ type Props = {
   setDate: (date: Date) => void;
   type: calendarViewType;
   setType: (type: calendarViewType) => void;
+  toDate: Date;
+  setToDate: (date: Date) => void;
 };
 
 const controlsButton = tv({
@@ -32,16 +33,61 @@ const controlsButton = tv({
 });
 
 export default function CalendarControls(props: Props) {
-  const { date, setDate, type, setType } = props;
+  const { date, setDate, toDate, setToDate, type, setType } = props;
 
-  const setCurrentDate = () => {
-    setDate(timeUtils.toDayBegin(new Date()));
+  useEffect(() => {}, [date, toDate, type]);
+
+  const setCurrentDate = (type: calendarViewType) => {
+    const today = new Date();
+    if (type === calendarViewType.DAY) {
+      const range = timeUtils.getDayRange(today);
+      setDate(range.start);
+      setToDate(range.end);
+    } else if (type === calendarViewType.WEEK) {
+      const range = timeUtils.getWeekRange(today);
+      setDate(range.start);
+      setToDate(range.end);
+    } else if (type === calendarViewType.MONTH) {
+      const range = timeUtils.getMonthRange(today);
+      setDate(range.start);
+      setToDate(range.end);
+    }
   };
+
   const setPreviousDate = () => {
-    setDate(new Date(date.getTime() - 24 * 60 * 60 * 1000));
+    if (type === calendarViewType.DAY) {
+      const range = timeUtils.getDayRange(new Date(date.getTime() - 24 * 60 * 60 * 1000));
+      setDate(range.start);
+      setToDate(range.end);
+    } else if (type === calendarViewType.WEEK) {
+      const range = timeUtils.getWeekRange(new Date(date.getTime() - 7 * 24 * 60 * 60 * 1000));
+      setDate(range.start);
+      setToDate(range.end);
+    } else if (type === calendarViewType.MONTH) {
+      const prevMonth = new Date(date);
+      prevMonth.setMonth(prevMonth.getMonth() - 1);
+      const range = timeUtils.getMonthRange(prevMonth);
+      setDate(range.start);
+      setToDate(range.end);
+    }
   };
+
   const setNextDate = () => {
-    setDate(new Date(date.getTime() + 24 * 60 * 60 * 1000));
+    if (type === calendarViewType.DAY) {
+      const range = timeUtils.getDayRange(new Date(date.getTime() + 24 * 60 * 60 * 1000));
+      setDate(range.start);
+      setToDate(range.end);
+    } else if (type === calendarViewType.WEEK) {
+      const range = timeUtils.getWeekRange(new Date(date.getTime() + 7 * 24 * 60 * 60 * 1000));
+      setDate(range.start);
+      setToDate(range.end);
+    } else if (type === calendarViewType.MONTH) {
+      const nextMonth = new Date(date.getTime() + 7 * 24 * 60 * 60 * 1000);
+      nextMonth.setMonth(nextMonth.getMonth() + 1);
+      const range = timeUtils.getMonthRange(nextMonth);
+      setDate(range.start);
+      setToDate(range.end);
+    }
   };
 
   const options = [
@@ -49,18 +95,21 @@ export default function CalendarControls(props: Props) {
       label: 'Day',
       handler: () => {
         setType(calendarViewType.DAY);
+        setCurrentDate(calendarViewType.DAY);
       },
     },
     {
       label: 'Week',
       handler: () => {
         setType(calendarViewType.WEEK);
+        setCurrentDate(calendarViewType.WEEK);
       },
     },
     {
       label: 'Month',
       handler: () => {
         setType(calendarViewType.MONTH);
+        setCurrentDate(calendarViewType.MONTH);
       },
     },
   ];
@@ -71,7 +120,7 @@ export default function CalendarControls(props: Props) {
         <button
           type='button'
           className={controlsButton({ variant: 'full' })}
-          onClick={setCurrentDate}
+          onClick={() => setCurrentDate(type)}
         >
           Today
         </button>
@@ -88,9 +137,6 @@ export default function CalendarControls(props: Props) {
             format='DD MMM YYYY'
             onChange={(newDate) => {
               if (newDate) setDate(newDate.toDate());
-            }}
-            slots={{
-              openPickerIcon: CalendarEventIcon,
             }}
             slotProps={{
               textField: {
