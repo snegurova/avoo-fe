@@ -169,7 +169,7 @@ export const ScheduleAddModal = (props: Props) => {
           <Button onClick={onClose} loading={isPending} color='secondary' variant='outlined'>
             Cancel
           </Button>
-          <Button loading={isPending} color='secondary' variant='contained'>
+          <Button loading={isPending} onClick={handleSubmit} color='secondary' variant='contained'>
             Create
           </Button>
         </div>
