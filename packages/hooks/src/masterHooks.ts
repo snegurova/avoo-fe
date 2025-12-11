@@ -5,6 +5,7 @@ import { useQuery } from '@tanstack/react-query';
 
 import { BaseResponse, MasterWithRelationsEntityResponse } from '@avoo/axios/types/apiTypes';
 import { apiStatus } from '@avoo/hooks/types/apiTypes';
+import { queryKeys } from './queryKeys';
 
 export const masterHooks = {
   useGetMastersProfileInfo: () => {
@@ -12,7 +13,7 @@ export const masterHooks = {
       BaseResponse<MasterWithRelationsEntityResponse>,
       Error
     >({
-      queryKey: ['mastersInfo'],
+      queryKey: queryKeys.masters.all,
       queryFn: masterApi.getMastersInfo,
     });
 

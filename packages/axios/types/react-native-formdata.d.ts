@@ -1,4 +1,4 @@
-import { FileInput } from './apiTypes';
+import { FileInput } from '@avoo/shared';
 
 declare global {
   interface FormData {
