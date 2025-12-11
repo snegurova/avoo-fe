@@ -1,11 +1,11 @@
 import {
   BaseResponse,
-  FileInput,
   UserMediaResponse,
   UserProfileResponse,
   UserUpdateAvatarResponse,
 } from '@avoo/axios/types/apiTypes';
 import { apiClient } from '@avoo/axios/src/apiClient';
+import { FileInput } from '@avoo/shared';
 
 const UPDATE_AVATAR_ENDPOINT = '/update-avatar';
 const GET_PROFILE_INFO_ENDPOINT = '/profile';

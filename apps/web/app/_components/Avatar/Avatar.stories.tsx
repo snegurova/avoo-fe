@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { Avatar, AvatarSize } from './Avatar';
+import Avatar, { AvatarSize } from './Avatar';
 
 const meta: Meta<typeof Avatar> = {
   title: 'Components/Avatar',
@@ -16,7 +16,15 @@ const meta: Meta<typeof Avatar> = {
     },
     name: {
       control: 'text',
-      description: 'Name to display below the avatar',
+      description: 'Name for avatar initial',
+    },
+    src: {
+      control: 'text',
+      description: 'Image URL',
+    },
+    bgColor: {
+      control: 'color',
+      description: 'Background color when no image',
     },
   },
 };
@@ -27,36 +35,70 @@ type Story = StoryObj<typeof meta>;
 export const Small: Story = {
   args: {
     size: AvatarSize.Small,
-    name: 'John Doe',
+    name: 'Anna',
+    bgColor: '#9E9E9E',
   },
 };
 
 export const Medium: Story = {
   args: {
     size: AvatarSize.Medium,
-    name: 'Jane Smith',
+    name: 'Anna',
+    bgColor: '#7E57C2',
   },
 };
 
 export const Large: Story = {
   args: {
     size: AvatarSize.Large,
-    name: 'Bob Johnson',
+    name: 'Anna',
+    bgColor: '#FF8A65',
   },
 };
 
-export const WithoutName: Story = {
+export const WithImage: Story = {
   args: {
-    size: AvatarSize.Medium,
+    size: AvatarSize.Large,
+    name: 'Alice Brown',
+    src: 'https://i.pravatar.cc/150?img=1',
   },
 };
 
 export const AllSizes: Story = {
   render: () => (
-    <div className='flex gap-8 items-end'>
-      <Avatar size={AvatarSize.Small} name='Small' />
-      <Avatar size={AvatarSize.Medium} name='Medium' />
-      <Avatar size={AvatarSize.Large} name='Large' />
+    <div className='flex gap-8 items-center'>
+      <Avatar size={AvatarSize.Small} name='Anna' bgColor='hsl(270, 50%, 65%)' />
+      <Avatar size={AvatarSize.Medium} name='Anna' bgColor='hsl(210, 50%, 65%)' />
+      <Avatar size={AvatarSize.Large} name='Anna' bgColor='hsl(30, 50%, 65%)' />
+    </div>
+  ),
+};
+
+export const ColorVariants: Story = {
+  render: () => (
+    <div className='flex gap-4 flex-wrap'>
+      <Avatar size={AvatarSize.Large} name='Anna' bgColor='hsl(270, 50%, 65%)' />
+      <Avatar size={AvatarSize.Large} name='Anna' bgColor='hsl(210, 50%, 65%)' />
+      <Avatar size={AvatarSize.Large} name='Anna' bgColor='hsl(30, 50%, 65%)' />
+      <Avatar size={AvatarSize.Large} name='Anna' bgColor='hsl(140, 50%, 65%)' />
+      <Avatar size={AvatarSize.Large} name='Anna' bgColor='hsl(340, 50%, 65%)' />
+    </div>
+  ),
+};
+
+export const WithAndWithoutImage: Story = {
+  render: () => (
+    <div className='flex gap-4 items-center'>
+      <Avatar 
+        size={AvatarSize.Large} 
+        name='With Image' 
+        src='https://i.pravatar.cc/150?img=2'
+      />
+      <Avatar 
+        size={AvatarSize.Large} 
+        name='Without Image' 
+        bgColor='hsl(210, 50%, 65%)'
+      />
     </div>
   ),
 };

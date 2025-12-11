@@ -25,6 +25,7 @@
   },
   "dependencies": {
     "@avoo/hooks": "workspace:*",
+    "@avoo/shared": "workspace:^",
     "@avoo/store": "workspace:*",
     "@react-native-async-storage/async-storage": "^2.2.0",
     "@react-navigation/bottom-tabs": "^7.5.0",

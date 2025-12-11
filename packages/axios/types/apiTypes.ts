@@ -53,3 +53,6 @@ export type PrivateCalendarQueryParams = Omit<
   operations['CalendarController_getCalendar']['parameters']['query'],
   'view'
 > & { view?: CalendarView };
+
+/** File types - re-exported from @avoo/shared for backward compatibility */
+export type { FileInput, UploadFile } from '@avoo/shared';
