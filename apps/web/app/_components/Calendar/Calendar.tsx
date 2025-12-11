@@ -10,10 +10,6 @@ import { calendarViewType } from '@avoo/hooks/types/calendarViewType';
 import { timeUtils } from '@/_utils/timeUtils';
 import { tv } from 'tailwind-variants';
 
-type Props = {
-  // Add your props here
-};
-
 const columnHeadContainer = tv({
   base: 'sticky bg-white z-10 ',
   variants: {
@@ -47,9 +43,7 @@ const dataContainer = tv({
   },
 });
 
-export default function Calendar(props: Props) {
-  const {} = props;
-
+export default function Calendar() {
   const [date, setDate] = useState<Date>(timeUtils.toDayBegin(new Date()));
   const [toDate, setToDate] = useState<Date>(timeUtils.toDayEnd(new Date()));
 
@@ -66,6 +60,10 @@ export default function Calendar(props: Props) {
       rangeToDate: toDate.toISOString(),
     });
   }, [date, toDate]);
+
+  useEffect(() => {
+    console.log('Calendar view type changed to:', type);
+  }, [type]);
 
   const calendar = calendarHooks.useGetCalendar(params);
   const masters = masterHooks.useGetMastersProfileInfo();
@@ -96,7 +94,7 @@ export default function Calendar(props: Props) {
 
           <div className={dataContainer({ type })}>
             <CalendarTimeScale type={type} date={date} />
-            {!calendarViewType.MONTH &&
+            {type !== calendarViewType.MONTH &&
               masters &&
               masters.map((master) => {
                 const columnData = calendar?.find(
@@ -112,7 +110,7 @@ export default function Calendar(props: Props) {
                   />
                 );
               })}
-            {calendarViewType.MONTH && <div>Month view coming soon!</div>}
+            {type === calendarViewType.MONTH && <div>Month view coming soon!</div>}
           </div>
         </div>
       </div>
