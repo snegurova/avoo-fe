@@ -1,6 +1,6 @@
 import React from 'react';
 import { MasterWithRelationsEntity } from '@avoo/axios/types/apiTypes';
-import { Avatar, AvatarSize } from '@/_components/Avatar/Avatar';
+import { CalendarAvatar, AvatarSize } from '@/_components/CalendarAvatar/CalendarAvatar';
 import { calendarViewType } from '@avoo/hooks/types/calendarViewType';
 import { tv } from 'tailwind-variants';
 
@@ -25,7 +25,12 @@ export default function CalendarColumnHead(props: Props) {
   const { master, idx, type } = props;
   return (
     <div className={container({ type })}>
-      <Avatar name={master ? master.name : undefined} size={AvatarSize.Small} idx={idx} addName />
+      <CalendarAvatar
+        name={master ? master.name : undefined}
+        size={AvatarSize.Small}
+        idx={idx}
+        addName
+      />
     </div>
   );
 }

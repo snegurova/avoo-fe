@@ -3,18 +3,19 @@ import { userApi } from '@avoo/axios';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import {
   BaseResponse,
-  FileInput,
   UserMediaResponse,
   UserProfileResponse,
   UserUpdateAvatarResponse,
 } from '@avoo/axios/types/apiTypes';
+import { FileInput } from '@avoo/shared';
 import { apiStatus } from '../types/apiTypes';
+import { queryKeys } from './queryKeys';
 
 export const userHooks = {
   useGetUserProfile: () => {
     const { data: userProfileData, isPending } = useQuery<BaseResponse<UserProfileResponse>, Error>(
       {
-        queryKey: ['userProfile'],
+        queryKey: queryKeys.user.profile(),
         queryFn: userApi.getUserProfile,
         refetchOnMount: true,
       },
@@ -43,7 +44,7 @@ export const userHooks = {
   },
   useGetUserMedia: () => {
     const { data: userMediaData, isPending } = useQuery<BaseResponse<UserMediaResponse>, Error>({
-      queryKey: ['userMedia'],
+      queryKey: queryKeys.user.media(),
       queryFn: userApi.getUserMedia,
     });
 
@@ -65,7 +66,7 @@ export const userHooks = {
     >({
       mutationFn: userApi.updateAvatar,
       onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: ['userProfile'] });
+        queryClient.invalidateQueries({ queryKey: queryKeys.user.profile() });
       },
     });
 

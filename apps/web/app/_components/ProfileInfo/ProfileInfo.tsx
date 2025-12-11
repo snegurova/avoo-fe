@@ -5,7 +5,7 @@ import { appRoutes } from '@/_routes/routes';
 import { userHooks } from '@avoo/hooks';
 import { ProfileLanguages } from '@/_components/ProfileLanguages/ProfileLanguages';
 import { ProfileCertificates } from '@/_components/ProfileCertificates/ProfileCertificates';
-import AvatarUpload from '@/_components/Avatar/AvatarUpload';
+import AvatarUpload from '@/_components/AvatarUpload/AvatarUpload';
 import { IconButton } from '@/_components/IconButton/IconButton';
 import { useApiStatusStore } from '@avoo/store';
 

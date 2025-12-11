@@ -2,14 +2,7 @@ import { Alert } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { permissionsHooks } from './permissionsHooks';
 import { ImagePickerOptions, MediaType, pickImageOptions, Source } from '../types/imagePicker';
-
-export type UploadFile = {
-  uri: string;
-  type?: string | null;
-  name?: string | null;
-};
-
-export type FileInput = File | UploadFile;
+import { UploadFile } from '@avoo/shared';
 
 export const imagePickerHooks = {
   pickImage: async (props: pickImageOptions): Promise<UploadFile | null> => {

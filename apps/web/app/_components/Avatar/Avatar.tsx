@@ -1,48 +1,71 @@
 'use client';
-import { tv } from 'tailwind-variants';
+import { Avatar as MuiAvatar, AvatarProps as MuiAvatarProps } from '@mui/material';
+import { utilsHooks } from '@/_utils/utilsHooks';
 
 export enum AvatarSize {
-  Small = 'small',
-  Medium = 'medium',
-  Large = 'large',
+  Small = 16,
+  Medium = 32,
+  Large = 40,
 }
 
-type Props = {
-  name?: string | null;
-  size?: AvatarSize;
-  imageUrl?: string;
-  idx?: number;
-  addName?: boolean;
+const sizeConfig = {
+  [AvatarSize.Small]: {
+    width: 16,
+    height: 16,
+    fontSize: 10,
+  },
+  [AvatarSize.Medium]: {
+    width: 32,
+    height: 32,
+    fontSize: 20,
+  },
+  [AvatarSize.Large]: {
+    width: 40,
+    height: 40,
+    fontSize: 20,
+  },
 };
 
-const avatar = tv({
-  base: 'rounded-full mx-auto flex items-center justify-center text-xl font-medium',
-  variants: {
-    size: {
-      [AvatarSize.Small]: 'w-10 h-10',
-      [AvatarSize.Medium]: 'w-20 h-20',
-      [AvatarSize.Large]: 'w-32 h-32',
-    },
-    addName: {
-      true: 'mb-2',
-    },
-    idx: {
-      0: 'bg-avatar',
-      1: 'bg-avatar1',
-      2: 'bg-avatar2',
-    },
-  },
-});
+type Props = {
+  name: string;
+  src?: string | null;
+  size?: AvatarSize;
+  bgColor?: string;
+  textColor?: string;
+} & Omit<MuiAvatarProps, 'src' | 'sx'>;
 
-export const Avatar = (props: Props) => {
-  const { name, size = AvatarSize.Medium, idx, addName } = props;
+export default function Avatar(props: Props) {
+  const {
+    name,
+    src,
+    size = AvatarSize.Large,
+    bgColor = '#9E9E9E',
+    textColor = '#000000',
+    ...rest
+  } = props;
+
+  const config = sizeConfig[size];
 
   return (
-    <div className='text-center'>
-      <div className={avatar({ size, addName, idx: (idx ? idx % 3 : 0) as 0 | 1 | 2 })}>
-        {name && <span>{name.charAt(0).toUpperCase()}</span>}
-      </div>
-      {addName && name && <p className='leading-none text-sm font-semibold text-time'>{name}</p>}
-    </div>
+    <MuiAvatar
+      src={src ?? undefined}
+      alt={name}
+      sx={{
+        width: config.width,
+        height: config.height,
+        bgcolor: !src ? bgColor : undefined,
+        fontSize: config.fontSize,
+        fontWeight: 500,
+        fontFamily: 'Roboto',
+        lineHeight: '100%',
+        color: textColor,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}
+      {...rest}
+    >
+      {!src && utilsHooks.getInitials(name)}
+    </MuiAvatar>
   );
-};
+}

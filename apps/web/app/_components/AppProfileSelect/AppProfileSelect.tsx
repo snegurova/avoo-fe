@@ -6,7 +6,7 @@ import DropdownList from '@/_components/DropdownList/DropdownList';
 import { useRouter } from 'next/navigation';
 import { appRoutes } from '@/_routes/routes';
 import { authHooks } from '@avoo/hooks';
-import { Avatar, AvatarSize } from '@/_components/Avatar/Avatar';
+import { CalendarAvatar, AvatarSize } from '@/_components/CalendarAvatar/CalendarAvatar';
 
 export default function AppProfileSelect() {
   const [isOpen, setIsOpen] = useState(false);
@@ -52,7 +52,7 @@ export default function AppProfileSelect() {
   return (
     <div className='relative select-profile-container'>
       <button className='rounded-full cursor-pointer' onClick={toggleOpen}>
-        <Avatar name={visualProfileInfo?.name} size={AvatarSize.Small} />
+        <CalendarAvatar name={visualProfileInfo?.name} size={AvatarSize.Small} />
       </button>
       {isOpen && <DropdownList options={options} closeDropdown={closeDropdown} isRight />}
     </div>
