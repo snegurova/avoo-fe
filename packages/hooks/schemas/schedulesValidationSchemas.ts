@@ -7,7 +7,7 @@ export const scheduleUpdateSchema = yup.object({
   endAt: yup
     .string()
     .nullable()
-    .matches(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/, 'endAt must be a valid ISO datetime'),
+    .matches(/^\d{4}-\d{2}-\d{2}$/, 'endAt must be a valid ISO date'),
 
   workingHours: yup
     .array()
@@ -60,15 +60,12 @@ export const scheduleCreateSchema = yup.object({
   startAt: yup
     .string()
     .required('startAt is required')
-    .matches(
-      /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/,
-      'startAt must be a valid ISO datetime',
-    ),
+    .matches(/^\d{4}-\d{2}-\d{2}$/, 'startAt must be a valid ISO date'),
 
   endAt: yup
     .string()
     .nullable()
-    .matches(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/, 'endAt must be a valid ISO datetime'),
+    .matches(/^\d{4}-\d{2}-\d{2}$/, 'endAt must be a valid ISO date'),
 
   workingHours: yup
     .array()

@@ -18,10 +18,12 @@ export const getNextMonday = (date: Date) => {
   return result;
 };
 
-export const convertToMidnightDate = (date: Date) => {
-  const result = new Date(date);
-  result.setHours(0, 0, 0, 0);
-  return result;
+export const toLocalDateISO = (date: Date): string => {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0'); // 0-based
+  const day = String(date.getDate()).padStart(2, '0');
+
+  return `${year}-${month}-${day}`;
 };
 
 export const toDisplayDate = (date: Date) => {

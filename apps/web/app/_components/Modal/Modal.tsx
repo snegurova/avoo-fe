@@ -15,9 +15,9 @@ const style = {
   transform: 'translate(-50%, -50%)',
   width: 400,
   bgcolor: 'background.paper',
-  p: 4,
   borderRadius: 2,
-  maxHeight: '90%',
+  p: 4,
+  maxHeight: '90vh',
   overflowY: 'auto',
 };
 export const Modal = (props: Props) => {
@@ -34,13 +34,14 @@ export const Modal = (props: Props) => {
           onClick={onClose}
           sx={{
             position: 'absolute',
-            top: 8,
-            right: 8,
+            top: 4,
+            right: 4,
+            zIndex: 10,
           }}
         >
           <CloseIcon />
         </IconButton>
-        {children}
+        <Box>{children}</Box>
       </Box>
     </MuiModal>
   );

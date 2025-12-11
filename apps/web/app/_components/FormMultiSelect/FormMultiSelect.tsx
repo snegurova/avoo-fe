@@ -21,7 +21,7 @@ export type Props = {
   selectAll?: boolean;
   size?: 'small' | 'medium';
   selectAllLabel?: string;
-  onChange: (values: string[]) => void;
+  onChange?: (values: string[]) => void;
 };
 
 export const FormMultiSelect = (props: Props) => {
@@ -40,7 +40,7 @@ export const FormMultiSelect = (props: Props) => {
     const {
       target: { value },
     } = event;
-    onChange(typeof value === 'string' ? value.split(',') : value);
+    onChange?.(typeof value === 'string' ? value.split(',') : value);
   };
   const ITEM_HEIGHT = 48;
   const ITEM_PADDING_TOP = 8;

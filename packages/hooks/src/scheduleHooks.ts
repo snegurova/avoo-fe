@@ -18,7 +18,7 @@ import {
   ScheduleCreateFormData,
   scheduleCreateSchema,
 } from '../schemas/schedulesValidationSchemas';
-import { convertToMidnightDate, getNextMonday } from '../../../apps/web/app/_utils/date.utils';
+import { toLocalDateISO, getNextMonday } from '../../../apps/web/app/_utils/date.utils';
 
 type UseCreateScheduleFormParams = {
   onSuccess?: () => void;
@@ -74,7 +74,7 @@ export const scheduleHooks = {
         pattern: 7,
         patternType: 'weekly',
         mastersIds: [],
-        startAt: convertToMidnightDate(getNextMonday(new Date())).toISOString(),
+        startAt: toLocalDateISO(getNextMonday(new Date())),
         endAt: null,
         workingHours: Array.from({ length: 7 }).map((_, i) => ({
           enabled: i < 5,

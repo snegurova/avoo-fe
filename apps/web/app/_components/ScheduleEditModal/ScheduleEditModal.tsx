@@ -8,9 +8,9 @@ import { Modal } from '../Modal/Modal';
 import FormInput from '../FormInput/FormInput';
 import { FormMultiSelect } from '../FormMultiSelect/FormMultiSelect';
 import { DateSelect } from '../DateSelect/DateSelect';
-import { convertToMidnightDate } from '@/_utils/date.utils';
 import { getAllErrorMessages } from '@/_utils/formError.utils';
 import { Button } from '@mui/material';
+import { WorkingDayRow } from '../WorkingDayRow/WorkingDayRow';
 
 type Props = {
   scheduleId: number | null;
@@ -24,7 +24,7 @@ export const ScheduleEditModal = (props: Props) => {
   const schedule = scheduleHooks.useGetScheduleById(scheduleId);
   const isPending = useApiStatusStore((state) => state.isPending);
 
-  const { register, errors, control } = scheduleHooks.useUpdateScheduleForm({
+  const { register, errors, control, watch, setValue } = scheduleHooks.useUpdateScheduleForm({
     onSuccess: () => {
       alert('Schedule updated successfully');
     },
@@ -36,7 +36,7 @@ export const ScheduleEditModal = (props: Props) => {
       label: m.name ?? `Master #${m.id}`,
       value: m.id.toString(),
     })) ?? [];
-
+  mastersOptions.push({ label: 'All', value: 'all' });
   const errorsList = getAllErrorMessages(errors);
 
   return (
@@ -50,19 +50,37 @@ export const ScheduleEditModal = (props: Props) => {
             label='Name'
             value={schedule.name}
           />
-          <Controller
+
+          <FormMultiSelect
             name='mastersIds'
-            control={control}
-            render={({ field }) => (
-              <FormMultiSelect
-                name='mastersIds'
-                label='Apply to'
-                options={mastersOptions}
-                selected={((field.value ?? []) as number[]).map((v) => v.toString())}
-                onChange={(vals) => field.onChange(vals.map((v) => Number(v)))}
-              />
-            )}
+            label='Apply to'
+            options={mastersOptions}
+            selected={[schedule.master ? schedule.master.id.toString() : 'all']}
+            disabled
           />
+
+          <DateSelect name='startAt' label='Start at' value={dayjs(schedule.startAt)} disabled />
+
+          {/* {fields.map((field, index) => (
+                    <WorkingDayRow
+                      key={field.id}
+                      index={index}
+                      control={control}
+                      watch={watch}
+                      scheduleType={scheduleType}
+                      setValue={setValue}
+                    />
+                  ))} */}
+
+          {schedule.workingHours.map((day, index) => (
+            <WorkingDayRow
+              key={day.id}
+              index={index}
+              control={control}
+              watch={watch}
+              setValue={setValue}
+            />
+          ))}
           <Controller
             name='endAt'
             control={control}
@@ -71,9 +89,7 @@ export const ScheduleEditModal = (props: Props) => {
                 name='startAt'
                 label='End date'
                 value={field.value ? dayjs(field.value) : null}
-                onChange={(date) =>
-                  field.onChange(date ? convertToMidnightDate(new Date(date)).toISOString() : null)
-                }
+                onChange={(value) => field.onChange(value)}
               />
             )}
           />

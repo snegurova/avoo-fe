@@ -9,7 +9,7 @@ import { FormMultiSelect } from '../FormMultiSelect/FormMultiSelect';
 import { DateSelect } from '../DateSelect/DateSelect';
 import FormInput from '../FormInput/FormInput';
 import { getAllErrorMessages } from '@/_utils/formError.utils';
-import { convertToMidnightDate, getNextMonday } from '@/_utils/date.utils';
+import { toLocalDateISO, getNextMonday } from '@/_utils/date.utils';
 import { WorkingDayRow } from '../WorkingDayRow/WorkingDayRow';
 import {
   BREAK_END_MINUTES,
@@ -127,15 +127,13 @@ export const ScheduleAddModal = (props: Props) => {
         <Controller
           name='startAt'
           control={control}
-          defaultValue={convertToMidnightDate(getNextMonday(new Date())).toISOString()}
+          defaultValue={toLocalDateISO(getNextMonday(new Date()))}
           render={({ field }) => (
             <DateSelect
               name='startAt'
               label='Start date'
               value={dayjs(field.value)}
-              onChange={(date) =>
-                field.onChange(date ? convertToMidnightDate(new Date(date)).toISOString() : null)
-              }
+              onChange={(value) => field.onChange(value)}
             />
           )}
         />
@@ -158,9 +156,7 @@ export const ScheduleAddModal = (props: Props) => {
               name='startAt'
               label='End date'
               value={field.value ? dayjs(field.value) : null}
-              onChange={(date) =>
-                field.onChange(date ? convertToMidnightDate(new Date(date)).toISOString() : null)
-              }
+              onChange={(value) => field.onChange(value)}
             />
           )}
         />
