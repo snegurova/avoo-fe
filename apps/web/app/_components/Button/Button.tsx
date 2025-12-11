@@ -6,16 +6,12 @@ import { tv } from 'tailwind-variants';
 export enum ButtonIntent {
   Primary = 'primary',
   Secondary = 'secondary',
-  Cancel = 'cancel',
-  Submit = 'submit',
 }
 
 export enum ButtonFit {
   Fill = 'fill',
   Inline = 'inline',
 }
-
-export type ButtonSize = 'sm' | 'md' | 'lg';
 
 type UseOnClickParams = {
   disabled?: boolean;
@@ -51,11 +47,6 @@ const button = tv({
       fill: 'w-full',
       inline: 'w-fit',
     },
-    size: {
-      sm: 'px-3 py-1 text-sm',
-      md: 'px-4 py-2 text-base',
-      lg: 'px-6 py-3 text-lg',
-    },
   },
   defaultVariants: { intent: 'primary', size: 'md' },
 });
@@ -64,7 +55,6 @@ export type Props = {
   children: JSX.Element | string;
   fit?: ButtonFit;
   intent?: ButtonIntent;
-  size?: ButtonSize;
   disabled?: boolean;
   loading?: boolean;
   onClick?: React.MouseEventHandler;
@@ -77,7 +67,6 @@ export const Button = (props: Props) => {
     children,
     fit = ButtonFit.Inline,
     intent = ButtonIntent.Primary,
-    size = 'md',
     disabled = false,
     loading = false,
     onClick,
@@ -90,7 +79,7 @@ export const Button = (props: Props) => {
   return (
     <button
       type={type}
-      className={`${button({ intent, fit, size })} ${className ?? ''}`}
+      className={`${button({ intent, fit })} ${className ?? ''}`}
       disabled={disabled}
       onClick={handleClick}
     >

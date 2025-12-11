@@ -4,14 +4,17 @@ import React, { useState, useCallback, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { appRoutes } from '@/_routes/routes';
 import { userHooks, masterHooks } from '@avoo/hooks';
-import { Button, ButtonFit, ButtonIntent } from '@/_components/Button/Button';
+import { Button } from '@mui/material';
 import FormInput from '@/_components/FormInput/FormInput';
 import SelectButton from '@/_components/SelectButton/SelectButton';
+import { useApiStatusStore } from '@avoo/store';
 
 export const CertificateAdd = () => {
   const router = useRouter();
   const { handleAddCertificate } = userHooks.usePostCertificate();
   const masters = masterHooks.useGetMastersProfileInfo();
+
+  const isPending = useApiStatusStore((state) => state.isPending);
 
   const [ownerType, setOwnerType] = useState<'salon' | 'master'>('salon');
   const [selectedMasterId, setSelectedMasterId] = useState<number | null>(null);
@@ -196,14 +199,21 @@ export const CertificateAdd = () => {
       </div>
       <div className='flex justify-center gap-3'>
         <Button
-          type='button'
-          intent={ButtonIntent.Cancel}
-          fit={ButtonFit.Inline}
           onClick={() => router.back()}
+          loading={isPending}
+          color='secondary'
+          variant='outlined'
+          sx={{ minWidth: 150 }}
         >
           Cancel
         </Button>
-        <Button type='submit' intent={ButtonIntent.Submit} fit={ButtonFit.Inline}>
+        <Button
+          type='submit'
+          loading={isPending}
+          color='secondary'
+          variant='contained'
+          sx={{ minWidth: 150 }}
+        >
           Save
         </Button>
       </div>
