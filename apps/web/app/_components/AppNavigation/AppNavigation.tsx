@@ -23,7 +23,7 @@ export default function AppNavigation() {
       label: 'Calendar',
     },
     {
-      href: appRoutes.Clietns,
+      href: appRoutes.Clients,
       icon: <CoPresentIcon />,
       label: 'Clients',
     },

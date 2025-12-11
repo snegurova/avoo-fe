@@ -1,11 +1,12 @@
 'use client';
 
+import React, { useState, useCallback, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { appRoutes } from '@/_routes/routes';
 import { userHooks, masterHooks } from '@avoo/hooks';
 import { Button, ButtonFit, ButtonIntent } from '@/_components/Button/Button';
+import FormInput from '@/_components/FormInput/FormInput';
 import SelectButton from '@/_components/SelectButton/SelectButton';
-import { useState, useCallback, useRef } from 'react';
 
 export const CertificateAdd = () => {
   const router = useRouter();
@@ -48,7 +49,8 @@ export const CertificateAdd = () => {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    const formData = new FormData(event.currentTarget);
+    const form = event.currentTarget;
+    const formData = new FormData(form);
     const title = (formData.get('title') as string) ?? '';
     const description = (formData.get('description') as string) ?? '';
     const issueDate = (formData.get('issueDate') as string) ?? '';
@@ -73,12 +75,23 @@ export const CertificateAdd = () => {
       payload.masterId = selectedMasterId;
     }
 
-    if (file) {
-      payload.file = file;
-    }
+    if (file) payload.file = file;
 
-    handleAddCertificate(payload);
-    router.push(appRoutes.Certificates);
+    handleAddCertificate(payload, {
+      onSuccess: () => {
+        form.reset();
+
+        setOwnerType('salon');
+        setSelectedMasterId(null);
+        setSelectedMasterError(null);
+        setFile(null);
+        setFileError(null);
+
+        if (fileInputRef.current) fileInputRef.current.value = '';
+    
+        router.push(appRoutes.Certificates);
+      },
+    });
   };
 
   return (
@@ -88,22 +101,20 @@ export const CertificateAdd = () => {
         <label htmlFor='title' className='block text-gray-700 font-semibold mb-2'>
           Title
         </label>
-        <input
+        <FormInput
           type='text'
           id='title'
           name='title'
-          className='w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500'
           placeholder='Enter certificate title'
           required
         />
         <label htmlFor='description' className='block text-gray-700 font-semibold mb-2'>
           Description
         </label>
-        <input
+        <FormInput
           type='text'
           id='description'
           name='description'
-          className='w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500'
           placeholder='Enter certificate description'
         />
       </div>
@@ -115,9 +126,8 @@ export const CertificateAdd = () => {
       </div>
       <div className='mb-4'>
         <label htmlFor='masterId' className='block text-gray-700 font-semibold mb-2'>
-          Owner
+          Master
         </label>
-        {/* Owner selector: default is Salon. Select a master from dropdown to set owner to master. */}
         <div>
           <SelectButton
             label={
@@ -135,11 +145,11 @@ export const CertificateAdd = () => {
                   setSelectedMasterError(null);
                 },
               },
-              ...((masters ?? []).map((m) => ({
-                label: m.name ?? `Master ${m.id}`,
+              ...((masters ?? []).map((master) => ({
+                label: master.name ?? `Master ${master.id}`,
                 handler: () => {
                   setOwnerType('master');
-                  setSelectedMasterId(m.id);
+                  setSelectedMasterId(master.id);
                   setSelectedMasterError(null);
                 },
               })) as { label: string; handler: () => void }[]),
@@ -153,13 +163,10 @@ export const CertificateAdd = () => {
       </div>
 
       <div className='mb-4'>
-        <label htmlFor='certificateFileInput' className='block text-gray-700 font-semibold mb-2'>
-          Certificate File
-        </label>
         <button
           type='button'
           aria-label='Upload certificate file'
-          className='w-full text-left border-2 border-dashed border-gray-300 rounded-lg p-6 text-center cursor-pointer'
+          className='w-full text-center border-2 border-dashed border-gray-300 rounded-lg p-6 text-center cursor-pointer'
           onDragOver={(e) => e.preventDefault()}
           onDrop={(e) => {
             e.preventDefault();
@@ -187,7 +194,7 @@ export const CertificateAdd = () => {
           {fileError && <p className='text-sm text-red-500 mt-2'>{fileError}</p>}
         </button>
       </div>
-      <div className='flex justify-end gap-3'>
+      <div className='flex justify-center gap-3'>
         <Button
           type='button'
           intent={ButtonIntent.Cancel}
@@ -196,7 +203,6 @@ export const CertificateAdd = () => {
         >
           Cancel
         </Button>
-
         <Button type='submit' intent={ButtonIntent.Submit} fit={ButtonFit.Inline}>
           Save
         </Button>
