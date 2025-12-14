@@ -3,6 +3,7 @@ import {
   UserMediaResponse,
   UserProfileResponse,
   UserUpdateAvatarResponse,
+  CertificateResponse,
 } from '@avoo/axios/types/apiTypes';
 import { apiClient } from '@avoo/axios/src/apiClient';
 import { FileInput } from '@avoo/shared';
@@ -43,7 +44,7 @@ export const userApi = {
     issueDate: string;
     description?: string;
     masterId?: number;
-    file?: File | Blob;
+    file?: FileInput;
   }) {
     const formData = new FormData();
 
@@ -52,18 +53,22 @@ export const userApi = {
     }
     formData.append('title', payload.title);
     if (payload.description) {
-      formData.append('description', payload.description as any);
+      formData.append('description', payload.description);
     }
     formData.append('issueDate', payload.issueDate);
     if (payload.file) {
-      formData.append('file', payload.file as any);
+      formData.append('file', payload.file);
     }
 
-    const response = await apiClient.post<BaseResponse<any>>(CERTIFICATES_ENDPOINT, formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
+    const response = await apiClient.post<BaseResponse<CertificateResponse>>(
+      CERTIFICATES_ENDPOINT,
+      formData,
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
       },
-    });
+    );
 
     return response.data;
   },

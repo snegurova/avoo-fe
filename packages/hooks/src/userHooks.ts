@@ -3,6 +3,7 @@ import { userApi } from '@avoo/axios';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import {
   BaseResponse,
+  CertificateResponse,
   UserMediaResponse,
   UserProfileResponse,
   UserUpdateAvatarResponse,
@@ -80,20 +81,20 @@ export const userHooks = {
     const queryClient = useQueryClient();
 
     const { mutate: handleAddCertificate, isPending } = useMutation<
-      BaseResponse<any>,
+      BaseResponse<CertificateResponse>,
       Error,
       {
         title: string;
         issueDate: string;
         description?: string;
         masterId?: number;
-        file?: File | Blob;
+        file?: FileInput;
       }
     >({
       mutationFn: (payload) => userApi.createCertificate(payload),
       onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: ['userProfile'] });
-        queryClient.invalidateQueries({ queryKey: ['userCertificates'] });
+        queryClient.invalidateQueries({ queryKey: queryKeys.user.profile() });
+        queryClient.invalidateQueries({ queryKey: queryKeys.user.certificates() });
       },
     });
 

@@ -31,6 +31,8 @@ export type UserMediaResponse = {
 
 export type UserUpdateAvatarResponse = components['schemas']['UserEntity'];
 
+export type CertificateResponse = components['schemas']['CertificateEntity'];
+
 /** Master */
 export type MasterWithRelationsEntityResponse = components['schemas']['MasterEntity'][];
 

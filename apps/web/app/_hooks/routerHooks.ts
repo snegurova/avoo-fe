@@ -11,6 +11,16 @@ export const routerHooks = {
       router.push(appRoutes.Home);
     }, [router]);
   },
+  useBackWithFallback: (fallback: appRoutes) => {
+    const router = useRouter();
+    return useCallback(() => {
+      if (typeof window !== 'undefined' && window.history.length > 1) {
+        router.back();
+      } else {
+        router.push(fallback);
+      }
+    }, [router, fallback]);
+  },
   useIsValidRoute: (path: string | null): path is appRoutes => {
     const validRoutes = new Set<string>(Object.values(appRoutes));
 

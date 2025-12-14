@@ -13,6 +13,12 @@ export enum ButtonFit {
   Inline = 'inline',
 }
 
+export enum ButtonType {
+  Button = 'button',
+  Submit = 'submit',
+  Reset = 'reset',
+}
+
 type UseOnClickParams = {
   disabled?: boolean;
   loading?: boolean;
@@ -58,7 +64,7 @@ export type Props = {
   disabled?: boolean;
   loading?: boolean;
   onClick?: React.MouseEventHandler;
-  type?: 'button' | 'submit' | 'reset';
+  type?: ButtonType;
   className?: string;
 };
 
@@ -70,7 +76,7 @@ export const Button = (props: Props) => {
     disabled = false,
     loading = false,
     onClick,
-    type = 'button',
+    type = ButtonType.Button,
     className,
   } = props;
 
@@ -79,7 +85,7 @@ export const Button = (props: Props) => {
   return (
     <button
       type={type}
-      className={`${button({ intent, fit })} ${className ?? ''}`}
+      className={button({ intent, fit, className })}
       disabled={disabled}
       onClick={handleClick}
     >
