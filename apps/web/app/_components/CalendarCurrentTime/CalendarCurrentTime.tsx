@@ -8,7 +8,7 @@ type Props = {
 };
 
 const marker = tv({
-  base: 'absolute w-full -translate-y-1/2 pointer-events-none flex items-center after:content-[""] after:h-px after:bg-important after:w-full after:grow min-h-1',
+  base: 'absolute w-full -translate-y-1/2 pointer-events-none flex items-center after:content-[""] after:h-px after:bg-red-700 after:w-full after:grow min-h-1',
   variants: {
     showLabel: {
       true: 'pl-0.5 h-5',
@@ -21,7 +21,7 @@ const label = tv({
   base: '',
   variants: {
     showLabel: {
-      true: 'w-min border border-important rounded-2xl bg-white p-1 font-medium text-[10px] leading-[1.2] text-important',
+      true: 'w-min border border-red-700 rounded-2xl bg-white p-1 font-medium text-[10px] leading-[1.2] text-red-700',
       false: '',
     },
   },

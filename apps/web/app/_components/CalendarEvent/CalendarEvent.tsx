@@ -26,9 +26,9 @@ const eventItem = tv({
   base: 'border rounded-[3px] overflow-hidden h-full p-1 relative w-full flex flex-col items-start gap-0.5 cursor-pointer',
   variants: {
     status: {
-      [orderStatus.PENDING]: 'border-pending bg-pendingBg text-pendingText',
-      [orderStatus.CONFIRMED]: 'border-confirmed bg-confirmedBg text-confirmed',
-      [orderStatus.COMPLETED]: 'border-completed bg-completedBg text-completed',
+      [orderStatus.PENDING]: 'border-orange-500 bg-orange-50 text-orange-700',
+      [orderStatus.CONFIRMED]: 'border-blue-700 bg-blue-50 text-blue-700',
+      [orderStatus.COMPLETED]: 'border-green-700 bg-green-50 text-green-700',
     },
   },
 });
@@ -37,8 +37,8 @@ const eventLabel = tv({
   base: 'text-[10px] font-medium text-white leading-none px-1.5 py-1 flex items-center justify-center absolute top-0.5 right-0.5 rounded-2xl capitalize',
   variants: {
     status: {
-      [orderStatus.PENDING]: 'bg-pending',
-      conflict: 'bg-canceled',
+      [orderStatus.PENDING]: 'bg-orange-500',
+      conflict: 'bg-red-800',
     },
   },
 });

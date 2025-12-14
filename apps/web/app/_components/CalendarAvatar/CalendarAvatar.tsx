@@ -42,7 +42,7 @@ export const CalendarAvatar = (props: Props) => {
       <div className={avatar({ size, addName, idx: (idx ? idx % 3 : 0) as 0 | 1 | 2 })}>
         {name && <span>{name.charAt(0).toUpperCase()}</span>}
       </div>
-      {addName && name && <p className='leading-none text-sm font-semibold text-time'>{name}</p>}
+      {addName && name && <p className='leading-none text-sm font-semibold text-black'>{name}</p>}
     </div>
   );
 };

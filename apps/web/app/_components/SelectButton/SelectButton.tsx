@@ -15,7 +15,7 @@ const selectButton = tv({
     type: {
       solid: 'text-white bg-black gap-6 px-6 py-2.5',
       outline:
-        'text-contorlsText border border-controlsBorder bg-transparent gap-4 px-3 py-2.5 text-sm leading-none',
+        'text-gray-800 border border-gray-200 bg-transparent gap-4 px-3 py-2.5 text-sm leading-none',
     },
   },
 });
@@ -27,7 +27,7 @@ const selectIcon = tv({
       true: '-scale-y-100',
     },
     type: {
-      outline: 'fill-contorlsText w-3.5 h-3.5',
+      outline: 'fill-gray-800 w-3.5 h-3.5',
       solid: 'fill-white',
     },
   },

@@ -16,7 +16,7 @@ const dropdownList = tv({
       false: 'left-0',
     },
     type: {
-      outline: 'bg-white py-4 px-3 border border-controlsBorder',
+      outline: 'bg-white py-4 px-3 border border-gray-200',
       solid: '',
     },
   },
@@ -27,7 +27,7 @@ const button = tv({
   variants: {
     type: {
       outline:
-        'text-dropdownText font-medium p-2 text-sm leading-[1.15] rounded-xl hover:bg-light focus:bg-light',
+        'text-gray-700 font-medium p-2 text-sm leading-[1.15] rounded-xl hover:bg-primary-50 focus:bg-primary-50',
       solid: 'text-white bg-black px-6 py-2.5 ',
     },
   },

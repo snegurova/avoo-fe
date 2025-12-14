@@ -21,7 +21,7 @@ type Props = {
 };
 
 const controlsButton = tv({
-  base: 'cursor-pointer text-contorlsText border border-controlsBorder bg-transparent px-3 py-2.5 text-sm leading-none transition-colors',
+  base: 'cursor-pointer text-gray-800 border border-gray-200 bg-transparent px-3 py-2.5 text-sm leading-none transition-colors',
   variants: {
     variant: {
       full: 'rounded-2xl',
@@ -116,7 +116,7 @@ export default function CalendarControls(props: Props) {
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <div className='bg-controls px-4 py-3 flex gap-3'>
+      <div className='bg-gray-50 px-4 py-3 flex gap-3'>
         <button
           type='button'
           className={controlsButton({ variant: 'full' })}
@@ -130,7 +130,7 @@ export default function CalendarControls(props: Props) {
             className={controlsButton({ variant: 'left' })}
             onClick={setPreviousDate}
           >
-            <ArrowBackIcon className='fill-contorlsText w-3.5 h-3.5' />
+            <ArrowBackIcon className='fill-gray-800 w-3.5 h-3.5' />
           </button>
           <DatePicker
             value={dayjs(date)}
@@ -147,12 +147,12 @@ export default function CalendarControls(props: Props) {
                   '& .MuiPickersSectionList-root': {
                     padding: '8px 0',
                     fontSize: '14px',
-                    color: 'var(--color-contorlsText)',
+                    color: 'var(--color-gray-800)',
                     leading: '1.15',
                   },
                 },
               },
-              openPickerIcon: { className: 'fill-contorlsText w-4 h-4' },
+              openPickerIcon: { className: 'fill-gray-800 w-4 h-4' },
             }}
           />
           <button
@@ -160,7 +160,7 @@ export default function CalendarControls(props: Props) {
             className={controlsButton({ variant: 'right' })}
             onClick={setNextDate}
           >
-            <ArrowForwardIcon className='fill-contorlsText w-3.5 h-3.5' />
+            <ArrowForwardIcon className='fill-gray-800 w-3.5 h-3.5' />
           </button>
         </div>
         <SelectButton label={type} options={options} type='outline' />

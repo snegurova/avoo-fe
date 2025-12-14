@@ -4,36 +4,9 @@
 @theme {
   --font-inter: 'Inter', sans-serif;
   --font-roboto: 'Roboto', sans-serif;
-  --color-primary: #bb94ce;
-  --color-secondary: #e8deee;
-  --color-light: #f8f6fc;
-  --color-dark: #8a51ab;
-  --color-border: #e2e2e2;
-  --color-border2: #eef0f2;
-  --color-border3: #c0c0c0;
-  --color-border4: #dadce0;
-  --color-cell: #f1f1f2;
-  --color-time: #444444;
-  --color-logo: #4d4d4d;
-  --color-dropdownText: #34373b;
-  --color-controls: #f6f6f6;
-  --color-contorlsText: #1d2025;
-  --color-controlsBorder: #e7e7e8;
   --color-avatar: #bab0d8;
   --color-avatar1: #94a6ce;
   --color-avatar2: #f1ba91;
-  --color-pending: #dc9239;
-  --color-pendingText: #835318;
-  --color-pendingBg: #fdfaf6;
-  --color-canceled: #dc4a41;
-  --color-important: #ac0900;
-  --color-canceledBg: #fdf6f5;
-  --color-confirmed: #347fdb;
-  --color-confirmedBg: #f1f6fd;
-  --color-expired: #7d7f82;
-  --color-expiredBg: #f7f7f8;
-  --color-completed: #1a6849;
-  --color-completedBg: #f3faf6;
 }
 
 body {

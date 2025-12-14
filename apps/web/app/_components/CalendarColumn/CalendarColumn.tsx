@@ -19,7 +19,7 @@ type Props = {
 };
 
 const col = tv({
-  base: 'flex-1 border-border3 grow relative bg-cell',
+  base: 'flex-1 border-gray-300 grow relative bg-gray-100',
   variants: {
     type: {
       [calendarViewType.DAY]: 'border-r min-w-90 ',
@@ -33,13 +33,13 @@ const cell = tv({
   base: 'box-border relative z-5 ',
   variants: {
     main: {
-      true: 'border-t-border3',
-      false: 'border-t-border4',
+      true: 'border-t-gray-300',
+      false: 'border-t-gray-200',
     },
     type: {
       [calendarViewType.DAY]:
-        'h-6 border-t last:border-b last:border-b-border3 pointer-events-none',
-      [calendarViewType.WEEK]: 'h-full not-last:border-r border-border3 min-w-40 flex-1',
+        'h-6 border-t last:border-b last:border-b-gray-300 pointer-events-none',
+      [calendarViewType.WEEK]: 'h-full not-last:border-r border-gray-300 min-w-40 flex-1',
       [calendarViewType.MONTH]: '',
     },
   },
@@ -115,7 +115,7 @@ export default function CalendarColumn(props: Props) {
                     ))}
                   </div>
                   {data.days[idx].events.length > 3 && (
-                    <div className='text-xs text-time font-medium mt-0.5 px-1'>
+                    <div className='text-xs text-black font-medium mt-0.5 px-1'>
                       +{data.days[idx].events.length - 3} more
                     </div>
                   )}
