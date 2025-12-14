@@ -33,11 +33,20 @@ export default function CalendarCurrentTime(props: Props) {
   const [time, setTime] = useState(timeUtils.getMinutesInDay(new Date().toString()));
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setTime(timeUtils.getMinutesInDay(new Date().toString()));
-    }, 60000);
+    let interval: ReturnType<typeof setInterval> | null = null;
 
-    return () => clearInterval(interval);
+    const now = new Date();
+    const delay = (60 - now.getSeconds()) * 1000 - now.getMilliseconds();
+    const timeout = setTimeout(() => {
+      interval = setInterval(() => {
+        setTime(timeUtils.getMinutesInDay(new Date().toString()));
+      }, 60000);
+      setTime(timeUtils.getMinutesInDay(new Date().toString()));
+    }, delay);
+    return () => {
+      clearTimeout(timeout);
+      if (interval) clearInterval(interval);
+    };
   }, []);
 
   return (

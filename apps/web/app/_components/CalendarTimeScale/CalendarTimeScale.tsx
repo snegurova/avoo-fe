@@ -44,9 +44,9 @@ export default function CalendarTimeScale(props: Props) {
         Array.from({ length: 7 }).map((_, idx) => (
           <div
             key={type + idx}
-            className='h-full p-1 first:border-l not-last:border-r border-border3 text-xs text-time font-medium box-border border-b flex items-center justify-center flex-1 min-w-40'
+            className='h-full p-1 not-last:border-r border-border3 text-xs text-time font-medium box-border border-b flex items-center justify-center flex-1 min-w-40'
           >
-            {type === calendarViewType.WEEK && <>{weekRange.start.getDate() + idx},</>}
+            {type === calendarViewType.WEEK && <>{weekRange.start.getDate() + idx}, </>}
             {timeUtils.getWeekDay(idx)}
           </div>
         ))}

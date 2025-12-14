@@ -15,7 +15,8 @@ const container = tv({
   variants: {
     type: {
       [calendarViewType.DAY]: 'min-w-90 h-19 py-2',
-      [calendarViewType.WEEK]: 'w-20 min-h-40 px-2 flex items-center justify-center',
+      [calendarViewType.WEEK]:
+        'w-20 first:min-h-50 min-h-40 px-2 flex items-center justify-center  border-r border-border3 first:pt-10',
       [calendarViewType.MONTH]: '',
     },
   },

@@ -4,10 +4,23 @@ import { PrivateEvent } from '@avoo/axios/types/apiTypes';
 import { tv } from 'tailwind-variants';
 import { orderStatus } from '@avoo/hooks/types/orderStatus';
 import { PX_IN_MINUTE } from '@/_constants/time';
+import { calendarViewType } from '@avoo/hooks/types/calendarViewType';
 
 type Props = {
   event: PrivateEvent;
+  type: calendarViewType;
 };
+
+const container = tv({
+  base: 'z-6 p-0.5',
+  variants: {
+    type: {
+      [calendarViewType.DAY]: 'absolute left-0 right-0  ',
+      [calendarViewType.WEEK]: 'relative',
+      [calendarViewType.MONTH]: '',
+    },
+  },
+});
 
 const eventItem = tv({
   base: 'border rounded-[3px] overflow-hidden h-full p-1 relative w-full flex flex-col items-start gap-0.5 cursor-pointer',
@@ -31,7 +44,7 @@ const eventLabel = tv({
 });
 
 export default function CalendarEvent(props: Props) {
-  const { event } = props;
+  const { event, type } = props;
 
   const onEventClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
@@ -44,12 +57,15 @@ export default function CalendarEvent(props: Props) {
       event.status === orderStatus.CONFIRMED ||
       event.status === orderStatus.COMPLETED ? (
         <div
-          key={event.id}
-          className='absolute left-0 right-0 p-0.5 z-6'
-          style={{
-            top: `${timeUtils.getMinutesInDay(event.start) * PX_IN_MINUTE}px`,
-            height: `${(timeUtils.getMinutesInDay(event.end) - timeUtils.getMinutesInDay(event.start)) * PX_IN_MINUTE}px`,
-          }}
+          className={container({ type })}
+          style={
+            type === calendarViewType.DAY
+              ? {
+                  top: `${timeUtils.getMinutesInDay(event.start) * PX_IN_MINUTE}px`,
+                  height: `${(timeUtils.getMinutesInDay(event.end) - timeUtils.getMinutesInDay(event.start)) * PX_IN_MINUTE}px`,
+                }
+              : undefined
+          }
         >
           <button
             type='button'

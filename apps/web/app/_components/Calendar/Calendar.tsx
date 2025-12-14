@@ -15,7 +15,7 @@ const columnHeadContainer = tv({
   variants: {
     type: {
       [calendarViewType.DAY]: 'flex pl-10.5 top-0 ',
-      [calendarViewType.WEEK]: 'flex left-0 flex flex-col pt-10',
+      [calendarViewType.WEEK]: 'flex left-0 flex flex-col',
       [calendarViewType.MONTH]: 'hidden',
     },
   },
@@ -61,10 +61,6 @@ export default function Calendar() {
     });
   }, [date, toDate]);
 
-  useEffect(() => {
-    console.log('Calendar view type changed to:', type);
-  }, [type]);
-
   const calendar = calendarHooks.useGetCalendar(params);
   const masters = masterHooks.useGetMastersProfileInfo();
 
@@ -107,6 +103,9 @@ export default function Calendar() {
                     master={master}
                     type={type}
                     date={date}
+                    setDate={setDate}
+                    setToDate={setToDate}
+                    setType={setType}
                   />
                 );
               })}
