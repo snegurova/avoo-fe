@@ -15,6 +15,8 @@ import PostsScreen from '@/screens/PostsScreen';
 import GalleryScreen from '@/screens/GalleryScreen';
 import EditLanguagesScreen from '@/screens/EditLanguagesScreen';
 import EditProfileScreen from '@/screens/EditProfileScreen';
+import AddPostScreen from '@/screens/AddPostScreen';
+import AddBookingScreen from '@/screens/AddBookingScreen';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -46,6 +48,8 @@ const AppContainer = () => {
           <Stack.Screen name={RootScreens.GalleryScreen} component={GalleryScreen} />
           <Stack.Screen name={RootScreens.EditLanguagesScreen} component={EditLanguagesScreen} />
           <Stack.Screen name={RootScreens.EditProfileScreen} component={EditProfileScreen} />
+          <Stack.Screen name={RootScreens.AddPostScreen} component={AddPostScreen} />
+          <Stack.Screen name={RootScreens.AddBookingScreen} component={AddBookingScreen} />
         </>
       )}
 
