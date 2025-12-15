@@ -1,7 +1,18 @@
 import React, { useEffect } from 'react';
 import { Controller, useFieldArray } from 'react-hook-form';
 import dayjs from 'dayjs';
-import { masterHooks, scheduleHooks } from '@avoo/hooks';
+import {
+  masterHooks,
+  scheduleHooks,
+  ScheduleKey,
+  START_MINUTE,
+  END_MINUTE,
+  BREAK_START_MINUTES,
+  BREAK_END_MINUTES,
+  TYPE_OF_SCHEDULE,
+  getNextMonday,
+  toLocalDateISO,
+} from '@avoo/hooks';
 import { useApiStatusStore } from '@avoo/store';
 import { Modal } from '../Modal/Modal';
 import { FormSelect } from '../FormSelect/FormSelect';
@@ -9,16 +20,8 @@ import { FormMultiSelect } from '../FormMultiSelect/FormMultiSelect';
 import { DateSelect } from '../DateSelect/DateSelect';
 import FormInput from '../FormInput/FormInput';
 import { getAllErrorMessages } from '@/_utils/formError.utils';
-import { toLocalDateISO, getNextMonday } from '@/_utils/date.utils';
 import { WorkingDayRow } from '../WorkingDayRow/WorkingDayRow';
-import {
-  BREAK_END_MINUTES,
-  BREAK_START_MINUTES,
-  END_MINUTE,
-  ScheduleKey,
-  START_MINUTE,
-  TYPE_OF_SCHEDULE,
-} from '@/_utils/common/schedule.common';
+
 import { Button } from '@mui/material';
 
 type Props = {
@@ -48,11 +51,7 @@ export const ScheduleAddModal = (props: Props) => {
   const masters = masterHooks.useGetMastersProfileInfo();
 
   const scheduleType = watch('patternType') as ScheduleKey;
-  const scheduleOptions = (Object.keys(TYPE_OF_SCHEDULE) as ScheduleKey[]).map((key) => ({
-    label: TYPE_OF_SCHEDULE[key].name,
-    value: key,
-  }));
-
+  const scheduleOptions = scheduleHooks.useScheduleOptions();
   const mastersOptions =
     masters?.map((m) => ({
       label: m.name ?? `Master #${m.id}`,
@@ -71,7 +70,12 @@ export const ScheduleAddModal = (props: Props) => {
       endTimeMinutes: index < config.workingDaysCount ? END_MINUTE : 0,
       breaks:
         index < config.workingDaysCount
-          ? [{ breakStartTimeMinutes: BREAK_START_MINUTES, breakEndTimeMinutes: BREAK_END_MINUTES }]
+          ? [
+              {
+                breakStartTimeMinutes: BREAK_START_MINUTES,
+                breakEndTimeMinutes: BREAK_END_MINUTES,
+              },
+            ]
           : [],
     }));
 
@@ -83,12 +87,7 @@ export const ScheduleAddModal = (props: Props) => {
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <form className='space-y-6' onSubmit={handleSubmit}>
-        <FormInput
-          {...register('name')}
-          className='border p-2 w-full'
-          placeholder='Schedule name'
-          label='Name'
-        />
+        <FormInput {...register('name')} label='Name' />
 
         <Controller
           name='patternType'

@@ -11,18 +11,18 @@ import {
 import { FormTimeSelect } from '../FormTimeSelect/FormTimeSelect';
 import React from 'react';
 import { ScheduleCreateFormData } from '@avoo/hooks/schemas/schedulesValidationSchemas';
-import {
-  BREAK_END_MINUTES,
-  BREAK_START_MINUTES,
-  END_MINUTE,
-  ScheduleKey,
-  START_MINUTE,
-  WORKING_HOURS_OPTIONS,
-  DAYS_NAME,
-} from '@/_utils/common/schedule.common';
 import AddOutlinedIcon from '@/_icons/AddOutlinedIcon';
 import RemoveOutlinedIcon from '@/_icons/RemoveOutlinedIcon';
 import IconButton from '@mui/material/IconButton';
+import {
+  ScheduleKey,
+  START_MINUTE,
+  END_MINUTE,
+  BREAK_START_MINUTES,
+  BREAK_END_MINUTES,
+  DAYS_NAME,
+  scheduleHooks,
+} from '@avoo/hooks';
 
 type Props = {
   index: number;
@@ -69,7 +69,10 @@ export const WorkingDayRow = (props: Props) => {
       setValue(`workingHours.${index}.startTimeMinutes`, START_MINUTE);
       setValue(`workingHours.${index}.endTimeMinutes`, END_MINUTE);
       setValue(`workingHours.${index}.breaks`, [
-        { breakStartTimeMinutes: BREAK_START_MINUTES, breakEndTimeMinutes: BREAK_END_MINUTES },
+        {
+          breakStartTimeMinutes: BREAK_START_MINUTES,
+          breakEndTimeMinutes: BREAK_END_MINUTES,
+        },
       ]);
     }
   };
@@ -102,7 +105,7 @@ export const WorkingDayRow = (props: Props) => {
               <FormTimeSelect
                 name={`workingHours.${index}.startTimeMinutes`}
                 value={String(field.value)}
-                options={WORKING_HOURS_OPTIONS}
+                options={scheduleHooks.useWorkingHoursOptions()}
                 onChange={(val) => field.onChange(Number(val))}
                 disabled={!enabled}
               />
@@ -116,7 +119,7 @@ export const WorkingDayRow = (props: Props) => {
               <FormTimeSelect
                 name={`workingHours.${index}.endTimeMinutes`}
                 value={String(field.value)}
-                options={WORKING_HOURS_OPTIONS}
+                options={scheduleHooks.useWorkingHoursOptions()}
                 onChange={(val) => field.onChange(Number(val))}
                 disabled={!enabled}
               />
@@ -136,7 +139,7 @@ export const WorkingDayRow = (props: Props) => {
               <FormTimeSelect
                 name={`workingHours.${index}.breaks.${brIndex}.breakStartTimeMinutes`}
                 value={String(field.value)}
-                options={WORKING_HOURS_OPTIONS}
+                options={scheduleHooks.useWorkingHoursOptions()}
                 onChange={(val) => field.onChange(Number(val))}
               />
             )}
@@ -148,7 +151,7 @@ export const WorkingDayRow = (props: Props) => {
               <FormTimeSelect
                 name={`workingHours.${index}.breaks.${brIndex}.breakEndTimeMinutes`}
                 value={String(field.value)}
-                options={WORKING_HOURS_OPTIONS}
+                options={scheduleHooks.useWorkingHoursOptions()}
                 onChange={(val) => field.onChange(Number(val))}
               />
             )}

@@ -1,6 +1,6 @@
 import React from 'react';
 import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
-import { SelectChangeEvent } from 'node_modules/@mui/material';
+import { SelectChangeEvent } from '@mui/material';
 
 export type Option = { label: string; value: string };
 

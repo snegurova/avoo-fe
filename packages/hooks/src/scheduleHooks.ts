@@ -18,7 +18,6 @@ import {
   ScheduleCreateFormData,
   scheduleCreateSchema,
 } from '../schemas/schedulesValidationSchemas';
-import { toLocalDateISO, getNextMonday } from '../../../apps/web/app/_utils/date.utils';
 
 type UseCreateScheduleFormParams = {
   onSuccess?: () => void;
@@ -29,7 +28,67 @@ type UseUpdateScheduleFormParams = {
   defaultValues?: ScheduleUpdateFormData;
 };
 
+export const getNextMonday = (date: Date): Date => {
+  const result = new Date(date);
+  const day = result.getDay(); // 0 = Sun, 1 = Mon, ..., 6 = Sat
+  const daysToAdd = (8 - day) % 7 || 7;
+  result.setDate(result.getDate() + daysToAdd);
+  return result;
+};
+
+export const toLocalDateISO = (date: Date): string => {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0'); // 0-based
+  const day = String(date.getDate()).padStart(2, '0');
+
+  return `${year}-${month}-${day}`;
+};
+
+export const TYPE_OF_SCHEDULE = {
+  weekly: { name: 'Weekly', pattern: 7, workingDaysCount: 5 },
+  '2x2': { name: '2 on / 2 off', pattern: 4, workingDaysCount: 2 },
+  '3x2': { name: '3 on / 2 off', pattern: 5, workingDaysCount: 3 },
+  '2x1': { name: '2 on / 1 off', pattern: 3, workingDaysCount: 2 },
+  custom: { name: 'Custom', pattern: 1, workingDaysCount: 1 },
+};
+
+export type ScheduleKey = keyof typeof TYPE_OF_SCHEDULE;
+
+export const DAYS_NAME = [
+  'Monday',
+  'Tuesday',
+  'Wednesday',
+  'Thursday',
+  'Friday',
+  'Saturday',
+  'Sunday',
+];
+
+export const START_MINUTE = 9 * 60;
+export const END_MINUTE = 18 * 60;
+export const BREAK_START_MINUTES = 13 * 60;
+export const BREAK_END_MINUTES = 14 * 60;
+
 export const scheduleHooks = {
+  useWorkingHoursOptions: () =>
+    Array.from({ length: 48 }, (_, i) => ({
+      label:
+        i % 2 === 0
+          ? `${Math.floor(i / 2)
+              .toString()
+              .padStart(2, '0')}:00`
+          : `${Math.floor(i / 2)
+              .toString()
+              .padStart(2, '0')}:30`,
+      value: String(i * 30),
+    })),
+
+  useScheduleOptions: () =>
+    (Object.keys(TYPE_OF_SCHEDULE) as ScheduleKey[]).map((key) => ({
+      label: TYPE_OF_SCHEDULE[key].name,
+      value: key,
+    })),
+
   useGetSchedules: () => {
     const { data: schedulesData, isPending } = useQuery<BaseResponse<GetSchedulesResponse>, Error>({
       queryKey: ['schedules'],
@@ -79,12 +138,12 @@ export const scheduleHooks = {
         workingHours: Array.from({ length: 7 }).map((_, i) => ({
           enabled: i < 5,
           day: i + 1,
-          startTimeMinutes: 9 * 60,
-          endTimeMinutes: 18 * 60,
+          startTimeMinutes: START_MINUTE,
+          endTimeMinutes: END_MINUTE,
           breaks: [
             {
-              breakStartTimeMinutes: i < 5 ? 13 * 60 : 0,
-              breakEndTimeMinutes: i < 5 ? 14 * 60 : 0,
+              breakStartTimeMinutes: i < 5 ? BREAK_START_MINUTES : 0,
+              breakEndTimeMinutes: i < 5 ? BREAK_END_MINUTES : 0,
             },
           ],
         })),

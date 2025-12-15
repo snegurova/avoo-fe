@@ -10,7 +10,6 @@ import { FormMultiSelect } from '../FormMultiSelect/FormMultiSelect';
 import { DateSelect } from '../DateSelect/DateSelect';
 import { getAllErrorMessages } from '@/_utils/formError.utils';
 import { Button } from '@mui/material';
-import { WorkingDayRow } from '../WorkingDayRow/WorkingDayRow';
 
 type Props = {
   scheduleId: number | null;
@@ -24,7 +23,7 @@ export const ScheduleEditModal = (props: Props) => {
   const schedule = scheduleHooks.useGetScheduleById(scheduleId);
   const isPending = useApiStatusStore((state) => state.isPending);
 
-  const { register, errors, control, watch, setValue } = scheduleHooks.useUpdateScheduleForm({
+  const { register, errors, control } = scheduleHooks.useUpdateScheduleForm({
     onSuccess: () => {
       alert('Schedule updated successfully');
     },
@@ -45,7 +44,6 @@ export const ScheduleEditModal = (props: Props) => {
         <form className='space-y-6'>
           <FormInput
             {...register('name')}
-            className='border p-2 w-full'
             placeholder='Schedule name'
             label='Name'
             value={schedule.name}
@@ -60,27 +58,6 @@ export const ScheduleEditModal = (props: Props) => {
           />
 
           <DateSelect name='startAt' label='Start at' value={dayjs(schedule.startAt)} disabled />
-
-          {/* {fields.map((field, index) => (
-                    <WorkingDayRow
-                      key={field.id}
-                      index={index}
-                      control={control}
-                      watch={watch}
-                      scheduleType={scheduleType}
-                      setValue={setValue}
-                    />
-                  ))} */}
-
-          {schedule.workingHours.map((day, index) => (
-            <WorkingDayRow
-              key={day.id}
-              index={index}
-              control={control}
-              watch={watch}
-              setValue={setValue}
-            />
-          ))}
           <Controller
             name='endAt'
             control={control}

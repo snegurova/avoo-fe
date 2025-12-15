@@ -9,9 +9,13 @@ import { ScheduleAddModal } from '@/_components/ScheduleAddModal/ScheduleAddModa
 import { routerHooks } from '@/_hooks/routerHooks';
 import { Button, IconButton } from '@mui/material';
 import ArrowReturnBackIcon from '@/_icons/ArrowReturnBackIcon';
-import { toDisplayDate } from '@/_utils/date.utils';
 import InfinityIcon from '@/_icons/InfinityIcon';
 import { colors } from '@avoo/design-tokens';
+
+const toDisplayDate = (date: Date) => {
+  const result = new Date(date);
+  return result.toLocaleDateString();
+};
 
 export default function WorkingHoursPage() {
   const [activeScheduleId, setActiveScheduleId] = useState<number | null>(null);
@@ -43,7 +47,7 @@ export default function WorkingHoursPage() {
                 <div key={schedule.id} className='mt-4 space-y-2 border border-gray-200 p-2'>
                   <div className='flex justify-between'>
                     <h5 className='font-bold text-sm'>{schedule.name}</h5>
-                    <span className='text-gray-500 bg-gray-200 px-2 py-1 rounded flex items-center gap-2'>
+                    <span className='bg-gray-200 px-2 py-1 rounded flex items-center gap-2'>
                       {toDisplayDate(new Date(schedule.startAt))} {'-'}
                       {schedule.endAt ? (
                         toDisplayDate(new Date(schedule.endAt))
@@ -91,7 +95,7 @@ export default function WorkingHoursPage() {
             </div>
           ) : (
             <>
-              <p className='text-gray-500'>No schedules found</p>
+              <p>No schedules found</p>
               <div className='flex justify-end mt-4'>
                 <Button
                   color='secondary'
