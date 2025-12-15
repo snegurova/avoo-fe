@@ -1,5 +1,6 @@
 import Layout from '@/shared/Layout/Layout';
 import { RootStackScreenProps, RootScreens } from '@/types/navigation';
+import { Text } from 'react-native';
 
 type Props = RootStackScreenProps<RootScreens.AddBookingScreen>;
 
@@ -8,7 +9,7 @@ export const AddBookingScreen = (props: Props) => {
 
   return (
     <Layout showBack={true} onBackPress={() => navigation.goBack()}>
-      {null}
+      <Text>Add Booking</Text>
     </Layout>
   );
 };

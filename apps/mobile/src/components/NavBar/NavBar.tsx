@@ -1,10 +1,5 @@
 import React from 'react';
-import {
-  View,
-  StyleSheet,
-  StyleProp,
-  ViewStyle,
-} from 'react-native';
+import { View, Text, StyleSheet, StyleProp, ViewStyle } from 'react-native';
 import { colors, spacing } from '@avoo/design-tokens';
 import DefaultRightContent from './DefaultRightContent';
 import DefaultLeftContent from './DefaultLeftContent';
@@ -21,27 +16,33 @@ type Props = {
 };
 
 export default function NavBar(props: Props) {
-  const { title, leftContent, rightContent, showBack, onBackPress, headerStyle, titleStyle } = props;
+  const { title, leftContent, rightContent, showBack, onBackPress, headerStyle, titleStyle } =
+    props;
 
-  const defaultTitle = title ?? <DefaultTitle />;
+  const renderTitle = () => {
+    if (title == null) {
+      return <DefaultTitle />;
+    }
 
-  const defaultRightContent = rightContent ?? <DefaultRightContent />;
+    if (typeof title === 'string') {
+      return <Text style={styles.titleText}>{title}</Text>;
+    }
 
-  const defaultLeftContent = leftContent ?? <DefaultLeftContent showBack={showBack} onBackPress={onBackPress} />;
-
+    return title;
+  };
 
   return (
     <View style={[styles.header, headerStyle]}>
       <View style={styles.headerLeft}>
-        {defaultLeftContent}
+        {leftContent ?? <DefaultLeftContent showBack={showBack} onBackPress={onBackPress} />}
       </View>
 
-      <View style={[styles.titleContainer, titleStyle]}>{defaultTitle}</View>
+      <View style={[styles.titleContainer, titleStyle]}>{renderTitle()}</View>
 
-      <View style={styles.headerRight}>{defaultRightContent}</View>
+      <View style={styles.headerRight}>{rightContent ?? <DefaultRightContent />}</View>
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   header: {
@@ -50,7 +51,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: colors.primary[50],
     paddingHorizontal: 16,
-  },  
+  },
   headerLeft: {
     justifyContent: 'center',
   },
@@ -64,5 +65,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginRight: spacing.lg,
   },
+  titleText: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: colors.black,
+  },
 });
-

@@ -9,7 +9,7 @@ export default function LoginScreen(props: Props) {
   const { navigation } = props;
 
   return (
-    <Layout headerShown={false} centerContent={true}>
+    <Layout isHeaderHidden={true} centerContent={true}>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View className='w-full'>
           <Text className='text-3xl font-bold text-center'>AVOO App</Text>

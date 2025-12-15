@@ -1,7 +1,17 @@
-import React, { useState, cloneElement } from 'react';
-import { StyleSheet, View, Text, Modal, Pressable, StyleProp, ViewStyle, PressableProps } from 'react-native';
+import React, { useState, cloneElement, useEffect, useMemo, useCallback, useRef } from 'react';
+import {
+  StyleSheet,
+  View,
+  Text,
+  Modal,
+  Pressable,
+  StyleProp,
+  ViewStyle,
+  PressableProps,
+  Dimensions,
+  LayoutChangeEvent,
+} from 'react-native';
 import { colors, spacing, radius, typography } from '@avoo/design-tokens';
-import { useDropdownPosition } from '../../hooks/useDropdownPosition';
 
 export enum DropdownAlign {
   LEFT = 'left',
@@ -28,6 +38,138 @@ type Props = {
   estimatedMenuWidth?: number;
 };
 
+type Layout = { x: number; y: number; width: number; height: number };
+
+function computeMenuPosition(
+  triggerLayout: Layout,
+  menuWidth: number,
+  align: DropdownAlign,
+  gap: number,
+): ViewStyle {
+  const screenWidth = Dimensions.get('window').width;
+  const leftPosition = triggerLayout.x;
+  const rightPosition = screenWidth - (triggerLayout.x + triggerLayout.width);
+
+  const fitsOnLeft = leftPosition >= 0 && leftPosition + menuWidth <= screenWidth;
+  const fitsOnRight =
+    rightPosition >= 0 && triggerLayout.x + triggerLayout.width - menuWidth >= 0;
+
+  let finalPosition: ViewStyle;
+  if (align === DropdownAlign.RIGHT) {
+    finalPosition =
+      !fitsOnRight && fitsOnLeft ? { left: leftPosition } : { right: rightPosition };
+  } else {
+    finalPosition =
+      !fitsOnLeft && fitsOnRight ? { right: rightPosition } : { left: leftPosition };
+  }
+
+  return {
+    position: 'absolute',
+    top: triggerLayout.y + triggerLayout.height + gap,
+    ...finalPosition,
+  };
+}
+
+function useDropdownPosition(
+  isVisible: boolean,
+  align: DropdownAlign,
+  gap: number = spacing.xs,
+  estimatedMenuWidth?: number
+) {
+  const [triggerLayout, setTriggerLayout] = useState<Layout>({ x: 0, y: 0, width: 0, height: 0 });
+  const [menuWidth, setMenuWidth] = useState(estimatedMenuWidth || 0);
+  const [isPositionReady, setIsPositionReady] = useState(false);
+  const [lastValidPosition, setLastValidPosition] = useState<ViewStyle | null>(null);
+  const triggerRef = useRef<View>(null);
+
+  const measureTrigger = useCallback(() => {
+    if (triggerRef.current) {
+      triggerRef.current.measureInWindow((x: number, y: number, width: number, height: number) => {
+        setTriggerLayout({ x, y, width, height });
+      });
+    }
+  }, [triggerRef, setTriggerLayout]);
+
+  const handleMenuLayout = useCallback(
+    (event: LayoutChangeEvent) => {
+      const { width } = event.nativeEvent.layout;
+      if (width > 0) {
+        setMenuWidth(width);
+      }
+    },
+    [setMenuWidth],
+  );
+
+  useEffect(() => {
+    if (isVisible) {
+      setIsPositionReady(false);
+      requestAnimationFrame(() => {
+        measureTrigger();
+        requestAnimationFrame(() => {
+          setIsPositionReady(true);
+        });
+      });
+    } else {
+      setIsPositionReady(false);
+    }
+  }, [isVisible, measureTrigger]);
+
+  const currentPosition = useMemo(
+    (): ViewStyle => {
+      if (!isPositionReady || triggerLayout.width === 0) {
+        return {
+          position: 'absolute',
+          top: 0,
+          left: 0,
+        };
+      }
+
+      return computeMenuPosition(triggerLayout, menuWidth, align, gap);
+    },
+    [isPositionReady, triggerLayout, menuWidth, align, gap],
+  );
+
+  useEffect(() => {
+    if (isPositionReady && triggerLayout.width > 0 && isVisible) {
+      setLastValidPosition(currentPosition);
+    }
+  }, [isPositionReady, triggerLayout.width, isVisible, currentPosition]);
+
+  const menuPosition: ViewStyle =
+    !isVisible && lastValidPosition ? lastValidPosition : currentPosition;
+
+  return {
+    triggerRef,
+    menuPosition,
+    handleMenuLayout,
+    measureTrigger,
+    isPositionReady,
+  };
+}
+
+function useDropdownState() {
+  const [visible, setVisible] = useState(false);
+
+  const openMenu = () => {
+    setVisible(true);
+  };
+
+  const closeMenu = () => {
+    setVisible(false);
+  };
+
+  return {
+    visible,
+    openMenu,
+    closeMenu,
+  };
+}
+
+const hooks = {
+  useDropdownPosition,
+  useDropdownState,
+};
+
 export default function Dropdown(props: Props) {
   const {
     trigger,
@@ -38,26 +180,18 @@ export default function Dropdown(props: Props) {
     estimatedMenuWidth,
   } = props;
 
-  const [visible, setVisible] = useState(false);
+  const { visible, openMenu, closeMenu } = hooks.useDropdownState();
 
   const defaultMenuWidth = styles.menuContainer.minWidth || 0;
   const menuWidth = estimatedMenuWidth ?? defaultMenuWidth;
 
-  const { triggerRef, menuPosition, handleMenuLayout, handleTriggerLayout, isPositionReady } =
-    useDropdownPosition(
+  const { triggerRef, menuPosition, handleMenuLayout, measureTrigger, isPositionReady } =
+    hooks.useDropdownPosition(
       visible,
-      align === DropdownAlign.RIGHT ? 'right' : 'left',
+      align,
       spacing.xs,
       menuWidth,
     );
-
-  const openMenu = () => {
-    setVisible(true);
-  };
-
-  const closeMenu = () => {
-    setVisible(false);
-  };
 
   if (!items || items.length === 0) {
     const triggerElement = typeof trigger === 'function' ? trigger(false) : trigger;
@@ -72,12 +206,12 @@ export default function Dropdown(props: Props) {
           existingOnPress(event);
           openMenu();
         }
-      : () => openMenu(),
+      : openMenu,
   });
 
   return (
     <>
-      <View ref={triggerRef} onLayout={handleTriggerLayout}>
+      <View ref={triggerRef} onLayout={measureTrigger}>
         {triggerWithProps}
       </View>
       <Modal visible={visible && isPositionReady} transparent onRequestClose={closeMenu}>
