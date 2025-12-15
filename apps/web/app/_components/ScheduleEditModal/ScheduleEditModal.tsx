@@ -8,7 +8,7 @@ import { Modal } from '../Modal/Modal';
 import FormInput from '../FormInput/FormInput';
 import { FormMultiSelect } from '../FormMultiSelect/FormMultiSelect';
 import { DateSelect } from '../DateSelect/DateSelect';
-import { getAllErrorMessages } from '@/_utils/formError.utils';
+import { getAllErrorMessages } from '@/_utils/formError';
 import { Button } from '@mui/material';
 
 type Props = {
