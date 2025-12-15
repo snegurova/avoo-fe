@@ -13,7 +13,7 @@ import NavBar from '@/components/NavBar/NavBar';
 
 type Props = {
   children: React.ReactNode;
-  headerShown?: boolean;
+  isHeaderHidden?: boolean;
   title?:  React.ReactNode;
   leftContent?: React.ReactNode;
   rightContent?: React.ReactNode;
@@ -28,7 +28,7 @@ type Props = {
 export default function Layout(props: Props) {
   const {
     children,
-    headerShown = true,
+    isHeaderHidden = false,
     title,
     leftContent,
     rightContent,
@@ -45,7 +45,7 @@ export default function Layout(props: Props) {
       edges={hasBottomTab ? ['top'] : undefined}
       style={[styles.container, style]}
     >
-      {headerShown && (
+      {!isHeaderHidden && (
         <NavBar
           title={title}
           leftContent={leftContent}
