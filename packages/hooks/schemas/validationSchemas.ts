@@ -1,4 +1,5 @@
 import * as yup from 'yup';
+import { VALID_LANGUAGE_CODES } from '@avoo/constants';
 
 export const registerSchema = yup.object({
   name: yup
@@ -66,8 +67,44 @@ export const resetPasswordSchema = yup.object({
     .oneOf([yup.ref('password')], 'Passwords do not match'),
 });
 
+export const createMasterSchema = yup.object({
+  email: yup
+    .string()
+    .required('Email is required')
+    .email('Please enter a valid email')
+    .trim(),
+  name: yup
+    .string()
+    .required('Name is required')
+    .min(2, 'Name must be at least 2 characters')
+    .trim(),
+  bio: yup
+    .string()
+    .nullable()
+    .trim()
+    .test('bio-min-length', 'Bio must be longer than or equal to 10 characters', function(value) {
+      if (!value || value.trim().length === 0) return true;
+      return value.trim().length >= 10;
+    }),
+  phone: yup
+    .string()
+    .nullable()
+    .trim(),
+  languages: yup
+    .array()
+    .of(
+      yup
+    .string()
+        .oneOf([...VALID_LANGUAGE_CODES], 'Invalid language code')
+        .required()
+    )
+    .nullable()
+    .default([]),
+});
+
 export type RegisterFormData = yup.InferType<typeof registerSchema>;
 export type LoginFormData = yup.InferType<typeof loginSchema>;
 export type ForgotPasswordFormData = yup.InferType<typeof forgotPasswordSchema>;
 export type VerifyCodeFormData = yup.InferType<typeof verifyCodeSchema>;
 export type ResetPasswordFormData = yup.InferType<typeof resetPasswordSchema>;
+export type CreateMasterFormData = yup.InferType<typeof createMasterSchema>;

@@ -1,5 +1,5 @@
 import { View, Text } from 'react-native';
-import { Layout } from '@/shared/Layout';
+import  Layout from '@/shared/Layout/Layout';
 import Button from '@/shared/Button/Button';
 import { authHooks } from '@avoo/hooks';
 

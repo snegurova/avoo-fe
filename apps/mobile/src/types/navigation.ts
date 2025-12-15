@@ -11,12 +11,15 @@ export enum RootScreens {
   BottomBar = 'BottomBar',
   Storybook = 'Storybook',
   MastersScreen = 'MastersScreen',
+  AddMasterScreen = 'AddMasterScreen',
   CertificatesScreen = 'CertificatesScreen',
   WorkingHoursScreen = 'WorkingHoursScreen',
   PostsScreen = 'PostsScreen',
   GalleryScreen = 'GalleryScreen',
   EditLanguagesScreen = 'EditLanguagesScreen',
   EditProfileScreen = 'EditProfileScreen',
+  AddPostScreen = 'AddPostScreen',
+  AddBookingScreen = 'AddBookingScreen',
 }
 
 export enum BottomBarScreens {
@@ -46,12 +49,15 @@ export type RootStackParamList = {
   [RootScreens.BottomBar]: NavigatorScreenParams<BottomBarStackParamList>;
   [RootScreens.Storybook]: undefined;
   [RootScreens.MastersScreen]: undefined;
+  [RootScreens.AddMasterScreen]: undefined;
   [RootScreens.CertificatesScreen]: undefined;
   [RootScreens.WorkingHoursScreen]: undefined;
   [RootScreens.PostsScreen]: undefined;
   [RootScreens.GalleryScreen]: undefined;
   [RootScreens.EditLanguagesScreen]: undefined;
   [RootScreens.EditProfileScreen]: undefined;
+  [RootScreens.AddPostScreen]: undefined;
+  [RootScreens.AddBookingScreen]: undefined;
 };
 
 export type RootStackScreenProps<T extends keyof RootStackParamList> = NativeStackScreenProps<

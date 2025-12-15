@@ -1,10 +1,10 @@
-import { View } from 'react-native';
-import { Layout } from '@/shared/Layout';
+import { Button } from 'react-native';
+import Layout from '@/shared/Layout/Layout';
 import { RootStackScreenProps, RootScreens } from '@/types/navigation';
 
 type Props = RootStackScreenProps<RootScreens.MastersScreen>;
 
-export const MastersScreen = (props: Props) => {
+export default function MastersScreen(props: Props) {
   const { navigation } = props;
 
   return (
@@ -13,9 +13,10 @@ export const MastersScreen = (props: Props) => {
       showBack={true}
       onBackPress={() => navigation.goBack()}
     >
-      <View />
+      <Button
+        title='To create master'
+        onPress={() => navigation.navigate(RootScreens.AddMasterScreen)}
+      />
     </Layout>
   );
 };
-
-export default MastersScreen;
