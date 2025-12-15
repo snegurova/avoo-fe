@@ -141,12 +141,7 @@ export const scheduleHooks = {
           day: i + 1,
           startTimeMinutes: START_MINUTE,
           endTimeMinutes: END_MINUTE,
-          breaks: [
-            {
-              breakStartTimeMinutes: i < 5 ? BREAK_START_MINUTES : 0,
-              breakEndTimeMinutes: i < 5 ? BREAK_END_MINUTES : 0,
-            },
-          ],
+          breaks: [],
         })),
       },
     });

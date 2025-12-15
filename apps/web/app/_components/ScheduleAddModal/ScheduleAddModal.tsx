@@ -7,8 +7,6 @@ import {
   ScheduleKey,
   START_MINUTE,
   END_MINUTE,
-  BREAK_START_MINUTES,
-  BREAK_END_MINUTES,
   TYPE_OF_SCHEDULE,
   getNextMonday,
   toLocalDateISO,
@@ -68,15 +66,7 @@ export const ScheduleAddModal = (props: Props) => {
       enabled: index < config.workingDaysCount,
       startTimeMinutes: index < config.workingDaysCount ? START_MINUTE : 0,
       endTimeMinutes: index < config.workingDaysCount ? END_MINUTE : 0,
-      breaks:
-        index < config.workingDaysCount
-          ? [
-              {
-                breakStartTimeMinutes: BREAK_START_MINUTES,
-                breakEndTimeMinutes: BREAK_END_MINUTES,
-              },
-            ]
-          : [],
+      breaks: [],
     }));
 
     replace(newDays);
