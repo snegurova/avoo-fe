@@ -9,6 +9,7 @@ import {
   ScheduleUpdateResponse,
 } from '@avoo/axios/types/apiTypes';
 import { apiStatus } from '@avoo/hooks/types/apiTypes';
+import { queryKeys } from './queryKeys';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -91,7 +92,7 @@ export const scheduleHooks = {
 
   useGetSchedules: () => {
     const { data: schedulesData, isPending } = useQuery<BaseResponse<GetSchedulesResponse>, Error>({
-      queryKey: ['schedules'],
+      queryKey: queryKeys.schedules.all,
       queryFn: scheduleApi.getSchedules,
     });
 

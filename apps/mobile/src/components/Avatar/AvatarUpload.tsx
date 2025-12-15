@@ -1,6 +1,7 @@
 import { View, Image, ImageSourcePropType, Pressable, ActivityIndicator } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
-import { imagePickerHooks, UploadFile } from '@/hooks/imagePickerHooks';
+import { imagePickerHooks } from '@/hooks/imagePickerHooks';
+import { UploadFile } from '@avoo/shared';
 import { useApiStatusStore } from '@avoo/store';
 
 type Props = {

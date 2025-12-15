@@ -1,5 +1,5 @@
 import { View } from 'react-native';
-import { Layout } from '@/shared/Layout';
+import  Layout from '@/shared/Layout/Layout';
 import { RootStackScreenProps, RootScreens } from '@/types/navigation';
 
 type Props = RootStackScreenProps<RootScreens.EditProfileScreen>;

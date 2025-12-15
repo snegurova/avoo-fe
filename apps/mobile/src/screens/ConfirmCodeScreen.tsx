@@ -1,7 +1,7 @@
 import { Pressable, Text, View } from 'react-native';
 import { RootScreens, RootStackScreenProps } from '@/types/navigation';
 import { formatHooks } from '@avoo/hooks';
-import { Layout } from '@/shared/Layout';
+import  Layout from '@/shared/Layout/Layout';
 import VerifyCodeForm from '@/components/VerifyCodeForm';
 import { authHooks } from '@avoo/hooks';
 
