@@ -740,6 +740,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/calendar/by-dates": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["CalendarController_getCalendarByDates"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/public/calendar": {
         parameters: {
             query?: never;
@@ -748,6 +764,22 @@ export interface paths {
             cookie?: never;
         };
         get: operations["CalendarPublicController_getCalendarView"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/public/calendar/by-dates": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["CalendarPublicController_getCalendarByDates"];
         put?: never;
         post?: never;
         delete?: never;
@@ -852,6 +884,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/customers": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["CustomersController_findAll"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/posts": {
         parameters: {
             query?: never;
@@ -882,6 +930,7 @@ export interface components {
             email: string;
             avatarUrl: string | null;
             avatarPreviewUrl: string | null;
+            timezone: string;
             isEmailVerify: boolean;
         };
         UserResponseDto: {
@@ -923,6 +972,11 @@ export interface components {
             email: string;
             /** @example password123 */
             password: string;
+            /**
+             * @description User timezone (optional)
+             * @example Europe/Warsaw
+             */
+            timezone?: string;
         };
         ForgotPasswordRequestDto: {
             /** @example user@example.com */
@@ -1024,6 +1078,7 @@ export interface components {
             email: string;
             avatarUrl: string | null;
             avatarPreviewUrl: string | null;
+            timezone: string;
             isEmailVerify: boolean;
             masters: components["schemas"]["MasterEntity"][];
             services: components["schemas"]["ServiceEntity"][];
@@ -1071,6 +1126,7 @@ export interface components {
             email: string;
             avatarUrl: string | null;
             avatarPreviewUrl: string | null;
+            timezone: string;
             isEmailVerify: boolean;
             businessInfo: components["schemas"]["BusinessInfoEntity"] | null;
         };
@@ -1613,6 +1669,41 @@ export interface components {
             /** @description List of working days */
             days: components["schemas"]["PrivateWorkingDayDto"][];
         };
+        QueryCalendarByDatesPrivateDto: {
+            /** @description Master ID */
+            masterId?: number;
+            /**
+             * Format: date-time
+             * @description Range from date
+             * @example 2025-10-18
+             */
+            rangeFromDate: string;
+            /**
+             * Format: date-time
+             * @description Range to date
+             * @example 2025-10-28
+             */
+            rangeToDate: string;
+            /**
+             * @description Service ID
+             * @example 1
+             */
+            serviceId?: number;
+            /** @description Combination ID */
+            combinationId?: number;
+            /** @description Timezone offset in minutes */
+            timezoneOffset?: number;
+            /**
+             * @description Limit of events
+             * @example 3
+             */
+            limitEvents?: number;
+            /**
+             * @description Filter by order status
+             * @example PENDING
+             */
+            orderStatus?: string[];
+        };
         CalendarExceptionEntity: {
             id: number;
             userId: number;
@@ -1663,6 +1754,101 @@ export interface components {
              * @example Need to rest
              */
             note?: string;
+        };
+        PrivateEventWithMasterDto: {
+            /** @example 101 */
+            id: number;
+            /** @example Client appointment */
+            title: string;
+            /**
+             * @description Type of the order
+             * @example SERVICE
+             */
+            type: string;
+            /**
+             * Format: date-time
+             * @example 2025-10-28T09:30:00.000Z
+             */
+            start: string;
+            /**
+             * Format: date-time
+             * @example 2025-10-28T10:00:00.000Z
+             */
+            end: string;
+            /** @example 15 */
+            price: number;
+            /** @example 60 */
+            duration: number;
+            /**
+             * @description Status
+             * @example PENDING
+             */
+            status: string;
+            /** @example First appointment */
+            notes: Record<string, never>;
+            /** @example John Doe */
+            customerName: Record<string, never>;
+            /** @example 1 */
+            customerId: number;
+            /** @example 1 */
+            serviceId: Record<string, never>;
+            /** @example 1 */
+            combinationId: Record<string, never>;
+        };
+        PrivateWorkingDayByDatesDto: {
+            /**
+             * Format: date-time
+             * @description Range to date
+             * @example 2025-10-28
+             */
+            date: string;
+            /**
+             * @description Weekday
+             * @example Mon
+             */
+            weekday: string;
+            /**
+             * @description Is schedule accessible for this day(if we out of schedule range)
+             * @example true
+             */
+            isAccessible: boolean;
+            /**
+             * @description Is working day for this schedule(if salon not work on this day)
+             * @example true
+             */
+            isWorkingDay: boolean;
+            /** @description Events */
+            events: components["schemas"]["PrivateEventWithMasterDto"][];
+        };
+        PrivateCalendarResponseByDatesDto: {
+            /**
+             * @description User ID
+             * @example 1
+             */
+            userId: number;
+            /**
+             * @description Master ID
+             * @example 1
+             */
+            masterId?: Record<string, never>;
+            /**
+             * Format: date-time
+             * @description Range from date
+             * @example 2025-10-17T00:00:00Z
+             */
+            rangeFromDate: string;
+            /**
+             * Format: date-time
+             * @description Range to date
+             * @example 2025-10-27T00:00:00Z
+             */
+            rangeToDate: string;
+            /** @example 1 */
+            serviceId: Record<string, never>;
+            /** @example 1 */
+            combinationId: Record<string, never>;
+            /** @description List of working days */
+            days: components["schemas"]["PrivateWorkingDayByDatesDto"][];
         };
         PublicEventDto: {
             /** @example 101 */
@@ -1772,6 +1958,61 @@ export interface components {
              * @example 2025-10-28T10:00:00.000Z
              */
             end: string;
+        };
+        PublicWorkingDayByDatesDto: {
+            /**
+             * Format: date-time
+             * @description Range to date
+             * @example 2025-10-28
+             */
+            date: string;
+            /**
+             * @description Weekday
+             * @example Mon
+             */
+            weekday: string;
+            /**
+             * @description Is schedule accessible for this day(if we out of schedule range)
+             * @example true
+             */
+            isAccessible: boolean;
+            /**
+             * @description Is working day for this schedule(if salon not work on this day)
+             * @example true
+             */
+            isWorkingDay: boolean;
+            /** @description Events */
+            events: components["schemas"]["PublicEventDto"][];
+        };
+        PublicCalendarResponseByDatesDto: {
+            /**
+             * @description User ID
+             * @example 1
+             */
+            userId: number;
+            /**
+             * @description Master ID
+             * @example 1
+             */
+            masterId: number;
+            /**
+             * Format: date-time
+             * @description Range from date
+             * @example 2025-10-17T00:00:00Z
+             */
+            rangeFromDate: string;
+            /**
+             * Format: date-time
+             * @description Range to date
+             * @example 2025-10-27T00:00:00Z
+             */
+            rangeToDate: string;
+            /** @example 1 */
+            serviceId: Record<string, never>;
+            /** @example 1 */
+            combinationId: Record<string, never>;
+            /** @description List of working days */
+            days: components["schemas"]["PublicWorkingDayByDatesDto"][];
         };
         WorkingHourBreakEntity: {
             id: number;
@@ -4082,6 +4323,8 @@ export interface operations {
                 serviceId?: number;
                 /** @description Combination ID */
                 combinationId?: number;
+                /** @description Timezone offset in minutes */
+                timezoneOffset?: number;
             };
             header?: never;
             path?: never;
@@ -4149,6 +4392,54 @@ export interface operations {
             };
         };
     };
+    CalendarController_getCalendarByDates: {
+        parameters: {
+            query: {
+                /** @description Master ID */
+                masterId?: number;
+                /** @description Range from date */
+                rangeFromDate: string;
+                /** @description Range to date */
+                rangeToDate: string;
+                /** @description Service ID */
+                serviceId?: number;
+                /** @description Combination ID */
+                combinationId?: number;
+                /** @description Timezone offset in minutes */
+                timezoneOffset?: number;
+                /** @description Limit of events */
+                limitEvents?: number;
+                /** @description Filter by order status */
+                orderStatus?: string[];
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Calendar working day entities */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SuccessResponseDto"] & {
+                        data?: components["schemas"]["PrivateCalendarResponseByDatesDto"];
+                    };
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
     CalendarPublicController_getCalendarView: {
         parameters: {
             query: {
@@ -4164,6 +4455,8 @@ export interface operations {
                 serviceId?: number;
                 /** @description Combination ID */
                 combinationId?: number;
+                /** @description Timezone offset in minutes */
+                timezoneOffset?: number;
             };
             header?: never;
             path?: never;
@@ -4179,6 +4472,52 @@ export interface operations {
                 content: {
                     "application/json": components["schemas"]["SuccessResponseDto"] & {
                         data?: components["schemas"]["PublicCalendarResponseDto"][];
+                    };
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    CalendarPublicController_getCalendarByDates: {
+        parameters: {
+            query: {
+                /** @description Filter by user ID */
+                userId: number;
+                /** @description Master ID */
+                masterId?: number;
+                /** @description Range from date */
+                rangeFromDate: string;
+                /** @description Range to date */
+                rangeToDate: string;
+                /** @description Service ID */
+                serviceId?: number;
+                /** @description Combination ID */
+                combinationId?: number;
+                /** @description Timezone offset in minutes */
+                timezoneOffset?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Calendar working day entities */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SuccessResponseDto"] & {
+                        data?: components["schemas"]["PublicCalendarResponseByDatesDto"];
                     };
                 };
             };
@@ -4579,6 +4918,51 @@ export interface operations {
                 content: {
                     "application/json": components["schemas"]["SuccessResponseDto"] & {
                         data?: components["schemas"]["WorkingHourBreakEntity"];
+                    };
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    CustomersController_findAll: {
+        parameters: {
+            query?: {
+                /** @description Page number */
+                page?: number;
+                /** @description Items per page */
+                limit?: number;
+                /** @description Filter by name */
+                name?: string;
+                /** @description Filter by email */
+                email?: string;
+                /** @description Filter by phone */
+                phone?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description List of customers */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SuccessResponseDto"] & {
+                        data?: {
+                            items?: components["schemas"]["CustomerInfoDto"][];
+                            pagination?: components["schemas"]["PaginationDto"];
+                        };
                     };
                 };
             };

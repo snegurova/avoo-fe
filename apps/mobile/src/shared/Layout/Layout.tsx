@@ -2,13 +2,14 @@ import React from 'react';
 import {
   StyleSheet,
   ScrollView,
+  View,
   KeyboardAvoidingView,
   Platform,
   StyleProp,
   ViewStyle,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { colors } from '@avoo/design-tokens';
+import { colors, radius } from '@avoo/design-tokens';
 import NavBar from '@/components/NavBar/NavBar';
 
 type Props = {
@@ -21,6 +22,7 @@ type Props = {
   onBackPress?: () => void;
   centerContent?: boolean;
   hasBottomTab?: boolean;
+  isScrollableDisabled?: boolean;
   style?: StyleProp<ViewStyle>;
   headerStyle?: StyleProp<ViewStyle>;
 };
@@ -36,6 +38,7 @@ export default function Layout(props: Props) {
     onBackPress,
     centerContent = false,
     hasBottomTab = false,
+    isScrollableDisabled = false,
     style,
     headerStyle,
   } = props;
@@ -59,13 +62,29 @@ export default function Layout(props: Props) {
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={{ flex: 1 }}
       >
-        <ScrollView
-          style={styles.content}
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={centerContent ? styles.centerContent : {}}
-        >
-          {children}
-        </ScrollView>
+        {isScrollableDisabled ? (
+          <View style={styles.scrollView}>
+            <View
+              style={[
+                styles.contentContainer,
+                centerContent && styles.centerContent,
+              ]}
+            >
+              {children}
+            </View>
+          </View>
+        ) : (
+          <ScrollView
+            style={styles.scrollView}
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={[
+              styles.contentContainer,
+              centerContent && styles.centerContent,
+            ]}
+          >
+            {children}
+          </ScrollView>
+        )}
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
@@ -76,13 +95,20 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.primary[50],
   },
-  content: {
+  scrollView: {
     flex: 1,
+    padding: 16,
+  },
+  contentContainer: {
+    backgroundColor: colors.white,
+    borderWidth: 1,
+    borderColor: colors.gray[200],
+    borderRadius: radius.xl,
+    padding: 20,
+    minHeight: '100%',
   },
   centerContent: {
-    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 16,
   },
 });

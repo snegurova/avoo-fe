@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { utils } from '@avoo/hooks/utils/utils';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -21,7 +22,7 @@ type UseCreateMasterFormParams = {
 export const masterHooks = {
   useGetMastersProfileInfo: () => {
     const { data: profileInfoData, isPending } = useQuery<
-      BaseResponse<MasterWithRelationsEntityResponse>,
+      BaseResponse<MasterWithRelationsEntityResponse[]>,
       Error
     >({
       queryKey: queryKeys.masters.all,
@@ -75,5 +76,22 @@ export const masterHooks = {
       errors,
       isPending,
     };
+  },
+  useFilterMasters: (
+    masters: MasterWithRelationsEntityResponse[] | null,
+    searchQuery: string,
+  ) => {
+    return useMemo(() => {
+      if (!masters) return [];
+      if (!searchQuery.trim()) return masters;
+
+      const query = searchQuery.toLowerCase();
+      return masters.filter(
+        (master) =>
+          master.name?.toLowerCase().includes(query) ||
+          master.email?.toLowerCase().includes(query) ||
+          master.phone?.toLowerCase().includes(query),
+      );
+    }, [masters, searchQuery]);
   },
 };
