@@ -11,6 +11,8 @@ import {
 import { FileInput } from '@avoo/shared';
 import { apiStatus } from '../types/apiTypes';
 import { queryKeys } from './queryKeys';
+import { appendFileToForm, buildCertificateForm } from './utils/formDataHelpers';
+import { CreateCertificatePayload } from '@avoo/axios/types/certificate';
 
 export const userHooks = {
   useGetUserProfile: () => {
@@ -65,7 +67,11 @@ export const userHooks = {
       Error,
       FileInput
     >({
-      mutationFn: userApi.updateAvatar,
+      mutationFn: async (file) => {
+        const form = new FormData();
+        await appendFileToForm(form, 'file', file);
+        return userApi.updateAvatar(form);
+      },
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: queryKeys.user.profile() });
       },
@@ -83,15 +89,14 @@ export const userHooks = {
     const { mutate: handleAddCertificate, isPending } = useMutation<
       BaseResponse<CertificateResponse>,
       Error,
-      {
-        title: string;
-        issueDate: string;
-        description?: string;
-        masterId?: number;
-        file?: FileInput;
-      }
+      CreateCertificatePayload
     >({
-      mutationFn: (payload) => userApi.createCertificate(payload),
+      mutationFn: (payload) => {
+        return (async () => {
+          const form = await buildCertificateForm(payload);
+          return userApi.createCertificate(form);
+        })();
+      },
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: queryKeys.user.profile() });
         queryClient.invalidateQueries({ queryKey: queryKeys.user.certificates() });

@@ -6,7 +6,6 @@ import {
   CertificateResponse,
 } from '@avoo/axios/types/apiTypes';
 import { apiClient } from '@avoo/axios/src/apiClient';
-import { FileInput } from '@avoo/shared';
 
 const UPDATE_AVATAR_ENDPOINT = '/update-avatar';
 const GET_PROFILE_INFO_ENDPOINT = '/profile';
@@ -23,14 +22,10 @@ export const userApi = {
     const response = await apiClient.get<BaseResponse<UserMediaResponse>>(GET_USER_MEDIA_ENDPOINT);
     return response.data;
   },
-  async updateAvatar(file: FileInput) {
-    const formData = new FormData();
-
-    formData.append('file', file);
-
+  async updateAvatar(body: FormData) {
     const response = await apiClient.patch<BaseResponse<UserUpdateAvatarResponse>>(
       UPDATE_AVATAR_ENDPOINT,
-      formData,
+      body,
       {
         headers: {
           'Content-Type': 'multipart/form-data',
@@ -39,30 +34,10 @@ export const userApi = {
     );
     return response.data;
   },
-  async createCertificate(payload: {
-    title: string;
-    issueDate: string;
-    description?: string;
-    masterId?: number;
-    file?: FileInput;
-  }) {
-    const formData = new FormData();
-
-    if (payload.masterId !== undefined) {
-      formData.append('masterId', String(payload.masterId));
-    }
-    formData.append('title', payload.title);
-    if (payload.description) {
-      formData.append('description', payload.description);
-    }
-    formData.append('issueDate', payload.issueDate);
-    if (payload.file) {
-      formData.append('file', payload.file);
-    }
-
+  async createCertificate(body: FormData) {
     const response = await apiClient.post<BaseResponse<CertificateResponse>>(
       CERTIFICATES_ENDPOINT,
-      formData,
+      body,
       {
         headers: {
           'Content-Type': 'multipart/form-data',
