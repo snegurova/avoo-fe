@@ -9,7 +9,7 @@ export default function ForgotPasswordScreen(props: Props) {
   const { navigation } = props;
 
   return (
-    <Layout centerContent={true}>
+    <Layout centerContent={true} isHeaderHidden={true}>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View className='w-full'>
           <Text className='text-3xl font-bold text-center mb-2'>Forgot Password</Text>
