@@ -7,10 +7,15 @@ import { QueryClientProvider } from '@tanstack/react-query';
 import { queryClient } from '@avoo/hooks';
 import { PaperProvider } from 'react-native-paper';
 import paperTheme from '@/theme/paper-theme';
+import { setClearQueryClientCallback } from '@avoo/axios';
 
 import './global.css';
 
 enableScreens();
+
+setClearQueryClientCallback(() => {
+  queryClient.clear();
+});
 
 export default function App() {
   return (

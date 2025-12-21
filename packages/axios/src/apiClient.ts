@@ -1,6 +1,12 @@
 import { useAuthStore } from '@avoo/store';
-import { queryClient } from '@avoo/hooks';
 import axios from 'axios';
+
+// Callback для очистки queryClient, устанавливается извне
+let clearQueryClientCallback: (() => void) | null = null;
+
+export const setClearQueryClientCallback = (callback: () => void) => {
+  clearQueryClientCallback = callback;
+};
 
 export const apiClient = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/',
@@ -23,7 +29,7 @@ apiClient.interceptors.response.use(
   (error) => {
     if (error.response?.status === 401) {
       useAuthStore.getState().logoutStore();
-      queryClient.clear();
+      clearQueryClientCallback?.();
     }
     return Promise.reject(error);
   },

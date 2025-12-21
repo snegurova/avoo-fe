@@ -1,4 +1,4 @@
-export { apiClient } from './apiClient';
+export { apiClient, setClearQueryClientCallback } from './apiClient';
 export { categoriesApi } from './modules/categories';
 export { authApi } from './modules/auth';
 export { userApi } from './modules/user';

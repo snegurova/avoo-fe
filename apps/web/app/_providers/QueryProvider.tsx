@@ -3,7 +3,8 @@
 import { QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { queryClient } from '@avoo/hooks';
-import { ReactNode } from 'react';
+import { setClearQueryClientCallback } from '@avoo/axios';
+import { ReactNode, useEffect } from 'react';
 
 const __DEV__ = process.env.NODE_ENV === 'development';
 
@@ -13,6 +14,12 @@ type Props = {
 
 export function QueryProvider(props: Props) {
   const { children } = props;
+
+  useEffect(() => {
+    setClearQueryClientCallback(() => {
+      queryClient.clear();
+    });
+  }, []);
 
   return (
     <QueryClientProvider client={queryClient}>
