@@ -1,6 +1,5 @@
 import React from 'react';
 import {
-  StyleSheet,
   ScrollView,
   KeyboardAvoidingView,
   Platform,
@@ -8,7 +7,6 @@ import {
   ViewStyle,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { colors } from '@avoo/design-tokens';
 import NavBar from '@/components/NavBar/NavBar';
 
 type Props = {
@@ -43,7 +41,8 @@ export default function Layout(props: Props) {
   return (
     <SafeAreaView
       edges={hasBottomTab ? ['top'] : undefined}
-      style={[styles.container, style]}
+      className="flex-1 bg-primary-50"
+      style={style}
     >
       {!isHeaderHidden && (
         <NavBar
@@ -57,12 +56,12 @@ export default function Layout(props: Props) {
       )}
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        style={{ flex: 1 }}
+        className="flex-1"
       >
         <ScrollView
-          style={styles.content}
+          className="flex-1"
           showsVerticalScrollIndicator={false}
-          contentContainerStyle={centerContent ? styles.centerContent : {}}
+          contentContainerClassName={centerContent ? 'flex-1 justify-center items-center p-4' : undefined}
         >
           {children}
         </ScrollView>
@@ -70,19 +69,3 @@ export default function Layout(props: Props) {
     </SafeAreaView>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: colors.primary[50],
-  },
-  content: {
-    flex: 1,
-  },
-  centerContent: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 16,
-  },
-});
