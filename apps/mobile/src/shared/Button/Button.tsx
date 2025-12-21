@@ -1,47 +1,85 @@
-import { useCallback, memo } from 'react';
-import { Pressable, Text, ActivityIndicator, ViewStyle, TextStyle } from 'react-native';
+import { memo } from 'react';
+import {
+  Button as PaperButton,
+  useTheme,
+  type ButtonProps as PaperButtonProps,
+} from 'react-native-paper';
+import { StyleProp, ViewStyle } from 'react-native';
+
+export enum Variant {
+  PRIMARY = 'primary',
+  SECONDARY = 'secondary',
+  TERTIARY = 'tertiary',
+}
 
 type Props = {
   onPress: () => void;
   title: string;
+  variant?: Variant;
   disabled?: boolean;
   loading?: boolean;
-  style?: ViewStyle | ViewStyle[];
-  textStyle?: TextStyle;
-}
+  style?: StyleProp<ViewStyle>;
+} & Omit<PaperButtonProps, 'onPress' | 'children' | 'mode' | 'buttonColor' | 'textColor' | 'style'>;
 
 function Button(props: Props) {
-  const { onPress, title, disabled = false, loading = false, style, textStyle } = props;
+  const {
+    onPress,
+    title,
+    variant = Variant.PRIMARY,
+    disabled = false,
+    loading = false,
+    style,
+    ...rest
+  } = props;
 
-  const handlePress = useCallback(() => {
-    onPress();
-  }, [onPress]);
+  const theme = useTheme();
 
+  const getButtonConfig = () => {
+    switch (variant) {
+      case 'primary':
+        return {
+          mode: 'contained' as const,
+          buttonColor: theme.colors.primary,
+          textColor: theme.colors.onPrimary,
+        };
+      case 'secondary':
+        return {
+          mode: 'contained' as const,
+          buttonColor: theme.colors.secondary,
+          textColor: theme.colors.onSecondary,
+        };
+      case 'tertiary':
+        return {
+          mode: 'outlined' as const,
+          buttonColor: theme.colors.secondaryContainer,
+          textColor: theme.colors.secondary,
+          borderColor: theme.colors.secondary,
+        };
+      default:
+        return {
+          mode: 'contained' as const,
+          buttonColor: theme.colors.primary,
+          textColor: theme.colors.onPrimary,
+        };
+    }
+  };
+
+  const buttonConfig = getButtonConfig();
 
   return (
-    <Pressable
-      className={`
-        bg-blue-600 rounded-lg p-4 items-center mt-2
-        ${disabled ? 'opacity-60' : ''}
-        ${loading ? 'opacity-60' : ''}
-      `}
-      style={({ pressed }) => [
-        !disabled && !loading && pressed && { opacity: 0.8 },
-        style,
-      ]}
-      onPress={handlePress}
+    <PaperButton
+      mode={buttonConfig.mode}
+      buttonColor={buttonConfig.buttonColor}
+      textColor={buttonConfig.textColor}
+      onPress={onPress}
       disabled={disabled || loading}
+      loading={loading}
+      style={[style]}
+      {...rest}
     >
-      {loading ? (
-        <ActivityIndicator color='#FFFFFF' />
-      ) : (
-        <Text className='text-white text-lg font-semibold' style={textStyle}>
-          {title}
-        </Text>
-      )}
-    </Pressable>
+      {title}
+    </PaperButton>
   );
 }
-
 
 export default memo(Button);
