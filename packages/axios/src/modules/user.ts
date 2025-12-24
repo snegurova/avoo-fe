@@ -5,6 +5,7 @@ import {
   UserUpdateAvatarResponse,
   CertificateResponse,
 } from '@avoo/axios/types/apiTypes';
+import type { components } from '@avoo/axios/types/generated';
 import { apiClient } from '@avoo/axios/src/apiClient';
 
 const UPDATE_AVATAR_ENDPOINT = '/update-avatar';
@@ -46,5 +47,20 @@ export const userApi = {
     );
 
     return response.data;
+  },
+  async updateProfile(body: Partial<components['schemas']['UpdateProfileDto']>) {
+    try {
+      const response = await apiClient.put<BaseResponse<UserProfileResponse>>(
+        GET_PROFILE_INFO_ENDPOINT,
+        body,
+      );
+      return response.data;
+    } catch (err) {
+      const e = err as { response?: { data?: unknown } };
+      if (e.response?.data) {
+        throw e.response.data;
+      }
+      throw err;
+    }
   },
 };
