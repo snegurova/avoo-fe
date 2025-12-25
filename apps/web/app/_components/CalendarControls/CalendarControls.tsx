@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect } from 'react';
+import React from 'react';
 import SelectButton from '@/_components/SelectButton/SelectButton';
 import ArrowBackIcon from '@/_icons/ArrowBackIcon';
 import ArrowForwardIcon from '@/_icons/ArrowForwardIcon';
@@ -10,6 +10,15 @@ import { DatePicker } from '@mui/x-date-pickers';
 import dayjs from 'dayjs';
 import { calendarViewType } from '@avoo/hooks/types/calendarViewType';
 import { timeUtils } from '@/_utils/timeUtils';
+import CheckboxesButton from '../CheckboxesButton/CheckboxesButton';
+import { orderStatus } from '@avoo/hooks/types/orderStatus';
+import {
+  PrivateCalendarQueryParams,
+  MasterWithRelationsEntityResponse,
+} from '@avoo/axios/types/apiTypes';
+import CalendarViewDay from '@/_icons/CalendarViewDay';
+import CalendarViewWeek from '@/_icons/CalendarViewWeek';
+import CalendarViewMonth from '@/_icons/CalendarViewMonth';
 
 type Props = {
   date: Date;
@@ -18,6 +27,10 @@ type Props = {
   setType: (type: calendarViewType) => void;
   toDate: Date;
   setToDate: (date: Date) => void;
+  scrollToCurrentTime: () => void;
+  params: PrivateCalendarQueryParams;
+  setParams: (params: PrivateCalendarQueryParams) => void;
+  masters: MasterWithRelationsEntityResponse;
 };
 
 const controlsButton = tv({
@@ -32,10 +45,12 @@ const controlsButton = tv({
   },
 });
 
-export default function CalendarControls(props: Props) {
-  const { date, setDate, toDate, setToDate, type, setType } = props;
+const icon = tv({
+  base: 'w-4 h-4 fill-black',
+});
 
-  useEffect(() => {}, [date, toDate, type]);
+export default function CalendarControls(props: Props) {
+  const { date, setDate, setToDate, type, setType, scrollToCurrentTime, masters } = props;
 
   const setCurrentDate = (type: calendarViewType) => {
     const today = new Date();
@@ -64,7 +79,7 @@ export default function CalendarControls(props: Props) {
       setDate(range.start);
       setToDate(range.end);
     } else if (type === calendarViewType.MONTH) {
-      const prevMonth = new Date(date);
+      const prevMonth = new Date(date.getTime() + 7 * 24 * 60 * 60 * 1000);
       prevMonth.setMonth(prevMonth.getMonth() - 1);
       const range = timeUtils.getMonthRange(prevMonth);
       setDate(range.start);
@@ -90,9 +105,28 @@ export default function CalendarControls(props: Props) {
     }
   };
 
-  const options = [
+  const handleChangeDate = (newDate: dayjs.Dayjs | null) => {
+    if (!newDate) return;
+    const newDateObj = newDate.toDate();
+    if (type === calendarViewType.DAY) {
+      const range = timeUtils.getDayRange(newDateObj);
+      setDate(range.start);
+      setToDate(range.end);
+    } else if (type === calendarViewType.WEEK) {
+      const range = timeUtils.getWeekRange(newDateObj);
+      setDate(range.start);
+      setToDate(range.end);
+    } else if (type === calendarViewType.MONTH) {
+      const range = timeUtils.getMonthRange(newDateObj);
+      setDate(range.start);
+      setToDate(range.end);
+    }
+  };
+
+  const viewOptions = [
     {
       label: 'Day',
+      icon: <CalendarViewDay className={icon()} />,
       handler: () => {
         setType(calendarViewType.DAY);
         setCurrentDate(calendarViewType.DAY);
@@ -100,6 +134,7 @@ export default function CalendarControls(props: Props) {
     },
     {
       label: 'Week',
+      icon: <CalendarViewWeek className={icon()} />,
       handler: () => {
         setType(calendarViewType.WEEK);
         setCurrentDate(calendarViewType.WEEK);
@@ -107,6 +142,7 @@ export default function CalendarControls(props: Props) {
     },
     {
       label: 'Month',
+      icon: <CalendarViewMonth className={icon()} />,
       handler: () => {
         setType(calendarViewType.MONTH);
         setCurrentDate(calendarViewType.MONTH);
@@ -114,13 +150,32 @@ export default function CalendarControls(props: Props) {
     },
   ];
 
+  const statusesOptions = {
+    label: 'All statuses',
+    handler: () => {},
+    items: [
+      { label: orderStatus.PENDING, handler: () => {} },
+      { label: orderStatus.CONFIRMED, handler: () => {} },
+      { label: orderStatus.COMPLETED, handler: () => {} },
+    ],
+  };
+
+  const mastersOptions = {
+    label: 'All masters',
+    handler: () => {},
+    items: masters?.map((master) => ({ label: master.name, handler: () => {} })) ?? [],
+  };
+
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <div className='bg-gray-50 px-4 py-3 flex gap-3'>
         <button
           type='button'
           className={controlsButton({ variant: 'full' })}
-          onClick={() => setCurrentDate(type)}
+          onClick={() => {
+            setCurrentDate(type);
+            scrollToCurrentTime();
+          }}
         >
           Today
         </button>
@@ -135,9 +190,7 @@ export default function CalendarControls(props: Props) {
           <DatePicker
             value={dayjs(date)}
             format='DD MMM YYYY'
-            onChange={(newDate) => {
-              if (newDate) setDate(newDate.toDate());
-            }}
+            onChange={handleChangeDate}
             slotProps={{
               textField: {
                 sx: {
@@ -163,7 +216,9 @@ export default function CalendarControls(props: Props) {
             <ArrowForwardIcon className='fill-gray-800 w-3.5 h-3.5' />
           </button>
         </div>
-        <SelectButton label={type} options={options} type='outline' />
+        <SelectButton label={type} options={viewOptions} type='outline' />
+        <CheckboxesButton addCount label='Masters' options={[mastersOptions]} />
+        <CheckboxesButton addCount label='Statuses' options={[statusesOptions]} />
       </div>
     </LocalizationProvider>
   );

@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { PX_IN_MINUTE } from '@/_constants/time';
 import { timeUtils } from '@/_utils/timeUtils';
 import { tv } from 'tailwind-variants';
 
 type Props = {
   showLabel?: boolean;
+  time: number;
+  setTime: React.Dispatch<React.SetStateAction<number>>;
 };
 
 const marker = tv({
@@ -28,9 +30,7 @@ const label = tv({
 });
 
 export default function CalendarCurrentTime(props: Props) {
-  const { showLabel = false } = props;
-
-  const [time, setTime] = useState(timeUtils.getMinutesInDay(new Date().toString()));
+  const { showLabel = false, time, setTime } = props;
 
   useEffect(() => {
     let interval: ReturnType<typeof setInterval> | null = null;

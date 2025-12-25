@@ -45,6 +45,8 @@ export type GetSchedulesResponse = {
 /** Calendar */
 export type GetCalendarResponse = components['schemas']['PrivateCalendarResponseDto'][];
 
+export type GetCalendarByDatesResponse = components['schemas']['PrivateCalendarResponseByDatesDto'];
+
 export type CalendarItem = components['schemas']['PrivateCalendarResponseDto'];
 
 export type PrivateEvent = components['schemas']['PrivateEventDto'];
@@ -54,6 +56,9 @@ export enum CalendarView {
   Month = 'month',
   Year = 'year',
 }
+
+export type PrivateCalendarByDatesQueryParams =
+  components['schemas']['QueryCalendarByDatesPrivateDto'];
 
 export type PrivateCalendarQueryParams = Omit<
   operations['CalendarController_getCalendar']['parameters']['query'],

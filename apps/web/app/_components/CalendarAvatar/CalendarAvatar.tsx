@@ -27,9 +27,9 @@ const avatar = tv({
       true: 'mb-2',
     },
     idx: {
-      0: 'bg-avatar',
-      1: 'bg-avatar1',
-      2: 'bg-avatar2',
+      0: 'bg-primary-200',
+      1: 'bg-blue-200',
+      2: 'bg-orange-200',
     },
   },
 });

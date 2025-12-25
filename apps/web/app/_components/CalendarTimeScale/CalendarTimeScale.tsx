@@ -7,6 +7,8 @@ import { tv } from 'tailwind-variants';
 type Props = {
   type: calendarViewType;
   date: Date;
+  time: number;
+  setTime: React.Dispatch<React.SetStateAction<number>>;
 };
 
 const container = tv({
@@ -15,7 +17,7 @@ const container = tv({
     type: {
       [calendarViewType.DAY]: 'left-0 w-10.5',
       [calendarViewType.WEEK]: 'top-0 min-w-full h-10 flex flex-row flex-nowrap',
-      [calendarViewType.MONTH]: 'top-0 min-w-full h-10 flex flex-row flex-nowrap',
+      [calendarViewType.MONTH]: 'top-0 h-10 grid grid-cols-7 min-w-70',
     },
   },
 });
@@ -32,8 +34,12 @@ const dateValue = tv({
 });
 
 const weekDay = tv({
-  base: 'h-full p-1 not-last:border-r border-gray-300 text-xs font-medium box-border border-b flex items-center justify-center flex-1 min-w-40 gap-1',
+  base: 'h-full p-1 not-last:border-r border-gray-300 text-xs font-medium box-border border-b flex items-center justify-center flex-1 gap-1',
   variants: {
+    type: {
+      [calendarViewType.WEEK]: 'min-w-40',
+      [calendarViewType.MONTH]: 'min-w-10',
+    },
     day: {
       today: 'text-primary-800',
       past: 'text-gray-500',
@@ -43,7 +49,7 @@ const weekDay = tv({
 });
 
 export default function CalendarTimeScale(props: Props) {
-  const { type, date } = props;
+  const { type, date, time, setTime } = props;
 
   const weekRange = timeUtils.getWeekRange(date);
 
@@ -59,20 +65,23 @@ export default function CalendarTimeScale(props: Props) {
               {idx}:00
             </div>
           ))}
-          {timeUtils.isSameDay(date, new Date()) && <CalendarCurrentTime showLabel />}
+          {timeUtils.isSameDay(date, new Date()) && (
+            <CalendarCurrentTime showLabel time={time} setTime={setTime} />
+          )}
         </>
       )}
       {(type === calendarViewType.WEEK || type === calendarViewType.MONTH) &&
         Array.from({ length: 7 }).map((_, idx) => {
-          const dateObj = new Date(weekRange.start.getTime() + idx * 24 * 60 * 60 * 1000);
-
-          let day: 'future' | 'today' | 'past' = 'future';
-          if (timeUtils.isSameDay(dateObj, new Date())) {
-            day = 'today';
-          } else if (dateObj < timeUtils.toDayBegin(new Date())) {
-            day = 'past';
+          let day = 'future' as 'past' | 'today' | 'future';
+          if (type === calendarViewType.WEEK) {
+            day = timeUtils.getDateStatus(
+              new Date(
+                weekRange.start.getFullYear(),
+                weekRange.start.getMonth(),
+                weekRange.start.getDate() + idx,
+              ),
+            );
           }
-
           return (
             <div key={type + idx} className={weekDay({ day })}>
               {type === calendarViewType.WEEK && (

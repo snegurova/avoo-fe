@@ -1,5 +1,5 @@
 import ArrowDownIcon from '@/_icons/ArrowDownIcon';
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useRef } from 'react';
 import { tv } from 'tailwind-variants';
 import DropdownList from '@/_components/DropdownList/DropdownList';
 
@@ -15,7 +15,7 @@ const selectButton = tv({
     type: {
       solid: 'text-white bg-black gap-6 px-6 py-2.5',
       outline:
-        'text-gray-800 border border-gray-200 bg-transparent gap-4 px-3 py-2.5 text-sm leading-none',
+        'text-gray-800 border border-gray-200 bg-transparent gap-2 px-3 py-2.5 text-sm leading-none',
     },
   },
 });
@@ -36,11 +36,12 @@ const selectIcon = tv({
 export default function SelectButton(props: Props) {
   const { label, options, type = 'solid' } = props;
   const [isOpen, setIsOpen] = useState(false);
+  const selectRef = useRef<HTMLDivElement>(null);
 
   const toggleOpen = () => {
     const handleClickOutside = (event: MouseEvent) => {
       const target = event.target as HTMLElement;
-      if (!target.closest('.select-button-container')) {
+      if (selectRef.current && !selectRef.current.contains(target)) {
         setIsOpen(false);
       }
     };
@@ -58,7 +59,7 @@ export default function SelectButton(props: Props) {
   }, []);
 
   return (
-    <div className='relative select-button-container'>
+    <div className='relative' ref={selectRef}>
       <button className={selectButton({ type })} onClick={toggleOpen}>
         <span className='capitalize'>{label}</span>
         <ArrowDownIcon className={selectIcon({ open: isOpen, type })} />

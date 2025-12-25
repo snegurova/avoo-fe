@@ -6,7 +6,7 @@ export const timeUtils = {
   },
   toDayEnd(date: Date): Date {
     const d = new Date(date);
-    d.setHours(23, 59, 59, 999);
+    d.setHours(23, 59, 59);
     return d;
   },
   getMinutesInDay(date: string): number {
@@ -25,6 +25,9 @@ export const timeUtils = {
       .padStart(2, '0');
     const mins = (minutes % 60).toString().padStart(2, '0');
     return `${hours}:${mins}`;
+  },
+  getMinutesFromDate(date: Date): number {
+    return date.getHours() * 60 + date.getMinutes();
   },
   isSameDay(date1: Date, date2: Date): boolean {
     return (
@@ -69,5 +72,17 @@ export const timeUtils = {
   getWeekDay(day: number): string {
     const weekDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
     return weekDays[day];
+  },
+  getDateStatus(date: Date): 'past' | 'today' | 'future' {
+    const today = this.toDayBegin(new Date());
+    const targetDate = this.toDayBegin(date);
+
+    if (targetDate.getTime() === today.getTime()) {
+      return 'today';
+    } else if (targetDate < today) {
+      return 'past';
+    } else {
+      return 'future';
+    }
   },
 };
