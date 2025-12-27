@@ -32,7 +32,7 @@ export type UserMediaResponse = {
 export type UserUpdateAvatarResponse = components['schemas']['UserEntity'];
 
 /** Master */
-export type MasterWithRelationsEntityResponse = components['schemas']['MasterEntity'][];
+export type MasterWithRelationsEntityResponse = components['schemas']['MasterEntity'];
 
 type MasterBaseForCreate = Omit<
   components['schemas']['MasterEntity'],

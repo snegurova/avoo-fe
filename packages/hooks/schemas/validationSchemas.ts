@@ -81,24 +81,25 @@ export const createMasterSchema = yup.object({
   bio: yup
     .string()
     .nullable()
-    .trim()
+    .transform((value) => (value && value.trim() ? value.trim() : null))
     .test('bio-min-length', 'Bio must be longer than or equal to 10 characters', function(value) {
-      if (!value || value.trim().length === 0) return true;
-      return value.trim().length >= 10;
+      if (!value) return true;
+      return value.length >= 10;
     }),
   phone: yup
     .string()
     .nullable()
-    .trim(),
+    .transform((value) => (value && value.trim() ? value.trim() : null)),
   languages: yup
     .array()
     .of(
       yup
-    .string()
+        .string()
         .oneOf([...VALID_LANGUAGE_CODES], 'Invalid language code')
         .required()
     )
     .nullable()
+    .transform((value) => (value && value.length > 0 ? value : null))
     .default([]),
 });
 
