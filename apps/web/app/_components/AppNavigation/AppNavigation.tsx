@@ -1,16 +1,23 @@
 'use client';
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import { appRoutes } from '@/_routes/routes';
 import AppNavigationItem from '../AppNavigationItem/AppNavigationItem';
+import { routerHooks } from '@/_hooks/routerHooks';
 import HomeIcon from '@/_icons/HomeIcon';
 import CalendarIcon from '@/_icons/CalendarIcon';
 import GroupsIcon from '@/_icons/GroupsIcon';
 import BookIcon from '@/_icons/BookIcon';
 import MosaicIcon from '@/_icons/MosaicIcon';
 import CoPresentIcon from '@/_icons/CoPresentIcon';
+import ArrowDownIcon from '@/_icons/ArrowDownIcon';
+import ArrowUpIcon from '@/_icons/ArrowUpIcon';
+import TimeOffModal from '../TimeOffModal/TimeOffModal';
 
 export default function AppNavigation() {
+  const [calendarOpen, setCalendarOpen] = useState(false);
+  const [isTimeOffOpen, setIsTimeOffOpen] = useState(false);
+
   const items = [
     {
       href: appRoutes.Home,
@@ -21,6 +28,7 @@ export default function AppNavigation() {
       href: appRoutes.Calendar,
       icon: <CalendarIcon />,
       label: 'Calendar',
+      hasDropdown: true,
     },
     {
       href: appRoutes.Clients,
@@ -55,10 +63,62 @@ export default function AppNavigation() {
         <ul className='flex flex-col'>
           {items.map((item) => (
             <li key={item.href}>
-              <AppNavigationItem href={item.href} icon={item.icon} label={item.label} />
+              {item.hasDropdown ? (
+                (() => {
+                  const isActive = routerHooks.useIsActivePage(item.href);
+                  const baseCls =
+                    'flex items-center gap-3.5 px-4 py-3 hover:bg-primary focus:bg-primary transition-colors';
+                  return (
+                    <>
+                      <div
+                        className={`${baseCls} ${isActive ? 'bg-secondary' : ''} flex items-center justify-between`}
+                      >
+                        <Link href={item.href} className='flex items-center gap-3.5'>
+                          {item.icon}
+                          <span className='text-sm'>{item.label}</span>
+                        </Link>
+
+                        <button
+                          type='button'
+                          className='px-3 py-2 hover:bg-muted'
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            setCalendarOpen((s) => !s);
+                          }}
+                          aria-expanded={calendarOpen}
+                        >
+                          {calendarOpen ? (
+                            <ArrowUpIcon />
+                          ) : (
+                            <ArrowDownIcon />
+                          )}
+                        </button>
+                      </div>
+
+                      {calendarOpen && (
+                        <ul className='flex flex-col pl-8'>
+                          <li>
+                            <button
+                              type='button'
+                              className='w-full text-left px-6 py-2 hover:bg-muted'
+                              onClick={() => setIsTimeOffOpen(true)}
+                            >
+                              Time off
+                            </button>
+                          </li>
+                        </ul>
+                      )}
+                    </>
+                  );
+                })()
+              ) : (
+                <AppNavigationItem href={item.href} icon={item.icon} label={item.label} />
+              )}
             </li>
           ))}
         </ul>
+        <TimeOffModal isOpen={isTimeOffOpen} onClose={() => setIsTimeOffOpen(false)} />
       </nav>
     </aside>
   );

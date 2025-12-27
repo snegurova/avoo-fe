@@ -1,0 +1,16 @@
+import React from 'react';
+
+export default function ArrowUpIcon(props: React.SVGProps<SVGSVGElement>) {
+  return (
+    <svg
+      {...props}
+      xmlns='http://www.w3.org/2000/svg'
+      width='24'
+      height='24'
+      viewBox='0 -960 960 960'
+      style={{ transform: 'rotate(180deg)' }}
+    >
+      <path d='M480-372.92q-7.23 0-13.46-2.31t-11.85-7.92L274.92-562.92q-8.3-8.31-8.5-20.89-.19-12.57 8.5-21.27 8.7-8.69 21.08-8.69t21.08 8.69L480-442.15l162.92-162.93q8.31-8.3 20.89-8.5 12.57-.19 21.27 8.5 8.69 8.7 8.69 21.08t-8.69 21.08L505.31-383.15q-5.62 5.61-11.85 7.92T480-372.92'></path>
+    </svg>
+  );
+}
