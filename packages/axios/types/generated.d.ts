@@ -308,6 +308,38 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/certificates": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["UsersController_getAllCertificates"];
+        put?: never;
+        post: operations["UsersController_createCertificate"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/certificates/{certificateId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["UsersController_getOneCertificate"];
+        put?: never;
+        post?: never;
+        delete: operations["UsersController_deleteUserCertificate"];
+        options?: never;
+        head?: never;
+        patch: operations["UsersController_updateUserCertificate"];
+        trace?: never;
+    };
     "/services": {
         parameters: {
             query?: never;
@@ -1090,6 +1122,60 @@ export interface components {
             language: string;
             masters: components["schemas"]["ShortMasterInfoDto"][];
         };
+        CertificateEntity: {
+            id: number;
+            /** @description Certificate title */
+            title: string;
+            /** @description Certificate description */
+            description?: Record<string, never>;
+            /**
+             * Format: date-time
+             * @description Certificate issue date
+             */
+            issueDate: string;
+            /** @description Certificate file URL */
+            url: string;
+            /** @description Certificate preview URL */
+            previewUrl?: Record<string, never>;
+            /** @description Salon (user) ID */
+            userId: number;
+            /** @description Master ID (optional) */
+            masterId?: Record<string, never>;
+            /** Format: date-time */
+            createdAt: string;
+            /** Format: date-time */
+            updatedAt: string;
+        };
+        UploadCertificateFormDto: {
+            /** @description Master ID (optional). If omitted certificate will be for whole salon */
+            masterId?: number;
+            /** @description Certificate title */
+            title: string;
+            /** @description Certificate description */
+            description?: string;
+            /**
+             * @description Issue date (YYYY-MM-DD)
+             * @example 2025-11-23
+             */
+            issueDate: string;
+            /** Format: binary */
+            file: string;
+        };
+        UploadCertificateDto: {
+            /** @description Master ID (optional). If omitted certificate will be for whole salon */
+            masterId?: number;
+            /** @description Certificate title */
+            title: string;
+            /** @description Certificate description */
+            description?: string;
+            /**
+             * @description Issue date (YYYY-MM-DD)
+             * @example 2025-11-23
+             */
+            issueDate: string;
+            files: string[];
+            folder: string;
+        };
         CreateServiceDto: {
             /**
              * @description Name of the service
@@ -1422,24 +1508,24 @@ export interface components {
         };
         PrivateEventDto: {
             /** @example 101 */
-            id?: number;
+            id: number;
             /** @example Client appointment */
-            title?: string;
+            title: string;
             /**
              * @description Type of the order
              * @example SERVICE
              */
-            type?: string;
+            type: string;
             /**
              * Format: date-time
              * @example 2025-10-28T09:30:00.000Z
              */
-            start?: string;
+            start: string;
             /**
              * Format: date-time
              * @example 2025-10-28T10:00:00.000Z
              */
-            end?: string;
+            end: string;
             /** @example 15 */
             price: number;
             /** @example 60 */
@@ -1455,6 +1541,10 @@ export interface components {
             customerName: Record<string, never>;
             /** @example 1 */
             customerId: number;
+            /** @example 1 */
+            serviceId: Record<string, never>;
+            /** @example 1 */
+            combinationId: Record<string, never>;
         };
         PrivateWorkingDayDto: {
             /**
@@ -1462,24 +1552,24 @@ export interface components {
              * @description Range to date
              * @example 2025-10-28
              */
-            date?: string;
+            date: string;
             /**
              * @description Weekday
              * @example Mon
              */
-            weekday?: string;
+            weekday: string;
             /**
              * @description Is schedule accessible for this day(if we out of schedule range)
              * @example true
              */
-            isAccessible?: boolean;
+            isAccessible: boolean;
             /**
              * @description Is working day for this schedule(if salon not work on this day)
              * @example true
              */
-            isWorkingDay?: boolean;
+            isWorkingDay: boolean;
             /** @description Availability */
-            availability?: components["schemas"]["AvailabilityDto"][];
+            availability: components["schemas"]["AvailabilityDto"][];
             /**
              * @description Exceptions
              * @example [
@@ -1489,7 +1579,7 @@ export interface components {
              *       }
              *     ]
              */
-            exceptions?: string[];
+            exceptions: string[];
             /** @description Events */
             events: components["schemas"]["PrivateEventDto"][];
         };
@@ -1576,24 +1666,24 @@ export interface components {
         };
         PublicEventDto: {
             /** @example 101 */
-            id?: number;
+            id: number;
             /** @example Client appointment */
-            title?: string;
+            title: string;
             /**
              * @description Type of the order
              * @example SERVICE
              */
-            type?: string;
+            type: string;
             /**
              * Format: date-time
              * @example 2025-10-28T09:30:00.000Z
              */
-            start?: string;
+            start: string;
             /**
              * Format: date-time
              * @example 2025-10-28T10:00:00.000Z
              */
-            end?: string;
+            end: string;
         };
         PublicWorkingDayDto: {
             /**
@@ -1601,24 +1691,24 @@ export interface components {
              * @description Range to date
              * @example 2025-10-28
              */
-            date?: string;
+            date: string;
             /**
              * @description Weekday
              * @example Mon
              */
-            weekday?: string;
+            weekday: string;
             /**
              * @description Is schedule accessible for this day(if we out of schedule range)
              * @example true
              */
-            isAccessible?: boolean;
+            isAccessible: boolean;
             /**
              * @description Is working day for this schedule(if salon not work on this day)
              * @example true
              */
-            isWorkingDay?: boolean;
+            isWorkingDay: boolean;
             /** @description Availability */
-            availability?: components["schemas"]["AvailabilityDto"][];
+            availability: components["schemas"]["AvailabilityDto"][];
             /**
              * @description Exceptions
              * @example [
@@ -1628,7 +1718,7 @@ export interface components {
              *       }
              *     ]
              */
-            exceptions?: string[];
+            exceptions: string[];
             /** @description Events */
             events: components["schemas"]["PublicEventDto"][];
         };
@@ -2603,6 +2693,175 @@ export interface operations {
                 content: {
                     "application/json": components["schemas"]["SuccessResponseDto"] & {
                         data?: components["schemas"]["GetProfileLanguagesDto"][];
+                    };
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    UsersController_getAllCertificates: {
+        parameters: {
+            query?: {
+                /** @description Master ID to filter by (optional). If omitted, returns salon-level certificates */
+                masterId?: number;
+                page?: number;
+                limit?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description All certificates */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SuccessResponseDto"] & {
+                        data?: {
+                            items?: components["schemas"]["CertificateEntity"][];
+                            pagination?: components["schemas"]["PaginationDto"];
+                        };
+                    };
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    UsersController_createCertificate: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "multipart/form-data": components["schemas"]["UploadCertificateFormDto"];
+            };
+        };
+        responses: {
+            /** @description Created certificate */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SuccessResponseDto"] & {
+                        data?: components["schemas"]["CertificateEntity"];
+                    };
+                };
+            };
+        };
+    };
+    UsersController_getOneCertificate: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                certificateId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description One certificate by id */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SuccessResponseDto"] & {
+                        data?: components["schemas"]["CertificateEntity"];
+                    };
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    UsersController_deleteUserCertificate: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                certificateId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Delete certificate by id */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SuccessResponseDto"] & {
+                        data?: components["schemas"]["CertificateEntity"];
+                    };
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    UsersController_updateUserCertificate: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                certificateId: number;
+            };
+            cookie?: never;
+        };
+        /** @description Fields to update (partial) */
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["UploadCertificateDto"];
+            };
+        };
+        responses: {
+            /** @description Updated certificate */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SuccessResponseDto"] & {
+                        data?: components["schemas"]["CertificateEntity"];
                     };
                 };
             };
@@ -3815,8 +4074,6 @@ export interface operations {
             query: {
                 /** @description Master ID */
                 masterId?: number;
-                /** @description View type (week, month, year) */
-                view?: string;
                 /** @description Range from date */
                 rangeFromDate: string;
                 /** @description Range to date */
@@ -3899,8 +4156,6 @@ export interface operations {
                 userId: number;
                 /** @description Master ID */
                 masterId?: number;
-                /** @description View type (week, month, year) */
-                view?: string;
                 /** @description Range from date */
                 rangeFromDate: string;
                 /** @description Range to date */
