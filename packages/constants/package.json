@@ -1,0 +1,10 @@
+{
+  "name": "@avoo/constants",
+  "version": "1.0.0",
+  "main": "src/index.ts",
+  "type": "module",
+  "private": true,
+  "dependencies": {
+    "@avoo/axios": "workspace:^"
+  }
+}

@@ -1,7 +1,7 @@
 import { Pressable, Text, View } from 'react-native';
 import { RootScreens, RootStackScreenProps } from '@/types/navigation';
 import { formatHooks } from '@avoo/hooks';
-import { Layout } from '@/shared/Layout';
+import  Layout from '@/shared/Layout/Layout';
 import VerifyCodeForm from '@/components/VerifyCodeForm';
 import { authHooks } from '@avoo/hooks';
 
@@ -17,7 +17,7 @@ export default function ConfirmCodeScreen(props: Props) {
   const { sendCodeHandler } = authHooks.useSendCode();
 
   return (
-    <Layout centerContent={true}>
+    <Layout centerContent={true} isHeaderHidden={true}>
       <View>
         <Text className='text-3xl font-bold text-center mb-4'>Verify your email address</Text>
         <Text className='text-sm text-gray-500 text-center mb-8'>
