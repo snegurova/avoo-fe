@@ -7,6 +7,9 @@ export const queryKeys = {
   schedules: {
     all: ['schedules'] as const,
   },
+  customers: {
+    all: ['customers'] as const,
+  },
   user: {
     all: ['user'] as const,
     profile: () => [...queryKeys.user.all, 'profile'] as const,
