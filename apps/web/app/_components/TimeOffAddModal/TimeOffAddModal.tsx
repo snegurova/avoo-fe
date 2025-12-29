@@ -5,7 +5,7 @@ import ArrowBackIcon from '@/_icons/ArrowBackIcon';
 import FormInput from '../FormInput/FormInput';
 import { FormSelect } from '../FormSelect/FormSelect';
 import { FormMultiSelect } from '../FormMultiSelect/FormMultiSelect';
-import { Formik, Form, FormikProps } from 'formik';
+import { useForm } from 'react-hook-form';
 import { masterHooks } from '@avoo/hooks';
 
 type Props = {
@@ -29,7 +29,7 @@ const TimeOffAddModal = ({ isOpen, onClose, onBack }: Props) => {
   const masters = masterHooks.useGetMastersProfileInfo();
 
   const timeOffTypeOptions = [
-    { label: 'Personal breake', value: 'personal' },
+    { label: 'Personal break', value: 'personal' },
     { label: 'Holiday (Salon)', value: 'holiday' },
     { label: 'Vacation', value: 'vacation' },
     { label: 'Sick Leave', value: 'sick' },
@@ -46,7 +46,7 @@ const TimeOffAddModal = ({ isOpen, onClose, onBack }: Props) => {
 
   const handleSubmitFormik = (values: FormValues): void => {
     // TODO: integrate with Time Off API: conflict check -> show banner -> save
-    // values contains: { type, staff, wholeDay, startDate, startTime, endDate, endTime, note }
+    // values contains: { type, staff(masters), wholeDay, startDate, startTime, endDate, endTime, note }
     // For salon-wide time off, staff may contain ['all']
     // Implement API call here
     // For now show stub and close
@@ -70,29 +70,32 @@ const TimeOffAddModal = ({ isOpen, onClose, onBack }: Props) => {
           <h3 className='text-lg font-semibold'>Add Time off</h3>
         </div>
 
-        <Formik<FormValues>
-          initialValues={{
-            type: 'personal',
-            staff: ['all'],
-            wholeDay: true,
-            startDate: '',
-            startTime: '09:00',
-            endDate: '',
-            endTime: '18:00',
-            note: '',
-          }}
-          onSubmit={handleSubmitFormik}
-        >
-          {({ values, setFieldValue }: FormikProps<FormValues>) => (
-            <Form className='space-y-6 p-2'>
+        {/* react-hook-form implementation */}
+        {(() => {
+          const { handleSubmit, setValue, watch } = useForm<FormValues>({
+            defaultValues: {
+              type: 'personal',
+              staff: ['all'],
+              wholeDay: true,
+              startDate: '',
+              startTime: '09:00',
+              endDate: '',
+              endTime: '18:00',
+              note: '',
+            },
+          });
+
+          const values = watch();
+
+          return (
+            <form onSubmit={handleSubmit(handleSubmitFormik)} className='space-y-6 p-2'>
               <div>
                 <label className='block text-sm font-medium text-gray-700'>Type of Time off</label>
                 <FormSelect
                   name='type'
-                  label='Type of Time off'
                   options={timeOffTypeOptions}
                   value={values.type}
-                  onChange={(v) => setFieldValue('type', v)}
+                  onChange={(v) => setValue('type', v)}
                 />
               </div>
 
@@ -102,10 +105,9 @@ const TimeOffAddModal = ({ isOpen, onClose, onBack }: Props) => {
                 </label>
                 <FormMultiSelect
                   name='staff'
-                  label='Select Staff'
                   options={mastersOptions}
                   selected={values.staff}
-                  onChange={(vals) => setFieldValue('staff', vals)}
+                  onChange={(vals) => setValue('staff', vals)}
                 />
               </div>
 
@@ -117,16 +119,17 @@ const TimeOffAddModal = ({ isOpen, onClose, onBack }: Props) => {
                   <input
                     type='checkbox'
                     checked={values.wholeDay}
-                    onChange={(e) => setFieldValue('wholeDay', e.target.checked)}
+                    onChange={(e) => setValue('wholeDay', e.target.checked)}
                   />
                   <span className='text-sm'>Whole day</span>
                 </label>
               </div>
               <FormInput
                 type='date'
-                name='startDate'
                 value={values.startDate}
-                onChange={(e) => setFieldValue('startDate', e.target.value)}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                  setValue('startDate', e.target.value)
+                }
               />
 
               {!values.wholeDay && (
@@ -134,9 +137,10 @@ const TimeOffAddModal = ({ isOpen, onClose, onBack }: Props) => {
                   <label className='block text-sm font-medium text-gray-700'>Start time</label>
                   <FormInput
                     type='time'
-                    name='startTime'
                     value={values.startTime}
-                    onChange={(e) => setFieldValue('startTime', e.target.value)}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                      setValue('startTime', e.target.value)
+                    }
                   />
                 </div>
               )}
@@ -145,9 +149,10 @@ const TimeOffAddModal = ({ isOpen, onClose, onBack }: Props) => {
                 <label className='block text-sm font-medium text-gray-700'>End Date</label>
                 <FormInput
                   type='date'
-                  name='endDate'
                   value={values.endDate}
-                  onChange={(e) => setFieldValue('endDate', e.target.value)}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                    setValue('endDate', e.target.value)
+                  }
                 />
               </div>
               {!values.wholeDay && (
@@ -155,18 +160,20 @@ const TimeOffAddModal = ({ isOpen, onClose, onBack }: Props) => {
                   <label className='block text-sm font-medium text-gray-700'>End time</label>
                   <FormInput
                     type='time'
-                    name='endTime'
                     value={values.endTime}
-                    onChange={(e) => setFieldValue('endTime', e.target.value)}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                      setValue('endTime', e.target.value)
+                    }
                   />
                 </div>
               )}
               <div>
                 <label className='block text-sm font-medium text-gray-700'>Note</label>
                 <textarea
-                  name='note'
                   value={values.note}
-                  onChange={(e) => setFieldValue('note', e.target.value)}
+                  onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
+                    setValue('note', e.target.value)
+                  }
                   className='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-secondary-500 focus:ring-secondary-500 sm:text-sm'
                   rows={4}
                 />
@@ -185,9 +192,9 @@ const TimeOffAddModal = ({ isOpen, onClose, onBack }: Props) => {
                   Save Changes
                 </Button>
               </div>
-            </Form>
-          )}
-        </Formik>
+            </form>
+          );
+        })()}
       </div>
     </Modal>
   );
