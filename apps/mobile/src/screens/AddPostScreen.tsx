@@ -15,4 +15,3 @@ export const AddPostScreen = (props: Props) => {
 };
 
 export default AddPostScreen;
-
