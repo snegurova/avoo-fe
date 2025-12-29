@@ -1,6 +1,7 @@
 import React from 'react';
 import {
   ScrollView,
+  View,
   KeyboardAvoidingView,
   Platform,
   StyleProp,
@@ -19,6 +20,7 @@ type Props = {
   onBackPress?: () => void;
   centerContent?: boolean;
   hasBottomTab?: boolean;
+  isScrollableDisabled?: boolean;
   style?: StyleProp<ViewStyle>;
   headerStyle?: StyleProp<ViewStyle>;
 };
@@ -34,6 +36,7 @@ export default function Layout(props: Props) {
     onBackPress,
     centerContent = false,
     hasBottomTab = false,
+    isScrollableDisabled = false,
     style,
     headerStyle,
   } = props;
@@ -58,6 +61,7 @@ export default function Layout(props: Props) {
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         className="flex-1"
       >
+
         <ScrollView
           className="flex-1"
           showsVerticalScrollIndicator={false}
