@@ -14,16 +14,17 @@ export enum OwnerType {
 
 export const CertificateAdd = () => {
   const hook = useCertificateForm();
-  const { formik, masters, file, fileError, onFilePicked, onCancel } = hook;
+  const { form, handleSubmit, setValue, watch, masters, file, fileError, onFilePicked, onCancel } =
+    hook;
 
   const isPending = useApiStatusStore((state) => state.isPending);
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    formik.handleSubmit(e);
-  };
+  const masterId = watch('masterId');
+  const {
+    formState: { errors },
+  } = form;
 
   return (
     <form onSubmit={handleSubmit}>
@@ -35,11 +36,13 @@ export const CertificateAdd = () => {
         <FormInput
           type='text'
           id='title'
-          name='title'
           placeholder='Enter certificate title'
           required
-          value={formik.values.title}
-          onChange={formik.handleChange}
+          {...form.register('title', {
+            required: 'Title is required',
+            minLength: { value: 2, message: 'Title is too short' },
+          })}
+          error={errors.title?.message as string | undefined}
         />
         <label htmlFor='description' className='block text-gray-700 font-semibold mb-2'>
           Description
@@ -47,10 +50,11 @@ export const CertificateAdd = () => {
         <FormInput
           type='text'
           id='description'
-          name='description'
           placeholder='Enter certificate description'
-          value={formik.values.description}
-          onChange={formik.handleChange}
+          {...form.register('description', {
+            maxLength: { value: 500, message: 'Max length is 500' },
+          })}
+          error={errors.description?.message as string | undefined}
         />
       </div>
       <div className='mb-4'>
@@ -60,11 +64,23 @@ export const CertificateAdd = () => {
         <input
           type='date'
           id='issueDate'
-          name='issueDate'
           required
-          value={formik.values.issueDate}
-          onChange={formik.handleChange}
+          {...form.register('issueDate', {
+            required: 'Issue date is required',
+            pattern: { value: /^\d{4}-\d{2}-\d{2}$/, message: 'Invalid date format' },
+            validate: (v: string) => {
+              if (!v) return true;
+              const d = new Date(v);
+              const today = new Date();
+              today.setHours(0, 0, 0, 0);
+              d.setHours(0, 0, 0, 0);
+              return d <= today || 'Date cannot be in the future';
+            },
+          })}
         />
+        {errors.issueDate?.message && (
+          <p className='mt-1 text-sm text-red-500'>{errors.issueDate.message}</p>
+        )}
       </div>
       <div className='mb-4'>
         <label htmlFor='masterId' className='block text-gray-700 font-semibold mb-2'>
@@ -73,30 +89,28 @@ export const CertificateAdd = () => {
         <div>
           <SelectButton
             label={
-              formik.values.masterId
-                ? (masters?.find((x) => x.id === formik.values.masterId)?.name ??
-                  `Master ${formik.values.masterId}`)
+              masterId
+                ? (masters?.find((x) => x.id === masterId)?.name ?? `Master ${masterId}`)
                 : 'Salon'
             }
             options={[
               {
                 label: 'Salon',
                 handler: () => {
-                  formik.setFieldValue('ownerType', OwnerType.Salon);
-                  formik.setFieldValue('masterId', null);
+                  setValue('ownerType', OwnerType.Salon);
+                  setValue('masterId', null);
                 },
               },
               ...(masters ?? []).map((master): { label: string; handler: () => void } => ({
                 label: master.name ?? `Master ${master.id}`,
                 handler: () => {
-                  formik.setFieldValue('ownerType', OwnerType.Master);
-                  formik.setFieldValue('masterId', master.id);
+                  setValue('ownerType', OwnerType.Master);
+                  setValue('masterId', master.id);
                 },
               })),
             ]}
           />
-          <input type='hidden' name='masterId' value={formik.values.masterId ?? ''} />
-          {fileError && <p className='text-sm text-red-500 mt-2'>{fileError}</p>}
+          <input type='hidden' {...form.register('masterId')} />
         </div>
       </div>
 

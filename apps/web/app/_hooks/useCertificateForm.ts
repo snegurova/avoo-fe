@@ -2,7 +2,7 @@
 
 import { useCallback, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useFormik } from 'formik';
+import { useForm } from 'react-hook-form';
 import { appRoutes } from '@/_routes/routes';
 import { userHooks, masterHooks } from '@avoo/hooks';
 import {
@@ -28,47 +28,56 @@ export function useCertificateForm() {
   const [fileError, setFileError] = useState<string | null>(null);
   const [file, setFile] = useState<File | null>(null);
 
-  const formik = useFormik<Values>({
-    initialValues: {
+  const form = useForm<Values>({
+    defaultValues: {
       title: '',
       description: '',
       issueDate: '',
       ownerType: OwnerType.Salon,
       masterId: null,
     },
-    onSubmit: (values) => {
-      const payload: {
-        title: string;
-        description?: string;
-        issueDate: string;
-        masterId?: number;
-        file?: FileInput;
-      } = {
-        title: values.title,
-        description: values.description || undefined,
-        issueDate: values.issueDate,
-      };
-
-      if (values.ownerType === OwnerType.Master) {
-        if (!values.masterId) {
-          setFileError('Please choose a master');
-          return;
-        }
-        payload.masterId = values.masterId;
-      }
-
-      if (file) payload.file = file;
-
-      handleAddCertificate(payload, {
-        onSuccess: () => {
-          formik.resetForm();
-          setFile(null);
-          setFileError(null);
-          router.push(appRoutes.Certificates);
-        },
-      });
-    },
   });
+
+  const { handleSubmit, setValue, reset, watch } = form;
+
+  const onSubmit = (values: Values) => {
+    const payload: {
+      title: string;
+      description?: string;
+      issueDate: string;
+      masterId?: number;
+      file?: FileInput;
+    } = {
+      title: values.title,
+      description: values.description || undefined,
+      issueDate: values.issueDate,
+    };
+
+    if (values.ownerType === OwnerType.Master) {
+      if (!values.masterId) {
+        setFileError('Please choose a master');
+        return;
+      }
+      payload.masterId = values.masterId;
+    }
+
+    // require file upload
+    if (!file) {
+      setFileError('Please upload a file');
+      return;
+    }
+
+    payload.file = file;
+
+    handleAddCertificate(payload, {
+      onSuccess: () => {
+        reset();
+        setFile(null);
+        setFileError(null);
+        router.push(appRoutes.Certificates);
+      },
+    });
+  };
 
   const onFilePicked = useCallback((f: File | null) => {
     if (!f) {
@@ -91,7 +100,10 @@ export function useCertificateForm() {
   const onCancel = useCallback(() => router.back(), [router]);
 
   return {
-    formik,
+    form,
+    handleSubmit: handleSubmit(onSubmit),
+    setValue,
+    watch,
     masters,
     file,
     fileError,
