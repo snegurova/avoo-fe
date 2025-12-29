@@ -1,6 +1,7 @@
 import { Pressable } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { MaterialIcons } from '@/shared/icons';
+import { colors } from '@avoo/design-tokens';
 
 type Props = {
   showBack?: boolean;
@@ -13,11 +14,11 @@ export default function DefaultLeftContent(props: Props) {
 
   return showBack ? (
     <Pressable onPress={onBackPress || (() => navigation.goBack())}>
-      <MaterialIcons name='arrow-back' size={24} color='black' />
+      <MaterialIcons name='arrow-back' size={24} color={colors.black} />
     </Pressable>
   ) : (
     <Pressable hitSlop={{ top: 44, bottom: 44, left: 44, right: 44 }}>
-      <MaterialIcons name='dehaze' size={24} color='black' />
+      <MaterialIcons name='dehaze' size={24} color={colors.black} />
     </Pressable>
   );
 }
