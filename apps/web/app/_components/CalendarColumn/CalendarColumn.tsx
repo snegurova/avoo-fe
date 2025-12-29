@@ -25,7 +25,7 @@ const col = tv({
   variants: {
     type: {
       [calendarViewType.DAY]: 'border-r min-w-25 md:min-w-55 2xl:min-w-90',
-      [calendarViewType.WEEK]: 'not-last:border-b min-h-40 flex flex-row flex-nowrap',
+      [calendarViewType.WEEK]: 'not-last:border-b min-h-38 md:min-h-40 flex flex-row flex-nowrap',
       [calendarViewType.MONTH]: '',
     },
   },
@@ -42,7 +42,7 @@ const cell = tv({
       [calendarViewType.DAY]:
         'h-6 border-t last:border-b last:border-b-gray-300 pointer-events-none',
       [calendarViewType.WEEK]:
-        'h-full not-last:border-r border-gray-300 min-w-40 flex-1 p-1 flex flex-col justify-between gap-1',
+        'h-full not-last:border-r border-gray-300 min-w-26 md:min-w-40 flex-1 p-1 flex flex-col justify-between gap-1',
       [calendarViewType.MONTH]: '',
     },
     isAccessible: {

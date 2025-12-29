@@ -19,6 +19,7 @@ import {
 import CalendarViewDay from '@/_icons/CalendarViewDay';
 import CalendarViewWeek from '@/_icons/CalendarViewWeek';
 import CalendarViewMonth from '@/_icons/CalendarViewMonth';
+import useMediaQuery from '@mui/material/useMediaQuery';
 
 type Props = {
   date: Date;
@@ -30,7 +31,7 @@ type Props = {
   scrollToCurrentTime: () => void;
   params: PrivateCalendarQueryParams;
   setParams: (params: PrivateCalendarQueryParams) => void;
-  masters: MasterWithRelationsEntityResponse;
+  masters: MasterWithRelationsEntityResponse[];
 };
 
 const controlsButton = tv({
@@ -51,6 +52,8 @@ const icon = tv({
 
 export default function CalendarControls(props: Props) {
   const { date, setDate, setToDate, type, setType, scrollToCurrentTime, masters } = props;
+
+  const desktopUp = useMediaQuery('(min-width:1024px)');
 
   const setCurrentDate = (type: calendarViewType) => {
     const today = new Date();
@@ -217,8 +220,12 @@ export default function CalendarControls(props: Props) {
           </button>
         </div>
         <SelectButton label={type} options={viewOptions} type='outline' />
-        <CheckboxesButton addCount label='Masters' options={[mastersOptions]} />
-        <CheckboxesButton addCount label='Statuses' options={[statusesOptions]} />
+        {desktopUp && (
+          <>
+            <CheckboxesButton addCount label='Masters' options={[mastersOptions]} />
+            <CheckboxesButton addCount label='Statuses' options={[statusesOptions]} />
+          </>
+        )}
       </div>
     </LocalizationProvider>
   );

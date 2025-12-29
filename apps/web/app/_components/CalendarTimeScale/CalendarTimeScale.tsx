@@ -3,6 +3,7 @@ import { calendarViewType } from '@avoo/hooks/types/calendarViewType';
 import { timeUtils } from '@/_utils/timeUtils';
 import CalendarCurrentTime from '../CalendarCurrentTime/CalendarCurrentTime';
 import { tv } from 'tailwind-variants';
+import useMediaQuery from '@mui/material/useMediaQuery';
 
 type Props = {
   type: calendarViewType;
@@ -37,7 +38,7 @@ const weekDay = tv({
   base: 'h-full p-1 not-last:border-r border-gray-300 text-xs font-medium box-border border-b flex items-center justify-center flex-1 gap-1',
   variants: {
     type: {
-      [calendarViewType.WEEK]: 'min-w-40',
+      [calendarViewType.WEEK]: 'min-w-26 md:min-w-40',
       [calendarViewType.MONTH]: 'min-w-10',
     },
     day: {
@@ -50,6 +51,8 @@ const weekDay = tv({
 
 export default function CalendarTimeScale(props: Props) {
   const { type, date, time, setTime } = props;
+
+  const belowDesktop = useMediaQuery('(max-width:1023px)');
 
   const weekRange = timeUtils.getWeekRange(date);
 
@@ -93,7 +96,7 @@ export default function CalendarTimeScale(props: Props) {
                   {weekRange.start.getDate() + idx}
                 </span>
               )}
-              {timeUtils.getWeekDay(idx)}
+              {belowDesktop ? timeUtils.getWeekDay(idx).slice(0, 3) : timeUtils.getWeekDay(idx)}
             </div>
           );
         })}
