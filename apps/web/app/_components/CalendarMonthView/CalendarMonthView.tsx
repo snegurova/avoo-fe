@@ -1,5 +1,5 @@
 import { timeUtils } from '@/_utils/timeUtils';
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { tv } from 'tailwind-variants';
 import { PrivateCalendarByDatesQueryParams } from '@avoo/axios/types/apiTypes';
 import { calendarHooks } from '@avoo/hooks';

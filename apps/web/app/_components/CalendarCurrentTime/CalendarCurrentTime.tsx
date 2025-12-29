@@ -10,7 +10,7 @@ type Props = {
 };
 
 const marker = tv({
-  base: 'absolute w-full -translate-y-1/2 pointer-events-none flex items-center after:content-[""] after:h-px after:bg-red-700 after:w-full after:grow min-h-1',
+  base: 'absolute w-full -translate-y-1/2 pointer-events-none flex items-center after:content-[""] after:h-px after:bg-red-700 after:w-full after:grow min-h-1 z-7',
   variants: {
     showLabel: {
       true: 'pl-0.5 h-5',
@@ -50,11 +50,9 @@ export default function CalendarCurrentTime(props: Props) {
   }, []);
 
   return (
-    <div className=''>
-      <div className={marker({ showLabel })} style={{ top: `${time * PX_IN_MINUTE}px` }}>
-        <div className={label({ showLabel })}>
-          {showLabel && <span>{timeUtils.getTimeFromMinutes(time)}</span>}
-        </div>
+    <div className={marker({ showLabel })} style={{ top: `${time * PX_IN_MINUTE}px` }}>
+      <div className={label({ showLabel })}>
+        {showLabel && <span>{timeUtils.getTimeFromMinutes(time)}</span>}
       </div>
     </div>
   );

@@ -168,7 +168,7 @@ export default function CalendarControls(props: Props) {
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <div className='bg-gray-50 px-4 py-3 flex gap-3'>
+      <div className='bg-primary-50 px-4 py-3 flex gap-3'>
         <button
           type='button'
           className={controlsButton({ variant: 'full' })}

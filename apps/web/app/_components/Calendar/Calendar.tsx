@@ -57,8 +57,10 @@ export default function Calendar() {
   const [time, setTime] = useState(timeUtils.getMinutesInDay(new Date().toString()));
 
   useEffect(() => {
+    if (type !== calendarViewType.DAY) return;
+
     scrollToCurrentTime();
-  }, []);
+  }, [type]);
 
   useEffect(() => {
     setParams({
@@ -70,10 +72,16 @@ export default function Calendar() {
   const scrollToCurrentTime = () => {
     if (type !== calendarViewType.DAY || !scrollRef.current) return;
 
-    const scrollTop = time * PX_IN_MINUTE;
+    let scrollValue;
+
+    if (timeUtils.isSameDay(date, new Date())) {
+      scrollValue = time * PX_IN_MINUTE - (scrollRef.current.clientHeight - 76) / 2;
+    } else {
+      scrollValue = 0;
+    }
 
     scrollRef.current.scrollTo({
-      top: scrollTop,
+      top: scrollValue,
       behavior: 'smooth',
     });
   };

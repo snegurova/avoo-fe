@@ -52,9 +52,9 @@ export default function AppProfileSelect() {
   return (
     <div className='relative select-profile-container'>
       <button className='rounded-full cursor-pointer' onClick={toggleOpen}>
-        <CalendarAvatar name={visualProfileInfo?.name} size={AvatarSize.Small} />
+        <CalendarAvatar name={visualProfileInfo?.name} size={AvatarSize.Large} />
       </button>
-      {isOpen && <DropdownList options={options} closeDropdown={closeDropdown} isRight />}
+      {isOpen && <DropdownList options={options} closeDropdown={closeDropdown} />}
     </div>
   );
 }

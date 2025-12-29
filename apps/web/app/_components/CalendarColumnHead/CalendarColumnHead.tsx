@@ -14,7 +14,7 @@ const container = tv({
   base: 'bg-white flex-1',
   variants: {
     type: {
-      [calendarViewType.DAY]: 'min-w-90 h-19 py-2',
+      [calendarViewType.DAY]: 'min-w-25 md:min-w-55 2xl:min-w-90 h-19 py-2',
       [calendarViewType.WEEK]:
         'w-20 first:min-h-50 min-h-40 px-2 flex items-center justify-center  border-r border-gray-300 first:pt-10',
       [calendarViewType.MONTH]: '',
@@ -28,7 +28,7 @@ export default function CalendarColumnHead(props: Props) {
     <div className={container({ type })}>
       <CalendarAvatar
         name={master ? master.name : undefined}
-        size={AvatarSize.Small}
+        size={AvatarSize.Large}
         idx={idx}
         addName
       />

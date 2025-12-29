@@ -24,7 +24,7 @@ const col = tv({
   base: 'flex-1 border-gray-300 grow relative bg-gray-100',
   variants: {
     type: {
-      [calendarViewType.DAY]: 'border-r min-w-90',
+      [calendarViewType.DAY]: 'border-r min-w-25 md:min-w-55 2xl:min-w-90',
       [calendarViewType.WEEK]: 'not-last:border-b min-h-40 flex flex-row flex-nowrap',
       [calendarViewType.MONTH]: '',
     },

@@ -19,12 +19,12 @@ const avatar = tv({
   base: 'rounded-full mx-auto flex items-center justify-center text-xl font-medium',
   variants: {
     size: {
-      [AvatarSize.Small]: 'w-10 h-10',
-      [AvatarSize.Medium]: 'w-20 h-20',
-      [AvatarSize.Large]: 'w-32 h-32',
+      [AvatarSize.Small]: 'w-4 h-4',
+      [AvatarSize.Medium]: 'w-8 h-8',
+      [AvatarSize.Large]: 'w-8 h-8 md:w-10 md:h-10',
     },
     addName: {
-      true: 'mb-2',
+      true: 'mb-1 md:mb-2',
     },
     idx: {
       0: 'bg-primary-200',
@@ -42,7 +42,11 @@ export const CalendarAvatar = (props: Props) => {
       <div className={avatar({ size, addName, idx: (idx ? idx % 3 : 0) as 0 | 1 | 2 })}>
         {name && <span>{name.charAt(0).toUpperCase()}</span>}
       </div>
-      {addName && name && <p className='leading-none text-sm font-semibold text-black'>{name}</p>}
+      {addName && name && (
+        <p className='leading-[1.1] md:leading-none text-xs md:text-sm font-semibold text-black'>
+          {name}
+        </p>
+      )}
     </div>
   );
 };
