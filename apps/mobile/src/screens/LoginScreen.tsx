@@ -1,6 +1,6 @@
 import { Text, View, TouchableWithoutFeedback, Keyboard, Pressable } from 'react-native';
-import { Layout } from '@/shared/Layout';
 import LoginForm from '@/components/LoginForm';
+import  Layout from '@/shared/Layout/Layout';
 import { RootScreens, RootStackScreenProps } from '@/types/navigation';
 
 type Props = RootStackScreenProps<RootScreens.LoginScreen>;
@@ -9,7 +9,7 @@ export default function LoginScreen(props: Props) {
   const { navigation } = props;
 
   return (
-    <Layout centerContent={true}>
+    <Layout isHeaderHidden={true} centerContent={true}>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View className='w-full'>
           <Text className='text-3xl font-bold text-center'>AVOO App</Text>

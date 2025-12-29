@@ -628,6 +628,54 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/posts": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["PostsController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/posts/{id}/media": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["PostsController_getPostMedia"];
+        put?: never;
+        post: operations["PostsController_createPostMedia"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/posts/{id}/media/{mediaId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["PostsController_getPostMediaById"];
+        put?: never;
+        post?: never;
+        delete: operations["PostsController_deletePostMedia"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/public/categories": {
         parameters: {
             query?: never;
@@ -910,22 +958,6 @@ export interface paths {
         get: operations["CustomersController_findAllBase"];
         put?: never;
         post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/posts": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["PostsController_create"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1438,6 +1470,30 @@ export interface components {
         UpdateMasterAvatarDto: {
             /** Format: binary */
             file: string;
+        };
+        PostEntity: {
+            id: number;
+            description: string | null;
+            user: components["schemas"]["UserEntity"];
+            master: components["schemas"]["MasterEntity"];
+            service: components["schemas"]["ServiceEntity"];
+        };
+        CreatePostDto: {
+            /**
+             * @description Description of the post
+             * @example This is a sample post description.
+             */
+            description?: string;
+            /**
+             * @description ID of the master associated with the post
+             * @example 1
+             */
+            masterId: number;
+            /**
+             * @description ID of the service associated with the post
+             * @example 1
+             */
+            serviceId: number;
         };
         CreatePrivateOrderDto: {
             /**
@@ -2159,30 +2215,6 @@ export interface components {
             /** @description List of working hours ( Mon-Fri (Sunday, Saturday Day off)), if start date is Monday */
             workingHours?: components["schemas"]["UpdateWorkingHourDto"][];
         };
-        PostEntity: {
-            id: number;
-            description: string | null;
-            user: components["schemas"]["UserEntity"];
-            master: components["schemas"]["MasterEntity"];
-            service: components["schemas"]["ServiceEntity"];
-        };
-        CreatePostDto: {
-            /**
-             * @description Description of the post
-             * @example This is a sample post description.
-             */
-            description?: string;
-            /**
-             * @description ID of the master associated with the post
-             * @example 1
-             */
-            masterId: number;
-            /**
-             * @description ID of the service associated with the post
-             * @example 1
-             */
-            serviceId: number;
-        };
     };
     responses: never;
     parameters: never;
@@ -2533,7 +2565,7 @@ export interface operations {
             };
             header?: never;
             path: {
-                id: string;
+                id: number;
             };
             cookie?: never;
         };
@@ -2569,8 +2601,8 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                id: string;
-                mediaId: string;
+                id: number;
+                mediaId: number;
             };
             cookie?: never;
         };
@@ -2873,7 +2905,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                mediaId: string;
+                mediaId: number;
             };
             cookie?: never;
         };
@@ -2906,7 +2938,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                mediaId: string;
+                mediaId: number;
             };
             cookie?: never;
         };
@@ -3403,7 +3435,7 @@ export interface operations {
             };
             header?: never;
             path: {
-                id: string;
+                id: number;
             };
             cookie?: never;
         };
@@ -3439,7 +3471,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                id: string;
+                id: number;
             };
             cookie?: never;
         };
@@ -3476,8 +3508,8 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                id: string;
-                mediaId: string;
+                id: number;
+                mediaId: number;
             };
             cookie?: never;
         };
@@ -3510,8 +3542,8 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                id: string;
-                mediaId: string;
+                id: number;
+                mediaId: number;
             };
             cookie?: never;
         };
@@ -3662,7 +3694,7 @@ export interface operations {
             };
             header?: never;
             path: {
-                id: string;
+                id: number;
             };
             cookie?: never;
         };
@@ -3698,8 +3730,8 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                id: string;
-                mediaId: string;
+                id: number;
+                mediaId: number;
             };
             cookie?: never;
         };
@@ -4081,6 +4113,187 @@ export interface operations {
                             items?: components["schemas"]["ServiceEntity"][];
                             pagination?: components["schemas"]["PaginationDto"];
                         };
+                    };
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    PostsController_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreatePostDto"];
+            };
+        };
+        responses: {
+            /** @description Post was created successfully */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SuccessResponseDto"] & {
+                        data?: components["schemas"]["PostEntity"];
+                    };
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    PostsController_getPostMedia: {
+        parameters: {
+            query?: {
+                /** @description Page number */
+                page?: number;
+                /** @description Items per page */
+                limit?: number;
+            };
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description All media for the post */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SuccessResponseDto"] & {
+                        data?: {
+                            items?: components["schemas"]["MediaEntity"][];
+                            pagination?: components["schemas"]["PaginationDto"];
+                        };
+                    };
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    PostsController_createPostMedia: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "multipart/form-data": components["schemas"]["UploadFileDto"];
+            };
+        };
+        responses: {
+            /** @description Created media for post */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SuccessResponseDto"] & {
+                        data?: components["schemas"]["MediaEntity"];
+                    };
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    PostsController_getPostMediaById: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+                mediaId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description One media for the post by id */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SuccessResponseDto"] & {
+                        data?: components["schemas"]["MediaEntity"];
+                    };
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    PostsController_deletePostMedia: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+                mediaId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Deleted media entity */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SuccessResponseDto"] & {
+                        data?: components["schemas"]["MediaEntity"];
                     };
                 };
             };
@@ -5025,41 +5238,6 @@ export interface operations {
                             items?: components["schemas"]["CustomerInfoDto"][];
                             pagination?: components["schemas"]["PaginationDto"];
                         };
-                    };
-                };
-            };
-            /** @description Bad Request */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-        };
-    };
-    PostsController_create: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["CreatePostDto"];
-            };
-        };
-        responses: {
-            /** @description Post was created successfully */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["SuccessResponseDto"] & {
-                        data?: components["schemas"]["PostEntity"];
                     };
                 };
             };

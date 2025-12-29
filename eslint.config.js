@@ -67,4 +67,10 @@ export default defineConfig([
       '@typescript-eslint/no-empty-object-type': 'off',
     },
   },
+  {
+    files: ['**/tailwind.config.ts'],
+    rules: {
+      '@typescript-eslint/no-require-imports': 'off',
+    },
+  },
 ]);

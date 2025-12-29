@@ -32,7 +32,18 @@ export type UserMediaResponse = {
 export type UserUpdateAvatarResponse = components['schemas']['UserEntity'];
 
 /** Master */
-export type MasterWithRelationsEntityResponse = components['schemas']['MasterEntity'][];
+export type MasterWithRelationsEntityResponse = components['schemas']['MasterEntity'];
+
+type MasterBaseForCreate = Omit<
+  components['schemas']['MasterEntity'],
+  'id' | 'avatarUrl' | 'avatarPreviewUrl'
+>;
+export type CreateMasterRequest = {
+  email: MasterBaseForCreate['email'];
+} & Partial<Omit<MasterBaseForCreate, 'email'>>;
+
+
+export type MasterLanguages = components['schemas']['MasterEntity']['languages'];
 
 export type MasterWithRelationsEntity = components['schemas']['MasterEntity'];
 
