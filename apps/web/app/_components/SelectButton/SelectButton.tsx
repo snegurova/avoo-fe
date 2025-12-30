@@ -44,6 +44,7 @@ export default function SelectButton(props: Props) {
   return (
     <div className='relative select-button-container'>
       <button
+        type='button'
         className='px-6 py-2.5 rounded-2xl text-white bg-black cursor-pointer flex gap-6 items-center'
         onClick={toggleOpen}
       >
