@@ -9,6 +9,7 @@ import ForgotPasswordScreen from '@/screens/ForgotPasswordScreen';
 import ConfirmCodeScreen from '@/screens/ConfirmCodeScreen';
 import ResetPasswordScreen from '@/screens/ResetPasswordScreen';
 import MastersScreen from '@/screens/MastersScreen';
+import AddMasterScreen from '@/screens/AddMasterScreen';
 import CertificatesScreen from '@/screens/CertificatesScreen';
 import WorkingHoursScreen from '@/screens/WorkingHoursScreen';
 import PostsScreen from '@/screens/PostsScreen';
@@ -42,6 +43,7 @@ const AppContainer = () => {
         <>
           <Stack.Screen name={RootScreens.BottomBar} component={BottomBarNavigator} />
           <Stack.Screen name={RootScreens.MastersScreen} component={MastersScreen} />
+          <Stack.Screen name={RootScreens.AddMasterScreen} component={AddMasterScreen} />
           <Stack.Screen name={RootScreens.CertificatesScreen} component={CertificatesScreen} />
           <Stack.Screen name={RootScreens.WorkingHoursScreen} component={WorkingHoursScreen} />
           <Stack.Screen name={RootScreens.PostsScreen} component={PostsScreen} />

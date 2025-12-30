@@ -34,7 +34,18 @@ export type UserUpdateAvatarResponse = components['schemas']['UserEntity'];
 export type CertificateResponse = components['schemas']['CertificateEntity'];
 
 /** Master */
-export type MasterWithRelationsEntityResponse = components['schemas']['MasterEntity'][];
+export type MasterWithRelationsEntityResponse = components['schemas']['MasterEntity'];
+
+type MasterBaseForCreate = Omit<
+  components['schemas']['MasterEntity'],
+  'id' | 'avatarUrl' | 'avatarPreviewUrl'
+>;
+export type CreateMasterRequest = {
+  email: MasterBaseForCreate['email'];
+} & Partial<Omit<MasterBaseForCreate, 'email'>>;
+
+
+export type MasterLanguages = components['schemas']['MasterEntity']['languages'];
 
 /** Schedule */
 export type GetSchedulesResponse = {

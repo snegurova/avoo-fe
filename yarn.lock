@@ -31,13 +31,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@avoo/axios@workspace:*, @avoo/axios@workspace:packages/axios":
+"@avoo/axios@workspace:*, @avoo/axios@workspace:^, @avoo/axios@workspace:packages/axios":
   version: 0.0.0-use.local
   resolution: "@avoo/axios@workspace:packages/axios"
   dependencies:
     "@avoo/shared": "workspace:^"
     axios: "npm:^1.7.7"
     openapi-typescript: "npm:^7.10.1"
+  languageName: unknown
+  linkType: soft
+
+"@avoo/constants@workspace:*, @avoo/constants@workspace:^, @avoo/constants@workspace:packages/constants":
+  version: 0.0.0-use.local
+  resolution: "@avoo/constants@workspace:packages/constants"
+  dependencies:
+    "@avoo/axios": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -51,6 +59,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@avoo/hooks@workspace:packages/hooks"
   dependencies:
+    "@avoo/constants": "workspace:^"
     "@avoo/shared": "workspace:^"
     "@hookform/resolvers": "npm:^3.9.1"
     "@tanstack/react-query": "npm:^5.0.0"
@@ -5700,17 +5709,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/hoist-non-react-statics@npm:^3.3.1":
-  version: 3.3.7
-  resolution: "@types/hoist-non-react-statics@npm:3.3.7"
-  dependencies:
-    hoist-non-react-statics: "npm:^3.3.0"
-  peerDependencies:
-    "@types/react": "*"
-  checksum: 10c0/ed8f4e88338f7d021d0f956adf6089d2a12b2e254a03c05292324f2e986d2376eb9efdb8a4f04596823e8fca88c9d06361d20dab4a2a00dc935fb36ac911de55
-  languageName: node
-  linkType: hard
-
 "@types/http-errors@npm:*":
   version: 2.0.5
   resolution: "@types/http-errors@npm:2.0.5"
@@ -6736,7 +6734,6 @@ __metadata:
     concurrently: "npm:^9.2.1"
     eslint: "npm:^9.35.0"
     eslint-config-prettier: "npm:^10.1.8"
-    formik: "npm:^2.4.9"
     husky: "npm:^8.0.0"
     lint-staged: "npm:^16.1.6"
     plop: "npm:^4.0.4"
@@ -7920,13 +7917,6 @@ __metadata:
   version: 0.1.4
   resolution: "deep-is@npm:0.1.4"
   checksum: 10c0/7f0ee496e0dff14a573dc6127f14c95061b448b87b995fc96c017ce0a1e66af1675e73f1d6064407975bc4ea6ab679497a29fff7b5b9c4e99cb10797c1ad0b4c
-  languageName: node
-  linkType: hard
-
-"deepmerge@npm:^2.1.1":
-  version: 2.2.1
-  resolution: "deepmerge@npm:2.2.1"
-  checksum: 10c0/4379288cabd817587cee92a095ea65d18317b45e48010a2e0d87982b5f432239a144f9c8ebd4ab090cc21f0cb47e51ebfe32921f329b3b3084a2711d5d63e450
   languageName: node
   linkType: hard
 
@@ -9433,24 +9423,6 @@ __metadata:
     hasown: "npm:^2.0.2"
     mime-types: "npm:^2.1.12"
   checksum: 10c0/373525a9a034b9d57073e55eab79e501a714ffac02e7a9b01be1c820780652b16e4101819785e1e18f8d98f0aee866cc654d660a435c378e16a72f2e7cac9695
-  languageName: node
-  linkType: hard
-
-"formik@npm:^2.4.9":
-  version: 2.4.9
-  resolution: "formik@npm:2.4.9"
-  dependencies:
-    "@types/hoist-non-react-statics": "npm:^3.3.1"
-    deepmerge: "npm:^2.1.1"
-    hoist-non-react-statics: "npm:^3.3.0"
-    lodash: "npm:^4.17.21"
-    lodash-es: "npm:^4.17.21"
-    react-fast-compare: "npm:^2.0.1"
-    tiny-warning: "npm:^1.0.2"
-    tslib: "npm:^2.0.0"
-  peerDependencies:
-    react: ">=16.8.0"
-  checksum: 10c0/2b76154b624f4464871f56204a7a87fec9f0cc24d742ad4e20628bd680a81ef2ae9966f54b616003f623dc1f7c7b25a25aafa8a59bcc1d940b7526fb665dbd0b
   languageName: node
   linkType: hard
 
@@ -11117,13 +11089,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lodash-es@npm:^4.17.21":
-  version: 4.17.21
-  resolution: "lodash-es@npm:4.17.21"
-  checksum: 10c0/fb407355f7e6cd523a9383e76e6b455321f0f153a6c9625e21a8827d10c54c2a2341bd2ae8d034358b60e07325e1330c14c224ff582d04612a46a4f0479ff2f2
-  languageName: node
-  linkType: hard
-
 "lodash.debounce@npm:^4.0.8":
   version: 4.0.8
   resolution: "lodash.debounce@npm:4.0.8"
@@ -12054,6 +12019,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "mobile@workspace:apps/mobile"
   dependencies:
+    "@avoo/constants": "workspace:*"
     "@avoo/hooks": "workspace:*"
     "@avoo/shared": "workspace:^"
     "@avoo/store": "workspace:*"
@@ -13526,13 +13492,6 @@ __metadata:
   peerDependencies:
     react: ^19.2.0
   checksum: 10c0/fa2cae05248d01288e91523b590ce4e7635b1e13f1344e225f850d722a8da037bf0782f63b1c1d46353334e0c696909b82e582f8cad607948fde6f7646cc18d9
-  languageName: node
-  linkType: hard
-
-"react-fast-compare@npm:^2.0.1":
-  version: 2.0.4
-  resolution: "react-fast-compare@npm:2.0.4"
-  checksum: 10c0/f0300c677e95198b5f993cbb8a983dab09586157dc678f9e2b5b29ff941b6677a8776fbbdc425ce102fad86937e36bb45cfcfd797f006270b97ccf287ebfb885
   languageName: node
   linkType: hard
 
@@ -15439,13 +15398,6 @@ __metadata:
   version: 1.3.3
   resolution: "tiny-invariant@npm:1.3.3"
   checksum: 10c0/65af4a07324b591a059b35269cd696aba21bef2107f29b9f5894d83cc143159a204b299553435b03874ebb5b94d019afa8b8eff241c8a4cfee95872c2e1c1c4a
-  languageName: node
-  linkType: hard
-
-"tiny-warning@npm:^1.0.2":
-  version: 1.0.3
-  resolution: "tiny-warning@npm:1.0.3"
-  checksum: 10c0/ef8531f581b30342f29670cb41ca248001c6fd7975ce22122bd59b8d62b4fc84ad4207ee7faa95cde982fa3357cd8f4be650142abc22805538c3b1392d7084fa
   languageName: node
   linkType: hard
 

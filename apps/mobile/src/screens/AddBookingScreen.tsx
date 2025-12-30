@@ -15,4 +15,3 @@ export const AddBookingScreen = (props: Props) => {
 };
 
 export default AddBookingScreen;
-

@@ -213,7 +213,7 @@ export const authHooks = {
       errors,
     };
   },
-  useResetPasswordForm: ({ token, onSuccess }: UseResetPasswordFormParams = {}) => {
+  useResetPasswordForm: ({ onSuccess }: UseResetPasswordFormParams = {}) => {
     const {
       register,
       control,
@@ -229,7 +229,7 @@ export const authHooks = {
     });
 
     const { mutate: resetPassword, isPending } = useMutation<
-      BaseResponse<{}>,
+      BaseResponse<Record<string, never>>,
       Error,
       ResetPasswordRequest
     >({
@@ -252,7 +252,7 @@ export const authHooks = {
   },
   useSendCode: ({ onSuccess }: UseSendCodeParams = {}) => {
     const { mutate: sendCodeHandler, isPending } = useMutation<
-      BaseResponse<{}>,
+      BaseResponse<Record<string, never>>,
       Error,
       ForgotPasswordRequestType
     >({
