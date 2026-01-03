@@ -25,6 +25,7 @@ export default function DropdownList(props: Props) {
       {options.map((option, index) => (
         <li key={index}>
           <button
+            type='button'
             className='text-white bg-black px-6 py-2.5 w-full cursor-pointer text-start'
             onClick={() => {
               option.handler();
