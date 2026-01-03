@@ -1,81 +1,88 @@
-import { Text, TouchableOpacity, View, StyleSheet } from 'react-native';
+// BottomBarNavigator.tsx
+import { View } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { BottomBarScreens, BottomBarStackParamList, ProfileScreens, ProfileStackParamList } from '@/types/navigation';
-import { MaterialIcons } from '@/shared/icons';
+
+import { BottomBarScreens, BottomBarStackParamList } from '@/types/navigation';
+
 import { HomeScreen } from '@/screens/HomeScreen';
-import { SettingsScreen } from '@/screens/SettingsScreen';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { CalendarScreen } from '@/screens/CalendarScreen';
+import { ClientsScreen } from '@/screens/ClientsScreen';
+import { ServicesScreen } from '@/screens/ServicesScreen';
+import MastersScreen from '@/screens/MastersScreen';
+import { PostsScreen } from '@/screens/PostsScreen';
+import {
+  HomeIcon,
+  CalendarIcon,
+  CoPresentIcon,
+  BookIcon,
+  GroupsIcon,
+  AutoAwesomeMosaicIcon,
+} from '@/icons';
+import { BottomBar } from '../components/BottomBar/BottomBar';
 
 const BottomTab = createBottomTabNavigator<BottomBarStackParamList>();
-const ProfileStack = createNativeStackNavigator<ProfileStackParamList>();
-
-export const ProfileStackNavigator = () => {
-  return (
-    <ProfileStack.Navigator
-      initialRouteName={ProfileScreens.Settings}
-      screenOptions={{
-        headerShown: false,
-      }}
-    >
-      <ProfileStack.Screen name={ProfileScreens.Settings} component={SettingsScreen} />
-    </ProfileStack.Navigator>
-  );
-};
 
 const BottomBarNavigator = () => {
   return (
-    <View style={styles.container}>
-      <BottomTab.Navigator initialRouteName={BottomBarScreens.Home}>
+    <View className='flex-1'>
+      <BottomTab.Navigator
+        initialRouteName={BottomBarScreens.Home}
+        screenOptions={{
+          headerShown: false,
+        }}
+        tabBar={(props) => <BottomBar {...props} />}
+      >
         <BottomTab.Screen
           name={BottomBarScreens.Home}
           component={HomeScreen}
           options={{
-            headerShown: false,
-            tabBarIcon: ({ color }) => <Text style={{ color }}>🏠</Text>,
+            tabBarLabel: 'Home',
+            tabBarIcon: ({ color }) => <HomeIcon size={24} color={color} />,
           }}
         />
         <BottomTab.Screen
-          name={BottomBarScreens.Profile}
-          component={ProfileStackNavigator}
+          name={BottomBarScreens.Calendar}
+          component={CalendarScreen}
           options={{
-            headerShown: false,
-            tabBarIcon: ({ color }) => <Text style={{ color }}>⚙️</Text>,
+            tabBarLabel: 'Calendar',
+            tabBarIcon: ({ color }) => <CalendarIcon size={24} color={color} />,
+          }}
+        />
+        <BottomTab.Screen
+          name={BottomBarScreens.Clients}
+          component={ClientsScreen}
+          options={{
+            tabBarLabel: 'Clients',
+            tabBarIcon: ({ color }) => <CoPresentIcon size={24} color={color} />,
+          }}
+        />
+        <BottomTab.Screen
+          name={BottomBarScreens.Services}
+          component={ServicesScreen}
+          options={{
+            tabBarLabel: 'Services',
+            tabBarIcon: ({ color }) => <BookIcon size={24} color={color} />,
+          }}
+        />
+        <BottomTab.Screen
+          name={BottomBarScreens.Masters}
+          component={MastersScreen}
+          options={{
+            tabBarLabel: 'Masters',
+            tabBarIcon: ({ color }) => <GroupsIcon size={24} color={color} />,
+          }}
+        />
+        <BottomTab.Screen
+          name={BottomBarScreens.Posts}
+          component={PostsScreen}
+          options={{
+            tabBarLabel: 'Posts',
+            tabBarIcon: ({ color }) => <AutoAwesomeMosaicIcon size={24} color={color} />,
           }}
         />
       </BottomTab.Navigator>
-
-      <TouchableOpacity
-        style={styles.floatingButton}
-        activeOpacity={0.8}
-      >
-        <MaterialIcons name='add' size={24} color='#FFFFFF' />
-      </TouchableOpacity>
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  floatingButton: {
-    backgroundColor: '#2563EB',
-    width: 56,
-    height: 56,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: 28,
-    position: 'absolute',
-    bottom: 40,
-    alignSelf: 'center',
-    shadowColor: '#0F172A',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
-    borderWidth: 3,
-    borderColor: '#FFFFFF',
-  },
-});
 
 export default BottomBarNavigator;

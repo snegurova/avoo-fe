@@ -3,19 +3,26 @@ import { MaterialIcons, MaterialCommunityIcons } from '@/shared/icons';
 import { Avatar } from '@/shared/Avatar/Avatar';
 import { colors } from '@avoo/design-tokens';
 import { userHooks } from '@avoo/hooks';
+import { useGlobalBottomSheet } from '@/shared/GlobalBottomSheet';
+import { ProfileBottomSheet } from '@/shared/ProfileBottomSheet/ProfileBottomSheet';
 
 export default function DefaultRightContent() {
   const { visualProfileInfo } = userHooks.useGetUserProfile();
+  const { open } = useGlobalBottomSheet();
+
+  const handleOpenProfile = () => {
+    open(<ProfileBottomSheet />);
+  };
 
   return (
-    <View className="flex-row items-center gap-lg">
-      <Pressable className="w-11 h-11 justify-center items-center">
+    <View className='flex-row items-center gap-lg'>
+      <Pressable className='w-11 h-11 justify-center items-center'>
         <MaterialCommunityIcons name='share-variant-outline' size={24} />
       </Pressable>
-      <Pressable className="w-11 h-11 justify-center items-center">
+      <Pressable className='w-11 h-11 justify-center items-center'>
         <MaterialIcons name='notifications-none' size={24} />
       </Pressable>
-      <Pressable className="w-11 h-11 justify-center items-center">
+      <Pressable className='w-11 h-11 justify-center items-center' onPress={handleOpenProfile}>
         <Avatar
           uri={visualProfileInfo?.avatarUrl || null}
           name={visualProfileInfo?.name || ''}
@@ -25,5 +32,4 @@ export default function DefaultRightContent() {
       </Pressable>
     </View>
   );
-};
-
+}

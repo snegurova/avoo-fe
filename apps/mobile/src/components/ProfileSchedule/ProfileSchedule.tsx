@@ -15,7 +15,7 @@ export const ProfileSchedule = () => {
   };
 
   return (
-    <View className='px-5 py-4 border-t border-gray-200'>
+    <View className='py-4 border-t border-gray-200'>
       <SectionHeader title='Working hours' onEdit={handleNavigate} />
 
       {!hasSchedules && (

@@ -10,8 +10,6 @@ export enum RootScreens {
   ResetPasswordScreen = 'ResetPasswordScreen',
   BottomBar = 'BottomBar',
   Storybook = 'Storybook',
-  MastersScreen = 'MastersScreen',
-  AddMasterScreen = 'AddMasterScreen',
   CertificatesScreen = 'CertificatesScreen',
   WorkingHoursScreen = 'WorkingHoursScreen',
   PostsScreen = 'PostsScreen',
@@ -20,10 +18,16 @@ export enum RootScreens {
   EditProfileScreen = 'EditProfileScreen',
   AddPostScreen = 'AddPostScreen',
   AddBookingScreen = 'AddBookingScreen',
+  ProfileScreen = 'ProfileScreen',
 }
 
 export enum BottomBarScreens {
   Home = 'Home',
+  Calendar = 'Calendar',
+  Clients = 'Clients',
+  Services = 'Services',
+  Masters = 'Masters',
+  Posts = 'Posts',
   Profile = 'Profile',
 }
 
@@ -31,13 +35,13 @@ export enum ProfileScreens {
   Settings = 'Settings',
 }
 
-export type ProfileStackParamList = {
-  [ProfileScreens.Settings]: undefined;
-};
-
 export type BottomBarStackParamList = {
   [BottomBarScreens.Home]: undefined;
-  [BottomBarScreens.Profile]: NavigatorScreenParams<ProfileStackParamList>;
+  [BottomBarScreens.Calendar]: undefined;
+  [BottomBarScreens.Clients]: undefined;
+  [BottomBarScreens.Services]: undefined;
+  [BottomBarScreens.Masters]: undefined;
+  [BottomBarScreens.Posts]: undefined;
 };
 
 export type RootStackParamList = {
@@ -48,8 +52,6 @@ export type RootStackParamList = {
   [RootScreens.ResetPasswordScreen]: undefined;
   [RootScreens.BottomBar]: NavigatorScreenParams<BottomBarStackParamList>;
   [RootScreens.Storybook]: undefined;
-  [RootScreens.MastersScreen]: undefined;
-  [RootScreens.AddMasterScreen]: undefined;
   [RootScreens.CertificatesScreen]: undefined;
   [RootScreens.WorkingHoursScreen]: undefined;
   [RootScreens.PostsScreen]: undefined;
@@ -58,6 +60,7 @@ export type RootStackParamList = {
   [RootScreens.EditProfileScreen]: undefined;
   [RootScreens.AddPostScreen]: undefined;
   [RootScreens.AddBookingScreen]: undefined;
+  [RootScreens.ProfileScreen]: undefined;
 };
 
 export type RootStackScreenProps<T extends keyof RootStackParamList> = NativeStackScreenProps<
@@ -67,16 +70,7 @@ export type RootStackScreenProps<T extends keyof RootStackParamList> = NativeSta
 
 export type RootNavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
-
 export type BottomBarScreenProps<T extends keyof BottomBarStackParamList> = CompositeScreenProps<
   BottomTabScreenProps<BottomBarStackParamList, T>,
   RootStackScreenProps<keyof RootStackParamList>
->;
-
-export type ProfileScreenProps<T extends keyof ProfileStackParamList> = CompositeScreenProps<
-  NativeStackScreenProps<ProfileStackParamList, T>,
-  CompositeScreenProps<
-    BottomTabScreenProps<BottomBarStackParamList, BottomBarScreens.Profile>,
-    RootStackScreenProps<keyof RootStackParamList>
-  >
 >;
