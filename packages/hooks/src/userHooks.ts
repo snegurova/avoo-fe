@@ -3,6 +3,7 @@ import { userApi } from '@avoo/axios';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import {
   BaseResponse,
+  CertificateResponse,
   UserMediaResponse,
   UserProfileResponse,
   UserUpdateAvatarResponse,
@@ -10,6 +11,8 @@ import {
 import { FileInput } from '@avoo/shared';
 import { apiStatus } from '../types/apiTypes';
 import { queryKeys } from './queryKeys';
+import { appendFileToForm, buildCertificateForm } from './utils/formDataHelpers';
+import { CreateCertificatePayload } from '@avoo/axios/types/certificate';
 
 export const userHooks = {
   useGetUserProfile: () => {
@@ -64,7 +67,11 @@ export const userHooks = {
       Error,
       FileInput
     >({
-      mutationFn: userApi.updateAvatar,
+      mutationFn: async (file) => {
+        const form = new FormData();
+        await appendFileToForm(form, 'file', file);
+        return userApi.updateAvatar(form);
+      },
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: queryKeys.user.profile() });
       },
@@ -74,6 +81,32 @@ export const userHooks = {
 
     return {
       handleUpdateAvatar,
+    };
+  },
+  usePostCertificate: () => {
+    const queryClient = useQueryClient();
+
+    const { mutate: handleAddCertificate, isPending } = useMutation<
+      BaseResponse<CertificateResponse>,
+      Error,
+      CreateCertificatePayload
+    >({
+      mutationFn: (payload) => {
+        return (async () => {
+          const form = await buildCertificateForm(payload);
+          return userApi.createCertificate(form);
+        })();
+      },
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: queryKeys.user.profile() });
+        queryClient.invalidateQueries({ queryKey: queryKeys.user.certificates() });
+      },
+    });
+
+    utils.useSetPendingApi(isPending);
+
+    return {
+      handleAddCertificate,
     };
   },
 };

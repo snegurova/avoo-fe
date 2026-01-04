@@ -10,6 +10,7 @@ export const queryKeys = {
   user: {
     all: ['user'] as const,
     profile: () => [...queryKeys.user.all, 'profile'] as const,
+    certificates: () => [...queryKeys.user.all, 'certificates'] as const,
     media: () => [...queryKeys.user.all, 'media'] as const,
   },
   calendar: {

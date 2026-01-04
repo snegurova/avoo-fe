@@ -19,3 +19,28 @@
 body {
   @apply font-roboto;
 }
+
+/* Hide visible scrollbars but keep scrolling behavior
+   - Targets the page's main scroll container and any element with `.hide-scrollbar`.
+   Notes: hiding scrollbars can affect discoverability/accessibility. Consider using
+   this only where needed (e.g. inner panels). */
+main,
+.hide-scrollbar {
+  /* Firefox */
+  scrollbar-width: none;
+  /* IE 10+ */
+  -ms-overflow-style: none;
+  /* Smooth scrolling on iOS */
+  -webkit-overflow-scrolling: touch;
+}
+
+main::-webkit-scrollbar,
+.hide-scrollbar::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
+main::-webkit-scrollbar-thumb,
+.hide-scrollbar::-webkit-scrollbar-thumb {
+  background: transparent;
+}
