@@ -1,5 +1,4 @@
-import React from 'react';
-import { View, Pressable, StyleSheet } from 'react-native';
+import { View, Pressable } from 'react-native';
 import { MaterialIcons, MaterialCommunityIcons } from '@/shared/icons';
 import { Avatar } from '@/shared/Avatar/Avatar';
 import { colors } from '@avoo/design-tokens';
@@ -9,14 +8,14 @@ export default function DefaultRightContent() {
   const { visualProfileInfo } = userHooks.useGetUserProfile();
 
   return (
-    <View style={styles.container}>
-      <Pressable style={styles.iconButton}>
+    <View className="flex-row items-center gap-lg">
+      <Pressable className="w-11 h-11 justify-center items-center">
         <MaterialCommunityIcons name='share-variant-outline' size={24} />
       </Pressable>
-      <Pressable style={styles.iconButton}>
+      <Pressable className="w-11 h-11 justify-center items-center">
         <MaterialIcons name='notifications-none' size={24} />
       </Pressable>
-      <Pressable style={styles.iconButton}>
+      <Pressable className="w-11 h-11 justify-center items-center">
         <Avatar
           uri={visualProfileInfo?.avatarUrl || null}
           name={visualProfileInfo?.name || ''}
@@ -27,18 +26,4 @@ export default function DefaultRightContent() {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  iconButton: {
-    width: 44,
-    height: 44,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-});
 

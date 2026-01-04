@@ -1,6 +1,6 @@
 import React from 'react';
-import { View, Text, StyleSheet, StyleProp, ViewStyle } from 'react-native';
-import { colors, spacing } from '@avoo/design-tokens';
+import { View, StyleProp, ViewStyle } from 'react-native';
+import { Text } from 'react-native-paper';
 import DefaultRightContent from './DefaultRightContent';
 import DefaultLeftContent from './DefaultLeftContent';
 import DefaultTitle from './DefaultTitle';
@@ -25,49 +25,25 @@ export default function NavBar(props: Props) {
     }
 
     if (typeof title === 'string') {
-      return <Text style={styles.titleText}>{title}</Text>;
+      return <Text variant="titleMedium">{title}</Text>;
     }
 
     return title;
   };
 
   return (
-    <View style={[styles.header, headerStyle]}>
-      <View style={styles.headerLeft}>
+    <View className="h-14 flex-row items-center bg-primary-50 px-4" style={headerStyle}>
+      <View className="justify-center">
         {leftContent ?? <DefaultLeftContent showBack={showBack} onBackPress={onBackPress} />}
       </View>
 
-      <View style={[styles.titleContainer, titleStyle]}>{renderTitle()}</View>
+      <View className="flex-1 items-end justify-center mr-lg" style={titleStyle}>
+        {renderTitle()}
+      </View>
 
-      <View style={styles.headerRight}>{rightContent ?? <DefaultRightContent />}</View>
+      <View className="justify-center items-end">
+        {rightContent ?? <DefaultRightContent />}
+      </View>
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  header: {
-    height: 56,
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: colors.primary[50],
-    paddingHorizontal: 16,
-  },
-  headerLeft: {
-    justifyContent: 'center',
-  },
-  headerRight: {
-    justifyContent: 'center',
-    alignItems: 'flex-end',
-  },
-  titleContainer: {
-    flex: 1,
-    alignItems: 'flex-end',
-    justifyContent: 'center',
-    marginRight: spacing.lg,
-  },
-  titleText: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: colors.black,
-  },
-});

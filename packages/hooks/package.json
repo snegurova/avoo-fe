@@ -5,6 +5,7 @@
     "type": "module",
     "private": true,
     "dependencies": {
+        "@avoo/constants": "workspace:^",
         "@avoo/shared": "workspace:^",
         "@hookform/resolvers": "^3.9.1",
         "@tanstack/react-query": "^5.0.0",
