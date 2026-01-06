@@ -1,10 +1,10 @@
-import React, { createContext, useContext, useRef, useState, useCallback, ReactNode } from 'react';
+import { createContext, useContext, useRef, useState, useCallback, ReactNode } from 'react';
 import BottomSheet from '@gorhom/bottom-sheet';
-import { GlobalBottomSheet } from './GlobalBottomSheet';
+import { GlobalBottomSheet } from '../GlobalBottomSheet/GlobalBottomSheet';
 
 type GlobalBottomSheetContextType = {
-  open: (content: ReactNode) => void;
-  close: () => void;
+  handleOpenBottomSheet: (content: ReactNode) => void;
+  handleCloseBottomSheet: () => void;
 };
 
 const GlobalBottomSheetContext = createContext<GlobalBottomSheetContextType | null>(null);
@@ -25,20 +25,19 @@ export const GlobalBottomSheetProvider = ({ children }: Props) => {
   const bottomSheetRef = useRef<BottomSheet>(null);
   const [content, setContent] = useState<ReactNode>(null);
 
-  const open = useCallback((newContent: ReactNode) => {
+  const handleOpenBottomSheet = useCallback((newContent: ReactNode) => {
     setContent(newContent);
     bottomSheetRef.current?.expand();
   }, []);
 
-  const close = useCallback(() => {
+  const handleCloseBottomSheet = useCallback(() => {
     bottomSheetRef.current?.close();
-    setTimeout(() => setContent(null), 300);
   }, []);
 
   return (
-    <GlobalBottomSheetContext.Provider value={{ open, close }}>
+    <GlobalBottomSheetContext.Provider value={{ handleOpenBottomSheet, handleCloseBottomSheet }}>
       {children}
-      <GlobalBottomSheet ref={bottomSheetRef} content={content} onClose={close} />
+      <GlobalBottomSheet ref={bottomSheetRef} content={content} onClose={handleCloseBottomSheet} />
     </GlobalBottomSheetContext.Provider>
   );
 };

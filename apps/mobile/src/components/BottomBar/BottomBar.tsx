@@ -4,51 +4,41 @@ import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import { useNavigation } from '@react-navigation/native';
 import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet';
 import { BottomBarItem } from './BottomBarItem';
-import { useBottomBarStyles } from '@/hooks/useBottomBarStyles';
 import { radius, colors } from '@avoo/design-tokens';
 import { MaterialIcons } from '@/shared/icons';
 import { RootScreens, RootNavigationProp } from '@/types/navigation';
 import { Text } from 'react-native-paper';
+import { CONSTANTS } from '@/constants/constants';
 
 export function BottomBar(props: BottomTabBarProps) {
   const { state, descriptors, navigation } = props;
-  const { constants } = useBottomBarStyles();
   const bottomSheetRef = useRef<BottomSheet>(null);
   const rootNavigation = useNavigation<RootNavigationProp>();
 
   const snapPoints = ['25%', '50%'];
 
-  const handlePlusPress = useCallback(() => {
-    bottomSheetRef.current?.expand();
-  }, []);
 
-  const handleClose = useCallback(() => {
+  const handleNavigateToPost = useCallback(() => {
     bottomSheetRef.current?.close();
-  }, []);
+    rootNavigation.navigate(RootScreens.AddPostScreen);
+  }, [rootNavigation]);
 
-  const handleNavigate = useCallback(
-    (screen: RootScreens.AddPostScreen | RootScreens.AddBookingScreen) => {
-      bottomSheetRef.current?.close();
-      setTimeout(() => {
-        rootNavigation.navigate(screen);
-      }, 100);
-    },
-    [rootNavigation],
-  );
+  const handleNavigateToBooking = useCallback(() => {
+    bottomSheetRef.current?.close();
+    rootNavigation.navigate(RootScreens.AddBookingScreen);
+  }, [rootNavigation]);
 
   return (
     <>
       <View pointerEvents='box-none' style={StyleSheet.absoluteFill}>
         <View
-          className='absolute bg-white justify-center rounded-[24px]'
+          className='absolute bg-white justify-center rounded-[24px] z-10'
           style={[
-            styles.pill,
             {
-              zIndex: 10,
-              left: constants.H_PADDING,
-              right: constants.H_PADDING,
-              bottom: constants.BOTTOM_OFFSET,
-              height: constants.HEIGHT,
+              left: CONSTANTS.BOTTOM_BAR.H_PADDING,
+              right: CONSTANTS.BOTTOM_BAR.H_PADDING,
+              bottom: CONSTANTS.BOTTOM_BAR.BOTTOM_OFFSET,
+              height: CONSTANTS.BOTTOM_BAR.HEIGHT,
             },
           ]}
         >
@@ -64,7 +54,11 @@ export function BottomBar(props: BottomTabBarProps) {
               />
             ))}
           </View>
-          <Pressable className='absolute top-[-56px] right-0' hitSlop={20} onPress={handlePlusPress}>
+          <Pressable
+            className='absolute top-[-56px] right-0'
+            hitSlop={20}
+            onPress={() => bottomSheetRef.current?.expand()}
+          >
             <View className='w-11 h-11 rounded-full bg-primary-400 items-center justify-center'>
               <MaterialIcons name='add' size={24} color={colors.white} />
             </View>
@@ -75,24 +69,17 @@ export function BottomBar(props: BottomTabBarProps) {
           index={-1}
           snapPoints={snapPoints}
           enablePanDownToClose={true}
-          style={{ marginHorizontal: 20, zIndex: 1}}
+          style={{ marginHorizontal: 20, zIndex: 1 }}
           backgroundStyle={styles.bottomSheetBackground}
           handleIndicatorStyle={styles.bottomSheetIndicator}
-          bottomInset={constants.BOTTOM_OFFSET + constants.HEIGHT/2}
-          onClose={handleClose}
+          bottomInset={CONSTANTS.BOTTOM_BAR.BOTTOM_OFFSET + CONSTANTS.BOTTOM_BAR.HEIGHT / 2}
           animateOnMount={false}
         >
           <BottomSheetView className='py-4'>
-            <Pressable
-              className='px-6 py-4'
-              onPress={() => handleNavigate(RootScreens.AddPostScreen)}
-            >
+            <Pressable className='px-6 py-4' onPress={handleNavigateToPost}>
               <Text variant='titleMedium'>New Post</Text>
             </Pressable>
-            <Pressable
-              className='px-6 py-4'
-              onPress={() => handleNavigate(RootScreens.AddBookingScreen)}
-            >
+            <Pressable className='px-6 py-4' onPress={handleNavigateToBooking}>
               <Text variant='titleMedium'>Add Booking</Text>
             </Pressable>
           </BottomSheetView>
@@ -102,19 +89,9 @@ export function BottomBar(props: BottomTabBarProps) {
   );
 }
 const styles = StyleSheet.create({
-  pill: {
-    // iOS shadow
-    shadowColor: '#000',
-    shadowOpacity: 0.1,
-    shadowRadius: 10,
-    shadowOffset: { width: 0, height: 6 },
-
-    // Android
-    elevation: 8,
-  },
   bottomSheetBackground: {
     backgroundColor: colors.white,
-    borderRadius: radius['2xl'],
+    borderRadius: radius.xxl,
   },
   bottomSheetIndicator: {
     backgroundColor: colors.gray[300],

@@ -8,7 +8,7 @@ import { QueryClientProvider } from '@tanstack/react-query';
 import { queryClient } from '@avoo/hooks';
 import { PaperProvider } from 'react-native-paper';
 import paperTheme from '@/theme/paper-theme';
-import { GlobalBottomSheetProvider } from '@/shared/GlobalBottomSheet';
+import { GlobalBottomSheetProvider } from '@/shared/GlobalBottomSheetProvider/GlobalBottomSheetProvider';
 
 import './global.css';
 

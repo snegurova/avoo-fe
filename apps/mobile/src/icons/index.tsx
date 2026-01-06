@@ -4,4 +4,3 @@ export { CoPresentIcon } from './CoPresentIcon';
 export { BookIcon } from './BookIcon';
 export { GroupsIcon } from './GroupsIcon';
 export { AutoAwesomeMosaicIcon } from './AutoAwesomeMosaicIcon';
-

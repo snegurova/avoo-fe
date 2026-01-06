@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import NavBar from '@/components/NavBar/NavBar';
-import { useBottomBarStyles } from '@/hooks/useBottomBarStyles';
+import { layoutHooks } from '@/hooks/layoutHooks';
 
 type Props = {
   children: React.ReactNode;
@@ -42,7 +42,7 @@ export default function Layout(props: Props) {
     headerStyle,
   } = props;
 
-  const { totalHeight } = useBottomBarStyles();
+  const bottomBarHeight = layoutHooks.useBottomBarHeight();
 
   return (
     <SafeAreaView
@@ -74,7 +74,7 @@ export default function Layout(props: Props) {
           <ScrollView
             className="flex-1 px-5 pt-5"
             showsVerticalScrollIndicator={false}
-            contentContainerStyle={hasBottomTab ? { paddingBottom: totalHeight } : undefined}
+            contentContainerStyle={hasBottomTab ? { paddingBottom: bottomBarHeight } : undefined}
             contentContainerClassName={centerContent ? 'flex-1 justify-center items-center' : undefined}
           >
             {children}

@@ -41,3 +41,4 @@ export const GlobalBottomSheet = forwardRef<BottomSheet, Props>((props, ref) => 
 });
 
 GlobalBottomSheet.displayName = 'GlobalBottomSheet';
+

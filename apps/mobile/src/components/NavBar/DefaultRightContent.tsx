@@ -3,15 +3,15 @@ import { MaterialIcons, MaterialCommunityIcons } from '@/shared/icons';
 import { Avatar } from '@/shared/Avatar/Avatar';
 import { colors } from '@avoo/design-tokens';
 import { userHooks } from '@avoo/hooks';
-import { useGlobalBottomSheet } from '@/shared/GlobalBottomSheet';
+import { useGlobalBottomSheet } from '@/shared/GlobalBottomSheetProvider/GlobalBottomSheetProvider';
 import { ProfileBottomSheet } from '@/shared/ProfileBottomSheet/ProfileBottomSheet';
 
 export default function DefaultRightContent() {
   const { visualProfileInfo } = userHooks.useGetUserProfile();
-  const { open } = useGlobalBottomSheet();
+  const { handleOpenBottomSheet } = useGlobalBottomSheet();
 
   const handleOpenProfile = () => {
-    open(<ProfileBottomSheet />);
+    handleOpenBottomSheet(<ProfileBottomSheet />);
   };
 
   return (

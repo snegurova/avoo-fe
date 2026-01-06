@@ -7,13 +7,13 @@ import { SearchInput } from '@/shared/SearchInput/SearchInput';
 import { MaterialIcons } from '@/shared/icons';
 import { colors } from '@avoo/design-tokens';
 import CreateMasterForm from '@/components/CreateMasterForm';
-import { useGlobalBottomSheet } from '@/shared/GlobalBottomSheet';
-import { useBottomBarStyles } from '@/hooks/useBottomBarStyles';
+import { useGlobalBottomSheet } from '@/shared/GlobalBottomSheetProvider/GlobalBottomSheetProvider';
+import { layoutHooks } from '@/hooks/layoutHooks';
 
 export default function MastersScreen() {
   const [searchQuery, setSearchQuery] = useState('');
-  const { open, close } = useGlobalBottomSheet();
-  const { totalHeight } = useBottomBarStyles();
+  const { handleOpenBottomSheet } = useGlobalBottomSheet();
+  const bottomBarHeight = layoutHooks.useBottomBarHeight();
 
   const masters = masterHooks.useGetMastersProfileInfo();
   const filteredMasters = masterHooks.useFilterMasters(masters, searchQuery);
@@ -22,14 +22,16 @@ export default function MastersScreen() {
     onSuccess: () => close(),
   });
 
+
+
   const handleOpenForm = () => {
-    open(
+    handleOpenBottomSheet(
       <CreateMasterForm
         control={control}
         handleSubmit={handleSubmit}
         errors={errors}
         isPending={isPending}
-      />
+      />,
     );
   };
 
@@ -39,8 +41,13 @@ export default function MastersScreen() {
         <Text className='text-xl font-medium text-black' style={styles.title}>
           Masters
         </Text>
-        <Pressable className='flex-row items-center border border-black rounded-md px-4 py-3.5 gap-4' onPress={handleOpenForm}>
-          <Text className='text-base font-medium text-black' style={styles.newMasterText}>New master</Text>
+        <Pressable
+          className='flex-row items-center border border-black rounded-md px-4 py-3.5 gap-4'
+          onPress={handleOpenForm}
+        >
+          <Text className='text-base font-medium text-black' style={styles.newMasterText}>
+            New master
+          </Text>
           <MaterialIcons name='add' size={24} color={colors.black} />
         </Pressable>
       </View>
@@ -50,7 +57,7 @@ export default function MastersScreen() {
           data={filteredMasters}
           keyExtractor={(item) => item.id.toString()}
           renderItem={({ item }) => <MasterListItem master={item} />}
-          contentContainerStyle={{ gap: 12, paddingBottom: totalHeight }}
+          contentContainerStyle={{ gap: 12, paddingBottom: bottomBarHeight }}
           showsVerticalScrollIndicator={false}
           ListEmptyComponent={
             <View className='flex-1 justify-center items-center'>

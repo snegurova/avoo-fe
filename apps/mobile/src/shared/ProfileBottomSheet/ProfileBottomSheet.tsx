@@ -3,12 +3,12 @@ import { Avatar } from '@/shared/Avatar/Avatar';
 import { colors } from '@avoo/design-tokens';
 import { authHooks, userHooks } from '@avoo/hooks';
 import { Text } from 'react-native-paper';
-import { useGlobalBottomSheet } from '@/shared/GlobalBottomSheet';
+import { useGlobalBottomSheet } from '@/shared/GlobalBottomSheetProvider/GlobalBottomSheetProvider';
 import { RootNavigationProp, RootScreens } from '@/types/navigation';
 import { useNavigation } from '@react-navigation/native';
 
 export const ProfileBottomSheet = () => {
-  const { close } = useGlobalBottomSheet();
+  const { handleCloseBottomSheet } = useGlobalBottomSheet();
   const navigation = useNavigation<RootNavigationProp>();
   const { visualProfileInfo } = userHooks.useGetUserProfile();
 
@@ -16,7 +16,7 @@ export const ProfileBottomSheet = () => {
 
   const handleLogout = () => {
     logoutMutation();
-    close();
+    handleCloseBottomSheet();
   };
 
   const handleNavigate = () => {
