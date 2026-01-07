@@ -1,10 +1,11 @@
 import React from 'react';
 import { tv } from 'tailwind-variants';
+import { ElementStyleType } from '@avoo/hooks/types/elementStyleType';
 
 type Props = {
   options: { icon?: React.ReactNode; label: string; handler: () => void }[];
   closeDropdown: () => void;
-  type?: 'solid' | 'outline';
+  type?: ElementStyleType;
 };
 
 const dropdownList = tv({
@@ -29,7 +30,7 @@ const button = tv({
 });
 
 export default function DropdownList(props: Props) {
-  const { options, closeDropdown, type = 'solid' } = props;
+  const { options, closeDropdown, type = ElementStyleType.SOLID } = props;
 
   return (
     <ul className={dropdownList({ type })}>

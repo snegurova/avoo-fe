@@ -1,3 +1,5 @@
+import { DateStatus } from '@avoo/hooks/types/dateStatus';
+
 export const timeUtils = {
   toDayBegin(date: Date): Date {
     const d = new Date(date);
@@ -73,16 +75,16 @@ export const timeUtils = {
     const weekDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
     return weekDays[day];
   },
-  getDateStatus(date: Date): 'past' | 'today' | 'future' {
+  getDateStatus(date: Date): DateStatus {
     const today = this.toDayBegin(new Date());
     const targetDate = this.toDayBegin(date);
 
     if (targetDate.getTime() === today.getTime()) {
-      return 'today';
+      return DateStatus.TODAY;
     } else if (targetDate < today) {
-      return 'past';
+      return DateStatus.PAST;
     } else {
-      return 'future';
+      return DateStatus.FUTURE;
     }
   },
 };

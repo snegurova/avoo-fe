@@ -2,21 +2,25 @@ import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { CalendarItem } from '@avoo/axios/types/apiTypes';
 import { tv } from 'tailwind-variants';
 import { MasterWithRelationsEntity } from '@avoo/axios/types/apiTypes';
-import { calendarViewType } from '@avoo/hooks/types/calendarViewType';
+import { CalendarViewType } from '@avoo/hooks/types/calendarViewType';
 import CalendarEvent from '@/_components/CalendarEvent/CalendarEvent';
-import { timeUtils } from '@/_utils/timeUtils';
+import { timeUtils } from '@avoo/shared';
 import { PX_IN_MINUTE } from '@/_constants/time';
 import CalendarCurrentTime from '../CalendarCurrentTime/CalendarCurrentTime';
+
+const DAY_CELLS = Array.from({ length: 96 });
+const WEEK_CELLS = Array.from({ length: 7 });
+const HOUR_SEPARATE = 4;
 
 type Props = {
   data: CalendarItem | undefined;
   master: MasterWithRelationsEntity;
-  type: calendarViewType;
+  type: CalendarViewType;
   date: Date;
   time: number;
   setDate: React.Dispatch<React.SetStateAction<Date>>;
   setToDate: React.Dispatch<React.SetStateAction<Date>>;
-  setType: React.Dispatch<React.SetStateAction<calendarViewType>>;
+  setType: React.Dispatch<React.SetStateAction<CalendarViewType>>;
   setTime: React.Dispatch<React.SetStateAction<number>>;
 };
 
@@ -24,9 +28,9 @@ const col = tv({
   base: 'flex-1 border-gray-300 grow relative bg-gray-100',
   variants: {
     type: {
-      [calendarViewType.DAY]: 'border-r min-w-25 md:min-w-55 2xl:min-w-90',
-      [calendarViewType.WEEK]: 'not-last:border-b min-h-38 md:min-h-40 flex flex-row flex-nowrap',
-      [calendarViewType.MONTH]: '',
+      [CalendarViewType.DAY]: 'border-r min-w-25 md:min-w-55 2xl:min-w-90',
+      [CalendarViewType.WEEK]: 'not-last:border-b min-h-38 md:min-h-40 flex flex-row flex-nowrap',
+      [CalendarViewType.MONTH]: '',
     },
   },
 });
@@ -39,11 +43,11 @@ const cell = tv({
       false: 'border-t-gray-200',
     },
     type: {
-      [calendarViewType.DAY]:
+      [CalendarViewType.DAY]:
         'h-6 border-t last:border-b last:border-b-gray-300 pointer-events-none',
-      [calendarViewType.WEEK]:
+      [CalendarViewType.WEEK]:
         'h-full not-last:border-r border-gray-300 min-w-26 md:min-w-40 flex-1 p-1 flex flex-col justify-between gap-1',
-      [calendarViewType.MONTH]: '',
+      [CalendarViewType.MONTH]: '',
     },
     isAccessible: {
       true: 'bg-white',
@@ -67,15 +71,16 @@ export default function CalendarColumn(props: Props) {
   }, [ref?.current?.clientHeight]);
 
   useEffect(() => {
-    window.addEventListener('resize', calculateShowEvents);
-    return () => {
-      window.removeEventListener('resize', calculateShowEvents);
-    };
-  }, []);
+    if (!ref.current) return;
+    const resizeObserver = new ResizeObserver(() => {
+      calculateShowEvents();
+    });
+    resizeObserver.observe(ref.current);
 
-  useEffect(() => {
-    calculateShowEvents();
-  }, [data]);
+    return () => {
+      resizeObserver.disconnect();
+    };
+  }, [ref.current]);
 
   const onAvailabelTimeClick = (e: React.MouseEvent<HTMLDivElement>) => {
     const parent = e.currentTarget.parentElement;
@@ -87,25 +92,23 @@ export default function CalendarColumn(props: Props) {
     const mins = minutes % 60;
     const target = e.target as HTMLElement;
     const isAvailable = target.classList.contains('available-time');
-    alert(
-      `Available time clicked at ${hours.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')} for master ${master.name} (Available: ${isAvailable})`,
-    );
+
+    return [hours, mins, isAvailable, master];
   };
 
-  const onWeekDayClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    const dayIndex = e.currentTarget.getAttribute('data-day-index');
-    if (dayIndex === null) return;
+  const onWeekDayClick = (idx: number) => {
+    if (!idx || idx < 0 || idx > 6) return;
 
     const newDate = new Date(date);
-    newDate.setDate(newDate.getDate() + Number(dayIndex));
+    newDate.setDate(newDate.getDate() + idx);
     setDate(newDate);
     setToDate(timeUtils.toDayEnd(newDate));
-    setType(calendarViewType.DAY);
+    setType(CalendarViewType.DAY);
   };
 
   return (
     <>
-      {type === calendarViewType.DAY && (
+      {type === CalendarViewType.DAY && (
         <div className={col({ type })} onClick={onAvailabelTimeClick}>
           {data &&
             data.days[0].availability?.map((avail, idx) => (
@@ -118,8 +121,11 @@ export default function CalendarColumn(props: Props) {
                 }}
               ></div>
             ))}
-          {Array.from({ length: 96 }).map((_, idx) => (
-            <div key={'15mins' + idx} className={cell({ main: idx % 4 === 0, type })}></div>
+          {DAY_CELLS.map((_, idx) => (
+            <div
+              key={'15mins' + idx}
+              className={cell({ main: idx % HOUR_SEPARATE === 0, type })}
+            ></div>
           ))}
           {data &&
             data.days[0].events.map((event) => (
@@ -130,9 +136,9 @@ export default function CalendarColumn(props: Props) {
           )}
         </div>
       )}
-      {type === calendarViewType.WEEK && (
+      {type === CalendarViewType.WEEK && (
         <div className={col({ type })} ref={ref}>
-          {Array.from({ length: 7 }).map((_, idx) => {
+          {WEEK_CELLS.map((_, idx) => {
             const slicedEvents =
               data && data.days[idx] ? data.days[idx].events.slice(0, showEvents) : [];
 
@@ -144,8 +150,7 @@ export default function CalendarColumn(props: Props) {
                   type,
                   isAccessible: data?.days[idx]?.isWorkingDay,
                 })}
-                data-day-index={idx}
-                onClick={onWeekDayClick}
+                onClick={() => onWeekDayClick(idx)}
               >
                 {data && data.days[idx] && (
                   <>

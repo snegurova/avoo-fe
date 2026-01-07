@@ -1,16 +1,17 @@
-import { timeUtils } from '@/_utils/timeUtils';
+import { timeUtils } from '@avoo/shared';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { tv } from 'tailwind-variants';
 import { PrivateCalendarByDatesQueryParams } from '@avoo/axios/types/apiTypes';
 import { calendarHooks } from '@avoo/hooks';
-import { calendarViewType } from '@avoo/hooks/types/calendarViewType';
+import { CalendarViewType } from '@avoo/hooks/types/calendarViewType';
 import CalendarEvent from '../CalendarEvent/CalendarEvent';
+import { DateStatus } from '@avoo/hooks/types/dateStatus';
 
 type Props = {
   params: PrivateCalendarByDatesQueryParams;
   setDate: React.Dispatch<React.SetStateAction<Date>>;
   setToDate: React.Dispatch<React.SetStateAction<Date>>;
-  setType: React.Dispatch<React.SetStateAction<calendarViewType>>;
+  setType: React.Dispatch<React.SetStateAction<CalendarViewType>>;
 };
 
 const dayCell = tv({
@@ -63,12 +64,15 @@ export default function CalendarMonthView(props: Props) {
   }, [calendar?.days.length, ref?.current?.clientHeight]);
 
   useEffect(() => {
-    calculateShowEvents();
-    window.addEventListener('resize', calculateShowEvents);
+    if (!ref.current) return;
+    const resizeObserver = new ResizeObserver(() => {
+      calculateShowEvents();
+    });
+    resizeObserver.observe(ref.current);
     return () => {
-      window.removeEventListener('resize', calculateShowEvents);
+      resizeObserver.disconnect();
     };
-  }, [calendar]);
+  }, [ref.current]);
 
   const onDayClick = (e: React.MouseEvent<HTMLDivElement>) => {
     const dateStr = e.currentTarget.getAttribute('data-date');
@@ -77,7 +81,7 @@ export default function CalendarMonthView(props: Props) {
 
     setDate(timeUtils.toDayBegin(date));
     setToDate(timeUtils.toDayEnd(date));
-    setType(calendarViewType.DAY);
+    setType(CalendarViewType.DAY);
   };
 
   return (
@@ -88,7 +92,7 @@ export default function CalendarMonthView(props: Props) {
       {calendar &&
         calendar.days.map(({ date, events, isWorkingDay }, idx) => {
           const dayDate = new Date(date);
-          const day: 'past' | 'today' | 'future' = timeUtils.getDateStatus(dayDate);
+          const day: DateStatus = timeUtils.getDateStatus(dayDate);
           const slicedEvents = events.length > showEvents ? events.slice(0, showEvents) : events;
           return (
             <div
@@ -102,7 +106,7 @@ export default function CalendarMonthView(props: Props) {
                 <div className='flex flex-col flex-1 gap-1 justify-between'>
                   <div className='flex flex-col gap-0.5'>
                     {slicedEvents.map((event, eIdx) => (
-                      <CalendarEvent key={eIdx} event={event} type={calendarViewType.MONTH} />
+                      <CalendarEvent key={eIdx} event={event} type={CalendarViewType.MONTH} />
                     ))}
                   </div>
                   {slicedEvents.length < events.length && (

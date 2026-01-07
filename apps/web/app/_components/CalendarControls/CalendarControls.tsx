@@ -1,5 +1,5 @@
 'use client';
-import React from 'react';
+import React, { useCallback, useMemo } from 'react';
 import SelectButton from '@/_components/SelectButton/SelectButton';
 import ArrowBackIcon from '@/_icons/ArrowBackIcon';
 import ArrowForwardIcon from '@/_icons/ArrowForwardIcon';
@@ -8,10 +8,10 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { tv } from 'tailwind-variants';
 import { DatePicker } from '@mui/x-date-pickers';
 import dayjs from 'dayjs';
-import { calendarViewType } from '@avoo/hooks/types/calendarViewType';
-import { timeUtils } from '@/_utils/timeUtils';
+import { CalendarViewType } from '@avoo/hooks/types/calendarViewType';
+import { timeUtils } from '@avoo/shared';
 import CheckboxesButton from '../CheckboxesButton/CheckboxesButton';
-import { orderStatus } from '@avoo/hooks/types/orderStatus';
+import { OrderStatus } from '@avoo/hooks/types/orderStatus';
 import {
   PrivateCalendarQueryParams,
   MasterWithRelationsEntityResponse,
@@ -20,12 +20,13 @@ import CalendarViewDay from '@/_icons/CalendarViewDay';
 import CalendarViewWeek from '@/_icons/CalendarViewWeek';
 import CalendarViewMonth from '@/_icons/CalendarViewMonth';
 import useMediaQuery from '@mui/material/useMediaQuery';
+import { ElementStyleType } from '@avoo/hooks/types/elementStyleType';
 
 type Props = {
   date: Date;
   setDate: (date: Date) => void;
-  type: calendarViewType;
-  setType: (type: calendarViewType) => void;
+  type: CalendarViewType;
+  setType: (type: CalendarViewType) => void;
   toDate: Date;
   setToDate: (date: Date) => void;
   scrollToCurrentTime: () => void;
@@ -55,119 +56,167 @@ export default function CalendarControls(props: Props) {
 
   const desktopUp = useMediaQuery('(min-width:1024px)');
 
-  const setCurrentDate = (type: calendarViewType) => {
+  const setCurrentDate = (type: CalendarViewType) => {
     const today = new Date();
-    if (type === calendarViewType.DAY) {
-      const range = timeUtils.getDayRange(today);
-      setDate(range.start);
-      setToDate(range.end);
-    } else if (type === calendarViewType.WEEK) {
-      const range = timeUtils.getWeekRange(today);
-      setDate(range.start);
-      setToDate(range.end);
-    } else if (type === calendarViewType.MONTH) {
-      const range = timeUtils.getMonthRange(today);
-      setDate(range.start);
-      setToDate(range.end);
+    switch (type) {
+      case CalendarViewType.DAY: {
+        const range = timeUtils.getDayRange(today);
+        setDate(range.start);
+        setToDate(range.end);
+        break;
+      }
+      case CalendarViewType.WEEK: {
+        const range = timeUtils.getWeekRange(today);
+        setDate(range.start);
+        setToDate(range.end);
+        break;
+      }
+      case CalendarViewType.MONTH: {
+        const range = timeUtils.getMonthRange(today);
+        setDate(range.start);
+        setToDate(range.end);
+        break;
+      }
+      default:
+        break;
     }
   };
 
   const setPreviousDate = () => {
-    if (type === calendarViewType.DAY) {
-      const range = timeUtils.getDayRange(new Date(date.getTime() - 24 * 60 * 60 * 1000));
-      setDate(range.start);
-      setToDate(range.end);
-    } else if (type === calendarViewType.WEEK) {
-      const range = timeUtils.getWeekRange(new Date(date.getTime() - 7 * 24 * 60 * 60 * 1000));
-      setDate(range.start);
-      setToDate(range.end);
-    } else if (type === calendarViewType.MONTH) {
-      const prevMonth = new Date(date.getTime() + 7 * 24 * 60 * 60 * 1000);
-      prevMonth.setMonth(prevMonth.getMonth() - 1);
-      const range = timeUtils.getMonthRange(prevMonth);
-      setDate(range.start);
-      setToDate(range.end);
+    switch (type) {
+      case CalendarViewType.DAY: {
+        const range = timeUtils.getDayRange(new Date(date.getTime() - 24 * 60 * 60 * 1000));
+        setDate(range.start);
+        setToDate(range.end);
+        break;
+      }
+      case CalendarViewType.WEEK: {
+        const range = timeUtils.getWeekRange(new Date(date.getTime() - 7 * 24 * 60 * 60 * 1000));
+        setDate(range.start);
+        setToDate(range.end);
+        break;
+      }
+      case CalendarViewType.MONTH: {
+        const prevMonth = new Date(date.getTime() - 7 * 24 * 60 * 60 * 1000);
+        prevMonth.setMonth(prevMonth.getMonth() - 1);
+        const range = timeUtils.getMonthRange(prevMonth);
+        setDate(range.start);
+        setToDate(range.end);
+        break;
+      }
+      default:
+        break;
     }
   };
 
   const setNextDate = () => {
-    if (type === calendarViewType.DAY) {
-      const range = timeUtils.getDayRange(new Date(date.getTime() + 24 * 60 * 60 * 1000));
-      setDate(range.start);
-      setToDate(range.end);
-    } else if (type === calendarViewType.WEEK) {
-      const range = timeUtils.getWeekRange(new Date(date.getTime() + 7 * 24 * 60 * 60 * 1000));
-      setDate(range.start);
-      setToDate(range.end);
-    } else if (type === calendarViewType.MONTH) {
-      const nextMonth = new Date(date.getTime() + 7 * 24 * 60 * 60 * 1000);
-      nextMonth.setMonth(nextMonth.getMonth() + 1);
-      const range = timeUtils.getMonthRange(nextMonth);
-      setDate(range.start);
-      setToDate(range.end);
+    switch (type) {
+      case CalendarViewType.DAY: {
+        const range = timeUtils.getDayRange(new Date(date.getTime() + 24 * 60 * 60 * 1000));
+        setDate(range.start);
+        setToDate(range.end);
+        break;
+      }
+      case CalendarViewType.WEEK: {
+        const range = timeUtils.getWeekRange(new Date(date.getTime() + 7 * 24 * 60 * 60 * 1000));
+        setDate(range.start);
+        setToDate(range.end);
+        break;
+      }
+      case CalendarViewType.MONTH: {
+        const nextMonth = new Date(date.getTime() + 7 * 24 * 60 * 60 * 1000);
+        nextMonth.setMonth(nextMonth.getMonth() + 1);
+        const range = timeUtils.getMonthRange(nextMonth);
+        setDate(range.start);
+        setToDate(range.end);
+        break;
+      }
+      default:
+        break;
     }
   };
 
-  const handleChangeDate = (newDate: dayjs.Dayjs | null) => {
-    if (!newDate) return;
-    const newDateObj = newDate.toDate();
-    if (type === calendarViewType.DAY) {
-      const range = timeUtils.getDayRange(newDateObj);
-      setDate(range.start);
-      setToDate(range.end);
-    } else if (type === calendarViewType.WEEK) {
-      const range = timeUtils.getWeekRange(newDateObj);
-      setDate(range.start);
-      setToDate(range.end);
-    } else if (type === calendarViewType.MONTH) {
-      const range = timeUtils.getMonthRange(newDateObj);
-      setDate(range.start);
-      setToDate(range.end);
-    }
-  };
+  const handleChangeDate = useCallback(
+    (newDate: dayjs.Dayjs | null) => {
+      if (!newDate) return;
+      const newDateObj = newDate.toDate();
+      switch (type) {
+        case CalendarViewType.DAY: {
+          const range = timeUtils.getDayRange(newDateObj);
+          setDate(range.start);
+          setToDate(range.end);
+          break;
+        }
+        case CalendarViewType.WEEK: {
+          const range = timeUtils.getWeekRange(newDateObj);
+          setDate(range.start);
+          setToDate(range.end);
+          break;
+        }
+        case CalendarViewType.MONTH: {
+          const range = timeUtils.getMonthRange(newDateObj);
+          setDate(range.start);
+          setToDate(range.end);
+          break;
+        }
+        default:
+          break;
+      }
+    },
+    [type, date],
+  );
 
-  const viewOptions = [
-    {
-      label: 'Day',
-      icon: <CalendarViewDay className={icon()} />,
-      handler: () => {
-        setType(calendarViewType.DAY);
-        setCurrentDate(calendarViewType.DAY);
+  const viewOptions = useMemo(
+    () => [
+      {
+        label: 'Day',
+        icon: <CalendarViewDay className={icon()} />,
+        handler: () => {
+          setType(CalendarViewType.DAY);
+          setCurrentDate(CalendarViewType.DAY);
+        },
       },
-    },
-    {
-      label: 'Week',
-      icon: <CalendarViewWeek className={icon()} />,
-      handler: () => {
-        setType(calendarViewType.WEEK);
-        setCurrentDate(calendarViewType.WEEK);
+      {
+        label: 'Week',
+        icon: <CalendarViewWeek className={icon()} />,
+        handler: () => {
+          setType(CalendarViewType.WEEK);
+          setCurrentDate(CalendarViewType.WEEK);
+        },
       },
-    },
-    {
-      label: 'Month',
-      icon: <CalendarViewMonth className={icon()} />,
-      handler: () => {
-        setType(calendarViewType.MONTH);
-        setCurrentDate(calendarViewType.MONTH);
+      {
+        label: 'Month',
+        icon: <CalendarViewMonth className={icon()} />,
+        handler: () => {
+          setType(CalendarViewType.MONTH);
+          setCurrentDate(CalendarViewType.MONTH);
+        },
       },
-    },
-  ];
-
-  const statusesOptions = {
-    label: 'All statuses',
-    handler: () => {},
-    items: [
-      { label: orderStatus.PENDING, handler: () => {} },
-      { label: orderStatus.CONFIRMED, handler: () => {} },
-      { label: orderStatus.COMPLETED, handler: () => {} },
     ],
-  };
+    [],
+  );
 
-  const mastersOptions = {
-    label: 'All masters',
-    handler: () => {},
-    items: masters?.map((master) => ({ label: master.name, handler: () => {} })) ?? [],
-  };
+  const statusesOptions = useMemo(
+    () => ({
+      label: 'All statuses',
+      handler: () => {},
+      items: [
+        { label: OrderStatus.PENDING, handler: () => {} },
+        { label: OrderStatus.CONFIRMED, handler: () => {} },
+        { label: OrderStatus.COMPLETED, handler: () => {} },
+      ],
+    }),
+    [],
+  );
+
+  const mastersOptions = useMemo(
+    () => ({
+      label: 'All masters',
+      handler: () => {},
+      items: masters?.map((master) => ({ label: master.name, handler: () => {} })) ?? [],
+    }),
+    [masters],
+  );
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -190,27 +239,7 @@ export default function CalendarControls(props: Props) {
           >
             <ArrowBackIcon className='fill-gray-800 w-3.5 h-3.5' />
           </button>
-          <DatePicker
-            value={dayjs(date)}
-            format='DD MMM YYYY'
-            onChange={handleChangeDate}
-            slotProps={{
-              textField: {
-                sx: {
-                  '& .MuiPickersInputBase-root': {
-                    borderRadius: 0,
-                  },
-                  '& .MuiPickersSectionList-root': {
-                    padding: '8px 0',
-                    fontSize: '14px',
-                    color: 'var(--color-gray-800)',
-                    leading: '1.15',
-                  },
-                },
-              },
-              openPickerIcon: { className: 'fill-gray-800 w-4 h-4' },
-            }}
-          />
+          <DatePicker value={dayjs(date)} format='DD MMM YYYY' onChange={handleChangeDate} />
           <button
             type='button'
             className={controlsButton({ variant: 'right' })}
@@ -219,7 +248,7 @@ export default function CalendarControls(props: Props) {
             <ArrowForwardIcon className='fill-gray-800 w-3.5 h-3.5' />
           </button>
         </div>
-        <SelectButton label={type} options={viewOptions} type='outline' />
+        <SelectButton label={type} options={viewOptions} type={ElementStyleType.OUTLINE} />
         {desktopUp && (
           <>
             <CheckboxesButton addCount label='Masters' options={[mastersOptions]} />

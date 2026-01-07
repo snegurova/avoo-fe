@@ -6,8 +6,8 @@ import { calendarHooks } from '@avoo/hooks';
 import { PrivateCalendarQueryParams } from '@avoo/axios/types/apiTypes';
 import { masterHooks } from '@avoo/hooks';
 import CalendarControls from '@/_components/CalendarControls/CalendarControls';
-import { calendarViewType } from '@avoo/hooks/types/calendarViewType';
-import { timeUtils } from '@/_utils/timeUtils';
+import { CalendarViewType } from '@avoo/hooks/types/calendarViewType';
+import { timeUtils } from '@avoo/shared';
 import { tv } from 'tailwind-variants';
 import CalendarMonthView from '../CalendarMonthView/CalendarMonthView';
 import { PX_IN_MINUTE } from '@/_constants/time';
@@ -16,9 +16,9 @@ const columnHeadContainer = tv({
   base: 'sticky bg-white z-10 ',
   variants: {
     type: {
-      [calendarViewType.DAY]: 'flex pl-10.5 top-0 ',
-      [calendarViewType.WEEK]: 'flex left-0 flex flex-col',
-      [calendarViewType.MONTH]: 'hidden',
+      [CalendarViewType.DAY]: 'flex pl-10.5 top-0 ',
+      [CalendarViewType.WEEK]: 'flex left-0 flex flex-col',
+      [CalendarViewType.MONTH]: 'hidden',
     },
   },
 });
@@ -27,9 +27,9 @@ const mainContainer = tv({
   base: 'overflow-auto relative',
   variants: {
     type: {
-      [calendarViewType.DAY]: 'min-w-full',
-      [calendarViewType.WEEK]: 'w-full h-full flex',
-      [calendarViewType.MONTH]: 'h-full',
+      [CalendarViewType.DAY]: 'min-w-full',
+      [CalendarViewType.WEEK]: 'w-full h-full flex',
+      [CalendarViewType.MONTH]: 'h-full',
     },
   },
 });
@@ -38,9 +38,9 @@ const dataContainer = tv({
   base: 'flex ',
   variants: {
     type: {
-      [calendarViewType.DAY]: 'h-580 pb-4',
-      [calendarViewType.WEEK]: 'flex flex-col grow',
-      [calendarViewType.MONTH]: 'flex flex-col grow h-full',
+      [CalendarViewType.DAY]: 'h-580 pb-4',
+      [CalendarViewType.WEEK]: 'flex flex-col grow',
+      [CalendarViewType.MONTH]: 'flex flex-col grow h-full',
     },
   },
 });
@@ -49,7 +49,7 @@ export default function Calendar() {
   const scrollRef = useRef<HTMLDivElement | null>(null);
   const [date, setDate] = useState<Date>(timeUtils.toDayBegin(new Date()));
   const [toDate, setToDate] = useState<Date>(timeUtils.toDayEnd(new Date()));
-  const [type, setType] = useState<calendarViewType>(calendarViewType.DAY);
+  const [type, setType] = useState<CalendarViewType>(CalendarViewType.DAY);
   const [params, setParams] = useState<PrivateCalendarQueryParams>({
     rangeFromDate: date.toISOString(),
     rangeToDate: toDate.toISOString(),
@@ -57,7 +57,7 @@ export default function Calendar() {
   const [time, setTime] = useState(timeUtils.getMinutesInDay(new Date().toString()));
 
   useEffect(() => {
-    if (type !== calendarViewType.DAY) return;
+    if (type !== CalendarViewType.DAY) return;
 
     scrollToCurrentTime();
   }, [type]);
@@ -70,7 +70,7 @@ export default function Calendar() {
   }, [date, toDate]);
 
   const scrollToCurrentTime = () => {
-    if (type !== calendarViewType.DAY || !scrollRef.current) return;
+    if (type !== CalendarViewType.DAY || !scrollRef.current) return;
 
     let scrollValue;
 
@@ -119,7 +119,7 @@ export default function Calendar() {
 
           <div className={dataContainer({ type })}>
             <CalendarTimeScale type={type} date={date} time={time} setTime={setTime} />
-            {type !== calendarViewType.MONTH &&
+            {type !== CalendarViewType.MONTH &&
               masters &&
               masters.map((master) => {
                 const columnData = calendar?.find(
@@ -140,7 +140,7 @@ export default function Calendar() {
                   />
                 );
               })}
-            {type === calendarViewType.MONTH &&
+            {type === CalendarViewType.MONTH &&
               new Date(params.rangeFromDate).getTime() + 28 * 24 * 60 * 60 * 1000 <=
                 new Date(params.rangeToDate).getTime() && (
                 <CalendarMonthView

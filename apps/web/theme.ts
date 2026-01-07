@@ -151,6 +151,31 @@ const theme = createTheme({
         },
       },
     },
+    MuiDatePicker: {
+      defaultProps: {
+        slotProps: {
+          openPickerIcon: {
+            className: 'fill-gray-800 w-4 h-4',
+          },
+        },
+      },
+    },
+
+    MuiPickersTextField: {
+      styleOverrides: {
+        root: {
+          '& .MuiPickersInputBase-root': {
+            borderRadius: 0,
+          },
+          '& .MuiPickersSectionList-root': {
+            padding: '8px 0',
+            fontSize: typography.fontSize.sm,
+            lineHeight: 1.15,
+            color: 'var(--color-gray-800)',
+          },
+        },
+      },
+    },
   },
 });
 

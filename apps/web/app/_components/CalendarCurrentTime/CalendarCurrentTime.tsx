@@ -1,7 +1,9 @@
 import React, { useEffect } from 'react';
 import { PX_IN_MINUTE } from '@/_constants/time';
-import { timeUtils } from '@/_utils/timeUtils';
+import { timeUtils } from '@avoo/shared';
 import { tv } from 'tailwind-variants';
+
+const ONE_MINUTE_MS = 60000;
 
 type Props = {
   showLabel?: boolean;
@@ -40,7 +42,7 @@ export default function CalendarCurrentTime(props: Props) {
     const timeout = setTimeout(() => {
       interval = setInterval(() => {
         setTime(timeUtils.getMinutesInDay(new Date().toString()));
-      }, 60000);
+      }, ONE_MINUTE_MS);
       setTime(timeUtils.getMinutesInDay(new Date().toString()));
     }, delay);
     return () => {

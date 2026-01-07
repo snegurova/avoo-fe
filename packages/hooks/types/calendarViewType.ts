@@ -1,4 +1,4 @@
-export enum calendarViewType {
+export enum CalendarViewType {
   DAY = 'day',
   WEEK = 'week',
   MONTH = 'month',

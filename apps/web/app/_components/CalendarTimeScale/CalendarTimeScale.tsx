@@ -1,12 +1,16 @@
 import React from 'react';
-import { calendarViewType } from '@avoo/hooks/types/calendarViewType';
-import { timeUtils } from '@/_utils/timeUtils';
+import { CalendarViewType } from '@avoo/hooks/types/calendarViewType';
+import { timeUtils } from '@avoo/shared';
 import CalendarCurrentTime from '../CalendarCurrentTime/CalendarCurrentTime';
 import { tv } from 'tailwind-variants';
 import useMediaQuery from '@mui/material/useMediaQuery';
+import { DateStatus } from '@avoo/hooks/types/dateStatus';
+
+const WEEK_CELLS = Array.from({ length: 7 });
+const DAY_CELLS = Array.from({ length: 24 });
 
 type Props = {
-  type: calendarViewType;
+  type: CalendarViewType;
   date: Date;
   time: number;
   setTime: React.Dispatch<React.SetStateAction<number>>;
@@ -16,9 +20,9 @@ const container = tv({
   base: 'shrink-0 sticky bg-white z-7',
   variants: {
     type: {
-      [calendarViewType.DAY]: 'left-0 w-10.5',
-      [calendarViewType.WEEK]: 'top-0 min-w-full h-10 flex flex-row flex-nowrap',
-      [calendarViewType.MONTH]: 'top-0 h-10 grid grid-cols-7 min-w-70',
+      [CalendarViewType.DAY]: 'left-0 w-10.5',
+      [CalendarViewType.WEEK]: 'top-0 min-w-full h-10 flex flex-row flex-nowrap',
+      [CalendarViewType.MONTH]: 'top-0 h-10 grid grid-cols-7 min-w-70',
     },
   },
 });
@@ -38,8 +42,8 @@ const weekDay = tv({
   base: 'h-full p-1 not-last:border-r border-gray-300 text-xs font-medium box-border border-b flex items-center justify-center flex-1 gap-1',
   variants: {
     type: {
-      [calendarViewType.WEEK]: 'min-w-26 md:min-w-40',
-      [calendarViewType.MONTH]: 'min-w-10',
+      [CalendarViewType.WEEK]: 'min-w-26 md:min-w-40',
+      [CalendarViewType.MONTH]: 'min-w-10',
     },
     day: {
       today: 'text-primary-800',
@@ -56,11 +60,33 @@ export default function CalendarTimeScale(props: Props) {
 
   const weekRange = timeUtils.getWeekRange(date);
 
+  const defineDateStatus = (dayIndex: number): DateStatus => {
+    let day = DateStatus.FUTURE as DateStatus;
+    if (type === CalendarViewType.WEEK) {
+      day = timeUtils.getDateStatus(
+        new Date(
+          weekRange.start.getFullYear(),
+          weekRange.start.getMonth(),
+          weekRange.start.getDate() + dayIndex,
+        ),
+      );
+    }
+
+    return day;
+  };
+
+  const getWeekDate = (idx: number) =>
+    new Date(
+      weekRange.start.getFullYear(),
+      weekRange.start.getMonth(),
+      weekRange.start.getDate() + idx,
+    );
+
   return (
     <div className={container({ type })}>
-      {type === calendarViewType.DAY && (
+      {type === CalendarViewType.DAY && (
         <>
-          {Array.from({ length: 24 }).map((_, idx) => (
+          {DAY_CELLS.map((_, idx) => (
             <div
               key={type + idx}
               className='h-24 p-1 last:border-b border-t border-gray-300 text-xs text-black font-medium box-border border-r leading-'
@@ -73,27 +99,18 @@ export default function CalendarTimeScale(props: Props) {
           )}
         </>
       )}
-      {(type === calendarViewType.WEEK || type === calendarViewType.MONTH) &&
-        Array.from({ length: 7 }).map((_, idx) => {
-          let day = 'future' as 'past' | 'today' | 'future';
-          if (type === calendarViewType.WEEK) {
-            day = timeUtils.getDateStatus(
-              new Date(
-                weekRange.start.getFullYear(),
-                weekRange.start.getMonth(),
-                weekRange.start.getDate() + idx,
-              ),
-            );
-          }
+      {(type === CalendarViewType.WEEK || type === CalendarViewType.MONTH) &&
+        WEEK_CELLS.map((_, idx) => {
+          const day = defineDateStatus(idx);
           return (
             <div key={type + idx} className={weekDay({ day })}>
-              {type === calendarViewType.WEEK && (
+              {type === CalendarViewType.WEEK && (
                 <span
                   className={dateValue({
                     day,
                   })}
                 >
-                  {weekRange.start.getDate() + idx}
+                  {getWeekDate(idx).getDate()}
                 </span>
               )}
               {belowDesktop ? timeUtils.getWeekDay(idx).slice(0, 3) : timeUtils.getWeekDay(idx)}

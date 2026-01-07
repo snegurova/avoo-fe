@@ -2,11 +2,12 @@ import ArrowDownIcon from '@/_icons/ArrowDownIcon';
 import React, { useState, useCallback, useRef } from 'react';
 import { tv } from 'tailwind-variants';
 import DropdownList from '@/_components/DropdownList/DropdownList';
+import { ElementStyleType } from '@avoo/hooks/types/elementStyleType';
 
 type Props = {
   label: string;
   options: { label: string; handler: () => void }[];
-  type?: 'solid' | 'outline';
+  type?: ElementStyleType;
 };
 
 const selectButton = tv({
@@ -34,7 +35,7 @@ const selectIcon = tv({
 });
 
 export default function SelectButton(props: Props) {
-  const { label, options, type = 'solid' } = props;
+  const { label, options, type = ElementStyleType.SOLID } = props;
   const [isOpen, setIsOpen] = useState(false);
   const selectRef = useRef<HTMLDivElement>(null);
 
