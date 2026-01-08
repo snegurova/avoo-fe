@@ -6,33 +6,22 @@ import { MasterListItem } from '@/components/MasterListItem/MasterListItem';
 import { SearchInput } from '@/shared/SearchInput/SearchInput';
 import { MaterialIcons } from '@/shared/icons';
 import { colors } from '@avoo/design-tokens';
-import CreateMasterForm from '@/components/CreateMasterForm';
-import { useGlobalBottomSheet } from '@/shared/GlobalBottomSheetProvider/GlobalBottomSheetProvider';
 import { layoutHooks } from '@/hooks/layoutHooks';
+import { useBottomSheetStore, BottomSheetType } from '@/store/useBottomSheetStore';
 
 export default function MastersScreen() {
   const [searchQuery, setSearchQuery] = useState('');
-  const { handleOpenBottomSheet } = useGlobalBottomSheet();
   const bottomBarHeight = layoutHooks.useBottomBarHeight();
 
   const masters = masterHooks.useGetMastersProfileInfo();
   const filteredMasters = masterHooks.useFilterMasters(masters, searchQuery);
 
-  const { control, handleSubmit, errors, isPending } = masterHooks.useCreateMasterForm({
-    onSuccess: () => close(),
-  });
-
-
+  const handleOpenBottomSheet = useBottomSheetStore((state) => state.handleOpenBottomSheet);
 
   const handleOpenForm = () => {
-    handleOpenBottomSheet(
-      <CreateMasterForm
-        control={control}
-        handleSubmit={handleSubmit}
-        errors={errors}
-        isPending={isPending}
-      />,
-    );
+    handleOpenBottomSheet(BottomSheetType.CREATE_MASTER, {
+      snapPoints: ['95%'],
+    });
   };
 
   return (
