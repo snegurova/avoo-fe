@@ -1,5 +1,4 @@
 'use client';
-
 import { Avatar as MuiAvatar, AvatarProps as MuiAvatarProps } from '@mui/material';
 import { utilsHooks } from '@/_utils/utilsHooks';
 

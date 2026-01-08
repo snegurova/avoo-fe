@@ -1,13 +1,9 @@
 import { View } from 'react-native';
-import  Layout from '@/shared/Layout/Layout';
-import { RootStackScreenProps, RootScreens } from '@/types/navigation';
+import Layout from '@/shared/Layout/Layout';
 
-type Props = RootStackScreenProps<RootScreens.PostsScreen>;
-
-export const PostsScreen = (props: Props) => {
-  const { navigation } = props;
+export const PostsScreen = () => {
   return (
-    <Layout title='Posts' showBack={true} onBackPress={() => navigation.goBack()}>
+    <Layout hasBottomTab={true}>
       <View />
     </Layout>
   );

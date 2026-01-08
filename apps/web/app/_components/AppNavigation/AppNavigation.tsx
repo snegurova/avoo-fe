@@ -44,10 +44,10 @@ export default function AppNavigation() {
     },
   ];
   return (
-    <aside className='h-full min-w-55 border-r border-border'>
+    <aside className='h-full w-55 border-r border-gray-100'>
       <nav className='flex flex-col py-7 gap-15'>
         <div className='px-8'>
-          <Link href={appRoutes.Home} className='font-inter font-semibold text-4xl text-logo'>
+          <Link href={appRoutes.Home} className='font-inter font-semibold text-4xl text-gray-600'>
             Avoo
           </Link>
         </div>

@@ -1,6 +1,11 @@
-import { BaseResponse, GetCalendarResponse } from '@avoo/axios/types/apiTypes';
+import {
+  BaseResponse,
+  GetCalendarResponse,
+  GetCalendarByDatesResponse,
+  PrivateCalendarQueryParams,
+  PrivateCalendarByDatesQueryParams,
+} from '@avoo/axios/types/apiTypes';
 import { apiClient } from '@avoo/axios/src/apiClient';
-import { PrivateCalendarQueryParams } from '@avoo/axios/types/apiTypes';
 
 const GET_CALENDAR_ENDPOINT = '/calendar';
 
@@ -9,6 +14,15 @@ export const calendarApi = {
     const res = await apiClient.get<BaseResponse<GetCalendarResponse>>(GET_CALENDAR_ENDPOINT, {
       params,
     });
+    return res.data;
+  },
+  async getCalendarByDates(params: PrivateCalendarByDatesQueryParams) {
+    const res = await apiClient.get<BaseResponse<GetCalendarByDatesResponse>>(
+      `${GET_CALENDAR_ENDPOINT}/by-dates`,
+      {
+        params,
+      },
+    );
     return res.data;
   },
 };
