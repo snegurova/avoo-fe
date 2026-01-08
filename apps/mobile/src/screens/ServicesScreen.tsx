@@ -1,7 +1,7 @@
 import { View } from 'react-native';
 import Layout from '@/shared/Layout/Layout';
 
-export const HomeScreen = () => {
+export const ServicesScreen = () => {
   return (
     <Layout hasBottomTab={true}>
       <View />
@@ -9,4 +9,3 @@ export const HomeScreen = () => {
   );
 };
 
-export default HomeScreen;

@@ -9,11 +9,12 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import NavBar from '@/components/NavBar/NavBar';
+import { layoutHooks } from '@/hooks/layoutHooks';
 
 type Props = {
   children: React.ReactNode;
   isHeaderHidden?: boolean;
-  title?:  React.ReactNode;
+  title?: React.ReactNode;
   leftContent?: React.ReactNode;
   rightContent?: React.ReactNode;
   showBack?: boolean;
@@ -41,10 +42,12 @@ export default function Layout(props: Props) {
     headerStyle,
   } = props;
 
+  const bottomBarHeight = layoutHooks.useBottomBarHeight();
+
   return (
     <SafeAreaView
       edges={hasBottomTab ? ['top'] : undefined}
-      className="flex-1 bg-primary-50"
+      className='flex-1 bg-primary-50'
       style={style}
     >
       {!isHeaderHidden && (
@@ -59,17 +62,25 @@ export default function Layout(props: Props) {
       )}
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        className="flex-1"
+        className='flex-1'
       >
-
-        <ScrollView
-          className="flex-1"
-          showsVerticalScrollIndicator={false}
-          contentContainerClassName={centerContent ? 'flex-1 justify-center items-center p-4' : undefined}
-        >
-          {children}
-        </ScrollView>
+        {isScrollableDisabled ? (
+          <View
+            className="flex-1 px-5"
+          >
+            {children}
+          </View>
+        ) : ( 
+          <ScrollView
+            className="flex-1 px-5 pt-5"
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={hasBottomTab ? { paddingBottom: bottomBarHeight } : undefined}
+            contentContainerClassName={centerContent ? 'flex-1 justify-center items-center' : undefined}
+          >
+            {children}
+          </ScrollView>
+        )}
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
-};
+}
