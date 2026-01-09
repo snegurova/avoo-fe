@@ -1,8 +1,12 @@
+'use client';
 import React from 'react';
 import { Modal } from '../Modal/Modal';
-import { Button, IconButton } from '@mui/material';
-import ArrowBackIcon from '@/_icons/ArrowBackIcon';
-import FormInput from '../FormInput/FormInput';
+import { Button, Checkbox } from '@mui/material';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { DatePicker, TimePicker } from '@mui/x-date-pickers';
+import InputAdornment from '@mui/material/InputAdornment';
+import dayjs from 'dayjs';
 import { FormSelect } from '../FormSelect/FormSelect';
 import { FormMultiSelect } from '../FormMultiSelect/FormMultiSelect';
 import { useForm } from 'react-hook-form';
@@ -11,7 +15,6 @@ import { masterHooks } from '@avoo/hooks';
 type Props = {
   isOpen: boolean;
   onClose: () => void;
-  onBack?: () => void;
 };
 
 type FormValues = {
@@ -25,7 +28,7 @@ type FormValues = {
   note: string;
 };
 
-const TimeOffAddModal = ({ isOpen, onClose, onBack }: Props) => {
+const TimeOffAddModal = ({ isOpen, onClose }: Props) => {
   const masters = masterHooks.useGetMastersProfileInfo();
 
   const timeOffTypeOptions = [
@@ -44,7 +47,7 @@ const TimeOffAddModal = ({ isOpen, onClose, onBack }: Props) => {
     })) ?? []),
   ];
 
-  const handleSubmitFormik = (values: FormValues): void => {
+  const handleSubmitForm = (values: FormValues): void => {
     // TODO: integrate with Time Off API: conflict check -> show banner -> save
     // values contains: { type, staff(masters), wholeDay, startDate, startTime, endDate, endTime, note }
     // For salon-wide time off, staff may contain ['all']
@@ -55,146 +58,194 @@ const TimeOffAddModal = ({ isOpen, onClose, onBack }: Props) => {
     onClose();
   };
 
+  const { handleSubmit, setValue, watch } = useForm<FormValues>({
+    defaultValues: {
+      type: 'personal',
+      staff: ['all'],
+      wholeDay: true,
+      startDate: dayjs().format('YYYY-MM-DD'),
+      startTime: '09:00',
+      endDate: dayjs().format('YYYY-MM-DD'),
+      endTime: '18:00',
+      note: '',
+    },
+  });
+
+  const values = watch();
+
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
-      <div className='relative'>
-        <IconButton
-          onClick={() => onBack?.()}
-          sx={{ position: 'absolute', top: -25, left: -25, zIndex: 10 }}
-          aria-label='back'
-        >
-          <ArrowBackIcon />
-        </IconButton>
-
+      <div className='relative min-h-[80vh]'>
         <div className='flex items-center justify-center py-4'>
           <h3 className='text-lg font-semibold'>Add Time off</h3>
         </div>
+        <form onSubmit={handleSubmit(handleSubmitForm)} className='space-y-6 p-2'>
+          <div>
+            <label htmlFor='type' className='block text-sm font-medium text-gray-700'>
+              Type of Time off
+            </label>
+            <FormSelect
+              id='type'
+              name='type'
+              options={timeOffTypeOptions}
+              value={values.type}
+              onChange={(v) => setValue('type', v)}
+            />
+          </div>
 
-        {/* react-hook-form implementation */}
-        {(() => {
-          const { handleSubmit, setValue, watch } = useForm<FormValues>({
-            defaultValues: {
-              type: 'personal',
-              staff: ['all'],
-              wholeDay: true,
-              startDate: '',
-              startTime: '09:00',
-              endDate: '',
-              endTime: '18:00',
-              note: '',
-            },
-          });
+          <div>
+            <label htmlFor='staff' className='block text-sm font-medium text-gray-700'>
+              Select Staff (For Salon)
+            </label>
+            <FormMultiSelect
+              id='staff'
+              name='staff'
+              options={mastersOptions}
+              selected={values.staff}
+              onChange={(vals) => setValue('staff', vals)}
+            />
+          </div>
 
-          const values = watch();
-
-          return (
-            <form onSubmit={handleSubmit(handleSubmitFormik)} className='space-y-6 p-2'>
+          <div>
+            <div className='flex justify-between items-center'>
               <div>
-                <label className='block text-sm font-medium text-gray-700'>Type of Time off</label>
-                <FormSelect
-                  name='type'
-                  options={timeOffTypeOptions}
-                  value={values.type}
-                  onChange={(v) => setValue('type', v)}
-                />
-              </div>
-
-              <div>
-                <label className='block text-sm font-medium text-gray-700'>
-                  Select Staff (For Salon)
-                </label>
-                <FormMultiSelect
-                  name='staff'
-                  options={mastersOptions}
-                  selected={values.staff}
-                  onChange={(vals) => setValue('staff', vals)}
-                />
-              </div>
-
-              <div className='flex justify-between'>
-                <div>
-                  <label className='block text-sm font-medium text-gray-700'>Start Date</label>
-                </div>
-                <label className='inline-flex items-center gap-2'>
-                  <input
-                    type='checkbox'
-                    checked={values.wholeDay}
-                    onChange={(e) => setValue('wholeDay', e.target.checked)}
-                  />
-                  <span className='text-sm'>Whole day</span>
+                <label htmlFor='startDate' className='block text-sm font-medium text-gray-700'>
+                  Start Date
                 </label>
               </div>
-              <FormInput
-                type='date'
-                value={values.startDate}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                  setValue('startDate', e.target.value)
-                }
-              />
+              <label className='inline-flex items-center gap-2'>
+                <Checkbox
+                  size='small'
+                  checked={values.wholeDay}
+                  onChange={(_e, checked) => setValue('wholeDay', checked)}
+                  slotProps={{ input: { 'aria-label': 'whole day' } }}
+                />
+                <span className='text-sm'>Whole day</span>
+              </label>
+            </div>
 
-              {!values.wholeDay && (
-                <div>
-                  <label className='block text-sm font-medium text-gray-700'>Start time</label>
-                  <FormInput
-                    type='time'
-                    value={values.startTime}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                      setValue('startTime', e.target.value)
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              {values.wholeDay ? (
+                <div className='mt-3'>
+                  <DatePicker
+                    format='ddd DD MMM YYYY'
+                    value={values.startDate ? dayjs(values.startDate) : null}
+                    onChange={(newDate) =>
+                      setValue('startDate', newDate ? newDate.format('YYYY-MM-DD') : '')
                     }
+                    slotProps={{ textField: { size: 'small', fullWidth: true } }}
+                  />
+                </div>
+              ) : (
+                <div className='mt-3 flex flex-col gap-3'>
+                  <DatePicker
+                    format='ddd DD MMM YYYY'
+                    value={values.startDate ? dayjs(values.startDate) : null}
+                    onChange={(newDate) =>
+                      setValue('startDate', newDate ? newDate.format('YYYY-MM-DD') : '')
+                    }
+                    slotProps={{ textField: { size: 'small', fullWidth: true } }}
+                  />
+                  <TimePicker
+                    format='HH:mm'
+                    value={values.startTime ? dayjs(values.startTime, 'HH:mm') : null}
+                    onChange={(newTime) =>
+                      setValue('startTime', newTime ? newTime.format('HH:mm') : '')
+                    }
+                    slotProps={{
+                      textField: {
+                        size: 'small',
+                        fullWidth: true,
+                        InputProps: {
+                          startAdornment: (
+                            <InputAdornment position='start'>
+                              <span className='text-sm text-gray-700'>Start</span>
+                            </InputAdornment>
+                          ),
+                        },
+                      },
+                    }}
                   />
                 </div>
               )}
+            </LocalizationProvider>
+          </div>
 
-              <div>
-                <label className='block text-sm font-medium text-gray-700'>End Date</label>
-                <FormInput
-                  type='date'
-                  value={values.endDate}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                    setValue('endDate', e.target.value)
-                  }
-                />
-              </div>
-              {!values.wholeDay && (
-                <div>
-                  <label className='block text-sm font-medium text-gray-700'>End time</label>
-                  <FormInput
-                    type='time'
-                    value={values.endTime}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                      setValue('endTime', e.target.value)
+          <div>
+            <label htmlFor='endDate' className='block text-sm font-medium text-gray-700'>
+              End Date
+            </label>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              {values.wholeDay ? (
+                <div className='mt-3'>
+                  <DatePicker
+                    format='ddd DD MMM YYYY'
+                    value={values.endDate ? dayjs(values.endDate) : null}
+                    onChange={(newDate) =>
+                      setValue('endDate', newDate ? newDate.format('YYYY-MM-DD') : '')
                     }
+                    slotProps={{ textField: { size: 'small', fullWidth: true } }}
+                  />
+                </div>
+              ) : (
+                <div className='mt-3 flex flex-col gap-3'>
+                  <DatePicker
+                    format='ddd DD MMM YYYY'
+                    value={values.endDate ? dayjs(values.endDate) : null}
+                    onChange={(newDate) =>
+                      setValue('endDate', newDate ? newDate.format('YYYY-MM-DD') : '')
+                    }
+                    slotProps={{ textField: { size: 'small', fullWidth: true } }}
+                  />
+                  <TimePicker
+                    format='HH:mm'
+                    value={values.endTime ? dayjs(values.endTime, 'HH:mm') : null}
+                    onChange={(newTime) =>
+                      setValue('endTime', newTime ? newTime.format('HH:mm') : '')
+                    }
+                    slotProps={{
+                      textField: {
+                        size: 'small',
+                        fullWidth: true,
+                        InputProps: {
+                          startAdornment: (
+                            <InputAdornment position='start'>
+                              <span className='text-sm text-gray-700'>End</span>
+                            </InputAdornment>
+                          ),
+                        },
+                      },
+                    }}
                   />
                 </div>
               )}
-              <div>
-                <label className='block text-sm font-medium text-gray-700'>Note</label>
-                <textarea
-                  value={values.note}
-                  onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
-                    setValue('note', e.target.value)
-                  }
-                  className='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-secondary-500 focus:ring-secondary-500 sm:text-sm'
-                  rows={4}
-                />
-              </div>
+            </LocalizationProvider>
+          </div>
+          <div>
+            <label htmlFor='note' className='block text-sm font-medium text-gray-700'>
+              Note
+            </label>
+            <textarea
+              id='note'
+              name='note'
+              value={values.note}
+              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
+                setValue('note', e.target.value)
+              }
+              className='mt-3 block w-full border border-gray-200 p-3 text-gray-900 focus:outline-none focus:ring-1 focus:ring-purple-800 sm:text-sm mb-[30px] h-[50px] resize-none'
+              rows={1}
+            />
+          </div>
 
-              <div className='flex justify-between'>
-                <Button
-                  onClick={onClose}
-                  color='secondary'
-                  variant='outlined'
-                  sx={{ minWidth: 150 }}
-                >
-                  Cancel
-                </Button>
-                <Button type='submit' color='secondary' variant='contained' sx={{ minWidth: 150 }}>
-                  Save Changes
-                </Button>
-              </div>
-            </form>
-          );
-        })()}
+          <div className='flex justify-between'>
+            <Button onClick={onClose} color='secondary' variant='outlined' sx={{ minWidth: 150 }}>
+              Cancel
+            </Button>
+            <Button type='submit' color='secondary' variant='contained' sx={{ minWidth: 150 }}>
+              Save Changes
+            </Button>
+          </div>
+        </form>
       </div>
     </Modal>
   );

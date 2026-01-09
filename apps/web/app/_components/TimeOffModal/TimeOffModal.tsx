@@ -17,7 +17,7 @@ const TimeOffModal = ({ isOpen, onClose }: Props) => {
   return (
     <>
       <Modal isOpen={isOpen} onClose={onClose}>
-        <div className='space-y-6 relative'>
+        <div className='space-y-6 relative min-h-[80vh]'>
           <IconButton
             onClick={onClose}
             sx={{ position: 'absolute', top: -25, left: -25, zIndex: 10 }}
@@ -50,7 +50,10 @@ const TimeOffModal = ({ isOpen, onClose }: Props) => {
               color='secondary'
               variant='outlined'
               sx={{ minWidth: 150 }}
-              onClick={() => setShowAdd(true)}
+              onClick={() => {
+                onClose();
+                setShowAdd(true);
+              }}
             >
               Add Time off
             </Button>
@@ -61,7 +64,6 @@ const TimeOffModal = ({ isOpen, onClose }: Props) => {
       <TimeOffAddModal
         isOpen={showAdd}
         onClose={() => setShowAdd(false)}
-        onBack={() => setShowAdd(false)}
       />
     </>
   );
