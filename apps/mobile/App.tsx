@@ -8,11 +8,11 @@ import { QueryClientProvider } from '@tanstack/react-query';
 import { queryClient } from '@avoo/hooks';
 import { PaperProvider } from 'react-native-paper';
 import paperTheme from '@/theme/paper-theme';
-import { GlobalBottomSheetProvider } from '@/shared/GlobalBottomSheetProvider/GlobalBottomSheetProvider';
-
 import './global.css';
+import { GlobalBottomSheetHost } from '@/shared/GlobalBottomSheetHost/GlobalBottomSheetHost';
 
 enableScreens();
+
 
 export default function App() {
   return (
@@ -22,9 +22,8 @@ export default function App() {
           <QueryClientProvider client={queryClient}>
             <StatusBar style='auto' />
             <PaperProvider theme={paperTheme}>
-              <GlobalBottomSheetProvider>
-                <AppContainer />
-              </GlobalBottomSheetProvider>
+              <AppContainer />
+              <GlobalBottomSheetHost />
             </PaperProvider>
           </QueryClientProvider>
         </NavigationContainer>
