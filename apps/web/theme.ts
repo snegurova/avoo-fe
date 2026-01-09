@@ -1,6 +1,7 @@
 'use client';
 import { createTheme } from '@mui/material/styles';
 import { Roboto } from 'next/font/google';
+import type {} from '@mui/x-date-pickers/themeAugmentation';
 import { colors, radius, typography } from '@avoo/design-tokens';
 
 const roboto = Roboto({
@@ -147,6 +148,31 @@ const theme = createTheme({
 
         label: {
           fontWeight: typography.fontWeight.medium,
+        },
+      },
+    },
+    MuiDatePicker: {
+      defaultProps: {
+        slotProps: {
+          openPickerIcon: {
+            className: 'fill-gray-800 w-4 h-4',
+          },
+        },
+      },
+    },
+
+    MuiPickersTextField: {
+      styleOverrides: {
+        root: {
+          '& .MuiPickersInputBase-root': {
+            borderRadius: 0,
+          },
+          '& .MuiPickersSectionList-root': {
+            padding: '8px 0',
+            fontSize: typography.fontSize.sm,
+            lineHeight: 1.15,
+            color: 'var(--color-gray-800)',
+          },
         },
       },
     },

@@ -3,7 +3,7 @@ import { View, StyleProp, ViewStyle } from 'react-native';
 import { Text } from 'react-native-paper';
 import DefaultRightContent from './DefaultRightContent';
 import DefaultLeftContent from './DefaultLeftContent';
-import DefaultTitle from './DefaultTitle';
+import { typeGuardHooks } from '@/hooks/typeGuardsHooks';
 
 type Props = {
   title?: React.ReactNode;
@@ -21,29 +21,27 @@ export default function NavBar(props: Props) {
 
   const renderTitle = () => {
     if (title == null) {
-      return <DefaultTitle />;
+      return null;
     }
 
-    if (typeof title === 'string') {
-      return <Text variant="titleMedium">{title}</Text>;
+    if (typeGuardHooks.isString(title)) {
+      return <Text variant='titleMedium'>{title}</Text>;
     }
 
     return title;
   };
 
   return (
-    <View className="h-14 flex-row items-center bg-primary-50 px-4" style={headerStyle}>
-      <View className="justify-center">
+    <View className='h-14 flex-row items-center bg-primary-50 px-4' style={headerStyle}>
+      <View className='justify-center'>
         {leftContent ?? <DefaultLeftContent showBack={showBack} onBackPress={onBackPress} />}
       </View>
 
-      <View className="flex-1 items-end justify-center mr-lg" style={titleStyle}>
+      <View className='flex-1 items-end justify-center mr-lg' style={titleStyle}>
         {renderTitle()}
       </View>
 
-      <View className="justify-center items-end">
-        {rightContent ?? <DefaultRightContent />}
-      </View>
+      <View className='justify-center items-end'>{rightContent ?? <DefaultRightContent />}</View>
     </View>
   );
 }

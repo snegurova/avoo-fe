@@ -12,10 +12,11 @@ type Props = {
 };
 
 const iconLink = tv({
-  base: 'rounded-full w-10 h-10 flex items-center justify-center hover:text-dark focus:text-dark transition-colors',
+  base: 'rounded-full w-10 h-10 flex items-center justify-center hover:text-primary-700 focus:text-primary-700 transition-colors',
   variants: {
     active: {
-      true: 'text-dark',
+      true: 'text-primary-700',
+      false: '',
     },
   },
 });
