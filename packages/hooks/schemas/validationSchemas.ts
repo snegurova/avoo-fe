@@ -103,6 +103,42 @@ export const createMasterSchema = yup.object({
     .default([]),
 });
 
+export const updateMasterSchema = yup.object({
+  email: yup
+    .string()
+    .required('Email is required')
+    .email('Please enter a valid email')
+    .trim(),
+  name: yup
+    .string()
+    .required('Name is required')
+    .min(2, 'Name must be at least 2 characters')
+    .trim(),
+  bio: yup
+    .string()
+    .nullable()
+    .transform((value) => (value && value.trim() ? value.trim() : null))
+    .test('bio-min-length', 'Bio must be longer than or equal to 10 characters', function(value) {
+      if (!value) return true;
+      return value.length >= 10;
+    }),
+  phone: yup
+    .string()
+    .nullable()
+    .transform((value) => (value && value.trim() ? value.trim() : null)),
+  languages: yup
+    .array()
+    .of(
+      yup
+        .string()
+        .oneOf([...VALID_LANGUAGE_CODES], 'Invalid language code')
+        .required()
+    )
+    .nullable()
+    .transform((value) => (value && value.length > 0 ? value : []))
+    .default([]),
+});
+
 export type RegisterFormData = yup.InferType<typeof registerSchema>;
 export type LoginFormData = yup.InferType<typeof loginSchema>;
 export type ForgotPasswordFormData = yup.InferType<typeof forgotPasswordSchema>;
