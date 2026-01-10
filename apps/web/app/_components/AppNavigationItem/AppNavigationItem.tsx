@@ -8,6 +8,7 @@ type Props = {
   href: string;
   icon: React.ReactNode;
   label: string;
+  onClick?: () => void;
 };
 
 const navigationItem = tv({
@@ -20,14 +21,17 @@ const navigationItem = tv({
 });
 
 export default function DashboardNavigationItem(props: Props) {
-  const { href, icon, label } = props;
+  const { href, icon, label, onClick } = props;
   const isActive = routerHooks.useIsActivePage(href);
 
   return (
     <Link
       href={href}
       className={navigationItem({ active: isActive })}
-      onClick={(e) => e.currentTarget.blur()}
+      onClick={(e) => {
+        e.currentTarget.blur();
+        onClick?.();
+      }}
     >
       {icon}
       <span>{label}</span>
