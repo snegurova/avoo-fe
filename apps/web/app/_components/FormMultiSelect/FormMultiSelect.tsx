@@ -42,8 +42,6 @@ export const FormMultiSelect = (props: Props) => {
     } = event;
     onChange?.(typeof value === 'string' ? value.split(',') : value);
   };
-  const ITEM_HEIGHT = 48;
-  const ITEM_PADDING_TOP = 8;
 
   return (
     <div className={className}>
@@ -62,14 +60,6 @@ export const FormMultiSelect = (props: Props) => {
               .map((option) => option.label)
               .join(', ')
           }
-          MenuProps={{
-            PaperProps: {
-              style: {
-                maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-                width: 250,
-              },
-            },
-          }}
         >
           {options.map((option) => (
             <MenuItem key={option.label} value={option.value}>

@@ -1,14 +1,13 @@
 'use client';
-import React from 'react';
+import React, { useCallback } from 'react';
+import type { Dayjs } from 'dayjs';
+import { VALUE_DATE_FORMAT } from '@/_constants/dateFormats';
 import { Modal } from '../Modal/Modal';
 import { Button, Checkbox } from '@mui/material';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { DatePicker, TimePicker } from '@mui/x-date-pickers';
-import InputAdornment from '@mui/material/InputAdornment';
 import dayjs from 'dayjs';
 import { FormSelect } from '../FormSelect/FormSelect';
 import { FormMultiSelect } from '../FormMultiSelect/FormMultiSelect';
+import DateTimePickers from '../DateTimePickers/DateTimePickers';
 import { useForm } from 'react-hook-form';
 import { masterHooks } from '@avoo/hooks';
 
@@ -17,8 +16,16 @@ type Props = {
   onClose: () => void;
 };
 
+export enum TimeOffType {
+  Personal = 'personal',
+  Holiday = 'holiday',
+  Vacation = 'vacation',
+  Sick = 'sick',
+  Other = 'other',
+}
+
 type FormValues = {
-  type: string;
+  type: TimeOffType;
   staff: string[];
   wholeDay: boolean;
   startDate: string;
@@ -31,13 +38,18 @@ type FormValues = {
 const TimeOffAddModal = ({ isOpen, onClose }: Props) => {
   const masters = masterHooks.useGetMastersProfileInfo();
 
-  const timeOffTypeOptions = [
-    { label: 'Personal break', value: 'personal' },
-    { label: 'Holiday (Salon)', value: 'holiday' },
-    { label: 'Vacation', value: 'vacation' },
-    { label: 'Sick Leave', value: 'sick' },
-    { label: 'Other', value: 'other' },
-  ];
+  const timeOffTypeLabels: Record<TimeOffType, string> = {
+    [TimeOffType.Personal]: 'Personal break',
+    [TimeOffType.Holiday]: 'Holiday (Salon)',
+    [TimeOffType.Vacation]: 'Vacation',
+    [TimeOffType.Sick]: 'Sick Leave',
+    [TimeOffType.Other]: 'Other',
+  };
+
+  const timeOffTypeOptions = (Object.values(TimeOffType) as TimeOffType[]).map((value) => ({
+    label: timeOffTypeLabels[value],
+    value,
+  }));
 
   const mastersOptions = [
     { label: 'All Staff', value: 'all' },
@@ -48,30 +60,76 @@ const TimeOffAddModal = ({ isOpen, onClose }: Props) => {
   ];
 
   const handleSubmitForm = (values: FormValues): void => {
-    // TODO: integrate with Time Off API: conflict check -> show banner -> save
-    // values contains: { type, staff(masters), wholeDay, startDate, startTime, endDate, endTime, note }
-    // For salon-wide time off, staff may contain ['all']
-    // Implement API call here
-    // For now show stub and close
-    // eslint-disable-next-line no-alert
     alert(JSON.stringify(values, null, 2));
     onClose();
   };
 
   const { handleSubmit, setValue, watch } = useForm<FormValues>({
     defaultValues: {
-      type: 'personal',
+      type: TimeOffType.Personal,
       staff: ['all'],
       wholeDay: true,
-      startDate: dayjs().format('YYYY-MM-DD'),
+      startDate: dayjs().format(VALUE_DATE_FORMAT),
       startTime: '09:00',
-      endDate: dayjs().format('YYYY-MM-DD'),
+      endDate: dayjs().format(VALUE_DATE_FORMAT),
       endTime: '18:00',
       note: '',
     },
   });
 
   const values = watch();
+
+  const handleTypeChange = useCallback(
+    (v: string) => {
+      setValue('type', v as TimeOffType);
+    },
+    [setValue],
+  );
+
+  const handleStaffChange = useCallback(
+    (vals: string[]) => {
+      setValue('staff', vals);
+    },
+    [setValue],
+  );
+
+  const handleWholeDayChange = useCallback(
+    (_e: React.ChangeEvent<HTMLInputElement>, checked: boolean) => setValue('wholeDay', checked),
+    [setValue],
+  );
+
+  const handleStartDateChange = useCallback(
+    (newDate: Dayjs | null) => {
+      setValue('startDate', newDate ? newDate.format('YYYY-MM-DD') : '');
+    },
+    [setValue],
+  );
+
+  const handleEndDateChange = useCallback(
+    (newDate: Dayjs | null) => {
+      setValue('endDate', newDate ? newDate.format('YYYY-MM-DD') : '');
+    },
+    [setValue],
+  );
+
+  const handleStartTimeChange = useCallback(
+    (newTime: Dayjs | null) => {
+      setValue('startTime', newTime ? newTime.format('HH:mm') : '');
+    },
+    [setValue],
+  );
+
+  const handleEndTimeChange = useCallback(
+    (newTime: Dayjs | null) => {
+      setValue('endTime', newTime ? newTime.format('HH:mm') : '');
+    },
+    [setValue],
+  );
+
+  const handleNoteChange = useCallback(
+    (e: React.ChangeEvent<HTMLTextAreaElement>) => setValue('note', e.target.value),
+    [setValue],
+  );
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
@@ -89,7 +147,7 @@ const TimeOffAddModal = ({ isOpen, onClose }: Props) => {
               name='type'
               options={timeOffTypeOptions}
               value={values.type}
-              onChange={(v) => setValue('type', v)}
+              onChange={handleTypeChange}
             />
           </div>
 
@@ -102,7 +160,7 @@ const TimeOffAddModal = ({ isOpen, onClose }: Props) => {
               name='staff'
               options={mastersOptions}
               selected={values.staff}
-              onChange={(vals) => setValue('staff', vals)}
+              onChange={handleStaffChange}
             />
           </div>
 
@@ -117,109 +175,35 @@ const TimeOffAddModal = ({ isOpen, onClose }: Props) => {
                 <Checkbox
                   size='small'
                   checked={values.wholeDay}
-                  onChange={(_e, checked) => setValue('wholeDay', checked)}
+                  onChange={handleWholeDayChange}
                   slotProps={{ input: { 'aria-label': 'whole day' } }}
                 />
                 <span className='text-sm'>Whole day</span>
               </label>
             </div>
 
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              {values.wholeDay ? (
-                <div className='mt-3'>
-                  <DatePicker
-                    format='ddd DD MMM YYYY'
-                    value={values.startDate ? dayjs(values.startDate) : null}
-                    onChange={(newDate) =>
-                      setValue('startDate', newDate ? newDate.format('YYYY-MM-DD') : '')
-                    }
-                    slotProps={{ textField: { size: 'small', fullWidth: true } }}
-                  />
-                </div>
-              ) : (
-                <div className='mt-3 flex flex-col gap-3'>
-                  <DatePicker
-                    format='ddd DD MMM YYYY'
-                    value={values.startDate ? dayjs(values.startDate) : null}
-                    onChange={(newDate) =>
-                      setValue('startDate', newDate ? newDate.format('YYYY-MM-DD') : '')
-                    }
-                    slotProps={{ textField: { size: 'small', fullWidth: true } }}
-                  />
-                  <TimePicker
-                    format='HH:mm'
-                    value={values.startTime ? dayjs(values.startTime, 'HH:mm') : null}
-                    onChange={(newTime) =>
-                      setValue('startTime', newTime ? newTime.format('HH:mm') : '')
-                    }
-                    slotProps={{
-                      textField: {
-                        size: 'small',
-                        fullWidth: true,
-                        InputProps: {
-                          startAdornment: (
-                            <InputAdornment position='start'>
-                              <span className='text-sm text-gray-700'>Start</span>
-                            </InputAdornment>
-                          ),
-                        },
-                      },
-                    }}
-                  />
-                </div>
-              )}
-            </LocalizationProvider>
+            <DateTimePickers
+              dateValue={values.startDate}
+              timeValue={values.startTime}
+              wholeDay={values.wholeDay}
+              onDateChange={handleStartDateChange}
+              onTimeChange={handleStartTimeChange}
+              timeLabel='Start'
+            />
           </div>
 
           <div>
             <label htmlFor='endDate' className='block text-sm font-medium text-gray-700'>
               End Date
             </label>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              {values.wholeDay ? (
-                <div className='mt-3'>
-                  <DatePicker
-                    format='ddd DD MMM YYYY'
-                    value={values.endDate ? dayjs(values.endDate) : null}
-                    onChange={(newDate) =>
-                      setValue('endDate', newDate ? newDate.format('YYYY-MM-DD') : '')
-                    }
-                    slotProps={{ textField: { size: 'small', fullWidth: true } }}
-                  />
-                </div>
-              ) : (
-                <div className='mt-3 flex flex-col gap-3'>
-                  <DatePicker
-                    format='ddd DD MMM YYYY'
-                    value={values.endDate ? dayjs(values.endDate) : null}
-                    onChange={(newDate) =>
-                      setValue('endDate', newDate ? newDate.format('YYYY-MM-DD') : '')
-                    }
-                    slotProps={{ textField: { size: 'small', fullWidth: true } }}
-                  />
-                  <TimePicker
-                    format='HH:mm'
-                    value={values.endTime ? dayjs(values.endTime, 'HH:mm') : null}
-                    onChange={(newTime) =>
-                      setValue('endTime', newTime ? newTime.format('HH:mm') : '')
-                    }
-                    slotProps={{
-                      textField: {
-                        size: 'small',
-                        fullWidth: true,
-                        InputProps: {
-                          startAdornment: (
-                            <InputAdornment position='start'>
-                              <span className='text-sm text-gray-700'>End</span>
-                            </InputAdornment>
-                          ),
-                        },
-                      },
-                    }}
-                  />
-                </div>
-              )}
-            </LocalizationProvider>
+            <DateTimePickers
+              dateValue={values.endDate}
+              timeValue={values.endTime}
+              wholeDay={values.wholeDay}
+              onDateChange={handleEndDateChange}
+              onTimeChange={handleEndTimeChange}
+              timeLabel='End'
+            />
           </div>
           <div>
             <label htmlFor='note' className='block text-sm font-medium text-gray-700'>
@@ -229,9 +213,7 @@ const TimeOffAddModal = ({ isOpen, onClose }: Props) => {
               id='note'
               name='note'
               value={values.note}
-              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
-                setValue('note', e.target.value)
-              }
+              onChange={handleNoteChange}
               className='mt-3 block w-full border border-gray-200 p-3 text-gray-900 focus:outline-none focus:ring-1 focus:ring-purple-800 sm:text-sm mb-[30px] h-[50px] resize-none'
               rows={1}
             />

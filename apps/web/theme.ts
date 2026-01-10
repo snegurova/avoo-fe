@@ -131,6 +131,15 @@ const theme = createTheme({
     borderRadiusLg: radius.lg,
     borderRadiusXl: radius.xl,
   },
+  mixins: {
+    menu: {
+      itemHeight: 48,
+      itemPaddingTop: 8,
+      visibleItems: 4,
+      partialVisibleItem: 0.5,
+      width: 250,
+    },
+  },
   components: {
     MuiChip: {
       styleOverrides: {
@@ -173,6 +182,42 @@ const theme = createTheme({
             lineHeight: 1.15,
             color: 'var(--color-gray-800)',
           },
+        },
+      },
+    },
+    MuiFormControl: {
+      styleOverrides: {
+        root: {
+          '& label + .MuiInputBase-root': {
+            marginTop: '4px',
+          },
+        },
+      },
+    },
+    MuiInputBase: {
+      styleOverrides: {
+        root: {
+          '&::before': {
+            borderBottom: 'none',
+          },
+          '&:hover:not(.Mui-disabled)::before': {
+            borderBottom: 'none',
+          },
+          '&.Mui-focused::before': {
+            borderBottom: 'none',
+          },
+        },
+      },
+    },
+    MuiMenu: {
+      styleOverrides: {
+        paper: ({ theme }) => {
+          const menu = theme.mixins.menu;
+          const visibleCount = menu.visibleItems + menu.partialVisibleItem;
+          return {
+            maxHeight: menu.itemHeight * visibleCount + menu.itemPaddingTop,
+            width: menu.width,
+          };
         },
       },
     },

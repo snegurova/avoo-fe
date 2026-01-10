@@ -10,9 +10,9 @@ type Props = {
 };
 
 const TimeOffModal = ({ isOpen, onClose }: Props) => {
-  const [showAdd, setShowAdd] = useState(false);
+  const [isTimeOffModalShown, setIsTimeOffModalShown] = useState(false);
 
-  const timeOffList: Array<unknown> = []; // TODO: load via API
+  const timeOffList: Array<unknown> = [];
 
   return (
     <>
@@ -37,7 +37,6 @@ const TimeOffModal = ({ isOpen, onClose }: Props) => {
               <ul className='space-y-2'>
                 {timeOffList.map((t, idx) => (
                   <li key={idx} className='p-3 border rounded'>
-                    {/* TODO: render time off item */}
                     Time off item
                   </li>
                 ))}
@@ -51,8 +50,8 @@ const TimeOffModal = ({ isOpen, onClose }: Props) => {
               variant='outlined'
               sx={{ minWidth: 150 }}
               onClick={() => {
+                setIsTimeOffModalShown(true);
                 onClose();
-                setShowAdd(true);
               }}
             >
               Add Time off
@@ -61,10 +60,7 @@ const TimeOffModal = ({ isOpen, onClose }: Props) => {
         </div>
       </Modal>
 
-      <TimeOffAddModal
-        isOpen={showAdd}
-        onClose={() => setShowAdd(false)}
-      />
+      <TimeOffAddModal isOpen={isTimeOffModalShown} onClose={() => setIsTimeOffModalShown(false)} />
     </>
   );
 };
