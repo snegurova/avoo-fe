@@ -1,4 +1,4 @@
-export interface NominatimAddress {
+export type NominatimAddress = {
   house_number?: string;
   house?: string;
   road?: string;
@@ -16,11 +16,11 @@ export interface NominatimAddress {
   region?: string;
   postcode?: string;
   country?: string;
-}
+};
 
-export interface NominatimPlace {
+export type NominatimPlace = {
   display_name?: string;
   lat?: string;
   lon?: string;
   address?: NominatimAddress;
-}
+};

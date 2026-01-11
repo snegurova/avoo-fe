@@ -47,6 +47,8 @@ export type CreateMasterRequest = {
 
 export type MasterLanguages = components['schemas']['MasterEntity']['languages'];
 
+export type MasterWithRelationsEntity = components['schemas']['MasterEntity'];
+
 /** Schedule */
 export type GetSchedulesResponse = {
   items: components['schemas']['ScheduleEntity'][];
@@ -56,11 +58,20 @@ export type GetSchedulesResponse = {
 /** Calendar */
 export type GetCalendarResponse = components['schemas']['PrivateCalendarResponseDto'][];
 
+export type GetCalendarByDatesResponse = components['schemas']['PrivateCalendarResponseByDatesDto'];
+
+export type CalendarItem = components['schemas']['PrivateCalendarResponseDto'];
+
+export type PrivateEvent = components['schemas']['PrivateEventDto'];
+
 export enum CalendarView {
   Week = 'week',
   Month = 'month',
   Year = 'year',
 }
+
+export type PrivateCalendarByDatesQueryParams =
+  components['schemas']['QueryCalendarByDatesPrivateDto'];
 
 export type PrivateCalendarQueryParams = Omit<
   operations['CalendarController_getCalendar']['parameters']['query'],

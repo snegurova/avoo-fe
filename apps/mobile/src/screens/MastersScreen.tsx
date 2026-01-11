@@ -1,47 +1,56 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, Pressable, FlatList } from 'react-native';
 import Layout from '@/shared/Layout/Layout';
-import { RootStackScreenProps, RootScreens } from '@/types/navigation';
 import { masterHooks } from '@avoo/hooks';
 import { MasterListItem } from '@/components/MasterListItem/MasterListItem';
 import { SearchInput } from '@/shared/SearchInput/SearchInput';
 import { MaterialIcons } from '@/shared/icons';
-import { colors, typography, radius } from '@avoo/design-tokens';
+import { colors } from '@avoo/design-tokens';
+import { layoutHooks } from '@/hooks/layoutHooks';
+import { useBottomSheetStore, BottomSheetType } from '@/store/useBottomSheetStore';
 
-type Props = RootStackScreenProps<RootScreens.MastersScreen>;
-
-export default function MastersScreen(props: Props) {
-  const { navigation } = props;
-
+export default function MastersScreen() {
   const [searchQuery, setSearchQuery] = useState('');
+  const bottomBarHeight = layoutHooks.useBottomBarHeight();
 
   const masters = masterHooks.useGetMastersProfileInfo();
   const filteredMasters = masterHooks.useFilterMasters(masters, searchQuery);
 
-  const handleNewMaster = () => {
-    navigation.navigate(RootScreens.AddMasterScreen);
+  const handleOpenBottomSheet = useBottomSheetStore((state) => state.handleOpenBottomSheet);
+
+  const handleOpenForm = () => {
+    handleOpenBottomSheet(BottomSheetType.CREATE_MASTER, {
+      snapPoints: ['95%'],
+    });
   };
 
   return (
-    <Layout isScrollableDisabled={true}>
-      <View style={styles.header}>
-        <Text style={styles.title}>Masters</Text>
-        <Pressable style={styles.newMasterButton} onPress={handleNewMaster}>
-          <Text style={styles.newMasterText}>New master</Text>
+    <Layout isScrollableDisabled={true} hasBottomTab={true}>
+      <View className='flex-row justify-between items-center mb-4'>
+        <Text className='text-xl font-medium text-black' style={styles.title}>
+          Masters
+        </Text>
+        <Pressable
+          className='flex-row items-center border border-black rounded-md px-4 py-3.5 gap-4'
+          onPress={handleOpenForm}
+        >
+          <Text className='text-base font-medium text-black' style={styles.newMasterText}>
+            New master
+          </Text>
           <MaterialIcons name='add' size={24} color={colors.black} />
         </Pressable>
       </View>
-      <View style={styles.content}>
+      <View className='flex-1'>
         <SearchInput value={searchQuery} onChangeText={setSearchQuery} />
         <FlatList
           data={filteredMasters}
           keyExtractor={(item) => item.id.toString()}
           renderItem={({ item }) => <MasterListItem master={item} />}
-          contentContainerStyle={styles.listContainer}
+          contentContainerStyle={{ gap: 12, paddingBottom: bottomBarHeight }}
           showsVerticalScrollIndicator={false}
           ListEmptyComponent={
-            <View style={styles.emptyContainer}>
-              <Text style={styles.emptyText}>
+            <View className='flex-1 justify-center items-center'>
+              <Text className='text-base text-gray-500'>
                 {searchQuery ? 'No masters found' : 'No masters yet'}
               </Text>
             </View>
@@ -53,48 +62,11 @@ export default function MastersScreen(props: Props) {
 }
 
 const styles = StyleSheet.create({
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 16,
-  },
   title: {
-    fontSize: typography.fontSize.xl,
-    fontWeight: typography.fontWeight.medium,
     lineHeight: 30,
     letterSpacing: 0.04,
-    color: colors.black,
-  },
-  content: {
-    flex: 1,
-  },
-  newMasterButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    borderWidth: 1,
-    borderColor: colors.black,
-    borderRadius: radius.md,
-    paddingHorizontal: 16,
-    paddingVertical: 14,
-    gap: 16,
   },
   newMasterText: {
-    fontSize: typography.fontSize.md,
-    fontWeight: typography.fontWeight.medium,
     lineHeight: 20,
-    color: colors.black,
-  },
-  listContainer: {
-    gap: 12,
-  },
-  emptyContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  emptyText: {
-    fontSize: typography.fontSize.md,
-    color: colors.gray[500],
   },
 });

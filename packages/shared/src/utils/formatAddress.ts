@@ -1,11 +1,12 @@
 import type { NominatimPlace, NominatimAddress } from '../types/geocode';
 
-export function buildShortAddress(place?: NominatimPlace | Record<string, string | undefined>) {
-  const addrRaw =
-    (place && 'address' in place
-      ? (place as NominatimPlace).address
-      : (place as Record<string, string | undefined>)) ?? {};
-  const addr = addrRaw as NominatimAddress;
+function getAddress(place?: NominatimPlace): NominatimAddress {
+  if (!place) return {};
+  return place.address ?? {};
+}
+
+function buildShortAddress(place?: NominatimPlace) {
+  const addr = getAddress(place);
 
   const {
     house_number,
@@ -43,4 +44,8 @@ export function buildShortAddress(place?: NominatimPlace | Record<string, string
   return parts.join(', ');
 }
 
-export default buildShortAddress;
+export const formatAddressUtils = {
+  buildShortAddress,
+};
+
+export default formatAddressUtils;

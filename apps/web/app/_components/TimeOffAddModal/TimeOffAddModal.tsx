@@ -1,23 +1,40 @@
-import React from 'react';
+'use client';
+import React, { useCallback } from 'react';
+import type { Dayjs } from 'dayjs';
+import { VALUE_DATE_FORMAT } from '@/_constants/dateFormats';
 import { Modal } from '../Modal/Modal';
-import { Button, IconButton } from '@mui/material';
-import ArrowBackIcon from '@/_icons/ArrowBackIcon';
-import FormInput from '../FormInput/FormInput';
+import { Button, Checkbox } from '@mui/material';
+import dayjs from 'dayjs';
 import { FormSelect } from '../FormSelect/FormSelect';
 import { FormMultiSelect } from '../FormMultiSelect/FormMultiSelect';
-import { Formik, Form, FormikProps } from 'formik';
+import DateTimePickers from '../DateTimePickers/DateTimePickers';
+import { useForm } from 'react-hook-form';
 import { masterHooks } from '@avoo/hooks';
 
 type Props = {
   isOpen: boolean;
   onClose: () => void;
-  onBack?: () => void;
 };
 
+export enum TimeOffType {
+  Personal = 'personal',
+  Holiday = 'holiday',
+  Vacation = 'vacation',
+  Sick = 'sick',
+  Other = 'other',
+}
+
+export const WHOLE_DAY = {
+  Whole: 'whole',
+  Partial: 'partial',
+} as const;
+
+export type WholeDay = (typeof WHOLE_DAY)[keyof typeof WHOLE_DAY];
+
 type FormValues = {
-  type: string;
+  type: TimeOffType;
   staff: string[];
-  wholeDay: boolean;
+  wholeDay: WholeDay;
   startDate: string;
   startTime: string;
   endDate: string;
@@ -25,16 +42,21 @@ type FormValues = {
   note: string;
 };
 
-const TimeOffAddModal = ({ isOpen, onClose, onBack }: Props) => {
+const TimeOffAddModal = ({ isOpen, onClose }: Props) => {
   const masters = masterHooks.useGetMastersProfileInfo();
 
-  const timeOffTypeOptions = [
-    { label: 'Personal breake', value: 'personal' },
-    { label: 'Holiday (Salon)', value: 'holiday' },
-    { label: 'Vacation', value: 'vacation' },
-    { label: 'Sick Leave', value: 'sick' },
-    { label: 'Other', value: 'other' },
-  ];
+  const timeOffTypeLabels: Record<TimeOffType, string> = {
+    [TimeOffType.Personal]: 'Personal break',
+    [TimeOffType.Holiday]: 'Holiday (Salon)',
+    [TimeOffType.Vacation]: 'Vacation',
+    [TimeOffType.Sick]: 'Sick Leave',
+    [TimeOffType.Other]: 'Other',
+  };
+
+  const timeOffTypeOptions = (Object.values(TimeOffType) as TimeOffType[]).map((value) => ({
+    label: timeOffTypeLabels[value],
+    value,
+  }));
 
   const mastersOptions = [
     { label: 'All Staff', value: 'all' },
@@ -44,150 +66,176 @@ const TimeOffAddModal = ({ isOpen, onClose, onBack }: Props) => {
     })) ?? []),
   ];
 
-  const handleSubmitFormik = (values: FormValues): void => {
-    // TODO: integrate with Time Off API: conflict check -> show banner -> save
-    // values contains: { type, staff, wholeDay, startDate, startTime, endDate, endTime, note }
-    // For salon-wide time off, staff may contain ['all']
-    // Implement API call here
-    // For now show stub and close
-    // eslint-disable-next-line no-alert
+  const handleSubmitForm = (values: FormValues): void => {
     alert(JSON.stringify(values, null, 2));
     onClose();
   };
 
+  const { handleSubmit, setValue, watch } = useForm<FormValues>({
+    defaultValues: {
+      type: TimeOffType.Personal,
+      staff: ['all'],
+      wholeDay: WHOLE_DAY.Whole,
+      startDate: dayjs().format(VALUE_DATE_FORMAT),
+      startTime: '09:00',
+      endDate: dayjs().format(VALUE_DATE_FORMAT),
+      endTime: '18:00',
+      note: '',
+    },
+  });
+
+  const values = watch();
+
+  const handleTypeChange = useCallback(
+    (v: string) => {
+      setValue('type', v as TimeOffType);
+    },
+    [setValue],
+  );
+
+  const handleStaffChange = useCallback(
+    (vals: string[]) => {
+      setValue('staff', vals);
+    },
+    [setValue],
+  );
+
+  const handleWholeDayChange = useCallback(
+    (_e: React.ChangeEvent<HTMLInputElement>, checked: boolean) =>
+      setValue('wholeDay', checked ? WHOLE_DAY.Whole : WHOLE_DAY.Partial),
+    [setValue],
+  );
+
+  const handleStartDateChange = useCallback(
+    (newDate: Dayjs | null) => {
+      setValue('startDate', newDate ? newDate.format('YYYY-MM-DD') : '');
+    },
+    [setValue],
+  );
+
+  const handleEndDateChange = useCallback(
+    (newDate: Dayjs | null) => {
+      setValue('endDate', newDate ? newDate.format('YYYY-MM-DD') : '');
+    },
+    [setValue],
+  );
+
+  const handleStartTimeChange = useCallback(
+    (newTime: Dayjs | null) => {
+      setValue('startTime', newTime ? newTime.format('HH:mm') : '');
+    },
+    [setValue],
+  );
+
+  const handleEndTimeChange = useCallback(
+    (newTime: Dayjs | null) => {
+      setValue('endTime', newTime ? newTime.format('HH:mm') : '');
+    },
+    [setValue],
+  );
+
+  const handleNoteChange = useCallback(
+    (e: React.ChangeEvent<HTMLTextAreaElement>) => setValue('note', e.target.value),
+    [setValue],
+  );
+
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
-      <div className='relative'>
-        <IconButton
-          onClick={() => onBack?.()}
-          sx={{ position: 'absolute', top: -25, left: -25, zIndex: 10 }}
-          aria-label='back'
-        >
-          <ArrowBackIcon />
-        </IconButton>
-
+      <div className='relative min-h-[80vh]'>
         <div className='flex items-center justify-center py-4'>
           <h3 className='text-lg font-semibold'>Add Time off</h3>
         </div>
+        <form onSubmit={handleSubmit(handleSubmitForm)} className='space-y-6 p-2'>
+          <div>
+            <label htmlFor='type' className='block text-sm font-medium text-gray-700'>
+              Type of Time off
+            </label>
+            <FormSelect
+              id='type'
+              name='type'
+              options={timeOffTypeOptions}
+              value={values.type}
+              onChange={handleTypeChange}
+            />
+          </div>
 
-        <Formik<FormValues>
-          initialValues={{
-            type: 'personal',
-            staff: ['all'],
-            wholeDay: true,
-            startDate: '',
-            startTime: '09:00',
-            endDate: '',
-            endTime: '18:00',
-            note: '',
-          }}
-          onSubmit={handleSubmitFormik}
-        >
-          {({ values, setFieldValue }: FormikProps<FormValues>) => (
-            <Form className='space-y-6 p-2'>
+          <div>
+            <label htmlFor='staff' className='block text-sm font-medium text-gray-700'>
+              Select Staff (For Salon)
+            </label>
+            <FormMultiSelect
+              id='staff'
+              name='staff'
+              options={mastersOptions}
+              selected={values.staff}
+              onChange={handleStaffChange}
+            />
+          </div>
+
+          <div>
+            <div className='flex justify-between items-center'>
               <div>
-                <label className='block text-sm font-medium text-gray-700'>Type of Time off</label>
-                <FormSelect
-                  name='type'
-                  label='Type of Time off'
-                  options={timeOffTypeOptions}
-                  value={values.type}
-                  onChange={(v) => setFieldValue('type', v)}
-                />
-              </div>
-
-              <div>
-                <label className='block text-sm font-medium text-gray-700'>
-                  Select Staff (For Salon)
-                </label>
-                <FormMultiSelect
-                  name='staff'
-                  label='Select Staff'
-                  options={mastersOptions}
-                  selected={values.staff}
-                  onChange={(vals) => setFieldValue('staff', vals)}
-                />
-              </div>
-
-              <div className='flex justify-between'>
-                <div>
-                  <label className='block text-sm font-medium text-gray-700'>Start Date</label>
-                </div>
-                <label className='inline-flex items-center gap-2'>
-                  <input
-                    type='checkbox'
-                    checked={values.wholeDay}
-                    onChange={(e) => setFieldValue('wholeDay', e.target.checked)}
-                  />
-                  <span className='text-sm'>Whole day</span>
+                <label htmlFor='startDate' className='block text-sm font-medium text-gray-700'>
+                  Start Date
                 </label>
               </div>
-              <FormInput
-                type='date'
-                name='startDate'
-                value={values.startDate}
-                onChange={(e) => setFieldValue('startDate', e.target.value)}
-              />
-
-              {!values.wholeDay && (
-                <div>
-                  <label className='block text-sm font-medium text-gray-700'>Start time</label>
-                  <FormInput
-                    type='time'
-                    name='startTime'
-                    value={values.startTime}
-                    onChange={(e) => setFieldValue('startTime', e.target.value)}
-                  />
-                </div>
-              )}
-
-              <div>
-                <label className='block text-sm font-medium text-gray-700'>End Date</label>
-                <FormInput
-                  type='date'
-                  name='endDate'
-                  value={values.endDate}
-                  onChange={(e) => setFieldValue('endDate', e.target.value)}
+              <label className='inline-flex items-center gap-2'>
+                <Checkbox
+                  size='small'
+                  checked={values.wholeDay === WHOLE_DAY.Whole}
+                  onChange={handleWholeDayChange}
+                  slotProps={{ input: { 'aria-label': 'whole day' } }}
                 />
-              </div>
-              {!values.wholeDay && (
-                <div>
-                  <label className='block text-sm font-medium text-gray-700'>End time</label>
-                  <FormInput
-                    type='time'
-                    name='endTime'
-                    value={values.endTime}
-                    onChange={(e) => setFieldValue('endTime', e.target.value)}
-                  />
-                </div>
-              )}
-              <div>
-                <label className='block text-sm font-medium text-gray-700'>Note</label>
-                <textarea
-                  name='note'
-                  value={values.note}
-                  onChange={(e) => setFieldValue('note', e.target.value)}
-                  className='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-secondary-500 focus:ring-secondary-500 sm:text-sm'
-                  rows={4}
-                />
-              </div>
+                <span className='text-sm'>Whole day</span>
+              </label>
+            </div>
 
-              <div className='flex justify-between'>
-                <Button
-                  onClick={onClose}
-                  color='secondary'
-                  variant='outlined'
-                  sx={{ minWidth: 150 }}
-                >
-                  Cancel
-                </Button>
-                <Button type='submit' color='secondary' variant='contained' sx={{ minWidth: 150 }}>
-                  Save Changes
-                </Button>
-              </div>
-            </Form>
-          )}
-        </Formik>
+            <DateTimePickers
+              dateValue={values.startDate}
+              timeValue={values.startTime}
+              wholeDay={values.wholeDay === WHOLE_DAY.Whole}
+              onDateChange={handleStartDateChange}
+              onTimeChange={handleStartTimeChange}
+              timeLabel='Start'
+            />
+          </div>
+
+          <div>
+            <label htmlFor='endDate' className='block text-sm font-medium text-gray-700'>
+              End Date
+            </label>
+            <DateTimePickers
+              dateValue={values.endDate}
+              timeValue={values.endTime}
+              wholeDay={values.wholeDay === WHOLE_DAY.Whole}
+              onDateChange={handleEndDateChange}
+              onTimeChange={handleEndTimeChange}
+              timeLabel='End'
+            />
+          </div>
+          <div>
+            <label htmlFor='note' className='block text-sm font-medium text-gray-700'>
+              Note
+            </label>
+            <textarea
+              id='note'
+              name='note'
+              value={values.note}
+              onChange={handleNoteChange}
+              className='mt-3 block w-full border border-gray-200 p-3 text-gray-900 focus:outline-none focus:ring-1 focus:ring-purple-800 sm:text-sm mb-[30px] h-[50px] resize-none'
+              rows={1}
+            />
+          </div>
+
+          <div className='flex justify-between'>
+            <Button onClick={onClose} color='secondary' variant='outlined' sx={{ minWidth: 150 }}>
+              Cancel
+            </Button>
+            <Button type='submit' color='secondary' variant='contained' sx={{ minWidth: 150 }}>
+              Save Changes
+            </Button>
+          </div>
+        </form>
       </div>
     </Modal>
   );

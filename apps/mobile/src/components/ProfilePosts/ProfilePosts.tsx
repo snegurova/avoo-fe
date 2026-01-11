@@ -13,7 +13,7 @@ export const ProfilePosts = () => {
   };
 
   return (
-    <View className='px-5 py-4'>
+    <View className='py-4'>
       <SectionHeader title='Posts' onEdit={handleNavigate} />
 
       <View className='items-center justify-center py-8'>

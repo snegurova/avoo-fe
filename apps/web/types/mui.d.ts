@@ -1,4 +1,26 @@
 import '@mui/material/styles';
+
+declare module '@mui/material/styles' {
+  interface Mixins {
+    menu: {
+      itemHeight: number;
+      itemPaddingTop: number;
+      visibleItems: number;
+      partialVisibleItem: number;
+      width: number;
+    };
+  }
+  interface MixinsOptions {
+    menu?: {
+      itemHeight?: number;
+      itemPaddingTop?: number;
+      visibleItems?: number;
+      partialVisibleItem?: number;
+      width?: number;
+    };
+  }
+}
+import '@mui/material/styles';
 import '@mui/material/Chip';
 
 declare module '@mui/material/styles' {

@@ -18,7 +18,7 @@ export function ProfileInfo() {
 
   return (
     <>
-      <View className='items-center justify-center p-6'>
+      <View className='items-center justify-center mb-6'>
         <AvatarUpload
           size={80}
           iconSize={40}
@@ -26,7 +26,7 @@ export function ProfileInfo() {
           onImageSelected={handleUpdateAvatar}
         />
       </View>
-      <View className='bg-white border border-blue-500 rounded-xl p-4 mx-5 mb-4 relative flex-1'>
+      <View className='bg-white border border-blue-500 rounded-xl p-4 mb-4 relative flex-1'>
         <Pressable className='absolute top-4 right-4 p-1' onPress={handleNavigate}>
           <MaterialIcons name='edit' size={14} color='#64748b' />
         </Pressable>

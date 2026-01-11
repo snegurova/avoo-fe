@@ -16,10 +16,5 @@ export default function DefaultLeftContent(props: Props) {
     <Pressable onPress={onBackPress || (() => navigation.goBack())}>
       <MaterialIcons name='arrow-back' size={24} color={colors.black} />
     </Pressable>
-  ) : (
-    <Pressable hitSlop={{ top: 44, bottom: 44, left: 44, right: 44 }}>
-      <MaterialIcons name='dehaze' size={24} color={colors.black} />
-    </Pressable>
-  );
+  ) : null;
 }
-

@@ -27,8 +27,8 @@ export default function AppHeader() {
 
   return (
     <header className='flex items-center justify-between gap-30'>
-      <div className='bg-secondary rounded-2xl px-4 py-3.5 font-medium grow'>
-        <p>Billing or marketing notification</p>
+      <div className='bg-primary-100 rounded-2xl px-4 py-3.5 font-medium grow'>
+        <p className='text-primary-800'>Billing or marketing notification</p>
       </div>
       <div className='flex items-center gap-25 shrink-0'>
         <div className=''>

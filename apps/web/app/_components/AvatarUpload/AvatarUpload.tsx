@@ -31,7 +31,7 @@ export const AvatarUpload = (props: Props) => {
       component='label'
       tabIndex={-1}
       aria-label='Avatar image'
-      className='relative rounded-full [clip-path:circle(50%)] focus-visible:ring-2 focus-visible:ring-primary'
+      className='relative rounded-full [clip-path:circle(50%)] focus-visible:ring-2 focus-visible:ring-primary-500'
       disabled={isLoading}
     >
       <Avatar

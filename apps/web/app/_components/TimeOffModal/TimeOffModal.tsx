@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { Modal } from '../Modal/Modal';
 import { Button, IconButton } from '@mui/material';
 import TimeOffAddModal from '../TimeOffAddModal/TimeOffAddModal';
@@ -10,16 +10,29 @@ type Props = {
 };
 
 const TimeOffModal = ({ isOpen, onClose }: Props) => {
-  const [showAdd, setShowAdd] = useState(false);
+  const [isTimeOffModalShown, setIsTimeOffModalShown] = useState(false);
 
-  const timeOffList: Array<unknown> = []; // TODO: load via API
+  const timeOffList: Array<unknown> = [];
+
+  const handleClose = useCallback(() => {
+    onClose();
+  }, [onClose]);
+
+  const handleOpenAdd = useCallback(() => {
+    setIsTimeOffModalShown(true);
+    onClose();
+  }, [onClose]);
+
+  const handleCloseAdd = useCallback(() => {
+    setIsTimeOffModalShown(false);
+  }, []);
 
   return (
     <>
       <Modal isOpen={isOpen} onClose={onClose}>
-        <div className='space-y-6 relative'>
+        <div className='space-y-6 relative min-h-[80vh]'>
           <IconButton
-            onClick={onClose}
+            onClick={handleClose}
             sx={{ position: 'absolute', top: -25, left: -25, zIndex: 10 }}
             aria-label='back'
           >
@@ -37,7 +50,6 @@ const TimeOffModal = ({ isOpen, onClose }: Props) => {
               <ul className='space-y-2'>
                 {timeOffList.map((t, idx) => (
                   <li key={idx} className='p-3 border rounded'>
-                    {/* TODO: render time off item */}
                     Time off item
                   </li>
                 ))}
@@ -50,7 +62,7 @@ const TimeOffModal = ({ isOpen, onClose }: Props) => {
               color='secondary'
               variant='outlined'
               sx={{ minWidth: 150 }}
-              onClick={() => setShowAdd(true)}
+              onClick={handleOpenAdd}
             >
               Add Time off
             </Button>
@@ -58,11 +70,7 @@ const TimeOffModal = ({ isOpen, onClose }: Props) => {
         </div>
       </Modal>
 
-      <TimeOffAddModal
-        isOpen={showAdd}
-        onClose={() => setShowAdd(false)}
-        onBack={() => setShowAdd(false)}
-      />
+      <TimeOffAddModal isOpen={isTimeOffModalShown} onClose={handleCloseAdd} />
     </>
   );
 };

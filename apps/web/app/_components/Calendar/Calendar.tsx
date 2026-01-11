@@ -1,0 +1,158 @@
+import React, { useEffect, useState, useRef } from 'react';
+import CalendarColumn from '@/_components/CalendarColumn/CalendarColumn';
+import CalendarColumnHead from '@/_components/CalendarColumnHead/CalendarColumnHead';
+import CalendarTimeScale from '@/_components/CalendarTimeScale/CalendarTimeScale';
+import { calendarHooks } from '@avoo/hooks';
+import { PrivateCalendarQueryParams } from '@avoo/axios/types/apiTypes';
+import { masterHooks } from '@avoo/hooks';
+import CalendarControls from '@/_components/CalendarControls/CalendarControls';
+import { CalendarViewType } from '@avoo/hooks/types/calendarViewType';
+import { timeUtils } from '@avoo/shared';
+import { tv } from 'tailwind-variants';
+import CalendarMonthView from '../CalendarMonthView/CalendarMonthView';
+import { PX_IN_MINUTE } from '@/_constants/time';
+
+const columnHeadContainer = tv({
+  base: 'sticky bg-white z-10 ',
+  variants: {
+    type: {
+      [CalendarViewType.DAY]: 'flex pl-10.5 top-0 ',
+      [CalendarViewType.WEEK]: 'flex left-0 flex flex-col',
+      [CalendarViewType.MONTH]: 'hidden',
+    },
+  },
+});
+
+const mainContainer = tv({
+  base: 'overflow-auto relative',
+  variants: {
+    type: {
+      [CalendarViewType.DAY]: 'min-w-full',
+      [CalendarViewType.WEEK]: 'w-full h-full flex',
+      [CalendarViewType.MONTH]: 'h-full',
+    },
+  },
+});
+
+const dataContainer = tv({
+  base: 'flex ',
+  variants: {
+    type: {
+      [CalendarViewType.DAY]: 'h-580 pb-4',
+      [CalendarViewType.WEEK]: 'flex flex-col grow',
+      [CalendarViewType.MONTH]: 'flex flex-col grow h-full',
+    },
+  },
+});
+
+export default function Calendar() {
+  const scrollRef = useRef<HTMLDivElement | null>(null);
+  const [date, setDate] = useState<Date>(timeUtils.toDayBegin(new Date()));
+  const [toDate, setToDate] = useState<Date>(timeUtils.toDayEnd(new Date()));
+  const [type, setType] = useState<CalendarViewType>(CalendarViewType.DAY);
+  const [params, setParams] = useState<PrivateCalendarQueryParams>({
+    rangeFromDate: date.toISOString(),
+    rangeToDate: toDate.toISOString(),
+  });
+  const [time, setTime] = useState(timeUtils.getMinutesInDay(new Date().toString()));
+
+  useEffect(() => {
+    if (type !== CalendarViewType.DAY) return;
+
+    scrollToCurrentTime();
+  }, [type]);
+
+  useEffect(() => {
+    setParams({
+      rangeFromDate: date.toISOString(),
+      rangeToDate: toDate.toISOString(),
+    });
+  }, [date, toDate]);
+
+  const scrollToCurrentTime = () => {
+    if (type !== CalendarViewType.DAY || !scrollRef.current) return;
+
+    let scrollValue;
+
+    if (timeUtils.isSameDay(date, new Date())) {
+      scrollValue = time * PX_IN_MINUTE - (scrollRef.current.clientHeight - 76) / 2;
+    } else {
+      scrollValue = 0;
+    }
+
+    scrollRef.current.scrollTo({
+      top: scrollValue,
+      behavior: 'smooth',
+    });
+  };
+
+  const calendar = calendarHooks.useGetCalendar(params);
+  const masters = masterHooks.useGetMastersProfileInfo();
+
+  return (
+    <div className='flex h-[calc(100%-54px)] w-full'>
+      <div className='w-full flex flex-col'>
+        <CalendarControls
+          date={date}
+          setDate={setDate}
+          toDate={toDate}
+          setToDate={setToDate}
+          type={type}
+          setType={setType}
+          scrollToCurrentTime={scrollToCurrentTime}
+          params={params}
+          setParams={setParams}
+          masters={masters ?? []}
+        />
+        <div className={mainContainer({ type })} ref={scrollRef}>
+          <div className={columnHeadContainer({ type })}>
+            {masters &&
+              masters.map((master, idx) => (
+                <CalendarColumnHead
+                  key={`${master.id}-head`}
+                  master={master}
+                  idx={idx}
+                  type={type}
+                />
+              ))}
+          </div>
+
+          <div className={dataContainer({ type })}>
+            <CalendarTimeScale type={type} date={date} time={time} setTime={setTime} />
+            {type !== CalendarViewType.MONTH &&
+              masters &&
+              masters.map((master) => {
+                const columnData = calendar?.find(
+                  (schedule) => String(schedule.masterId) === String(master.id),
+                );
+                return (
+                  <CalendarColumn
+                    key={`${master.id}-col`}
+                    data={columnData}
+                    master={master}
+                    type={type}
+                    date={date}
+                    setDate={setDate}
+                    setToDate={setToDate}
+                    setType={setType}
+                    time={time}
+                    setTime={setTime}
+                  />
+                );
+              })}
+            {type === CalendarViewType.MONTH &&
+              new Date(params.rangeFromDate).getTime() + 28 * 24 * 60 * 60 * 1000 <=
+                new Date(params.rangeToDate).getTime() && (
+                <CalendarMonthView
+                  params={params}
+                  setDate={setDate}
+                  setToDate={setToDate}
+                  setType={setType}
+                />
+              )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
