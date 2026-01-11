@@ -24,10 +24,17 @@ export enum TimeOffType {
   Other = 'other',
 }
 
+export const WHOLE_DAY = {
+  Whole: 'whole',
+  Partial: 'partial',
+} as const;
+
+export type WholeDay = (typeof WHOLE_DAY)[keyof typeof WHOLE_DAY];
+
 type FormValues = {
   type: TimeOffType;
   staff: string[];
-  wholeDay: boolean;
+  wholeDay: WholeDay;
   startDate: string;
   startTime: string;
   endDate: string;
@@ -68,7 +75,7 @@ const TimeOffAddModal = ({ isOpen, onClose }: Props) => {
     defaultValues: {
       type: TimeOffType.Personal,
       staff: ['all'],
-      wholeDay: true,
+      wholeDay: WHOLE_DAY.Whole,
       startDate: dayjs().format(VALUE_DATE_FORMAT),
       startTime: '09:00',
       endDate: dayjs().format(VALUE_DATE_FORMAT),
@@ -94,7 +101,8 @@ const TimeOffAddModal = ({ isOpen, onClose }: Props) => {
   );
 
   const handleWholeDayChange = useCallback(
-    (_e: React.ChangeEvent<HTMLInputElement>, checked: boolean) => setValue('wholeDay', checked),
+    (_e: React.ChangeEvent<HTMLInputElement>, checked: boolean) =>
+      setValue('wholeDay', checked ? WHOLE_DAY.Whole : WHOLE_DAY.Partial),
     [setValue],
   );
 
@@ -174,7 +182,7 @@ const TimeOffAddModal = ({ isOpen, onClose }: Props) => {
               <label className='inline-flex items-center gap-2'>
                 <Checkbox
                   size='small'
-                  checked={values.wholeDay}
+                  checked={values.wholeDay === WHOLE_DAY.Whole}
                   onChange={handleWholeDayChange}
                   slotProps={{ input: { 'aria-label': 'whole day' } }}
                 />
@@ -185,7 +193,7 @@ const TimeOffAddModal = ({ isOpen, onClose }: Props) => {
             <DateTimePickers
               dateValue={values.startDate}
               timeValue={values.startTime}
-              wholeDay={values.wholeDay}
+              wholeDay={values.wholeDay === WHOLE_DAY.Whole}
               onDateChange={handleStartDateChange}
               onTimeChange={handleStartTimeChange}
               timeLabel='Start'
@@ -199,7 +207,7 @@ const TimeOffAddModal = ({ isOpen, onClose }: Props) => {
             <DateTimePickers
               dateValue={values.endDate}
               timeValue={values.endTime}
-              wholeDay={values.wholeDay}
+              wholeDay={values.wholeDay === WHOLE_DAY.Whole}
               onDateChange={handleEndDateChange}
               onTimeChange={handleEndTimeChange}
               timeLabel='End'

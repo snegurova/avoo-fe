@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { Modal } from '../Modal/Modal';
 import { Button, IconButton } from '@mui/material';
 import TimeOffAddModal from '../TimeOffAddModal/TimeOffAddModal';
@@ -14,12 +14,25 @@ const TimeOffModal = ({ isOpen, onClose }: Props) => {
 
   const timeOffList: Array<unknown> = [];
 
+  const handleClose = useCallback(() => {
+    onClose();
+  }, [onClose]);
+
+  const handleOpenAdd = useCallback(() => {
+    setIsTimeOffModalShown(true);
+    onClose();
+  }, [onClose]);
+
+  const handleCloseAdd = useCallback(() => {
+    setIsTimeOffModalShown(false);
+  }, []);
+
   return (
     <>
       <Modal isOpen={isOpen} onClose={onClose}>
         <div className='space-y-6 relative min-h-[80vh]'>
           <IconButton
-            onClick={onClose}
+            onClick={handleClose}
             sx={{ position: 'absolute', top: -25, left: -25, zIndex: 10 }}
             aria-label='back'
           >
@@ -49,10 +62,7 @@ const TimeOffModal = ({ isOpen, onClose }: Props) => {
               color='secondary'
               variant='outlined'
               sx={{ minWidth: 150 }}
-              onClick={() => {
-                setIsTimeOffModalShown(true);
-                onClose();
-              }}
+              onClick={handleOpenAdd}
             >
               Add Time off
             </Button>
@@ -60,7 +70,7 @@ const TimeOffModal = ({ isOpen, onClose }: Props) => {
         </div>
       </Modal>
 
-      <TimeOffAddModal isOpen={isTimeOffModalShown} onClose={() => setIsTimeOffModalShown(false)} />
+      <TimeOffAddModal isOpen={isTimeOffModalShown} onClose={handleCloseAdd} />
     </>
   );
 };

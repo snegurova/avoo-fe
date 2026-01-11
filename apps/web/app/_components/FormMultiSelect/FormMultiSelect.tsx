@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
@@ -43,23 +43,25 @@ export const FormMultiSelect = (props: Props) => {
     onChange?.(typeof value === 'string' ? value.split(',') : value);
   };
 
+  const selectLabelsValue = useMemo(() => {
+    return options
+      .filter((option) => selected.includes(option.value))
+      .map((option) => option.label)
+      .join(', ');
+  }, [options, selected]);
+
   return (
     <div className={className}>
       <FormControl size={size} fullWidth sx={{ mt: 2 }} disabled={disabled}>
         <InputLabel id={`multiple-${name}-label`}>{label}</InputLabel>
         <Select
           labelId={`multiple-${name}-label`}
-          id={id ? id : `multiple-${name}`}
+          id={id ?? `multiple-${name}`}
           multiple
           value={selected}
           onChange={handleChange}
           input={<OutlinedInput label={label} />}
-          renderValue={(selected) =>
-            options
-              .filter((option) => selected.includes(option.value))
-              .map((option) => option.label)
-              .join(', ')
-          }
+          renderValue={() => selectLabelsValue}
         >
           {options.map((option) => (
             <MenuItem key={option.label} value={option.value}>

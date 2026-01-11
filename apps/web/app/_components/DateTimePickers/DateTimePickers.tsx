@@ -1,5 +1,5 @@
 'use client';
-import React from 'react';
+import React, { useMemo } from 'react';
 import type { Dayjs } from 'dayjs';
 import { DatePicker, TimePicker } from '@mui/x-date-pickers';
 import InputAdornment from '@mui/material/InputAdornment';
@@ -23,6 +23,26 @@ export default function DateTimePickers({
   onTimeChange,
   timeLabel,
 }: Props) {
+  const startAdornment = useMemo(
+    () => (
+      <InputAdornment position='start'>
+        <span>{timeLabel ?? 'Time'}</span>
+      </InputAdornment>
+    ),
+    [timeLabel],
+  );
+
+  const timeSlotProps = useMemo(
+    () => ({
+      textField: {
+        InputProps: {
+          startAdornment,
+        },
+      },
+    }),
+    [startAdornment],
+  );
+
   return (
     <>
       {wholeDay ? (
@@ -31,7 +51,6 @@ export default function DateTimePickers({
             format={DATE_DISPLAY_FORMAT}
             value={dateValue ? dayjs(dateValue) : null}
             onChange={onDateChange}
-            slotProps={{ textField: { size: 'small', fullWidth: true } }}
           />
         </div>
       ) : (
@@ -40,25 +59,12 @@ export default function DateTimePickers({
             format={DATE_DISPLAY_FORMAT}
             value={dateValue ? dayjs(dateValue) : null}
             onChange={onDateChange}
-            slotProps={{ textField: { size: 'small', fullWidth: true } }}
           />
           <TimePicker
             format={TIME_FORMAT}
             value={timeValue ? dayjs(timeValue, TIME_FORMAT) : null}
             onChange={onTimeChange}
-            slotProps={{
-              textField: {
-                size: 'small',
-                fullWidth: true,
-                InputProps: {
-                  startAdornment: (
-                    <InputAdornment position='start'>
-                      <span className='text-sm text-gray-700'>{timeLabel ?? 'Time'}</span>
-                    </InputAdornment>
-                  ),
-                },
-              },
-            }}
+            slotProps={timeSlotProps}
           />
         </div>
       )}

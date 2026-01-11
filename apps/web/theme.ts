@@ -166,6 +166,21 @@ const theme = createTheme({
           openPickerIcon: {
             className: 'fill-gray-800 w-4 h-4',
           },
+          textField: {
+            size: 'small',
+            fullWidth: true,
+          },
+        },
+      },
+    },
+
+    MuiTimePicker: {
+      defaultProps: {
+        slotProps: {
+          textField: {
+            size: 'small',
+            fullWidth: true,
+          },
         },
       },
     },
@@ -207,6 +222,16 @@ const theme = createTheme({
             borderBottom: 'none',
           },
         },
+      },
+    },
+    MuiInputAdornment: {
+      styleOverrides: {
+        root: () => ({
+          '& span': {
+            fontSize: typography.fontSize.sm,
+            color: 'var(--color-gray-800)',
+          },
+        }),
       },
     },
     MuiMenu: {

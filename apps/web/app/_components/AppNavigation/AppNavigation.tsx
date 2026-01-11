@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import Link from 'next/link';
 import { appRoutes } from '@/_routes/routes';
 import AppNavigationItem from '../AppNavigationItem/AppNavigationItem';
@@ -56,6 +56,17 @@ export default function AppNavigation() {
     base: 'flex items-center gap-3.5 px-8 py-3 hover:bg-primary-500 focus:bg-primary-500 transition-colors',
     variants: { active: { true: 'bg-primary-100' } },
   });
+
+  const handleCalendarToggle = useCallback((e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setCalendarOpen((s) => !s);
+  }, []);
+
+  const handleOpenTimeOff = useCallback(() => {
+    setIsTimeOffOpen(true);
+  }, []);
+  
   return (
     <aside className='h-full w-55 border-r border-gray-100'>
       <nav className='flex flex-col py-7 gap-15'>
@@ -83,11 +94,7 @@ export default function AppNavigation() {
                         <button
                           type='button'
                           className='absolute right-3 top-0 bottom-0 px-3 flex items-center hover:bg-muted'
-                          onClick={(e) => {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            setCalendarOpen((s) => !s);
-                          }}
+                          onClick={handleCalendarToggle}
                           aria-expanded={calendarOpen}
                           aria-haspopup='true'
                         >
@@ -101,7 +108,7 @@ export default function AppNavigation() {
                             <button
                               type='button'
                               className='w-full text-left px-6 py-2 hover:bg-muted'
-                              onClick={() => setIsTimeOffOpen(true)}
+                              onClick={handleOpenTimeOff}
                             >
                               Time off
                             </button>

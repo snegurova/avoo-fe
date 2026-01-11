@@ -36,6 +36,7 @@ export const FormSelect = (props: Props) => {
     },
     [onChange],
   );
+  
   return (
     <FormControl size={size} fullWidth sx={{ mt: 2 }} disabled={disabled}>
       <InputLabel id={`${name}-select-label`}>{label}</InputLabel>
