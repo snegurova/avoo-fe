@@ -98,15 +98,20 @@ export default function AppNavigation({ menuOpen, setMenuOpen }: Props) {
     setIsTimeOffOpen(true);
   }, []);
 
+  const handleCloseMenu = useCallback(() => {
+    setMenuOpen(false);
+    setCalendarOpen(false);
+  }, []);
+
   return (
-    <aside className={overlayStyles({ open: isOpen })} onClick={() => setMenuOpen(false)}>
+    <aside className={overlayStyles({ open: isOpen })} onClick={handleCloseMenu}>
       <div className={sidebarStyles({ open: isOpen })} onClick={(e) => e.stopPropagation()}>
         <nav className='flex h-full flex-col py-7 gap-15'>
           <div className='px-8 shrink-0'>
             <Link
               href={appRoutes.Home}
               className='font-inter font-semibold text-4xl text-gray-600'
-              onClick={() => setMenuOpen(false)}
+              onClick={handleCloseMenu}
             >
               Avoo
             </Link>
@@ -122,14 +127,18 @@ export default function AppNavigation({ menuOpen, setMenuOpen }: Props) {
                     return (
                       <>
                         <div className={`${cls} relative flex items-center justify-between`}>
-                          <Link href={item.href} className='flex items-center gap-3.5'>
+                          <Link
+                            href={item.href}
+                            className='flex items-center gap-3.5'
+                            onClick={handleCloseMenu}
+                          >
                             {item.icon}
-                            <span className='text-sm'>{item.label}</span>
+                            <span className=''>{item.label}</span>
                           </Link>
 
                           <button
                             type='button'
-                            className='absolute right-3 top-0 bottom-0 px-3 flex items-center hover:bg-muted'
+                            className='absolute right-3 top-0 bottom-0 px-3 flex items-center hover:bg-muted cursor-pointer'
                             onClick={handleCalendarToggle}
                             aria-expanded={calendarOpen}
                             aria-haspopup='true'
@@ -139,11 +148,11 @@ export default function AppNavigation({ menuOpen, setMenuOpen }: Props) {
                         </div>
 
                         {calendarOpen && (
-                          <ul className='flex flex-col pl-12'>
+                          <ul className='flex flex-col'>
                             <li>
                               <button
                                 type='button'
-                                className='w-full text-left px-6 py-2 hover:bg-muted'
+                                className='w-full text-left pl-20.5 pr-6 py-2 hover:bg-primary-500 focus:bg-primary-500 transition-colors cursor-pointer'
                                 onClick={handleOpenTimeOff}
                               >
                                 Time off
@@ -159,7 +168,7 @@ export default function AppNavigation({ menuOpen, setMenuOpen }: Props) {
                     href={item.href}
                     icon={item.icon}
                     label={item.label}
-                    onClick={() => setMenuOpen(false)}
+                    onClick={handleCloseMenu}
                   />
                 )}
               </li>

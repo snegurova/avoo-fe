@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useMemo } from 'react';
 import AppProfileSelect from '@/_components/AppProfileSelect/AppProfileSelect';
 import NotificationsIcon from '@/_icons/NotificationsIcon';
 import ShareIcon from '@/_icons/ShareIcon';
@@ -33,9 +33,12 @@ export default function AppHeader({ setMenuOpen }: Props) {
     },
   ];
 
-  const onMenuClick = () => {
-    setMenuOpen(true);
-  };
+  const onMenuClick = useMemo(
+    () => () => {
+      setMenuOpen(true);
+    },
+    [],
+  );
 
   return (
     <header className='px-4 md:px-0 flex flex-col gap-3 md:gap-0'>
