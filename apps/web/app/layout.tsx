@@ -3,6 +3,7 @@ import '../styles/globals.css';
 import { QueryProvider } from '@/_providers/QueryProvider';
 import { Metadata } from 'next/types';
 import { MUIThemeProvider } from '@/_providers/ThemeProvider';
+import DateLocalizationProvider from '@/_providers/DateLocalizationProvider';
 
 export const metadata: Metadata = {
   title: 'AVOO App',
@@ -20,7 +21,9 @@ export default function RootLayout(props: Props) {
     <html lang='en'>
       <body>
         <MUIThemeProvider>
-          <QueryProvider>{children}</QueryProvider>
+          <DateLocalizationProvider>
+            <QueryProvider>{children}</QueryProvider>
+          </DateLocalizationProvider>
         </MUIThemeProvider>
       </body>
     </html>

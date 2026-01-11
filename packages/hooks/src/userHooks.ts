@@ -13,6 +13,7 @@ import { apiStatus } from '../types/apiTypes';
 import { queryKeys } from './queryKeys';
 import { appendFileToForm, buildCertificateForm } from './utils/formDataHelpers';
 import { CreateCertificatePayload } from '@avoo/axios/types/certificate';
+import type { components } from '@avoo/axios/types/generated';
 
 export const userHooks = {
   useGetUserProfile: () => {
@@ -36,6 +37,8 @@ export const userHooks = {
       phone: profileInfo?.businessInfo?.phone ?? 'Phone not set',
       avatarUrl: profileInfo?.avatarPreviewUrl ?? profileInfo?.avatarUrl ?? null,
       avatarPreviewUrl: profileInfo?.avatarPreviewUrl ?? null,
+      location_lat: profileInfo?.businessInfo?.location_lat ?? null,
+      location_lon: profileInfo?.businessInfo?.location_lon ?? null,
     };
 
     const visualLanguages = profileInfo?.businessInfo?.languages ?? null;
@@ -107,6 +110,30 @@ export const userHooks = {
 
     return {
       handleAddCertificate,
+    };
+  },
+  useUpdateProfile: () => {
+    const queryClient = useQueryClient();
+
+    const { mutate, mutateAsync, isPending } = useMutation<
+      BaseResponse<UserProfileResponse>,
+      Error,
+      Partial<components['schemas']['UpdateProfileDto']>
+    >({
+      mutationFn: (payload) => {
+        return userApi.updateProfile(payload);
+      },
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: queryKeys.user.profile() });
+      },
+    });
+
+    utils.useSetPendingApi(isPending);
+
+    return {
+      handleUpdateProfile: mutate,
+      handleUpdateProfileAsync: mutateAsync,
+      isPending,
     };
   },
 };

@@ -131,6 +131,15 @@ const theme = createTheme({
     borderRadiusLg: radius.lg,
     borderRadiusXl: radius.xl,
   },
+  mixins: {
+    menu: {
+      itemHeight: 48,
+      itemPaddingTop: 8,
+      visibleItems: 4,
+      partialVisibleItem: 0.5,
+      width: 250,
+    },
+  },
   components: {
     MuiChip: {
       styleOverrides: {
@@ -157,6 +166,21 @@ const theme = createTheme({
           openPickerIcon: {
             className: 'fill-gray-800 w-4 h-4',
           },
+          textField: {
+            size: 'small',
+            fullWidth: true,
+          },
+        },
+      },
+    },
+
+    MuiTimePicker: {
+      defaultProps: {
+        slotProps: {
+          textField: {
+            size: 'small',
+            fullWidth: true,
+          },
         },
       },
     },
@@ -173,6 +197,52 @@ const theme = createTheme({
             lineHeight: 1.15,
             color: 'var(--color-gray-800)',
           },
+        },
+      },
+    },
+    MuiFormControl: {
+      styleOverrides: {
+        root: {
+          '& label + .MuiInputBase-root': {
+            marginTop: '4px',
+          },
+        },
+      },
+    },
+    MuiInputBase: {
+      styleOverrides: {
+        root: {
+          '&::before': {
+            borderBottom: 'none',
+          },
+          '&:hover:not(.Mui-disabled)::before': {
+            borderBottom: 'none',
+          },
+          '&.Mui-focused::before': {
+            borderBottom: 'none',
+          },
+        },
+      },
+    },
+    MuiInputAdornment: {
+      styleOverrides: {
+        root: () => ({
+          '& span': {
+            fontSize: typography.fontSize.sm,
+            color: 'var(--color-gray-800)',
+          },
+        }),
+      },
+    },
+    MuiMenu: {
+      styleOverrides: {
+        paper: ({ theme }) => {
+          const menu = theme.mixins.menu;
+          const visibleCount = menu.visibleItems + menu.partialVisibleItem;
+          return {
+            maxHeight: menu.itemHeight * visibleCount + menu.itemPaddingTop,
+            width: menu.width,
+          };
         },
       },
     },
