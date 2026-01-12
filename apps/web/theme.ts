@@ -1,6 +1,7 @@
 'use client';
 import { createTheme } from '@mui/material/styles';
 import { Roboto } from 'next/font/google';
+import type {} from '@mui/x-date-pickers/themeAugmentation';
 import { colors, radius, typography } from '@avoo/design-tokens';
 
 const roboto = Roboto({
@@ -130,6 +131,15 @@ const theme = createTheme({
     borderRadiusLg: radius.lg,
     borderRadiusXl: radius.xl,
   },
+  mixins: {
+    menu: {
+      itemHeight: 48,
+      itemPaddingTop: 8,
+      visibleItems: 4,
+      partialVisibleItem: 0.5,
+      width: 250,
+    },
+  },
   components: {
     MuiChip: {
       styleOverrides: {
@@ -147,6 +157,92 @@ const theme = createTheme({
 
         label: {
           fontWeight: typography.fontWeight.medium,
+        },
+      },
+    },
+    MuiDatePicker: {
+      defaultProps: {
+        slotProps: {
+          openPickerIcon: {
+            className: 'fill-gray-800 w-4 h-4',
+          },
+          textField: {
+            size: 'small',
+            fullWidth: true,
+          },
+        },
+      },
+    },
+
+    MuiTimePicker: {
+      defaultProps: {
+        slotProps: {
+          textField: {
+            size: 'small',
+            fullWidth: true,
+          },
+        },
+      },
+    },
+
+    MuiPickersTextField: {
+      styleOverrides: {
+        root: {
+          '& .MuiPickersInputBase-root': {
+            borderRadius: 0,
+          },
+          '& .MuiPickersSectionList-root': {
+            padding: '8px 0',
+            fontSize: typography.fontSize.sm,
+            lineHeight: 1.15,
+            color: 'var(--color-gray-800)',
+          },
+        },
+      },
+    },
+    MuiFormControl: {
+      styleOverrides: {
+        root: {
+          '& label + .MuiInputBase-root': {
+            marginTop: '4px',
+          },
+        },
+      },
+    },
+    MuiInputBase: {
+      styleOverrides: {
+        root: {
+          '&::before': {
+            borderBottom: 'none',
+          },
+          '&:hover:not(.Mui-disabled)::before': {
+            borderBottom: 'none',
+          },
+          '&.Mui-focused::before': {
+            borderBottom: 'none',
+          },
+        },
+      },
+    },
+    MuiInputAdornment: {
+      styleOverrides: {
+        root: () => ({
+          '& span': {
+            fontSize: typography.fontSize.sm,
+            color: 'var(--color-gray-800)',
+          },
+        }),
+      },
+    },
+    MuiMenu: {
+      styleOverrides: {
+        paper: ({ theme }) => {
+          const menu = theme.mixins.menu;
+          const visibleCount = menu.visibleItems + menu.partialVisibleItem;
+          return {
+            maxHeight: menu.itemHeight * visibleCount + menu.itemPaddingTop,
+            width: menu.width,
+          };
         },
       },
     },

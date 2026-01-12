@@ -1,10 +1,7 @@
-export interface VisualProfileInfo {
-  name?: string | null;
-  phone?: string | null;
-  description?: string | null;
-  address?: string | null;
-  avatarPreviewUrl?: string | null;
-  avatarUrl?: string | null;
-  location_lat?: number | null;
-  location_lon?: number | null;
-}
+import type { components } from '@avoo/axios/types/generated';
+
+export type VisualProfileInfo = Partial<components['schemas']['BusinessInfoEntity']> & {
+  avatarPreviewUrl?: components['schemas']['UserProfileEntity']['avatarPreviewUrl'];
+  avatarUrl?: components['schemas']['UserProfileEntity']['avatarUrl'];
+  email?: components['schemas']['UserProfileEntity']['email'];
+};

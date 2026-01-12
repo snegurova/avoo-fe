@@ -948,6 +948,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/customers/list": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["CustomersController_findAllBase"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -5147,6 +5163,51 @@ export interface operations {
         };
     };
     CustomersController_findAll: {
+        parameters: {
+            query?: {
+                /** @description Page number */
+                page?: number;
+                /** @description Items per page */
+                limit?: number;
+                /** @description Filter by name */
+                name?: string;
+                /** @description Filter by email */
+                email?: string;
+                /** @description Filter by phone */
+                phone?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description List of customers */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SuccessResponseDto"] & {
+                        data?: {
+                            items?: components["schemas"]["CustomerInfoDto"][];
+                            pagination?: components["schemas"]["PaginationDto"];
+                        };
+                    };
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    CustomersController_findAllBase: {
         parameters: {
             query?: {
                 /** @description Page number */
