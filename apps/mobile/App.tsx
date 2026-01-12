@@ -19,7 +19,7 @@ export default function App() {
   const [fontsLoaded] = useFonts(fonts);
 
   if (!fontsLoaded) {
-    return null; // или <Loader />
+    return null; 
   }
 
   return (
