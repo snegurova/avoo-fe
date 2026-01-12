@@ -1,6 +1,6 @@
 import { View, Pressable, StyleSheet } from 'react-native';
 import { Avatar } from '@/shared/Avatar/Avatar';
-import { colors, typography } from '@avoo/design-tokens';
+import { colors } from '@avoo/design-tokens';
 import { MasterWithRelationsEntityResponse } from '@avoo/axios/types/apiTypes';
 import { MasterLanguageList } from '@/components/MasterLanguageList/MasterLanguageList';
 import { Text } from 'react-native-paper';
@@ -22,7 +22,10 @@ export const MasterListItem = ({ master, onPress }: Props) => {
       className='flex-col items-start bg-white rounded-md p-4 border border-gray-200'
       onPress={handlePress}
     >
-      <View className='flex-row gap-4' style={languages.length > 0 ? { alignItems: 'flex-start' } : { alignItems: 'center' }}>
+      <View
+        className='flex-row gap-4'
+        style={languages.length > 0 ? { alignItems: 'flex-start' } : { alignItems: 'center' }}
+      >
         <Avatar
           backgroundColor={colors.primary[200]}
           size={50}
@@ -30,20 +33,17 @@ export const MasterListItem = ({ master, onPress }: Props) => {
           name={master.name}
         />
         <View className='flex-1'>
-          <Text variant='titleMedium' className='mb-2' style={styles.titleMedium}>
+          <Text variant='titleMedium' className='mb-2'>
             {master.name}
           </Text>
           <Text
-            variant='titleSmall'
-            style={[
-              styles.titleSmall,
-              master.phone ? { marginBottom: 8 } : null,
-            ]}
-          >
+            variant='bodyMedium'
+              style={[styles.bodyMedium, master.phone ? { marginBottom: 8 } : null]}
+            >
             {master.email}
           </Text>
           {master.phone && (
-            <Text variant='titleSmall' style={styles.titleSmall}>
+            <Text variant='bodyMedium' style={styles.bodyMedium}>
               {master.phone}
             </Text>
           )}
@@ -62,13 +62,7 @@ export const MasterListItem = ({ master, onPress }: Props) => {
 };
 
 const styles = StyleSheet.create({
-  titleSmall: {
-    lineHeight: 14,
+  bodyMedium: {
     color: colors.gray[500],
-  },
-  titleMedium: {
-    fontWeight: typography.fontWeight.bold,
-    color: colors.gray[700],
-    lineHeight: 16,
   },
 });

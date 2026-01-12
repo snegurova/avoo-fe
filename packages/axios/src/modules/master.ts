@@ -5,42 +5,30 @@ import {
 } from '@avoo/axios/types/apiTypes';
 import { apiClient } from '@avoo/axios/src/apiClient';
 
-const GET_MASTERS_ENDPOINT = '/masters';
-const CREATE_MASTER_ENDPOINT = '/masters';
-const UPDATE_MASTER_ENDPOINT = '/masters';
-
-
-const mastersEndpoints = {
-  all: () => GET_MASTERS_ENDPOINT,
-  create: () => CREATE_MASTER_ENDPOINT,
-  update: (id: number) => `${UPDATE_MASTER_ENDPOINT}/${id}`,
-  delete: (id: number) => `${UPDATE_MASTER_ENDPOINT}/${id}`,
-};
+const MASTERS_ENDPOINT = '/masters/';
 
 export const masterApi = {
   async getMastersInfo() {
     const response =
-      await apiClient.get<BaseResponse<MasterWithRelationsEntityResponse[]>>(
-        mastersEndpoints.all(),
-      );
+      await apiClient.get<BaseResponse<MasterWithRelationsEntityResponse[]>>(MASTERS_ENDPOINT);
     return response.data;
   },
   async createMaster(data: CreateMasterRequest) {
     const response = await apiClient.post<BaseResponse<MasterWithRelationsEntityResponse>>(
-      mastersEndpoints.create(),
+      MASTERS_ENDPOINT,
       data,
     );
     return response.data;
   },
   async updateMaster(id: number, data: CreateMasterRequest) {
     const response = await apiClient.put<BaseResponse<MasterWithRelationsEntityResponse>>(
-      mastersEndpoints.update(id),
+      `${MASTERS_ENDPOINT}${id}`,
       data,
     );
     return response.data;
   },
   async deleteMaster(id: number) {
-    const response = await apiClient.delete<BaseResponse<void>>(mastersEndpoints.delete(id));
+    const response = await apiClient.delete<BaseResponse<void>>(`${MASTERS_ENDPOINT}${id}`);
     return response.data;
   },
 };

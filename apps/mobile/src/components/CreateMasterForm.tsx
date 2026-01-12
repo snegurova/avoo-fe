@@ -8,9 +8,7 @@ import { useBottomSheetStore } from '@/store/useBottomSheetStore';
 const CreateMasterForm = () => {
   const handleCloseBottomSheet = useBottomSheetStore((state) => state.handleCloseBottomSheet);
   const { control, errors, handleSubmit } = masterHooks.useCreateMasterForm({
-    onSuccess: () => {
-      handleCloseBottomSheet();
-    },
+    onSuccess: handleCloseBottomSheet,
   });
 
   return (
