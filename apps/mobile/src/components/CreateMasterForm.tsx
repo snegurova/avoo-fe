@@ -3,17 +3,20 @@ import FormTextInput from '@/shared/FormTextInput';
 import FormSearchInput from '@/shared/FormSearchInput';
 import { masterHooks } from '@avoo/hooks';
 import { BottomSheetHeader } from '@/shared/BottomSheetHeader/BottomSheetHeader';
-
+import { useBottomSheetStore } from '@/store/useBottomSheetStore';
 
 const CreateMasterForm = () => {
-  const { control, errors, handleSubmit } = masterHooks.useCreateMasterForm();
+  const handleCloseBottomSheet = useBottomSheetStore((state) => state.handleCloseBottomSheet);
+  const { control, errors, handleSubmit } = masterHooks.useCreateMasterForm({
+    onSuccess: handleCloseBottomSheet,
+  });
 
   return (
     <>
       <BottomSheetHeader showCloseButton={true} handleConfirm={handleSubmit} />
-      <View style={{ padding: 16 }}>
-        <View style={{ marginBottom: 16 }}>
-          <Text style={{ marginBottom: 8 }}>Email *</Text>
+      <View className='p-4'>
+        <View className='mb-4'>
+          <Text className='mb-2'>Email *</Text>
           <FormTextInput
             name='email'
             control={control}
@@ -24,8 +27,8 @@ const CreateMasterForm = () => {
           />
         </View>
 
-        <View style={{ marginBottom: 16 }}>
-          <Text style={{ marginBottom: 8 }}>Name *</Text>
+        <View className='mb-4'>
+          <Text className='mb-2'>Name *</Text>
           <FormTextInput
             name='name'
             control={control}
@@ -34,8 +37,8 @@ const CreateMasterForm = () => {
           />
         </View>
 
-        <View style={{ marginBottom: 16 }}>
-          <Text style={{ marginBottom: 8 }}>Bio</Text>
+        <View className='mb-4'>
+          <Text className='mb-2'>Bio</Text>
           <FormTextInput
             name='bio'
             control={control}
@@ -46,8 +49,8 @@ const CreateMasterForm = () => {
           />
         </View>
 
-        <View style={{ marginBottom: 16 }}>
-          <Text style={{ marginBottom: 8 }}>Phone</Text>
+        <View className='mb-4'>
+          <Text className='mb-2'>Phone</Text>
           <FormTextInput
             name='phone'
             control={control}
@@ -57,8 +60,8 @@ const CreateMasterForm = () => {
           />
         </View>
 
-        <View style={{ marginBottom: 16 }}>
-          <Text style={{ marginBottom: 8 }}>Languages</Text>
+        <View className='mb-4'>
+          <Text className='mb-2'>Languages</Text>
           <FormSearchInput name='languages' control={control} error={errors.languages?.message} />
         </View>
       </View>
@@ -67,5 +70,3 @@ const CreateMasterForm = () => {
 };
 
 export default CreateMasterForm;
-
-

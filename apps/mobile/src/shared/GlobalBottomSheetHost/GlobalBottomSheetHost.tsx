@@ -1,9 +1,14 @@
 import CreateMasterForm from "@/components/CreateMasterForm";
-import { useBottomSheetStore, BottomSheetType, BottomSheetComponents } from "../../store/useBottomSheetStore";
+import { useBottomSheetStore, BottomSheetType } from "../../store/useBottomSheetStore";
 import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
 import { useEffect, useRef } from "react";
 import { ProfileMenu } from "@/shared/ProfileMenu/ProfileMenu";
 import { colors } from '@avoo/design-tokens';
+import { ComponentType } from 'react';
+
+type BottomSheetComponents = {
+  [K in BottomSheetType]: ComponentType;
+};
 
 const BOTTOM_SHEET_COMPONENTS: BottomSheetComponents = {
   [BottomSheetType.CREATE_MASTER]: CreateMasterForm,

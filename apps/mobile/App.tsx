@@ -10,11 +10,18 @@ import { PaperProvider } from 'react-native-paper';
 import paperTheme from '@/theme/paper-theme';
 import './global.css';
 import { GlobalBottomSheetHost } from '@/shared/GlobalBottomSheetHost/GlobalBottomSheetHost';
+import { useFonts } from 'expo-font';
+import { fonts } from '@/fonts/fonts';
 
 enableScreens();
 
-
 export default function App() {
+  const [fontsLoaded] = useFonts(fonts);
+
+  if (!fontsLoaded) {
+    return null; 
+  }
+
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <SafeAreaProvider>

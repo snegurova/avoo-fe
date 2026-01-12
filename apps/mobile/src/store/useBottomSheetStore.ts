@@ -1,6 +1,6 @@
 // shared/stores/useBottomSheetStore.ts
 import { create } from 'zustand';
-import { ComponentType } from 'react';
+import { MasterWithRelationsEntityResponse } from '@avoo/axios/types/apiTypes';
 
 export type GlobalBottomSheetOptions = {
   snapPoints?: (string | number)[];
@@ -13,22 +13,20 @@ export enum BottomSheetType {
   PROFILE = 'profile',
 }
 
-export type BottomSheetTypeValue = BottomSheetType | null;
-
-export type BottomSheetComponents = {
-  [K in BottomSheetType]: ComponentType;
+export type EditMasterProps = {
+  master: MasterWithRelationsEntityResponse;
 };
 
-type BottomSheetState = {
+type BottomSheetStore = {
   type: BottomSheetType | null;
   options: GlobalBottomSheetOptions | null;
-  handleOpenBottomSheet: (type: BottomSheetType, options: GlobalBottomSheetOptions | null) => void;
+  handleOpenBottomSheet: (type: BottomSheetType, options?: GlobalBottomSheetOptions | null) => void;
   handleCloseBottomSheet: () => void;
 };
 
-export const useBottomSheetStore = create<BottomSheetState>((set) => ({
+export const useBottomSheetStore = create<BottomSheetStore>((set) => ({
   type: null,
   options: null,
-  handleOpenBottomSheet: (type, options) => set({ type, options }),
+  handleOpenBottomSheet: (type, options) => set({ type, options: options ?? null }),
   handleCloseBottomSheet: () => set({ type: null, options: null }),
 }));
