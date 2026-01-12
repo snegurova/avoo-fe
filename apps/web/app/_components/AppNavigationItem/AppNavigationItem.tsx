@@ -1,5 +1,5 @@
 'use client';
-import React from 'react';
+import React, { useMemo } from 'react';
 import Link from 'next/link';
 import { routerHooks } from '@/_hooks/routerHooks';
 import { tv } from 'tailwind-variants';
@@ -8,6 +8,7 @@ type Props = {
   href: string;
   icon: React.ReactNode;
   label: string;
+  onClick?: () => void;
 };
 
 const navigationItem = tv({
@@ -20,15 +21,19 @@ const navigationItem = tv({
 });
 
 export default function DashboardNavigationItem(props: Props) {
-  const { href, icon, label } = props;
+  const { href, icon, label, onClick } = props;
   const isActive = routerHooks.useIsActivePage(href);
 
+  const onClickHandler = useMemo(
+    () => (e: React.MouseEvent<HTMLAnchorElement>) => {
+      e.currentTarget.blur();
+      onClick?.();
+    },
+    [],
+  );
+
   return (
-    <Link
-      href={href}
-      className={navigationItem({ active: isActive })}
-      onClick={(e) => e.currentTarget.blur()}
-    >
+    <Link href={href} className={navigationItem({ active: isActive })} onClick={onClickHandler}>
       {icon}
       <span>{label}</span>
     </Link>
