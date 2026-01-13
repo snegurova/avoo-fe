@@ -1,19 +1,21 @@
 import { View, Text } from 'react-native';
 import FormTextInput from '@/shared/FormTextInput';
-import FormSearchInput from '@/shared/FormSearchInput';
+import LanguageSelector from '@/shared/LanguageSelector/LanguageSelector';
 import { masterHooks } from '@avoo/hooks';
 import { BottomSheetHeader } from '@/shared/BottomSheetHeader/BottomSheetHeader';
-import { useBottomSheetStore } from '@/store/useBottomSheetStore';
 
-const CreateMasterForm = () => {
-  const handleCloseBottomSheet = useBottomSheetStore((state) => state.handleCloseBottomSheet);
+type Props = {
+  onClose: () => void;
+};
+
+const CreateMasterForm = ({ onClose }: Props) => {
   const { control, errors, handleSubmit } = masterHooks.useCreateMasterForm({
-    onSuccess: handleCloseBottomSheet,
+    onSuccess: onClose,
   });
 
   return (
     <>
-      <BottomSheetHeader showCloseButton={true} handleConfirm={handleSubmit} />
+      <BottomSheetHeader handleClose={onClose} handleConfirm={handleSubmit} />
       <View className='p-4'>
         <View className='mb-4'>
           <Text className='mb-2'>Email *</Text>
@@ -61,8 +63,11 @@ const CreateMasterForm = () => {
         </View>
 
         <View className='mb-4'>
-          <Text className='mb-2'>Languages</Text>
-          <FormSearchInput name='languages' control={control} error={errors.languages?.message} />
+          <LanguageSelector
+            name='languages'
+            control={control}
+            error={errors.languages?.message}
+          />
         </View>
       </View>
     </>
