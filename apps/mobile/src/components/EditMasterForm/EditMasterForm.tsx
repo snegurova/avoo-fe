@@ -16,9 +16,7 @@ type Props = {
 const EditMasterForm = ({ master, onClose }: Props) => {
   const { control, handleSubmit, errors, reset } = masterHooks.useUpdateMasterForm({
     master,
-    onSuccess: () => {
-      onClose();
-    },
+    onSuccess: onClose,
   });
 
   const { deleteMaster, isPending: isDeleting } = masterHooks.useDeleteMaster({

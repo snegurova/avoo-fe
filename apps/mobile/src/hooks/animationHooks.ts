@@ -1,4 +1,4 @@
-import { useRef, useCallback, useEffect } from 'react';
+import { useRef, useCallback } from 'react';
 import { Animated, Easing, PanResponder } from 'react-native';
 
 type UseBottomSheetAnimationProps = {
@@ -10,11 +10,6 @@ export const animationHooks = {
   useBottomSheetAnimation({ onClose, disableSwipeToClose = false }: UseBottomSheetAnimationProps) {
     const translateY = useRef(new Animated.Value(400)).current;
     const backdropOpacity = useRef(new Animated.Value(0)).current;
-    const closeRef = useRef(onClose);
-
-    useEffect(() => {
-      closeRef.current = onClose;
-    }, [onClose]);
 
     const open = useCallback(() => {
       Animated.parallel([
@@ -46,9 +41,9 @@ export const animationHooks = {
           useNativeDriver: true,
         }),
       ]).start(() => {
-        closeRef.current();
+        onClose();
       });
-    }, [translateY, backdropOpacity]);
+    }, [translateY, backdropOpacity, onClose]);
 
     const panResponder = useRef(
       PanResponder.create({

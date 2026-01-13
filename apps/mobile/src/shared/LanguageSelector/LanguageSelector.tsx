@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { View, Pressable, StyleSheet } from 'react-native';
 import { Control, FieldValues, Path, PathValue, useController } from 'react-hook-form';
 import { Chip, Text } from 'react-native-paper';
 import { LanguageSelectionModal } from '@/components/LanguageSelectionModal/LanguageSelectionModal';
 import { LANGUAGE_NAMES, type LanguageCode } from '@avoo/constants';
 import { colors } from '@avoo/design-tokens';
+import { utils } from '@avoo/hooks';
 import { MaterialIcons } from '../icons';
 
 type Props<T extends FieldValues> = {
@@ -24,17 +25,10 @@ export default function LanguageSelector<T extends FieldValues>({
     defaultValue: [] as PathValue<T, Path<T>>,
   });
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
   const selectedLanguages: LanguageCode[] = Array.isArray(field.value) ? field.value : [];
 
-  const handleOpenModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-  };
+  const { value: isModalOpen, enable: handleOpenModal, disable: handleCloseModal } =
+    utils.useBooleanState(false);
 
   const handleConfirm = (languages: LanguageCode[]) => {
     field.onChange(languages);

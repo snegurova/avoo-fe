@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback } from 'react';
 import { View, StyleSheet, Pressable } from 'react-native';
 import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import { useNavigation } from '@react-navigation/native';
@@ -9,24 +9,23 @@ import { RootScreens, RootNavigationProp } from '@/types/navigation';
 import { Text } from 'react-native-paper';
 import { CONSTANTS } from '@/constants/constants';
 import { CustomBottomSheet } from '@/shared/CustomBottomSheet/CustomBottomSheet';
+import { utils } from '@avoo/hooks';
 
 export function BottomBar(props: BottomTabBarProps) {
   const { state, descriptors, navigation } = props;
   const rootNavigation = useNavigation<RootNavigationProp>();
 
-  
-  const [visible, setVisible] = useState(false);
-
+  const { value: visible, enable, disable } = utils.useBooleanState(false);
 
   const handleNavigateToPost = useCallback(() => {
-    setVisible(false);
+    disable();
     rootNavigation.navigate(RootScreens.AddPostScreen);
-  }, [rootNavigation]);
+  }, [rootNavigation, disable]);
 
   const handleNavigateToBooking = useCallback(() => {
-    setVisible(false);
+    disable();
     rootNavigation.navigate(RootScreens.AddBookingScreen);
-  }, [rootNavigation]);
+  }, [rootNavigation, disable]);
 
   return (
     <>
@@ -57,14 +56,14 @@ export function BottomBar(props: BottomTabBarProps) {
           <Pressable
             className='absolute top-[-56px] right-0'
             hitSlop={20}
-            onPress={() => setVisible(true)}
+            onPress={enable}
           >
             <View className='w-11 h-11 rounded-full bg-primary-400 items-center justify-center'>
               <MaterialIcons name='add' size={24} color={colors.white} />
             </View>
           </Pressable>
         </View>
-        <CustomBottomSheet visible={visible} onClose={() => setVisible(false)}>
+        <CustomBottomSheet visible={visible} onClose={disable}>
           <Pressable className='px-6 py-4' onPress={handleNavigateToPost}>
             <Text variant='titleMedium'>New Post</Text>
           </Pressable>
