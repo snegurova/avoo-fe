@@ -3,16 +3,20 @@ import { MaterialIcons, MaterialCommunityIcons } from '@/shared/icons';
 import { Avatar } from '@/shared/Avatar/Avatar';
 import { colors } from '@avoo/design-tokens';
 import { userHooks } from '@avoo/hooks';
-import { useBottomSheetStore, BottomSheetType } from '@/store/useBottomSheetStore';
+import { CustomBottomSheet } from '@/shared/CustomBottomSheet/CustomBottomSheet';
+import { ProfileMenu } from '@/shared/ProfileMenu/ProfileMenu';
+import { useState } from 'react';
 
 export default function DefaultRightContent() {
   const { visualProfileInfo } = userHooks.useGetUserProfile();
-  const handleOpenBottomSheet = useBottomSheetStore((state) => state.handleOpenBottomSheet);
+  const [isProfileMenuVisible, setIsProfileMenuVisible] = useState(false);
 
   const handleOpenProfile = () => {
-    handleOpenBottomSheet(BottomSheetType.PROFILE, {
-      enableDynamicSizing: true,
-    });
+    setIsProfileMenuVisible(true);
+  };
+
+  const handleCloseProfile = () => {
+    setIsProfileMenuVisible(false);
   };
 
   return (
@@ -31,6 +35,9 @@ export default function DefaultRightContent() {
           backgroundColor={colors.primary[200]}
         />
       </Pressable>
+      <CustomBottomSheet visible={isProfileMenuVisible} onClose={handleCloseProfile} snapToContent>
+        <ProfileMenu onClose={handleCloseProfile} />
+      </CustomBottomSheet>
     </View>
   );
 }
