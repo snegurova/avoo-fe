@@ -65,11 +65,11 @@ export const userHooks = {
   usePatchUserProfileAvatar: () => {
     const queryClient = useQueryClient();
 
-    const { mutate: handleUpdateAvatar, isPending } = useMutation<
-      BaseResponse<UserUpdateAvatarResponse>,
-      Error,
-      FileInput
-    >({
+    const {
+      mutate: handleUpdateAvatar,
+      mutateAsync: handleUpdateAvatarAsync,
+      isPending,
+    } = useMutation<BaseResponse<UserUpdateAvatarResponse>, Error, FileInput>({
       mutationFn: async (file) => {
         const form = new FormData();
         await appendFileToForm(form, 'file', file);
@@ -84,6 +84,7 @@ export const userHooks = {
 
     return {
       handleUpdateAvatar,
+      handleUpdateAvatarAsync,
     };
   },
   usePostCertificate: () => {

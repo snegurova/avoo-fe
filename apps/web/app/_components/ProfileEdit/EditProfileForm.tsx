@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useCallback } from 'react';
 import { useForm } from 'react-hook-form';
 import { Button } from '@mui/material';
 import { AvatarUpload, AvatarSize } from '@/_components/AvatarUpload/AvatarUpload';
@@ -7,7 +7,10 @@ import { userHooks } from '@avoo/hooks';
 import FormInput from '@/_components/FormInput/FormInput';
 import type { components } from '@avoo/axios/types/generated';
 import type { NominatimPlace, VisualProfileInfo } from '@avoo/shared';
-import { buildShortAddress } from '@avoo/shared';
+import { buildShortAddress, useAddressSearch, getCondensedAddress } from '@avoo/shared';
+import AddressResults from './AddressResults';
+import { createProfileDefaults, buildUpdateProfilePayload } from './helpers';
+import useAvatarUpload from './useAvatarUpload';
 
 type Props = {
   initial?: VisualProfileInfo | null;
@@ -23,73 +26,94 @@ export default function EditProfileForm({
   onCancel,
   isPending,
   showPreview = false,
-}: Props) {
-  const { handleUpdateAvatar } = userHooks.usePatchUserProfileAvatar();
+}: Readonly<Props>) {
+  const { handleUpdateAvatar, handleUpdateAvatarAsync } = userHooks.usePatchUserProfileAvatar();
 
-  const [localAvatarPreview, setLocalAvatarPreview] = useState<string | null>(
-    initial?.avatarPreviewUrl ?? initial?.avatarUrl ?? null,
-  );
-  const [searchResults, setSearchResults] = useState<NominatimPlace[] | null>(null);
-  const [isSearching, setIsSearching] = useState(false);
+  const { search, searchResults, isSearching, clear, getMyLocation } = useAddressSearch();
+  const { localPreview, handleImageSelected } = useAvatarUpload({
+    initialPreview: initial?.avatarPreviewUrl ?? initial?.avatarUrl ?? null,
+    upload: (file: File) => {
+      if (handleUpdateAvatarAsync) return handleUpdateAvatarAsync(file);
+      return Promise.resolve(handleUpdateAvatar(file));
+    },
+  });
 
   type FormValues = {
     name: string;
     phone: string;
     address: string;
-    location_lat?: number | undefined;
-    location_lon?: number | undefined;
+    location_lat?: number;
+    location_lon?: number;
     description: string;
   };
 
   const form = useForm<FormValues>({
-    defaultValues: {
-      name: initial?.name ?? '',
-      phone: initial?.phone ?? '',
-      address: initial?.address ?? '',
-      location_lat: initial?.location_lat ?? undefined,
-      location_lon: initial?.location_lon ?? undefined,
-      description: initial?.description ?? '',
-    },
+    defaultValues: createProfileDefaults(initial),
   });
 
   const { register, handleSubmit, setValue, setError, watch } = form;
 
-  const handleImageSelected = (file: File) => {
-    setLocalAvatarPreview(URL.createObjectURL(file));
-    void Promise.resolve(handleUpdateAvatar(file)).catch(() => null);
-  };
+  const handleSearchClick = useCallback(async () => {
+    const query = watch('address');
+    if (!query) return;
+    await search(query);
+  }, [search, watch]);
+
+  const handleUseMyLocation = useCallback(async () => {
+    const result = await getMyLocation();
+    if (!result) return;
+    const { place, coords } = result;
+    if (coords) {
+      setValue('location_lat', coords.latitude);
+      setValue('location_lon', coords.longitude);
+    }
+    if (place) {
+      const condensed = getCondensedAddress(place, () => watch('address'));
+      setValue('address', condensed);
+      clear();
+    }
+  }, [getMyLocation, setValue, clear, watch]);
+
+  const handleSelectResult = useCallback(
+    (place: NominatimPlace) => {
+      const short = buildShortAddress(place);
+      const label = short || place.display_name || `${place.lat},${place.lon}`;
+      setValue('address', label);
+      setValue('location_lat', Number(place.lat));
+      setValue('location_lon', Number(place.lon));
+      clear();
+    },
+    [setValue, clear],
+  );
+
+  const onImageSelected = useCallback(
+    (file: File) => {
+      handleImageSelected(file);
+    },
+    [handleImageSelected],
+  );
 
   const onSubmitInternal = async (values: FormValues) => {
-    const payload: Partial<components['schemas']['UpdateProfileDto']> = {
-      name: values.name || undefined,
-      phone: values.phone || undefined,
-      description: values.description || undefined,
-      address: values.address || undefined,
-      location_lat:
-        typeof values.location_lat === 'number' && !Number.isNaN(values.location_lat)
-          ? values.location_lat
-          : undefined,
-      location_lon:
-        typeof values.location_lon === 'number' && !Number.isNaN(values.location_lon)
-          ? values.location_lon
-          : undefined,
-    };
+    const payload = buildUpdateProfilePayload(values);
 
-    await Promise.resolve(onSubmit(payload)).catch((e) => {
-      const maybe = e as {
+    try {
+      await onSubmit(payload);
+    } catch (err) {
+      const maybe = err as {
         errors?: Array<{ field?: string; message?: string }>;
         errorMessage?: string;
       };
-      if (maybe?.errors && Array.isArray(maybe.errors)) {
-        maybe.errors.forEach((it) => {
-          if (it.field)
-            setError(it.field as keyof FormValues, {
+      if (Array.isArray(maybe?.errors)) {
+        maybe.errors.forEach((fieldError) => {
+          if (fieldError.field) {
+            setError(fieldError.field as keyof FormValues, {
               type: 'server',
-              message: it.message ?? 'Validation error',
+              message: fieldError.message ?? 'Validation error',
             });
+          }
         });
       }
-    });
+    }
   };
 
   return (
@@ -100,8 +124,8 @@ export default function EditProfileForm({
       {showPreview && (
         <div className='flex justify-center'>
           <AvatarUpload
-            imageUri={localAvatarPreview}
-            onImageSelected={handleImageSelected}
+            imageUri={localPreview}
+            onImageSelected={onImageSelected}
             isLoading={Boolean(isPending)}
             size={AvatarSize.LARGE}
           />
@@ -109,108 +133,47 @@ export default function EditProfileForm({
       )}
 
       <div>
-        <label className='text-sm text-gray-600'>Display Name</label>
-        <FormInput {...register('name')} />
+        <label htmlFor='name' className='text-sm text-gray-600'>
+          Display Name
+        </label>
+        <FormInput id='name' {...register('name')} />
       </div>
 
       <div>
-        <label className='text-sm text-gray-600'>Phone</label>
-        <FormInput {...register('phone')} />
+        <label htmlFor='phone' className='text-sm text-gray-600'>
+          Phone
+        </label>
+        <FormInput id='phone' {...register('phone')} />
       </div>
 
       <div>
-        <label className='text-sm text-gray-600'>Address</label>
+        <label htmlFor='address' className='text-sm text-gray-600'>
+          Address
+        </label>
         <div className='space-y-2'>
           <div className='flex gap-2'>
-            <FormInput {...register('address')} />
-            <Button
-              type='button'
-              size='small'
-              onClick={async () => {
-                const query = watch('address');
-                if (!query) return;
-                setIsSearching(true);
-                setSearchResults(null);
-                const res = await fetch(
-                  `https://nominatim.openstreetmap.org/search?format=json&limit=5&q=${encodeURIComponent(
-                    query,
-                  )}`,
-                ).catch(() => null);
-                if (res) {
-                  const data = (await res.json().catch(() => null)) as NominatimPlace[] | null;
-                  if (data && data.length > 0) setSearchResults(data);
-                }
-                setIsSearching(false);
-              }}
-            >
+            <FormInput id='address' {...register('address')} />
+            <Button type='button' size='small' onClick={handleSearchClick}>
               {isSearching ? 'Searching...' : 'Search'}
             </Button>
-            <Button
-              type='button'
-              size='small'
-              onClick={() => {
-                if (!navigator.geolocation) return;
-                navigator.geolocation.getCurrentPosition(
-                  async (pos) => {
-                    const lat = pos.coords.latitude;
-                    const lon = pos.coords.longitude;
-                    setValue('location_lat', lat);
-                    setValue('location_lon', lon);
-                    const res = await fetch(
-                      `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`,
-                    ).catch(() => null);
-                    if (res) {
-                      const j = (await res.json().catch(() => null)) as NominatimPlace | null;
-                      if (j) {
-                        const short = buildShortAddress(j);
-                        const condensed =
-                          short && short.length > 0
-                            ? short
-                            : j.display_name
-                              ? j.display_name.split(',').slice(0, 3).join(',')
-                              : watch('address');
-                        setValue('address', condensed);
-                        setSearchResults(null);
-                      }
-                    }
-                  },
-                  () => {},
-                );
-              }}
-            >
+            <Button type='button' size='small' onClick={handleUseMyLocation}>
               Use my location
             </Button>
           </div>
 
           {searchResults && searchResults.length > 0 && (
             <div className='mt-2 bg-white border rounded shadow-sm max-h-48 overflow-auto'>
-              {searchResults.map((r) => {
-                const short = buildShortAddress(r);
-                const label = short || r.display_name || `${r.lat},${r.lon}`;
-                return (
-                  <button
-                    key={`${r.lat}-${r.lon}`}
-                    type='button'
-                    className='w-full text-left px-3 py-2 hover:bg-gray-100'
-                    onClick={() => {
-                      setValue('address', label);
-                      setValue('location_lat', Number(r.lat));
-                      setValue('location_lon', Number(r.lon));
-                      setSearchResults(null);
-                    }}
-                  >
-                    {label}
-                  </button>
-                );
-              })}
+              <AddressResults results={searchResults} onSelect={handleSelectResult} />
             </div>
           )}
         </div>
       </div>
 
       <div>
-        <label className='text-sm text-gray-600'>About</label>
-        <FormInput {...register('description')} />
+        <label htmlFor='description' className='text-sm text-gray-600'>
+          About
+        </label>
+        <FormInput id='description' {...register('description')} />
       </div>
 
       <div className='flex justify-center gap-3'>

@@ -5,7 +5,7 @@ function getAddress(place?: NominatimPlace): NominatimAddress {
   return place.address ?? {};
 }
 
-function buildShortAddress(place?: NominatimPlace) {
+export function buildShortAddress(place?: NominatimPlace) {
   const addr = getAddress(place);
 
   const {
