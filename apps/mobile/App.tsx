@@ -8,13 +8,20 @@ import { QueryClientProvider } from '@tanstack/react-query';
 import { queryClient } from '@avoo/hooks';
 import { PaperProvider } from 'react-native-paper';
 import paperTheme from '@/theme/paper-theme';
-import { GlobalBottomSheetProvider } from '@/shared/GlobalBottomSheetProvider/GlobalBottomSheetProvider';
-
 import './global.css';
+import { GlobalBottomSheetHost } from '@/shared/GlobalBottomSheetHost/GlobalBottomSheetHost';
+import { useFonts } from 'expo-font';
+import { fonts } from '@/fonts/fonts';
 
 enableScreens();
 
 export default function App() {
+  const [fontsLoaded] = useFonts(fonts);
+
+  if (!fontsLoaded) {
+    return null; 
+  }
+
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <SafeAreaProvider>
@@ -22,9 +29,8 @@ export default function App() {
           <QueryClientProvider client={queryClient}>
             <StatusBar style='auto' />
             <PaperProvider theme={paperTheme}>
-              <GlobalBottomSheetProvider>
-                <AppContainer />
-              </GlobalBottomSheetProvider>
+              <AppContainer />
+              <GlobalBottomSheetHost />
             </PaperProvider>
           </QueryClientProvider>
         </NavigationContainer>

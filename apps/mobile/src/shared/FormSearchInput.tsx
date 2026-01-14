@@ -154,6 +154,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
     paddingHorizontal: 12,
     marginBottom: 8,
+    borderWidth: 1,
   },
   searchIcon: {
     fontSize: 16,

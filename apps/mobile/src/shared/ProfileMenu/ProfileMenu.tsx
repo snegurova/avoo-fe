@@ -3,16 +3,15 @@ import { Avatar } from '@/shared/Avatar/Avatar';
 import { colors } from '@avoo/design-tokens';
 import { authHooks, userHooks } from '@avoo/hooks';
 import { Text } from 'react-native-paper';
-import { useGlobalBottomSheet } from '@/shared/GlobalBottomSheetProvider/GlobalBottomSheetProvider';
 import { RootNavigationProp, RootScreens } from '@/types/navigation';
 import { useNavigation } from '@react-navigation/native';
+import { useBottomSheetStore } from '@/store/useBottomSheetStore';
 
-export const ProfileBottomSheet = () => {
-  const { handleCloseBottomSheet } = useGlobalBottomSheet();
+export const ProfileMenu = () => {
   const navigation = useNavigation<RootNavigationProp>();
   const { visualProfileInfo } = userHooks.useGetUserProfile();
-
   const { logoutMutation } = authHooks.useLogout();
+  const handleCloseBottomSheet = useBottomSheetStore((state) => state.handleCloseBottomSheet);
 
   const handleLogout = () => {
     logoutMutation();
@@ -20,7 +19,7 @@ export const ProfileBottomSheet = () => {
   };
 
   const handleNavigate = () => {
-    close();
+    handleCloseBottomSheet();
     navigation.navigate(RootScreens.ProfileScreen);
   };
 
@@ -40,27 +39,40 @@ export const ProfileBottomSheet = () => {
       </View>
 
       <Pressable className='py-3 border-t border-primary-100' onPress={handleNavigate}>
-        <Text variant='titleSmall' style={{ lineHeight: 16, color: colors.gray[700] }}>Profile</Text>
+        <Text variant='titleSmall' style={{ lineHeight: 16, color: colors.gray[700] }}>
+          Profile
+        </Text>
       </Pressable>
       <Pressable className='py-3'>
-        <Text variant='titleSmall' style={{ lineHeight: 16, color: colors.gray[700] }}>Account settings</Text>
+        <Text variant='titleSmall' style={{ lineHeight: 16, color: colors.gray[700] }}>
+          Account settings
+        </Text>
       </Pressable>
       <Pressable className='py-3'>
-        <Text variant='titleSmall' style={{ lineHeight: 16, color: colors.gray[700] }}>Security settings</Text>
+        <Text variant='titleSmall' style={{ lineHeight: 16, color: colors.gray[700] }}>
+          Security settings
+        </Text>
       </Pressable>
       <Pressable className='py-3 border-t border-primary-100'>
-        <Text variant='titleSmall' style={{ lineHeight: 16, color: colors.gray[700] }}>Terms of serrvice</Text>
+        <Text variant='titleSmall' style={{ lineHeight: 16, color: colors.gray[700] }}>
+          Terms of serrvice
+        </Text>
       </Pressable>
       <Pressable className='py-3'>
-        <Text variant='titleSmall' style={{ lineHeight: 16, color: colors.gray[700] }}>Privacy policy</Text>
+        <Text variant='titleSmall' style={{ lineHeight: 16, color: colors.gray[700] }}>
+          Privacy policy
+        </Text>
       </Pressable>
       <Pressable className='py-3 border-t border-primary-100'>
-        <Text variant='titleSmall' style={{ lineHeight: 16, color: colors.gray[700] }}>Help and support</Text>
+        <Text variant='titleSmall' style={{ lineHeight: 16, color: colors.gray[700] }}>
+          Help and support
+        </Text>
       </Pressable>
       <Pressable className='py-3' onPress={handleLogout}>
-        <Text variant='titleSmall' style={{ lineHeight: 16, color: colors.red[500] }}>Logout</Text>
+        <Text variant='titleSmall' style={{ lineHeight: 16, color: colors.red[500] }}>
+          Logout
+        </Text>
       </Pressable>
     </View>
   );
 };
-

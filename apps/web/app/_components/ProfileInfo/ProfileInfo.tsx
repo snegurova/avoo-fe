@@ -27,7 +27,7 @@ export const ProfileInfo = () => {
     <>
       <div className='flex justify-center mb-4'>
         <AvatarUpload
-          imageUri={visualProfileInfo.avatarPreviewUrl}
+          imageUri={visualProfileInfo.avatarUrl}
           onImageSelected={handleImageSelect}
           isLoading={isPending}
         />

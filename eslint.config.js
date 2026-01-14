@@ -73,4 +73,11 @@ export default defineConfig([
       '@typescript-eslint/no-require-imports': 'off',
     },
   },
+  {
+    files: ['**/fonts/fonts.ts'],
+    rules: {
+      '@typescript-eslint/no-require-imports': 'off',
+      '@typescript-eslint/no-var-requires': 'off',
+    },
+  },
 ]);

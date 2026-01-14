@@ -25,7 +25,6 @@ export const SearchInput = ({ containerStyle, ...rest }: Props) => {
 const styles = StyleSheet.create({
   container: {
     width: '100%',
-    marginBottom: 16,
   },
   inputContainer: {
     flexDirection: 'row',
