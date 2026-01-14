@@ -7,4 +7,6 @@ export * from './calendarHooks';
 export * from './languageHooks';
 export * from '../schemas/validationSchemas';
 export * from '../client/queryClient';
+export * from './categoriesHooks';
+export * from './servicesHooks';
 export * from '../utils/utils';
