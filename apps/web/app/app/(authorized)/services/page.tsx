@@ -5,37 +5,19 @@ import ServiceList from '@/_components/ServiceList/ServiceList';
 import ServiceControls from '@/_components/ServiceControls/ServiceControls';
 import { servicesHooks } from '@avoo/hooks/src/servicesHooks';
 import { categoriesHooks } from '@avoo/hooks';
-import { PrivateServiceQueryParams, Service } from '@avoo/axios/types/apiTypes';
-
-type ServicesQueryProps = {
-  page: number;
-  limit: number;
-  categoryId: number | null;
-  search: string;
-};
+import { Service } from '@avoo/axios/types/apiTypes';
 
 export default function ServicesPage() {
   const currency = 'EUR';
   const [services, setServices] = useState<Service[]>([]);
   const [totalServicesCount, setTotalServicesCount] = useState<number>(0);
-  const [selectedCategoryName, setSelectedCategoryName] = useState<string>('All categories');
   const [allCategoriesCount, setAllCategoriesCount] = useState<number>(0);
 
-  const [params, setParams] = useState<ServicesQueryProps>({
-    page: 1,
-    limit: 10,
-    categoryId: null,
-    search: '',
-  });
-  const query: PrivateServiceQueryParams = {
-    page: params.page,
-    limit: params.limit,
-    search: params.search,
-    ...(params.categoryId !== null && { categoryId: params.categoryId }),
-  };
+  const { params, queryParams, selectedCategoryName, setSearchQuery, setCategory, incrementPage } =
+    servicesHooks.useServicesQuery();
 
   const categories = categoriesHooks.useGetCategories();
-  const servicesResponse = servicesHooks.useGetServices(query);
+  const servicesResponse = servicesHooks.useGetServices(queryParams);
   const { items = [], pagination } = servicesResponse ?? { items: [], pagination: { total: 0 } };
 
   useEffect(() => {
@@ -52,15 +34,6 @@ export default function ServicesPage() {
     setTotalServicesCount(pagination?.total ?? 0);
   }, [items, pagination, params.page, params.categoryId]);
 
-  const setSelectedCategory = (value: number | null, name: string) => {
-    setParams({ ...params, page: 1, categoryId: value, search: '' });
-    setSelectedCategoryName(name);
-  };
-  const setSearchQuery = (value: string) => {
-    setParams({ ...params, page: 1, categoryId: null, search: value });
-    setSelectedCategoryName('All categories');
-  };
-
   return (
     <AppWrapper>
       <ServiceControls setSearchQuery={setSearchQuery} />
@@ -71,8 +44,8 @@ export default function ServicesPage() {
         totalServicesCount={totalServicesCount}
         selectedCategoryId={params.categoryId}
         selectedCategoryName={selectedCategoryName}
-        setSelectedCategory={setSelectedCategory}
-        incrementPage={() => setParams({ ...params, page: params.page + 1 })}
+        setSelectedCategory={setCategory}
+        incrementPage={incrementPage}
         hasMore={services.length < totalServicesCount}
         currency={currency}
       />
