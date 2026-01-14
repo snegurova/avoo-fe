@@ -2,7 +2,7 @@
 import { createTheme } from '@mui/material/styles';
 import { Roboto } from 'next/font/google';
 import type {} from '@mui/x-date-pickers/themeAugmentation';
-import { colors, radius, typography } from '@avoo/design-tokens';
+import { colors, breakpoints, radius, typography } from '@avoo/design-tokens';
 
 const roboto = Roboto({
   weight: ['400', '500', '700'],
@@ -245,6 +245,15 @@ const theme = createTheme({
           };
         },
       },
+    },
+  },
+  breakpoints: {
+    values: {
+      xs: breakpoints.xs,
+      sm: breakpoints.sm,
+      md: breakpoints.md,
+      lg: breakpoints.lg,
+      xl: breakpoints.xl,
     },
   },
 });

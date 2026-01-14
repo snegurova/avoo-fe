@@ -87,4 +87,17 @@ export const timeUtils = {
       return DateStatus.FUTURE;
     }
   },
+  convertDuration(duration: number): string {
+    const hours = Math.floor(duration / 60);
+    const minutes = duration % 60;
+    if (hours === 0) {
+      const minuteText = minutes === 1 ? 'min' : 'mins';
+      return `${minutes} ${minuteText}`;
+    }
+    if (minutes === 0) {
+      const hourText = hours === 1 ? 'hour' : 'hours';
+      return `${hours} ${hourText}`;
+    }
+    return `${hours}h ${minutes} mins`;
+  },
 };
