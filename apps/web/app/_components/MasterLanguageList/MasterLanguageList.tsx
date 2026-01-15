@@ -2,32 +2,59 @@
 
 import React from 'react';
 import { colors, typography } from '@avoo/design-tokens';
+import { LANGUAGE_NAMES } from '@avoo/constants';
 
 type Props = {
   languages: string[];
 };
 
-export const MasterLanguageList = ({ languages }: Props) => {
+type ExtraProps = {
+  showLabel?: boolean;
+  labelStyle?: React.CSSProperties;
+  textStyle?: React.CSSProperties;
+};
+
+export const MasterLanguageList = ({
+  languages,
+  showLabel = false,
+  labelStyle,
+  textStyle,
+}: Props & ExtraProps) => {
   if (!languages || languages.length === 0) {
     return (
-      <div style={{ fontSize: typography.fontSize.xs, color: colors.black }}>No languages</div>
+      <div style={{ fontSize: typography.fontSize.xs, color: colors.gray[700] }}>No languages</div>
     );
   }
 
+  const names = languages
+    .map((lang) => {
+      const raw = String(lang || '').trim();
+      const key = raw.toLowerCase();
+      return (
+        (LANGUAGE_NAMES as Record<string, string>)[key] ??
+        (raw ? raw[0].toUpperCase() + raw.slice(1).toLowerCase() : raw)
+      );
+    })
+    .join(', ');
+
+  const defaultLabelStyle: React.CSSProperties = {
+    fontWeight: typography.fontWeight.medium,
+    color: colors.gray[700],
+  };
+
+  const defaultTextStyle: React.CSSProperties = {
+    fontSize: '12px',
+    color: colors.gray[500],
+    fontFamily: `Roboto, ${typography.fontFamily.sans}`,
+  };
+
+  const finalLabelStyle = { ...defaultLabelStyle, ...(labelStyle || {}) };
+  const finalTextStyle = { ...defaultTextStyle, ...(textStyle || {}) };
+
   return (
-    <div className='flex gap-2 flex-wrap'>
-      {languages.map((lang, idx) => (
-        <span
-          key={idx}
-          style={{
-            fontSize: typography.fontSize.xs,
-            color: colors.black,
-          }}
-          className='bg-gray-100 rounded-full px-2 py-1 text-xs'
-        >
-          {lang.toUpperCase()}
-        </span>
-      ))}
+    <div style={finalTextStyle}>
+      {showLabel ? <span style={finalLabelStyle}>Languages:&nbsp;</span> : null}
+      {names}
     </div>
   );
 };

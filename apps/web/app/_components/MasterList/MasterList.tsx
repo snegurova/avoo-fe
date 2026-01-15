@@ -15,16 +15,16 @@ export const MasterList = ({ masters }: Props) => {
 
   return (
     <div>
-      <div className='hidden md:flex items-center gap-4 px-3 py-2 text-sm text-gray-500 border-b'>
-        <div className='w-2/5'>Client name</div>
+      <div className='hidden lg:flex items-center gap-4 px-8 py-3 mb-8 text-sm text-black font-semibold bg-primary-50'>
+        <div className='w-1/5'>Master name</div>
         <div className='w-1/5'>Mobile number</div>
         <div className='w-1/5'>Email address</div>
         <div className='w-1/5'>Languages</div>
         <div className='w-12 text-right'>Actions</div>
       </div>
-      <div className='flex flex-col gap-4 py-4'>
-        {masters.map((m) => (
-          <MasterListItem key={m.id} master={m} />
+      <div className='flex flex-col gap-4'>
+        {masters.map((master) => (
+          <MasterListItem key={master.id} master={master} />
         ))}
       </div>
     </div>
