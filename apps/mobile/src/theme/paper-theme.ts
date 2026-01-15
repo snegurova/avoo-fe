@@ -47,6 +47,12 @@ const paperTheme: MD3Theme = {
   },
   fonts: {
     ...MD3LightTheme.fonts,
+    titleLarge: {
+      ...MD3LightTheme.fonts.titleLarge,
+      fontFamily: getFontFamily(typography.fontWeight.medium),
+      fontSize: typography.fontSize.xl,
+      lineHeight: 30,
+    },
     titleMedium: {
       ...MD3LightTheme.fonts.titleMedium,
       fontFamily: getFontFamily(typography.fontWeight.medium),
