@@ -1,17 +1,19 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, Pressable, FlatList } from 'react-native';
 import Layout from '@/shared/Layout/Layout';
-import { masterHooks } from '@avoo/hooks';
+import { masterHooks, utils } from '@avoo/hooks';
 import { MasterListItem } from '@/components/MasterListItem/MasterListItem';
 import { SearchInput } from '@/shared/SearchInput/SearchInput';
 import { layoutHooks } from '@/hooks/layoutHooks';
-import { useBottomSheetStore, BottomSheetType } from '@/store/useBottomSheetStore';
 import { MasterWithRelationsEntityResponse } from '@avoo/axios/types/apiTypes';
-import EditMasterForm from '@/components/EditMasterForm';
-import { CustomBottomSheet } from '@/shared/CustomBottomSheet';
+import EditMasterForm from '@/components/EditMasterForm/EditMasterForm';
+import { CustomBottomSheet } from '@/shared/CustomBottomSheet/CustomBottomSheet';
+import CreateMasterForm from '@/components/CreateMasterForm/CreateMasterForm';
 
 export default function MastersScreen() {
   const [searchQuery, setSearchQuery] = useState('');
+  const { value: isCreateMasterFormVisible, enable: openCreateForm, disable: closeCreateForm } =
+    utils.useBooleanState(false);
   const bottomBarHeight = layoutHooks.useBottomBarHeight();
 
   const masters = masterHooks.useGetMastersProfileInfo();
@@ -20,13 +22,7 @@ export default function MastersScreen() {
     null,
   );
 
-  const handleOpenBottomSheet = useBottomSheetStore((state) => state.handleOpenBottomSheet);
 
-  const handleOpenForm = () => {
-    handleOpenBottomSheet(BottomSheetType.CREATE_MASTER, {
-      snapPoints: ['95%'],
-    });
-  };
 
   const handleMasterPress = (master: MasterWithRelationsEntityResponse) => {
     setSelectedMaster(master);
@@ -45,7 +41,7 @@ export default function MastersScreen() {
           </Text>
           <Pressable
             className='flex-row items-center border border-primary-700 rounded-md px-4 py-3.5 gap-4'
-            onPress={handleOpenForm}
+            onPress={openCreateForm}
           >
             <Text className='text-md font-bold text-primary-700 leading-4'>New master</Text>
           </Pressable>
@@ -74,6 +70,9 @@ export default function MastersScreen() {
 
         <CustomBottomSheet visible={!!selectedMaster} onClose={handleCloseModal}>
           {selectedMaster && <EditMasterForm master={selectedMaster} onClose={handleCloseModal} />}
+        </CustomBottomSheet>
+        <CustomBottomSheet visible={isCreateMasterFormVisible} onClose={closeCreateForm}>
+          <CreateMasterForm onClose={closeCreateForm} />
         </CustomBottomSheet>
       </Layout>
     </>

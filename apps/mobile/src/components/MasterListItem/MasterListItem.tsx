@@ -33,7 +33,7 @@ export const MasterListItem = ({ master, onPress }: Props) => {
           name={master.name}
         />
         <View className='flex-1'>
-          <Text variant='titleMedium' className='mb-2'>
+          <Text variant='titleMedium' className='mb-2' style={styles.titleMedium}>
             {master.name}
           </Text>
           <Text
@@ -62,6 +62,9 @@ export const MasterListItem = ({ master, onPress }: Props) => {
 };
 
 const styles = StyleSheet.create({
+  titleMedium: {
+    color: colors.gray[700],
+  },
   bodyMedium: {
     color: colors.gray[500],
   },

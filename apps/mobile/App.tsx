@@ -9,7 +9,6 @@ import { queryClient } from '@avoo/hooks';
 import { PaperProvider } from 'react-native-paper';
 import paperTheme from '@/theme/paper-theme';
 import './global.css';
-import { GlobalBottomSheetHost } from '@/shared/GlobalBottomSheetHost/GlobalBottomSheetHost';
 import { useFonts } from 'expo-font';
 import { fonts } from '@/fonts/fonts';
 
@@ -19,7 +18,7 @@ export default function App() {
   const [fontsLoaded] = useFonts(fonts);
 
   if (!fontsLoaded) {
-    return null; 
+    return null;
   }
 
   return (
@@ -30,7 +29,6 @@ export default function App() {
             <StatusBar style='auto' />
             <PaperProvider theme={paperTheme}>
               <AppContainer />
-              <GlobalBottomSheetHost />
             </PaperProvider>
           </QueryClientProvider>
         </NavigationContainer>
