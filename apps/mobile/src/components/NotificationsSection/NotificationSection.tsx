@@ -46,7 +46,6 @@ export const NotificationsSection = () => {
       </View>
 
       <Pressable
-        onPress={() => {}}
         className='flex-row items-center border border-gray-200 rounded-full py-2.5 px-3 gap-2 mt-5 self-end'
       >
         <Text variant='bodyMedium' style={{ color: colors.gray[600] }}>
