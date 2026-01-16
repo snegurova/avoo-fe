@@ -2,12 +2,13 @@
 
 import React from 'react';
 import Avatar, { AvatarSize } from '@/_components/Avatar/Avatar';
+import { Typography } from '@mui/material';
 import { MasterWithRelationsEntityResponse } from '@avoo/axios/types/apiTypes';
 import { colors, typography } from '@avoo/design-tokens';
 import MasterLanguageList from '@/_components/MasterLanguageList/MasterLanguageList';
 import ShareIcon from '@/_icons/ShareIcon';
-import EditIcon from '@/_icons/EditIcon';
 import DeleteIcon from '@/_icons/DeleteIcon';
+import EditSquareIcon from '@/_icons/EditSquareIcon';
 import IconLink from '@/_components/IconLink/IconLink';
 
 type Props = {
@@ -32,9 +33,10 @@ export const MasterListItem = ({ master }: Props) => {
         </div>
 
         <div className='flex-1'>
-          <div
+          <Typography
+            component='div'
             className='break-words whitespace-normal'
-            style={{
+            sx={{
               fontFamily: typography.fontFamily.sans,
               fontSize: typography.fontSize.lg,
               fontWeight: typography.fontWeight.bold,
@@ -42,7 +44,7 @@ export const MasterListItem = ({ master }: Props) => {
             }}
           >
             {displayName}
-          </div>
+          </Typography>
           <div className='text-sm text-gray-500 break-words whitespace-normal'>
             {master.email ?? 'No email'}
           </div>
@@ -68,9 +70,10 @@ export const MasterListItem = ({ master }: Props) => {
             bgColor={colors.primary[200]}
           />
           <div>
-            <div
+            <Typography
+              component='div'
               className='break-words whitespace-normal'
-              style={{
+              sx={{
                 fontFamily: typography.fontFamily.sans,
                 fontSize: typography.fontSize.sm,
                 fontWeight: typography.fontWeight.medium,
@@ -78,7 +81,7 @@ export const MasterListItem = ({ master }: Props) => {
               }}
             >
               {displayName}
-            </div>
+            </Typography>
           </div>
         </div>
         <div className='w-1/5 text-sm text-gray-700 break-words whitespace-normal'>{phone}</div>
@@ -89,7 +92,7 @@ export const MasterListItem = ({ master }: Props) => {
           <MasterLanguageList languages={languagesArr} />
         </div>
         <div className='w-12 flex items-center gap-2'>
-          <IconLink icon={<EditIcon />} href='#' label='Edit' />
+          <IconLink icon={<EditSquareIcon />} href='#' label='Edit' />
           <IconLink icon={<ShareIcon />} href='#' label='Share' />
           <IconLink icon={<DeleteIcon />} href='#' label='Delete' />
         </div>

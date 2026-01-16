@@ -1,12 +1,11 @@
 'use client';
 
 import React, { useState, useCallback } from 'react';
-import { SectionHeader } from '@/_components/SectionHeader/SectionHeader';
+import Controls from '@/_components/Controls/Controls';
 import { IconButton } from '@/_components/IconButton/IconButton';
 import { routerHooks } from '@/_hooks/routerHooks';
 import { masterHooks } from '@avoo/hooks';
 import MasterList from '@/_components/MasterList/MasterList';
-import SearchInput from '@/_components/SearchInput/SearchInput';
 import {
   Button,
   Dialog,
@@ -40,48 +39,15 @@ export default function MastersPage() {
       <div className='p-6'>
         <IconButton icon='⬅' onClick={handleBackClick} ariaLabel='Back' />
 
-        <div className='flex flex-col gap-4 pb-8 sm:flex-row sm:items-center sm:justify-between'>
-          <div className='flex items-center justify-between w-full sm:w-auto'>
-            <div className='-mb-4'>
-              <SectionHeader title='Masters' />
-            </div>
-
-            <div className='sm:hidden'>
-              <Button
-                variant='outlined'
-                onClick={handleAddMaster}
-                sx={{
-                  color: 'var(--color-primary-700)',
-                  borderColor: 'var(--color-primary-700)',
-                  '&:hover': { backgroundColor: 'var(--color-primary-50)' },
-                }}
-              >
-                New master
-              </Button>
-            </div>
-          </div>
-
-          <div className='w-full sm:flex-1 sm:min-w-0'>
-            <SearchInput
-              value={searchQuery}
-              onChange={setSearchQuery}
-              placeholder='Search by name, phone or email'
-            />
-          </div>
-
-          <div className='hidden sm:block flex-shrink-0'>
-            <Button
-              variant='outlined'
-              onClick={handleAddMaster}
-              sx={{
-                color: 'var(--color-primary-700)',
-                borderColor: 'var(--color-primary-700)',
-                '&:hover': { backgroundColor: 'var(--color-primary-50)' },
-              }}
-            >
-              New master
-            </Button>
-          </div>
+        <div className='mb-8'>
+          <Controls
+            title='Masters'
+            onAddItem={handleAddMaster}
+            addLabel='New master'
+            searchValue={searchQuery}
+            onSearchChange={setSearchQuery}
+            placeholder='Search by name, phone or email'
+          />
         </div>
 
         <MasterList masters={filtered} />
@@ -99,7 +65,9 @@ export default function MastersPage() {
             </Typography>
           </DialogContent>
           <DialogActions>
-            <Button onClick={handleCloseCreateMaster}>Close</Button>
+            <Button autoFocus onClick={handleCloseCreateMaster}>
+              Close
+            </Button>
           </DialogActions>
         </Dialog>
       </div>
