@@ -1,6 +1,6 @@
 import { Text, View, TouchableWithoutFeedback, Keyboard, Pressable } from 'react-native';
 import  Layout from '@/shared/Layout/Layout';
-import RegistrationForm from '@/components/RegistrationForm';
+import RegistrationForm from '@/components/RegistrationForm/RegistrationForm';
 import { RootScreens, RootStackScreenProps } from '@/types/navigation';
 
 type Props = RootStackScreenProps<RootScreens.RegisterScreen>;

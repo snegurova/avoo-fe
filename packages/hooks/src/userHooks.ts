@@ -7,13 +7,13 @@ import {
   UserMediaResponse,
   UserProfileResponse,
   UserUpdateAvatarResponse,
+  UpdateProfile,
 } from '@avoo/axios/types/apiTypes';
 import { FileInput } from '@avoo/shared';
 import { apiStatus } from '../types/apiTypes';
 import { queryKeys } from './queryKeys';
 import { appendFileToForm, buildCertificateForm } from './utils/formDataHelpers';
 import { CreateCertificatePayload } from '@avoo/axios/types/certificate';
-import type { components } from '@avoo/axios/types/generated';
 
 export const userHooks = {
   useGetUserProfile: () => {
@@ -65,11 +65,11 @@ export const userHooks = {
   usePatchUserProfileAvatar: () => {
     const queryClient = useQueryClient();
 
-    const { mutate: handleUpdateAvatar, isPending } = useMutation<
-      BaseResponse<UserUpdateAvatarResponse>,
-      Error,
-      FileInput
-    >({
+    const {
+      mutate: handleUpdateAvatar,
+      mutateAsync: handleUpdateAvatarAsync,
+      isPending,
+    } = useMutation<BaseResponse<UserUpdateAvatarResponse>, Error, FileInput>({
       mutationFn: async (file) => {
         const form = new FormData();
         await appendFileToForm(form, 'file', file);
@@ -84,6 +84,7 @@ export const userHooks = {
 
     return {
       handleUpdateAvatar,
+      handleUpdateAvatarAsync,
     };
   },
   usePostCertificate: () => {
@@ -118,7 +119,7 @@ export const userHooks = {
     const { mutate, mutateAsync, isPending } = useMutation<
       BaseResponse<UserProfileResponse>,
       Error,
-      Partial<components['schemas']['UpdateProfileDto']>
+      UpdateProfile
     >({
       mutationFn: (payload) => {
         return userApi.updateProfile(payload);

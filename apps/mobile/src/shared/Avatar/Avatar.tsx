@@ -25,6 +25,7 @@ export const Avatar = (props: Props) => {
         fontSize: typography.fontSize.xl,
         fontWeight: typography.fontWeight.medium,
         fontFamily: typography.fontFamily.sans,
+        lineHeight: 30,
       }}
     />
   );

@@ -2,18 +2,14 @@ import { View, Pressable } from 'react-native';
 import { MaterialIcons, MaterialCommunityIcons } from '@/shared/icons';
 import { Avatar } from '@/shared/Avatar/Avatar';
 import { colors } from '@avoo/design-tokens';
-import { userHooks } from '@avoo/hooks';
-import { useBottomSheetStore, BottomSheetType } from '@/store/useBottomSheetStore';
+import { userHooks, utils } from '@avoo/hooks';
+import { CustomBottomSheet } from '@/shared/CustomBottomSheet/CustomBottomSheet';
+import { ProfileMenu } from '@/shared/ProfileMenu/ProfileMenu';
 
 export default function DefaultRightContent() {
   const { visualProfileInfo } = userHooks.useGetUserProfile();
-  const handleOpenBottomSheet = useBottomSheetStore((state) => state.handleOpenBottomSheet);
-
-  const handleOpenProfile = () => {
-    handleOpenBottomSheet(BottomSheetType.PROFILE, {
-      enableDynamicSizing: true,
-    });
-  };
+  const { value: isProfileMenuVisible, enable: handleOpenProfile, disable: handleCloseProfile } =
+    utils.useBooleanState(false);
 
   return (
     <View className='flex-row items-center gap-lg'>
@@ -31,6 +27,9 @@ export default function DefaultRightContent() {
           backgroundColor={colors.primary[200]}
         />
       </Pressable>
+      <CustomBottomSheet visible={isProfileMenuVisible} onClose={handleCloseProfile} snapToContent>
+        <ProfileMenu onClose={handleCloseProfile} />
+      </CustomBottomSheet>
     </View>
   );
 }

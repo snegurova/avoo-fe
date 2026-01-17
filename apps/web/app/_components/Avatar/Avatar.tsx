@@ -29,7 +29,7 @@ const sizeConfig = {
 type Props = {
   name: string;
   src?: string | null;
-  size?: AvatarSize;
+  size?: AvatarSize | number;
   bgColor?: string;
   textColor?: string;
 } & Omit<MuiAvatarProps, 'src' | 'sx'>;
@@ -44,7 +44,10 @@ export default function Avatar(props: Props) {
     ...rest
   } = props;
 
-  const config = sizeConfig[size];
+  const config =
+    typeof size === 'number'
+      ? { width: size, height: size, fontSize: Math.max(10, Math.floor(size / 2)) }
+      : sizeConfig[size];
 
   return (
     <MuiAvatar

@@ -5,21 +5,23 @@ import { authHooks, userHooks } from '@avoo/hooks';
 import { Text } from 'react-native-paper';
 import { RootNavigationProp, RootScreens } from '@/types/navigation';
 import { useNavigation } from '@react-navigation/native';
-import { useBottomSheetStore } from '@/store/useBottomSheetStore';
 
-export const ProfileMenu = () => {
+type Props = {
+  onClose: () => void;
+};
+
+export const ProfileMenu = ({ onClose }: Props) => {
   const navigation = useNavigation<RootNavigationProp>();
   const { visualProfileInfo } = userHooks.useGetUserProfile();
   const { logoutMutation } = authHooks.useLogout();
-  const handleCloseBottomSheet = useBottomSheetStore((state) => state.handleCloseBottomSheet);
 
   const handleLogout = () => {
     logoutMutation();
-    handleCloseBottomSheet();
+    onClose();
   };
 
   const handleNavigate = () => {
-    handleCloseBottomSheet();
+    onClose();
     navigation.navigate(RootScreens.ProfileScreen);
   };
 

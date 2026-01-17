@@ -2,7 +2,7 @@ import { Pressable, Text, View } from 'react-native';
 import { RootScreens, RootStackScreenProps } from '@/types/navigation';
 import { formatHooks } from '@avoo/hooks';
 import  Layout from '@/shared/Layout/Layout';
-import VerifyCodeForm from '@/components/VerifyCodeForm';
+import VerifyCodeForm from '@/components/VerifyCodeForm/VerifyCodeForm';
 import { authHooks } from '@avoo/hooks';
 
 type Props = RootStackScreenProps<RootScreens.ConfirmCodeScreen>;
