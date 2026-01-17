@@ -12,6 +12,7 @@ import { tv } from 'tailwind-variants';
 import CalendarMonthView from '../CalendarMonthView/CalendarMonthView';
 import { PX_IN_MINUTE } from '@/_constants/time';
 import { OrderStatus } from '@avoo/hooks/types/orderStatus';
+import AppPlaceholder from '../AppPlaceholder/AppPlaceholder';
 
 const columnHeadContainer = tv({
   base: 'sticky bg-white z-10 ',
@@ -28,7 +29,7 @@ const mainContainer = tv({
   base: 'overflow-auto relative',
   variants: {
     type: {
-      [CalendarViewType.DAY]: 'min-w-full',
+      [CalendarViewType.DAY]: 'min-w-full h-full',
       [CalendarViewType.WEEK]: 'w-full h-full flex',
       [CalendarViewType.MONTH]: 'h-full',
     },
@@ -162,6 +163,7 @@ export default function Calendar() {
                 )}
             </div>
           )}
+          {filteredMasters.length === 0 && <AppPlaceholder />}
         </div>
       </div>
     </div>
