@@ -22,6 +22,7 @@ type Props = {
   setToDate: React.Dispatch<React.SetStateAction<Date>>;
   setType: React.Dispatch<React.SetStateAction<CalendarViewType>>;
   setTime: React.Dispatch<React.SetStateAction<number>>;
+  isSingleWeek?: boolean;
 };
 
 const col = tv({
@@ -31,6 +32,10 @@ const col = tv({
       [CalendarViewType.DAY]: 'border-r min-w-25 md:min-w-55 2xl:min-w-90',
       [CalendarViewType.WEEK]: 'not-last:border-b min-h-38 md:min-h-40 flex flex-row flex-nowrap',
       [CalendarViewType.MONTH]: '',
+    },
+    isSingleWeek: {
+      false: '',
+      true: '2xl:min-w-55',
     },
   },
 });
@@ -56,7 +61,18 @@ const cell = tv({
 });
 
 export default function CalendarColumn(props: Props) {
-  const { data, master, type, date, time, setDate, setToDate, setType, setTime } = props;
+  const {
+    data,
+    master,
+    type,
+    date,
+    time,
+    setDate,
+    setToDate,
+    setType,
+    setTime,
+    isSingleWeek = false,
+  } = props;
   const ref = useRef<HTMLDivElement | null>(null);
 
   const [showEvents, setShowEvents] = useState<number>(1);
@@ -109,7 +125,7 @@ export default function CalendarColumn(props: Props) {
   return (
     <>
       {type === CalendarViewType.DAY && (
-        <div className={col({ type })} onClick={onAvailabelTimeClick}>
+        <div className={col({ type, isSingleWeek })} onClick={onAvailabelTimeClick}>
           {data &&
             data.days[0].availability?.map((avail, idx) => (
               <div

@@ -13,6 +13,7 @@ import CalendarMonthView from '../CalendarMonthView/CalendarMonthView';
 import { PX_IN_MINUTE } from '@/_constants/time';
 import { OrderStatus } from '@avoo/hooks/types/orderStatus';
 import AppPlaceholder from '../AppPlaceholder/AppPlaceholder';
+import CalendarWeekSingleMasterView from '../CalendarWeekSingleMasterView/CalendarWeekSingleMasterView';
 
 const columnHeadContainer = tv({
   base: 'sticky bg-white z-10 ',
@@ -102,6 +103,10 @@ export default function Calendar() {
     return masters.filter((master) => masterIds.includes(Number(master.id)));
   }, [masters, masterIds]);
 
+  const isWeekSingleMasterView = useMemo(() => {
+    return type === CalendarViewType.WEEK && filteredMasters.length === 1;
+  }, [type, filteredMasters]);
+
   return (
     <div className='flex h-[calc(100%-54px)] w-full'>
       <div className='w-full flex flex-col'>
@@ -122,46 +127,67 @@ export default function Calendar() {
           setStatuses={setStatuses}
         />
         <div className={mainContainer({ type })} ref={scrollRef}>
-          <div className={columnHeadContainer({ type })}>
-            {filteredMasters.map((master, idx) => (
-              <CalendarColumnHead key={`${master.id}-head`} master={master} idx={idx} type={type} />
-            ))}
-          </div>
+          {filteredMasters.length > 0 && !isWeekSingleMasterView && (
+            <>
+              <div className={columnHeadContainer({ type })}>
+                {filteredMasters.map((master, idx) => (
+                  <CalendarColumnHead
+                    key={`${master.id}-head`}
+                    master={master}
+                    idx={idx}
+                    type={type}
+                  />
+                ))}
+              </div>
 
-          {filteredMasters.length > 0 && (
-            <div className={dataContainer({ type })}>
-              <CalendarTimeScale type={type} date={date} time={time} setTime={setTime} />
-              {type !== CalendarViewType.MONTH &&
-                filteredMasters.map((master) => {
-                  const columnData = calendar?.find(
-                    (schedule) => String(schedule.masterId) === String(master.id),
-                  );
-                  return (
-                    <CalendarColumn
-                      key={`${master.id}-col`}
-                      data={columnData}
-                      master={master}
-                      type={type}
-                      date={date}
+              <div className={dataContainer({ type })}>
+                <CalendarTimeScale type={type} date={date} time={time} setTime={setTime} />
+                {type !== CalendarViewType.MONTH &&
+                  filteredMasters.map((master) => {
+                    const columnData = calendar?.find(
+                      (schedule) => String(schedule.masterId) === String(master.id),
+                    );
+                    return (
+                      <CalendarColumn
+                        key={`${master.id}-col`}
+                        data={columnData}
+                        master={master}
+                        type={type}
+                        date={date}
+                        setDate={setDate}
+                        setToDate={setToDate}
+                        setType={setType}
+                        time={time}
+                        setTime={setTime}
+                      />
+                    );
+                  })}
+                {type === CalendarViewType.MONTH &&
+                  new Date(params.rangeFromDate).getTime() + 28 * 24 * 60 * 60 * 1000 <=
+                    new Date(params.rangeToDate).getTime() && (
+                    <CalendarMonthView
+                      params={params}
                       setDate={setDate}
                       setToDate={setToDate}
                       setType={setType}
-                      time={time}
-                      setTime={setTime}
                     />
-                  );
-                })}
-              {type === CalendarViewType.MONTH &&
-                new Date(params.rangeFromDate).getTime() + 28 * 24 * 60 * 60 * 1000 <=
-                  new Date(params.rangeToDate).getTime() && (
-                  <CalendarMonthView
-                    params={params}
-                    setDate={setDate}
-                    setToDate={setToDate}
-                    setType={setType}
-                  />
-                )}
-            </div>
+                  )}
+              </div>
+            </>
+          )}
+          {isWeekSingleMasterView && (
+            <CalendarWeekSingleMasterView
+              date={date}
+              time={time}
+              setTime={setTime}
+              data={calendar?.find(
+                (schedule) => String(schedule.masterId) === String(filteredMasters[0].id),
+              )}
+              master={filteredMasters[0]}
+              setDate={setDate}
+              setToDate={setToDate}
+              setType={setType}
+            />
           )}
           {filteredMasters.length === 0 && <AppPlaceholder />}
         </div>
