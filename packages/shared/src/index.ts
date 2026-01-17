@@ -4,5 +4,6 @@ export * from './timeUtils';
 export * from './types/geocode';
 export * from './types/profile';
 export * from './utils/formatAddress';
+export * from './currencyUtils';
 export * from './hooks/useAddressSearch';
 export * from './utils/address';

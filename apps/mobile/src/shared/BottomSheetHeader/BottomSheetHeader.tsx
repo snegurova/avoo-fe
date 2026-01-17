@@ -1,23 +1,21 @@
-import { useBottomSheetStore } from '@/store/useBottomSheetStore';
 import { colors, radius } from '@avoo/design-tokens';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { MaterialIcons } from '../icons';
 
 type Props = {
-  showCloseButton: boolean;
-  handleConfirm: () => void;
+  handleClose?: () => void;
+  handleConfirm?: () => void;
 };
 
-export const BottomSheetHeader = ({ showCloseButton, handleConfirm }: Props) => {
-  const hasButtons = showCloseButton || handleConfirm;
-  const handleCloseBottomSheet = useBottomSheetStore((state) => state.handleCloseBottomSheet);
+export const BottomSheetHeader = ({ handleClose, handleConfirm }: Props) => {
+  const hasButtons = handleClose || handleConfirm;
 
   return (
     <View style={[styles.handleWrap, !hasButtons && styles.handleWrapMinimal]}>
       {hasButtons && (
         <View style={styles.buttonsContainer}>
-          {showCloseButton && (
-            <Pressable onPress={handleCloseBottomSheet} style={styles.button} hitSlop={8}>
+          {handleClose && (
+            <Pressable onPress={handleClose} style={styles.button} hitSlop={8}>
               <MaterialIcons name='close' size={30} color={colors.white} />
             </Pressable>
           )}

@@ -10,8 +10,16 @@ export type BaseResponse<T> = {
   errors?: Error[];
   data: T | null;
 };
+/** Category && Services */
 export type Category = components['schemas']['CategoryEntity'];
+export type Service = components['schemas']['ServiceEntity'];
+export type PrivateServiceQueryParams = components['schemas']['QueryServicesDto'];
+export type GetServiceResponse = {
+  items: Service[];
+  pagination: components['schemas']['PaginationDto'];
+};
 
+export type GetCategoriesResponse = Category[];
 /** Auth */
 export type LoginRequest = components['schemas']['LoginRequestDto'];
 export type RegisterRequest = components['schemas']['CreateUserDto'];
@@ -43,7 +51,6 @@ type MasterBaseForCreate = Omit<
 export type CreateMasterRequest = {
   email: MasterBaseForCreate['email'];
 } & Partial<Omit<MasterBaseForCreate, 'email'>>;
-
 
 export type MasterLanguages = components['schemas']['MasterEntity']['languages'];
 

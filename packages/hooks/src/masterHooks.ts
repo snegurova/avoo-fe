@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import { utils } from '@avoo/hooks/utils/utils';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { createMasterSchema, CreateMasterFormData } from '../schemas/validationSchemas';
+import { createMasterSchema, CreateMasterFormData, updateMasterSchema } from '../schemas/validationSchemas';
 
 import { masterApi } from '@avoo/axios';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
@@ -16,6 +16,11 @@ import { apiStatus } from '@avoo/hooks/types/apiTypes';
 import { queryKeys } from './queryKeys';
 
 type UseCreateMasterFormParams = {
+  onSuccess?: () => void;
+};
+
+type UseUpdateMasterFormParams = {
+  master: MasterWithRelationsEntityResponse;
   onSuccess?: () => void;
 };
 
@@ -74,6 +79,70 @@ export const masterHooks = {
       control,
       handleSubmit: handleSubmit(utils.submitAdapter<CreateMasterRequest>(createMasterMutation)),
       errors,
+      isPending,
+    };
+  },
+  useUpdateMasterForm: ({ master, onSuccess }: UseUpdateMasterFormParams) => {
+    const {
+      control,
+      handleSubmit,
+      formState: { errors },
+      reset,
+    } = useForm<CreateMasterFormData>({
+      resolver: yupResolver(updateMasterSchema),
+      mode: 'onSubmit',
+      defaultValues: {
+        email: master.email || '',
+        name: master.name || '',
+        bio: master.bio || '',
+        phone: master.phone || '',
+        languages: master.languages || [],
+      },
+    });
+
+    const queryClient = useQueryClient();
+
+    const { mutate: updateMasterMutation, isPending } = useMutation<
+      BaseResponse<MasterWithRelationsEntityResponse>,
+      Error,
+      CreateMasterRequest
+    >({
+      mutationFn: (data: CreateMasterRequest) => masterApi.updateMaster(master.id, data),
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: queryKeys.masters.all });
+        onSuccess?.();
+      },
+    });
+
+    utils.useSetPendingApi(isPending);
+
+    return {
+      control,
+      handleSubmit: handleSubmit(utils.submitAdapter<CreateMasterRequest>(updateMasterMutation)),
+      errors,
+      isPending,
+      reset,
+    };
+  },
+  useDeleteMaster: ({ onSuccess }: { onSuccess?: () => void } = {}) => {
+    const queryClient = useQueryClient();
+
+    const { mutate: deleteMasterMutation, isPending } = useMutation<
+      BaseResponse<void>,
+      Error,
+      number
+    >({
+      mutationFn: masterApi.deleteMaster,
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: queryKeys.masters.all });
+        onSuccess?.();
+      },
+    });
+
+    utils.useSetPendingApi(isPending);
+
+    return {
+      deleteMaster: deleteMasterMutation,
       isPending,
     };
   },

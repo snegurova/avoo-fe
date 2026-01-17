@@ -1,5 +1,5 @@
 import { Text, View, TouchableWithoutFeedback, Keyboard, Pressable } from 'react-native';
-import LoginForm from '@/components/LoginForm';
+import LoginForm from '@/components/LoginForm/LoginForm';
 import  Layout from '@/shared/Layout/Layout';
 import { RootScreens, RootStackScreenProps } from '@/types/navigation';
 

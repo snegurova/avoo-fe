@@ -14,17 +14,41 @@ export const utils = {
       setIsPending(isPending);
     }, [isPending, setIsPending]);
   },
-  useBooleanState: (initialValue: boolean = false) => {
+  useBooleanState: (
+    initialValue: boolean = false,
+    options?: { onEnable?: () => void; onDisable?: () => void },
+  ) => {
     const [value, setValue] = useState(initialValue);
-  
+    const { onEnable, onDisable } = options || {};
+
+    const enable = useCallback(() => {
+      setValue(true);
+      onEnable?.();
+    }, [onEnable]);
+
+    const disable = useCallback(() => {
+      setValue(false);
+      onDisable?.();
+    }, [onDisable]);
+
     const toggleValue = useCallback(() => {
-      setValue((prev) => !prev);
-    }, []);
-  
+      setValue((prev) => {
+        const newValue = !prev;
+        if (newValue) {
+          onEnable?.();
+        } else {
+          onDisable?.();
+        }
+        return newValue;
+      });
+    }, [onEnable, onDisable]);
+
     return {
       value,
       setValue,
       toggleValue,
+      enable,
+      disable,
     };
   },
 }
