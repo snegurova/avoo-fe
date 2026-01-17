@@ -1043,6 +1043,7 @@ export interface components {
         MasterEntity: {
             id: number;
             name: string | null;
+            headline: string | null;
             email: string;
             phone: string | null;
             avatarUrl: string | null;
@@ -1210,14 +1211,6 @@ export interface components {
              * @example 30.718815628384387
              */
             location_lon?: number;
-            /**
-             * @description Languages spoken by the master
-             * @example [
-             *       "pl",
-             *       "uk"
-             *     ]
-             */
-            languages: ("ar" | "bn" | "da" | "de" | "en" | "es" | "fi" | "fr" | "hr" | "hi" | "is" | "it" | "ja" | "ko" | "la" | "lv" | "nl" | "no" | "pl" | "pt" | "ro" | "sv" | "tr" | "uk" | "vi" | "zh" | "fa")[];
         };
         ShortMasterInfoDto: {
             id: number;
@@ -1441,7 +1434,12 @@ export interface components {
              */
             name?: Record<string, never>;
             /**
-             * @description Master bio/description
+             * @description Headline
+             * @example Hairdresser
+             */
+            headline?: Record<string, never>;
+            /**
+             * @description About Master
              * @example Professional stylist with expertise in modern haircuts and coloring.
              */
             bio?: Record<string, never>;
@@ -1467,11 +1465,16 @@ export interface components {
             email: string;
             /**
              * @description Master name (required)
-             * @example John Doe
+             * @example Jane Smith
              */
-            name: string;
+            name?: Record<string, never>;
             /**
-             * @description Master bio/description
+             * @description Headline
+             * @example Hairdresser
+             */
+            headline?: Record<string, never>;
+            /**
+             * @description About Master
              * @example Professional hair stylist with 5+ years of experience...
              */
             bio?: string;
@@ -1487,7 +1490,7 @@ export interface components {
              *       "uk"
              *     ]
              */
-            languages: ("ar" | "bn" | "da" | "de" | "en" | "es" | "fi" | "fr" | "hr" | "hi" | "is" | "it" | "ja" | "ko" | "la" | "lv" | "nl" | "no" | "pl" | "pt" | "ro" | "sv" | "tr" | "uk" | "vi" | "zh" | "fa")[];
+            languages?: Record<string, never>;
         };
         UpdateMasterAvatarDto: {
             /** Format: binary */

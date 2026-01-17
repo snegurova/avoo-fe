@@ -13,6 +13,19 @@ export const calendarApi = {
   async getCalendar(params: PrivateCalendarQueryParams) {
     const res = await apiClient.get<BaseResponse<GetCalendarResponse>>(GET_CALENDAR_ENDPOINT, {
       params,
+      paramsSerializer: (params) => {
+        const searchParams = new URLSearchParams();
+        Object.entries(params).forEach(([key, value]) => {
+          if (Array.isArray(value)) {
+            value.forEach((val) => {
+              searchParams.append(key, String(val));
+            });
+          } else if (value !== undefined) {
+            searchParams.append(key, String(value));
+          }
+        });
+        return searchParams.toString();
+      },
     });
     return res.data;
   },
@@ -21,6 +34,19 @@ export const calendarApi = {
       `${GET_CALENDAR_ENDPOINT}/by-dates`,
       {
         params,
+        paramsSerializer: (params) => {
+          const searchParams = new URLSearchParams();
+          Object.entries(params).forEach(([key, value]) => {
+            if (Array.isArray(value)) {
+              value.forEach((val) => {
+                searchParams.append(key, String(val));
+              });
+            } else if (value !== undefined) {
+              searchParams.append(key, String(value));
+            }
+          });
+          return searchParams.toString();
+        },
       },
     );
     return res.data;

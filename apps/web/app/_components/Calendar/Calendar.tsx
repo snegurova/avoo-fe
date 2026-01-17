@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useMemo } from 'react';
 import CalendarColumn from '@/_components/CalendarColumn/CalendarColumn';
 import CalendarColumnHead from '@/_components/CalendarColumnHead/CalendarColumnHead';
 import CalendarTimeScale from '@/_components/CalendarTimeScale/CalendarTimeScale';
@@ -45,14 +45,28 @@ const dataContainer = tv({
   },
 });
 
+// /** @description Master IDs */
+// masterIds?: number[];
+// /** @description Calendar start date (local, YYYY-MM-DD) */
+// rangeFromDate: string;
+// /** @description Calendar end date (local, YYYY-MM-DD) */
+// rangeToDate: string;
+// /** @description Service ID */
+// serviceId?: number;
+// /** @description Combination ID */
+// combinationId?: number;
+// /** @description User timezone */
+// timezone?: string;
+
 export default function Calendar() {
   const scrollRef = useRef<HTMLDivElement | null>(null);
   const [date, setDate] = useState<Date>(timeUtils.toDayBegin(new Date()));
   const [toDate, setToDate] = useState<Date>(timeUtils.toDayEnd(new Date()));
+  const [masterIds, setMasterIds] = useState<number[] | undefined>(undefined);
   const [type, setType] = useState<CalendarViewType>(CalendarViewType.DAY);
   const [params, setParams] = useState<PrivateCalendarQueryParams>({
-    rangeFromDate: date.toISOString(),
-    rangeToDate: toDate.toISOString(),
+    rangeFromDate: timeUtils.formatDate(date),
+    rangeToDate: timeUtils.formatDate(toDate),
   });
   const [time, setTime] = useState(timeUtils.getMinutesInDay(new Date().toString()));
 
@@ -63,11 +77,13 @@ export default function Calendar() {
   }, [type]);
 
   useEffect(() => {
-    setParams({
-      rangeFromDate: date.toISOString(),
-      rangeToDate: toDate.toISOString(),
-    });
-  }, [date, toDate]);
+    setParams((prev) => ({
+      ...prev,
+      rangeFromDate: timeUtils.formatDate(date),
+      rangeToDate: timeUtils.formatDate(toDate),
+      masterIds,
+    }));
+  }, [date, toDate, masterIds]);
 
   const scrollToCurrentTime = () => {
     if (type !== CalendarViewType.DAY || !scrollRef.current) return;
@@ -89,6 +105,12 @@ export default function Calendar() {
   const calendar = calendarHooks.useGetCalendar(params);
   const masters = masterHooks.useGetMastersProfileInfo();
 
+  const filteredMasters = useMemo(() => {
+    if (!masters || (masterIds && masterIds.length === 0)) return [];
+    if (!masterIds) return masters;
+    return masters.filter((master) => masterIds.includes(Number(master.id)));
+  }, [masters, masterIds]);
+
   return (
     <div className='flex h-[calc(100%-54px)] w-full'>
       <div className='w-full flex flex-col'>
@@ -103,54 +125,51 @@ export default function Calendar() {
           params={params}
           setParams={setParams}
           masters={masters ?? []}
+          masterIds={masterIds}
+          setMasterIds={setMasterIds}
         />
         <div className={mainContainer({ type })} ref={scrollRef}>
           <div className={columnHeadContainer({ type })}>
-            {masters &&
-              masters.map((master, idx) => (
-                <CalendarColumnHead
-                  key={`${master.id}-head`}
-                  master={master}
-                  idx={idx}
-                  type={type}
-                />
-              ))}
+            {filteredMasters.map((master, idx) => (
+              <CalendarColumnHead key={`${master.id}-head`} master={master} idx={idx} type={type} />
+            ))}
           </div>
 
-          <div className={dataContainer({ type })}>
-            <CalendarTimeScale type={type} date={date} time={time} setTime={setTime} />
-            {type !== CalendarViewType.MONTH &&
-              masters &&
-              masters.map((master) => {
-                const columnData = calendar?.find(
-                  (schedule) => String(schedule.masterId) === String(master.id),
-                );
-                return (
-                  <CalendarColumn
-                    key={`${master.id}-col`}
-                    data={columnData}
-                    master={master}
-                    type={type}
-                    date={date}
+          {filteredMasters.length > 0 && (
+            <div className={dataContainer({ type })}>
+              <CalendarTimeScale type={type} date={date} time={time} setTime={setTime} />
+              {type !== CalendarViewType.MONTH &&
+                filteredMasters.map((master) => {
+                  const columnData = calendar?.find(
+                    (schedule) => String(schedule.masterId) === String(master.id),
+                  );
+                  return (
+                    <CalendarColumn
+                      key={`${master.id}-col`}
+                      data={columnData}
+                      master={master}
+                      type={type}
+                      date={date}
+                      setDate={setDate}
+                      setToDate={setToDate}
+                      setType={setType}
+                      time={time}
+                      setTime={setTime}
+                    />
+                  );
+                })}
+              {type === CalendarViewType.MONTH &&
+                new Date(params.rangeFromDate).getTime() + 28 * 24 * 60 * 60 * 1000 <=
+                  new Date(params.rangeToDate).getTime() && (
+                  <CalendarMonthView
+                    params={params}
                     setDate={setDate}
                     setToDate={setToDate}
                     setType={setType}
-                    time={time}
-                    setTime={setTime}
                   />
-                );
-              })}
-            {type === CalendarViewType.MONTH &&
-              new Date(params.rangeFromDate).getTime() + 28 * 24 * 60 * 60 * 1000 <=
-                new Date(params.rangeToDate).getTime() && (
-                <CalendarMonthView
-                  params={params}
-                  setDate={setDate}
-                  setToDate={setToDate}
-                  setType={setType}
-                />
-              )}
-          </div>
+                )}
+            </div>
+          )}
         </div>
       </div>
     </div>

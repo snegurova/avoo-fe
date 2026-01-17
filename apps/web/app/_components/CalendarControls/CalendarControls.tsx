@@ -31,8 +31,16 @@ type Props = {
   setToDate: (date: Date) => void;
   scrollToCurrentTime: () => void;
   params: PrivateCalendarQueryParams;
-  setParams: (params: PrivateCalendarQueryParams) => void;
+  setParams: (
+    params:
+      | PrivateCalendarQueryParams
+      | ((prev: PrivateCalendarQueryParams) => PrivateCalendarQueryParams),
+  ) => void;
   masters: MasterWithRelationsEntityResponse[];
+  masterIds?: number[] | undefined;
+  setMasterIds: (
+    ids: number[] | undefined | ((prev: number[] | undefined) => number[] | undefined),
+  ) => void;
 };
 
 const controlsButton = tv({
@@ -52,7 +60,17 @@ const icon = tv({
 });
 
 export default function CalendarControls(props: Props) {
-  const { date, setDate, setToDate, type, setType, scrollToCurrentTime, masters } = props;
+  const {
+    date,
+    setDate,
+    setToDate,
+    type,
+    setType,
+    scrollToCurrentTime,
+    masters,
+    masterIds,
+    setMasterIds,
+  } = props;
 
   const desktopUp = useMediaQuery('(min-width:1024px)');
 
@@ -201,9 +219,9 @@ export default function CalendarControls(props: Props) {
       label: 'All statuses',
       handler: () => {},
       items: [
-        { label: OrderStatus.PENDING, handler: () => {} },
-        { label: OrderStatus.CONFIRMED, handler: () => {} },
-        { label: OrderStatus.COMPLETED, handler: () => {} },
+        { label: OrderStatus.PENDING, id: OrderStatus.PENDING, handler: () => {} },
+        { label: OrderStatus.CONFIRMED, id: OrderStatus.CONFIRMED, handler: () => {} },
+        { label: OrderStatus.COMPLETED, id: OrderStatus.COMPLETED, handler: () => {} },
       ],
     }),
     [],
@@ -212,8 +230,36 @@ export default function CalendarControls(props: Props) {
   const mastersOptions = useMemo(
     () => ({
       label: 'All masters',
-      handler: () => {},
-      items: masters?.map((master) => ({ label: master.name, handler: () => {} })) ?? [],
+      handler: () => {
+        setMasterIds((prev) => {
+          if (!prev) {
+            return [];
+          } else {
+            return undefined;
+          }
+        });
+      },
+      items:
+        masters?.map((master) => ({
+          label: master.name,
+          id: master.id,
+          handler: () => {
+            setMasterIds((prev) => {
+              if (!prev) {
+                return masters.reduce<number[]>((acc, m) => {
+                  if (m.id && m.id !== master.id) {
+                    acc.push(m.id);
+                  }
+                  return acc;
+                }, []);
+              } else if (prev?.includes(master.id)) {
+                return prev.filter((id) => id !== master.id);
+              } else {
+                return [...(prev || []), master.id];
+              }
+            });
+          },
+        })) ?? [],
     }),
     [masters],
   );
@@ -251,8 +297,13 @@ export default function CalendarControls(props: Props) {
         <SelectButton label={type} options={viewOptions} type={ElementStyleType.OUTLINE} />
         {desktopUp && (
           <>
-            <CheckboxesButton addCount label='Masters' options={[mastersOptions]} />
-            <CheckboxesButton addCount label='Statuses' options={[statusesOptions]} />
+            <CheckboxesButton
+              addCount
+              label='Masters'
+              options={[mastersOptions]}
+              values={masterIds}
+            />
+            <CheckboxesButton addCount label='Statuses' options={[statusesOptions]} values={[]} />
           </>
         )}
       </div>
