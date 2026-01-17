@@ -7,33 +7,19 @@ import { IconButton } from '@/_components/IconButton/IconButton';
 
 import { userHooks } from '@avoo/hooks';
 import EditProfileForm from '@/_components/ProfileEdit/EditProfileForm';
-import type { VisualProfileInfo } from '@avoo/shared';
+import type { UpdateProfile } from '@avoo/axios/types/apiTypes';
 
 export default function EditProfilePage() {
   const handleBackClick = routerHooks.useBackWithFallback(appRoutes.Profile);
 
   const { handleUpdateProfile, handleUpdateProfileAsync, isPending } = userHooks.useUpdateProfile();
-  const { visualProfileInfo, visualLanguages } = userHooks.useGetUserProfile();
+  const { visualProfileInfo } = userHooks.useGetUserProfile();
 
-  const handleSubmit = async (
-    payload: Partial<
-      import('@avoo/axios/types/generated').components['schemas']['UpdateProfileDto']
-    >,
-  ) => {
-    const sanitizedLanguages = (
-      Array.isArray(visualLanguages)
-        ? visualLanguages.filter((lang) => typeof lang === 'string')
-        : []
-    ).map((lang) => lang.trim());
-
-    const payloadWithLangs = { ...payload, languages: sanitizedLanguages } as Partial<
-      import('@avoo/axios/types/generated').components['schemas']['UpdateProfileDto']
-    >;
-
+  const handleSubmit = async (payload: UpdateProfile) => {
     if (handleUpdateProfileAsync) {
-      await handleUpdateProfileAsync(payloadWithLangs);
+      await handleUpdateProfileAsync(payload);
     } else {
-      handleUpdateProfile(payloadWithLangs);
+      handleUpdateProfile(payload);
     }
 
     handleBackClick();
@@ -50,8 +36,8 @@ export default function EditProfilePage() {
           phone: visualProfileInfo?.phone ?? null,
           description: visualProfileInfo?.description ?? null,
           address: visualProfileInfo?.address ?? null,
-          location_lat: (visualProfileInfo as VisualProfileInfo)?.location_lat ?? null,
-          location_lon: (visualProfileInfo as VisualProfileInfo)?.location_lon ?? null,
+          location_lat: visualProfileInfo?.location_lat ?? null,
+          location_lon: visualProfileInfo?.location_lon ?? null,
           avatarPreviewUrl:
             visualProfileInfo?.avatarPreviewUrl ?? visualProfileInfo?.avatarUrl ?? null,
         }}

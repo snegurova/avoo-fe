@@ -3,18 +3,18 @@ import React, { useCallback } from 'react';
 import { useForm } from 'react-hook-form';
 import { Button } from '@mui/material';
 import { AvatarUpload, AvatarSize } from '@/_components/AvatarUpload/AvatarUpload';
-import { userHooks } from '@avoo/hooks';
+import { useAddressSearch, userHooks, useServerFormErrors } from '@avoo/hooks';
 import FormInput from '@/_components/FormInput/FormInput';
-import type { components } from '@avoo/axios/types/generated';
+import type { UpdateProfile } from '@avoo/axios/types/apiTypes';
 import type { NominatimPlace, VisualProfileInfo } from '@avoo/shared';
-import { buildShortAddress, useAddressSearch, getCondensedAddress } from '@avoo/shared';
+import { buildShortAddress, getCondensedAddress } from '@avoo/shared';
 import AddressResults from './AddressResults';
-import { createProfileDefaults, buildUpdateProfilePayload } from './helpers';
+import { createProfileDefaults, buildUpdateProfilePayload } from '@avoo/hooks';
 import useAvatarUpload from './useAvatarUpload';
 
 type Props = {
   initial?: VisualProfileInfo | null;
-  onSubmit: (payload: Partial<components['schemas']['UpdateProfileDto']>) => Promise<unknown>;
+  onSubmit: (payload: UpdateProfile) => Promise<unknown>;
   onCancel: () => void;
   isPending?: boolean;
   showPreview?: boolean;
@@ -52,6 +52,7 @@ export default function EditProfileForm({
   });
 
   const { register, handleSubmit, setValue, setError, watch } = form;
+  const applyServerFormErrors = useServerFormErrors(setError);
 
   const handleSearchClick = useCallback(async () => {
     const query = watch('address');
@@ -99,20 +100,7 @@ export default function EditProfileForm({
     try {
       await onSubmit(payload);
     } catch (err) {
-      const maybe = err as {
-        errors?: Array<{ field?: string; message?: string }>;
-        errorMessage?: string;
-      };
-      if (Array.isArray(maybe?.errors)) {
-        maybe.errors.forEach((fieldError) => {
-          if (fieldError.field) {
-            setError(fieldError.field as keyof FormValues, {
-              type: 'server',
-              message: fieldError.message ?? 'Validation error',
-            });
-          }
-        });
-      }
+      if (applyServerFormErrors(err)) return;
     }
   };
 

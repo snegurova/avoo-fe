@@ -5,7 +5,7 @@ import { appRoutes } from '@/_routes/routes';
 import { userHooks } from '@avoo/hooks';
 import { ProfileLanguages } from '@/_components/ProfileLanguages/ProfileLanguages';
 import { ProfileCertificates } from '@/_components/ProfileCertificates/ProfileCertificates';
-import { Avatar } from '@mui/material';
+import Avatar from '@/_components/Avatar/Avatar';
 import AvatarLoader from '@/_components/AvatarLoader/AvatarLoader';
 import { AvatarSize } from '@/_components/AvatarUpload/AvatarUpload';
 import { IconButton } from '@/_components/IconButton/IconButton';
@@ -24,9 +24,9 @@ export const ProfileInfo = () => {
     <>
       <div className='flex justify-center mb-4 relative'>
         <Avatar
-          alt={visualProfileInfo.name ?? 'Avatar'}
-          sx={{ width: AvatarSize.LARGE, height: AvatarSize.LARGE }}
-          src={visualProfileInfo.avatarUrl ?? undefined}
+          name={visualProfileInfo.name ?? 'Avatar'}
+          size={AvatarSize.LARGE}
+          src={visualProfileInfo.avatarUrl}
         />
         {isPending && <AvatarLoader size={AvatarSize.LARGE} />}
       </div>

@@ -7,13 +7,13 @@ import {
   UserMediaResponse,
   UserProfileResponse,
   UserUpdateAvatarResponse,
+  UpdateProfile,
 } from '@avoo/axios/types/apiTypes';
 import { FileInput } from '@avoo/shared';
 import { apiStatus } from '../types/apiTypes';
 import { queryKeys } from './queryKeys';
 import { appendFileToForm, buildCertificateForm } from './utils/formDataHelpers';
 import { CreateCertificatePayload } from '@avoo/axios/types/certificate';
-import type { components } from '@avoo/axios/types/generated';
 
 export const userHooks = {
   useGetUserProfile: () => {
@@ -119,7 +119,7 @@ export const userHooks = {
     const { mutate, mutateAsync, isPending } = useMutation<
       BaseResponse<UserProfileResponse>,
       Error,
-      Partial<components['schemas']['UpdateProfileDto']>
+      UpdateProfile
     >({
       mutationFn: (payload) => {
         return userApi.updateProfile(payload);

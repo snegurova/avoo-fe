@@ -1,7 +1,5 @@
-import type { components } from '@avoo/axios/types/generated';
 import type { VisualProfileInfo } from '@avoo/shared';
-
-export type UpdateProfilePayload = Partial<components['schemas']['UpdateProfileDto']>;
+import type { UpdateProfile } from '@avoo/axios/types/apiTypes';
 
 export function createProfileDefaults(initial?: VisualProfileInfo | null) {
   return {
@@ -14,7 +12,7 @@ export function createProfileDefaults(initial?: VisualProfileInfo | null) {
   } as const;
 }
 
-export function buildUpdateProfilePayload(values: Record<string, unknown>): UpdateProfilePayload {
+export function buildUpdateProfilePayload(values: Record<string, unknown>): UpdateProfile {
   const parsedValues = values as {
     name?: string;
     phone?: string;
@@ -37,5 +35,12 @@ export function buildUpdateProfilePayload(values: Record<string, unknown>): Upda
       typeof parsedValues.location_lon === 'number' && !Number.isNaN(parsedValues.location_lon)
         ? parsedValues.location_lon
         : undefined,
+  };
+}
+
+export default function useProfileHelpers() {
+  return {
+    createProfileDefaults,
+    buildUpdateProfilePayload,
   };
 }
