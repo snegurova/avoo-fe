@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function DeleteIcon(props: React.SVGProps<SVGSVGElement>) {
+export default function EditSquareIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg
       xmlns='http://www.w3.org/2000/svg'
