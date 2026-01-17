@@ -1,4 +1,5 @@
 import '@mui/material/styles';
+import '@mui/material/Chip';
 
 declare module '@mui/material/styles' {
   interface Mixins {
@@ -9,6 +10,16 @@ declare module '@mui/material/styles' {
       partialVisibleItem: number;
       width: number;
     };
+    searchInput: {
+      height: number;
+      borderRadius: number;
+      iconSize: number;
+      iconMarginLeft: number;
+      widthMd: string;
+      widthLg: string;
+      mrMd: number;
+      mrLg: number;
+    };
   }
   interface MixinsOptions {
     menu?: {
@@ -18,12 +29,18 @@ declare module '@mui/material/styles' {
       partialVisibleItem?: number;
       width?: number;
     };
+    searchInput?: {
+      height?: number;
+      borderRadius?: number;
+      iconSize?: number;
+      iconMarginLeft?: number;
+      widthMd?: string;
+      widthLg?: string;
+      mrMd?: number;
+      mrLg?: number;
+    };
   }
-}
-import '@mui/material/styles';
-import '@mui/material/Chip';
 
-declare module '@mui/material/styles' {
   interface Palette {
     pending: Palette['primary'];
   }

@@ -139,6 +139,16 @@ const theme = createTheme({
       partialVisibleItem: 0.5,
       width: 250,
     },
+    searchInput: {
+      height: 44,
+      borderRadius: 18,
+      iconSize: 20,
+      iconMarginLeft: 12,
+      widthMd: '306px',
+      widthLg: '306px',
+      mrMd: 32,
+      mrLg: 48,
+    },
   },
   components: {
     MuiChip: {
@@ -232,6 +242,31 @@ const theme = createTheme({
             color: 'var(--color-gray-800)',
           },
         }),
+      },
+    },
+    MuiButton: {
+      styleOverrides: {
+        root: ({ ownerState }: { ownerState?: { variant?: string; color?: string } }) => ({
+          ...(ownerState?.variant === 'outlined' &&
+            ownerState?.color === 'primary' && {
+              color: colors.primary[700],
+              borderColor: colors.primary[700],
+              '&:hover': { backgroundColor: colors.primary[50] },
+            }),
+        }),
+      },
+    },
+    MuiOutlinedInput: {
+      styleOverrides: {
+        root: {
+          borderRadius: 18,
+          height: '44px',
+          paddingLeft: 0,
+          '& input': {
+            height: '44px',
+            boxSizing: 'border-box',
+          },
+        },
       },
     },
     MuiMenu: {
