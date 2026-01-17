@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { tv } from 'tailwind-variants';
 import ArrowDownIcon from '@/_icons/ArrowDownIcon';
 import CheckboxesList from '../CheckboxesList/CheckboxesList';
@@ -32,6 +32,15 @@ export default function CheckboxesButton(props: Props) {
   const ref = useRef<HTMLDivElement>(null);
 
   const [isOpen, setIsOpen] = useState(false);
+  const [counter, setCounter] = useState(options[0].items?.length || 0);
+
+  useEffect(() => {
+    if (values === undefined) {
+      setCounter(options[0].items?.length || 0);
+    } else {
+      setCounter(values.length);
+    }
+  }, [values, options]);
 
   const toggleOpen = () => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -56,7 +65,7 @@ export default function CheckboxesButton(props: Props) {
           options.length === 1 &&
           (options[0].items?.length ? (
             <span className='w-5 h-5 flex items-center justify-center rounded-full bg-primary-500 text-white text-sm font-medium -mr-1'>
-              {options[0].items?.length}
+              {counter}
             </span>
           ) : (
             <span className='-mr-1'>All</span>

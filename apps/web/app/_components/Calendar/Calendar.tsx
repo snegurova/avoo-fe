@@ -11,6 +11,7 @@ import { timeUtils } from '@avoo/shared';
 import { tv } from 'tailwind-variants';
 import CalendarMonthView from '../CalendarMonthView/CalendarMonthView';
 import { PX_IN_MINUTE } from '@/_constants/time';
+import { OrderStatus } from '@avoo/hooks/types/orderStatus';
 
 const columnHeadContainer = tv({
   base: 'sticky bg-white z-10 ',
@@ -45,24 +46,12 @@ const dataContainer = tv({
   },
 });
 
-// /** @description Master IDs */
-// masterIds?: number[];
-// /** @description Calendar start date (local, YYYY-MM-DD) */
-// rangeFromDate: string;
-// /** @description Calendar end date (local, YYYY-MM-DD) */
-// rangeToDate: string;
-// /** @description Service ID */
-// serviceId?: number;
-// /** @description Combination ID */
-// combinationId?: number;
-// /** @description User timezone */
-// timezone?: string;
-
 export default function Calendar() {
   const scrollRef = useRef<HTMLDivElement | null>(null);
   const [date, setDate] = useState<Date>(timeUtils.toDayBegin(new Date()));
   const [toDate, setToDate] = useState<Date>(timeUtils.toDayEnd(new Date()));
   const [masterIds, setMasterIds] = useState<number[] | undefined>(undefined);
+  const [statuses, setStatuses] = useState<OrderStatus[] | undefined>(undefined);
   const [type, setType] = useState<CalendarViewType>(CalendarViewType.DAY);
   const [params, setParams] = useState<PrivateCalendarQueryParams>({
     rangeFromDate: timeUtils.formatDate(date),
@@ -82,8 +71,9 @@ export default function Calendar() {
       rangeFromDate: timeUtils.formatDate(date),
       rangeToDate: timeUtils.formatDate(toDate),
       masterIds,
+      orderStatus: statuses,
     }));
-  }, [date, toDate, masterIds]);
+  }, [date, toDate, masterIds, statuses]);
 
   const scrollToCurrentTime = () => {
     if (type !== CalendarViewType.DAY || !scrollRef.current) return;
@@ -127,6 +117,8 @@ export default function Calendar() {
           masters={masters ?? []}
           masterIds={masterIds}
           setMasterIds={setMasterIds}
+          statuses={statuses}
+          setStatuses={setStatuses}
         />
         <div className={mainContainer({ type })} ref={scrollRef}>
           <div className={columnHeadContainer({ type })}>

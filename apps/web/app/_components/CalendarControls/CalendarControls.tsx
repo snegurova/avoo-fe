@@ -22,6 +22,12 @@ import CalendarViewMonth from '@/_icons/CalendarViewMonth';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { ElementStyleType } from '@avoo/hooks/types/elementStyleType';
 
+const STATUSES_ITEMS = [
+  { label: 'Pending', id: OrderStatus.PENDING },
+  { label: 'Confirmed', id: OrderStatus.CONFIRMED },
+  { label: 'Completed', id: OrderStatus.COMPLETED },
+];
+
 type Props = {
   date: Date;
   setDate: (date: Date) => void;
@@ -40,6 +46,13 @@ type Props = {
   masterIds?: number[] | undefined;
   setMasterIds: (
     ids: number[] | undefined | ((prev: number[] | undefined) => number[] | undefined),
+  ) => void;
+  statuses?: OrderStatus[] | undefined;
+  setStatuses: (
+    statuses:
+      | OrderStatus[]
+      | undefined
+      | ((prev: OrderStatus[] | undefined) => OrderStatus[] | undefined),
   ) => void;
 };
 
@@ -70,6 +83,8 @@ export default function CalendarControls(props: Props) {
     masters,
     masterIds,
     setMasterIds,
+    statuses,
+    setStatuses,
   } = props;
 
   const desktopUp = useMediaQuery('(min-width:1024px)');
@@ -217,14 +232,37 @@ export default function CalendarControls(props: Props) {
   const statusesOptions = useMemo(
     () => ({
       label: 'All statuses',
-      handler: () => {},
-      items: [
-        { label: OrderStatus.PENDING, id: OrderStatus.PENDING, handler: () => {} },
-        { label: OrderStatus.CONFIRMED, id: OrderStatus.CONFIRMED, handler: () => {} },
-        { label: OrderStatus.COMPLETED, id: OrderStatus.COMPLETED, handler: () => {} },
-      ],
+      handler: () => {
+        setStatuses((prev) => {
+          if (!prev || prev.length === 3) {
+            return [];
+          } else {
+            return undefined;
+          }
+        });
+      },
+      items: STATUSES_ITEMS.map((status) => ({
+        label: status.label,
+        id: status.id,
+        handler: () => {
+          setStatuses((prev) => {
+            if (!prev) {
+              return STATUSES_ITEMS.reduce<OrderStatus[]>((acc, s) => {
+                if (s.id && s.id !== status.id) {
+                  acc.push(s.id);
+                }
+                return acc;
+              }, []);
+            } else if (prev?.includes(status.id)) {
+              return prev.filter((id) => id !== status.id);
+            } else {
+              return [...(prev || []), status.id];
+            }
+          });
+        },
+      })),
     }),
-    [],
+    [statuses],
   );
 
   const mastersOptions = useMemo(
@@ -232,7 +270,7 @@ export default function CalendarControls(props: Props) {
       label: 'All masters',
       handler: () => {
         setMasterIds((prev) => {
-          if (!prev) {
+          if (!prev || prev.length === masters.length) {
             return [];
           } else {
             return undefined;
@@ -303,7 +341,12 @@ export default function CalendarControls(props: Props) {
               options={[mastersOptions]}
               values={masterIds}
             />
-            <CheckboxesButton addCount label='Statuses' options={[statusesOptions]} values={[]} />
+            <CheckboxesButton
+              addCount
+              label='Statuses'
+              options={[statusesOptions]}
+              values={statuses}
+            />
           </>
         )}
       </div>
