@@ -6,3 +6,4 @@ export * from './types/profile';
 export * from './utils/formatAddress';
 export * from './currencyUtils';
 export * from './utils/sort';
+export * from './utils/address';
