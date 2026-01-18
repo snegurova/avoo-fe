@@ -11,7 +11,7 @@ type Props = {
     handler: () => void;
     items?: { label: string | null; id: number | string; handler: () => void }[];
   }[];
-  values: (string | number)[] | undefined;
+  values: ((string | number)[] | undefined)[];
 };
 
 const selectButton = tv({
@@ -35,11 +35,15 @@ export default function CheckboxesButton(props: Props) {
   const [counter, setCounter] = useState(options[0].items?.length || 0);
 
   useEffect(() => {
-    if (values === undefined) {
-      setCounter(options[0].items?.length || 0);
-    } else {
-      setCounter(values.length);
-    }
+    let count = 0;
+    values.forEach((val, index) => {
+      if (val === undefined) {
+        count += options[index].items?.length || 0;
+      } else {
+        count += val.length;
+      }
+    });
+    setCounter(count);
   }, [values, options]);
 
   const toggleOpen = () => {

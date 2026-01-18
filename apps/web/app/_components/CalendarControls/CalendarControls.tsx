@@ -87,7 +87,7 @@ export default function CalendarControls(props: Props) {
     setStatuses,
   } = props;
 
-  const desktopUp = useMediaQuery('(min-width:1024px)');
+  const tabletUp = useMediaQuery('(min-width:768px)');
 
   const setCurrentDate = (type: CalendarViewType) => {
     const today = new Date();
@@ -304,7 +304,7 @@ export default function CalendarControls(props: Props) {
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <div className='bg-primary-50 px-4 py-3 flex gap-3'>
+      <div className='bg-primary-50 px-4 py-3 flex gap-3 relative'>
         <button
           type='button'
           className={controlsButton({ variant: 'full' })}
@@ -333,21 +333,29 @@ export default function CalendarControls(props: Props) {
           </button>
         </div>
         <SelectButton label={type} options={viewOptions} type={ElementStyleType.OUTLINE} />
-        {desktopUp && (
+        {tabletUp ? (
           <>
             <CheckboxesButton
               addCount
               label='Masters'
               options={[mastersOptions]}
-              values={masterIds}
+              values={[masterIds]}
             />
             <CheckboxesButton
               addCount
               label='Statuses'
               options={[statusesOptions]}
-              values={statuses}
+              values={[statuses]}
             />
           </>
+        ) : (
+          <div className='absolute right-4 bottom-[calc(100%+26px)] translate-y-1/2 z-11'>
+            <CheckboxesButton
+              label='Options'
+              options={[mastersOptions, statusesOptions]}
+              values={[masterIds, statuses]}
+            />
+          </div>
         )}
       </div>
     </LocalizationProvider>

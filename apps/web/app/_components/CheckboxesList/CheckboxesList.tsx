@@ -9,7 +9,7 @@ type Props = {
     handler: () => void;
     items?: { label: string | null; id: number | string; handler: () => void }[];
   }[];
-  values: (string | number)[] | undefined;
+  values: ((string | number)[] | undefined)[];
 };
 
 const dropdown = tv({
@@ -22,11 +22,14 @@ export default function CheckboxesList(props: Props) {
   return (
     <div className={dropdown()}>
       {options.map((option, index) => (
-        <div key={index} className='mb-2 last:mb-0'>
+        <div
+          key={index}
+          className='mb-2 last:mb-0 not-last:border-b not-last:border-b-primary-100 not-last:pb-2 not-last:mb-2'
+        >
           <FormControlLabel
             control={
               <Checkbox
-                checked={!values || values.length >= (option.items?.length || 0)}
+                checked={!values[index] || values[index]?.length >= (option.items?.length || 0)}
                 onChange={option.handler}
                 size='small'
               />
@@ -39,7 +42,7 @@ export default function CheckboxesList(props: Props) {
                 <FormControlLabel
                   control={
                     <Checkbox
-                      checked={!values || values.includes(item.id || '')}
+                      checked={!values[index] || values[index]?.includes(item.id || '')}
                       onChange={item.handler}
                       size='small'
                     />
