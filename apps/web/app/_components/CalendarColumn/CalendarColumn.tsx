@@ -148,7 +148,7 @@ export default function CalendarColumn(props: Props) {
               <CalendarEvent key={`${event.id}-${type}`} event={event} type={type} />
             ))}
           {timeUtils.isSameDay(date, new Date()) && (
-            <CalendarCurrentTime time={time} setTime={setTime} />
+            <CalendarCurrentTime time={time} setTime={setTime} isSingleWeek={isSingleWeek} />
           )}
         </div>
       )}

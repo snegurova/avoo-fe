@@ -62,12 +62,6 @@ export default function Calendar() {
   const [time, setTime] = useState(timeUtils.getMinutesInDay(new Date().toString()));
 
   useEffect(() => {
-    if (type !== CalendarViewType.DAY) return;
-
-    scrollToCurrentTime();
-  }, [type]);
-
-  useEffect(() => {
     setParams((prev) => ({
       ...prev,
       rangeFromDate: timeUtils.formatDate(date),
@@ -78,20 +72,39 @@ export default function Calendar() {
   }, [date, toDate, masterIds, statuses]);
 
   const scrollToCurrentTime = () => {
-    if (type !== CalendarViewType.DAY || !scrollRef.current) return;
+    if (
+      type === CalendarViewType.MONTH ||
+      !scrollRef.current ||
+      (type === CalendarViewType.WEEK && filteredMasters.length !== 1)
+    )
+      return;
 
-    let scrollValue;
-
-    if (timeUtils.isSameDay(date, new Date())) {
-      scrollValue = time * PX_IN_MINUTE - (scrollRef.current.clientHeight - 76) / 2;
+    let scrollOptions: {
+      top?: number;
+      left?: number;
+      behavior?: 'auto' | 'smooth';
+    } = {
+      behavior: 'smooth',
+    };
+    if (
+      timeUtils.isSameDay(date, new Date()) ||
+      (type === CalendarViewType.WEEK &&
+        filteredMasters.length === 1 &&
+        timeUtils.isCurrentWeek(date))
+    ) {
+      scrollOptions.top = time * PX_IN_MINUTE - (scrollRef.current.clientHeight - 76) / 2;
     } else {
-      scrollValue = 0;
+      scrollOptions.top = 0;
     }
 
-    scrollRef.current.scrollTo({
-      top: scrollValue,
-      behavior: 'smooth',
-    });
+    if (type === CalendarViewType.WEEK && filteredMasters.length === 1) {
+      const dayOfWeek = new Date().getDay();
+      const dayIndex = dayOfWeek === 0 ? 6 : dayOfWeek - 1;
+      const columnWidth = scrollRef.current.scrollWidth / 7;
+      scrollOptions.left = dayIndex * columnWidth;
+    }
+
+    scrollRef.current.scrollTo(scrollOptions);
   };
 
   const calendar = calendarHooks.useGetCalendar(params);
@@ -102,6 +115,16 @@ export default function Calendar() {
     if (!masterIds) return masters;
     return masters.filter((master) => masterIds.includes(Number(master.id)));
   }, [masters, masterIds]);
+
+  useEffect(() => {
+    if (
+      type === CalendarViewType.MONTH ||
+      (type === CalendarViewType.WEEK && filteredMasters.length !== 1)
+    )
+      return;
+
+    scrollToCurrentTime();
+  }, [type, filteredMasters]);
 
   const isWeekSingleMasterView = useMemo(() => {
     return type === CalendarViewType.WEEK && filteredMasters.length === 1;

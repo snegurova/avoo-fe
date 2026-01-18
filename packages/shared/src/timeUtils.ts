@@ -38,6 +38,12 @@ export const timeUtils = {
       date1.getDate() === date2.getDate()
     );
   },
+  isCurrentWeek(date: Date) {
+    const now = new Date();
+    const targetWeekRange = this.getWeekRange(date);
+
+    return now >= targetWeekRange.start && now <= targetWeekRange.end;
+  },
   getDayRange(date: Date): { start: Date; end: Date } {
     const start = this.toDayBegin(date);
     const end = this.toDayEnd(date);

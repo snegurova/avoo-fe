@@ -20,7 +20,7 @@ export default function CalendarWeekSingleMasterView(props: Props) {
   const { date, time, setTime, data, master, setDate, setToDate, setType } = props;
 
   return (
-    <div className='overflow-auto relative min-w-full h-full'>
+    <div className='relative min-w-full h-full'>
       <div className='pl-10.5 shrink-0 sticky top-0 min-w-185.5 md:min-w-395.5 z-8 bg-white'>
         <CalendarTimeScale
           type={CalendarViewType.WEEK}
@@ -42,7 +42,7 @@ export default function CalendarWeekSingleMasterView(props: Props) {
               }}
               master={master}
               type={CalendarViewType.DAY}
-              date={date}
+              date={new Date(item.date)}
               time={time}
               setTime={setTime}
               setDate={setDate}
