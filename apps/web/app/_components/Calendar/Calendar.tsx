@@ -34,6 +34,10 @@ const mainContainer = tv({
       [CalendarViewType.WEEK]: 'w-full h-full flex',
       [CalendarViewType.MONTH]: 'h-full',
     },
+    isWeekSingleMasterView: {
+      true: 'flex-col',
+      false: '',
+    },
   },
 });
 
@@ -41,7 +45,7 @@ const dataContainer = tv({
   base: 'flex ',
   variants: {
     type: {
-      [CalendarViewType.DAY]: 'h-580 pb-4',
+      [CalendarViewType.DAY]: 'h-580 pb-4 min-w-min',
       [CalendarViewType.WEEK]: 'flex flex-col grow',
       [CalendarViewType.MONTH]: 'flex flex-col grow h-full',
     },
@@ -149,7 +153,7 @@ export default function Calendar() {
           statuses={statuses}
           setStatuses={setStatuses}
         />
-        <div className={mainContainer({ type })} ref={scrollRef}>
+        <div className={mainContainer({ type, isWeekSingleMasterView })} ref={scrollRef}>
           {filteredMasters.length > 0 && !isWeekSingleMasterView && (
             <>
               <div className={columnHeadContainer({ type })}>

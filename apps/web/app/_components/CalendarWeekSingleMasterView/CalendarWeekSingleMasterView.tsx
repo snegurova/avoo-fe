@@ -20,7 +20,7 @@ export default function CalendarWeekSingleMasterView(props: Props) {
   const { date, time, setTime, data, master, setDate, setToDate, setType } = props;
 
   return (
-    <div className='relative min-w-full h-full'>
+    <>
       <div className='pl-10.5 shrink-0 sticky top-0 min-w-185.5 md:min-w-395.5 z-8 bg-white'>
         <CalendarTimeScale
           type={CalendarViewType.WEEK}
@@ -30,7 +30,7 @@ export default function CalendarWeekSingleMasterView(props: Props) {
           hideBorder
         />
       </div>
-      <div className='h-580 pb-4 flex'>
+      <div className='h-580 pb-4 flex min-w-min'>
         <CalendarTimeScale type={CalendarViewType.DAY} date={date} time={time} setTime={setTime} />
         {data &&
           data.days.map((item, idx) => (
@@ -52,6 +52,6 @@ export default function CalendarWeekSingleMasterView(props: Props) {
             />
           ))}
       </div>
-    </div>
+    </>
   );
 }
