@@ -200,12 +200,15 @@ const theme = createTheme({
         root: {
           '& .MuiPickersInputBase-root': {
             borderRadius: 0,
+            paddingLeft: 12,
+            paddingRight: 12,
           },
           '& .MuiPickersSectionList-root': {
             padding: '8px 0',
             fontSize: typography.fontSize.sm,
             lineHeight: 1.15,
             color: 'var(--color-gray-800)',
+            width: 'min-content',
           },
         },
       },
@@ -241,6 +244,15 @@ const theme = createTheme({
             fontSize: typography.fontSize.sm,
             color: 'var(--color-gray-800)',
           },
+          '& .MuiButtonBase-root': {
+            position: 'absolute',
+            top: '0',
+            right: '0',
+            bottom: '0',
+            left: '0',
+            opacity: 0,
+          },
+          margin: 0,
         }),
       },
     },

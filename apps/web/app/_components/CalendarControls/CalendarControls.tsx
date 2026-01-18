@@ -22,6 +22,12 @@ import CalendarViewMonth from '@/_icons/CalendarViewMonth';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { ElementStyleType } from '@avoo/hooks/types/elementStyleType';
 
+const STATUSES_ITEMS = [
+  { label: 'Pending', id: OrderStatus.PENDING },
+  { label: 'Confirmed', id: OrderStatus.CONFIRMED },
+  { label: 'Completed', id: OrderStatus.COMPLETED },
+];
+
 type Props = {
   date: Date;
   setDate: (date: Date) => void;
@@ -31,8 +37,23 @@ type Props = {
   setToDate: (date: Date) => void;
   scrollToCurrentTime: () => void;
   params: PrivateCalendarQueryParams;
-  setParams: (params: PrivateCalendarQueryParams) => void;
+  setParams: (
+    params:
+      | PrivateCalendarQueryParams
+      | ((prev: PrivateCalendarQueryParams) => PrivateCalendarQueryParams),
+  ) => void;
   masters: MasterWithRelationsEntityResponse[];
+  masterIds?: number[] | undefined;
+  setMasterIds: (
+    ids: number[] | undefined | ((prev: number[] | undefined) => number[] | undefined),
+  ) => void;
+  statuses?: OrderStatus[] | undefined;
+  setStatuses: (
+    statuses:
+      | OrderStatus[]
+      | undefined
+      | ((prev: OrderStatus[] | undefined) => OrderStatus[] | undefined),
+  ) => void;
 };
 
 const controlsButton = tv({
@@ -52,9 +73,21 @@ const icon = tv({
 });
 
 export default function CalendarControls(props: Props) {
-  const { date, setDate, setToDate, type, setType, scrollToCurrentTime, masters } = props;
+  const {
+    date,
+    setDate,
+    setToDate,
+    type,
+    setType,
+    scrollToCurrentTime,
+    masters,
+    masterIds,
+    setMasterIds,
+    statuses,
+    setStatuses,
+  } = props;
 
-  const desktopUp = useMediaQuery('(min-width:1024px)');
+  const tabletUp = useMediaQuery('(min-width:768px)');
 
   const setCurrentDate = (type: CalendarViewType) => {
     const today = new Date();
@@ -199,28 +232,79 @@ export default function CalendarControls(props: Props) {
   const statusesOptions = useMemo(
     () => ({
       label: 'All statuses',
-      handler: () => {},
-      items: [
-        { label: OrderStatus.PENDING, handler: () => {} },
-        { label: OrderStatus.CONFIRMED, handler: () => {} },
-        { label: OrderStatus.COMPLETED, handler: () => {} },
-      ],
+      handler: () => {
+        setStatuses((prev) => {
+          if (!prev || prev.length === 3) {
+            return [];
+          } else {
+            return undefined;
+          }
+        });
+      },
+      items: STATUSES_ITEMS.map((status) => ({
+        label: status.label,
+        id: status.id,
+        handler: () => {
+          setStatuses((prev) => {
+            if (!prev) {
+              return STATUSES_ITEMS.reduce<OrderStatus[]>((acc, s) => {
+                if (s.id && s.id !== status.id) {
+                  acc.push(s.id);
+                }
+                return acc;
+              }, []);
+            } else if (prev?.includes(status.id)) {
+              return prev.filter((id) => id !== status.id);
+            } else {
+              return [...(prev || []), status.id];
+            }
+          });
+        },
+      })),
     }),
-    [],
+    [statuses],
   );
 
   const mastersOptions = useMemo(
     () => ({
       label: 'All masters',
-      handler: () => {},
-      items: masters?.map((master) => ({ label: master.name, handler: () => {} })) ?? [],
+      handler: () => {
+        setMasterIds((prev) => {
+          if (!prev || prev.length === masters.length) {
+            return [];
+          } else {
+            return undefined;
+          }
+        });
+      },
+      items:
+        masters?.map((master) => ({
+          label: master.name,
+          id: master.id,
+          handler: () => {
+            setMasterIds((prev) => {
+              if (!prev) {
+                return masters.reduce<number[]>((acc, m) => {
+                  if (m.id && m.id !== master.id) {
+                    acc.push(m.id);
+                  }
+                  return acc;
+                }, []);
+              } else if (prev?.includes(master.id)) {
+                return prev.filter((id) => id !== master.id);
+              } else {
+                return [...(prev || []), master.id];
+              }
+            });
+          },
+        })) ?? [],
     }),
     [masters],
   );
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <div className='bg-primary-50 px-4 py-3 flex gap-3'>
+      <div className='bg-primary-50 px-4 py-3 flex gap-3 relative'>
         <button
           type='button'
           className={controlsButton({ variant: 'full' })}
@@ -249,11 +333,29 @@ export default function CalendarControls(props: Props) {
           </button>
         </div>
         <SelectButton label={type} options={viewOptions} type={ElementStyleType.OUTLINE} />
-        {desktopUp && (
+        {tabletUp ? (
           <>
-            <CheckboxesButton addCount label='Masters' options={[mastersOptions]} />
-            <CheckboxesButton addCount label='Statuses' options={[statusesOptions]} />
+            <CheckboxesButton
+              addCount
+              label='Masters'
+              options={[mastersOptions]}
+              values={[masterIds]}
+            />
+            <CheckboxesButton
+              addCount
+              label='Statuses'
+              options={[statusesOptions]}
+              values={[statuses]}
+            />
           </>
+        ) : (
+          <div className='absolute right-4 bottom-[calc(100%+26px)] translate-y-1/2 z-11'>
+            <CheckboxesButton
+              label='Options'
+              options={[mastersOptions, statusesOptions]}
+              values={[masterIds, statuses]}
+            />
+          </div>
         )}
       </div>
     </LocalizationProvider>

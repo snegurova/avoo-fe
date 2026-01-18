@@ -7,8 +7,9 @@ type Props = {
   options: {
     label: string;
     handler: () => void;
-    items?: { label: string | null; handler: () => void }[];
+    items?: { label: string | null; id: number | string; handler: () => void }[];
   }[];
+  values: ((string | number)[] | undefined)[];
 };
 
 const dropdown = tv({
@@ -16,24 +17,37 @@ const dropdown = tv({
 });
 
 export default function CheckboxesList(props: Props) {
-  const { options } = props;
+  const { options, values } = props;
 
   return (
     <div className={dropdown()}>
       {options.map((option, index) => (
-        <div key={index} className='mb-2 last:mb-0'>
+        <div
+          key={index}
+          className='mb-2 last:mb-0 not-last:border-b not-last:border-b-primary-100 not-last:pb-2 not-last:mb-2'
+        >
           <FormControlLabel
-            control={<Checkbox onChange={option.handler} size='small' />}
+            control={
+              <Checkbox
+                checked={!values[index] || values[index]?.length >= (option.items?.length || 0)}
+                onChange={option.handler}
+                size='small'
+              />
+            }
             label={option.label}
-            onChange={() => {}}
           />
           {option.items &&
             option.items.map((item, idx) => (
               <div key={idx} className='pl-6'>
                 <FormControlLabel
-                  control={<Checkbox onChange={item.handler} size='small' />}
+                  control={
+                    <Checkbox
+                      checked={!values[index] || values[index]?.includes(item.id || '')}
+                      onChange={item.handler}
+                      size='small'
+                    />
+                  }
                   label={item.label}
-                  onChange={() => {}}
                 />
               </div>
             ))}

@@ -38,6 +38,12 @@ export const timeUtils = {
       date1.getDate() === date2.getDate()
     );
   },
+  isCurrentWeek(date: Date) {
+    const now = new Date();
+    const targetWeekRange = this.getWeekRange(date);
+
+    return now >= targetWeekRange.start && now <= targetWeekRange.end;
+  },
   getDayRange(date: Date): { start: Date; end: Date } {
     const start = this.toDayBegin(date);
     const end = this.toDayEnd(date);
@@ -99,5 +105,11 @@ export const timeUtils = {
       return `${hours} ${hourText}`;
     }
     return `${hours}h ${minutes} mins`;
+  },
+  formatDate(date: Date): string {
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, '0');
+    return `${year}-${month}-${day}`;
   },
 };
