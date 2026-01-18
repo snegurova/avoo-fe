@@ -4,16 +4,23 @@ import ShareIcon from '@/_icons/ShareIcon';
 import DeleteIcon from '@/_icons/DeleteIcon';
 import EditSquareIcon from '@/_icons/EditSquareIcon';
 import ContentCopyIcon from '@/_icons/ContentCopyIcon';
+import { IconButton } from '@mui/material';
+import { useApiStatusStore } from '@avoo/store';
 
 type Props = {
+  id: number;
   name: string;
   durationMinutes: number;
   price: number;
   currency: string;
+  onDelete: (id: number) => void;
 };
 
 export default function ServiceCard(props: Props) {
-  const { name, durationMinutes, price, currency } = props;
+  const { id, name, durationMinutes, price, currency, onDelete } = props;
+
+  const isPending = useApiStatusStore((state) => state.isPending);
+
   return (
     <div className='relative border border-gray-200 rounded-lg overflow-hidden'>
       <span className='absolute left-0 top-0 h-full w-2 bg-primary-200 rounded-l-lg' />
@@ -29,6 +36,7 @@ export default function ServiceCard(props: Props) {
           </div>
         </div>
         <div className='flex items-center gap-3'>
+          <span className='text-bold'>ID:{id}</span>
           <span className='font-regular font-weight-400 lg:hidden'>
             {currencyUtils.formatPrice(price, currency)}
           </span>
@@ -48,11 +56,16 @@ export default function ServiceCard(props: Props) {
               icon={<ShareIcon className='transition-colors' />}
               label='Share Service'
             />
-            <IconLink
-              href={'#'}
-              icon={<DeleteIcon className='transition-colors' />}
-              label='Delete Service'
-            />
+            <IconButton
+              aria-label='delete'
+              onClick={() => {
+                onDelete(id);
+              }}
+              loading={isPending}
+              disabled={isPending}
+            >
+              <DeleteIcon className='transition-colors' />
+            </IconButton>
           </div>
         </div>
       </div>

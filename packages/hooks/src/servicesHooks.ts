@@ -2,59 +2,49 @@ import { utils } from '@avoo/hooks/utils/utils';
 import { GetServiceResponse, PrivateServiceQueryParams } from '@avoo/axios/types/apiTypes';
 
 import { BaseResponse } from '@avoo/axios/types/apiTypes';
-import { apiStatus } from '@avoo/hooks/types/apiTypes';
-import { useQuery } from '@tanstack/react-query';
+import { InfiniteData, useInfiniteQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useMemo, useState } from 'react';
-import { queryKeys } from './queryKeys';
 import { servicesApi } from '@avoo/axios/src/modules/services';
+import { useDebounce } from './useDebounce';
 
 type ServicesQueryProps = {
-  page: number;
   limit: number;
   categoryId: number | null;
   search: string;
 };
 
+const DEFAULT_LIMIT = 10;
+
 export const servicesHooks = {
-  useGetServices: ({
-    page,
-    limit,
+  useGetServicesInfinite: ({
+    limit = DEFAULT_LIMIT,
     categoryId,
     minPrice,
     maxPrice,
     search,
     isActive,
-  }: PrivateServiceQueryParams) => {
-    const memoParams = useMemo<PrivateServiceQueryParams>(
-      () => ({
-        page,
-        limit,
-        categoryId,
-        minPrice,
-        maxPrice,
-        search,
-        isActive,
-      }),
-      [page, limit, categoryId, minPrice, maxPrice, search, isActive],
-    );
-
-    const { data: servicesData, isPending } = useQuery<BaseResponse<GetServiceResponse>, Error>({
-      queryKey: ['services', queryKeys.services.byParams(memoParams)],
-      queryFn: () => servicesApi.getServices(memoParams),
+  }: Omit<PrivateServiceQueryParams, 'page'>) => {
+    const filterParams = { limit, categoryId, minPrice, maxPrice, search, isActive };
+    const query = useInfiniteQuery<BaseResponse<GetServiceResponse>, Error>({
+      queryKey: ['services', filterParams],
+      queryFn: ({ pageParam = 1 }) =>
+        servicesApi.getServices({ ...filterParams, page: pageParam as number }),
+      initialPageParam: 1,
+      getNextPageParam: (lastPage) => {
+        const { currentPage, total } = lastPage.data?.pagination || { currentPage: 0, total: 0 };
+        return currentPage * limit < total ? currentPage + 1 : undefined;
+      },
     });
+
+    const isPending = query.isFetching;
 
     utils.useSetPendingApi(isPending);
 
-    if (servicesData?.status === apiStatus.SUCCESS && servicesData.data) {
-      return servicesData.data;
-    }
-
-    return null;
+    return query;
   },
   useServicesQuery() {
     const [params, setParams] = useState<ServicesQueryProps>({
-      page: 1,
-      limit: 10,
+      limit: DEFAULT_LIMIT,
       categoryId: null,
       search: '',
     });
@@ -64,7 +54,6 @@ export const servicesHooks = {
     const setSearchQuery = (value: string) => {
       setParams((prev) => ({
         ...prev,
-        page: 1,
         categoryId: null,
         search: value,
       }));
@@ -74,31 +63,20 @@ export const servicesHooks = {
     const setCategory = (categoryId: number | null, name = 'All categories') => {
       setParams((prev) => ({
         ...prev,
-        page: 1,
         categoryId,
       }));
       setSelectedCategoryName(name);
     };
 
-    const setPage = (page: number) => {
-      setParams((prev) => ({
-        ...prev,
-        page,
-      }));
-    };
+    const debouncedSearch = useDebounce(params.search, 400);
 
-    const incrementPage = () => {
-      setPage(params.page + 1);
-    };
-
-    const queryParams: PrivateServiceQueryParams = useMemo(
+    const queryParams: Omit<PrivateServiceQueryParams, 'page'> = useMemo(
       () => ({
-        page: params.page,
         limit: params.limit,
-        search: params.search,
+        search: debouncedSearch,
         ...(params.categoryId !== null && { categoryId: params.categoryId }),
       }),
-      [params],
+      [params.limit, params.categoryId, debouncedSearch],
     );
 
     return {
@@ -107,8 +85,73 @@ export const servicesHooks = {
       selectedCategoryName,
       setSearchQuery,
       setCategory,
-      setPage,
-      incrementPage,
+    };
+  },
+  useDeleteService: () => {
+    const queryClient = useQueryClient();
+
+    const deleteServiceMutation = useMutation({
+      mutationFn: (id: number) => servicesApi.deleteService(id),
+      onSuccess: (_, deletedId) => {
+        queryClient.setQueryData<InfiniteData<BaseResponse<GetServiceResponse>>>(
+          ['services'],
+          (oldData) => {
+            if (!oldData) return oldData;
+
+            return {
+              ...oldData,
+              pages: oldData.pages.map((page) => ({
+                ...page,
+                data: {
+                  ...page.data,
+                  items: page.data.items.filter((s) => s.id !== deletedId),
+                  pagination: {
+                    ...page.data.pagination,
+                    total: page.data.pagination.total - 1,
+                  },
+                },
+              })),
+            };
+          },
+        );
+      },
+    });
+
+    utils.useSetPendingApi(deleteServiceMutation.isPending);
+
+    return {
+      deleteServiceMutation,
+      deleteServiceMutationAsync: deleteServiceMutation.mutateAsync,
     };
   },
 };
+
+// useDeleteService: () => {
+//     const queryClient = useQueryClient();
+
+//     const deleteServiceMutation = useMutation({
+//       mutationFn: (id: number) => servicesApi.deleteService(id),
+//       onSuccess: (_, deletedId) => {
+//         queryClient.setQueryData(['services', 'list'], (oldData: any) => {
+//           if (!oldData) return oldData;
+
+//           return {
+//             ...oldData,
+//             pages: oldData.pages.map((page: any) => ({
+//               ...page,
+//               data: {
+//                 ...page.data,
+//                 items: page.data.items.filter((item: any) => item.id !== deletedId),
+//                 pagination: {
+//                   ...page.data.pagination,
+//                   total: page.data.pagination.total - 1,
+//                 },
+//               },
+//             })),
+//           };
+//         });
+//       },
+//     });
+
+//     return deleteServiceMutation;
+//   },
