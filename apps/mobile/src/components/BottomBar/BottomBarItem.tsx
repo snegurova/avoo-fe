@@ -2,7 +2,7 @@ import { Pressable } from 'react-native';
 import { BottomTabBarProps, BottomTabNavigationEventMap } from '@react-navigation/bottom-tabs';
 import type { NavigationHelpers, ParamListBase, Route } from '@react-navigation/native';
 import { colors } from '@avoo/design-tokens';
-import { typeGuardHooks } from '@/hooks/typeGuardsHooks';
+import { typeGuardHooks } from '@avoo/shared';
 import { Text } from 'react-native-paper';
 
 type Props = {

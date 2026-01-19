@@ -1040,20 +1040,17 @@ export interface components {
             /** @example password123 */
             password: string;
         };
+        /** @enum {string} */
+        Language: "ar" | "bn" | "da" | "de" | "en" | "es" | "fi" | "fr" | "hr" | "hi" | "is" | "it" | "ja" | "ko" | "la" | "lv" | "nl" | "no" | "pl" | "pt" | "ro" | "sv" | "tr" | "uk" | "vi" | "zh" | "fa";
         MasterEntity: {
             id: number;
             name: string | null;
+            headline: string | null;
             email: string;
             phone: string | null;
             avatarUrl: string | null;
             avatarPreviewUrl: string | null;
-            /**
-             * @example [
-             *       "pl",
-             *       "en"
-             *     ]
-             */
-            languages: ("ar" | "bn" | "da" | "de" | "en" | "es" | "fi" | "fr" | "hr" | "hi" | "is" | "it" | "ja" | "ko" | "la" | "lv" | "nl" | "no" | "pl" | "pt" | "ro" | "sv" | "tr" | "uk" | "vi" | "zh" | "fa")[] | null;
+            languages: components["schemas"]["Language"][] | null;
             bio?: string | null;
         };
         CategoryEntity: {
@@ -1090,7 +1087,11 @@ export interface components {
         };
         OrderEntity: {
             id: number;
-            status: string;
+            /**
+             * @description Status
+             * @enum {string}
+             */
+            status: "PENDING" | "CONFIRMED" | "COMPLETED" | "EXPIRED" | "CANCELED";
             notes: Record<string, never>;
             duration: number;
             /** Format: date-time */
@@ -1111,14 +1112,7 @@ export interface components {
             phone: string | null;
             address: string | null;
             avatarUrl: string | null;
-            /**
-             * @example [
-             *       "pl",
-             *       "en",
-             *       "uk"
-             *     ]
-             */
-            languages: ("ar" | "bn" | "da" | "de" | "en" | "es" | "fi" | "fr" | "hr" | "hi" | "is" | "it" | "ja" | "ko" | "la" | "lv" | "nl" | "no" | "pl" | "pt" | "ro" | "sv" | "tr" | "uk" | "vi" | "zh" | "fa")[] | null;
+            languages: components["schemas"]["Language"][] | null;
             location_lat: number | null;
             location_lon: number | null;
         };
@@ -1210,21 +1204,14 @@ export interface components {
              * @example 30.718815628384387
              */
             location_lon?: number;
-            /**
-             * @description Languages spoken by the master
-             * @example [
-             *       "pl",
-             *       "uk"
-             *     ]
-             */
-            languages: ("ar" | "bn" | "da" | "de" | "en" | "es" | "fi" | "fr" | "hr" | "hi" | "is" | "it" | "ja" | "ko" | "la" | "lv" | "nl" | "no" | "pl" | "pt" | "ro" | "sv" | "tr" | "uk" | "vi" | "zh" | "fa")[];
         };
         ShortMasterInfoDto: {
             id: number;
             avatarPreviewUrl: string | null;
         };
         GetProfileLanguagesDto: {
-            language: string;
+            /** @enum {string} */
+            language: "ar" | "bn" | "da" | "de" | "en" | "es" | "fi" | "fr" | "hr" | "hi" | "is" | "it" | "ja" | "ko" | "la" | "lv" | "nl" | "no" | "pl" | "pt" | "ro" | "sv" | "tr" | "uk" | "vi" | "zh" | "fa";
             masters: components["schemas"]["ShortMasterInfoDto"][];
         };
         CertificateEntity: {
@@ -1441,7 +1428,12 @@ export interface components {
              */
             name?: Record<string, never>;
             /**
-             * @description Master bio/description
+             * @description Headline
+             * @example Hairdresser
+             */
+            headline?: Record<string, never>;
+            /**
+             * @description About Master
              * @example Professional stylist with expertise in modern haircuts and coloring.
              */
             bio?: Record<string, never>;
@@ -1467,11 +1459,16 @@ export interface components {
             email: string;
             /**
              * @description Master name (required)
-             * @example John Doe
+             * @example Jane Smith
              */
-            name: string;
+            name?: Record<string, never>;
             /**
-             * @description Master bio/description
+             * @description Headline
+             * @example Hairdresser
+             */
+            headline?: Record<string, never>;
+            /**
+             * @description About Master
              * @example Professional hair stylist with 5+ years of experience...
              */
             bio?: string;
@@ -1487,7 +1484,7 @@ export interface components {
              *       "uk"
              *     ]
              */
-            languages: ("ar" | "bn" | "da" | "de" | "en" | "es" | "fi" | "fr" | "hr" | "hi" | "is" | "it" | "ja" | "ko" | "la" | "lv" | "nl" | "no" | "pl" | "pt" | "ro" | "sv" | "tr" | "uk" | "vi" | "zh" | "fa")[];
+            languages?: components["schemas"]["Language"][];
         };
         UpdateMasterAvatarDto: {
             /** Format: binary */
@@ -1518,11 +1515,8 @@ export interface components {
             serviceId: number;
         };
         CreatePrivateOrderDto: {
-            /**
-             * @description Type of the order: SERVICE or COMBINATION
-             * @example SERVICE
-             */
-            type: string;
+            /** @enum {string} */
+            type: "SERVICE" | "COMBINATION";
             /**
              * @description ID of the service for the order (required if type is SERVICE)
              * @example 2
@@ -1584,16 +1578,13 @@ export interface components {
         UpdateOrderStatusDto: {
             /**
              * @description Status of the order
-             * @example CONFIRMED
+             * @enum {string}
              */
-            status?: string;
+            status?: "PENDING" | "CONFIRMED" | "COMPLETED" | "EXPIRED" | "CANCELED";
         };
         CreatePublicOrderDto: {
-            /**
-             * @description Type of the order: SERVICE or COMBINATION
-             * @example SERVICE
-             */
-            type: string;
+            /** @enum {string} */
+            type: "SERVICE" | "COMBINATION";
             /**
              * @description ID of the service for the order (required if type is SERVICE)
              * @example 2
@@ -1681,9 +1672,9 @@ export interface components {
             duration: number;
             /**
              * @description Status
-             * @example PENDING
+             * @enum {string}
              */
-            status: string;
+            status: "PENDING" | "CONFIRMED" | "COMPLETED" | "EXPIRED" | "CANCELED";
             /** @example First appointment */
             notes: Record<string, never>;
             /** @example John Doe */
@@ -1788,6 +1779,11 @@ export interface components {
             /** @description List of working days */
             days: components["schemas"]["PrivateWorkingDayDto"][];
         };
+        /**
+         * @description Filter by order status
+         * @enum {string}
+         */
+        OrderStatus: "PENDING" | "CONFIRMED" | "COMPLETED" | "EXPIRED" | "CANCELED";
         QueryCalendarByDatesPrivateDto: {
             /** @description Master IDs */
             masterIds?: number[];
@@ -1817,9 +1813,11 @@ export interface components {
             limitEvents?: number;
             /**
              * @description Filter by order status
-             * @example PENDING
+             * @example [
+             *       "PENDING"
+             *     ]
              */
-            orderStatus?: string[];
+            orderStatus?: components["schemas"]["OrderStatus"][];
         };
         CalendarExceptionEntity: {
             id: number;
@@ -1852,9 +1850,9 @@ export interface components {
             dateTo: string;
             /**
              * @description Type of exception
-             * @example OTHER_OFF
+             * @enum {string}
              */
-            type: string;
+            type: "SICK_LEAVE" | "VACATION" | "PERSONAL_OFF" | "HOLIDAY_OFF" | "OTHER_OFF" | "PERSONAL_WORKING" | "HOLIDAY_WORKING" | "VACATION_WORKING" | "OTHER_WORKING";
             /**
              * @description Start time of exception in minutes
              * @example 540
@@ -1897,9 +1895,9 @@ export interface components {
             duration: number;
             /**
              * @description Status
-             * @example PENDING
+             * @enum {string}
              */
-            status: string;
+            status: "PENDING" | "CONFIRMED" | "COMPLETED" | "EXPIRED" | "CANCELED";
             /** @example First appointment */
             notes: Record<string, never>;
             /** @example John Doe */
@@ -4477,7 +4475,7 @@ export interface operations {
                 /** @description Items per page */
                 limit?: number;
                 /** @description Filter by status */
-                status?: string;
+                status?: "PENDING" | "CONFIRMED" | "COMPLETED" | "EXPIRED" | "CANCELED";
                 /** @description Filter by customer ID */
                 customerId?: number;
                 /** @description Filter by master ID (assigned to the order) */
@@ -4652,6 +4650,8 @@ export interface operations {
                 combinationId?: number;
                 /** @description User timezone */
                 timezone?: string;
+                /** @description Filter by order status */
+                orderStatus?: components["schemas"]["OrderStatus"][];
             };
             header?: never;
             path?: never;
@@ -4806,7 +4806,7 @@ export interface operations {
                 /** @description Limit of events */
                 limitEvents?: number;
                 /** @description Filter by order status */
-                orderStatus?: string[];
+                orderStatus?: components["schemas"]["OrderStatus"][];
             };
             header?: never;
             path?: never;
