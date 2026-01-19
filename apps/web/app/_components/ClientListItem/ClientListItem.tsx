@@ -15,7 +15,7 @@ type Props = {
 const ClientListItem: React.FC<Props> = ({ client, onEdit }) => {
   const clientDisplayName = client.name || 'No name';
   const phone = client.phone || 'No phone';
-  const formattedLastVisit = timeUtils.formatDate(client.lastVisit) ?? '-';
+  const formattedLastVisit = timeUtils.formatLastVisitDate(client.lastVisit) ?? '-';
   const handleOpenDetails = () => {
     onEdit?.(client.id);
   };
