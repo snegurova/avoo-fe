@@ -100,4 +100,31 @@ export const timeUtils = {
     }
     return `${hours}h ${minutes} mins`;
   },
+
+  formatDate(
+    value: string | Date | Record<string, unknown> | null | undefined,
+    locale = 'en-GB',
+  ): string | null {
+    if (value == null) return null;
+
+    const parseDate = (dateLike: unknown): Date | null => {
+      if (dateLike == null) return null;
+      if (dateLike instanceof Date) return isNaN(dateLike.getTime()) ? null : dateLike;
+      if (typeof dateLike === 'string') {
+        const parsed = new Date(dateLike);
+        return isNaN(parsed.getTime()) ? null : parsed;
+      }
+      if (typeof dateLike === 'object') {
+        const values = Object.values(dateLike as Record<string, unknown>);
+        for (const item of values) {
+          const parsed = parseDate(item);
+          if (parsed) return parsed;
+        }
+      }
+      return null;
+    };
+
+    const parsedDate = parseDate(value);
+    return parsedDate ? parsedDate.toLocaleDateString(locale) : null;
+  },
 };

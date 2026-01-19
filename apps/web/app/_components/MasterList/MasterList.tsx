@@ -13,12 +13,13 @@ type Props = {
 };
 
 export const MasterList = ({ masters }: Props) => {
+  const [sortDirection, setSortDirection] = useState<SortDirection>(null);
+
+  const sorted = useMemo(() => sortByName(masters ?? [], sortDirection), [masters, sortDirection]);
+
   if (!masters || masters.length === 0) {
     return <div className='py-8 text-center text-gray-500'>No masters yet</div>;
   }
-  const [sortDirection, setSortDirection] = useState<SortDirection>(null);
-
-  const sorted = useMemo(() => sortByName(masters, sortDirection), [masters, sortDirection]);
 
   return (
     <div>
@@ -47,7 +48,7 @@ export const MasterList = ({ masters }: Props) => {
         <div className='w-1/5'>Languages</div>
         <div className='w-12 text-right'>Actions</div>
       </div>
-      <div className='flex flex-col gap-4'>
+      <div className='flex flex-col gap-4 lg:gap-0'>
         {sorted.map((master) => (
           <MasterListItem key={master.id} master={master} />
         ))}

@@ -13,6 +13,9 @@ type Props = {
   showAddButton?: boolean;
   addLabel?: string;
   className?: string;
+  searchClassName?: string;
+  searchContainerClassName?: string;
+  titleClassName?: string;
 };
 
 export default function Controls({
@@ -24,11 +27,14 @@ export default function Controls({
   showAddButton = true,
   addLabel = 'Add',
   className = '',
+  searchClassName,
+  searchContainerClassName,
+  titleClassName,
 }: Props) {
   return (
     <div className={`p-4 flex flex-wrap items-center gap-y-3 ${className}`}>
       <div className='flex flex-wrap md:flex-nowrap w-full items-center gap-y-4 gap-x-2'>
-        <Typography component='h1' variant='h1' className='order-1'>
+        <Typography component='h1' variant='h1' className={`order-1 ${titleClassName ?? ''}`}>
           {title}
         </Typography>
 
@@ -48,12 +54,16 @@ export default function Controls({
           ) : null}
         </div>
 
-        <div className='order-3 md:order-2 w-full md:w-auto md:ml-auto'>
+        <div
+          className={searchContainerClassName ?? 'order-3 md:order-2 w-full md:w-auto md:ml-auto'}
+        >
           <SearchInput
             value={searchValue}
             onChange={(v) => onSearchChange?.(v)}
             placeholder={placeholder}
-            className={'md:w-[306px] lg:w-[306px] md:mr-8 lg:mr-12'}
+            className={
+              searchClassName ?? 'md:w-[306px] lg:w-[306px] md:mr-8 lg:mr-12'
+            }
           />
         </div>
       </div>

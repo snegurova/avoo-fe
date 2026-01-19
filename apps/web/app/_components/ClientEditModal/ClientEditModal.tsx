@@ -11,10 +11,9 @@ type Props = {
   id: number | null;
   open: boolean;
   onClose: () => void;
-  onSaved?: () => void;
 };
 
-export const ClientEditModal: React.FC<Props> = ({ id, open, onClose, onSaved }) => {
+export const ClientEditModal: React.FC<Props> = ({ id, open, onClose }) => {
   const customer = customerHooks.useGetCustomerById(id);
 
   const update = customerHooks.useUpdateCustomer();
@@ -35,13 +34,7 @@ export const ClientEditModal: React.FC<Props> = ({ id, open, onClose, onSaved })
         <Modal isOpen={open} onClose={onClose}>
           <div className='p-4'>
             <h2 className='text-lg font-semibold mb-3'>Edit client</h2>
-            <ClientForm
-              initial={initial}
-              onClose={onClose}
-              onSaved={onSaved}
-              id={id}
-              update={update}
-            />
+            <ClientForm initial={initial} onClose={onClose} id={id} update={update} />
           </div>
         </Modal>
       )}
@@ -59,13 +52,11 @@ type FormValues = {
 function ClientForm({
   initial,
   onClose,
-  onSaved,
   id,
   update,
 }: {
   initial: FormValues;
   onClose: () => void;
-  onSaved?: () => void;
   id: number | null;
   update: ReturnType<typeof customerHooks.useUpdateCustomer>;
 }) {
@@ -76,18 +67,13 @@ function ClientForm({
   }, [initial, reset]);
 
   const onSubmit = async (values: FormValues) => {
-    try {
-      if (!id) {
-        onClose();
-        return;
-      }
-
-      await update.updateCustomerAsync({ id, body: values });
-      onSaved?.();
+    if (id == null) {
       onClose();
-    } catch {
-      // TODO: handle error
+      return;
     }
+
+    await update.updateCustomerAsync({ id, body: values });
+    onClose();
   };
 
   const loading = update.isPending;
