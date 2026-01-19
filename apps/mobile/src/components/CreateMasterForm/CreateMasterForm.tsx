@@ -3,10 +3,6 @@ import FormTextInput from '@/shared/FormTextInput';
 import LanguageSelector from '@/shared/LanguageSelector/LanguageSelector';
 import { masterHooks } from '@avoo/hooks';
 import { BottomSheetHeader } from '@/shared/BottomSheetHeader/BottomSheetHeader';
-import { Snackbar, Portal } from 'react-native-paper';
-import { useApiStatusStore } from '@avoo/store';
-import { MaterialIcons } from '@/shared/icons';
-import { colors } from '@avoo/design-tokens';
 
 type Props = {
   onClose: () => void;
@@ -19,7 +15,6 @@ const CreateMasterForm = ({ onClose }: Props) => {
     },
   });
 
-  const {isError, errorMessage} = useApiStatusStore();
   return (
     <>
       <BottomSheetHeader handleClose={onClose} handleConfirm={handleSubmit} />
@@ -73,18 +68,6 @@ const CreateMasterForm = ({ onClose }: Props) => {
           <LanguageSelector name='languages' control={control} error={errors.languages?.message} />
         </View>
       </View>
-      <Portal>
-        <Snackbar
-          visible={isError && !!errorMessage}
-          onDismiss={() => useApiStatusStore.setState({ isError: false, errorMessage: null })}
-          duration={4000}
-          style={[{ backgroundColor: colors.red[800], zIndex: 10001, elevation: 10001 }]}
-          icon={({ size, color }) => <MaterialIcons name='close' size={size} color={color} />}
-          onIconPress={() => useApiStatusStore.setState({ isError: false, errorMessage: null })}
-        >
-          <Text style={{ fontSize: 16, fontWeight: 'bold', color: 'white' }}>{errorMessage}</Text>
-        </Snackbar>
-      </Portal>
     </>
   );
 };
