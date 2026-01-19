@@ -36,7 +36,6 @@ export default function ServiceCard(props: Props) {
           </div>
         </div>
         <div className='flex items-center gap-3'>
-          <span className='text-bold'>ID:{id}</span>
           <span className='font-regular font-weight-400 lg:hidden'>
             {currencyUtils.formatPrice(price, currency)}
           </span>

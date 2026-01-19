@@ -26,7 +26,7 @@ export const servicesHooks = {
   }: Omit<PrivateServiceQueryParams, 'page'>) => {
     const filterParams = { limit, categoryId, minPrice, maxPrice, search, isActive };
     const query = useInfiniteQuery<BaseResponse<GetServiceResponse>, Error>({
-      queryKey: ['services', filterParams],
+      queryKey: ['services', 'list', filterParams],
       queryFn: ({ pageParam = 1 }) =>
         servicesApi.getServices({ ...filterParams, page: pageParam as number }),
       initialPageParam: 1,
@@ -93,27 +93,35 @@ export const servicesHooks = {
     const deleteServiceMutation = useMutation({
       mutationFn: (id: number) => servicesApi.deleteService(id),
       onSuccess: (_, deletedId) => {
-        queryClient.setQueryData<InfiniteData<BaseResponse<GetServiceResponse>>>(
-          ['services'],
+        queryClient.setQueriesData<InfiniteData<BaseResponse<GetServiceResponse>>>(
+          {
+            predicate: (query) => query.queryKey[0] === 'services' && query.queryKey[1] === 'list',
+          },
           (oldData) => {
             if (!oldData) return oldData;
 
-            return {
-              ...oldData,
-              pages: oldData.pages.map((page) => ({
+            const newPages = oldData.pages.map((page) => {
+              const newItems = page.data.items.filter((s) => s.id !== deletedId);
+
+              return {
                 ...page,
                 data: {
                   ...page.data,
-                  items: page.data.items.filter((s) => s.id !== deletedId),
+                  items: newItems,
                   pagination: {
                     ...page.data.pagination,
-                    total: page.data.pagination.total - 1,
+                    total: Math.max(page.data.pagination.total - 1, 0),
                   },
                 },
-              })),
-            };
+              };
+            });
+
+            return { ...oldData, pages: newPages };
           },
         );
+        queryClient.invalidateQueries({
+          queryKey: ['categories'],
+        });
       },
     });
 
@@ -125,33 +133,3 @@ export const servicesHooks = {
     };
   },
 };
-
-// useDeleteService: () => {
-//     const queryClient = useQueryClient();
-
-//     const deleteServiceMutation = useMutation({
-//       mutationFn: (id: number) => servicesApi.deleteService(id),
-//       onSuccess: (_, deletedId) => {
-//         queryClient.setQueryData(['services', 'list'], (oldData: any) => {
-//           if (!oldData) return oldData;
-
-//           return {
-//             ...oldData,
-//             pages: oldData.pages.map((page: any) => ({
-//               ...page,
-//               data: {
-//                 ...page.data,
-//                 items: page.data.items.filter((item: any) => item.id !== deletedId),
-//                 pagination: {
-//                   ...page.data.pagination,
-//                   total: page.data.pagination.total - 1,
-//                 },
-//               },
-//             })),
-//           };
-//         });
-//       },
-//     });
-
-//     return deleteServiceMutation;
-//   },

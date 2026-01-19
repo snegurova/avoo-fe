@@ -1,18 +1,18 @@
 import { Typography } from '@mui/material';
 import CategoryFilterItem from '../CategoryFilterItem/CategoryFilterItem';
 import ServiceCard from '../ServiceCard/ServiceCard';
-import { Category, Service } from '@avoo/axios/types/apiTypes';
+import { CategoryWithServicesCount, Service } from '@avoo/axios/types/apiTypes';
 import { useApiStatusStore } from '@avoo/store';
 import ConfirmationDialog from '../ConfirmationDialog/ConfirmationDialog';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { servicesHooks } from '@avoo/hooks';
+import { useToast } from '@/_hooks/useToast';
 
 type Props = {
   allServicesCount: number;
-  totalServicesCount: number;
   hasMore: boolean;
   currency: string;
-  categorySidebarItems: Category[] | null;
+  categorySidebarItems: CategoryWithServicesCount[] | null;
   services: Service[] | null;
   selectedCategoryId: number | null;
   selectedCategoryName: string | null;
@@ -25,7 +25,6 @@ export default function ServiceList(props: Props) {
     categorySidebarItems,
     services,
     allServicesCount,
-    totalServicesCount,
     selectedCategoryId,
     selectedCategoryName,
     setSelectedCategory,
@@ -33,6 +32,9 @@ export default function ServiceList(props: Props) {
     hasMore,
     currency,
   } = props;
+  const toast = useToast();
+  const listRef = useRef<HTMLDivElement>(null);
+
   const isPending = useApiStatusStore((state) => state.isPending);
 
   const [serviceIdToDelete, setServiceIdToDelete] = useState<number | null>(null);
@@ -45,14 +47,23 @@ export default function ServiceList(props: Props) {
     setServiceIdToDelete(null);
   };
   const handleConfirmDelete = async () => {
+    handleCloseDeleteDialog();
     if (!serviceIdToDelete) return;
     try {
       await deleteServiceMutationAsync(serviceIdToDelete);
+      toast.success('Service deleted successfully');
     } catch {
-      alert('Failed to delete service');
+      toast.error('Failed to delete service');
     }
-    handleCloseDeleteDialog();
   };
+
+  useEffect(() => {
+    const el = listRef.current;
+    if (!el || !hasMore) return;
+    if (el.scrollHeight <= el.clientHeight) {
+      incrementPage();
+    }
+  }, [services?.length, hasMore]);
 
   return (
     <>
@@ -62,21 +73,25 @@ export default function ServiceList(props: Props) {
             Categories
           </Typography>
           <ul className='flex lg:flex-col gap-4 overflow-x-auto'>
-            <li key={'all'}>
-              <CategoryFilterItem
-                name='All categories'
-                count={allServicesCount}
-                isActive={selectedCategoryId === null}
-                onClick={() => setSelectedCategory(null, 'All categories')}
-              />
-            </li>
+            {categorySidebarItems?.length !== 1 && (
+              <li key={'all'}>
+                <CategoryFilterItem
+                  name='All categories'
+                  count={allServicesCount}
+                  isActive={selectedCategoryId === null}
+                  onClick={() => setSelectedCategory(null, 'All categories')}
+                />
+              </li>
+            )}
 
             {categorySidebarItems?.map((category) => (
               <li key={category.id}>
                 <CategoryFilterItem
                   name={category.name}
-                  count={selectedCategoryId === category.id ? totalServicesCount : 0}
-                  isActive={selectedCategoryId === category.id}
+                  count={category.totalServices}
+                  isActive={
+                    selectedCategoryId === category.id || categorySidebarItems?.length === 1
+                  }
                   onClick={() => setSelectedCategory(category.id, category.name)}
                 />
               </li>
@@ -84,24 +99,25 @@ export default function ServiceList(props: Props) {
           </ul>
         </div>
 
-        <div className='flex flex-col gap-6 overflow-y-auto max-h-[calc(100vh-300px)]'>
+        <div className='flex flex-col gap-6 overflow-y-hidden max-h-[calc(100vh-300px)]'>
           {services && services.length > 0 ? (
             <section key={selectedCategoryId}>
               <Typography variant='h6' className='hidden lg:block' sx={{ mb: 2 }}>
                 {selectedCategoryName}
               </Typography>
               <div
-                className='flex flex-col gap-4 overflow-y-auto max-h-[70vh]'
+                ref={listRef}
+                className='flex flex-col overflow-y-auto gap-4 max-h-[70vh]'
                 onScroll={(e) => {
-                  const target = e.currentTarget;
-                  if (target.scrollHeight - target.scrollTop === target.clientHeight && hasMore) {
+                  const el = e.currentTarget;
+                  if (el.scrollHeight - el.scrollTop <= el.clientHeight + 1 && hasMore) {
                     incrementPage();
                   }
                 }}
               >
-                <ul className='flex flex-col gap-4'>
+                <ul className='flex flex-col gap-4  mb-30'>
                   {services.map((service) => (
-                    <li key={service.id} className={service.id.toString()}>
+                    <li key={service.id}>
                       <ServiceCard
                         id={service.id}
                         name={service.name}

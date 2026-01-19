@@ -38,9 +38,7 @@ export default function ConfirmationDialog(props: Props) {
       >
         <CloseIcon />
       </IconButton>
-      <DialogTitle style={{ cursor: 'move' }} id='draggable-dialog-title'>
-        {title}
-      </DialogTitle>
+      <DialogTitle style={{ cursor: 'move' }}>{title}</DialogTitle>
       <DialogContent>
         <DialogContentText>{content}</DialogContentText>
       </DialogContent>

@@ -12,6 +12,7 @@ export type BaseResponse<T> = {
 };
 /** Category && Services */
 export type Category = components['schemas']['CategoryEntity'];
+export type CategoryWithServicesCount = components['schemas']['ServiceWithCategoryDto'];
 export type Service = components['schemas']['ServiceEntity'];
 export type PrivateServiceQueryParams = components['schemas']['QueryServicesDto'];
 export type GetServiceResponse = {
@@ -20,6 +21,8 @@ export type GetServiceResponse = {
 };
 
 export type GetCategoriesResponse = Category[];
+export type GetPrivateCategoriesResponse =
+  components['schemas']['ServicesGroupByCategoriesResponseDto'];
 /** Auth */
 export type LoginRequest = components['schemas']['LoginRequestDto'];
 export type RegisterRequest = components['schemas']['CreateUserDto'];

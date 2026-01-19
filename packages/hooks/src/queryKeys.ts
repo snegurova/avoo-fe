@@ -13,6 +13,7 @@ export const queryKeys = {
   },
   categories: {
     all: ['categories'] as const,
+    byParams: (params: string) => [...queryKeys.categories.all, params] as const,
   },
   user: {
     all: ['user'] as const,
