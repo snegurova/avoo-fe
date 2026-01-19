@@ -44,6 +44,8 @@ export type UserUpdateAvatarResponse = components['schemas']['UserEntity'];
 
 export type CertificateResponse = components['schemas']['CertificateEntity'];
 
+export type UpdateProfile = components['schemas']['UpdateProfileDto'];
+
 /** Master */
 export type MasterWithRelationsEntityResponse = components['schemas']['MasterEntity'];
 
