@@ -15,23 +15,25 @@ import { queryKeys } from './queryKeys';
 
 export const calendarHooks = {
   useGetCalendar: ({
-    masterId,
+    masterIds,
     view,
     rangeFromDate,
     rangeToDate,
     serviceId,
     combinationId,
+    orderStatus,
   }: PrivateCalendarQueryParams) => {
     const memoParams = useMemo<PrivateCalendarQueryParams>(
       () => ({
-        masterId,
+        masterIds,
         view,
         rangeFromDate,
         rangeToDate,
         serviceId,
         combinationId,
+        orderStatus,
       }),
-      [masterId, view, rangeFromDate, rangeToDate, serviceId, combinationId],
+      [masterIds, view, rangeFromDate, rangeToDate, serviceId, combinationId, orderStatus],
     );
 
     const { data: calendarData, isPending } = useQuery<BaseResponse<GetCalendarResponse>, Error>({
@@ -48,23 +50,25 @@ export const calendarHooks = {
     return null;
   },
   useGetCalendarByDates: ({
-    masterId,
+    masterIds,
     view,
     rangeFromDate,
     rangeToDate,
     serviceId,
     combinationId,
+    orderStatus,
   }: PrivateCalendarQueryParams) => {
     const memoParams = useMemo<PrivateCalendarByDatesQueryParams>(
       () => ({
-        masterId,
+        masterIds,
         view,
         rangeFromDate,
         rangeToDate,
         serviceId,
         combinationId,
+        orderStatus,
       }),
-      [masterId, view, rangeFromDate, rangeToDate, serviceId, combinationId],
+      [masterIds, view, rangeFromDate, rangeToDate, serviceId, combinationId, orderStatus],
     );
 
     const { data: calendarData, isPending } = useQuery<

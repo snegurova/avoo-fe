@@ -14,6 +14,7 @@ type Props = {
   date: Date;
   time: number;
   setTime: React.Dispatch<React.SetStateAction<number>>;
+  hideBorder?: boolean;
 };
 
 const container = tv({
@@ -39,7 +40,7 @@ const dateValue = tv({
 });
 
 const weekDay = tv({
-  base: 'h-full p-1 not-last:border-r border-gray-300 text-xs font-medium box-border border-b flex items-center justify-center flex-1 gap-1',
+  base: 'h-full p-1 not-last:border-r border-gray-300 text-xs font-medium box-border flex items-center justify-center flex-1 gap-1',
   variants: {
     type: {
       [CalendarViewType.WEEK]: 'min-w-26 md:min-w-40',
@@ -50,11 +51,15 @@ const weekDay = tv({
       past: 'text-gray-500',
       future: 'text-black',
     },
+    hideBorder: {
+      true: '',
+      false: 'border-b',
+    },
   },
 });
 
 export default function CalendarTimeScale(props: Props) {
-  const { type, date, time, setTime } = props;
+  const { type, date, time, setTime, hideBorder = false } = props;
 
   const belowDesktop = useMediaQuery('(max-width:1023px)');
 
@@ -103,7 +108,7 @@ export default function CalendarTimeScale(props: Props) {
         WEEK_CELLS.map((_, idx) => {
           const day = defineDateStatus(idx);
           return (
-            <div key={type + idx} className={weekDay({ day })}>
+            <div key={type + idx} className={weekDay({ day, hideBorder })}>
               {type === CalendarViewType.WEEK && (
                 <span
                   className={dateValue({

@@ -38,6 +38,12 @@ export const timeUtils = {
       date1.getDate() === date2.getDate()
     );
   },
+  isCurrentWeek(date: Date) {
+    const now = new Date();
+    const targetWeekRange = this.getWeekRange(date);
+
+    return now >= targetWeekRange.start && now <= targetWeekRange.end;
+  },
   getDayRange(date: Date): { start: Date; end: Date } {
     const start = this.toDayBegin(date);
     const end = this.toDayEnd(date);
@@ -100,31 +106,10 @@ export const timeUtils = {
     }
     return `${hours}h ${minutes} mins`;
   },
-
-  formatDate(
-    value: string | Date | Record<string, unknown> | null | undefined,
-    locale = 'en-GB',
-  ): string | null {
-    if (value == null) return null;
-
-    const parseDate = (dateLike: unknown): Date | null => {
-      if (dateLike == null) return null;
-      if (dateLike instanceof Date) return isNaN(dateLike.getTime()) ? null : dateLike;
-      if (typeof dateLike === 'string') {
-        const parsed = new Date(dateLike);
-        return isNaN(parsed.getTime()) ? null : parsed;
-      }
-      if (typeof dateLike === 'object') {
-        const values = Object.values(dateLike as Record<string, unknown>);
-        for (const item of values) {
-          const parsed = parseDate(item);
-          if (parsed) return parsed;
-        }
-      }
-      return null;
-    };
-
-    const parsedDate = parseDate(value);
-    return parsedDate ? parsedDate.toLocaleDateString(locale) : null;
+  formatDate(date: Date): string {
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, '0');
+    return `${year}-${month}-${day}`;
   },
 };

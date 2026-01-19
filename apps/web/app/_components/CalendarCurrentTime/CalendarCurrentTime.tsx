@@ -6,6 +6,7 @@ import { tv } from 'tailwind-variants';
 const ONE_MINUTE_MS = 60000;
 
 type Props = {
+  isSingleWeek?: boolean;
   showLabel?: boolean;
   time: number;
   setTime: React.Dispatch<React.SetStateAction<number>>;
@@ -18,6 +19,10 @@ const marker = tv({
       true: 'pl-0.5 h-5',
       false: '',
     },
+    isSingleWeek: {
+      true: 'before:content-[""] before:absolute before:right-full before:h-px before:w-10 before:bg-red-700',
+      false: '',
+    },
   },
 });
 
@@ -28,11 +33,15 @@ const label = tv({
       true: 'w-min border border-red-700 rounded-2xl bg-white p-1 font-medium text-[10px] leading-[1.2] text-red-700',
       false: '',
     },
+    isSingleWeek: {
+      true: 'w-min border border-red-700 rounded-2xl bg-white p-1 font-medium text-[10px] leading-[1.2] text-red-700 absolute -translate-x-10.5',
+      false: '',
+    },
   },
 });
 
 export default function CalendarCurrentTime(props: Props) {
-  const { showLabel = false, time, setTime } = props;
+  const { showLabel = false, time, setTime, isSingleWeek = false } = props;
 
   useEffect(() => {
     let interval: ReturnType<typeof setInterval> | null = null;
@@ -52,9 +61,12 @@ export default function CalendarCurrentTime(props: Props) {
   }, []);
 
   return (
-    <div className={marker({ showLabel })} style={{ top: `${time * PX_IN_MINUTE}px` }}>
-      <div className={label({ showLabel })}>
-        {showLabel && <span>{timeUtils.getTimeFromMinutes(time)}</span>}
+    <div
+      className={marker({ showLabel, isSingleWeek })}
+      style={{ top: `${time * PX_IN_MINUTE}px` }}
+    >
+      <div className={label({ showLabel, isSingleWeek })}>
+        {(showLabel || isSingleWeek) && <span>{timeUtils.getTimeFromMinutes(time)}</span>}
       </div>
     </div>
   );
