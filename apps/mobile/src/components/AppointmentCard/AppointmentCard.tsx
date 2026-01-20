@@ -1,19 +1,32 @@
 import { Avatar } from '@/shared/Avatar/Avatar';
+import { StatusChip } from '@/shared/StatusChip/StatusChip';
 import { colors } from '@avoo/design-tokens';
 import { View } from 'react-native';
 import { Text } from 'react-native-paper';
 import { Appointment } from '../AppointmentsSection/AppointmentsSection';
+import { OrderStatusEnum } from '@avoo/axios/types/apiEnums';
 
 type AppointmentCardProps = {
   appointment: Appointment;
 };
 
-export const AppointmentCard = ({ appointment }: AppointmentCardProps) => {
-  const isOutOfSchedule = appointment.status === 'out_of_schedule';
+const getStatusColor = (status?: string) => {
+  if (!status) return colors.gray[500];
+  
+  if (status === OrderStatusEnum.CANCELED) return colors.red[800];
+  if (status === OrderStatusEnum.PENDING) return colors.orange[500];
+  if (status === OrderStatusEnum.CONFIRMED) return colors.blue[700];
+  if (status === OrderStatusEnum.COMPLETED) return colors.green[800];
+  if (status === OrderStatusEnum.EXPIRED) return colors.gray[500];
+  
+  return colors.gray[500];
+};
 
+export const AppointmentCard = ({ appointment }: AppointmentCardProps) => {
+  const statusColor = getStatusColor(appointment.status);
   return (
     <View className='rounded-2xl border border-gray-200 p-4 flex-row'>
-      <View className='w-1.5 rounded-full mr-3' style={{ backgroundColor: colors.red[800] }} />
+      <View className='w-1.5 rounded-full mr-3' style={{ backgroundColor: statusColor }} />
 
       <View className='flex-1'>
         <View className='flex-row items-center justify-between mb-1'>
@@ -24,13 +37,7 @@ export const AppointmentCard = ({ appointment }: AppointmentCardProps) => {
             </Text>
           </View>
 
-          {isOutOfSchedule && (
-            <View className='px-3 py-1 rounded-full' style={{ backgroundColor: colors.red[800] }}>
-              <Text variant='bodySmall' style={{ color: colors.white }}>
-                Out of schedule
-              </Text>
-            </View>
-          )}
+          <StatusChip status={appointment.status} color={getStatusColor(appointment.status)} />
         </View>
 
         <View className='mt-3'>
@@ -57,7 +64,7 @@ export const AppointmentCard = ({ appointment }: AppointmentCardProps) => {
 
         <View className='mt-3'>
           <Text variant='titleMedium'>
-            {appointment.clientName} 
+            {appointment.clientName}
           </Text>
           <Text variant='bodySmall'>
             {appointment.clientPhone}

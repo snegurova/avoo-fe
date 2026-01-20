@@ -3,6 +3,7 @@ import { Text } from 'react-native-paper';
 import { colors } from '@avoo/design-tokens';
 import { AppointmentCard } from '../AppointmentCard/AppointmentCard';
 import { Carousel } from '@/shared/Carousel/Carousel';
+import { OrderStatusEnum, OrderStatusType } from '@avoo/axios/types/apiEnums';
 
 export type Appointment = {
   id: string;
@@ -15,7 +16,7 @@ export type Appointment = {
   clientName: string;
   clientPhone: string;
   note: string;
-  status?: 'out_of_schedule' | 'normal';
+  status?: OrderStatusType;
 };
 
 const mockAppointments: Appointment[] = [
@@ -30,7 +31,7 @@ const mockAppointments: Appointment[] = [
     clientName: 'Client Name',
     clientPhone: '0122-23-23-232',
     note: 'Lorem ipsum dolor sit amet consectetur. Turpis lorem lectus egestas quam integer. Ac urna…',
-    status: 'out_of_schedule',
+    status: OrderStatusEnum.EXPIRED,
   },
   {
     id: '2',
@@ -43,7 +44,7 @@ const mockAppointments: Appointment[] = [
     clientName: 'Maria',
     clientPhone: '066-234-34-34',
     note: 'Confirm the color palette before start.',
-    status: 'normal',
+    status: OrderStatusEnum.CONFIRMED,
   },
   {
     id: '3',
@@ -56,7 +57,7 @@ const mockAppointments: Appointment[] = [
     clientName: 'Olena',
     clientPhone: '050-101-01-01',
     note: 'Sensitive skin — use gentle wax.',
-    status: 'normal',
+    status: OrderStatusEnum.PENDING,
   },
   {
     id: '4',
@@ -69,7 +70,7 @@ const mockAppointments: Appointment[] = [
     clientName: 'Alex',
     clientPhone: '093-777-77-77',
     note: 'Focus on upper back/neck.',
-    status: 'out_of_schedule',
+    status: OrderStatusEnum.CANCELED,
   },
   {
     id: '5',
@@ -82,7 +83,7 @@ const mockAppointments: Appointment[] = [
     clientName: 'Katya',
     clientPhone: '098-222-22-22',
     note: 'Bring reference photo; prefers colder tones.',
-    status: 'normal',
+    status: OrderStatusEnum.COMPLETED,
   },
 ];
 

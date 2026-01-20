@@ -779,10 +779,26 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get?: never;
+        get: operations["CalendarController_findAll"];
         put?: never;
         post: operations["CalendarController_createException"];
         delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/calendar/exceptions/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete: operations["CalendarController_deleteException"];
         options?: never;
         head?: never;
         patch?: never;
@@ -948,22 +964,6 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/customers/list": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["CustomersController_findAllBase"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -1040,20 +1040,17 @@ export interface components {
             /** @example password123 */
             password: string;
         };
+        /** @enum {string} */
+        Language: "ar" | "bn" | "da" | "de" | "en" | "es" | "fi" | "fr" | "hr" | "hi" | "is" | "it" | "ja" | "ko" | "la" | "lv" | "nl" | "no" | "pl" | "pt" | "ro" | "sv" | "tr" | "uk" | "vi" | "zh" | "fa";
         MasterEntity: {
             id: number;
             name: string | null;
+            headline: string | null;
             email: string;
             phone: string | null;
             avatarUrl: string | null;
             avatarPreviewUrl: string | null;
-            /**
-             * @example [
-             *       "pl",
-             *       "en"
-             *     ]
-             */
-            languages: ("ar" | "bn" | "da" | "de" | "en" | "es" | "fi" | "fr" | "hr" | "hi" | "is" | "it" | "ja" | "ko" | "la" | "lv" | "nl" | "no" | "pl" | "pt" | "ro" | "sv" | "tr" | "uk" | "vi" | "zh" | "fa")[] | null;
+            languages: components["schemas"]["Language"][] | null;
             bio?: string | null;
         };
         CategoryEntity: {
@@ -1090,7 +1087,11 @@ export interface components {
         };
         OrderEntity: {
             id: number;
-            status: string;
+            /**
+             * @description Status
+             * @enum {string}
+             */
+            status: "PENDING" | "CONFIRMED" | "COMPLETED" | "EXPIRED" | "CANCELED";
             notes: Record<string, never>;
             duration: number;
             /** Format: date-time */
@@ -1111,14 +1112,7 @@ export interface components {
             phone: string | null;
             address: string | null;
             avatarUrl: string | null;
-            /**
-             * @example [
-             *       "pl",
-             *       "en",
-             *       "uk"
-             *     ]
-             */
-            languages: ("ar" | "bn" | "da" | "de" | "en" | "es" | "fi" | "fr" | "hr" | "hi" | "is" | "it" | "ja" | "ko" | "la" | "lv" | "nl" | "no" | "pl" | "pt" | "ro" | "sv" | "tr" | "uk" | "vi" | "zh" | "fa")[] | null;
+            languages: components["schemas"]["Language"][] | null;
             location_lat: number | null;
             location_lon: number | null;
         };
@@ -1210,21 +1204,14 @@ export interface components {
              * @example 30.718815628384387
              */
             location_lon?: number;
-            /**
-             * @description Languages spoken by the master
-             * @example [
-             *       "pl",
-             *       "uk"
-             *     ]
-             */
-            languages: ("ar" | "bn" | "da" | "de" | "en" | "es" | "fi" | "fr" | "hr" | "hi" | "is" | "it" | "ja" | "ko" | "la" | "lv" | "nl" | "no" | "pl" | "pt" | "ro" | "sv" | "tr" | "uk" | "vi" | "zh" | "fa")[];
         };
         ShortMasterInfoDto: {
             id: number;
             avatarPreviewUrl: string | null;
         };
         GetProfileLanguagesDto: {
-            language: string;
+            /** @enum {string} */
+            language: "ar" | "bn" | "da" | "de" | "en" | "es" | "fi" | "fr" | "hr" | "hi" | "is" | "it" | "ja" | "ko" | "la" | "lv" | "nl" | "no" | "pl" | "pt" | "ro" | "sv" | "tr" | "uk" | "vi" | "zh" | "fa";
             masters: components["schemas"]["ShortMasterInfoDto"][];
         };
         CertificateEntity: {
@@ -1260,7 +1247,7 @@ export interface components {
             description?: string;
             /**
              * @description Issue date (YYYY-MM-DD)
-             * @example 2025-11-23
+             * @example 2026-01-01
              */
             issueDate: string;
             /** Format: binary */
@@ -1275,11 +1262,33 @@ export interface components {
             description?: string;
             /**
              * @description Issue date (YYYY-MM-DD)
-             * @example 2025-11-23
+             * @example 2026-01-01
              */
             issueDate: string;
             files: string[];
             folder: string;
+        };
+        QueryServicesDto: {
+            /**
+             * @description Page number
+             * @default 1
+             */
+            page: number;
+            /**
+             * @description Items per page
+             * @default 10
+             */
+            limit: number;
+            /** @description Filter by category ID */
+            categoryId?: number;
+            /** @description Minimum price */
+            minPrice?: number;
+            /** @description Maximum price */
+            maxPrice?: number;
+            /** @description Search keyword (in name, description, user name, or master name) */
+            search?: string;
+            /** @description Filter by active status */
+            isActive?: boolean;
         };
         CreateServiceDto: {
             /**
@@ -1419,7 +1428,12 @@ export interface components {
              */
             name?: Record<string, never>;
             /**
-             * @description Master bio/description
+             * @description Headline
+             * @example Hairdresser
+             */
+            headline?: Record<string, never>;
+            /**
+             * @description About Master
              * @example Professional stylist with expertise in modern haircuts and coloring.
              */
             bio?: Record<string, never>;
@@ -1445,11 +1459,16 @@ export interface components {
             email: string;
             /**
              * @description Master name (required)
-             * @example John Doe
+             * @example Jane Smith
              */
-            name: string;
+            name?: Record<string, never>;
             /**
-             * @description Master bio/description
+             * @description Headline
+             * @example Hairdresser
+             */
+            headline?: Record<string, never>;
+            /**
+             * @description About Master
              * @example Professional hair stylist with 5+ years of experience...
              */
             bio?: string;
@@ -1465,7 +1484,7 @@ export interface components {
              *       "uk"
              *     ]
              */
-            languages: ("ar" | "bn" | "da" | "de" | "en" | "es" | "fi" | "fr" | "hr" | "hi" | "is" | "it" | "ja" | "ko" | "la" | "lv" | "nl" | "no" | "pl" | "pt" | "ro" | "sv" | "tr" | "uk" | "vi" | "zh" | "fa")[];
+            languages?: components["schemas"]["Language"][];
         };
         UpdateMasterAvatarDto: {
             /** Format: binary */
@@ -1496,11 +1515,8 @@ export interface components {
             serviceId: number;
         };
         CreatePrivateOrderDto: {
-            /**
-             * @description Type of the order: SERVICE or COMBINATION
-             * @example SERVICE
-             */
-            type: string;
+            /** @enum {string} */
+            type: "SERVICE" | "COMBINATION";
             /**
              * @description ID of the service for the order (required if type is SERVICE)
              * @example 2
@@ -1517,9 +1533,8 @@ export interface components {
              */
             masterId: number;
             /**
-             * Format: date-time
              * @description Date of the service
-             * @example 2025-12-30T00:00:00.000Z
+             * @example 2026-03-10
              */
             date: string;
             /**
@@ -1563,16 +1578,13 @@ export interface components {
         UpdateOrderStatusDto: {
             /**
              * @description Status of the order
-             * @example CONFIRMED
+             * @enum {string}
              */
-            status?: string;
+            status?: "PENDING" | "CONFIRMED" | "COMPLETED" | "EXPIRED" | "CANCELED";
         };
         CreatePublicOrderDto: {
-            /**
-             * @description Type of the order: SERVICE or COMBINATION
-             * @example SERVICE
-             */
-            type: string;
+            /** @enum {string} */
+            type: "SERVICE" | "COMBINATION";
             /**
              * @description ID of the service for the order (required if type is SERVICE)
              * @example 2
@@ -1589,9 +1601,8 @@ export interface components {
              */
             masterId: number;
             /**
-             * Format: date-time
              * @description Date of the service
-             * @example 2025-12-30T00:00:00.000Z
+             * @example 2026-03-10
              */
             date: string;
             /**
@@ -1626,12 +1637,12 @@ export interface components {
         AvailabilityDto: {
             /**
              * Format: date-time
-             * @example 2025-10-28T09:00:00.000Z
+             * @example 2026-01-05T07:00:00.000Z
              */
             start: string;
             /**
              * Format: date-time
-             * @example 2025-10-28T13:00:00.000Z
+             * @example 2026-01-05T11:00:00.000Z
              */
             end: string;
         };
@@ -1647,12 +1658,12 @@ export interface components {
             type: string;
             /**
              * Format: date-time
-             * @example 2025-10-28T09:30:00.000Z
+             * @example 2026-01-04T09:30:00.000Z
              */
             start: string;
             /**
              * Format: date-time
-             * @example 2025-10-28T10:00:00.000Z
+             * @example 2026-01-04T10:00:00.000Z
              */
             end: string;
             /** @example 15 */
@@ -1661,9 +1672,9 @@ export interface components {
             duration: number;
             /**
              * @description Status
-             * @example PENDING
+             * @enum {string}
              */
-            status: string;
+            status: "PENDING" | "CONFIRMED" | "COMPLETED" | "EXPIRED" | "CANCELED";
             /** @example First appointment */
             notes: Record<string, never>;
             /** @example John Doe */
@@ -1678,8 +1689,19 @@ export interface components {
         PrivateWorkingDayDto: {
             /**
              * Format: date-time
+             * @description Range date in UTC
+             * @example 2026-01-01T22:00:00.000Z
+             */
+            utcDateFrom: string;
+            /**
+             * Format: date-time
+             * @description Range date to in UTC
+             * @example 2026-01-09T22:00:00.000Z
+             */
+            utcDateTo: string;
+            /**
              * @description Range to date
-             * @example 2025-10-28
+             * @example 2026-01-09
              */
             date: string;
             /**
@@ -1703,8 +1725,8 @@ export interface components {
              * @description Exceptions
              * @example [
              *       {
-             *         "start": "2025-10-28T09:30:00.000Z",
-             *         "end": "2025-10-28T10:00:00.000Z"
+             *         "start": "2026-01-09T09:30:00.000Z",
+             *         "end": "2026-01-09T10:00:00.000Z"
              *       }
              *     ]
              */
@@ -1724,17 +1746,32 @@ export interface components {
              */
             masterId?: Record<string, never>;
             /**
-             * Format: date-time
              * @description Range from date
-             * @example 2025-10-17T00:00:00Z
+             * @example 2026-01-01
              */
             rangeFromDate: string;
             /**
-             * Format: date-time
              * @description Range to date
-             * @example 2025-10-27T00:00:00Z
+             * @example 2026-01-09
              */
             rangeToDate: string;
+            /**
+             * Format: date-time
+             * @description Range from date
+             * @example 2026-01-01T22:00:00Z
+             */
+            utcRangeFromDate: string;
+            /**
+             * Format: date-time
+             * @description Range to date
+             * @example 2026-01-09T22:00:00Z
+             */
+            utcRangeToDate: string;
+            /**
+             * @description User timezone
+             * @example Europe/Kyiv
+             */
+            timezone: string;
             /** @example 1 */
             serviceId?: number;
             /** @example 1 */
@@ -1742,19 +1779,22 @@ export interface components {
             /** @description List of working days */
             days: components["schemas"]["PrivateWorkingDayDto"][];
         };
+        /**
+         * @description Filter by order status
+         * @enum {string}
+         */
+        OrderStatus: "PENDING" | "CONFIRMED" | "COMPLETED" | "EXPIRED" | "CANCELED";
         QueryCalendarByDatesPrivateDto: {
-            /** @description Master ID */
-            masterId?: number;
+            /** @description Master IDs */
+            masterIds?: number[];
             /**
-             * Format: date-time
-             * @description Range from date
-             * @example 2025-10-18
+             * @description Calendar start date (local, YYYY-MM-DD)
+             * @example 2026-01-01
              */
             rangeFromDate: string;
             /**
-             * Format: date-time
-             * @description Range to date
-             * @example 2025-10-28
+             * @description Calendar end date (local, YYYY-MM-DD)
+             * @example 2026-01-09
              */
             rangeToDate: string;
             /**
@@ -1764,8 +1804,8 @@ export interface components {
             serviceId?: number;
             /** @description Combination ID */
             combinationId?: number;
-            /** @description Timezone offset in minutes */
-            timezoneOffset?: number;
+            /** @description User timezone */
+            timezone?: string;
             /**
              * @description Limit of events
              * @example 3
@@ -1773,55 +1813,56 @@ export interface components {
             limitEvents?: number;
             /**
              * @description Filter by order status
-             * @example PENDING
+             * @example [
+             *       "PENDING"
+             *     ]
              */
-            orderStatus?: string[];
+            orderStatus?: components["schemas"]["OrderStatus"][];
         };
         CalendarExceptionEntity: {
             id: number;
             userId: number;
-            masterId: Record<string, never>;
+            masterId: number | null;
             /** Format: date-time */
             dateFrom: string;
-            dateTo: Record<string, never>;
-            type: string;
-            startTimeMinutes: Record<string, never>;
-            endTimeMinutes: Record<string, never>;
-            note: Record<string, never>;
+            /** Format: date-time */
+            dateTo: string;
+            /** @enum {string} */
+            type: "SICK_LEAVE" | "VACATION" | "PERSONAL_OFF" | "HOLIDAY_OFF" | "OTHER_OFF" | "PERSONAL_WORKING" | "HOLIDAY_WORKING" | "VACATION_WORKING" | "OTHER_WORKING";
+            startTimeMinutes: number;
+            endTimeMinutes: number;
+            note: string | null;
         };
         CreateCalendarExceptionDto: {
-            /**
-             * @description Master ID
-             * @example 1
-             */
-            masterId?: number;
+            /** @description Master IDs */
+            masterIds?: number[];
             /**
              * Format: date-time
-             * @description Range from date
-             * @example 2025-10-27T00:00:00Z
+             * @description Range from date, UTC instant of a local midnight
+             * @example 2026-01-05T23:00:00Z
              */
             dateFrom: string;
             /**
              * Format: date-time
-             * @description Range to date
-             * @example 2025-10-28T00:00:00Z
+             * @description Range to date, UTC instant of a local midnight
+             * @example 2026-01-06T23:00:00Z
              */
             dateTo: string;
             /**
              * @description Type of exception
-             * @example OFF
+             * @enum {string}
              */
-            type: string;
+            type: "SICK_LEAVE" | "VACATION" | "PERSONAL_OFF" | "HOLIDAY_OFF" | "OTHER_OFF" | "PERSONAL_WORKING" | "HOLIDAY_WORKING" | "VACATION_WORKING" | "OTHER_WORKING";
             /**
              * @description Start time of exception in minutes
              * @example 540
              */
-            startTimeMinutes?: number;
+            startTimeMinutes: number;
             /**
              * @description End time of exception in minutes
              * @example 1080
              */
-            endTimeMinutes?: number;
+            endTimeMinutes: number;
             /**
              * @description Note
              * @example Need to rest
@@ -1840,12 +1881,12 @@ export interface components {
             type: string;
             /**
              * Format: date-time
-             * @example 2025-10-28T09:30:00.000Z
+             * @example 2026-01-04T09:30:00.000Z
              */
             start: string;
             /**
              * Format: date-time
-             * @example 2025-10-28T10:00:00.000Z
+             * @example 2026-01-04T10:00:00.000Z
              */
             end: string;
             /** @example 15 */
@@ -1854,9 +1895,9 @@ export interface components {
             duration: number;
             /**
              * @description Status
-             * @example PENDING
+             * @enum {string}
              */
-            status: string;
+            status: "PENDING" | "CONFIRMED" | "COMPLETED" | "EXPIRED" | "CANCELED";
             /** @example First appointment */
             notes: Record<string, never>;
             /** @example John Doe */
@@ -1871,8 +1912,19 @@ export interface components {
         PrivateWorkingDayByDatesDto: {
             /**
              * Format: date-time
+             * @description Range date in UTC
+             * @example 2026-01-01T22:00:00.000Z
+             */
+            utcDateFrom: string;
+            /**
+             * Format: date-time
+             * @description Range date to in UTC
+             * @example 2026-01-09T22:00:00.000Z
+             */
+            utcDateTo: string;
+            /**
              * @description Range to date
-             * @example 2025-10-28
+             * @example 2026-01-09
              */
             date: string;
             /**
@@ -1905,17 +1957,32 @@ export interface components {
              */
             masterId?: Record<string, never>;
             /**
-             * Format: date-time
              * @description Range from date
-             * @example 2025-10-17T00:00:00Z
+             * @example 2026-01-01
              */
             rangeFromDate: string;
             /**
-             * Format: date-time
              * @description Range to date
-             * @example 2025-10-27T00:00:00Z
+             * @example 2026-01-09
              */
             rangeToDate: string;
+            /**
+             * Format: date-time
+             * @description Range from date
+             * @example 2026-01-01T00:00:00Z
+             */
+            utcRangeFromDate: string;
+            /**
+             * Format: date-time
+             * @description Range to date
+             * @example 2026-01-09T00:00:00Z
+             */
+            utcRangeToDate: string;
+            /**
+             * @description User timezone
+             * @example Europe/Kyiv
+             */
+            timezone: string;
             /** @example 1 */
             serviceId: Record<string, never>;
             /** @example 1 */
@@ -1935,20 +2002,31 @@ export interface components {
             type: string;
             /**
              * Format: date-time
-             * @example 2025-10-28T09:30:00.000Z
+             * @example 2026-01-04T09:30:00.000Z
              */
             start: string;
             /**
              * Format: date-time
-             * @example 2025-10-28T10:00:00.000Z
+             * @example 2026-01-04T10:00:00.000Z
              */
             end: string;
         };
         PublicWorkingDayDto: {
             /**
              * Format: date-time
+             * @description Range date in UTC
+             * @example 2026-01-01T22:00:00.000Z
+             */
+            utcDateFrom: string;
+            /**
+             * Format: date-time
+             * @description Range date to in UTC
+             * @example 2026-01-09T22:00:00.000Z
+             */
+            utcDateTo: string;
+            /**
              * @description Range to date
-             * @example 2025-10-28
+             * @example 2026-01-09
              */
             date: string;
             /**
@@ -1972,8 +2050,8 @@ export interface components {
              * @description Exceptions
              * @example [
              *       {
-             *         "start": "2025-10-28T09:30:00.000Z",
-             *         "end": "2025-10-28T10:00:00.000Z"
+             *         "start": "2026-01-09T09:30:00.000Z",
+             *         "end": "2026-01-09T10:00:00.000Z"
              *       }
              *     ]
              */
@@ -1995,13 +2073,13 @@ export interface components {
             /**
              * Format: date-time
              * @description Range from date
-             * @example 2025-10-17T00:00:00Z
+             * @example 2026-01-01T00:00:00Z
              */
             rangeFromDate: string;
             /**
              * Format: date-time
              * @description Range to date
-             * @example 2025-10-27T00:00:00Z
+             * @example 2026-01-09T00:00:00Z
              */
             rangeToDate: string;
             /** @example 1 */
@@ -2023,20 +2101,31 @@ export interface components {
             type: string;
             /**
              * Format: date-time
-             * @example 2025-10-28T09:30:00.000Z
+             * @example 2026-01-04T09:30:00.000Z
              */
             start: string;
             /**
              * Format: date-time
-             * @example 2025-10-28T10:00:00.000Z
+             * @example 2026-01-04T10:00:00.000Z
              */
             end: string;
         };
         PublicWorkingDayByDatesDto: {
             /**
              * Format: date-time
+             * @description Range date in UTC
+             * @example 2026-01-01T22:00:00.000Z
+             */
+            utcDateFrom: string;
+            /**
+             * Format: date-time
+             * @description Range date to in UTC
+             * @example 2026-01-09T22:00:00.000Z
+             */
+            utcDateTo: string;
+            /**
              * @description Range to date
-             * @example 2025-10-28
+             * @example 2026-01-09
              */
             date: string;
             /**
@@ -2069,17 +2158,32 @@ export interface components {
              */
             masterId: number;
             /**
-             * Format: date-time
              * @description Range from date
-             * @example 2025-10-17T00:00:00Z
+             * @example 2026-01-01
              */
             rangeFromDate: string;
             /**
-             * Format: date-time
              * @description Range to date
-             * @example 2025-10-27T00:00:00Z
+             * @example 2026-01-09
              */
             rangeToDate: string;
+            /**
+             * Format: date-time
+             * @description Range from date
+             * @example 2026-01-01T00:00:00Z
+             */
+            utcRangeFromDate: string;
+            /**
+             * Format: date-time
+             * @description Range to date
+             * @example 2026-01-09T00:00:00Z
+             */
+            utcRangeToDate: string;
+            /**
+             * @description User timezone
+             * @example Europe/Kyiv
+             */
+            timezone: string;
             /** @example 1 */
             serviceId: Record<string, never>;
             /** @example 1 */
@@ -2155,7 +2259,7 @@ export interface components {
             /**
              * Format: date-time
              * @description Schedule start date(future date)
-             * @example 2025-10-28T00:00:00.000Z
+             * @example 2026-01-01T00:00:00.000Z
              */
             startAt: string;
             /**
@@ -2455,10 +2559,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["SuccessResponseDto"] & {
-                        data?: {
-                            items?: components["schemas"]["UserWithRelationsEntity"][];
-                            pagination?: components["schemas"]["PaginationDto"];
-                        };
+                        data?: components["schemas"]["UserWithRelationsEntity"][];
                     };
                 };
             };
@@ -3775,10 +3876,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["SuccessResponseDto"] & {
-                        data?: {
-                            items?: components["schemas"]["MasterEntity"][];
-                            pagination?: components["schemas"]["PaginationDto"];
-                        };
+                        data?: components["schemas"]["MasterEntity"][];
                     };
                 };
             };
@@ -4027,10 +4125,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["SuccessResponseDto"] & {
-                        data?: {
-                            items?: components["schemas"]["MasterEntity"][];
-                            pagination?: components["schemas"]["PaginationDto"];
-                        };
+                        data?: components["schemas"]["MasterEntity"][];
                     };
                 };
             };
@@ -4380,7 +4475,7 @@ export interface operations {
                 /** @description Items per page */
                 limit?: number;
                 /** @description Filter by status */
-                status?: string;
+                status?: "PENDING" | "CONFIRMED" | "COMPLETED" | "EXPIRED" | "CANCELED";
                 /** @description Filter by customer ID */
                 customerId?: number;
                 /** @description Filter by master ID (assigned to the order) */
@@ -4543,18 +4638,20 @@ export interface operations {
     CalendarController_getCalendar: {
         parameters: {
             query: {
-                /** @description Master ID */
-                masterId?: number;
-                /** @description Range from date */
+                /** @description Master IDs */
+                masterIds?: number[];
+                /** @description Calendar start date (local, YYYY-MM-DD) */
                 rangeFromDate: string;
-                /** @description Range to date */
+                /** @description Calendar end date (local, YYYY-MM-DD) */
                 rangeToDate: string;
                 /** @description Service ID */
                 serviceId?: number;
                 /** @description Combination ID */
                 combinationId?: number;
-                /** @description Timezone offset in minutes */
-                timezoneOffset?: number;
+                /** @description User timezone */
+                timezone?: string;
+                /** @description Filter by order status */
+                orderStatus?: components["schemas"]["OrderStatus"][];
             };
             header?: never;
             path?: never;
@@ -4570,6 +4667,45 @@ export interface operations {
                 content: {
                     "application/json": components["schemas"]["SuccessResponseDto"] & {
                         data?: components["schemas"]["PrivateCalendarResponseDto"][];
+                    };
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    CalendarController_findAll: {
+        parameters: {
+            query?: {
+                /** @description Page number */
+                page?: number;
+                /** @description Items per page */
+                limit?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Calendar exception entities */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SuccessResponseDto"] & {
+                        data?: {
+                            items?: components["schemas"]["CalendarExceptionEntity"][];
+                            pagination?: components["schemas"]["PaginationDto"];
+                        };
                     };
                 };
             };
@@ -4604,10 +4740,40 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["SuccessResponseDto"] & {
-                        data?: {
-                            items?: components["schemas"]["CalendarExceptionEntity"][];
-                            pagination?: components["schemas"]["PaginationDto"];
-                        };
+                        data?: components["schemas"]["CalendarExceptionEntity"][];
+                    };
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    CalendarController_deleteException: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Calendar exception entity */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SuccessResponseDto"] & {
+                        data?: components["schemas"]["CalendarExceptionEntity"];
                     };
                 };
             };
@@ -4625,22 +4791,22 @@ export interface operations {
     CalendarController_getCalendarByDates: {
         parameters: {
             query: {
-                /** @description Master ID */
-                masterId?: number;
-                /** @description Range from date */
+                /** @description Master IDs */
+                masterIds?: number[];
+                /** @description Calendar start date (local, YYYY-MM-DD) */
                 rangeFromDate: string;
-                /** @description Range to date */
+                /** @description Calendar end date (local, YYYY-MM-DD) */
                 rangeToDate: string;
                 /** @description Service ID */
                 serviceId?: number;
                 /** @description Combination ID */
                 combinationId?: number;
-                /** @description Timezone offset in minutes */
-                timezoneOffset?: number;
+                /** @description User timezone */
+                timezone?: string;
                 /** @description Limit of events */
                 limitEvents?: number;
                 /** @description Filter by order status */
-                orderStatus?: string[];
+                orderStatus?: components["schemas"]["OrderStatus"][];
             };
             header?: never;
             path?: never;
@@ -4675,18 +4841,18 @@ export interface operations {
             query: {
                 /** @description Filter by user ID */
                 userId: number;
-                /** @description Master ID */
-                masterId?: number;
-                /** @description Range from date */
+                /** @description Master IDs */
+                masterIds?: number[];
+                /** @description Calendar start date (local, YYYY-MM-DD) */
                 rangeFromDate: string;
-                /** @description Range to date */
+                /** @description Calendar end date (local, YYYY-MM-DD) */
                 rangeToDate: string;
                 /** @description Service ID */
                 serviceId?: number;
                 /** @description Combination ID */
                 combinationId?: number;
-                /** @description Timezone offset in minutes */
-                timezoneOffset?: number;
+                /** @description User timezone */
+                timezone?: string;
             };
             header?: never;
             path?: never;
@@ -4721,18 +4887,18 @@ export interface operations {
             query: {
                 /** @description Filter by user ID */
                 userId: number;
-                /** @description Master ID */
-                masterId?: number;
-                /** @description Range from date */
+                /** @description Master IDs */
+                masterIds?: number[];
+                /** @description Calendar start date (local, YYYY-MM-DD) */
                 rangeFromDate: string;
-                /** @description Range to date */
+                /** @description Calendar end date (local, YYYY-MM-DD) */
                 rangeToDate: string;
                 /** @description Service ID */
                 serviceId?: number;
                 /** @description Combination ID */
                 combinationId?: number;
-                /** @description Timezone offset in minutes */
-                timezoneOffset?: number;
+                /** @description User timezone */
+                timezone?: string;
             };
             header?: never;
             path?: never;
@@ -5163,51 +5329,6 @@ export interface operations {
         };
     };
     CustomersController_findAll: {
-        parameters: {
-            query?: {
-                /** @description Page number */
-                page?: number;
-                /** @description Items per page */
-                limit?: number;
-                /** @description Filter by name */
-                name?: string;
-                /** @description Filter by email */
-                email?: string;
-                /** @description Filter by phone */
-                phone?: string;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description List of customers */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["SuccessResponseDto"] & {
-                        data?: {
-                            items?: components["schemas"]["CustomerInfoDto"][];
-                            pagination?: components["schemas"]["PaginationDto"];
-                        };
-                    };
-                };
-            };
-            /** @description Bad Request */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-        };
-    };
-    CustomersController_findAllBase: {
         parameters: {
             query?: {
                 /** @description Page number */
