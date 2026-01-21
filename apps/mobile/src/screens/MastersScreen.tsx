@@ -12,8 +12,11 @@ import CreateMasterForm from '@/components/CreateMasterForm/CreateMasterForm';
 
 export default function MastersScreen() {
   const [searchQuery, setSearchQuery] = useState('');
-  const { value: isCreateMasterFormVisible, enable: openCreateForm, disable: closeCreateForm } =
-    utils.useBooleanState(false);
+  const {
+    value: isCreateMasterFormVisible,
+    enable: openCreateForm,
+    disable: closeCreateForm,
+  } = utils.useBooleanState(false);
   const bottomBarHeight = layoutHooks.useBottomBarHeight();
 
   const masters = masterHooks.useGetMastersProfileInfo();
@@ -22,14 +25,16 @@ export default function MastersScreen() {
     null,
   );
 
-
-
   const handleMasterPress = (master: MasterWithRelationsEntityResponse) => {
     setSelectedMaster(master);
   };
 
   const handleCloseModal = () => {
     setSelectedMaster(null);
+  };
+
+  const handleMasterCreated = () => {
+    closeCreateForm();
   };
 
   return (
@@ -72,7 +77,7 @@ export default function MastersScreen() {
           {selectedMaster && <EditMasterForm master={selectedMaster} onClose={handleCloseModal} />}
         </CustomBottomSheet>
         <CustomBottomSheet visible={isCreateMasterFormVisible} onClose={closeCreateForm}>
-          <CreateMasterForm onClose={closeCreateForm} />
+          <CreateMasterForm onClose={handleMasterCreated} />
         </CustomBottomSheet>
       </Layout>
     </>

@@ -3,7 +3,7 @@ import { View, StyleProp, ViewStyle } from 'react-native';
 import { Text } from 'react-native-paper';
 import DefaultRightContent from './DefaultRightContent';
 import DefaultLeftContent from './DefaultLeftContent';
-import { typeGuardHooks } from '@/hooks/typeGuardsHooks';
+import { typeGuardHooks } from '@avoo/shared';
 
 type Props = {
   title?: React.ReactNode;

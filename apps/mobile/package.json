@@ -44,12 +44,12 @@
     "react-native-screens": "~4.16.0"
   },
   "peerDependencies": {
-    "@gorhom/bottom-sheet": "^5.2.6",
     "@tanstack/react-query": "^5.0.0",
     "react-hook-form": "^7.54.0"
   },
   "devDependencies": {
     "@babel/core": "^7.28.5",
+    "@gorhom/bottom-sheet": "^5.2.6",
     "@react-native-community/cli-server-api": "^12.3.0",
     "@react-native-community/datetimepicker": "^8.5.0",
     "@react-native-community/slider": "^5.1.0",
