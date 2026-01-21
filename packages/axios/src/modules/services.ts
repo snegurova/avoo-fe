@@ -11,4 +11,10 @@ export const servicesApi = {
     });
     return res.data;
   },
+  async deleteService(id: number) {
+    const res = await apiClient.delete<BaseResponse<Record<string, never>>>(
+      `${GET_SERVICES_ENDPOINT}/${id.toString()}`,
+    );
+    return res.data;
+  },
 };

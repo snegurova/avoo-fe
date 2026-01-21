@@ -4,6 +4,7 @@ import { QueryProvider } from '@/_providers/QueryProvider';
 import { Metadata } from 'next/types';
 import { MUIThemeProvider } from '@/_providers/ThemeProvider';
 import DateLocalizationProvider from '@/_providers/DateLocalizationProvider';
+import { SnackbarProvider } from './_providers/SnackbarContextProvider';
 
 export const metadata: Metadata = {
   title: 'AVOO App',
@@ -22,7 +23,9 @@ export default function RootLayout(props: Props) {
       <body>
         <MUIThemeProvider>
           <DateLocalizationProvider>
-            <QueryProvider>{children}</QueryProvider>
+            <QueryProvider>
+              <SnackbarProvider>{children}</SnackbarProvider>
+            </QueryProvider>
           </DateLocalizationProvider>
         </MUIThemeProvider>
       </body>
