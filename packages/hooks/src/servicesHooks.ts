@@ -1,17 +1,11 @@
 import { utils } from '@avoo/hooks/utils/utils';
-import { GetServiceResponse, PrivateServiceQueryParams } from '@avoo/axios/types/apiTypes';
+import { GetServiceResponse, ServicesQueryParams } from '@avoo/axios/types/apiTypes';
 
 import { BaseResponse } from '@avoo/axios/types/apiTypes';
 import { InfiniteData, useInfiniteQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useMemo, useState } from 'react';
 import { servicesApi } from '@avoo/axios/src/modules/services';
 import { useDebounce } from './useDebounce';
-
-type ServicesQueryProps = {
-  limit: number;
-  categoryId: number | null;
-  search: string;
-};
 
 const DEFAULT_LIMIT = 10;
 
@@ -23,7 +17,7 @@ export const servicesHooks = {
     maxPrice,
     search,
     isActive,
-  }: Omit<PrivateServiceQueryParams, 'page'>) => {
+  }: ServicesQueryParams) => {
     const filterParams = { limit, categoryId, minPrice, maxPrice, search, isActive };
     const query = useInfiniteQuery<BaseResponse<GetServiceResponse>, Error>({
       queryKey: ['services', 'list', filterParams],
@@ -43,7 +37,7 @@ export const servicesHooks = {
     return query;
   },
   useServicesQuery() {
-    const [params, setParams] = useState<ServicesQueryProps>({
+    const [params, setParams] = useState<ServicesQueryParams>({
       limit: DEFAULT_LIMIT,
       categoryId: null,
       search: '',
@@ -70,7 +64,7 @@ export const servicesHooks = {
 
     const debouncedSearch = useDebounce(params.search, 400);
 
-    const queryParams: Omit<PrivateServiceQueryParams, 'page'> = useMemo(
+    const queryParams: ServicesQueryParams = useMemo(
       () => ({
         limit: params.limit,
         search: debouncedSearch,
