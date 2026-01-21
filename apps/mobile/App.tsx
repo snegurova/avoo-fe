@@ -11,6 +11,7 @@ import paperTheme from '@/theme/paper-theme';
 import './global.css';
 import { useFonts } from 'expo-font';
 import { fonts } from '@/fonts/fonts';
+import { NotificationPopUp } from '@/shared/NotificationPopUp/NotificationPopUp';
 
 enableScreens();
 
@@ -21,6 +22,7 @@ export default function App() {
     return null;
   }
 
+
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <SafeAreaProvider>
@@ -29,6 +31,7 @@ export default function App() {
             <StatusBar style='auto' />
             <PaperProvider theme={paperTheme}>
               <AppContainer />
+              <NotificationPopUp />
             </PaperProvider>
           </QueryClientProvider>
         </NavigationContainer>

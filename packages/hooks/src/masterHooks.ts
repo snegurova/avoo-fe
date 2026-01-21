@@ -67,6 +67,9 @@ export const masterHooks = {
       CreateMasterRequest
     >({
       mutationFn: masterApi.createMaster,
+      meta: {
+        successMessage: 'Master created successfully',
+      },
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: queryKeys.masters.all });
         onSuccess?.();
@@ -108,6 +111,9 @@ export const masterHooks = {
       CreateMasterRequest
     >({
       mutationFn: (data: CreateMasterRequest) => masterApi.updateMaster(master.id, data),
+      meta: {
+        successMessage: 'Master updated successfully',
+      },
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: queryKeys.masters.all });
         onSuccess?.();
@@ -133,6 +139,9 @@ export const masterHooks = {
       number
     >({
       mutationFn: masterApi.deleteMaster,
+      meta: {
+        successMessage: 'Master deleted successfully',
+      },
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: queryKeys.masters.all });
         onSuccess?.();
