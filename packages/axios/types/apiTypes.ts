@@ -89,3 +89,4 @@ export type PrivateCalendarQueryParams = Omit<
 
 /** File types - re-exported from @avoo/shared for backward compatibility */
 export type { FileInput, UploadFile } from '@avoo/shared';
+

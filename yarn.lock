@@ -2497,7 +2497,29 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@gorhom/portal@npm:^1.0.14":
+"@gorhom/bottom-sheet@npm:^5.2.6":
+  version: 5.2.8
+  resolution: "@gorhom/bottom-sheet@npm:5.2.8"
+  dependencies:
+    "@gorhom/portal": "npm:1.0.14"
+    invariant: "npm:^2.2.4"
+  peerDependencies:
+    "@types/react": "*"
+    "@types/react-native": "*"
+    react: "*"
+    react-native: "*"
+    react-native-gesture-handler: ">=2.16.1"
+    react-native-reanimated: "*"
+  peerDependenciesMeta:
+    "@types/react":
+      optional: true
+    "@types/react-native":
+      optional: true
+  checksum: 10c0/9bb71a375cdcaec650e8c84ab5e3e42f55b3ae19d9e08cf90688cf72706588d211f3aeef28b857a37e9e411efa8fdf038429c90a8855167c7ab3dce5c595dfca
+  languageName: node
+  linkType: hard
+
+"@gorhom/portal@npm:1.0.14, @gorhom/portal@npm:^1.0.14":
   version: 1.0.14
   resolution: "@gorhom/portal@npm:1.0.14"
   dependencies:
@@ -12331,6 +12353,7 @@ __metadata:
     "@avoo/shared": "workspace:^"
     "@avoo/store": "workspace:*"
     "@babel/core": "npm:^7.28.5"
+    "@gorhom/bottom-sheet": "npm:^5.2.6"
     "@react-native-async-storage/async-storage": "npm:^2.2.0"
     "@react-native-community/cli-server-api": "npm:^12.3.0"
     "@react-native-community/datetimepicker": "npm:^8.5.0"
@@ -12374,7 +12397,6 @@ __metadata:
     typescript: "npm:^5.5.4"
     vite: "npm:^7.1.12"
   peerDependencies:
-    "@gorhom/bottom-sheet": ^5.2.6
     "@tanstack/react-query": ^5.0.0
     react-hook-form: ^7.54.0
   languageName: unknown
