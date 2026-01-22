@@ -9,37 +9,13 @@ const CUSTOMERS_ENDPOINT = '/customers';
 
 export const customerApi = {
   async getCustomers() {
-    type PossibleResponse =
-      | { status?: string; data?: { items?: CustomerInfoDto[]; pagination?: unknown } }
-      | { status?: string; data?: CustomerInfoDto[] };
+    const response =
+      await apiClient.get<BaseResponse<{ items: CustomerInfoDto[] }>>(CUSTOMERS_ENDPOINT);
 
-    const response = await apiClient.get<PossibleResponse>(CUSTOMERS_ENDPOINT);
-    const payload = response.data;
-
-    // If payload.data is an object containing `items` array (paginated)
-    if (
-      payload &&
-      payload.data &&
-      typeof payload.data === 'object' &&
-      'items' in payload.data &&
-      Array.isArray((payload.data as { items?: unknown }).items)
-    ) {
-      return {
-        status: 'SUCCESS',
-        data: (payload.data as { items: CustomerInfoDto[] }).items,
-      } as BaseResponse<CustomerInfoDto[]>;
-    }
-
-    // If payload.data is already an array
-    if (payload && Array.isArray(payload.data as unknown)) {
-      return {
-        status: (payload.status || 'SUCCESS').toUpperCase(),
-        data: payload.data as CustomerInfoDto[],
-      } as BaseResponse<CustomerInfoDto[]>;
-    }
-
-    // Fallback to typed cast of whatever the server returned
-    return payload as BaseResponse<CustomerInfoDto[]>;
+    return {
+      ...response.data,
+      data: response.data.data.items,
+    };
   },
 
   async getCustomerById(id: number) {

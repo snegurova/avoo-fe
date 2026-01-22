@@ -980,6 +980,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/customers/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put: operations["CustomersController_changeClientInfo"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -1098,8 +1114,10 @@ export interface components {
             email: string;
             name: string;
             phone: string;
-            notes?: Record<string, never>;
-            lastVisit?: Record<string, never>;
+            isNotificationEnable: boolean;
+            notes?: string;
+            /** Format: date-time */
+            lastVisit?: string;
         };
         OrderEntity: {
             id: number;
@@ -1595,6 +1613,7 @@ export interface components {
              * @example Preferred customer
              */
             notes?: string;
+            isNotificationEnable?: boolean;
         };
         CreatePrivateOrdersDto: {
             ordersData: components["schemas"]["CreatePrivateOrderDto"][];
@@ -2343,6 +2362,24 @@ export interface components {
             endAt?: Record<string, never>;
             /** @description List of working hours ( Mon-Fri (Sunday, Saturday Day off)), if start date is Monday */
             workingHours?: components["schemas"]["UpdateWorkingHourDto"][];
+        };
+        UpdateCustomerDto: {
+            /**
+             * @description Name of the customer
+             * @example John Doe
+             */
+            name?: string;
+            /**
+             * @description Phone number of the customer
+             * @example +48512345678
+             */
+            phone?: string;
+            /**
+             * @description Additional notes about the customer
+             * @example Preferred customer
+             */
+            notes?: string;
+            isNotificationEnable?: boolean;
         };
     };
     responses: never;
@@ -5418,6 +5455,43 @@ export interface operations {
                             items?: components["schemas"]["CustomerInfoDto"][];
                             pagination?: components["schemas"]["PaginationDto"];
                         };
+                    };
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    CustomersController_changeClientInfo: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateCustomerDto"];
+            };
+        };
+        responses: {
+            /** @description Updated customer */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SuccessResponseDto"] & {
+                        data?: components["schemas"]["CustomerInfoDto"];
                     };
                 };
             };

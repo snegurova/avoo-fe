@@ -22,10 +22,7 @@ export const customerHooks = {
 
     utils.useSetPendingApi(isPending);
 
-    if (
-      (customersData?.status ?? '').toString().toLowerCase() === apiStatus.SUCCESS &&
-      customersData.data
-    ) {
+    if ((customersData?.status ?? '').toLowerCase() === apiStatus.SUCCESS && customersData.data) {
       return customersData.data;
     }
 
@@ -41,36 +38,43 @@ export const customerHooks = {
     >({
       queryKey: ['customer', id],
       queryFn: async () => {
-        if (!id) return Promise.resolve(null);
+        if (!id) return null;
 
         const cached = queryClient.getQueryData<BaseResponse<CustomerInfoResponse[]>>(
           queryKeys.customers.all,
         );
-        const maybeList = cached && (cached.data as CustomerInfoResponse[] | undefined);
+        const maybeList = cached?.data;
         if (maybeList && Array.isArray(maybeList)) {
           const found = maybeList.find((c) => c.id === id);
-          if (found)
-            return { status: apiStatus.SUCCESS, data: found } as BaseResponse<CustomerInfoResponse>;
+          if (found) {
+            const result: BaseResponse<CustomerInfoResponse> = {
+              status: apiStatus.SUCCESS,
+              data: found,
+            };
+            return result;
+          }
         }
 
         const listResp = await customerApi.getCustomers().catch(() => null);
         if (listResp && Array.isArray(listResp.data)) {
           const found = listResp.data.find((customer: { id: number }) => customer.id === id);
-          if (found)
-            return { status: apiStatus.SUCCESS, data: found } as BaseResponse<CustomerInfoResponse>;
+          if (found) {
+            const result: BaseResponse<CustomerInfoResponse> = {
+              status: apiStatus.SUCCESS,
+              data: found,
+            };
+            return result;
+          }
         }
 
-        return Promise.resolve(null);
+        return null;
       },
       enabled: !!id,
     });
 
     utils.useSetPendingApi(isPending);
 
-    if (
-      (customerData?.status ?? '').toString().toLowerCase() === apiStatus.SUCCESS &&
-      customerData.data
-    ) {
+    if ((customerData?.status ?? '').toLowerCase() === apiStatus.SUCCESS && customerData.data) {
       return customerData.data;
     }
 
@@ -132,7 +136,7 @@ export const customerHooks = {
   useFilterCustomers: (customers: CustomerInfoResponse[] | null, searchQuery: string) => {
     return useMemo(() => {
       if (!customers) return [];
-      if (!searchQuery || !searchQuery.trim()) return customers;
+      if (!searchQuery?.trim()) return customers;
 
       const query = searchQuery.toLowerCase();
       return customers.filter((customer) => {
