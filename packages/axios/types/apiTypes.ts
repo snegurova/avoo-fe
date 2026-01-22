@@ -89,3 +89,10 @@ export type PrivateCalendarQueryParams = Omit<
 
 /** File types - re-exported from @avoo/shared for backward compatibility */
 export type { FileInput, UploadFile } from '@avoo/shared';
+
+/** Order */
+export type CreatePrivateOrdersRequest = components['schemas']['CreatePrivateOrdersDto'];
+export type UpdateOrderStatusRequest = components['schemas']['UpdateOrderStatusDto'];
+export type PrivateOrderQueryParams =
+  operations['OrdersController_findAllOwn']['parameters']['query'];
+export type Order = components['schemas']['OrderEntity'];

@@ -1,12 +1,12 @@
 import { utils } from '@avoo/hooks/utils/utils';
 import { calendarApi } from '@avoo/axios';
-import { PrivateCalendarQueryParams } from '@avoo/axios/types/apiTypes';
 
 import {
   BaseResponse,
   GetCalendarResponse,
   GetCalendarByDatesResponse,
   PrivateCalendarByDatesQueryParams,
+  PrivateCalendarQueryParams,
 } from '@avoo/axios/types/apiTypes';
 import { apiStatus } from '@avoo/hooks/types/apiTypes';
 import { useQuery } from '@tanstack/react-query';

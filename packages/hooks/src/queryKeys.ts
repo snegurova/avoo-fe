@@ -1,4 +1,8 @@
-import { PrivateCalendarQueryParams, PrivateServiceQueryParams } from '@avoo/axios/types/apiTypes';
+import {
+  PrivateCalendarQueryParams,
+  PrivateServiceQueryParams,
+  PrivateOrderQueryParams,
+} from '@avoo/axios/types/apiTypes';
 
 export const queryKeys = {
   masters: {
@@ -28,5 +32,9 @@ export const queryKeys = {
     all: ['monthCalendar'] as const,
     byParams: (params: PrivateCalendarQueryParams) =>
       [...queryKeys.monthCalendar.all, params] as const,
+  },
+  orders: {
+    all: ['orders'] as const,
+    byParams: (params: PrivateOrderQueryParams) => [...queryKeys.orders.all, params] as const,
   },
 } as const;
