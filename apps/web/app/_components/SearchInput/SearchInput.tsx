@@ -22,7 +22,7 @@ export const SearchInput = ({ value, onChange, placeholder = 'Search', className
   };
 
   return (
-    <div className={`w-full ${className ?? ''}`}>
+    <div className={`${className ?? 'w-full'}`}>
       <div
         className='flex items-center border border-gray-200 pr-3 gap-2 focus-within:[border-color:var(--color-primary-700)]'
         style={{
@@ -43,8 +43,16 @@ export const SearchInput = ({ value, onChange, placeholder = 'Search', className
           value={value}
           onChange={(e) => onChange(e.target.value)}
           placeholder={placeholder}
-          className='flex-1 outline-none text-sm text-gray-700'
-          style={{ fontSize: typography.fontSize.md }}
+          className={'outline-none text-sm text-gray-700 truncate'}
+          style={{
+            fontSize: typography.fontSize.md,
+            textOverflow: 'ellipsis',
+            whiteSpace: 'nowrap',
+            overflow: 'hidden',
+            width: '100%',
+            maxWidth: '100%',
+            boxSizing: 'border-box',
+          }}
         />
       </div>
     </div>

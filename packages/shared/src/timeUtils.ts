@@ -112,4 +112,23 @@ export const timeUtils = {
     const day = date.getDate().toString().padStart(2, '0');
     return `${year}-${month}-${day}`;
   },
+
+  formatLastVisitDate(
+    value: string | Date | Record<string, unknown> | null | undefined,
+  ): string | null {
+    if (value == null) return null;
+
+    let date: Date | null = null;
+    if (value instanceof Date) date = value;
+    else if (typeof value === 'string') date = new Date(value);
+    else return null;
+
+    if (!date || isNaN(date.getTime())) return null;
+
+    const day = date.getDate().toString().padStart(2, '0');
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const year = date.getFullYear();
+
+    return `${day}/${month}/${year}`;
+  },
 };
