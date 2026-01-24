@@ -60,6 +60,7 @@ export const orderHooks = {
     const {
       control,
       handleSubmit,
+      getValues,
       formState: { errors },
     } = useForm<CreatePrivateOrdersData>({
       resolver: yupResolver(createPrivateOrdersSchema),
@@ -71,6 +72,7 @@ export const orderHooks = {
             date: order.date ?? new Date().toISOString().split('T')[0],
             startTimeMinutes:
               order.startTimeMinutes ?? new Date().getHours() * 60 + new Date().getMinutes(),
+            type: 'SERVICE',
           },
         ],
         customerData: {},
@@ -96,6 +98,7 @@ export const orderHooks = {
     return {
       control,
       handleSubmit: handleSubmit(utils.submitAdapter<CreatePrivateOrdersRequest>(mutate)),
+      getValues,
       errors,
       isPending,
     };

@@ -2,7 +2,11 @@ import { useMemo } from 'react';
 import { utils } from '@avoo/hooks/utils/utils';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { createMasterSchema, CreateMasterFormData, updateMasterSchema } from '../schemas/validationSchemas';
+import {
+  createMasterSchema,
+  CreateMasterFormData,
+  updateMasterSchema,
+} from '../schemas/validationSchemas';
 
 import { masterApi } from '@avoo/axios';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
@@ -155,10 +159,7 @@ export const masterHooks = {
       isPending,
     };
   },
-  useFilterMasters: (
-    masters: MasterWithRelationsEntityResponse[] | null,
-    searchQuery: string,
-  ) => {
+  useFilterMasters: (masters: MasterWithRelationsEntityResponse[] | null, searchQuery: string) => {
     return useMemo(() => {
       if (!masters) return [];
       if (!searchQuery.trim()) return masters;

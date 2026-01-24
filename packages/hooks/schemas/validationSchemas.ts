@@ -116,43 +116,56 @@ export const updateMasterSchema = yup.object({
     .default([]),
 });
 
-export const createPrivateOrdersSchema = yup.object({
-  ordersData: yup
-    .array()
-    .of(
-      yup.object({
-        type: yup.string().oneOf(['SERVICE', 'COMBINATION']).required('Order type is required'),
-        serviceId: yup.number().when('type', {
-          is: 'SERVICE',
-          then: (schema) => schema.required('serviceId is required for SERVICE type'),
-          otherwise: (schema) => schema.notRequired(),
-        }),
-        combinationId: yup.number().when('type', {
-          is: 'COMBINATION',
-          then: (schema) => schema.required('combinationId is required for COMBINATION type'),
-          otherwise: (schema) => schema.notRequired(),
-        }),
-        masterId: yup.number().required('masterId is required'),
-        date: yup.string().required('date is required'),
-        startTimeMinutes: yup
-          .number()
-          .min(0, 'startTimeMinutes must be >= 0')
-          .max(1440, 'startTimeMinutes must be <= 1440')
-          .required('startTimeMinutes is required'),
-        notes: yup.string().nullable(),
+export const customerSchema = yup
+  .object({
+    id: yup.number().optional(),
+    name: yup.string().optional(),
+    phone: yup.string().optional(),
+    email: yup.string().email('Invalid email').optional(),
+    notes: yup.string().optional(),
+  })
+  .required('customerData is required')
+  .test('customer-id-or-phone', 'Customer must have either an ID or a phone number', (value) => {
+    if (!value) return false;
+
+    if (typeof value.id === 'number') {
+      return true;
+    }
+
+    return typeof value.phone === 'string' && value.phone.trim().length > 0;
+  });
+
+export const ordersDataSchema = yup
+  .array()
+  .of(
+    yup.object({
+      type: yup.string().oneOf(['SERVICE', 'COMBINATION']).required('Order type is required'),
+      serviceId: yup.number().when('type', {
+        is: 'SERVICE',
+        then: (schema) => schema.required('serviceId is required for SERVICE type'),
+        otherwise: (schema) => schema.notRequired(),
       }),
-    )
-    .min(1, 'At least one order is required')
-    .required('ordersData is required'),
-  customerData: yup
-    .object({
-      id: yup.number().notRequired(),
-      name: yup.string().notRequired(),
-      phone: yup.string().required('Customer phone is required'),
-      email: yup.string().email('Invalid email').notRequired(),
-      notes: yup.string().notRequired(),
-    })
-    .notRequired(),
+      combinationId: yup.number().when('type', {
+        is: 'COMBINATION',
+        then: (schema) => schema.required('combinationId is required for COMBINATION type'),
+        otherwise: (schema) => schema.notRequired(),
+      }),
+      masterId: yup.number().required('masterId is required'),
+      date: yup.string().required('date is required'),
+      startTimeMinutes: yup
+        .number()
+        .min(0, 'startTimeMinutes must be >= 0')
+        .max(1440, 'startTimeMinutes must be <= 1440')
+        .required('startTimeMinutes is required'),
+      notes: yup.string().optional(),
+    }),
+  )
+  .min(1, 'At least one order is required')
+  .required('ordersData is required');
+
+export const createPrivateOrdersSchema = yup.object({
+  ordersData: ordersDataSchema,
+  customerData: customerSchema,
 });
 
 export const updateOrderStatusSchema = yup.object({
@@ -170,3 +183,4 @@ export type ResetPasswordFormData = yup.InferType<typeof resetPasswordSchema>;
 export type CreateMasterFormData = yup.InferType<typeof createMasterSchema>;
 export type CreatePrivateOrdersData = yup.InferType<typeof createPrivateOrdersSchema>;
 export type UpdateOrderStatusData = yup.InferType<typeof updateOrderStatusSchema>;
+export type OrdersData = yup.InferType<typeof ordersDataSchema>;

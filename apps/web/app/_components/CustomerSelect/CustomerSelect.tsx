@@ -1,17 +1,25 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import { customerHooks } from '@avoo/hooks';
-import { CreateCustomerRequest, GetCustomersQueryParams } from '@avoo/axios/types/apiTypes';
-import SearchField from '../SearchField/SearchField';
+import {
+  CreateOrFindCustomerRequest,
+  GetCustomersQueryParams,
+  Customer,
+} from '@avoo/axios/types/apiTypes';
+import SearchField from '@/_components/SearchField/SearchField';
+import CustomerElement from '@/_components/CustomerElement/CustomerElement';
+import FormInput from '@/_components/FormInput/FormInput';
+import { isEmptyObject } from '@avoo/shared';
 
 type Props = {
-  value?: CreateCustomerRequest | { id: number } | undefined;
-  onChange: (customer: CreateCustomerRequest) => void;
+  value?: CreateOrFindCustomerRequest;
+  onChange: (customer: CreateOrFindCustomerRequest) => void;
 };
 
 export function CustomerSelect({ value, onChange }: Props) {
   const [search, setSearch] = useState('');
   const [params, setParams] = useState<GetCustomersQueryParams>({ limit: 3 });
+  const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(null);
 
   useEffect(() => {
     setParams((prev) => ({
@@ -22,63 +30,106 @@ export function CustomerSelect({ value, onChange }: Props) {
 
   const { items } = customerHooks.useGetCustomers(params);
 
+  useEffect(() => {
+    if (value && !isEmptyObject(value) && 'id' in value) {
+      const customer = items.find((item) => item.id === value.id) || null;
+      setSelectedCustomer(customer);
+    } else {
+      setSelectedCustomer(null);
+    }
+  }, [value]);
+
+  const addClientFields = () => {
+    onChange({ name: search.trim(), email: '', phone: '', notes: '' });
+  };
+
+  const isCustomerValues = (obj: unknown): obj is CreateOrFindCustomerRequest => {
+    return !!(
+      obj &&
+      typeof obj === 'object' &&
+      !Array.isArray(obj) &&
+      Object.prototype.hasOwnProperty.call(obj, 'name') &&
+      Object.prototype.hasOwnProperty.call(obj, 'email') &&
+      Object.prototype.hasOwnProperty.call(obj, 'phone') &&
+      Object.prototype.hasOwnProperty.call(obj, 'notes')
+    );
+  };
+
   return (
-    <>
+    <div className='w-full'>
       <SearchField
         label='Client'
-        value={value}
+        value={value || null}
         onChange={onChange}
         items={items}
-        ItemElement={() => null}
         search={search}
         setSearch={setSearch}
+        ItemElement={CustomerElement}
+        onAddClick={addClientFields}
+        searchMode={isEmptyObject(value)}
       />
-    </>
+      {isCustomerValues(value) && (
+        <div className='grid grid-cols-2 gap-3'>
+          <div className=''>
+            <label className='block mb-1 text-sm font-medium' htmlFor='name'>
+              Name
+            </label>
+            <FormInput
+              type='text'
+              placeholder='Enter name'
+              id='name'
+              value={(value as CreateOrFindCustomerRequest).name}
+              onChange={(e) =>
+                onChange({ ...(value as CreateOrFindCustomerRequest), name: e.target.value })
+              }
+            />
+          </div>
+          <div className=''>
+            <label className='block mb-1 text-sm font-medium' htmlFor='email'>
+              Email
+            </label>
+            <FormInput
+              type='email'
+              placeholder='Enter email'
+              id='email'
+              value={(value as CreateOrFindCustomerRequest).email}
+              onChange={(e) =>
+                onChange({ ...(value as CreateOrFindCustomerRequest), email: e.target.value })
+              }
+            />
+          </div>
+          <div className=''>
+            <label className='block mb-1 text-sm font-medium' htmlFor='phone'>
+              Phone
+            </label>
+            <FormInput
+              type='text'
+              placeholder='Enter phone'
+              required
+              id='phone'
+              value={(value as CreateOrFindCustomerRequest).phone}
+              onChange={(e) =>
+                onChange({ ...(value as CreateOrFindCustomerRequest), phone: e.target.value })
+              }
+            />
+          </div>
+          <div className=''>
+            <label className='block mb-1 text-sm font-medium' htmlFor='notes'>
+              Notes
+            </label>
+            <FormInput
+              type='text'
+              placeholder='Enter notes'
+              id='notes'
+              value={(value as CreateOrFindCustomerRequest).notes}
+              onChange={(e) =>
+                onChange({ ...(value as CreateOrFindCustomerRequest), notes: e.target.value })
+              }
+            />
+          </div>
+        </div>
+      )}
+      {selectedCustomer && <CustomerElement item={selectedCustomer} isCard />}
+    </div>
   );
 }
-
-// type MiniFormProps = {
-//   initialData?: CreateCustomerRequest;
-//   onSave: (c: CreateCustomerRequest) => void;
-//   onCancel: () => void;
-// };
-
-// function CustomerMiniForm({ initialData, onSave, onCancel }: MiniFormProps) {
-//   const [customerData, setCustomerData] = useState<CreateCustomerRequest>(
-//     initialData ?? { name: '', phone: '', email: '', notes: '' },
-//   );
-
-//   return (
-//     <div className='flex flex-col gap-3 p-4'>
-//       <TextField
-//         label='Name'
-//         value={customerData.name}
-//         onChange={(e) => setCustomerData({ ...customerData, name: e.target.value })}
-//       />
-//       <TextField
-//         label='Phone'
-//         value={customerData.phone}
-//         onChange={(e) => setCustomerData({ ...customerData, phone: e.target.value })}
-//       />
-//       <TextField
-//         label='Email'
-//         value={customerData.email}
-//         onChange={(e) => setCustomerData({ ...customerData, email: e.target.value })}
-//       />
-//       <TextField
-//         label='Notes'
-//         value={customerData.notes}
-//         onChange={(e) => setCustomerData({ ...customerData, notes: e.target.value })}
-//       />
-
-//       <div className='mt-2 flex gap-2'>
-//         <button className='rounded border px-3 py-1' onClick={onCancel}>
-//           Cancel
-//         </button>
-//         <button className='rounded bg-black px-3 py-1 text-white' onClick={() => onSave(form)}>
-//           OK
-//         </button>
-//       </div>
-//     </div>
-//   );
-// }

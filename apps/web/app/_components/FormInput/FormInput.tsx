@@ -7,7 +7,7 @@ export enum AccessoryPosition {
 }
 
 const input = tv({
-  base: 'block w-full rounded-lg border bg-gray-50 p-4 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500',
+  base: 'block w-full rounded-lg border p-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary-500 text-sm leading-none',
   variants: {
     error: {
       true: 'border-red-500',

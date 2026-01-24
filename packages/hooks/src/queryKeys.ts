@@ -22,6 +22,7 @@ export const queryKeys = {
   },
   customers: {
     all: ['customers'] as const,
+    byParams: (params: GetCustomersQueryParams) => [...queryKeys.customers.all, params] as const,
   },
   user: {
     all: ['user'] as const,
@@ -41,9 +42,5 @@ export const queryKeys = {
   orders: {
     all: ['orders'] as const,
     byParams: (params: PrivateOrderQueryParams) => [...queryKeys.orders.all, params] as const,
-  },
-  customers: {
-    all: ['customers'] as const,
-    byParams: (params: GetCustomersQueryParams) => [...queryKeys.customers.all, params] as const,
   },
 } as const;
