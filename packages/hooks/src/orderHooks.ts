@@ -21,11 +21,16 @@ import {
 } from '../schemas/validationSchemas';
 
 type useCreateOrdersFormParams = {
+  order: {
+    masterId?: number;
+    date?: string;
+    startTimeMinutes?: number;
+  };
   onSuccess?: () => void;
 };
 
 type useUpdateOrderStatusParams = {
-  id?: number;
+  id: number;
   onSuccess?: () => void;
 };
 
@@ -51,7 +56,7 @@ export const orderHooks = {
 
     return null;
   },
-  useCreateOrders: ({ onSuccess }: useCreateOrdersFormParams = {}) => {
+  useCreateOrders: ({ order, onSuccess }: useCreateOrdersFormParams) => {
     const {
       control,
       handleSubmit,
@@ -60,7 +65,14 @@ export const orderHooks = {
       resolver: yupResolver(createPrivateOrdersSchema),
       mode: 'onSubmit',
       defaultValues: {
-        ordersData: [],
+        ordersData: [
+          {
+            masterId: order.masterId ?? undefined,
+            date: order.date ?? new Date().toISOString().split('T')[0],
+            startTimeMinutes:
+              order.startTimeMinutes ?? new Date().getHours() * 60 + new Date().getMinutes(),
+          },
+        ],
         customerData: {},
       },
     });
@@ -88,7 +100,7 @@ export const orderHooks = {
       isPending,
     };
   },
-  useUpdateOrderStatus: ({ id, onSuccess }: useUpdateOrderStatusParams = {}) => {
+  useUpdateOrderStatus: ({ id, onSuccess }: useUpdateOrderStatusParams) => {
     const {
       control,
       handleSubmit,

@@ -96,3 +96,14 @@ export type UpdateOrderStatusRequest = components['schemas']['UpdateOrderStatusD
 export type PrivateOrderQueryParams =
   operations['OrdersController_findAllOwn']['parameters']['query'];
 export type Order = components['schemas']['OrderEntity'];
+
+/** Customer */
+
+export type GetCustomersResponse = {
+  items: components['schemas']['CustomerInfoDto'][];
+  pagination: components['schemas']['PaginationDto'];
+};
+export type GetCustomersQueryParams =
+  operations['CustomersController_findAll']['parameters']['query'];
+export type Customer = components['schemas']['CustomerInfoDto'];
+export type CreateCustomerRequest = components['schemas']['CreateCustomerDto'];

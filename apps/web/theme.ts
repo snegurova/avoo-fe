@@ -19,9 +19,9 @@ const theme = createTheme({
     fontWeightMedium: Number(typography.fontWeight.medium),
     fontWeightBold: Number(typography.fontWeight.bold),
     h1: {
-      fontSize: typography.fontSize['2xl'],
-      fontWeight: typography.fontWeight.bold,
-      lineHeight: 1.1,
+      fontSize: typography.fontSize.xl,
+      fontWeight: typography.fontWeight.medium,
+      lineHeight: 1.5,
     },
     h2: {
       fontSize: typography.fontSize.xl,
@@ -142,7 +142,7 @@ const theme = createTheme({
     searchInput: {
       height: 44,
       borderRadius: 18,
-      iconSize: 20,
+      iconSize: 24,
       iconMarginLeft: 12,
       widthMd: '306px',
       widthLg: '306px',

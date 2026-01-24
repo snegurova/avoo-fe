@@ -7,6 +7,8 @@ import CalendarEvent from '@/_components/CalendarEvent/CalendarEvent';
 import { timeUtils } from '@avoo/shared';
 import { PX_IN_MINUTE } from '@/_constants/time';
 import CalendarCurrentTime from '../CalendarCurrentTime/CalendarCurrentTime';
+import { useRouter } from 'next/navigation';
+import { appRoutes } from '@/_routes/routes';
 
 const DAY_CELLS = Array.from({ length: 96 });
 const WEEK_CELLS = Array.from({ length: 7 });
@@ -74,6 +76,7 @@ export default function CalendarColumn(props: Props) {
     isSingleWeek = false,
   } = props;
   const ref = useRef<HTMLDivElement | null>(null);
+  const router = useRouter();
 
   const [showEvents, setShowEvents] = useState<number>(1);
 
@@ -106,10 +109,13 @@ export default function CalendarColumn(props: Props) {
     const minutes = Math.floor(y / PX_IN_MINUTE);
     const hours = Math.floor(minutes / 60);
     const mins = minutes % 60;
-    const target = e.target as HTMLElement;
-    const isAvailable = target.classList.contains('available-time');
+    // const target = e.target as HTMLElement;
+    // const isAvailable = target.classList.contains('available-time');
 
-    return [hours, mins, isAvailable, master];
+    router.push(
+      appRoutes.OrderCreate +
+        `?masterId=${master.id}&date=${timeUtils.formatDate(date)}&startTimeMinutes=${hours * 60 + mins}`,
+    );
   };
 
   const onWeekDayClick = (idx: number) => {
