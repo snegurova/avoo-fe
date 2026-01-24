@@ -125,6 +125,9 @@ export const authHooks = {
       LoginRequest
     >({
       mutationFn: authApi.login,
+      meta: {
+        successMessage: 'Login successful',
+      },
       onSuccess: (response) => {
         if (response.status === apiStatus.SUCCESS) {
           setIsAuthenticated(true);

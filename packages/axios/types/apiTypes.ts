@@ -11,7 +11,9 @@ export type BaseResponse<T> = {
   data: T | null;
 };
 /** Category && Services */
+export type ServicesQueryParams = Omit<PrivateServiceQueryParams, 'page'>;
 export type Category = components['schemas']['CategoryEntity'];
+export type CategoryWithServicesCount = components['schemas']['ServiceWithCategoryDto'];
 export type Service = components['schemas']['ServiceEntity'];
 export type PrivateServiceQueryParams = components['schemas']['QueryServicesDto'];
 export type GetServiceResponse = {
@@ -20,6 +22,8 @@ export type GetServiceResponse = {
 };
 
 export type GetCategoriesResponse = Category[];
+export type GetPrivateCategoriesResponse =
+  components['schemas']['ServicesGroupByCategoriesResponseDto'];
 /** Auth */
 export type LoginRequest = components['schemas']['LoginRequestDto'];
 export type RegisterRequest = components['schemas']['CreateUserDto'];
@@ -57,6 +61,17 @@ export type CreateMasterRequest = {
 export type MasterLanguages = components['schemas']['MasterEntity']['languages'];
 
 export type MasterWithRelationsEntity = components['schemas']['MasterEntity'];
+
+/** Customer */
+export type CustomerInfoResponse = components['schemas']['CustomerInfoDto'];
+export type CreateCustomerRequest = components['schemas']['CreateCustomerDto'];
+export type GetCustomersResponse = {
+  items: components['schemas']['CustomerInfoDto'][];
+  pagination: components['schemas']['PaginationDto'];
+};
+export type GetCustomersQueryParams =
+  operations['CustomersController_findAll']['parameters']['query'];
+export type Customer = components['schemas']['CustomerInfoDto'];
 
 /** Schedule */
 export type GetSchedulesResponse = {
@@ -96,14 +111,3 @@ export type UpdateOrderStatusRequest = components['schemas']['UpdateOrderStatusD
 export type PrivateOrderQueryParams =
   operations['OrdersController_findAllOwn']['parameters']['query'];
 export type Order = components['schemas']['OrderEntity'];
-
-/** Customer */
-
-export type GetCustomersResponse = {
-  items: components['schemas']['CustomerInfoDto'][];
-  pagination: components['schemas']['PaginationDto'];
-};
-export type GetCustomersQueryParams =
-  operations['CustomersController_findAll']['parameters']['query'];
-export type Customer = components['schemas']['CustomerInfoDto'];
-export type CreateCustomerRequest = components['schemas']['CreateCustomerDto'];

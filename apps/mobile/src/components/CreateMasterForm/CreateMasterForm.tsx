@@ -10,7 +10,9 @@ type Props = {
 
 const CreateMasterForm = ({ onClose }: Props) => {
   const { control, errors, handleSubmit } = masterHooks.useCreateMasterForm({
-    onSuccess: onClose,
+    onSuccess: () => {
+      onClose();
+    },
   });
 
   return (
@@ -63,11 +65,7 @@ const CreateMasterForm = ({ onClose }: Props) => {
         </View>
 
         <View className='mb-4'>
-          <LanguageSelector
-            name='languages'
-            control={control}
-            error={errors.languages?.message}
-          />
+          <LanguageSelector name='languages' control={control} error={errors.languages?.message} />
         </View>
       </View>
     </>
