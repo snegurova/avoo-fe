@@ -6,10 +6,11 @@ import {
   PrivateOrderQueryParams,
   Order,
   BaseResponse,
+  Service,
 } from '@avoo/axios/types/apiTypes';
 import { apiStatus } from '@avoo/hooks/types/apiTypes';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { queryKeys } from './queryKeys';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -57,6 +58,7 @@ export const orderHooks = {
     return null;
   },
   useCreateOrders: ({ order, onSuccess }: useCreateOrdersFormParams) => {
+    const [selectedServices, setSelectedServices] = useState<(Service | null)[]>([null]);
     const {
       control,
       handleSubmit,
@@ -64,6 +66,9 @@ export const orderHooks = {
       formState: { errors },
     } = useForm<CreatePrivateOrdersData>({
       resolver: yupResolver(createPrivateOrdersSchema),
+      context: {
+        services: selectedServices ?? [],
+      },
       mode: 'onSubmit',
       defaultValues: {
         ordersData: [
@@ -71,7 +76,8 @@ export const orderHooks = {
             masterId: order.masterId ?? undefined,
             date: order.date ?? new Date().toISOString().split('T')[0],
             startTimeMinutes:
-              order.startTimeMinutes ?? new Date().getHours() * 60 + new Date().getMinutes(),
+              order.startTimeMinutes ??
+              new Date().getHours() * 60 + Math.ceil(new Date().getMinutes() / 15) * 15,
             type: 'SERVICE',
           },
         ],
@@ -101,6 +107,8 @@ export const orderHooks = {
       getValues,
       errors,
       isPending,
+      selectedServices,
+      setSelectedServices,
     };
   },
   useUpdateOrderStatus: ({ id, onSuccess }: useUpdateOrderStatusParams) => {

@@ -323,7 +323,12 @@ export default function CalendarControls(props: Props) {
           >
             <ArrowBackIcon className='fill-gray-800 w-3.5 h-3.5' />
           </button>
-          <DatePicker value={dayjs(date)} format='DD MMM YYYY' onChange={handleChangeDate} />
+          <DatePicker
+            value={dayjs(date)}
+            format='DD MMM YYYY'
+            onChange={handleChangeDate}
+            sx={{ '& .MuiButtonBase-root': { opacity: 0 } }}
+          />
           <button
             type='button'
             className={controlsButton({ variant: 'right' })}

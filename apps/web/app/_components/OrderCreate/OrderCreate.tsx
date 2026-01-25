@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { orderHooks } from '@avoo/hooks';
 import { useApiStatusStore } from '@avoo/store';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -8,13 +8,11 @@ import { Controller, useFieldArray } from 'react-hook-form';
 import ServiceForm from '../ServiceForm/ServiceForm';
 import { appRoutes } from '@/_routes/routes';
 import AddCircleIcon from '@/_icons/AddCircleIcon';
-import { Service } from '@avoo/axios/types/apiTypes';
 
 export default function OrderCreate() {
   const isPending = useApiStatusStore((state) => state.isPending);
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [selectedServices, setSelectedServices] = useState<(Service | null)[]>([null]);
 
   const initialMasterId = searchParams.get('masterId');
   const initialDate = searchParams.get('date');
@@ -23,7 +21,9 @@ export default function OrderCreate() {
   const initialParams = {
     masterId: initialMasterId ? Number(initialMasterId) : undefined,
     date: initialDate ?? undefined,
-    startTimeMinutes: initialStartTimeMinutes ? Number(initialStartTimeMinutes) : undefined,
+    startTimeMinutes: initialStartTimeMinutes
+      ? Math.ceil(Number(initialStartTimeMinutes) / 15) * 15
+      : undefined,
   };
 
   useEffect(() => {
@@ -32,16 +32,17 @@ export default function OrderCreate() {
     }
   }, []);
 
-  const { control, handleSubmit } = orderHooks.useCreateOrders({
-    order: {
-      masterId: initialParams.masterId,
-      date: initialParams.date,
-      startTimeMinutes: initialParams.startTimeMinutes,
-    },
-    onSuccess: () => {
-      router.back();
-    },
-  });
+  const { control, handleSubmit, errors, selectedServices, setSelectedServices } =
+    orderHooks.useCreateOrders({
+      order: {
+        masterId: initialParams.masterId,
+        date: initialParams.date,
+        startTimeMinutes: initialParams.startTimeMinutes,
+      },
+      onSuccess: () => {
+        router.back();
+      },
+    });
 
   const { fields, append, remove } = useFieldArray({
     control,
@@ -50,14 +51,14 @@ export default function OrderCreate() {
 
   const addService = () => {
     const prevOrder = fields[fields.length - 1];
-    const prevServiceId = prevOrder?.serviceId;
-    const prevService = selectedServices.find((s) => s?.id === prevServiceId) || null;
+    const prevService = selectedServices[fields.length - 1];
 
     append({
       type: 'SERVICE',
       masterId: prevOrder.masterId,
       date: prevOrder.date,
-      startTimeMinutes: prevOrder.startTimeMinutes + (prevService?.durationMinutes || 0),
+      startTimeMinutes:
+        prevOrder.startTimeMinutes + (prevService ? prevService.durationMinutes : 0),
     });
 
     setSelectedServices((prev) => [...prev, null]);
@@ -69,7 +70,13 @@ export default function OrderCreate() {
         <Controller
           name='customerData'
           control={control}
-          render={({ field }) => <CustomerSelect value={field.value} onChange={field.onChange} />}
+          render={({ field }) => (
+            <CustomerSelect
+              value={field.value}
+              onChange={field.onChange}
+              error={errors.customerData?.message}
+            />
+          )}
         />
         <Controller
           name='ordersData'
@@ -81,6 +88,8 @@ export default function OrderCreate() {
               initialParams={initialParams}
               selectedServices={selectedServices}
               setSelectedServices={setSelectedServices}
+              remove={remove}
+              errors={Array.isArray(errors.ordersData) ? errors.ordersData : []}
             />
           )}
         />
@@ -98,7 +107,7 @@ export default function OrderCreate() {
             </button>
           </div>
         )}
-        <div className='flex gap-8 mt-6'>
+        <div className='flex gap-8 mt-6 pb-15'>
           <Button
             disabled={isPending}
             loading={isPending}

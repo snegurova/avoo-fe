@@ -9,6 +9,7 @@ import { PX_IN_MINUTE } from '@/_constants/time';
 import CalendarCurrentTime from '../CalendarCurrentTime/CalendarCurrentTime';
 import { useRouter } from 'next/navigation';
 import { appRoutes } from '@/_routes/routes';
+import { useToast } from '@/_hooks/useToast';
 
 const DAY_CELLS = Array.from({ length: 96 });
 const WEEK_CELLS = Array.from({ length: 7 });
@@ -77,6 +78,7 @@ export default function CalendarColumn(props: Props) {
   } = props;
   const ref = useRef<HTMLDivElement | null>(null);
   const router = useRouter();
+  const toast = useToast();
 
   const [showEvents, setShowEvents] = useState<number>(1);
 
@@ -109,8 +111,18 @@ export default function CalendarColumn(props: Props) {
     const minutes = Math.floor(y / PX_IN_MINUTE);
     const hours = Math.floor(minutes / 60);
     const mins = minutes % 60;
-    // const target = e.target as HTMLElement;
-    // const isAvailable = target.classList.contains('available-time');
+    const target = e.target as HTMLElement;
+    const isAvailable = target.classList.contains('available-time');
+
+    const selectedDateTime = new Date(date);
+    selectedDateTime.setHours(hours, mins, 0, 0);
+    const cuurentDateTime = new Date();
+
+    if (selectedDateTime < cuurentDateTime) return;
+
+    if (!isAvailable) {
+      toast.info('Selected time is out of available working hours');
+    }
 
     router.push(
       appRoutes.OrderCreate +

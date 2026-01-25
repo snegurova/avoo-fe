@@ -125,7 +125,7 @@ export const customerSchema = yup
     notes: yup.string().optional(),
   })
   .required('customerData is required')
-  .test('customer-id-or-phone', 'Customer must have either an ID or a phone number', (value) => {
+  .test('customer-id-or-phone', 'Select an existing client or create a new one', (value) => {
     if (!value) return false;
 
     if (typeof value.id === 'number') {
@@ -142,21 +142,42 @@ export const ordersDataSchema = yup
       type: yup.string().oneOf(['SERVICE', 'COMBINATION']).required('Order type is required'),
       serviceId: yup.number().when('type', {
         is: 'SERVICE',
-        then: (schema) => schema.required('serviceId is required for SERVICE type'),
+        then: (schema) => schema.required('Select a service'),
         otherwise: (schema) => schema.notRequired(),
       }),
       combinationId: yup.number().when('type', {
         is: 'COMBINATION',
-        then: (schema) => schema.required('combinationId is required for COMBINATION type'),
+        then: (schema) => schema.required('Select a combination'),
         otherwise: (schema) => schema.notRequired(),
       }),
-      masterId: yup.number().required('masterId is required'),
-      date: yup.string().required('date is required'),
+      masterId: yup.number().required('Select a master'),
+      date: yup
+        .string()
+        .required('Select a date')
+        .test('is-future-date', "Date can't be in the past", function (value) {
+          if (!value) return false;
+          const inputDate = new Date(value);
+          const now = new Date();
+
+          inputDate.setHours(0, 0, 0, 0);
+          now.setHours(0, 0, 0, 0);
+          return inputDate >= now;
+        }),
       startTimeMinutes: yup
         .number()
-        .min(0, 'startTimeMinutes must be >= 0')
-        .max(1440, 'startTimeMinutes must be <= 1440')
-        .required('startTimeMinutes is required'),
+        .min(0, 'Time is not valid')
+        .max(1440, 'Time is not valid')
+        .test('is-future-time', "Time can't be in the past", function (value) {
+          const { date } = this.parent;
+          if (!date || !value) return false;
+          const inputDateTime = new Date(date);
+          const now = new Date();
+          const inputHours = Math.floor(value / 60);
+          const inputMinutes = value % 60;
+          inputDateTime.setHours(inputHours, inputMinutes, 0, 0);
+          return inputDateTime >= now;
+        })
+        .required('Select a time'),
       notes: yup.string().optional(),
     }),
   )

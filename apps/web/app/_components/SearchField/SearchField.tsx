@@ -17,6 +17,7 @@ type Props<R extends { id?: number }, T extends { id: number }> = {
   onAddClick?: () => void;
   placeholder?: string;
   className?: string;
+  error?: string;
 };
 
 export default function SearchField<R extends { id?: number }, T extends { id: number }>(
@@ -34,6 +35,7 @@ export default function SearchField<R extends { id?: number }, T extends { id: n
     searchMode = true,
     placeholder = 'Search by name, email, phone',
     className = '',
+    error,
   } = props;
   const [isActive, setIsActive] = useState(false);
 
@@ -78,6 +80,7 @@ export default function SearchField<R extends { id?: number }, T extends { id: n
               borderRadius={8}
               placeholder={placeholder}
               onFocus={onSearchFocus}
+              error={error}
             />
           )}
           {isActive && (
@@ -96,7 +99,7 @@ export default function SearchField<R extends { id?: number }, T extends { id: n
                   </button>
                 </div>
               )}
-              <ul className='flex flex-col gap-2'>
+              <ul className='flex flex-col gap-2 max-h-80 overflow-y-auto'>
                 {items.length > 0 &&
                   items.map((item, index) => (
                     <li key={label + index}>

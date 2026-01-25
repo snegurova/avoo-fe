@@ -4,6 +4,7 @@ import React from 'react';
 import SearchIcon from '@/_icons/SearchIcon';
 import { colors, typography } from '@avoo/design-tokens';
 import { useTheme, Theme } from '@mui/material/styles';
+import { tv } from 'tailwind-variants';
 
 type Props = {
   value: string;
@@ -12,7 +13,18 @@ type Props = {
   placeholder?: string;
   className?: string;
   borderRadius?: number;
+  error?: string;
 };
+
+const inputWrapper = tv({
+  base: 'flex items-center border border-gray-200 pr-3 gap-2 focus-within:[border-color:var(--color-primary-700)]',
+  variants: {
+    error: {
+      true: 'border-red-500',
+      false: '',
+    },
+  },
+});
 
 export const SearchInput = ({
   value,
@@ -21,6 +33,7 @@ export const SearchInput = ({
   placeholder = 'Search',
   className,
   borderRadius,
+  error,
 }: Props) => {
   const theme = useTheme() as Theme;
   const mix = theme.mixins?.searchInput ?? {
@@ -33,7 +46,7 @@ export const SearchInput = ({
   return (
     <div className={`${className ?? 'w-full'}`}>
       <div
-        className='flex items-center border border-gray-200 pr-3 gap-2 focus-within:[border-color:var(--color-primary-700)]'
+        className={inputWrapper({ error: !!error })}
         style={{
           backgroundColor: theme.palette?.background?.paper ?? colors.white,
           borderRadius: borderRadius ?? mix.borderRadius,
@@ -65,6 +78,7 @@ export const SearchInput = ({
           onFocus={onFocus}
         />
       </div>
+      <div className='mt-1 text-sm text-red-500'>{error}</div>
     </div>
   );
 };

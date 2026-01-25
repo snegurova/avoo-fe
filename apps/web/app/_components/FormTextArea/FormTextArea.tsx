@@ -1,4 +1,4 @@
-import { InputHTMLAttributes, ReactNode } from 'react';
+import { TextareaHTMLAttributes, ReactNode } from 'react';
 import { tv } from 'tailwind-variants';
 
 export enum AccessoryPosition {
@@ -56,7 +56,7 @@ const errorText = tv({
   base: 'mt-1 text-sm text-red-500',
 });
 
-type Props = Omit<InputHTMLAttributes<HTMLInputElement>, 'className'> & {
+type Props = Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, 'className'> & {
   error?: string;
   className?: string;
   accessory?: ReactNode;
@@ -67,8 +67,7 @@ type Props = Omit<InputHTMLAttributes<HTMLInputElement>, 'className'> & {
     error?: string;
   };
 };
-
-export default function FormInput(props: Props) {
+export default function FormTextArea(props: Props) {
   const {
     error,
     className = '',
@@ -77,7 +76,6 @@ export default function FormInput(props: Props) {
     accessoryPosition = AccessoryPosition.Right,
     ...rest
   } = props;
-
   const hasError = !!error;
   const hasAccessory = !!accessory;
 
@@ -97,7 +95,7 @@ export default function FormInput(props: Props) {
   return (
     <div className={containerClassName}>
       <div className={wrapperClassName}>
-        <input {...rest} className={inputClassName} />
+        <textarea {...rest} className={inputClassName} />
         {accessory && <div className={accessoryClassName}>{accessory}</div>}
       </div>
       {error && <p className={errorClassName}>{error}</p>}

@@ -112,7 +112,6 @@ export const timeUtils = {
     const day = date.getDate().toString().padStart(2, '0');
     return `${year}-${month}-${day}`;
   },
-
   formatLastVisitDate(
     value: string | Date | Record<string, unknown> | null | undefined,
   ): string | null {
@@ -130,5 +129,8 @@ export const timeUtils = {
     const year = date.getFullYear();
 
     return `${day}/${month}/${year}`;
+  },
+  formatToFullDate(date: string, time: string): string {
+    return `${date}T${time}:00`;
   },
 };

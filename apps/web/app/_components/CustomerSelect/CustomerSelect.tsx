@@ -9,16 +9,18 @@ import {
 import SearchField from '@/_components/SearchField/SearchField';
 import CustomerElement from '@/_components/CustomerElement/CustomerElement';
 import FormInput from '@/_components/FormInput/FormInput';
+import FormTextArea from '@/_components/FormTextArea/FormTextArea';
 import { isEmptyObject } from '@avoo/shared';
 
 type Props = {
   value?: CreateOrFindCustomerRequest;
   onChange: (customer: CreateOrFindCustomerRequest) => void;
+  error?: string;
 };
 
-export function CustomerSelect({ value, onChange }: Props) {
+export function CustomerSelect({ value, onChange, error }: Props) {
   const [search, setSearch] = useState('');
-  const [params, setParams] = useState<GetCustomersQueryParams>({ limit: 3 });
+  const [params, setParams] = useState<GetCustomersQueryParams>({ limit: 100 });
   const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(null);
 
   useEffect(() => {
@@ -67,9 +69,10 @@ export function CustomerSelect({ value, onChange }: Props) {
         ItemElement={CustomerElement}
         onAddClick={addClientFields}
         searchMode={isEmptyObject(value)}
+        error={error}
       />
       {isCustomerValues(value) && (
-        <div className='grid grid-cols-2 gap-3'>
+        <div className='grid gap-3'>
           <div className=''>
             <label className='block mb-1 text-sm font-medium' htmlFor='name'>
               Name
@@ -105,20 +108,21 @@ export function CustomerSelect({ value, onChange }: Props) {
             <FormInput
               type='text'
               placeholder='Enter phone'
-              required
               id='phone'
               value={(value as CreateOrFindCustomerRequest).phone}
               onChange={(e) =>
                 onChange({ ...(value as CreateOrFindCustomerRequest), phone: e.target.value })
               }
+              error={error ? 'Phone is required' : undefined}
             />
           </div>
           <div className=''>
             <label className='block mb-1 text-sm font-medium' htmlFor='notes'>
               Notes
             </label>
-            <FormInput
-              type='text'
+            <FormTextArea
+              className='resize-none'
+              rows={3}
               placeholder='Enter notes'
               id='notes'
               value={(value as CreateOrFindCustomerRequest).notes}

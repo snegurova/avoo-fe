@@ -15,11 +15,13 @@ type Props = {
   setSelectedServices: (
     services: (Service | null)[] | ((prev: (Service | null)[]) => (Service | null)[]),
   ) => void;
+  remove: (index: number) => void;
+  errors?: unknown[];
 };
 
 export default function ServiceForm(props: Props) {
-  const { value, onChange, initialParams, selectedServices, setSelectedServices } = props;
-
+  const { value, onChange, initialParams, selectedServices, setSelectedServices, remove, errors } =
+    props;
   const currentService = (index: number): Service | null => {
     return selectedServices[index] || null;
   };
@@ -32,9 +34,18 @@ export default function ServiceForm(props: Props) {
     });
   };
 
+  const removeEl = (index: number) => {
+    remove(index);
+    setSelectedServices((prev) => {
+      const newServices = [...prev];
+      newServices.splice(index, 1);
+      return newServices;
+    });
+  };
+
   return (
     <div className='flex flex-col gap-6'>
-      {value.map((order, index) => (
+      {value.map((order, index, arr) => (
         <ServiceFormItem
           key={`service-item-${index}`}
           order={order}
@@ -44,6 +55,12 @@ export default function ServiceForm(props: Props) {
           initialParams={index === 0 ? initialParams : {}}
           selectedService={currentService(index)}
           setSelectedService={(service: Service | null) => changeCurrentService(index, service)}
+          remove={arr.length > 1 && index === arr.length - 1 ? () => removeEl(index) : null}
+          errors={
+            Array.isArray(errors)
+              ? (errors[index] as { [key: string]: { message: string } }) || {}
+              : {}
+          }
         />
       ))}
     </div>

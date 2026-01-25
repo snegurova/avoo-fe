@@ -44,7 +44,13 @@ export default function MasterElement(props: Props) {
         <h4 className='font-medium text-sm text-start leading-normal text-gray-700'>{item.name}</h4>
       </div>
       {item.languages && (
-        <ul className='flex flex-col shrink-0'>
+        <ul
+          className='grid gap-x-1.5 shrink-0'
+          style={{
+            gridTemplateColumns: `repeat(${Math.ceil(item.languages.length / 2)}, minmax(0, max-content))`,
+            direction: 'rtl',
+          }}
+        >
           {item.languages.map((lang) => (
             <li key={lang} className='text-sm text-gray-500'>
               {lang.toUpperCase()}

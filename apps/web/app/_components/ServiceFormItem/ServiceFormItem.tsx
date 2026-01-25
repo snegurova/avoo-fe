@@ -6,8 +6,15 @@ import { masterHooks } from '@avoo/hooks';
 import ServiceElement from '../ServiceElement/ServiceElement';
 import MasterElement from '../MasterElement/MasterElement';
 import { isEmptyObject } from '@avoo/shared';
-import FormInput from '@/_components/FormInput/FormInput';
 import { timeUtils } from '@avoo/shared';
+import { IconButton } from '@/_components/IconButton/IconButton';
+import DeleteIcon from '@/_icons/DeleteIcon';
+import FormTextArea from '../FormTextArea/FormTextArea';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { TimePicker } from '@mui/x-date-pickers/TimePicker';
+import dayjs from 'dayjs';
+import CaledarIcon from '@/_icons/CalendarIcon';
+import ScheduleIcon from '@/_icons/ScheduleIcon';
 
 type Props = {
   order: CreatePrivateOrder;
@@ -21,11 +28,22 @@ type Props = {
   };
   selectedService: Service | null;
   setSelectedService: (service: Service | null) => void;
+  remove: (() => void) | null;
+  errors?: { [key: string]: { message: string } };
 };
 
 export default function ServiceFormItem(props: Props) {
-  const { order, onChange, value, index, initialParams, selectedService, setSelectedService } =
-    props;
+  const {
+    order,
+    onChange,
+    value,
+    index,
+    initialParams,
+    selectedService,
+    setSelectedService,
+    remove,
+    errors,
+  } = props;
 
   const [selectedMaster, setSelectedMaster] = useState<MasterWithRelationsEntity | null>(null);
   const [masterSearch, setMasterSearch] = useState('');
@@ -35,7 +53,7 @@ export default function ServiceFormItem(props: Props) {
 
   const { data: services } = useGetServicesInfinite({
     ...queryParams,
-    limit: 3,
+    limit: 100,
     isActive: true,
   });
 
@@ -69,10 +87,26 @@ export default function ServiceFormItem(props: Props) {
     setSelectedMaster(masters?.find((master) => master.id === id) || null);
   };
 
+  const ServiceElementWrapped: React.FC<{
+    item: Service;
+    onClick: () => void;
+  }> = ({ item, onClick }) => (
+    <ServiceElement item={item} isCard={false} hideMasters={!!selectedMaster} onClick={onClick} />
+  );
+
   return (
     <div className='rounded-lg border border-gray-200'>
-      <div className='bg-primary-50 p-4 rounded-t-lg'>
+      <div className='bg-primary-50 px-4 p-2 h-14 rounded-t-lg flex items-center justify-between'>
         <h3 className='font-medium'>{selectedService?.name ?? 'Select a service'}</h3>
+        {remove && (
+          <IconButton
+            className='group'
+            icon={
+              <DeleteIcon className='w-5 h-5 transition-colors group-hover:fill-primary-500 group-focus:fill-primary-500' />
+            }
+            onClick={remove}
+          />
+        )}
       </div>
       <div className='flex flex-col gap-4 p-4'>
         <div className=''>
@@ -83,9 +117,10 @@ export default function ServiceFormItem(props: Props) {
             items={services?.pages?.[0]?.data?.items ?? []}
             search={params.search ?? ''}
             setSearch={setSearchQuery}
-            ItemElement={ServiceElement}
+            ItemElement={ServiceElementWrapped}
             searchMode={!order.serviceId}
             placeholder='Search by service name'
+            error={errors?.serviceId?.message}
           />
           {selectedService && <ServiceElement item={selectedService} isCard />}
         </div>
@@ -99,22 +134,37 @@ export default function ServiceFormItem(props: Props) {
             setSearch={setMasterSearch}
             ItemElement={MasterElement}
             searchMode={!order.masterId}
+            error={errors?.masterId?.message}
           />
           {selectedMaster && <MasterElement item={selectedMaster} isCard />}
         </div>
-        <div className='grid grid-cols-3 gap-3'>
+        <div className='grid grid-cols-3 gap-x-3'>
           <div className='col-span-2'>
-            <label className='block mb-2 font-medium' htmlFor={`date-${index}`}>
-              Date
-            </label>
-            <FormInput
-              type='date'
-              id={`date-${index}`}
-              value={order.date || ''}
-              onChange={(e) => {
+            <label className='block mb-2 font-medium'>Date</label>
+            <DatePicker
+              value={dayjs(order.date)}
+              format='DD MMM YYYY'
+              disablePast={true}
+              slots={{ openPickerIcon: () => <CaledarIcon className='fill-black w-6 h-6' /> }}
+              slotProps={{
+                openPickerIcon: { className: 'fill-gray-800 w-4 h-4' },
+              }}
+              onChange={(newDate: dayjs.Dayjs | null) => {
                 const newOrders = [...value];
-                newOrders[index] = { ...newOrders[index], date: e.target.value };
+                newOrders[index] = {
+                  ...newOrders[index],
+                  date: newDate ? newDate.format('YYYY-MM-DD') : '',
+                };
                 onChange(newOrders);
+              }}
+              sx={{
+                '& span': {
+                  fontSize: 16,
+                },
+                '& .MuiPickersInputBase-root': {
+                  borderRadius: 1,
+                  height: 44,
+                },
               }}
             />
           </div>
@@ -122,15 +172,36 @@ export default function ServiceFormItem(props: Props) {
             <label className='block mb-2 font-medium' htmlFor={`time-${index}`}>
               Time
             </label>
-            <FormInput
-              type='time'
-              id={`time-${index}`}
-              value={
-                order.startTimeMinutes ? timeUtils.getTimeFromMinutes(order.startTimeMinutes) : ''
-              }
-              onChange={(e) => {
+            <TimePicker
+              sx={{
+                '& span': {
+                  fontSize: 16,
+                },
+                '& .MuiPickersInputBase-root': {
+                  borderRadius: 1,
+                  height: 44,
+                },
+              }}
+              value={dayjs(
+                timeUtils.formatToFullDate(
+                  order.date || '',
+                  timeUtils.getTimeFromMinutes(order.startTimeMinutes || 0),
+                ),
+              )}
+              views={['hours', 'minutes']}
+              minutesStep={15}
+              timeSteps={{ minutes: 15 }}
+              format='HH:mm'
+              ampm={false}
+              disablePast={true}
+              closeOnSelect={true}
+              slots={{ openPickerIcon: () => <ScheduleIcon className='fill-black w-6 h-6' /> }}
+              onChange={(newTime: dayjs.Dayjs | null) => {
                 const newOrders = [...value];
-                const [hours, minutes] = e.target.value.split(':').map(Number);
+
+                const hours = newTime ? newTime.hour() : 9;
+                const minutes = newTime ? newTime.minute() : 0;
+
                 newOrders[index] = {
                   ...newOrders[index],
                   startTimeMinutes: hours * 60 + minutes,
@@ -139,13 +210,19 @@ export default function ServiceFormItem(props: Props) {
               }}
             />
           </div>
+          {errors?.startTimeMinutes?.message && (
+            <div className='mt-1 text-sm text-red-500 col-span-3'>
+              {errors?.startTimeMinutes?.message}
+            </div>
+          )}
         </div>
         <div className=''>
           <label className='block mb-2 font-medium' htmlFor={`notes-${index}`}>
             Notes
           </label>
-          <FormInput
-            type='text'
+          <FormTextArea
+            className='resize-none'
+            rows={3}
             id={`notes-${index}`}
             value={order.notes || ''}
             onChange={(e) => {
@@ -153,6 +230,7 @@ export default function ServiceFormItem(props: Props) {
               newOrders[index] = { ...newOrders[index], notes: e.target.value };
               onChange(newOrders);
             }}
+            error={errors?.notes?.message}
           />
         </div>
       </div>

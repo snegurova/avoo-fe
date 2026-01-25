@@ -10,6 +10,7 @@ type Props = {
   item: Service;
   onClick?: () => void;
   isCard?: boolean;
+  hideMasters?: boolean;
 };
 
 const WrapperStyles = tv({
@@ -23,10 +24,10 @@ const WrapperStyles = tv({
 });
 
 export default function ServiceElement(props: Props) {
-  const { item, onClick, isCard } = props;
+  const { item, onClick, isCard, hideMasters = false } = props;
 
   const Wrapper = isCard ? 'div' : 'button';
-  console.log(item);
+
   return (
     <Wrapper
       className={WrapperStyles({ isCard })}
@@ -38,7 +39,7 @@ export default function ServiceElement(props: Props) {
       <div className='flex flex-col text-sm text-start gap-2 tracking-wider leading-none'>
         <h3 className='font-medium text-black'>{item.name}</h3>
         <p className=' text-gray-600'>{timeUtils.convertDuration(item.durationMinutes)}</p>
-        {!isCard && item.masters && (
+        {!isCard && item.masters && !hideMasters && (
           <ul className='flex flex-wrap gap-y-0.5 gap-x-1'>
             {item.masters.map((master) => (
               <li key={`service-master-${master.id}`} className='flex items-center gap-1'>
