@@ -5,3 +5,4 @@ export { userApi } from './modules/user';
 export { masterApi } from './modules/master';
 export { scheduleApi } from './modules/schedule';
 export { calendarApi } from './modules/calendar';
+export { customerApi } from './modules/customer';

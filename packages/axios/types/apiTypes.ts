@@ -62,6 +62,10 @@ export type MasterLanguages = components['schemas']['MasterEntity']['languages']
 
 export type MasterWithRelationsEntity = components['schemas']['MasterEntity'];
 
+/** Customer */
+export type CustomerInfoResponse = components['schemas']['CustomerInfoDto'];
+export type CreateCustomerRequest = components['schemas']['CreateCustomerDto'];
+
 /** Schedule */
 export type GetSchedulesResponse = {
   items: components['schemas']['ScheduleEntity'][];

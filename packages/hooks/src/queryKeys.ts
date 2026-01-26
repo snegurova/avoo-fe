@@ -15,6 +15,9 @@ export const queryKeys = {
     all: ['categories'] as const,
     byParams: (params: string) => [...queryKeys.categories.all, params] as const,
   },
+  customers: {
+    all: ['customers'] as const,
+  },
   user: {
     all: ['user'] as const,
     profile: () => [...queryKeys.user.all, 'profile'] as const,
