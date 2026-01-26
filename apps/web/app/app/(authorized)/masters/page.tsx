@@ -1,19 +1,13 @@
 'use client';
 
 import React, { useState, useCallback } from 'react';
+import { useRouter } from 'next/navigation';
+import { appRoutes } from '@/_routes/routes';
 import Controls from '@/_components/Controls/Controls';
 import { IconButton } from '@/_components/IconButton/IconButton';
 import { routerHooks } from '@/_hooks/routerHooks';
 import { masterHooks } from '@avoo/hooks';
 import MasterList from '@/_components/MasterList/MasterList';
-import {
-  Button,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  Typography,
-} from '@mui/material';
 import AppWrapper from '@/_components/AppWrapper/AppWrapper';
 
 export default function MastersPage() {
@@ -24,19 +18,15 @@ export default function MastersPage() {
   const masters = masterHooks.useGetMastersProfileInfo();
   const filtered = masterHooks.useFilterMasters(masters, searchQuery);
 
-  const [showCreateMasterModal, setShowCreateMasterModal] = useState(false);
+  const router = useRouter();
 
   const handleAddMaster = useCallback(() => {
-    setShowCreateMasterModal(true);
-  }, []);
-
-  const handleCloseCreateMaster = useCallback(() => {
-    setShowCreateMasterModal(false);
-  }, []);
+    router.push(`${appRoutes.Masters}/add-master`);
+  }, [router]);
 
   return (
     <AppWrapper>
-      <div className='p-6'>
+      <div className='p-6 flex-1 min-h-0 overflow-auto hide-scrollbar'>
         <IconButton icon='⬅' onClick={handleBackClick} ariaLabel='Back' />
 
         <div className='mb-8'>
@@ -51,25 +41,7 @@ export default function MastersPage() {
         </div>
 
         <MasterList masters={filtered} />
-
-        <Dialog
-          open={showCreateMasterModal}
-          onClose={handleCloseCreateMaster}
-          fullWidth
-          maxWidth='sm'
-        >
-          <DialogTitle>Create master</DialogTitle>
-          <DialogContent>
-            <Typography variant='body2' color='textSecondary'>
-              Master creation form will be implemented later.
-            </Typography>
-          </DialogContent>
-          <DialogActions>
-            <Button autoFocus onClick={handleCloseCreateMaster}>
-              Close
-            </Button>
-          </DialogActions>
-        </Dialog>
+        
       </div>
     </AppWrapper>
   );
