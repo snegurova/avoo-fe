@@ -13,7 +13,7 @@ type Props = {
   hideMasters?: boolean;
 };
 
-const WrapperStyles = tv({
+const wrapperStyles = tv({
   base: 'relative border border-gray-200 rounded-lg overflow-hidden w-full flex items-center justify-between gap-4 py-4 pr-4 pl-6 relative before:content-[""] before:absolute before:left-0 before:top-0 before:bottom-0 before:w-2 before:bg-primary-200',
   variants: {
     isCard: {
@@ -30,7 +30,7 @@ export default function ServiceElement(props: Props) {
 
   return (
     <Wrapper
-      className={WrapperStyles({ isCard })}
+      className={wrapperStyles({ isCard })}
       {...(!isCard && {
         type: 'button',
         onClick,

@@ -101,8 +101,8 @@ export default function SearchField<R extends { id?: number }, T extends { id: n
               )}
               <ul className='flex flex-col gap-2 max-h-80 overflow-y-auto'>
                 {items.length > 0 &&
-                  items.map((item, index) => (
-                    <li key={label + index}>
+                  items.map((item) => (
+                    <li key={label + item.id}>
                       <ItemElement item={item} onClick={() => onItemClick(item.id)} />
                     </li>
                   ))}

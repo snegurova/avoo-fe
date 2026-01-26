@@ -6,15 +6,11 @@ import { masterHooks } from '@avoo/hooks';
 import ServiceElement from '../ServiceElement/ServiceElement';
 import MasterElement from '../MasterElement/MasterElement';
 import { isEmptyObject } from '@avoo/shared';
-import { timeUtils } from '@avoo/shared';
 import { IconButton } from '@/_components/IconButton/IconButton';
 import DeleteIcon from '@/_icons/DeleteIcon';
 import FormTextArea from '../FormTextArea/FormTextArea';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { TimePicker } from '@mui/x-date-pickers/TimePicker';
-import dayjs from 'dayjs';
-import CaledarIcon from '@/_icons/CalendarIcon';
-import ScheduleIcon from '@/_icons/ScheduleIcon';
+import FormDatePicker from '@/_components/FormDatePicker/FormDatePicker';
+import FormTimePicker from '@/_components/FormTimePicker/FormTimePicker';
 
 type Props = {
   order: CreatePrivateOrder;
@@ -48,10 +44,9 @@ export default function ServiceFormItem(props: Props) {
   const [selectedMaster, setSelectedMaster] = useState<MasterWithRelationsEntity | null>(null);
   const [masterSearch, setMasterSearch] = useState('');
 
-  const { useGetServicesInfinite, useServicesQuery } = servicesHooks;
-  const { params, queryParams, setSearchQuery } = useServicesQuery();
+  const { params, queryParams, setSearchQuery } = servicesHooks.useServicesQuery();
 
-  const { data: services } = useGetServicesInfinite({
+  const { data: services } = servicesHooks.useGetServicesInfinite({
     ...queryParams,
     limit: 100,
     isActive: true,
@@ -93,6 +88,31 @@ export default function ServiceFormItem(props: Props) {
   }> = ({ item, onClick }) => (
     <ServiceElement item={item} isCard={false} hideMasters={!!selectedMaster} onClick={onClick} />
   );
+
+  const onDateChange = (newDate: string) => {
+    const newOrders = [...value];
+    newOrders[index] = {
+      ...newOrders[index],
+      date: newDate,
+    };
+    onChange(newOrders);
+  };
+
+  const onTimeChange = (newTimeMinutes: number) => {
+    const newOrders = [...value];
+
+    newOrders[index] = {
+      ...newOrders[index],
+      startTimeMinutes: newTimeMinutes,
+    };
+    onChange(newOrders);
+  };
+
+  const onNotesChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const newOrders = [...value];
+    newOrders[index] = { ...newOrders[index], notes: e.target.value };
+    onChange(newOrders);
+  };
 
   return (
     <div className='rounded-lg border border-gray-200'>
@@ -141,73 +161,16 @@ export default function ServiceFormItem(props: Props) {
         <div className='grid grid-cols-3 gap-x-3'>
           <div className='col-span-2'>
             <label className='block mb-2 font-medium'>Date</label>
-            <DatePicker
-              value={dayjs(order.date)}
-              format='DD MMM YYYY'
-              disablePast={true}
-              slots={{ openPickerIcon: () => <CaledarIcon className='fill-black w-6 h-6' /> }}
-              slotProps={{
-                openPickerIcon: { className: 'fill-gray-800 w-4 h-4' },
-              }}
-              onChange={(newDate: dayjs.Dayjs | null) => {
-                const newOrders = [...value];
-                newOrders[index] = {
-                  ...newOrders[index],
-                  date: newDate ? newDate.format('YYYY-MM-DD') : '',
-                };
-                onChange(newOrders);
-              }}
-              sx={{
-                '& span': {
-                  fontSize: 16,
-                },
-                '& .MuiPickersInputBase-root': {
-                  borderRadius: 1,
-                  height: 44,
-                },
-              }}
-            />
+            <FormDatePicker date={order.date} onChange={onDateChange} />
           </div>
           <div className=' '>
             <label className='block mb-2 font-medium' htmlFor={`time-${index}`}>
               Time
             </label>
-            <TimePicker
-              sx={{
-                '& span': {
-                  fontSize: 16,
-                },
-                '& .MuiPickersInputBase-root': {
-                  borderRadius: 1,
-                  height: 44,
-                },
-              }}
-              value={dayjs(
-                timeUtils.formatToFullDate(
-                  order.date || '',
-                  timeUtils.getTimeFromMinutes(order.startTimeMinutes || 0),
-                ),
-              )}
-              views={['hours', 'minutes']}
-              minutesStep={15}
-              timeSteps={{ minutes: 15 }}
-              format='HH:mm'
-              ampm={false}
-              disablePast={true}
-              closeOnSelect={true}
-              slots={{ openPickerIcon: () => <ScheduleIcon className='fill-black w-6 h-6' /> }}
-              onChange={(newTime: dayjs.Dayjs | null) => {
-                const newOrders = [...value];
-
-                const hours = newTime ? newTime.hour() : 9;
-                const minutes = newTime ? newTime.minute() : 0;
-
-                newOrders[index] = {
-                  ...newOrders[index],
-                  startTimeMinutes: hours * 60 + minutes,
-                };
-                onChange(newOrders);
-              }}
+            <FormTimePicker
+              date={order.date}
+              startTimeMinutes={order.startTimeMinutes}
+              onChange={onTimeChange}
             />
           </div>
           {errors?.startTimeMinutes?.message && (
@@ -225,11 +188,7 @@ export default function ServiceFormItem(props: Props) {
             rows={3}
             id={`notes-${index}`}
             value={order.notes || ''}
-            onChange={(e) => {
-              const newOrders = [...value];
-              newOrders[index] = { ...newOrders[index], notes: e.target.value };
-              onChange(newOrders);
-            }}
+            onChange={onNotesChange}
             error={errors?.notes?.message}
           />
         </div>

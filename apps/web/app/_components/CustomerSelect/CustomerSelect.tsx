@@ -2,7 +2,8 @@
 import React, { useState, useEffect } from 'react';
 import { customerHooks } from '@avoo/hooks';
 import {
-  CreateOrFindCustomerRequest,
+  CreateCustomerRequest,
+  FindCustomerRequest,
   GetCustomersQueryParams,
   Customer,
 } from '@avoo/axios/types/apiTypes';
@@ -13,8 +14,8 @@ import FormTextArea from '@/_components/FormTextArea/FormTextArea';
 import { isEmptyObject } from '@avoo/shared';
 
 type Props = {
-  value?: CreateOrFindCustomerRequest;
-  onChange: (customer: CreateOrFindCustomerRequest) => void;
+  value?: CreateCustomerRequest | FindCustomerRequest;
+  onChange: (customer: CreateCustomerRequest | FindCustomerRequest) => void;
   error?: string;
 };
 
@@ -45,7 +46,9 @@ export function CustomerSelect({ value, onChange, error }: Props) {
     onChange({ name: search.trim(), email: '', phone: '', notes: '' });
   };
 
-  const isCustomerValues = (obj: unknown): obj is CreateOrFindCustomerRequest => {
+  const isCustomerValues = (
+    obj: CreateCustomerRequest | FindCustomerRequest | undefined,
+  ): obj is CreateCustomerRequest => {
     return !!(
       obj &&
       typeof obj === 'object' &&
@@ -81,10 +84,8 @@ export function CustomerSelect({ value, onChange, error }: Props) {
               type='text'
               placeholder='Enter name'
               id='name'
-              value={(value as CreateOrFindCustomerRequest).name}
-              onChange={(e) =>
-                onChange({ ...(value as CreateOrFindCustomerRequest), name: e.target.value })
-              }
+              value={value.name}
+              onChange={(e) => onChange({ ...value, name: e.target.value })}
             />
           </div>
           <div className=''>
@@ -95,10 +96,8 @@ export function CustomerSelect({ value, onChange, error }: Props) {
               type='email'
               placeholder='Enter email'
               id='email'
-              value={(value as CreateOrFindCustomerRequest).email}
-              onChange={(e) =>
-                onChange({ ...(value as CreateOrFindCustomerRequest), email: e.target.value })
-              }
+              value={value.email}
+              onChange={(e) => onChange({ ...value, email: e.target.value })}
             />
           </div>
           <div className=''>
@@ -109,10 +108,8 @@ export function CustomerSelect({ value, onChange, error }: Props) {
               type='text'
               placeholder='Enter phone'
               id='phone'
-              value={(value as CreateOrFindCustomerRequest).phone}
-              onChange={(e) =>
-                onChange({ ...(value as CreateOrFindCustomerRequest), phone: e.target.value })
-              }
+              value={value.phone}
+              onChange={(e) => onChange({ ...value, phone: e.target.value })}
               error={error ? 'Phone is required' : undefined}
             />
           </div>
@@ -125,10 +122,8 @@ export function CustomerSelect({ value, onChange, error }: Props) {
               rows={3}
               placeholder='Enter notes'
               id='notes'
-              value={(value as CreateOrFindCustomerRequest).notes}
-              onChange={(e) =>
-                onChange({ ...(value as CreateOrFindCustomerRequest), notes: e.target.value })
-              }
+              value={value.notes}
+              onChange={(e) => onChange({ ...value, notes: e.target.value })}
             />
           </div>
         </div>

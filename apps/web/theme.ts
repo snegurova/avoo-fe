@@ -173,9 +173,6 @@ const theme = createTheme({
     MuiDatePicker: {
       defaultProps: {
         slotProps: {
-          // openPickerIcon: {
-          //   sx: { fill: colors.black },
-          // },
           textField: {
             size: 'small',
             fullWidth: true,
@@ -187,9 +184,6 @@ const theme = createTheme({
     MuiTimePicker: {
       defaultProps: {
         slotProps: {
-          // openPickerIcon: {
-          //   sx: { fill: colors.black },
-          // },
           textField: {
             size: 'small',
             fullWidth: true,

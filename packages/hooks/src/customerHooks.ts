@@ -10,7 +10,7 @@ import {
 import { queryKeys } from './queryKeys';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useMemo } from 'react';
-import { apiStatus } from '@avoo/hooks/types/apiTypes';
+import { ApiStatus } from '@avoo/hooks/types/apiTypes';
 
 export const customerHooks = {
   useGetCustomers: (params: GetCustomersQueryParams) => {
@@ -28,7 +28,7 @@ export const customerHooks = {
 
     utils.useSetPendingApi(isPending);
 
-    if ((customersData?.status ?? '').toLowerCase() === apiStatus.SUCCESS && customersData.data) {
+    if ((customersData?.status ?? '').toLowerCase() === ApiStatus.SUCCESS && customersData.data) {
       return customersData.data;
     }
 
@@ -54,7 +54,7 @@ export const customerHooks = {
           const found = maybeList.find((c) => c.id === id);
           if (found) {
             const result: BaseResponse<CustomerInfoResponse> = {
-              status: apiStatus.SUCCESS,
+              status: ApiStatus.SUCCESS,
               data: found,
             };
             return result;
@@ -66,7 +66,7 @@ export const customerHooks = {
           const found = listResp.data.find((customer: { id: number }) => customer.id === id);
           if (found) {
             const result: BaseResponse<CustomerInfoResponse> = {
-              status: apiStatus.SUCCESS,
+              status: ApiStatus.SUCCESS,
               data: found,
             };
             return result;
@@ -80,7 +80,7 @@ export const customerHooks = {
 
     utils.useSetPendingApi(isPending);
 
-    if ((customerData?.status ?? '').toLowerCase() === apiStatus.SUCCESS && customerData.data) {
+    if ((customerData?.status ?? '').toLowerCase() === ApiStatus.SUCCESS && customerData.data) {
       return customerData.data;
     }
 

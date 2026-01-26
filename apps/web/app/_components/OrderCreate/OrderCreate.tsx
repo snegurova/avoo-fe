@@ -8,21 +8,29 @@ import { Controller, useFieldArray } from 'react-hook-form';
 import ServiceForm from '../ServiceForm/ServiceForm';
 import { appRoutes } from '@/_routes/routes';
 import AddCircleIcon from '@/_icons/AddCircleIcon';
+import { OrderQueryParams } from '@avoo/hooks/types/orderQueryParams';
+import { OrderType } from '@avoo/hooks/types/orderType';
+
+const SERVICES_KEY_IN_ORDER_CREATE = 'ordersData';
+const WRAPPER_HEADER_HEIGHT = '62px';
 
 export default function OrderCreate() {
   const isPending = useApiStatusStore((state) => state.isPending);
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const initialMasterId = searchParams.get('masterId');
-  const initialDate = searchParams.get('date');
-  const initialStartTimeMinutes = searchParams.get('startTimeMinutes');
+  const parsedQuery = Object.fromEntries(
+    Object.values(OrderQueryParams).map((key) => [key, searchParams.get(key)]),
+  ) as Record<OrderQueryParams, string | null>;
 
   const initialParams = {
-    masterId: initialMasterId ? Number(initialMasterId) : undefined,
-    date: initialDate ?? undefined,
-    startTimeMinutes: initialStartTimeMinutes
-      ? Math.ceil(Number(initialStartTimeMinutes) / 15) * 15
+    masterId:
+      parsedQuery.masterId && !Number.isNaN(Number(parsedQuery.masterId))
+        ? Number(parsedQuery.masterId)
+        : undefined,
+    date: parsedQuery.date ?? undefined,
+    startTimeMinutes: parsedQuery.startTimeMinutes
+      ? Math.ceil(Number(parsedQuery.startTimeMinutes) / 15) * 15
       : undefined,
   };
 
@@ -33,20 +41,20 @@ export default function OrderCreate() {
   }, []);
 
   const { control, handleSubmit, errors, selectedServices, setSelectedServices } =
-    orderHooks.useCreateOrders({
+    orderHooks.useCreateOrder({
       order: {
         masterId: initialParams.masterId,
         date: initialParams.date,
         startTimeMinutes: initialParams.startTimeMinutes,
       },
       onSuccess: () => {
-        router.back();
+        router.replace(appRoutes.Calendar);
       },
     });
 
   const { fields, append, remove } = useFieldArray({
     control,
-    name: 'ordersData',
+    name: SERVICES_KEY_IN_ORDER_CREATE,
   });
 
   const addService = () => {
@@ -54,7 +62,7 @@ export default function OrderCreate() {
     const prevService = selectedServices[fields.length - 1];
 
     append({
-      type: 'SERVICE',
+      type: OrderType.Service,
       masterId: prevOrder.masterId,
       date: prevOrder.date,
       startTimeMinutes:
@@ -65,7 +73,7 @@ export default function OrderCreate() {
   };
 
   return (
-    <div className='h-[calc(100%-62px)] overflow-y-auto flex'>
+    <div className={`h-[calc(100%-${WRAPPER_HEADER_HEIGHT})] overflow-y-auto flex`}>
       <form className='px-12 w-full flex flex-col gap-6' onSubmit={handleSubmit}>
         <Controller
           name='customerData'

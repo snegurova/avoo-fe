@@ -1,4 +1,5 @@
 import type { components, operations } from './generated';
+import { OrderType } from '@avoo/hooks/types/orderType';
 
 export type Error = {
   field: string;
@@ -66,12 +67,9 @@ export type GetMastersQueryParams = operations['MastersController_findAll']['par
 /** Customer */
 export type CustomerInfoResponse = components['schemas']['CustomerInfoDto'];
 export type CreateCustomerRequest = components['schemas']['CreateCustomerDto'];
-export type CreateOrFindCustomerRequest = {
-  id?: number;
-  name?: string;
-  phone?: string;
-  email?: string;
-  notes?: string;
+
+export type FindCustomerRequest = {
+  id: number;
 };
 export type GetCustomersResponse = {
   items: components['schemas']['CustomerInfoDto'][];
@@ -118,9 +116,11 @@ export type UpdateOrderStatusRequest = components['schemas']['UpdateOrderStatusD
 export type PrivateOrderQueryParams =
   operations['OrdersController_findAllOwn']['parameters']['query'];
 export type Order = components['schemas']['OrderEntity'];
-export type CreatePrivateOrder = components['schemas']['CreatePrivateOrderDto'];
+export type CreatePrivateOrder = Omit<components['schemas']['CreatePrivateOrderDto'], 'type'> & {
+  type: OrderType;
+};
 
 export type CreatePrivateOrdersRequest = {
   ordersData: CreatePrivateOrder[];
-  customerData: CreateOrFindCustomerRequest;
+  customerData: CreateCustomerRequest | FindCustomerRequest;
 };

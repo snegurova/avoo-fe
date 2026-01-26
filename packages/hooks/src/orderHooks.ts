@@ -8,7 +8,7 @@ import {
   BaseResponse,
   Service,
 } from '@avoo/axios/types/apiTypes';
-import { apiStatus } from '@avoo/hooks/types/apiTypes';
+import { ApiStatus } from '@avoo/hooks/types/apiTypes';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useMemo, useState } from 'react';
 import { queryKeys } from './queryKeys';
@@ -20,8 +20,10 @@ import {
   CreatePrivateOrdersData,
   UpdateOrderStatusData,
 } from '../schemas/validationSchemas';
+import { OrderType } from '@avoo/hooks/types/orderType';
+import { OrderStatus } from '../types/orderStatus';
 
-type useCreateOrdersFormParams = {
+type UseCreateOrderFormParams = {
   order: {
     masterId?: number;
     date?: string;
@@ -30,7 +32,7 @@ type useCreateOrdersFormParams = {
   onSuccess?: () => void;
 };
 
-type useUpdateOrderStatusParams = {
+type UseUpdateOrderStatusParams = {
   id: number;
   onSuccess?: () => void;
 };
@@ -39,25 +41,29 @@ export const orderHooks = {
   useGetOrders: (params: PrivateOrderQueryParams) => {
     const memoParams = useMemo<PrivateOrderQueryParams>(
       () => ({
-        ...params,
+        page: params.page,
+        limit: params.limit,
+        status: params.status,
+        customerId: params.customerId,
+        masterId: params.masterId,
       }),
       [params],
     );
 
     const { data: ordersData, isPending } = useQuery<BaseResponse<Order[]>, Error>({
       queryKey: ['orders', queryKeys.orders.byParams(memoParams)],
-      queryFn: () => orderApi.getOrders(memoParams),
+      queryFn: () => orderApi.getOrders(params),
     });
 
     utils.useSetPendingApi(isPending);
 
-    if (ordersData?.status === apiStatus.SUCCESS && ordersData.data) {
+    if (ordersData?.status === ApiStatus.SUCCESS && ordersData.data) {
       return ordersData.data;
     }
 
     return null;
   },
-  useCreateOrders: ({ order, onSuccess }: useCreateOrdersFormParams) => {
+  useCreateOrder: ({ order, onSuccess }: UseCreateOrderFormParams) => {
     const [selectedServices, setSelectedServices] = useState<(Service | null)[]>([null]);
     const {
       control,
@@ -78,7 +84,7 @@ export const orderHooks = {
             startTimeMinutes:
               order.startTimeMinutes ??
               new Date().getHours() * 60 + Math.ceil(new Date().getMinutes() / 15) * 15,
-            type: 'SERVICE',
+            type: OrderType.Service,
           },
         ],
         customerData: {},
@@ -111,7 +117,7 @@ export const orderHooks = {
       setSelectedServices,
     };
   },
-  useUpdateOrderStatus: ({ id, onSuccess }: useUpdateOrderStatusParams) => {
+  useUpdateOrderStatus: ({ id, onSuccess }: UseUpdateOrderStatusParams) => {
     const {
       control,
       handleSubmit,
@@ -120,7 +126,7 @@ export const orderHooks = {
       resolver: yupResolver(updateOrderStatusSchema),
       mode: 'onSubmit',
       defaultValues: {
-        status: 'PENDING',
+        status: OrderStatus.PENDING,
       },
     });
 

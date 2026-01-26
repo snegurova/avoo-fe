@@ -21,6 +21,7 @@ import CalendarViewWeek from '@/_icons/CalendarViewWeek';
 import CalendarViewMonth from '@/_icons/CalendarViewMonth';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { ElementStyleType } from '@avoo/hooks/types/elementStyleType';
+import { DATE_PICKER_FORMAT } from '@/_constants/dateFormats';
 
 const STATUSES_ITEMS = [
   { label: 'Pending', id: OrderStatus.PENDING },
@@ -325,7 +326,7 @@ export default function CalendarControls(props: Props) {
           </button>
           <DatePicker
             value={dayjs(date)}
-            format='DD MMM YYYY'
+            format={DATE_PICKER_FORMAT}
             onChange={handleChangeDate}
             sx={{ '& .MuiButtonBase-root': { opacity: 0 } }}
           />

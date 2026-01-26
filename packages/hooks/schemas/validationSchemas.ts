@@ -1,5 +1,10 @@
 import * as yup from 'yup';
 import { VALID_LANGUAGE_CODES } from '@avoo/constants';
+import { OrderStatus } from '@avoo/hooks/types/orderStatus';
+import { OrderType } from '@avoo/hooks/types/orderType';
+
+const DAY_START_MINUTES = 0;
+const DAY_END_MINUTES = 1440;
 
 export const registerSchema = yup.object({
   name: yup.string().nullable().trim(),
@@ -124,7 +129,7 @@ export const customerSchema = yup
     email: yup.string().email('Invalid email').optional(),
     notes: yup.string().optional(),
   })
-  .required('customerData is required')
+  .required('Choose a client')
   .test('customer-id-or-phone', 'Select an existing client or create a new one', (value) => {
     if (!value) return false;
 
@@ -139,14 +144,14 @@ export const ordersDataSchema = yup
   .array()
   .of(
     yup.object({
-      type: yup.string().oneOf(['SERVICE', 'COMBINATION']).required('Order type is required'),
+      type: yup.string().oneOf(Object.values(OrderType)).required('Order type is required'),
       serviceId: yup.number().when('type', {
-        is: 'SERVICE',
+        is: OrderType.Service,
         then: (schema) => schema.required('Select a service'),
         otherwise: (schema) => schema.notRequired(),
       }),
       combinationId: yup.number().when('type', {
-        is: 'COMBINATION',
+        is: OrderType.Combination,
         then: (schema) => schema.required('Select a combination'),
         otherwise: (schema) => schema.notRequired(),
       }),
@@ -165,8 +170,8 @@ export const ordersDataSchema = yup
         }),
       startTimeMinutes: yup
         .number()
-        .min(0, 'Time is not valid')
-        .max(1440, 'Time is not valid')
+        .min(DAY_START_MINUTES, 'Time is not valid')
+        .max(DAY_END_MINUTES, 'Time is not valid')
         .test('is-future-time', "Time can't be in the past", function (value) {
           const { date } = this.parent;
           if (!date || !value) return false;
@@ -192,7 +197,12 @@ export const createPrivateOrdersSchema = yup.object({
 export const updateOrderStatusSchema = yup.object({
   status: yup
     .string()
-    .oneOf(['PENDING', 'CONFIRMED', 'COMPLETED', 'CANCELED'])
+    .oneOf([
+      OrderStatus.COMPLETED,
+      OrderStatus.PENDING,
+      OrderStatus.CONFIRMED,
+      OrderStatus.CANCELED,
+    ])
     .required('Status is required'),
 });
 
