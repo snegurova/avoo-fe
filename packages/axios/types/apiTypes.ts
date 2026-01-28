@@ -1,4 +1,5 @@
 import type { components, operations } from './generated';
+import { OrderType } from '@avoo/hooks/types/orderType';
 
 export type Error = {
   field: string;
@@ -61,10 +62,22 @@ export type CreateMasterRequest = {
 export type MasterLanguages = components['schemas']['MasterEntity']['languages'];
 
 export type MasterWithRelationsEntity = components['schemas']['MasterEntity'];
+export type GetMastersQueryParams = operations['MastersController_findAll']['parameters']['query'];
 
 /** Customer */
 export type CustomerInfoResponse = components['schemas']['CustomerInfoDto'];
 export type CreateCustomerRequest = components['schemas']['CreateCustomerDto'];
+
+export type FindCustomerRequest = {
+  id: number;
+};
+export type GetCustomersResponse = {
+  items: components['schemas']['CustomerInfoDto'][];
+  pagination: components['schemas']['PaginationDto'];
+};
+export type GetCustomersQueryParams =
+  operations['CustomersController_findAll']['parameters']['query'];
+export type Customer = components['schemas']['CustomerInfoDto'];
 
 /** Schedule */
 export type GetSchedulesResponse = {
@@ -98,3 +111,16 @@ export type PrivateCalendarQueryParams = Omit<
 /** File types - re-exported from @avoo/shared for backward compatibility */
 export type { FileInput, UploadFile } from '@avoo/shared';
 
+/** Order */
+export type UpdateOrderStatusRequest = components['schemas']['UpdateOrderStatusDto'];
+export type PrivateOrderQueryParams =
+  operations['OrdersController_findAllOwn']['parameters']['query'];
+export type Order = components['schemas']['OrderEntity'];
+export type CreatePrivateOrder = Omit<components['schemas']['CreatePrivateOrderDto'], 'type'> & {
+  type: OrderType;
+};
+
+export type CreatePrivateOrdersRequest = {
+  ordersData: CreatePrivateOrder[];
+  customerData: CreateCustomerRequest | FindCustomerRequest;
+};

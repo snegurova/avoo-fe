@@ -112,7 +112,37 @@ export const timeUtils = {
     const day = date.getDate().toString().padStart(2, '0');
     return `${year}-${month}-${day}`;
   },
-
+  formatDateTimeRounded(date: Date, startTimeMinutes: number): string {
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, '0');
+    const roundedStartTimeMinutes = Math.ceil(startTimeMinutes / 15) * 15;
+    const hours = Math.floor(roundedStartTimeMinutes / 60)
+      .toString()
+      .padStart(2, '0');
+    const minutes = (roundedStartTimeMinutes % 60).toString().padStart(2, '0');
+    return `${year}-${month}-${day}T${hours}:${minutes}:00`;
+  },
+  convertDateToString(date: Date): string {
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, '0');
+    const hours = date.getHours().toString().padStart(2, '0');
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+    return `${year}-${month}-${day}T${hours}:${minutes}:00`;
+  },
+  convertDateToRoundedString(date: Date): string {
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, '0');
+    const minutesTotal = date.getHours() * 60 + date.getMinutes();
+    const roundedMinutesTotal = Math.ceil(minutesTotal / 15) * 15;
+    const hours = Math.floor(roundedMinutesTotal / 60)
+      .toString()
+      .padStart(2, '0');
+    const minutes = (roundedMinutesTotal % 60).toString().padStart(2, '0');
+    return `${year}-${month}-${day}T${hours}:${minutes}:00`;
+  },
   formatLastVisitDate(
     value: string | Date | Record<string, unknown> | null | undefined,
   ): string | null {
@@ -130,5 +160,8 @@ export const timeUtils = {
     const year = date.getFullYear();
 
     return `${day}/${month}/${year}`;
+  },
+  formatToFullDate(date: string, time: string): string {
+    return `${date}T${time}:00`;
   },
 };

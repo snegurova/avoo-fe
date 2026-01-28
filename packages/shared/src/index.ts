@@ -8,3 +8,4 @@ export * from './utils/typeGuardsHooks';
 export * from './currencyUtils';
 export * from './utils/sort';
 export * from './utils/address';
+export * from './checks';
