@@ -1,26 +1,21 @@
 import React from 'react';
-import { timeUtils } from '@avoo/shared';
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 import dayjs from 'dayjs';
 import ScheduleIcon from '@/_icons/ScheduleIcon';
-import { TIME_FORMAT } from '@/_constants/dateFormats';
+import { TIME_FORMAT, DATE_TIME_FORMAT } from '@/_constants/dateFormats';
 
 type Props = {
   date: string;
-  startTimeMinutes: number;
-  onChange: (newTimeMinutes: number) => void;
+  onChange: (newDate: string) => void;
 };
 
 export default function FormTimePicker(props: Props) {
-  const { date, startTimeMinutes, onChange } = props;
+  const { date, onChange } = props;
 
-  const onValueChange = (newTime: dayjs.Dayjs | null) => {
-    const hours = newTime ? newTime.hour() : 9;
-    const minutes = newTime ? newTime.minute() : 0;
+  const onValueChange = (newDate: dayjs.Dayjs | null) => {
+    const convertedDate = newDate ? newDate.format(DATE_TIME_FORMAT) : '';
 
-    const newTimeMinutes = hours * 60 + minutes;
-
-    onChange(newTimeMinutes);
+    onChange(convertedDate);
   };
 
   return (
@@ -34,9 +29,7 @@ export default function FormTimePicker(props: Props) {
           height: 44,
         },
       }}
-      value={dayjs(
-        timeUtils.formatToFullDate(date || '', timeUtils.getTimeFromMinutes(startTimeMinutes || 0)),
-      )}
+      value={dayjs(date)}
       views={['hours', 'minutes']}
       minutesStep={15}
       timeSteps={{ minutes: 15 }}

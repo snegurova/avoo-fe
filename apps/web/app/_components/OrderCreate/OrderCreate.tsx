@@ -10,6 +10,7 @@ import { appRoutes } from '@/_routes/routes';
 import AddCircleIcon from '@/_icons/AddCircleIcon';
 import { OrderQueryParams } from '@avoo/hooks/types/orderQueryParams';
 import { OrderType } from '@avoo/hooks/types/orderType';
+import { timeUtils } from '@avoo/shared';
 
 const SERVICES_KEY_IN_ORDER_CREATE = 'ordersData';
 const WRAPPER_HEADER_HEIGHT = '62px';
@@ -29,9 +30,6 @@ export default function OrderCreate() {
         ? Number(parsedQuery.masterId)
         : undefined,
     date: parsedQuery.date ?? undefined,
-    startTimeMinutes: parsedQuery.startTimeMinutes
-      ? Math.ceil(Number(parsedQuery.startTimeMinutes) / 15) * 15
-      : undefined,
   };
 
   useEffect(() => {
@@ -45,7 +43,6 @@ export default function OrderCreate() {
       order: {
         masterId: initialParams.masterId,
         date: initialParams.date,
-        startTimeMinutes: initialParams.startTimeMinutes,
       },
       onSuccess: () => {
         router.replace(appRoutes.Calendar);
@@ -61,12 +58,21 @@ export default function OrderCreate() {
     const prevOrder = fields[fields.length - 1];
     const prevService = selectedServices[fields.length - 1];
 
+    const nextDate = new Date(prevOrder.date);
+
+    if (prevService) {
+      const hours = nextDate.getHours();
+      const minutes = nextDate.getMinutes();
+      const totalMinutes = hours * 60 + minutes + prevService.durationMinutes;
+
+      nextDate.setHours(Math.floor(totalMinutes / 60));
+      nextDate.setMinutes(totalMinutes % 60);
+    }
+
     append({
       type: OrderType.Service,
-      masterId: prevOrder.masterId,
-      date: prevOrder.date,
-      startTimeMinutes:
-        prevOrder.startTimeMinutes + (prevService ? prevService.durationMinutes : 0),
+      masterId: 0,
+      date: timeUtils.convertDateToString(nextDate),
     });
 
     setSelectedServices((prev) => [...prev, null]);

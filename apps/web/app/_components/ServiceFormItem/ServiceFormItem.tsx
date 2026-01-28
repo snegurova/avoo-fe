@@ -20,7 +20,6 @@ type Props = {
   initialParams: {
     masterId?: number;
     date?: string;
-    startTimeMinutes?: number;
   };
   selectedService: Service | null;
   setSelectedService: (service: Service | null) => void;
@@ -98,16 +97,6 @@ export default function ServiceFormItem(props: Props) {
     onChange(newOrders);
   };
 
-  const onTimeChange = (newTimeMinutes: number) => {
-    const newOrders = [...value];
-
-    newOrders[index] = {
-      ...newOrders[index],
-      startTimeMinutes: newTimeMinutes,
-    };
-    onChange(newOrders);
-  };
-
   const onNotesChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const newOrders = [...value];
     newOrders[index] = { ...newOrders[index], notes: e.target.value };
@@ -167,16 +156,10 @@ export default function ServiceFormItem(props: Props) {
             <label className='block mb-2 font-medium' htmlFor={`time-${index}`}>
               Time
             </label>
-            <FormTimePicker
-              date={order.date}
-              startTimeMinutes={order.startTimeMinutes}
-              onChange={onTimeChange}
-            />
+            <FormTimePicker date={order.date} onChange={onDateChange} />
           </div>
-          {errors?.startTimeMinutes?.message && (
-            <div className='mt-1 text-sm text-red-500 col-span-3'>
-              {errors?.startTimeMinutes?.message}
-            </div>
+          {errors?.date?.message && (
+            <div className='mt-1 text-sm text-red-500 col-span-3'>{errors?.date?.message}</div>
           )}
         </div>
         <div className=''>

@@ -3,9 +3,6 @@ import { VALID_LANGUAGE_CODES } from '@avoo/constants';
 import { OrderStatus } from '@avoo/hooks/types/orderStatus';
 import { OrderType } from '@avoo/hooks/types/orderType';
 
-const DAY_START_MINUTES = 0;
-const DAY_END_MINUTES = 1440;
-
 export const registerSchema = yup.object({
   name: yup.string().nullable().trim(),
   email: yup.string().required('Email is required').email('Please enter a valid email').trim(),
@@ -158,31 +155,14 @@ export const ordersDataSchema = yup
       masterId: yup.number().required('Select a master'),
       date: yup
         .string()
-        .required('Select a date')
-        .test('is-future-date', "Date can't be in the past", function (value) {
+        .required('Select a date and time')
+        .test('is-future-date', "Date and time can't be in the past", function (value) {
           if (!value) return false;
           const inputDate = new Date(value);
           const now = new Date();
 
-          inputDate.setHours(0, 0, 0, 0);
-          now.setHours(0, 0, 0, 0);
           return inputDate >= now;
         }),
-      startTimeMinutes: yup
-        .number()
-        .min(DAY_START_MINUTES, 'Time is not valid')
-        .max(DAY_END_MINUTES, 'Time is not valid')
-        .test('is-future-time', "Time can't be in the past", function (value) {
-          const { date } = this.parent;
-          if (!date || !value) return false;
-          const inputDateTime = new Date(date);
-          const now = new Date();
-          const inputHours = Math.floor(value / 60);
-          const inputMinutes = value % 60;
-          inputDateTime.setHours(inputHours, inputMinutes, 0, 0);
-          return inputDateTime >= now;
-        })
-        .required('Select a time'),
       notes: yup.string().optional(),
     }),
   )

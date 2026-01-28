@@ -2,7 +2,7 @@ import React from 'react';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs from 'dayjs';
 import CaledarIcon from '@/_icons/CalendarIcon';
-import { DATE_PICKER_FORMAT } from '@/_constants/dateFormats';
+import { DATE_PICKER_FORMAT, DATE_TIME_FORMAT } from '@/_constants/dateFormats';
 
 type Props = {
   date?: string;
@@ -13,7 +13,7 @@ export default function FormDatePicker(props: Props) {
   const { date, onChange } = props;
 
   const onValueChange = (newDate: dayjs.Dayjs | null) => {
-    const convertedDate = newDate ? newDate.format('YYYY-MM-DD') : '';
+    const convertedDate = newDate ? newDate.format(DATE_TIME_FORMAT) : '';
     onChange(convertedDate);
   };
 

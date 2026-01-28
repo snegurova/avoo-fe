@@ -22,12 +22,12 @@ import {
 } from '../schemas/validationSchemas';
 import { OrderType } from '@avoo/hooks/types/orderType';
 import { OrderStatus } from '../types/orderStatus';
+import { timeUtils } from '@avoo/shared';
 
 type UseCreateOrderFormParams = {
   order: {
     masterId?: number;
     date?: string;
-    startTimeMinutes?: number;
   };
   onSuccess?: () => void;
 };
@@ -80,10 +80,7 @@ export const orderHooks = {
         ordersData: [
           {
             masterId: order.masterId ?? undefined,
-            date: order.date ?? new Date().toISOString().split('T')[0],
-            startTimeMinutes:
-              order.startTimeMinutes ??
-              new Date().getHours() * 60 + Math.ceil(new Date().getMinutes() / 15) * 15,
+            date: order.date ?? timeUtils.convertDateToRoundedString(new Date()),
             type: OrderType.Service,
           },
         ],

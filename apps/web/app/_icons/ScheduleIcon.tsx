@@ -3,8 +3,7 @@ import React from 'react';
 export default function ScheduleIcon(
   props: React.SVGProps<SVGSVGElement> & { ownerState?: unknown },
 ) {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { ownerState, ...restProps } = props;
+  const { ownerState: _ownerState, ...restProps } = props;
   return (
     <svg
       xmlns='http://www.w3.org/2000/svg'

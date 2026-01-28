@@ -131,7 +131,7 @@ export default function CalendarControls(props: Props) {
         break;
       }
       case CalendarViewType.MONTH: {
-        const prevMonth = new Date(date.getTime() - 7 * 24 * 60 * 60 * 1000);
+        const prevMonth = new Date(date.getTime() + 7 * 24 * 60 * 60 * 1000);
         prevMonth.setMonth(prevMonth.getMonth() - 1);
         const range = timeUtils.getMonthRange(prevMonth);
         setDate(range.start);

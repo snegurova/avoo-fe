@@ -5,7 +5,7 @@ import { SearchInput } from '@/_components/SearchInput/SearchInput';
 import { ClickAwayListener } from '@mui/material';
 import AddIcon from '@/_icons/AddIcon';
 
-type Props<R extends { id?: number }, T extends { id: number }> = {
+type Props<R, T extends { id: number }> = {
   label: string;
   value: R | { id: number } | null;
   searchMode: boolean;
@@ -20,9 +20,7 @@ type Props<R extends { id?: number }, T extends { id: number }> = {
   error?: string;
 };
 
-export default function SearchField<R extends { id?: number }, T extends { id: number }>(
-  props: Props<R, T>,
-) {
+export default function SearchField<R, T extends { id: number }>(props: Props<R, T>) {
   const {
     label,
     value,

@@ -126,7 +126,7 @@ export default function CalendarColumn(props: Props) {
 
     router.push(
       appRoutes.OrderCreate +
-        `?masterId=${master.id}&date=${timeUtils.formatDate(date)}&startTimeMinutes=${hours * 60 + mins}`,
+        `?masterId=${master.id}&date=${timeUtils.formatDateTimeRounded(date, hours * 60 + mins)}`,
     );
   };
 

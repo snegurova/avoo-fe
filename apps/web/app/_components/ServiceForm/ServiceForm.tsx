@@ -9,7 +9,6 @@ type Props = {
   initialParams: {
     masterId?: number;
     date?: string;
-    startTimeMinutes?: number;
   };
   selectedServices: (Service | null)[];
   setSelectedServices: (
