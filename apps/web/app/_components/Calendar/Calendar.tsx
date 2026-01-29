@@ -136,7 +136,7 @@ export default function Calendar() {
   }, [type, filteredMasters]);
 
   return (
-    <div className='flex h-[calc(100%-54px)] w-full'>
+    <div className='flex h-[calc(100%-62px)] w-full'>
       <div className='w-full flex flex-col'>
         <CalendarControls
           date={date}

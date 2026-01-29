@@ -8,8 +8,9 @@ export default function CalendarPage() {
   return (
     <AppWrapper>
       <div className='p-4 flex justify-between items-center'>
-        <Typography component='h1'>Calendar</Typography>
-        <div className=''></div>
+        <Typography component='h1' variant='h1'>
+          Calendar
+        </Typography>
       </div>
       <Calendar />
     </AppWrapper>

@@ -1,14 +1,14 @@
 import { utils } from '@avoo/hooks/utils/utils';
 import { calendarApi } from '@avoo/axios';
-import { PrivateCalendarQueryParams } from '@avoo/axios/types/apiTypes';
 
 import {
   BaseResponse,
   GetCalendarResponse,
   GetCalendarByDatesResponse,
   PrivateCalendarByDatesQueryParams,
+  PrivateCalendarQueryParams,
 } from '@avoo/axios/types/apiTypes';
-import { apiStatus } from '@avoo/hooks/types/apiTypes';
+import { ApiStatus } from '@avoo/hooks/types/apiTypes';
 import { useQuery } from '@tanstack/react-query';
 import { useMemo } from 'react';
 import { queryKeys } from './queryKeys';
@@ -43,7 +43,7 @@ export const calendarHooks = {
 
     utils.useSetPendingApi(isPending);
 
-    if (calendarData?.status === apiStatus.SUCCESS && calendarData.data) {
+    if (calendarData?.status === ApiStatus.SUCCESS && calendarData.data) {
       return calendarData.data;
     }
 
@@ -81,7 +81,7 @@ export const calendarHooks = {
 
     utils.useSetPendingApi(isPending);
 
-    if (calendarData?.status === apiStatus.SUCCESS && calendarData.data) {
+    if (calendarData?.status === ApiStatus.SUCCESS && calendarData.data) {
       return calendarData.data;
     }
 

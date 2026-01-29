@@ -4,29 +4,35 @@ import {
   BaseResponse,
   CustomerInfoResponse,
   CreateCustomerRequest,
+  GetCustomersQueryParams,
+  GetCustomersResponse,
 } from '@avoo/axios/types/apiTypes';
 import { queryKeys } from './queryKeys';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useMemo } from 'react';
-import { apiStatus } from '@avoo/hooks/types/apiTypes';
+import { ApiStatus } from '@avoo/hooks/types/apiTypes';
 
 export const customerHooks = {
-  useGetCustomers: () => {
-    const { data: customersData, isPending } = useQuery<
-      BaseResponse<CustomerInfoResponse[]>,
-      Error
-    >({
-      queryKey: queryKeys.customers.all,
-      queryFn: customerApi.getCustomers,
+  useGetCustomers: (params: GetCustomersQueryParams) => {
+    const memoParams = useMemo<GetCustomersQueryParams>(
+      () => ({
+        ...params,
+      }),
+      [params],
+    );
+
+    const { data: customersData, isPending } = useQuery<BaseResponse<GetCustomersResponse>, Error>({
+      queryKey: ['customers', queryKeys.customers.byParams(memoParams)],
+      queryFn: () => customerApi.getCustomers(memoParams),
     });
 
     utils.useSetPendingApi(isPending);
 
-    if ((customersData?.status ?? '').toLowerCase() === apiStatus.SUCCESS && customersData.data) {
+    if ((customersData?.status ?? '').toLowerCase() === ApiStatus.SUCCESS && customersData.data) {
       return customersData.data;
     }
 
-    return null;
+    return { pagination: null, items: [] };
   },
 
   useGetCustomerById: (id?: number | null) => {
@@ -48,19 +54,19 @@ export const customerHooks = {
           const found = maybeList.find((c) => c.id === id);
           if (found) {
             const result: BaseResponse<CustomerInfoResponse> = {
-              status: apiStatus.SUCCESS,
+              status: ApiStatus.SUCCESS,
               data: found,
             };
             return result;
           }
         }
 
-        const listResp = await customerApi.getCustomers().catch(() => null);
+        const listResp = await customerApi.getCustomers({}).catch(() => null);
         if (listResp && Array.isArray(listResp.data)) {
           const found = listResp.data.find((customer: { id: number }) => customer.id === id);
           if (found) {
             const result: BaseResponse<CustomerInfoResponse> = {
-              status: apiStatus.SUCCESS,
+              status: ApiStatus.SUCCESS,
               data: found,
             };
             return result;
@@ -74,7 +80,7 @@ export const customerHooks = {
 
     utils.useSetPendingApi(isPending);
 
-    if ((customerData?.status ?? '').toLowerCase() === apiStatus.SUCCESS && customerData.data) {
+    if ((customerData?.status ?? '').toLowerCase() === ApiStatus.SUCCESS && customerData.data) {
       return customerData.data;
     }
 

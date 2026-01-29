@@ -2,7 +2,7 @@ import { utils } from '@avoo/hooks/utils/utils';
 import { GetCategoriesResponse, GetPrivateCategoriesResponse } from '@avoo/axios/types/apiTypes';
 
 import { BaseResponse } from '@avoo/axios/types/apiTypes';
-import { apiStatus } from '@avoo/hooks/types/apiTypes';
+import { ApiStatus } from '@avoo/hooks/types/apiTypes';
 import { useQuery } from '@tanstack/react-query';
 import { categoriesApi } from '@avoo/axios';
 import { queryKeys } from './queryKeys';
@@ -19,7 +19,7 @@ export const categoriesHooks = {
 
     utils.useSetPendingApi(isPending);
 
-    if (categoriesData?.status === apiStatus.SUCCESS && categoriesData.data) {
+    if (categoriesData?.status === ApiStatus.SUCCESS && categoriesData.data) {
       return categoriesData.data;
     }
 
@@ -38,7 +38,7 @@ export const categoriesHooks = {
 
     utils.useSetPendingApi(isPending);
 
-    if (categoriesData?.status === apiStatus.SUCCESS && categoriesData.data) {
+    if (categoriesData?.status === ApiStatus.SUCCESS && categoriesData.data) {
       return categoriesData.data;
     }
 

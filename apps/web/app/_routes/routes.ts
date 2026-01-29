@@ -19,6 +19,7 @@ export enum appRoutes {
   Profile = '/app/profile',
   Notifications = '/app/notifications',
   CreateService = '/app/services/create',
+  OrderCreate = '/app/orders/create',
 }
 export enum clientRoutes {
   Home = '/',

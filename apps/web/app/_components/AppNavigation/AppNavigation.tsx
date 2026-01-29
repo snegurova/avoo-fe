@@ -84,8 +84,8 @@ export default function AppNavigation({ menuOpen, setMenuOpen }: Props) {
     },
   ];
   const calendarNav = tv({
-    base: 'flex items-center gap-3.5 px-8 py-3 hover:bg-primary-500 focus:bg-primary-500 transition-colors',
-    variants: { active: { true: 'bg-primary-100' } },
+    base: 'flex items-center gap-3.5 hover:bg-primary-100 focus:bg-primary-100 transition-colors',
+    variants: { active: { true: 'bg-primary-50' } },
   });
 
   const handleCalendarToggle = useCallback((e: React.MouseEvent) => {
@@ -129,7 +129,7 @@ export default function AppNavigation({ menuOpen, setMenuOpen }: Props) {
                         <div className={`${cls} relative flex items-center justify-between`}>
                           <Link
                             href={item.href}
-                            className='flex items-center gap-3.5'
+                            className='flex items-center grow px-8 py-3 gap-3.5'
                             onClick={handleCloseMenu}
                           >
                             {item.icon}
@@ -138,7 +138,7 @@ export default function AppNavigation({ menuOpen, setMenuOpen }: Props) {
 
                           <button
                             type='button'
-                            className='absolute right-3 top-0 bottom-0 px-3 flex items-center hover:bg-muted cursor-pointer'
+                            className='absolute right-0 top-0 bottom-0 pl-3 pr-6 flex items-center hover:bg-muted cursor-pointer'
                             onClick={handleCalendarToggle}
                             aria-expanded={calendarOpen}
                             aria-haspopup='true'
@@ -152,7 +152,7 @@ export default function AppNavigation({ menuOpen, setMenuOpen }: Props) {
                             <li>
                               <button
                                 type='button'
-                                className='w-full text-left pl-20.5 pr-6 py-2 hover:bg-primary-500 focus:bg-primary-500 transition-colors cursor-pointer'
+                                className='w-full text-left pl-20.5 pr-6 py-3 hover:bg-primary-100 focus:bg-primary-100 transition-colors cursor-pointer'
                                 onClick={handleOpenTimeOff}
                               >
                                 Time off

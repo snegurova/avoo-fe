@@ -357,6 +357,7 @@ export interface paths {
         trace?: never;
     };
     "/public/services": {
+    "/public/services": {
         parameters: {
             query?: never;
             header?: never;
@@ -364,7 +365,9 @@ export interface paths {
             cookie?: never;
         };
         get: operations["ServicesPublicController_findAll"];
+        get: operations["ServicesPublicController_findAll"];
         put?: never;
+        post?: never;
         post?: never;
         delete?: never;
         options?: never;
@@ -373,6 +376,7 @@ export interface paths {
         trace?: never;
     };
     "/public/services/combination": {
+    "/public/services/combination": {
         parameters: {
             query?: never;
             header?: never;
@@ -380,8 +384,10 @@ export interface paths {
             cookie?: never;
         };
         get: operations["ServicesPublicController_findCombination"];
+        get: operations["ServicesPublicController_findCombination"];
         put?: never;
         post?: never;
+        delete?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -389,12 +395,14 @@ export interface paths {
         trace?: never;
     };
     "/public/services/{id}": {
+    "/public/services/{id}": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
+        get: operations["ServicesPublicController_findById"];
         get: operations["ServicesPublicController_findById"];
         put?: never;
         post?: never;
@@ -405,12 +413,14 @@ export interface paths {
         trace?: never;
     };
     "/media": {
+    "/media": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
+        get: operations["MediasController_getAll"];
         get: operations["MediasController_getAll"];
         put?: never;
         post: operations["MediasController_create"];
@@ -436,6 +446,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/media/media/{id}": {
     "/media/media/{id}": {
         parameters: {
             query?: never;
@@ -469,12 +480,14 @@ export interface paths {
         trace?: never;
     };
     "/public/media/{id}": {
+    "/public/media/{id}": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
+        get: operations["MediasPublicController_findByQuery"];
         get: operations["MediasPublicController_findByQuery"];
         put?: never;
         post?: never;
@@ -916,6 +929,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/posts": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["PostsController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -1154,6 +1183,15 @@ export interface components {
              *     ]
              */
             mediaIds: string[];
+            /**
+             * @description Media IDs
+             * @example [
+             *       1,
+             *       2,
+             *       3
+             *     ]
+             */
+            mediaIds: string[];
         };
         ShortMasterInfoDto: {
             id: number;
@@ -1189,12 +1227,8 @@ export interface components {
             updatedAt: string;
         };
         UploadCertificateFormDto: {
-            /** @description Master ID (optional). If omitted certificate will be for whole salon */
-            masterId?: number;
             /** @description Certificate title */
             title: string;
-            /** @description Certificate description */
-            description?: string;
             /**
              * @description Issue date (YYYY-MM-DD)
              * @example 2026-01-01
@@ -1202,21 +1236,25 @@ export interface components {
             issueDate: string;
             /** Format: binary */
             file: string;
-        };
-        UploadCertificateDto: {
             /** @description Master ID (optional). If omitted certificate will be for whole salon */
             masterId?: number;
-            /** @description Certificate title */
-            title: string;
             /** @description Certificate description */
             description?: string;
+        };
+        UploadCertificateDto: {
+            /** @description Certificate title */
+            title: string;
             /**
              * @description Issue date (YYYY-MM-DD)
              * @example 2026-01-01
              */
             issueDate: string;
-            files: string[];
-            folder: string;
+            /** @description Certificate description */
+            description?: string;
+            /** @description Master ID (optional). If omitted certificate will be for whole salon */
+            masterId?: number;
+            /** Format: binary */
+            file: string;
         };
         QueryServicesDto: {
             /**
@@ -1275,6 +1313,15 @@ export interface components {
              * @example 60
              */
             durationMinutes: number;
+            /**
+             * @description Media IDs
+             * @example [
+             *       1,
+             *       2,
+             *       3
+             *     ]
+             */
+            mediaIds: string[];
             /**
              * @description Media IDs
              * @example [
@@ -1560,6 +1607,9 @@ export interface components {
              * Format: date-time
              * @description Date of the service in UTC
              * @example 2026-03-19T07:00:00Z
+             * Format: date-time
+             * @description Date of the service in UTC
+             * @example 2026-03-19T07:00:00Z
              */
             date: string;
         };
@@ -1637,6 +1687,8 @@ export interface components {
             serviceId: Record<string, never>;
             /** @example 1 */
             combinationId: Record<string, never>;
+            /** @example false */
+            isOutOfSchedule: boolean;
             /** @example false */
             isOutOfSchedule: boolean;
         };
@@ -1777,6 +1829,11 @@ export interface components {
              * @example true
              */
             orderIsOutOfSchedule?: boolean;
+            /**
+             * @description Include orders in calendar
+             * @example true
+             */
+            orderIsOutOfSchedule?: boolean;
         };
         CalendarExceptionEntity: {
             id: number;
@@ -1867,6 +1924,8 @@ export interface components {
             serviceId: Record<string, never>;
             /** @example 1 */
             combinationId: Record<string, never>;
+            /** @example false */
+            isOutOfSchedule: boolean;
             /** @example false */
             isOutOfSchedule: boolean;
         };
@@ -2297,6 +2356,30 @@ export interface components {
              */
             notes?: string;
             isNotificationEnable?: boolean;
+        };
+        PostEntity: {
+            id: number;
+            description: string | null;
+            user: components["schemas"]["UserEntity"];
+            master: components["schemas"]["MasterEntity"];
+            service: components["schemas"]["ServiceEntity"];
+        };
+        CreatePostDto: {
+            /**
+             * @description Description of the post
+             * @example This is a sample post description.
+             */
+            description?: string;
+            /**
+             * @description ID of the master associated with the post
+             * @example 1
+             */
+            masterId: number;
+            /**
+             * @description ID of the service associated with the post
+             * @example 1
+             */
+            serviceId: number;
         };
         PostEntity: {
             id: number;
@@ -3358,6 +3441,7 @@ export interface operations {
         };
     };
     ServicesPublicController_findAll: {
+    ServicesPublicController_findAll: {
         parameters: {
             query?: {
                 /** @description Page number */
@@ -3372,13 +3456,23 @@ export interface operations {
                 maxPrice?: number;
                 /** @description Search keyword (in name, description, user name, or master name) */
                 search?: string;
+                /** @description Filter by category ID */
+                categoryId?: number;
+                /** @description Minimum price */
+                minPrice?: number;
+                /** @description Maximum price */
+                maxPrice?: number;
+                /** @description Search keyword (in name, description, user name, or master name) */
+                search?: string;
             };
             header?: never;
+            path?: never;
             path?: never;
             cookie?: never;
         };
         requestBody?: never;
         responses: {
+            /** @description List of all services */
             /** @description List of all services */
             200: {
                 headers: {
@@ -3387,6 +3481,7 @@ export interface operations {
                 content: {
                     "application/json": components["schemas"]["SuccessResponseDto"] & {
                         data?: {
+                            items?: components["schemas"]["ServiceEntity"][];
                             items?: components["schemas"]["ServiceEntity"][];
                             pagination?: components["schemas"]["PaginationDto"];
                         };
@@ -3405,16 +3500,23 @@ export interface operations {
         };
     };
     ServicesPublicController_findCombination: {
+    ServicesPublicController_findCombination: {
         parameters: {
+            query: {
+                services: string;
+            };
             query: {
                 services: string;
             };
             header?: never;
             path?: never;
+            path?: never;
             cookie?: never;
         };
         requestBody?: never;
+        requestBody?: never;
         responses: {
+            /** @description Combination found successfully */
             /** @description Combination found successfully */
             200: {
                 headers: {
@@ -3422,6 +3524,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["SuccessResponseDto"] & {
+                        data?: components["schemas"]["CombinationEntity"];
                         data?: components["schemas"]["CombinationEntity"];
                     };
                 };
@@ -3438,10 +3541,12 @@ export interface operations {
         };
     };
     ServicesPublicController_findById: {
+    ServicesPublicController_findById: {
         parameters: {
             query?: never;
             header?: never;
             path: {
+                id: string;
                 id: string;
             };
             cookie?: never;
@@ -3449,12 +3554,14 @@ export interface operations {
         requestBody?: never;
         responses: {
             /** @description Service found successfully */
+            /** @description Service found successfully */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
                     "application/json": components["schemas"]["SuccessResponseDto"] & {
+                        data?: components["schemas"]["ServiceEntity"];
                         data?: components["schemas"]["ServiceEntity"];
                     };
                 };
@@ -3471,7 +3578,15 @@ export interface operations {
         };
     };
     MediasController_getAll: {
+    MediasController_getAll: {
         parameters: {
+            query: {
+                type: "USER" | "POST" | "SERVICE";
+                typeEntityId: number;
+                /** @description Page number */
+                page?: number;
+                /** @description Items per page */
+                limit?: number;
             query: {
                 type: "USER" | "POST" | "SERVICE";
                 typeEntityId: number;
@@ -3482,10 +3597,13 @@ export interface operations {
             };
             header?: never;
             path?: never;
+            header?: never;
+            path?: never;
             cookie?: never;
         };
         requestBody?: never;
         responses: {
+            /** @description Get all media for type */
             /** @description Get all media for type */
             200: {
                 headers: {
@@ -3493,6 +3611,10 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["SuccessResponseDto"] & {
+                        data?: {
+                            items?: components["schemas"]["MediaEntity"][];
+                            pagination?: components["schemas"]["PaginationDto"];
+                        };
                         data?: {
                             items?: components["schemas"]["MediaEntity"][];
                             pagination?: components["schemas"]["PaginationDto"];
@@ -3525,12 +3647,14 @@ export interface operations {
         };
         responses: {
             /** @description Upload media */
+            /** @description Upload media */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
                     "application/json": components["schemas"]["SuccessResponseDto"] & {
+                        data?: components["schemas"]["MediaEntity"];
                         data?: components["schemas"]["MediaEntity"];
                     };
                 };
@@ -3547,12 +3671,18 @@ export interface operations {
         };
     };
     MediasController_findByQuery: {
+    MediasController_findByQuery: {
         parameters: {
             query: {
                 type: "USER" | "POST" | "SERVICE";
                 typeEntityId: number;
+                type: "USER" | "POST" | "SERVICE";
+                typeEntityId: number;
             };
             header?: never;
+            path: {
+                id: number;
+            };
             path: {
                 id: number;
             };
@@ -3561,12 +3691,14 @@ export interface operations {
         requestBody?: never;
         responses: {
             /** @description Get media by type and entityId */
+            /** @description Get media by type and entityId */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
                     "application/json": components["schemas"]["SuccessResponseDto"] & {
+                        data?: components["schemas"]["MediaEntity"];
                         data?: components["schemas"]["MediaEntity"];
                     };
                 };
@@ -3588,8 +3720,13 @@ export interface operations {
                 type: "USER" | "POST" | "SERVICE";
                 typeEntityId: number;
             };
+            query: {
+                type: "USER" | "POST" | "SERVICE";
+                typeEntityId: number;
+            };
             header?: never;
             path: {
+                id: number;
                 id: number;
             };
             cookie?: never;
@@ -3597,12 +3734,14 @@ export interface operations {
         requestBody?: never;
         responses: {
             /** @description Delete media */
+            /** @description Delete media */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
                     "application/json": components["schemas"]["SuccessResponseDto"] & {
+                        data?: components["schemas"]["MediaEntity"];
                         data?: components["schemas"]["MediaEntity"];
                     };
                 };
@@ -3619,7 +3758,12 @@ export interface operations {
         };
     };
     MediasPublicController_getAll: {
+    MediasPublicController_getAll: {
         parameters: {
+            query: {
+                type: "USER" | "POST" | "SERVICE";
+                typeEntityId: number;
+                createdBy: number;
             query: {
                 type: "USER" | "POST" | "SERVICE";
                 typeEntityId: number;
@@ -3631,10 +3775,12 @@ export interface operations {
             };
             header?: never;
             path?: never;
+            path?: never;
             cookie?: never;
         };
         requestBody?: never;
         responses: {
+            /** @description Get all media for type */
             /** @description Get all media for type */
             200: {
                 headers: {
@@ -3661,7 +3807,12 @@ export interface operations {
         };
     };
     MediasPublicController_findByQuery: {
+    MediasPublicController_findByQuery: {
         parameters: {
+            query: {
+                type: "USER" | "POST" | "SERVICE";
+                typeEntityId: number;
+            };
             query: {
                 type: "USER" | "POST" | "SERVICE";
                 typeEntityId: number;
@@ -3674,6 +3825,7 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
+            /** @description Get media by type and entityId */
             /** @description Get media by type and entityId */
             200: {
                 headers: {
@@ -3930,7 +4082,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["SuccessResponseDto"] & {
-                        data?: components["schemas"]["UpdateMasterAvatarResponseDto"];
+                        data?: components["schemas"]["MasterEntity"];
                     };
                 };
             };
@@ -4138,6 +4290,7 @@ export interface operations {
                 /** @description Filter by start date (ISO format) */
                 dateFrom?: string;
                 /** @description Filter by start order date (ISO format) */
+                /** @description Filter by start order date (ISO format) */
                 dateTo?: string;
             };
             header?: never;
@@ -4309,6 +4462,8 @@ export interface operations {
                 orderStatus?: components["schemas"]["OrderStatus"][];
                 /** @description Include orders in calendar */
                 orderIsOutOfSchedule?: boolean;
+                /** @description Include orders in calendar */
+                orderIsOutOfSchedule?: boolean;
             };
             header?: never;
             path?: never;
@@ -4464,6 +4619,8 @@ export interface operations {
                 limitEvents?: number;
                 /** @description Filter by order status */
                 orderStatus?: components["schemas"]["OrderStatus"][];
+                /** @description Include orders in calendar */
+                orderIsOutOfSchedule?: boolean;
                 /** @description Include orders in calendar */
                 orderIsOutOfSchedule?: boolean;
             };
@@ -5055,6 +5212,41 @@ export interface operations {
                 content: {
                     "application/json": components["schemas"]["SuccessResponseDto"] & {
                         data?: components["schemas"]["CustomerInfoDto"];
+                    };
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    PostsController_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreatePostDto"];
+            };
+        };
+        responses: {
+            /** @description Post was created successfully */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SuccessResponseDto"] & {
+                        data?: components["schemas"]["PostEntity"];
                     };
                 };
             };
