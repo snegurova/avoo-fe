@@ -186,6 +186,17 @@ export const updateOrderStatusSchema = yup.object({
     .required('Status is required'),
 });
 
+export const createServiceSchema = yup.object({
+  name: yup.string().min(3).required(),
+  description: yup.string().min(5).required(),
+  price: yup.number().min(1).required(),
+  categoryId: yup.number().required(),
+  durationMinutes: yup.number().min(1).required(),
+  isActive: yup.boolean().required(),
+  mediaIds: yup.array().of(yup.number().required()).required(),
+  masterIds: yup.array().of(yup.number()).required().default([]),
+});
+
 export type RegisterFormData = yup.InferType<typeof registerSchema>;
 export type LoginFormData = yup.InferType<typeof loginSchema>;
 export type ForgotPasswordFormData = yup.InferType<typeof forgotPasswordSchema>;
@@ -195,3 +206,4 @@ export type CreateMasterFormData = yup.InferType<typeof createMasterSchema>;
 export type CreatePrivateOrdersData = yup.InferType<typeof createPrivateOrdersSchema>;
 export type UpdateOrderStatusData = yup.InferType<typeof updateOrderStatusSchema>;
 export type OrdersData = yup.InferType<typeof ordersDataSchema>;
+export type CreateServiceFormData = yup.InferType<typeof createServiceSchema>;

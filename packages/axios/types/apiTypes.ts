@@ -27,10 +27,6 @@ export type GetPrivateCategoriesResponse =
   components['schemas']['ServicesGroupByCategoriesResponseDto'];
 export type CreateServiceRequest = components['schemas']['CreateServiceDto'];
 export type CreateServiceResponse = components['schemas']['ServiceEntity'];
-export type CreateServiceFormValues = Omit<CreateServiceRequest, 'mediaIds' | 'masterIds'> & {
-  mediaIds: number[];
-  masterIds: number[];
-};
 
 /** Auth */
 export type LoginRequest = components['schemas']['LoginRequestDto'];

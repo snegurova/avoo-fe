@@ -11,9 +11,10 @@ import {
 import React, { useMemo } from 'react';
 import { Control, Controller, UseFormSetValue, useWatch } from 'react-hook-form';
 import { FieldErrors } from 'react-hook-form';
-import { Category, CreateServiceFormValues } from '@avoo/axios/types/apiTypes';
+import { Category } from '@avoo/axios/types/apiTypes';
 import { MasterWithRelationsEntityResponse } from '@avoo/axios/types/apiTypes';
 import { timeUtils } from '@avoo/shared';
+import { CreateServiceFormData } from '@avoo/hooks';
 import MasterSelect from '@/_components/MasterSelect/MasterSelect';
 import CategorySelect from '@/_components/CategorySelect/CategorySelect';
 import MasterSelectCard from '@/_components/MasterSelectCard/MasterSelectCard';
@@ -22,32 +23,39 @@ type Props = {
   id: string;
   categories: Category[];
   masters: MasterWithRelationsEntityResponse[];
-  control: Control<CreateServiceFormValues>;
-  errors: FieldErrors<CreateServiceFormValues>;
+  control: Control<CreateServiceFormData>;
+  errors: FieldErrors<CreateServiceFormData>;
   children: React.ReactNode;
-  setValue: UseFormSetValue<CreateServiceFormValues>;
+  setValue: UseFormSetValue<CreateServiceFormData>;
   onSubmit?: () => void;
 };
 
 export default function CreateServiceForm(props: Props) {
   const { id, children, control, errors, categories, masters, onSubmit, setValue } = props;
+  const masterIds = useWatch<CreateServiceFormData>({
+    control,
+    name: 'masterIds',
+    defaultValue: [],
+  }) as number[]; // say TS that it's an array of numbers, because useWatch returns all types
 
-  const masterIds = useWatch({ control, name: 'masterIds' }) || [];
   const mastersById = useMemo(() => {
     return new Map(masters.map((m) => [m.id, m]));
   }, [masters]);
 
   const selectedMasters = useMemo(() => {
     return masterIds
-      .map((id) => mastersById.get(id))
-      .filter((m): m is MasterWithRelationsEntityResponse => Boolean(m));
+      ?.map((id) => mastersById.get(id))
+      .filter((m): m is MasterWithRelationsEntityResponse => m != null);
   }, [masterIds, mastersById]);
 
   const handleRemoveMaster = (id: number) => {
     setValue(
       'masterIds',
-      masterIds.filter((mid) => mid !== id),
-      { shouldDirty: true, shouldValidate: true },
+      masterIds?.filter((mid) => mid !== id),
+      {
+        shouldDirty: true,
+        shouldValidate: true,
+      },
     );
   };
 
@@ -67,9 +75,9 @@ export default function CreateServiceForm(props: Props) {
                   <TextField
                     {...field}
                     required
-                    label='Title'
                     fullWidth
                     value={field.value ?? ''}
+                    label='Title'
                   />
                 )}
               />
@@ -135,15 +143,28 @@ export default function CreateServiceForm(props: Props) {
                   <TextField
                     {...field}
                     label='Description'
+                    required
                     multiline
-                    rows={4}
-                    value={field.value ?? ''}
+                    rows={3}
+                    placeholder='Short description for the service'
+                    sx={{
+                      '& .MuiOutlinedInput-root': {
+                        height: '90px',
+                        alignItems: 'stretch',
+                      },
+
+                      '& .MuiOutlinedInput-inputMultiline': {
+                        height: '100%',
+                        boxSizing: 'border-box',
+                      },
+                    }}
                   />
                 )}
               />
               {errors.description?.message && (
                 <FormHelperText>{errors.description?.message}</FormHelperText>
               )}
+              <span className='text-sm text-gray-500'>Information will display on platform</span>
             </FormControl>
           </div>
         </div>
@@ -158,7 +179,7 @@ export default function CreateServiceForm(props: Props) {
           />
         </div>
         <ul id='masters-list' className='flex gap-4 mt-6'>
-          {selectedMasters.map((master) => (
+          {selectedMasters?.map((master) => (
             <li key={master.id}>
               <MasterSelectCard
                 id={master.id}
@@ -180,9 +201,17 @@ export default function CreateServiceForm(props: Props) {
       <div className='mt-8 flex items-center justify-between'>
         <Typography variant='h5'>Available for online booking</Typography>
         <Controller
-          name='description'
+          name='isActive'
           control={control}
-          render={({ field }) => <Switch {...field} defaultChecked />}
+          render={({ field }) => (
+            <>
+              <Switch {...field} defaultChecked />
+
+              {errors.isActive?.message && (
+                <FormHelperText>{errors.isActive?.message}</FormHelperText>
+              )}
+            </>
+          )}
         />
       </div>
     </form>

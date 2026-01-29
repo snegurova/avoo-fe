@@ -19,8 +19,8 @@ export default function ServicesCreatePage() {
       toast.success('Service has been created!');
       router.replace(appRoutes.Services);
     },
-    onError: () => {
-      toast.error('Failed to create service');
+    onError: (error) => {
+      toast.error('Failed to create service: ' + error.message);
     },
   });
 

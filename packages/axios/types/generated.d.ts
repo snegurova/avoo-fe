@@ -413,7 +413,7 @@ export interface paths {
         };
         get: operations["MediasController_getAll"];
         put?: never;
-        post: operations["MediasController_create"];
+        post: operations["MediasController_upload"];
         delete?: never;
         options?: never;
         head?: never;
@@ -446,7 +446,7 @@ export interface paths {
         get?: never;
         put?: never;
         post?: never;
-        delete: operations["MediasController_delete"];
+        delete: operations["MediasController_deleteById"];
         options?: never;
         head?: never;
         patch?: never;
@@ -1153,7 +1153,7 @@ export interface components {
              *       3
              *     ]
              */
-            mediaIds: string[];
+            mediaIds: number[];
         };
         ShortMasterInfoDto: {
             id: number;
@@ -1189,12 +1189,8 @@ export interface components {
             updatedAt: string;
         };
         UploadCertificateFormDto: {
-            /** @description Master ID (optional). If omitted certificate will be for whole salon */
-            masterId?: number;
             /** @description Certificate title */
             title: string;
-            /** @description Certificate description */
-            description?: string;
             /**
              * @description Issue date (YYYY-MM-DD)
              * @example 2026-01-01
@@ -1202,21 +1198,25 @@ export interface components {
             issueDate: string;
             /** Format: binary */
             file: string;
-        };
-        UploadCertificateDto: {
             /** @description Master ID (optional). If omitted certificate will be for whole salon */
             masterId?: number;
-            /** @description Certificate title */
-            title: string;
             /** @description Certificate description */
             description?: string;
+        };
+        UploadCertificateDto: {
+            /** @description Certificate title */
+            title: string;
             /**
              * @description Issue date (YYYY-MM-DD)
              * @example 2026-01-01
              */
             issueDate: string;
-            files: string[];
-            folder: string;
+            /** @description Certificate description */
+            description?: string;
+            /** @description Master ID (optional). If omitted certificate will be for whole salon */
+            masterId?: number;
+            /** Format: binary */
+            file: string;
         };
         QueryServicesDto: {
             /**
@@ -1283,7 +1283,7 @@ export interface components {
              *       3
              *     ]
              */
-            mediaIds: string[];
+            mediaIds: number[];
             /**
              * @description Is the service active
              * @default true
@@ -1295,7 +1295,7 @@ export interface components {
              *       1
              *     ]
              */
-            masterIds?: string[];
+            masterIds?: number[];
         };
         CreateCombinationDto: {
             /**
@@ -1315,7 +1315,7 @@ export interface components {
              *       2
              *     ]
              */
-            serviceIds: string[];
+            serviceIds: number[];
             /**
              * @description ID of the master associated with the combination
              * @example 1
@@ -1337,10 +1337,10 @@ export interface components {
              * @description Array of service IDs included in the combination
              * @example [
              *       1,
-             *       3
+             *       2
              *     ]
              */
-            serviceIds: string[];
+            serviceIds: number[];
         };
         UpdateServiceDto: {
             /**
@@ -1379,7 +1379,7 @@ export interface components {
              *       1
              *     ]
              */
-            masterIds?: string[];
+            masterIds?: number[];
         };
         MediaEntity: {
             id: number;
@@ -1390,14 +1390,11 @@ export interface components {
             /** Format: date-time */
             updatedAt: string;
         };
-        UploadMediaRequestDto: {
+        UploadMediaDto: {
             /** @enum {string} */
             type: "USER" | "POST" | "SERVICE";
             /** Format: binary */
             file: string;
-        };
-        UpdateMasterAvatarResponseDto: {
-            master: components["schemas"]["MasterEntity"];
         };
         CreateMasterDto: {
             /**
@@ -1739,7 +1736,13 @@ export interface components {
          */
         OrderStatus: "PENDING" | "CONFIRMED" | "COMPLETED" | "EXPIRED" | "CANCELED";
         QueryCalendarByDatesPrivateDto: {
-            /** @description Master IDs */
+            /**
+             * @description Master IDs
+             * @example [
+             *       1,
+             *       2
+             *     ]
+             */
             masterIds?: number[];
             /**
              * @description Calendar start date (local, YYYY-MM-DD)
@@ -1793,7 +1796,13 @@ export interface components {
             note: string | null;
         };
         CreateCalendarExceptionDto: {
-            /** @description Master IDs */
+            /**
+             * @description Master IDs
+             * @example [
+             *       1,
+             *       2
+             *     ]
+             */
             masterIds?: number[];
             /**
              * Format: date-time
@@ -2233,10 +2242,11 @@ export interface components {
             /**
              * @description Array of master IDs to apply schedule. If omitted, applies to all.
              * @example [
-             *       1
+             *       1,
+             *       2
              *     ]
              */
-            mastersId?: string[];
+            masterIds?: number[];
         };
         UpdateWorkingHourBreakDto: {
             /**
@@ -3511,7 +3521,7 @@ export interface operations {
             };
         };
     };
-    MediasController_create: {
+    MediasController_upload: {
         parameters: {
             query?: never;
             header?: never;
@@ -3520,7 +3530,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "multipart/form-data": components["schemas"]["UploadMediaRequestDto"];
+                "multipart/form-data": components["schemas"]["UploadMediaDto"];
             };
         };
         responses: {
@@ -3582,7 +3592,7 @@ export interface operations {
             };
         };
     };
-    MediasController_delete: {
+    MediasController_deleteById: {
         parameters: {
             query: {
                 type: "USER" | "POST" | "SERVICE";
@@ -3930,7 +3940,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["SuccessResponseDto"] & {
-                        data?: components["schemas"]["UpdateMasterAvatarResponseDto"];
+                        data?: components["schemas"]["MasterEntity"];
                     };
                 };
             };

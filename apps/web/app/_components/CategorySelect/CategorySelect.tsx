@@ -1,11 +1,12 @@
-import { Autocomplete, FormControl, FormHelperText, TextField } from '@mui/material';
-import { Control, Controller } from 'react-hook-form';
-import { Category, CreateServiceFormValues } from '@avoo/axios/types/apiTypes';
 import { useMemo } from 'react';
+import { Control, Controller } from 'react-hook-form';
+import { Autocomplete, FormControl, FormHelperText, TextField } from '@mui/material';
+import { Category } from '@avoo/axios/types/apiTypes';
+import { CreateServiceFormData } from '@avoo/hooks';
 
 type Props = {
   categories: Category[];
-  control: Control<CreateServiceFormValues>;
+  control: Control<CreateServiceFormData>;
   error?: string;
 };
 

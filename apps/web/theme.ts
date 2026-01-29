@@ -300,9 +300,8 @@ const theme = createTheme({
     MuiOutlinedInput: {
       styleOverrides: {
         root: {
-          borderRadius: 18,
+          borderRadius: radius.md,
           height: '44px',
-          paddingLeft: 0,
           '& input': {
             height: '44px',
             boxSizing: 'border-box',
@@ -319,6 +318,13 @@ const theme = createTheme({
             maxHeight: menu.itemHeight * visibleCount + menu.itemPaddingTop,
             width: menu.width,
           };
+        },
+      },
+    },
+    MuiSnackbar: {
+      styleOverrides: {
+        root: {
+          marginTop: '70px',
         },
       },
     },

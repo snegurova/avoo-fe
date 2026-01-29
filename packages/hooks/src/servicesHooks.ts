@@ -12,17 +12,14 @@ import { useMemo, useState } from 'react';
 import { servicesApi } from '@avoo/axios/src/modules/services';
 import { useDebounce } from './useDebounce';
 import { useForm } from 'react-hook-form';
-import {
-  CreateServiceFormValuesType,
-  createServiceSchema,
-} from '../schemas/serviceValidationSchemas';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { CreateServiceFormData, createServiceSchema } from '../schemas/validationSchemas';
 
 const DEFAULT_LIMIT = 10;
 
 type UseServiceCreateFormParams = {
   onSuccess?: () => void;
-  onError?: () => void;
+  onError?: (error: Error) => void;
 };
 
 export const servicesHooks = {
@@ -150,12 +147,14 @@ export const servicesHooks = {
       setValue,
       handleSubmit,
       formState: { errors },
-    } = useForm<CreateServiceFormValuesType>({
+    } = useForm<CreateServiceFormData>({
       resolver: yupResolver(createServiceSchema),
       mode: 'onSubmit',
       defaultValues: {
         durationMinutes: 15,
         mediaIds: [],
+        masterIds: [],
+        isActive: true,
       },
     });
     const queryClient = useQueryClient();
@@ -179,8 +178,8 @@ export const servicesHooks = {
 
         onSuccess?.();
       },
-      onError: () => {
-        onError?.();
+      onError: (error) => {
+        onError?.(error);
       },
     });
 
@@ -190,21 +189,7 @@ export const servicesHooks = {
       register,
       control,
       setValue,
-      handleSubmit: handleSubmit(
-        utils.submitAdapter<CreateServiceFormValuesType>((data) => {
-          const payload: CreateServiceRequest = {
-            name: data.name!,
-            description: data.description!,
-            price: data.price!,
-            categoryId: data.categoryId!,
-            durationMinutes: data.durationMinutes!,
-            isActive: data.isActive ?? true,
-            mediaIds: data.mediaIds?.map(String) ?? [],
-            masterIds: data.masterIds?.map(String),
-          };
-          createService(payload);
-        }),
-      ),
+      handleSubmit: handleSubmit(utils.submitAdapter<CreateServiceRequest>(createService)),
       errors,
     };
   },

@@ -32,7 +32,7 @@ export const SnackbarProvider = ({ children }: { children: ReactNode }) => {
         open={open}
         autoHideDuration={isLoading ? null : 4000}
         onClose={isLoading ? undefined : close}
-        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
       >
         <Alert
           onClose={isLoading ? undefined : close}

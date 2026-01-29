@@ -1,7 +1,5 @@
-import {
-  CreateServiceFormValues,
-  MasterWithRelationsEntityResponse,
-} from '@avoo/axios/types/apiTypes';
+import { MasterWithRelationsEntityResponse } from '@avoo/axios/types/apiTypes';
+import { CreateServiceFormData } from '@avoo/hooks';
 import {
   Checkbox,
   FormControl,
@@ -15,7 +13,7 @@ import { Control, Controller } from 'react-hook-form';
 
 type Props = {
   masters: MasterWithRelationsEntityResponse[];
-  control: Control<CreateServiceFormValues>;
+  control: Control<CreateServiceFormData>;
   error: string;
 };
 
