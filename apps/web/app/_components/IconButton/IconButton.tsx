@@ -91,6 +91,7 @@ export const IconButton = (props: Props) => {
       disabled={disabled}
       className={iconButton({ size, rounded, variant, className })}
       aria-label={ariaLabel}
+      type='button'
     >
       {typeof icon === 'string' ? <span>{icon}</span> : icon}
     </button>

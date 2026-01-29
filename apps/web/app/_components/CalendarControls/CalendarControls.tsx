@@ -21,6 +21,7 @@ import CalendarViewWeek from '@/_icons/CalendarViewWeek';
 import CalendarViewMonth from '@/_icons/CalendarViewMonth';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { ElementStyleType } from '@avoo/hooks/types/elementStyleType';
+import { DATE_PICKER_FORMAT } from '@/_constants/dateFormats';
 
 const STATUSES_ITEMS = [
   { label: 'Pending', id: OrderStatus.PENDING },
@@ -130,7 +131,7 @@ export default function CalendarControls(props: Props) {
         break;
       }
       case CalendarViewType.MONTH: {
-        const prevMonth = new Date(date.getTime() - 7 * 24 * 60 * 60 * 1000);
+        const prevMonth = new Date(date.getTime() + 7 * 24 * 60 * 60 * 1000);
         prevMonth.setMonth(prevMonth.getMonth() - 1);
         const range = timeUtils.getMonthRange(prevMonth);
         setDate(range.start);
@@ -323,7 +324,12 @@ export default function CalendarControls(props: Props) {
           >
             <ArrowBackIcon className='fill-gray-800 w-3.5 h-3.5' />
           </button>
-          <DatePicker value={dayjs(date)} format='DD MMM YYYY' onChange={handleChangeDate} />
+          <DatePicker
+            value={dayjs(date)}
+            format={DATE_PICKER_FORMAT}
+            onChange={handleChangeDate}
+            sx={{ '& .MuiButtonBase-root': { opacity: 0 } }}
+          />
           <button
             type='button'
             className={controlsButton({ variant: 'right' })}

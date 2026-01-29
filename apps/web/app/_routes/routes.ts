@@ -18,6 +18,7 @@ export enum appRoutes {
   AddPost = '/app/add-post',
   Profile = '/app/profile',
   Notifications = '/app/notifications',
+  OrderCreate = '/app/orders/create',
 }
 export enum clientRoutes {
   Home = '/',

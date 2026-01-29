@@ -13,6 +13,7 @@ export * from '../utils/utils';
 export * from './AddressSearchHooks';
 export * from './formHooks';
 export * from './profileHooks';
+export * from './orderHooks';
 export * from './customerHooks';
 export * from './usePhoneField';
 export * from './useLanguagePicker';

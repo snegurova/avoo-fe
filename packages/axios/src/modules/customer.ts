@@ -1,4 +1,8 @@
-import { BaseResponse } from '@avoo/axios/types/apiTypes';
+import {
+  BaseResponse,
+  GetCustomersResponse,
+  GetCustomersQueryParams,
+} from '@avoo/axios/types/apiTypes';
 import { apiClient } from '@avoo/axios/src/apiClient';
 import type { components } from '@avoo/axios/types/generated';
 
@@ -8,14 +12,12 @@ type CreateCustomerDto = components['schemas']['CreateCustomerDto'];
 const CUSTOMERS_ENDPOINT = '/customers';
 
 export const customerApi = {
-  async getCustomers() {
-    const response =
-      await apiClient.get<BaseResponse<{ items: CustomerInfoDto[] }>>(CUSTOMERS_ENDPOINT);
+  async getCustomers(params: GetCustomersQueryParams) {
+    const response = await apiClient.get<BaseResponse<GetCustomersResponse>>(CUSTOMERS_ENDPOINT, {
+      params,
+    });
 
-    return {
-      ...response.data,
-      data: response.data.data.items,
-    };
+    return response.data;
   },
 
   async getCustomerById(id: number) {

@@ -2,7 +2,7 @@ import { utils } from '@avoo/hooks/utils/utils';
 import { scheduleApi } from '@avoo/axios';
 
 import { BaseResponse, GetSchedulesResponse } from '@avoo/axios/types/apiTypes';
-import { apiStatus } from '@avoo/hooks/types/apiTypes';
+import { ApiStatus } from '@avoo/hooks/types/apiTypes';
 import { useQuery } from '@tanstack/react-query';
 import { queryKeys } from './queryKeys';
 
@@ -15,7 +15,7 @@ export const scheduleHooks = {
 
     utils.useSetPendingApi(isPending);
 
-    if (schedulesData?.status === apiStatus.SUCCESS && schedulesData.data) {
+    if (schedulesData?.status === ApiStatus.SUCCESS && schedulesData.data) {
       return schedulesData.data;
     }
 

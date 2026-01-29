@@ -37,6 +37,8 @@ export default defineConfig([
       '@typescript-eslint/no-unused-vars': ['error'],
       'no-console': 'error',
       '@typescript-eslint/ban-ts-comment': 'off',
+      argsIgnorePattern: '^_',
+      varsIgnorePattern: '^_',
     },
   },
   {

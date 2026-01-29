@@ -83,9 +83,9 @@ const theme = createTheme({
     fontWeightMedium: Number(typography.fontWeight.medium),
     fontWeightBold: Number(typography.fontWeight.bold),
     h1: {
-      fontSize: typography.fontSize['2xl'],
-      fontWeight: typography.fontWeight.bold,
-      lineHeight: 1.1,
+      fontSize: typography.fontSize.xl,
+      fontWeight: typography.fontWeight.medium,
+      lineHeight: 1.5,
     },
     h2: {
       fontSize: typography.fontSize.xl,
@@ -214,7 +214,7 @@ const theme = createTheme({
     searchInput: {
       height: 44,
       borderRadius: 18,
-      iconSize: 20,
+      iconSize: 24,
       iconMarginLeft: 12,
       widthMd: '306px',
       widthLg: '306px',
@@ -245,9 +245,6 @@ const theme = createTheme({
     MuiDatePicker: {
       defaultProps: {
         slotProps: {
-          openPickerIcon: {
-            className: 'fill-gray-800 w-4 h-4',
-          },
           textField: {
             size: 'small',
             fullWidth: true,
@@ -272,9 +269,28 @@ const theme = createTheme({
         root: {
           '& .MuiPickersInputBase-root': {
             borderRadius: 0,
-            paddingLeft: 12,
-            paddingRight: 12,
+            paddingLeft: 14,
+            paddingRight: 14,
+            position: 'relative',
           },
+
+          '& .MuiPickersOutlinedInput-notchedOutline': {
+            borderColor: colors.gray[200],
+          },
+          '& .MuiPickersInputBase-root:hover .MuiPickersOutlinedInput-notchedOutline': {
+            borderColor: colors.gray[200],
+          },
+          '& .MuiPickersInputBase-root.Mui-focused:not(.Mui-error) .MuiPickersOutlinedInput-notchedOutline':
+            {
+              borderColor: colors.primary[500],
+            },
+          '& .MuiPickersInputBase-root.Mui-focused .MuiPickersOutlinedInput-notchedOutline': {
+            borderWidth: 1,
+          },
+          '& .MuiPickersInputBase-root.Mui-focused.Mui-error .MuiPickersOutlinedInput-notchedOutline':
+            {
+              borderColor: colors.red[500],
+            },
           '& .MuiPickersSectionList-root': {
             padding: '8px 0',
             fontSize: typography.fontSize.sm,
@@ -309,6 +325,7 @@ const theme = createTheme({
         },
       },
     },
+
     MuiInputAdornment: {
       styleOverrides: {
         root: () => ({
@@ -322,7 +339,19 @@ const theme = createTheme({
             right: '0',
             bottom: '0',
             left: '0',
-            opacity: 0,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'end',
+            paddingRight: 20,
+          },
+          '& .MuiButtonBase-root:hover': {
+            backgroundColor: 'transparent',
+          },
+          '& .MuiButtonBase-root:active': {
+            backgroundColor: 'transparent',
+          },
+          '& .MuiButtonBase-root:focus': {
+            backgroundColor: 'transparent',
           },
           margin: 0,
         }),

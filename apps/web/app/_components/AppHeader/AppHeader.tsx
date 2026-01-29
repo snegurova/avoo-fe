@@ -23,7 +23,9 @@ export default function AppHeader({ setMenuOpen }: Props) {
   const options = [
     {
       label: 'New Booking',
-      handler: () => {},
+      handler: () => {
+        router.push(appRoutes.OrderCreate);
+      },
     },
     {
       label: 'New Post',
