@@ -124,6 +124,7 @@ export default function ServiceList(props: Props) {
                         durationMinutes={service.durationMinutes}
                         price={service.price}
                         currency={currency}
+                        isActive={service.isActive}
                         onDelete={handleOpenDeleteDialog}
                       />
                     </li>

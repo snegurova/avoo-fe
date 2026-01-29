@@ -1,13 +1,29 @@
 import { utils } from '@avoo/hooks/utils/utils';
-import { GetServiceResponse, ServicesQueryParams } from '@avoo/axios/types/apiTypes';
+import {
+  CreateServiceRequest,
+  CreateServiceResponse,
+  GetServiceResponse,
+  ServicesQueryParams,
+} from '@avoo/axios/types/apiTypes';
 
 import { BaseResponse } from '@avoo/axios/types/apiTypes';
 import { InfiniteData, useInfiniteQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useMemo, useState } from 'react';
 import { servicesApi } from '@avoo/axios/src/modules/services';
 import { useDebounce } from './useDebounce';
+import { useForm } from 'react-hook-form';
+import {
+  CreateServiceFormValuesType,
+  createServiceSchema,
+} from '../schemas/serviceValidationSchemas';
+import { yupResolver } from '@hookform/resolvers/yup';
 
 const DEFAULT_LIMIT = 10;
+
+type UseServiceCreateFormParams = {
+  onSuccess?: () => void;
+  onError?: () => void;
+};
 
 export const servicesHooks = {
   useGetServicesInfinite: ({
@@ -124,6 +140,72 @@ export const servicesHooks = {
     return {
       deleteServiceMutation,
       deleteServiceMutationAsync: deleteServiceMutation.mutateAsync,
+    };
+  },
+
+  useCreateServiceForm: ({ onSuccess, onError }: UseServiceCreateFormParams) => {
+    const {
+      register,
+      control,
+      setValue,
+      handleSubmit,
+      formState: { errors },
+    } = useForm<CreateServiceFormValuesType>({
+      resolver: yupResolver(createServiceSchema),
+      mode: 'onSubmit',
+      defaultValues: {
+        durationMinutes: 15,
+        mediaIds: [],
+      },
+    });
+    const queryClient = useQueryClient();
+
+    const { mutate: createService, isPending } = useMutation<
+      BaseResponse<CreateServiceResponse>,
+      Error,
+      CreateServiceRequest
+    >({
+      mutationFn: servicesApi.createService,
+      meta: {
+        successMessage: 'Service created successfully',
+      },
+      onSuccess: () => {
+        queryClient.invalidateQueries({
+          queryKey: ['categories'],
+        });
+        queryClient.invalidateQueries({
+          queryKey: ['services'],
+        });
+
+        onSuccess?.();
+      },
+      onError: () => {
+        onError?.();
+      },
+    });
+
+    utils.useSetPendingApi(isPending);
+
+    return {
+      register,
+      control,
+      setValue,
+      handleSubmit: handleSubmit(
+        utils.submitAdapter<CreateServiceFormValuesType>((data) => {
+          const payload: CreateServiceRequest = {
+            name: data.name!,
+            description: data.description!,
+            price: data.price!,
+            categoryId: data.categoryId!,
+            durationMinutes: data.durationMinutes!,
+            isActive: data.isActive ?? true,
+            mediaIds: data.mediaIds?.map(String) ?? [],
+            masterIds: data.masterIds?.map(String),
+          };
+          createService(payload);
+        }),
+      ),
+      errors,
     };
   },
 };

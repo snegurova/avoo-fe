@@ -13,17 +13,22 @@ type Props = {
   durationMinutes: number;
   price: number;
   currency: string;
+  isActive: boolean;
   onDelete: (id: number) => void;
 };
 
 export default function ServiceCard(props: Props) {
-  const { id, name, durationMinutes, price, currency, onDelete } = props;
+  const { id, name, durationMinutes, price, currency, isActive, onDelete } = props;
 
   const isPending = useApiStatusStore((state) => state.isPending);
 
   return (
-    <div className='relative border border-gray-200 rounded-lg overflow-hidden'>
-      <span className='absolute left-0 top-0 h-full w-2 bg-primary-200 rounded-l-lg' />
+    <div
+      className={`relative border border-gray-200 rounded-lg overflow-hidden ${isActive ? '' : 'bg-gray-100'}`}
+    >
+      <span
+        className={`absolute left-0 top-0 h-full w-2 rounded-l-lg ${isActive ? 'bg-primary-200' : 'bg-gray-300'}`}
+      />
 
       <div className='flex items-center justify-between px-4 py-3'>
         <div>

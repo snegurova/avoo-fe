@@ -24,6 +24,13 @@ export type GetServiceResponse = {
 export type GetCategoriesResponse = Category[];
 export type GetPrivateCategoriesResponse =
   components['schemas']['ServicesGroupByCategoriesResponseDto'];
+export type CreateServiceRequest = components['schemas']['CreateServiceDto'];
+export type CreateServiceResponse = components['schemas']['ServiceEntity'];
+export type CreateServiceFormValues = Omit<CreateServiceRequest, 'mediaIds' | 'masterIds'> & {
+  mediaIds: number[];
+  masterIds: number[];
+};
+
 /** Auth */
 export type LoginRequest = components['schemas']['LoginRequestDto'];
 export type RegisterRequest = components['schemas']['CreateUserDto'];
@@ -97,4 +104,3 @@ export type PrivateCalendarQueryParams = Omit<
 
 /** File types - re-exported from @avoo/shared for backward compatibility */
 export type { FileInput, UploadFile } from '@avoo/shared';
-

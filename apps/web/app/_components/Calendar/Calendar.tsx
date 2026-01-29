@@ -14,6 +14,7 @@ import { PX_IN_MINUTE } from '@/_constants/time';
 import { OrderStatus } from '@avoo/hooks/types/orderStatus';
 import AppPlaceholder from '../AppPlaceholder/AppPlaceholder';
 import CalendarWeekSingleMasterView from '../CalendarWeekSingleMasterView/CalendarWeekSingleMasterView';
+import CalendarEventIcon from '@/_icons/CalendarEventIcon';
 
 const columnHeadContainer = tv({
   base: 'sticky bg-white z-10 ',
@@ -216,7 +217,18 @@ export default function Calendar() {
               setType={setType}
             />
           )}
-          {filteredMasters.length === 0 && <AppPlaceholder />}
+          {filteredMasters.length === 0 && (
+            <AppPlaceholder
+              title='No schedules'
+              icon={<CalendarEventIcon className='w-20 h-20 lg:w-25 lg:h-25 fill-primary-300' />}
+              description={
+                <p>
+                  There are currently no schedules to display. Choose masters to see their schedules
+                  here.
+                </p>
+              }
+            />
+          )}
         </div>
       </div>
     </div>

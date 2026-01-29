@@ -148,38 +148,6 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/public/users/{id}/media": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["UsersPublicController_getUserMedia"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/public/users/{id}/media/{mediaId}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["UsersPublicController_getUserMediaById"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/update-avatar": {
         parameters: {
             query?: never;
@@ -255,38 +223,6 @@ export interface paths {
         put: operations["UsersController_updateProfile"];
         post?: never;
         delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/media": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["UsersController_getUserMedia"];
-        put?: never;
-        post: operations["UsersController_createUserMedia"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/media/{mediaId}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["UsersController_getUserMediaById"];
-        put?: never;
-        post?: never;
-        delete: operations["UsersController_deleteUserMedia"];
         options?: never;
         head?: never;
         patch?: never;
@@ -420,38 +356,6 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/services/{id}/media": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["ServicesController_getServiceMedia"];
-        put?: never;
-        post: operations["ServicesController_createServiceMedia"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/services/{id}/media/{mediaId}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["ServicesController_getServiceMediaById"];
-        put?: never;
-        post?: never;
-        delete: operations["ServicesController_deleteServiceMedia"];
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/public/services": {
         parameters: {
             query?: never;
@@ -500,14 +404,30 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/public/services/{id}/media": {
+    "/media": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["ServicesPublicController_getServiceMedia"];
+        get: operations["MediasController_getAll"];
+        put?: never;
+        post: operations["MediasController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/media/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["MediasController_findByQuery"];
         put?: never;
         post?: never;
         delete?: never;
@@ -516,14 +436,46 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/public/services/{id}/media/{mediaId}": {
+    "/media/media/{id}": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["ServicesPublicController_getServiceMediaById"];
+        get?: never;
+        put?: never;
+        post?: never;
+        delete: operations["MediasController_delete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/public/media": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["MediasPublicController_getAll"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/public/media/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["MediasPublicController_findByQuery"];
         put?: never;
         post?: never;
         delete?: never;
@@ -671,54 +623,6 @@ export interface paths {
         put?: never;
         post?: never;
         delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/posts": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["PostsController_create"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/posts/{id}/media": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["PostsController_getPostMedia"];
-        put?: never;
-        post: operations["PostsController_createPostMedia"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/posts/{id}/media/{mediaId}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["PostsController_getPostMediaById"];
-        put?: never;
-        post?: never;
-        delete: operations["PostsController_deletePostMedia"];
         options?: never;
         head?: never;
         patch?: never;
@@ -996,6 +900,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/posts": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["PostsController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -1130,7 +1050,6 @@ export interface components {
             duration: number;
             /** Format: date-time */
             date: string;
-            startTimeMinutes: number;
             price: number;
             name: string;
             type: string;
@@ -1171,18 +1090,6 @@ export interface components {
             totalPages: number;
             /** @example 10 */
             perPage: number;
-        };
-        MediaEntity: {
-            id: number;
-            /** @enum {string} */
-            type: "USER" | "POST" | "SERVICE";
-            typeEntityId: number;
-            url: string;
-            previewUrl: Record<string, never> | null;
-            /** Format: date-time */
-            createdAt: string;
-            /** Format: date-time */
-            updatedAt: string;
         };
         UploadFileDto: {
             /** Format: binary */
@@ -1238,6 +1145,15 @@ export interface components {
              * @example 30.718815628384387
              */
             location_lon?: number;
+            /**
+             * @description Media IDs
+             * @example [
+             *       1,
+             *       2,
+             *       3
+             *     ]
+             */
+            mediaIds: string[];
         };
         ShortMasterInfoDto: {
             id: number;
@@ -1360,6 +1276,15 @@ export interface components {
              */
             durationMinutes: number;
             /**
+             * @description Media IDs
+             * @example [
+             *       1,
+             *       2,
+             *       3
+             *     ]
+             */
+            mediaIds: string[];
+            /**
              * @description Is the service active
              * @default true
              */
@@ -1456,6 +1381,21 @@ export interface components {
              */
             masterIds?: string[];
         };
+        MediaEntity: {
+            id: number;
+            url: string;
+            previewUrl: string | null;
+            /** Format: date-time */
+            createdAt: string;
+            /** Format: date-time */
+            updatedAt: string;
+        };
+        UploadMediaRequestDto: {
+            /** @enum {string} */
+            type: "USER" | "POST" | "SERVICE";
+            /** Format: binary */
+            file: string;
+        };
         UpdateMasterAvatarResponseDto: {
             master: components["schemas"]["MasterEntity"];
         };
@@ -1533,30 +1473,6 @@ export interface components {
             /** Format: binary */
             file: string;
         };
-        PostEntity: {
-            id: number;
-            description: string | null;
-            user: components["schemas"]["UserEntity"];
-            master: components["schemas"]["MasterEntity"];
-            service: components["schemas"]["ServiceEntity"];
-        };
-        CreatePostDto: {
-            /**
-             * @description Description of the post
-             * @example This is a sample post description.
-             */
-            description?: string;
-            /**
-             * @description ID of the master associated with the post
-             * @example 1
-             */
-            masterId: number;
-            /**
-             * @description ID of the service associated with the post
-             * @example 1
-             */
-            serviceId: number;
-        };
         CreatePrivateOrderDto: {
             /** @enum {string} */
             type: "SERVICE" | "COMBINATION";
@@ -1576,15 +1492,11 @@ export interface components {
              */
             masterId: number;
             /**
-             * @description Date of the service
-             * @example 2026-03-10
+             * Format: date-time
+             * @description Date of the service in UTC
+             * @example 2026-03-19T07:00:00Z
              */
             date: string;
-            /**
-             * @description Start time in minutes from midnight
-             * @example 600
-             */
-            startTimeMinutes: number;
             /**
              * @description Additional notes for the order
              * @example Please arrive 10 minutes early
@@ -1645,15 +1557,11 @@ export interface components {
              */
             masterId: number;
             /**
-             * @description Date of the service
-             * @example 2026-03-10
+             * Format: date-time
+             * @description Date of the service in UTC
+             * @example 2026-03-19T07:00:00Z
              */
             date: string;
-            /**
-             * @description Start time in minutes from midnight
-             * @example 600
-             */
-            startTimeMinutes: number;
         };
         CreatePublicCustomerDto: {
             /**
@@ -1729,6 +1637,8 @@ export interface components {
             serviceId: Record<string, never>;
             /** @example 1 */
             combinationId: Record<string, never>;
+            /** @example false */
+            isOutOfSchedule: boolean;
         };
         PrivateWorkingDayDto: {
             /**
@@ -1862,6 +1772,11 @@ export interface components {
              *     ]
              */
             orderStatus?: components["schemas"]["OrderStatus"][];
+            /**
+             * @description Include orders in calendar
+             * @example true
+             */
+            orderIsOutOfSchedule?: boolean;
         };
         CalendarExceptionEntity: {
             id: number;
@@ -1952,6 +1867,8 @@ export interface components {
             serviceId: Record<string, never>;
             /** @example 1 */
             combinationId: Record<string, never>;
+            /** @example false */
+            isOutOfSchedule: boolean;
         };
         PrivateWorkingDayByDatesDto: {
             /**
@@ -2381,6 +2298,30 @@ export interface components {
             notes?: string;
             isNotificationEnable?: boolean;
         };
+        PostEntity: {
+            id: number;
+            description: string | null;
+            user: components["schemas"]["UserEntity"];
+            master: components["schemas"]["MasterEntity"];
+            service: components["schemas"]["ServiceEntity"];
+        };
+        CreatePostDto: {
+            /**
+             * @description Description of the post
+             * @example This is a sample post description.
+             */
+            description?: string;
+            /**
+             * @description ID of the master associated with the post
+             * @example 1
+             */
+            masterId: number;
+            /**
+             * @description ID of the service associated with the post
+             * @example 1
+             */
+            serviceId: number;
+        };
     };
     responses: never;
     parameters: never;
@@ -2718,81 +2659,6 @@ export interface operations {
             };
         };
     };
-    UsersPublicController_getUserMedia: {
-        parameters: {
-            query?: {
-                /** @description Page number */
-                page?: number;
-                /** @description Items per page */
-                limit?: number;
-            };
-            header?: never;
-            path: {
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description All media for user */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["SuccessResponseDto"] & {
-                        data?: {
-                            items?: components["schemas"]["MediaEntity"][];
-                            pagination?: components["schemas"]["PaginationDto"];
-                        };
-                    };
-                };
-            };
-            /** @description Bad Request */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-        };
-    };
-    UsersPublicController_getUserMediaById: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: number;
-                mediaId: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description One media for user by id */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["SuccessResponseDto"] & {
-                        data?: components["schemas"]["MediaEntity"];
-                    };
-                };
-            };
-            /** @description Bad Request */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-        };
-    };
     UsersController_updateUserAvatar: {
         parameters: {
             query?: never;
@@ -2984,137 +2850,6 @@ export interface operations {
                 content: {
                     "application/json": components["schemas"]["SuccessResponseDto"] & {
                         data?: components["schemas"]["UserProfileEntity"];
-                    };
-                };
-            };
-            /** @description Bad Request */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-        };
-    };
-    UsersController_getUserMedia: {
-        parameters: {
-            query?: {
-                /** @description Page number */
-                page?: number;
-                /** @description Items per page */
-                limit?: number;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description All media for user */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["SuccessResponseDto"] & {
-                        data?: {
-                            items?: components["schemas"]["MediaEntity"][];
-                            pagination?: components["schemas"]["PaginationDto"];
-                        };
-                    };
-                };
-            };
-            /** @description Bad Request */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-        };
-    };
-    UsersController_createUserMedia: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "multipart/form-data": components["schemas"]["UploadFileDto"];
-            };
-        };
-        responses: {
-            /** @description Created media for user */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["SuccessResponseDto"] & {
-                        data?: components["schemas"]["MediaEntity"];
-                    };
-                };
-            };
-        };
-    };
-    UsersController_getUserMediaById: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                mediaId: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description One media for user by id */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["SuccessResponseDto"] & {
-                        data?: components["schemas"]["MediaEntity"];
-                    };
-                };
-            };
-            /** @description Bad Request */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-        };
-    };
-    UsersController_deleteUserMedia: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                mediaId: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Delete media by id */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["SuccessResponseDto"] & {
-                        data?: components["schemas"]["MediaEntity"];
                     };
                 };
             };
@@ -3622,152 +3357,6 @@ export interface operations {
             };
         };
     };
-    ServicesController_getServiceMedia: {
-        parameters: {
-            query?: {
-                /** @description Page number */
-                page?: number;
-                /** @description Items per page */
-                limit?: number;
-            };
-            header?: never;
-            path: {
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description All media for the service */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["SuccessResponseDto"] & {
-                        data?: {
-                            items?: components["schemas"]["MediaEntity"][];
-                            pagination?: components["schemas"]["PaginationDto"];
-                        };
-                    };
-                };
-            };
-            /** @description Bad Request */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-        };
-    };
-    ServicesController_createServiceMedia: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "multipart/form-data": components["schemas"]["UploadFileDto"];
-            };
-        };
-        responses: {
-            /** @description Created media for service */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["SuccessResponseDto"] & {
-                        data?: components["schemas"]["MediaEntity"];
-                    };
-                };
-            };
-            /** @description Bad Request */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-        };
-    };
-    ServicesController_getServiceMediaById: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: number;
-                mediaId: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description One media for the service by id */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["SuccessResponseDto"] & {
-                        data?: components["schemas"]["MediaEntity"];
-                    };
-                };
-            };
-            /** @description Bad Request */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-        };
-    };
-    ServicesController_deleteServiceMedia: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: number;
-                mediaId: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Deleted media entity */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["SuccessResponseDto"] & {
-                        data?: components["schemas"]["MediaEntity"];
-                    };
-                };
-            };
-            /** @description Bad Request */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-        };
-    };
     ServicesPublicController_findAll: {
         parameters: {
             query?: {
@@ -3881,23 +3470,23 @@ export interface operations {
             };
         };
     };
-    ServicesPublicController_getServiceMedia: {
+    MediasController_getAll: {
         parameters: {
-            query?: {
+            query: {
+                type: "USER" | "POST" | "SERVICE";
+                typeEntityId: number;
                 /** @description Page number */
                 page?: number;
                 /** @description Items per page */
                 limit?: number;
             };
             header?: never;
-            path: {
-                id: number;
-            };
+            path?: never;
             cookie?: never;
         };
         requestBody?: never;
         responses: {
-            /** @description All media for the service */
+            /** @description Get all media for type */
             200: {
                 headers: {
                     [name: string]: unknown;
@@ -3922,19 +3511,170 @@ export interface operations {
             };
         };
     };
-    ServicesPublicController_getServiceMediaById: {
+    MediasController_create: {
         parameters: {
             query?: never;
             header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "multipart/form-data": components["schemas"]["UploadMediaRequestDto"];
+            };
+        };
+        responses: {
+            /** @description Upload media */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SuccessResponseDto"] & {
+                        data?: components["schemas"]["MediaEntity"];
+                    };
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    MediasController_findByQuery: {
+        parameters: {
+            query: {
+                type: "USER" | "POST" | "SERVICE";
+                typeEntityId: number;
+            };
+            header?: never;
             path: {
                 id: number;
-                mediaId: number;
             };
             cookie?: never;
         };
         requestBody?: never;
         responses: {
-            /** @description One media for the service by id */
+            /** @description Get media by type and entityId */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SuccessResponseDto"] & {
+                        data?: components["schemas"]["MediaEntity"];
+                    };
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    MediasController_delete: {
+        parameters: {
+            query: {
+                type: "USER" | "POST" | "SERVICE";
+                typeEntityId: number;
+            };
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Delete media */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SuccessResponseDto"] & {
+                        data?: components["schemas"]["MediaEntity"];
+                    };
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    MediasPublicController_getAll: {
+        parameters: {
+            query: {
+                type: "USER" | "POST" | "SERVICE";
+                typeEntityId: number;
+                createdBy: number;
+                /** @description Page number */
+                page?: number;
+                /** @description Items per page */
+                limit?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Get all media for type */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SuccessResponseDto"] & {
+                        data?: {
+                            items?: components["schemas"]["MediaEntity"][];
+                            pagination?: components["schemas"]["PaginationDto"];
+                        };
+                    };
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    MediasPublicController_findByQuery: {
+        parameters: {
+            query: {
+                type: "USER" | "POST" | "SERVICE";
+                typeEntityId: number;
+            };
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Get media by type and entityId */
             200: {
                 headers: {
                     [name: string]: unknown;
@@ -4382,187 +4122,6 @@ export interface operations {
             };
         };
     };
-    PostsController_create: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["CreatePostDto"];
-            };
-        };
-        responses: {
-            /** @description Post was created successfully */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["SuccessResponseDto"] & {
-                        data?: components["schemas"]["PostEntity"];
-                    };
-                };
-            };
-            /** @description Bad Request */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-        };
-    };
-    PostsController_getPostMedia: {
-        parameters: {
-            query?: {
-                /** @description Page number */
-                page?: number;
-                /** @description Items per page */
-                limit?: number;
-            };
-            header?: never;
-            path: {
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description All media for the post */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["SuccessResponseDto"] & {
-                        data?: {
-                            items?: components["schemas"]["MediaEntity"][];
-                            pagination?: components["schemas"]["PaginationDto"];
-                        };
-                    };
-                };
-            };
-            /** @description Bad Request */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-        };
-    };
-    PostsController_createPostMedia: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "multipart/form-data": components["schemas"]["UploadFileDto"];
-            };
-        };
-        responses: {
-            /** @description Created media for post */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["SuccessResponseDto"] & {
-                        data?: components["schemas"]["MediaEntity"];
-                    };
-                };
-            };
-            /** @description Bad Request */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-        };
-    };
-    PostsController_getPostMediaById: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: number;
-                mediaId: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description One media for the post by id */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["SuccessResponseDto"] & {
-                        data?: components["schemas"]["MediaEntity"];
-                    };
-                };
-            };
-            /** @description Bad Request */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-        };
-    };
-    PostsController_deletePostMedia: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: number;
-                mediaId: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Deleted media entity */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["SuccessResponseDto"] & {
-                        data?: components["schemas"]["MediaEntity"];
-                    };
-                };
-            };
-            /** @description Bad Request */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-        };
-    };
     OrdersController_findAllOwn: {
         parameters: {
             query?: {
@@ -4578,7 +4137,7 @@ export interface operations {
                 masterId?: number;
                 /** @description Filter by start date (ISO format) */
                 dateFrom?: string;
-                /** @description Filter by end date (ISO format) */
+                /** @description Filter by start order date (ISO format) */
                 dateTo?: string;
             };
             header?: never;
@@ -4748,6 +4307,8 @@ export interface operations {
                 timezone?: string;
                 /** @description Filter by order status */
                 orderStatus?: components["schemas"]["OrderStatus"][];
+                /** @description Include orders in calendar */
+                orderIsOutOfSchedule?: boolean;
             };
             header?: never;
             path?: never;
@@ -4903,6 +4464,8 @@ export interface operations {
                 limitEvents?: number;
                 /** @description Filter by order status */
                 orderStatus?: components["schemas"]["OrderStatus"][];
+                /** @description Include orders in calendar */
+                orderIsOutOfSchedule?: boolean;
             };
             header?: never;
             path?: never;
@@ -5492,6 +5055,41 @@ export interface operations {
                 content: {
                     "application/json": components["schemas"]["SuccessResponseDto"] & {
                         data?: components["schemas"]["CustomerInfoDto"];
+                    };
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    PostsController_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreatePostDto"];
+            };
+        };
+        responses: {
+            /** @description Post was created successfully */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SuccessResponseDto"] & {
+                        data?: components["schemas"]["PostEntity"];
                     };
                 };
             };
