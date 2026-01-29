@@ -1148,9 +1148,7 @@ export interface components {
             /**
              * @description Media IDs
              * @example [
-             *       1,
-             *       2,
-             *       3
+             *       1
              *     ]
              */
             mediaIds: number[];
@@ -1501,6 +1499,7 @@ export interface components {
             notes?: string;
         };
         CreateCustomerDto: {
+            /** @example 1 */
             id?: number;
             /**
              * @description Name of the customer
@@ -1739,8 +1738,7 @@ export interface components {
             /**
              * @description Master IDs
              * @example [
-             *       1,
-             *       2
+             *       1
              *     ]
              */
             masterIds?: number[];
@@ -1799,8 +1797,7 @@ export interface components {
             /**
              * @description Master IDs
              * @example [
-             *       1,
-             *       2
+             *       1
              *     ]
              */
             masterIds?: number[];
@@ -2242,8 +2239,7 @@ export interface components {
             /**
              * @description Array of master IDs to apply schedule. If omitted, applies to all.
              * @example [
-             *       1,
-             *       2
+             *       1
              *     ]
              */
             masterIds?: number[];
