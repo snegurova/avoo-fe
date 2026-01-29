@@ -1,7 +1,8 @@
 'use client';
 
 import React from 'react';
-import { Avatar, ButtonBase } from '@mui/material';
+import { Avatar, ButtonBase, IconButton } from '@mui/material';
+import PersonIcon from '@/_icons/PersonIcon';
 import { utilsHooks } from '@/_utils/utilsHooks';
 import { AVATAR_DOWNLOAD_FORMATS } from '@/_constants/files';
 import AvatarLoader from '../AvatarLoader/AvatarLoader';
@@ -19,6 +20,7 @@ type Props = {
   onImageSelected: (file: File) => void;
   isLoading: boolean;
   size?: AvatarSize;
+  iconSize?: number;
   showEditIcon?: boolean;
 };
 
@@ -28,6 +30,7 @@ export const AvatarUpload = (props: Props) => {
     onImageSelected,
     isLoading,
     size = AvatarSize.LARGE,
+    iconSize = 125,
     showEditIcon = false,
   } = props;
 
@@ -35,62 +38,70 @@ export const AvatarUpload = (props: Props) => {
     utilsHooks.handleFileChange(event, onImageSelected);
   };
 
+  const inputRef = React.useRef<HTMLInputElement | null>(null);
+
+  const handleEditClick = () => {
+    if (isLoading) return;
+    inputRef.current?.click();
+  };
+
+  const handleEditKey = (evt: React.KeyboardEvent) => {
+    if (evt.key === 'Enter' || evt.key === ' ') {
+      evt.preventDefault();
+      handleEditClick();
+    }
+  };
+
   return (
-    <ButtonBase
-      component='label'
-      tabIndex={-1}
-      aria-label='Avatar image'
-      className='relative rounded-full overflow-visible focus-visible:ring-2 focus-visible:ring-primary-500'
-      disabled={isLoading}
-    >
-      {imageUri ? (
-        <Avatar alt='Upload new avatar' sx={{ width: size, height: size }} src={imageUri} />
-      ) : (
-        <Avatar
-          alt='Upload new avatar'
-          sx={{ width: size, height: size }}
-          style={{ backgroundColor: 'var(--color-primary-50)' }}
-        >
-          <svg
-            width={Math.min(88, Math.floor(size * 0.6))}
-            height={Math.min(88, Math.floor(size * 0.6))}
-            viewBox='0 0 24 24'
-            fill='none'
-            xmlns='http://www.w3.org/2000/svg'
-            aria-hidden
+    <div className='relative inline-block'>
+      <ButtonBase
+        component='label'
+        tabIndex={-1}
+        aria-label='Avatar image'
+        className='rounded-full overflow-hidden focus-visible:ring-2 focus-visible:ring-primary-500 block'
+        sx={{ borderRadius: '50%', overflow: 'hidden' }}
+        disabled={isLoading}
+      >
+        {imageUri ? (
+          <Avatar alt='Upload new avatar' sx={{ width: size, height: size }} src={imageUri} />
+        ) : (
+          <Avatar
+            alt='Upload new avatar'
+            sx={{
+              width: size,
+              height: size,
+              bgcolor: 'var(--color-primary-50)',
+              color: 'var(--color-primary-200)',
+            }}
           >
-            <circle
-              cx='12'
-              cy='7.5'
-              r='3.5'
-              stroke='var(--color-primary-200)'
-              strokeWidth='2'
-              fill='none'
-            />
-            <path
-              d='M3.5 20c0-4.5 5-7 8.5-7s8.5 2.5 8.5 7'
-              stroke='var(--color-primary-200)'
-              strokeWidth='2'
-              fill='none'
-              strokeLinecap='round'
-              strokeLinejoin='round'
-            />
-          </svg>
-        </Avatar>
-      )}
-      {isLoading && <AvatarLoader size={size} />}
+            <PersonIcon width={iconSize} height={iconSize} />
+          </Avatar>
+        )}
+        {isLoading && <AvatarLoader size={size} />}
+        <input
+          ref={inputRef}
+          type='file'
+          accept={AVATAR_DOWNLOAD_FORMATS}
+          className='sr-only'
+          onChange={handleChoosePhoto}
+        />
+      </ButtonBase>
+
       {showEditIcon && (
-        <div className='absolute -bottom-1 -right-1 bg-white rounded-full border border-gray-200 shadow-sm w-11 h-11 p-3 flex items-center justify-center text-gray-300'>
-          <EditIcon width={20} height={20} />
+        <div className='absolute -bottom-1 -right-1'>
+          <IconButton
+            className='avatar-edit'
+            aria-label='Edit avatar'
+            size='small'
+            onClick={handleEditClick}
+            onKeyDown={handleEditKey}
+            disabled={isLoading}
+          >
+            <EditIcon />
+          </IconButton>
         </div>
       )}
-      <input
-        type='file'
-        accept={AVATAR_DOWNLOAD_FORMATS}
-        className='sr-only'
-        onChange={handleChoosePhoto}
-      />
-    </ButtonBase>
+    </div>
   );
 };
 

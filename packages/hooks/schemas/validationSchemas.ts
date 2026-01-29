@@ -86,6 +86,11 @@ export const createMasterSchema = yup.object({
       if (!value) return true;
       return value.length >= 10;
     }),
+  headline: yup
+    .string()
+    .nullable()
+    .transform((value) => (value && value.trim() ? value.trim() : null))
+    .max(100, 'Headline must be at most 100 characters'),
   phone: yup
     .string()
     .nullable()

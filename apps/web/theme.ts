@@ -10,6 +10,70 @@ const roboto = Roboto({
   display: 'swap',
 });
 
+declare module '@mui/material/IconButton' {
+  interface IconButtonPropsVariantOverrides {
+    avatarEdit: true;
+  }
+}
+
+declare module '@mui/material/styles' {
+  interface Mixins {
+    menu: {
+      itemHeight: number;
+      itemPaddingTop: number;
+      visibleItems: number;
+      partialVisibleItem: number;
+      width: number | string;
+    };
+    formInput: {
+      height: number | string;
+      borderRadius: number | string;
+      borderColor: string;
+      focusRingColor: string;
+      background: string;
+      padding: string;
+    };
+    searchInput: {
+      height: number | string;
+      borderRadius: number | string;
+      iconSize: number | string;
+      iconMarginLeft: number | string;
+      widthMd: string;
+      widthLg: string;
+      mrMd: number | string;
+      mrLg: number | string;
+    };
+  }
+
+  interface MixinsOptions {
+    menu?: {
+      itemHeight?: number;
+      itemPaddingTop?: number;
+      visibleItems?: number;
+      partialVisibleItem?: number;
+      width?: number | string;
+    };
+    formInput?: {
+      height?: number | string;
+      borderRadius?: number | string;
+      borderColor?: string;
+      focusRingColor?: string;
+      background?: string;
+      padding?: string;
+    };
+    searchInput?: {
+      height?: number | string;
+      borderRadius?: number | string;
+      iconSize?: number | string;
+      iconMarginLeft?: number | string;
+      widthMd?: string;
+      widthLg?: string;
+      mrMd?: number | string;
+      mrLg?: number | string;
+    };
+  }
+}
+
 const theme = createTheme({
   colorSchemes: { light: true, dark: false },
   cssVariables: true,
@@ -139,6 +203,14 @@ const theme = createTheme({
       partialVisibleItem: 0.5,
       width: 250,
     },
+    formInput: {
+      height: 44,
+      borderRadius: radius.md,
+      borderColor: colors.gray[200],
+      focusRingColor: colors.primary[800],
+      background: 'transparent',
+      padding: '0.75rem',
+    },
     searchInput: {
       height: 44,
       borderRadius: 18,
@@ -265,6 +337,26 @@ const theme = createTheme({
               borderColor: colors.primary[700],
               '&:hover': { backgroundColor: colors.primary[50] },
             }),
+        }),
+      },
+    },
+    MuiIconButton: {
+      styleOverrides: {
+        root: () => ({
+          '&.avatar-edit': {
+            width: 44,
+            height: 44,
+            padding: '12px',
+            borderRadius: '50%',
+            border: '1px solid',
+            borderColor: colors.gray[200],
+            backgroundColor: colors.white,
+            boxShadow: '0 1px 2px rgba(0,0,0,0.05)',
+            color: colors.gray[300],
+            '&:hover': { backgroundColor: colors.primary[50], borderColor: colors.gray[200] },
+            '&:active': { backgroundColor: colors.primary[50] },
+            '&.Mui-focusVisible': { boxShadow: `0 0 0 2px ${colors.primary[500]}` },
+          },
         }),
       },
     },

@@ -532,6 +532,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/media/upload": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["MediasController_createMedia"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/masters": {
         parameters: {
             query?: never;
@@ -1130,7 +1146,6 @@ export interface components {
             duration: number;
             /** Format: date-time */
             date: string;
-            startTimeMinutes: number;
             price: number;
             name: string;
             type: string;
@@ -1456,6 +1471,21 @@ export interface components {
              */
             masterIds?: string[];
         };
+        MediaResponseDto: {
+            id: number;
+            url: string;
+            previewUrl: string | null;
+            /** Format: date-time */
+            createdAt: string;
+            /** Format: date-time */
+            updatedAt: string;
+        };
+        UploadMediaRequestDto: {
+            /** @enum {string} */
+            type: "USER" | "POST" | "SERVICE";
+            /** Format: binary */
+            file: string;
+        };
         UpdateMasterAvatarResponseDto: {
             master: components["schemas"]["MasterEntity"];
         };
@@ -1576,15 +1606,11 @@ export interface components {
              */
             masterId: number;
             /**
-             * @description Date of the service
-             * @example 2026-03-10
+             * Format: date-time
+             * @description Date of the service in UTC
+             * @example 2026-03-19T07:00:00Z
              */
             date: string;
-            /**
-             * @description Start time in minutes from midnight
-             * @example 600
-             */
-            startTimeMinutes: number;
             /**
              * @description Additional notes for the order
              * @example Please arrive 10 minutes early
@@ -1645,15 +1671,11 @@ export interface components {
              */
             masterId: number;
             /**
-             * @description Date of the service
-             * @example 2026-03-10
+             * Format: date-time
+             * @description Date of the service in UTC
+             * @example 2026-03-19T07:00:00Z
              */
             date: string;
-            /**
-             * @description Start time in minutes from midnight
-             * @example 600
-             */
-            startTimeMinutes: number;
         };
         CreatePublicCustomerDto: {
             /**
@@ -1729,6 +1751,8 @@ export interface components {
             serviceId: Record<string, never>;
             /** @example 1 */
             combinationId: Record<string, never>;
+            /** @example false */
+            isOutOfSchedule: boolean;
         };
         PrivateWorkingDayDto: {
             /**
@@ -1862,6 +1886,11 @@ export interface components {
              *     ]
              */
             orderStatus?: components["schemas"]["OrderStatus"][];
+            /**
+             * @description Include orders in calendar
+             * @example true
+             */
+            orderIsOutOfSchedule?: boolean;
         };
         CalendarExceptionEntity: {
             id: number;
@@ -1952,6 +1981,8 @@ export interface components {
             serviceId: Record<string, never>;
             /** @example 1 */
             combinationId: Record<string, never>;
+            /** @example false */
+            isOutOfSchedule: boolean;
         };
         PrivateWorkingDayByDatesDto: {
             /**
@@ -3956,6 +3987,41 @@ export interface operations {
             };
         };
     };
+    MediasController_createMedia: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "multipart/form-data": components["schemas"]["UploadMediaRequestDto"];
+            };
+        };
+        responses: {
+            /** @description Upload media */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SuccessResponseDto"] & {
+                        data?: components["schemas"]["MediaResponseDto"];
+                    };
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
     MastersController_findAll: {
         parameters: {
             query?: never;
@@ -4578,7 +4644,7 @@ export interface operations {
                 masterId?: number;
                 /** @description Filter by start date (ISO format) */
                 dateFrom?: string;
-                /** @description Filter by end date (ISO format) */
+                /** @description Filter by start order date (ISO format) */
                 dateTo?: string;
             };
             header?: never;
@@ -4748,6 +4814,8 @@ export interface operations {
                 timezone?: string;
                 /** @description Filter by order status */
                 orderStatus?: components["schemas"]["OrderStatus"][];
+                /** @description Include orders in calendar */
+                orderIsOutOfSchedule?: boolean;
             };
             header?: never;
             path?: never;
@@ -4903,6 +4971,8 @@ export interface operations {
                 limitEvents?: number;
                 /** @description Filter by order status */
                 orderStatus?: components["schemas"]["OrderStatus"][];
+                /** @description Include orders in calendar */
+                orderIsOutOfSchedule?: boolean;
             };
             header?: never;
             path?: never;
