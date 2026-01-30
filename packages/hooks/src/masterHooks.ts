@@ -15,6 +15,7 @@ import {
   BaseResponse,
   MasterWithRelationsEntityResponse,
   CreateMasterRequest,
+  GetMastersResponse,
 } from '@avoo/axios/types/apiTypes';
 import { ApiStatus } from '@avoo/hooks/types/apiTypes';
 import { queryKeys } from './queryKeys';
@@ -30,10 +31,7 @@ type UseUpdateMasterFormParams = {
 
 export const masterHooks = {
   useGetMastersProfileInfo: () => {
-    const { data: profileInfoData, isPending } = useQuery<
-      BaseResponse<MasterWithRelationsEntityResponse[]>,
-      Error
-    >({
+    const { data: profileInfoData, isPending } = useQuery<BaseResponse<GetMastersResponse>, Error>({
       queryKey: queryKeys.masters.all,
       queryFn: masterApi.getMastersInfo,
     });

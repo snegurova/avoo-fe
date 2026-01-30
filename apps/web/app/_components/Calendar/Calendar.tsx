@@ -115,7 +115,7 @@ export default function Calendar() {
   };
 
   const calendar = calendarHooks.useGetCalendar(params);
-  const masters = masterHooks.useGetMastersProfileInfo();
+  const masters = masterHooks.useGetMastersProfileInfo()?.items;
 
   const filteredMasters = useMemo(() => {
     if (!masters || (masterIds && masterIds.length === 0)) return [];

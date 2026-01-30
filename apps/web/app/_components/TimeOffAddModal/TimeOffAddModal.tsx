@@ -60,7 +60,7 @@ const TimeOffAddModal = ({ isOpen, onClose }: Props) => {
 
   const mastersOptions = [
     { label: 'All Staff', value: 'all' },
-    ...(masters?.map((master) => ({
+    ...(masters?.items.map((master) => ({
       label: master.name ?? `Master #${master.id}`,
       value: String(master.id),
     })) ?? []),
