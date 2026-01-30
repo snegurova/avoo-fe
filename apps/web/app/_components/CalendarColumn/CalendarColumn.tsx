@@ -1,5 +1,5 @@
 import React, { useState, useRef, useCallback, useEffect } from 'react';
-import { CalendarItem } from '@avoo/axios/types/apiTypes';
+import { CalendarItem, PrivateEvent } from '@avoo/axios/types/apiTypes';
 import { tv } from 'tailwind-variants';
 import { MasterWithRelationsEntity } from '@avoo/axios/types/apiTypes';
 import { CalendarViewType } from '@avoo/hooks/types/calendarViewType';
@@ -26,6 +26,7 @@ type Props = {
   setType: React.Dispatch<React.SetStateAction<CalendarViewType>>;
   setTime: React.Dispatch<React.SetStateAction<number>>;
   isSingleWeek?: boolean;
+  selectEvent?: (event: PrivateEvent | null) => void;
 };
 
 const col = tv({
@@ -75,6 +76,7 @@ export default function CalendarColumn(props: Props) {
     setType,
     setTime,
     isSingleWeek = false,
+    selectEvent,
   } = props;
   const ref = useRef<HTMLDivElement | null>(null);
   const router = useRouter();
@@ -140,6 +142,12 @@ export default function CalendarColumn(props: Props) {
     setType(CalendarViewType.DAY);
   };
 
+
+  // Handler to select event and put event object into state
+  const handleEventSelect = useCallback((event: PrivateEvent) => {
+    if (selectEvent) selectEvent(event);
+  }, [selectEvent]);
+
   return (
     <>
       {type === CalendarViewType.DAY && (
@@ -163,7 +171,12 @@ export default function CalendarColumn(props: Props) {
           ))}
           {data &&
             data.days[0].events.map((event) => (
-              <CalendarEvent key={`${event.id}-${type}`} event={event} type={type} />
+              <CalendarEvent
+                key={`${event.id}-${type}`}
+                event={event}
+                type={type}
+                onEventSelect={handleEventSelect}
+              />
             ))}
           {timeUtils.isSameDay(date, new Date()) && (
             <CalendarCurrentTime time={time} setTime={setTime} isSingleWeek={isSingleWeek} />
@@ -190,7 +203,12 @@ export default function CalendarColumn(props: Props) {
                   <>
                     <div className='flex flex-col gap-0.5'>
                       {slicedEvents.map((event) => (
-                        <CalendarEvent key={`${event.id}-${type}`} event={event} type={type} />
+                        <CalendarEvent
+                          key={`${event.id}-${type}`}
+                          event={event}
+                          type={type}
+                          onEventSelect={handleEventSelect}
+                        />
                       ))}
                     </div>
                     {data.days[idx].events.length > showEvents && (
