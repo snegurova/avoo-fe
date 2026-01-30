@@ -3,10 +3,8 @@ import { masterHooks } from '@avoo/hooks';
 import { MasterCard } from '@/components/MasterCard/MasterCard';
 import { SectionHeader } from '@/shared/SectionHeader/SectionHeader';
 
-
 export const ProfileMaster = () => {
-  const mastersInfo = masterHooks.useGetMastersProfileInfo();
-
+  const mastersInfo = masterHooks.useGetMastersProfileInfo()?.items;
 
   return (
     <View className='py-4'>

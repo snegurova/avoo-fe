@@ -2,6 +2,7 @@ import {
   BaseResponse,
   MasterWithRelationsEntityResponse,
   CreateMasterRequest,
+  GetMastersResponse,
 } from '@avoo/axios/types/apiTypes';
 import { apiClient } from '@avoo/axios/src/apiClient';
 
@@ -9,8 +10,7 @@ const MASTERS_ENDPOINT = '/masters/';
 
 export const masterApi = {
   async getMastersInfo() {
-    const response =
-      await apiClient.get<BaseResponse<MasterWithRelationsEntityResponse[]>>(MASTERS_ENDPOINT);
+    const response = await apiClient.get<BaseResponse<GetMastersResponse>>(MASTERS_ENDPOINT);
     return response.data;
   },
   async createMaster(data: CreateMasterRequest) {

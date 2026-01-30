@@ -54,6 +54,11 @@ export type UpdateProfile = components['schemas']['UpdateProfileDto'];
 /** Master */
 export type MasterWithRelationsEntityResponse = components['schemas']['MasterEntity'];
 
+export type GetMastersResponse = {
+  items: MasterWithRelationsEntityResponse[];
+  pagination: components['schemas']['PaginationDto'];
+};
+
 type MasterBaseForCreate = Omit<
   components['schemas']['MasterEntity'],
   'id' | 'avatarUrl' | 'avatarPreviewUrl'

@@ -185,4 +185,13 @@ export const timeUtils = {
   formatToFullDate(date: string, time: string): string {
     return `${date}T${time}:00`;
   },
+  getHumanDate(date: string): string {
+    const dateObj = new Date(date);
+    const options: Intl.DateTimeFormatOptions = {
+      weekday: 'short',
+      day: '2-digit',
+      month: 'short',
+    };
+    return dateObj.toLocaleDateString('en-US', options);
+  },
 };
