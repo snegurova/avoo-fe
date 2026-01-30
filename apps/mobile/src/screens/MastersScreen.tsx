@@ -19,7 +19,7 @@ export default function MastersScreen() {
   } = utils.useBooleanState(false);
   const bottomBarHeight = layoutHooks.useBottomBarHeight();
 
-  const masters = masterHooks.useGetMastersProfileInfo();
+  const masters = masterHooks.useGetMastersProfileInfo()?.items;
   const filteredMasters = masterHooks.useFilterMasters(masters, searchQuery);
   const [selectedMaster, setSelectedMaster] = useState<MasterWithRelationsEntityResponse | null>(
     null,

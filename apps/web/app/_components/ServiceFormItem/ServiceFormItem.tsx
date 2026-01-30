@@ -51,7 +51,7 @@ export default function ServiceFormItem(props: Props) {
     isActive: true,
   });
 
-  const masters = masterHooks.useGetMastersProfileInfo();
+  const masters = masterHooks.useGetMastersProfileInfo()?.items;
 
   useEffect(() => {
     if (isEmptyObject(initialParams)) return;

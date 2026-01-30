@@ -43,7 +43,7 @@ type FormValues = {
 };
 
 const TimeOffAddModal = ({ isOpen, onClose }: Props) => {
-  const masters = masterHooks.useGetMastersProfileInfo();
+  const masters = masterHooks.useGetMastersProfileInfo()?.items;
 
   const timeOffTypeLabels: Record<TimeOffType, string> = {
     [TimeOffType.Personal]: 'Personal break',
