@@ -36,7 +36,11 @@ export const calendarHooks = {
       [masterIds, view, rangeFromDate, rangeToDate, serviceId, combinationId, orderStatus],
     );
 
-    const { data: calendarData, isPending } = useQuery<BaseResponse<GetCalendarResponse>, Error>({
+    const {
+      data: calendarData,
+      isPending,
+      refetch,
+    } = useQuery<BaseResponse<GetCalendarResponse>, Error>({
       queryKey: ['calendar', queryKeys.calendar.byParams(memoParams)],
       queryFn: () => calendarApi.getCalendar(memoParams),
     });
@@ -44,10 +48,10 @@ export const calendarHooks = {
     utils.useSetPendingApi(isPending);
 
     if (calendarData?.status === ApiStatus.SUCCESS && calendarData.data) {
-      return calendarData.data;
+      return { data: calendarData.data, refetch };
     }
 
-    return null;
+    return { data: null, refetch };
   },
   useGetCalendarByDates: ({
     masterIds,
@@ -71,10 +75,11 @@ export const calendarHooks = {
       [masterIds, view, rangeFromDate, rangeToDate, serviceId, combinationId, orderStatus],
     );
 
-    const { data: calendarData, isPending } = useQuery<
-      BaseResponse<GetCalendarByDatesResponse>,
-      Error
-    >({
+    const {
+      data: calendarData,
+      isPending,
+      refetch,
+    } = useQuery<BaseResponse<GetCalendarByDatesResponse>, Error>({
       queryKey: ['monthCalendar', queryKeys.monthCalendar.byParams(memoParams)],
       queryFn: () => calendarApi.getCalendarByDates(memoParams),
     });
@@ -82,9 +87,9 @@ export const calendarHooks = {
     utils.useSetPendingApi(isPending);
 
     if (calendarData?.status === ApiStatus.SUCCESS && calendarData.data) {
-      return calendarData.data;
+      return { data: calendarData.data, refetch };
     }
 
-    return null;
+    return { data: null, refetch };
   },
 };

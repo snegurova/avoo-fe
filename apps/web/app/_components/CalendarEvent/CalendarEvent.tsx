@@ -96,7 +96,7 @@ export default function CalendarEvent(props: Props) {
           >
             {type === CalendarViewType.DAY && event.status === OrderStatus.PENDING && (
               <div className={eventLabel({ status: event.status })}>
-                {event.status.toLocaleLowerCase()}
+                {event.status.toLowerCase()}
               </div>
             )}
             {type !== CalendarViewType.DAY && (

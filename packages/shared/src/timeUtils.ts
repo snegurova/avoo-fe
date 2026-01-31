@@ -173,4 +173,11 @@ export const timeUtils = {
     };
     return dateObj.toLocaleDateString('en-US', options);
   },
+  getHumanDuration(durationMinutes: number): string {
+    const hours = Math.floor(durationMinutes / 60);
+    const minutes = durationMinutes % 60;
+    const hoursPart = hours > 0 ? `${hours}h` : '';
+    const minutesPart = minutes > 0 ? ` ${minutes} mins` : '00 mins';
+    return `${hoursPart} ${minutesPart}`.trim();
+  },
 };

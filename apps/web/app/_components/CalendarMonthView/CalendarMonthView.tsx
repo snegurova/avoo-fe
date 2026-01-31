@@ -51,7 +51,7 @@ export default function CalendarMonthView(props: Props) {
   const ref = useRef<HTMLDivElement | null>(null);
   const [showEvents, setShowEvents] = useState<number>(1);
 
-  const calendar = calendarHooks.useGetCalendarByDates(params);
+  const { data: calendar, refetch } = calendarHooks.useGetCalendarByDates(params);
 
   const calculateShowEvents = useCallback(() => {
     if (!ref.current) return;

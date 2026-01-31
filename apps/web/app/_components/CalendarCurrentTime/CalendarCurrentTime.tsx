@@ -1,9 +1,8 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { PX_IN_MINUTE } from '@/_constants/time';
 import { timeUtils } from '@avoo/shared';
 import { tv } from 'tailwind-variants';
-
-const ONE_MINUTE_MS = 60000;
+import { useIntervalAction } from '@avoo/hooks';
 
 type Props = {
   isSingleWeek?: boolean;
@@ -42,23 +41,9 @@ const label = tv({
 
 export default function CalendarCurrentTime(props: Props) {
   const { showLabel = false, time, setTime, isSingleWeek = false } = props;
-
-  useEffect(() => {
-    let interval: ReturnType<typeof setInterval> | null = null;
-
-    const now = new Date();
-    const delay = (60 - now.getSeconds()) * 1000 - now.getMilliseconds();
-    const timeout = setTimeout(() => {
-      interval = setInterval(() => {
-        setTime(timeUtils.getMinutesInDay(new Date().toString()));
-      }, ONE_MINUTE_MS);
-      setTime(timeUtils.getMinutesInDay(new Date().toString()));
-    }, delay);
-    return () => {
-      clearTimeout(timeout);
-      if (interval) clearInterval(interval);
-    };
-  }, []);
+  useIntervalAction(() => {
+    setTime(timeUtils.getMinutesInDay(new Date().toString()));
+  });
 
   return (
     <div

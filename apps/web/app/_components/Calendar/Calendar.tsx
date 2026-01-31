@@ -15,7 +15,7 @@ import { OrderStatus } from '@avoo/hooks/types/orderStatus';
 import AppPlaceholder from '@/_components/AppPlaceholder/AppPlaceholder';
 import CalendarWeekSingleMasterView from '@/_components/CalendarWeekSingleMasterView/CalendarWeekSingleMasterView';
 import AsideModal from '@/_components/AsideModal/AsideModal';
-import EventInfo from '@/_components/EventInfo/EventInfo';
+import OrderData from '@/_components/OrderData/OrderData';
 
 const columnHeadContainer = tv({
   base: 'sticky bg-white z-10 ',
@@ -66,7 +66,7 @@ export default function Calendar() {
     rangeToDate: timeUtils.formatDate(toDate),
   });
   const [time, setTime] = useState(timeUtils.getMinutesInDay(new Date().toString()));
-  const [selectedEvent, setSelectedEvent] = useState<PrivateEvent | null>(null);
+  const [selectedOrder, setSelectedOrder] = useState<number | null>(null);
 
   useEffect(() => {
     setParams((prev) => ({
@@ -114,7 +114,7 @@ export default function Calendar() {
     scrollRef.current.scrollTo(scrollOptions);
   };
 
-  const calendar = calendarHooks.useGetCalendar(params);
+  const { data: calendar, refetch } = calendarHooks.useGetCalendar(params);
   const masters = masterHooks.useGetMastersProfileInfo()?.items;
 
   const filteredMasters = useMemo(() => {
@@ -137,8 +137,11 @@ export default function Calendar() {
     return type === CalendarViewType.WEEK && filteredMasters.length === 1;
   }, [type, filteredMasters]);
 
-  const closeEventModal = () => {
-    setSelectedEvent(null);
+  const closeOrderModal = () => {
+    const id = selectedOrder;
+    setTimeout(() => {
+      setSelectedOrder((prev) => (prev === id ? null : prev));
+    }, 0);
   };
 
   return (
@@ -194,7 +197,8 @@ export default function Calendar() {
                           setType={setType}
                           time={time}
                           setTime={setTime}
-                          selectEvent={setSelectedEvent}
+                          selectOrder={setSelectedOrder}
+                          availableBooking={!selectedOrder}
                         />
                       );
                     })}
@@ -223,14 +227,17 @@ export default function Calendar() {
                 setDate={setDate}
                 setToDate={setToDate}
                 setType={setType}
+                availableBooking={!selectedOrder}
               />
             )}
             {filteredMasters.length === 0 && <AppPlaceholder />}
           </div>
         </div>
       </div>
-      <AsideModal open={!!selectedEvent} handleClose={closeEventModal}>
-        {selectedEvent && <EventInfo event={selectedEvent} />}
+      <AsideModal open={!!selectedOrder} handleClose={closeOrderModal}>
+        {selectedOrder && (
+          <OrderData orderId={selectedOrder} onClose={closeOrderModal} refetchCalendar={refetch} />
+        )}
       </AsideModal>
     </>
   );

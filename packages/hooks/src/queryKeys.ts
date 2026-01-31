@@ -41,6 +41,7 @@ export const queryKeys = {
   },
   orders: {
     all: ['orders'] as const,
+    byId: (id: number) => [...queryKeys.orders.all, id] as const,
     byParams: (params: PrivateOrderQueryParams) => [...queryKeys.orders.all, params] as const,
   },
 } as const;

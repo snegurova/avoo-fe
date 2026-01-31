@@ -1,3 +1,4 @@
+import { OrderStatus } from '@avoo/hooks/types/orderStatus';
 import type { components, operations } from './generated';
 import { OrderType } from '@avoo/hooks/types/orderType';
 
@@ -91,13 +92,41 @@ export type GetSchedulesResponse = {
 };
 
 /** Calendar */
-export type GetCalendarResponse = components['schemas']['PrivateCalendarResponseDto'][];
 
-export type GetCalendarByDatesResponse = components['schemas']['PrivateCalendarResponseByDatesDto'];
+export type PrivateEvent = Omit<components['schemas']['PrivateEventDto'], 'status'> & {
+  status: OrderStatus;
+};
 
-export type CalendarItem = components['schemas']['PrivateCalendarResponseDto'];
+type PrivateWorkingDay = Omit<components['schemas']['PrivateWorkingDayDto'], 'events'> & {
+  events: PrivateEvent[];
+};
 
-export type PrivateEvent = components['schemas']['PrivateEventDto'];
+export type CalendarItem = Omit<components['schemas']['PrivateCalendarResponseDto'], 'days'> & {
+  days: PrivateWorkingDay[];
+};
+
+export type GetCalendarResponse = CalendarItem[];
+
+export type PrivateEventWithMaster = Omit<
+  components['schemas']['PrivateEventWithMasterDto'],
+  'status'
+> & {
+  status: OrderStatus;
+};
+
+type PrivateWorkingDayByDates = Omit<
+  components['schemas']['PrivateWorkingDayByDatesDto'],
+  'events'
+> & {
+  events: PrivateEventWithMaster[];
+};
+
+export type GetCalendarByDatesResponse = Omit<
+  components['schemas']['PrivateCalendarResponseByDatesDto'],
+  'days'
+> & {
+  days: PrivateWorkingDayByDates[];
+};
 
 export enum CalendarView {
   Week = 'week',
@@ -120,7 +149,9 @@ export type { FileInput, UploadFile } from '@avoo/shared';
 export type UpdateOrderStatusRequest = components['schemas']['UpdateOrderStatusDto'];
 export type PrivateOrderQueryParams =
   operations['OrdersController_findAllOwn']['parameters']['query'];
-export type Order = components['schemas']['OrderEntity'];
+export type Order = Omit<components['schemas']['OrderEntity'], 'status'> & {
+  status: OrderStatus;
+};
 export type CreatePrivateOrder = Omit<components['schemas']['CreatePrivateOrderDto'], 'type'> & {
   type: OrderType;
 };
@@ -128,4 +159,8 @@ export type CreatePrivateOrder = Omit<components['schemas']['CreatePrivateOrderD
 export type CreatePrivateOrdersRequest = {
   ordersData: CreatePrivateOrder[];
   customerData: CreateCustomerRequest | FindCustomerRequest;
+};
+
+export type UpdateOrderRequest = Omit<components['schemas']['UpdateOrderDto'], 'status'> & {
+  status?: OrderStatus.CONFIRMED | OrderStatus.CANCELED;
 };

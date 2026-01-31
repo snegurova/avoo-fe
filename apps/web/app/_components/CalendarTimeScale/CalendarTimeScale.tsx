@@ -18,7 +18,7 @@ type Props = {
 };
 
 const container = tv({
-  base: 'shrink-0 sticky bg-white z-7',
+  base: 'shrink-0 sticky bg-white z-8',
   variants: {
     type: {
       [CalendarViewType.DAY]: 'left-0 w-10.5',

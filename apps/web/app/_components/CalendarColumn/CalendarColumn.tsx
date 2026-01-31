@@ -26,7 +26,8 @@ type Props = {
   setType: React.Dispatch<React.SetStateAction<CalendarViewType>>;
   setTime: React.Dispatch<React.SetStateAction<number>>;
   isSingleWeek?: boolean;
-  selectEvent?: (event: PrivateEvent | null) => void;
+  selectOrder?: (eventId: number | null) => void;
+  availableBooking: boolean;
 };
 
 const col = tv({
@@ -76,7 +77,8 @@ export default function CalendarColumn(props: Props) {
     setType,
     setTime,
     isSingleWeek = false,
-    selectEvent,
+    selectOrder,
+    availableBooking,
   } = props;
   const ref = useRef<HTMLDivElement | null>(null);
   const router = useRouter();
@@ -106,6 +108,7 @@ export default function CalendarColumn(props: Props) {
   }, [ref.current]);
 
   const onAvailabelTimeClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!availableBooking) return;
     const parent = e.currentTarget.parentElement;
     if (!parent) return;
     const rect = parent.getBoundingClientRect();
@@ -127,8 +130,9 @@ export default function CalendarColumn(props: Props) {
     }
 
     router.push(
-      appRoutes.OrderCreate +
-        `?masterId=${master.id}&date=${timeUtils.formatDateTimeRounded(date, hours * 60 + mins)}`,
+      `${appRoutes.OrderCreate}?masterId=${master.id}&date=${encodeURIComponent(
+        timeUtils.formatDateTimeRounded(date, hours * 60 + mins),
+      )}`,
     );
   };
 
@@ -142,11 +146,12 @@ export default function CalendarColumn(props: Props) {
     setType(CalendarViewType.DAY);
   };
 
-
-  // Handler to select event and put event object into state
-  const handleEventSelect = useCallback((event: PrivateEvent) => {
-    if (selectEvent) selectEvent(event);
-  }, [selectEvent]);
+  const handleOrderSelect = useCallback(
+    (event: PrivateEvent) => {
+      if (selectOrder) selectOrder(event.id);
+    },
+    [selectOrder],
+  );
 
   return (
     <>
@@ -175,7 +180,7 @@ export default function CalendarColumn(props: Props) {
                 key={`${event.id}-${type}`}
                 event={event}
                 type={type}
-                onEventSelect={handleEventSelect}
+                onEventSelect={handleOrderSelect}
               />
             ))}
           {timeUtils.isSameDay(date, new Date()) && (
@@ -207,7 +212,7 @@ export default function CalendarColumn(props: Props) {
                           key={`${event.id}-${type}`}
                           event={event}
                           type={type}
-                          onEventSelect={handleEventSelect}
+                          onEventSelect={handleOrderSelect}
                         />
                       ))}
                     </div>

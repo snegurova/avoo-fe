@@ -1,0 +1,220 @@
+import React, { useEffect, useState } from 'react';
+import { Order, MasterWithRelationsEntity } from '@avoo/axios/types/apiTypes';
+import { Button, ButtonFit, ButtonIntent, ButtonType } from '@/_components/Button/Button';
+import { timeUtils } from '@avoo/shared';
+import { useApiStatusStore } from '@avoo/store';
+import ServiceElement from '@/_components/ServiceElement/ServiceElement';
+import CustomerElement from '@/_components/CustomerElement/CustomerElement';
+import { orderHooks } from '@avoo/hooks';
+import FormTextArea from '@/_components/FormTextArea/FormTextArea';
+import { Controller } from 'react-hook-form';
+import { masterHooks } from '@avoo/hooks';
+import SearchField from '@/_components/SearchField/SearchField';
+import MasterElement from '../MasterElement/MasterElement';
+import FormCounter from '@/_components/FormCounter/FormCounter';
+import InfoIcon from '@/_icons/InfoIcon';
+import FormDatePicker from '@/_components/FormDatePicker/FormDatePicker';
+import FormTimePicker from '@/_components/FormTimePicker/FormTimePicker';
+
+type Props = {
+  order: Order;
+  onClose: () => void;
+  refetchCalendar: () => void;
+  refetchOrder: () => void;
+};
+
+export default function OrderEdit(props: Props) {
+  const { order, onClose, refetchCalendar, refetchOrder } = props;
+  const [selectedMaster, setSelectedMaster] = React.useState<MasterWithRelationsEntity | undefined>(
+    order.master,
+  );
+  const [masterSearch, setMasterSearch] = useState('');
+  const [error, setError] = React.useState<string | null>(null);
+  const isPending = useApiStatusStore((state) => state.isPending);
+
+  const {
+    control,
+    handleSubmit,
+    errors,
+    setValue,
+    error: apiError,
+  } = orderHooks.useUpdateOrder({
+    order: {
+      duration: order.duration,
+      notes: typeof order.notes === 'string' ? order.notes : '',
+      masterId: order.master.id,
+      date: order.date,
+    },
+    id: order.id,
+    onSuccess: () => {
+      refetchCalendar();
+      refetchOrder();
+      onClose();
+    },
+  });
+
+  const masters = masterHooks.useGetMastersProfileInfo()?.items;
+
+  useEffect(() => {
+    if (apiError) {
+      const errorMessage =
+        typeof apiError === 'object' && 'response' in apiError
+          ? (apiError as any).response?.data?.errorMessage || apiError.message
+          : apiError.message;
+      setError(errorMessage);
+    } else {
+      setError(null);
+    }
+  }, [apiError]);
+
+  const onMasterChange = (value: number | { id: number } | undefined) => {
+    let masterId = undefined;
+
+    if (typeof value === 'number') {
+      masterId = value;
+    } else if (value && typeof value === 'object' && 'id' in value) {
+      masterId = value.id;
+    }
+    setValue('masterId', masterId);
+    const master = masters?.find((m) => m.id === masterId) || undefined;
+    setSelectedMaster(master);
+  };
+
+  return (
+    <form className='h-full' onSubmit={handleSubmit}>
+      <div className='flex flex-col gap-8 '>
+        <div className='flex flex-col gap-2'>
+          <div className='flex items-center justify-between gap-6 pr-6'>
+            <span className='text-2xl font-medium tracking-wider'>Edit Booking</span>
+          </div>
+        </div>
+        <div className='flex flex-col gap-3'>
+          <h3 className='font-medium tracking-wider'>Service</h3>
+          {order.service && <ServiceElement item={order.service} isCard />}
+          <div className='flex flex-col gap-3'>
+            <div className=''>
+              <label
+                className='block mb-1 text-sm tracking-wider font-medium'
+                htmlFor='confirmation-notes'
+              >
+                Notes
+              </label>
+              <Controller
+                name='notes'
+                control={control}
+                render={({ field }) => (
+                  <div className=''>
+                    <FormTextArea
+                      className='resize-none'
+                      rows={3}
+                      id='confirmation-notes'
+                      value={field.value}
+                      onChange={field.onChange}
+                      error={errors?.notes?.message}
+                    />
+                  </div>
+                )}
+              />
+            </div>
+            <div className='flex flex-col gap-3'>
+              <Controller
+                name='duration'
+                control={control}
+                render={({ field }) => (
+                  <div className=''>
+                    <span className='block mb-1 text-sm tracking-wider font-medium'>
+                      Service duration
+                    </span>
+                    <FormCounter
+                      value={field.value}
+                      onIncrease={() => field.onChange(field.value ? field.value + 5 : 0)}
+                      onDecrease={() =>
+                        field.onChange(field.value && field.value > 5 ? field.value - 5 : 0)
+                      }
+                    />
+                  </div>
+                )}
+              />
+            </div>
+            <div className=''>
+              <Controller
+                name='masterId'
+                control={control}
+                render={({ field }) => (
+                  <SearchField
+                    label='Master'
+                    value={field.value}
+                    onChange={onMasterChange}
+                    items={masters || []}
+                    search={masterSearch}
+                    setSearch={setMasterSearch}
+                    ItemElement={MasterElement}
+                    searchMode={false}
+                    error={errors?.masterId?.message}
+                  />
+                )}
+              />
+              {selectedMaster && <MasterElement item={selectedMaster} isCard />}
+            </div>
+            <Controller
+              name='date'
+              control={control}
+              render={({ field }) => (
+                <div className='grid grid-cols-3 gap-x-3 w-full'>
+                  <div className='col-span-2'>
+                    <label className='block mb-2 font-medium'>Date</label>
+                    <FormDatePicker date={field.value} onChange={field.onChange} />
+                  </div>
+                  <div className=' '>
+                    <label className='block mb-2 font-medium'>Time</label>
+                    <FormTimePicker date={field.value} onChange={field.onChange} />
+                  </div>
+
+                  {errors?.date?.message && (
+                    <div className='mt-1 text-sm text-red-500 col-span-3'>
+                      {errors?.date?.message}
+                    </div>
+                  )}
+                </div>
+              )}
+            />
+
+            {error && (
+              <div className='flex flex-row gap-4 items-center'>
+                <InfoIcon className='shrink-0 w-6 h-6 fill-red-800' />
+                <p className='text-sm text-red-800'>{error}</p>
+              </div>
+            )}
+          </div>
+        </div>
+
+        <div className='flex flex-col gap-3'>
+          <h3 className='font-medium tracking-wider'>Client</h3>
+          {order.customer && <CustomerElement item={order.customer} isCard />}
+          {order.customer.notes && (
+            <p className='text-xs text-gray-500'>Note: {order.customer.notes}</p>
+          )}
+        </div>
+      </div>
+
+      <div className='sticky bottom-0 pt-8 bg-white grid grid-cols-2 gap-8'>
+        <Button
+          loading={isPending}
+          fit={ButtonFit.Fill}
+          intent={ButtonIntent.Secondary}
+          onClick={onClose}
+        >
+          Close
+        </Button>
+        <Button
+          loading={isPending}
+          fit={ButtonFit.Fill}
+          intent={ButtonIntent.Primary}
+          type={ButtonType.Submit}
+        >
+          Save
+        </Button>
+      </div>
+    </form>
+  );
+}

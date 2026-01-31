@@ -186,6 +186,14 @@ export const updateOrderStatusSchema = yup.object({
     .required('Status is required'),
 });
 
+export const updateOrderSchema = yup.object({
+  status: yup.string().oneOf([OrderStatus.CONFIRMED, OrderStatus.CANCELED]).optional(),
+  duration: yup.number().positive().optional(),
+  notes: yup.string().optional(),
+  date: yup.string().optional(),
+  masterId: yup.number().optional(),
+});
+
 export type RegisterFormData = yup.InferType<typeof registerSchema>;
 export type LoginFormData = yup.InferType<typeof loginSchema>;
 export type ForgotPasswordFormData = yup.InferType<typeof forgotPasswordSchema>;
@@ -195,3 +203,4 @@ export type CreateMasterFormData = yup.InferType<typeof createMasterSchema>;
 export type CreatePrivateOrdersData = yup.InferType<typeof createPrivateOrdersSchema>;
 export type UpdateOrderStatusData = yup.InferType<typeof updateOrderStatusSchema>;
 export type OrdersData = yup.InferType<typeof ordersDataSchema>;
+export type UpdateOrderData = yup.InferType<typeof updateOrderSchema>;
