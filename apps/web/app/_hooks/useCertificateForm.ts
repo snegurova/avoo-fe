@@ -24,7 +24,7 @@ type Values = {
 export function useCertificateForm() {
   const router = useRouter();
   const { handleAddCertificate } = userHooks.usePostCertificate();
-  const masters = masterHooks.useGetMastersProfileInfo();
+  const masters = masterHooks.useGetMastersProfileInfo()?.items;
   const [fileError, setFileError] = useState<string | null>(null);
   const [file, setFile] = useState<File | null>(null);
 

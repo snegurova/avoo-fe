@@ -2,7 +2,11 @@ import { useMemo } from 'react';
 import { utils } from '@avoo/hooks/utils/utils';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { createMasterSchema, CreateMasterFormData, updateMasterSchema } from '../schemas/validationSchemas';
+import {
+  createMasterSchema,
+  CreateMasterFormData,
+  updateMasterSchema,
+} from '../schemas/validationSchemas';
 
 import { masterApi } from '@avoo/axios';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
@@ -11,8 +15,9 @@ import {
   BaseResponse,
   MasterWithRelationsEntityResponse,
   CreateMasterRequest,
+  GetMastersResponse,
 } from '@avoo/axios/types/apiTypes';
-import { apiStatus } from '@avoo/hooks/types/apiTypes';
+import { ApiStatus } from '@avoo/hooks/types/apiTypes';
 import { queryKeys } from './queryKeys';
 
 type UseCreateMasterFormParams = {
@@ -26,17 +31,14 @@ type UseUpdateMasterFormParams = {
 
 export const masterHooks = {
   useGetMastersProfileInfo: () => {
-    const { data: profileInfoData, isPending } = useQuery<
-      BaseResponse<MasterWithRelationsEntityResponse[]>,
-      Error
-    >({
+    const { data: profileInfoData, isPending } = useQuery<BaseResponse<GetMastersResponse>, Error>({
       queryKey: queryKeys.masters.all,
       queryFn: masterApi.getMastersInfo,
     });
 
     utils.useSetPendingApi(isPending);
 
-    if (profileInfoData?.status === apiStatus.SUCCESS && profileInfoData.data) {
+    if (profileInfoData?.status === ApiStatus.SUCCESS && profileInfoData.data) {
       return profileInfoData.data;
     }
 
@@ -67,6 +69,9 @@ export const masterHooks = {
       CreateMasterRequest
     >({
       mutationFn: masterApi.createMaster,
+      meta: {
+        successMessage: 'Master created successfully',
+      },
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: queryKeys.masters.all });
         onSuccess?.();
@@ -108,6 +113,9 @@ export const masterHooks = {
       CreateMasterRequest
     >({
       mutationFn: (data: CreateMasterRequest) => masterApi.updateMaster(master.id, data),
+      meta: {
+        successMessage: 'Master updated successfully',
+      },
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: queryKeys.masters.all });
         onSuccess?.();
@@ -133,6 +141,9 @@ export const masterHooks = {
       number
     >({
       mutationFn: masterApi.deleteMaster,
+      meta: {
+        successMessage: 'Master deleted successfully',
+      },
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: queryKeys.masters.all });
         onSuccess?.();
@@ -146,10 +157,7 @@ export const masterHooks = {
       isPending,
     };
   },
-  useFilterMasters: (
-    masters: MasterWithRelationsEntityResponse[] | null,
-    searchQuery: string,
-  ) => {
+  useFilterMasters: (masters: MasterWithRelationsEntityResponse[] | null, searchQuery: string) => {
     return useMemo(() => {
       if (!masters) return [];
       if (!searchQuery.trim()) return masters;

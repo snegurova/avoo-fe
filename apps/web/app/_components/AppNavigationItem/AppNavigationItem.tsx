@@ -12,10 +12,10 @@ type Props = {
 };
 
 const navigationItem = tv({
-  base: 'flex items-center gap-3.5 px-8 py-3 hover:bg-primary-500 focus:bg-primary-500 transition-colors',
+  base: 'flex items-center gap-3.5 px-8 py-3 hover:bg-primary-100 focus:bg-primary-100 transition-colors',
   variants: {
     active: {
-      true: 'bg-primary-100',
+      true: 'bg-primary-50',
     },
   },
 });

@@ -8,7 +8,7 @@ import Avatar, { AvatarSize } from '@/_components/Avatar/Avatar';
 import { colors } from '@avoo/design-tokens';
 
 export const ProfileMaster = () => {
-  const mastersInfo = masterHooks.useGetMastersProfileInfo();
+  const mastersInfo = masterHooks.useGetMastersProfileInfo()?.items;
   const router = useRouter();
 
   const handleNavigate = () => {

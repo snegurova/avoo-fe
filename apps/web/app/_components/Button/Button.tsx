@@ -41,11 +41,13 @@ const hooks = {
 };
 
 const button = tv({
-  base: 'inline-flex items-center justify-center min-w-[150px] rounded-md font-medium transition hover:shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 cursor-pointer disabled:cursor-not-allowed',
+  base: 'inline-flex items-center justify-center min-w-40  font-medium hover:shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 cursor-pointer disabled:cursor-not-allowed rounded-lg py-3.5 px-6 leading-none transition-colors',
   variants: {
     intent: {
-      primary: 'bg-blue-600 text-white hover:bg-blue-700 disabled:bg-blue-300',
-      secondary: 'bg-gray-200 text-gray-900 hover:bg-gray-300 disabled:bg-gray-100',
+      primary:
+        'bg-black text-white hover:bg-primary-500  focus:bg-primary-500 disabled:bg-gray-500',
+      secondary:
+        'bg-white text-black border-black border hover:border-primary-500 focus:border-primary-500 hover:text-primary-500 focus:text-primary-500 disabled:text-gray-500 disabled:text-gray-500',
       cancel: 'bg-transparent text-black border border-black hover:bg-gray-100',
       submit: 'bg-black text-white hover:bg-gray-800',
     },

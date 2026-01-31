@@ -10,7 +10,7 @@ import {
   UpdateProfile,
 } from '@avoo/axios/types/apiTypes';
 import { FileInput } from '@avoo/shared';
-import { apiStatus } from '../types/apiTypes';
+import { ApiStatus } from '../types/apiTypes';
 import { queryKeys } from './queryKeys';
 import { appendFileToForm, buildCertificateForm } from './utils/formDataHelpers';
 import { CreateCertificatePayload } from '@avoo/axios/types/certificate';
@@ -27,7 +27,7 @@ export const userHooks = {
 
     utils.useSetPendingApi(isPending);
 
-    const profileInfo = userProfileData?.status === apiStatus.SUCCESS ? userProfileData.data : null;
+    const profileInfo = userProfileData?.status === ApiStatus.SUCCESS ? userProfileData.data : null;
 
     const visualProfileInfo = {
       name: profileInfo?.businessInfo?.name ?? 'Salon Name not set',
@@ -56,7 +56,7 @@ export const userHooks = {
 
     utils.useSetPendingApi(isPending);
 
-    if (userMediaData?.status === apiStatus.SUCCESS) {
+    if (userMediaData?.status === ApiStatus.SUCCESS) {
       return userMediaData.data;
     }
 

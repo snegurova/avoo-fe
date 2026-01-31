@@ -3,17 +3,19 @@ import CalendarColumn from '@/_components/CalendarColumn/CalendarColumn';
 import CalendarColumnHead from '@/_components/CalendarColumnHead/CalendarColumnHead';
 import CalendarTimeScale from '@/_components/CalendarTimeScale/CalendarTimeScale';
 import { calendarHooks } from '@avoo/hooks';
-import { PrivateCalendarQueryParams } from '@avoo/axios/types/apiTypes';
+import { PrivateCalendarQueryParams, PrivateEvent } from '@avoo/axios/types/apiTypes';
 import { masterHooks } from '@avoo/hooks';
 import CalendarControls from '@/_components/CalendarControls/CalendarControls';
 import { CalendarViewType } from '@avoo/hooks/types/calendarViewType';
 import { timeUtils } from '@avoo/shared';
 import { tv } from 'tailwind-variants';
-import CalendarMonthView from '../CalendarMonthView/CalendarMonthView';
+import CalendarMonthView from '@/_components/CalendarMonthView/CalendarMonthView';
 import { PX_IN_MINUTE } from '@/_constants/time';
 import { OrderStatus } from '@avoo/hooks/types/orderStatus';
-import AppPlaceholder from '../AppPlaceholder/AppPlaceholder';
-import CalendarWeekSingleMasterView from '../CalendarWeekSingleMasterView/CalendarWeekSingleMasterView';
+import AppPlaceholder from '@/_components/AppPlaceholder/AppPlaceholder';
+import CalendarWeekSingleMasterView from '@/_components/CalendarWeekSingleMasterView/CalendarWeekSingleMasterView';
+import AsideModal from '@/_components/AsideModal/AsideModal';
+import EventInfo from '@/_components/EventInfo/EventInfo';
 
 const columnHeadContainer = tv({
   base: 'sticky bg-white z-10 ',
@@ -64,6 +66,7 @@ export default function Calendar() {
     rangeToDate: timeUtils.formatDate(toDate),
   });
   const [time, setTime] = useState(timeUtils.getMinutesInDay(new Date().toString()));
+  const [selectedEvent, setSelectedEvent] = useState<PrivateEvent | null>(null);
 
   useEffect(() => {
     setParams((prev) => ({
@@ -112,7 +115,7 @@ export default function Calendar() {
   };
 
   const calendar = calendarHooks.useGetCalendar(params);
-  const masters = masterHooks.useGetMastersProfileInfo();
+  const masters = masterHooks.useGetMastersProfileInfo()?.items;
 
   const filteredMasters = useMemo(() => {
     if (!masters || (masterIds && masterIds.length === 0)) return [];
@@ -134,91 +137,101 @@ export default function Calendar() {
     return type === CalendarViewType.WEEK && filteredMasters.length === 1;
   }, [type, filteredMasters]);
 
-  return (
-    <div className='flex h-[calc(100%-54px)] w-full'>
-      <div className='w-full flex flex-col'>
-        <CalendarControls
-          date={date}
-          setDate={setDate}
-          toDate={toDate}
-          setToDate={setToDate}
-          type={type}
-          setType={setType}
-          scrollToCurrentTime={scrollToCurrentTime}
-          params={params}
-          setParams={setParams}
-          masters={masters ?? []}
-          masterIds={masterIds}
-          setMasterIds={setMasterIds}
-          statuses={statuses}
-          setStatuses={setStatuses}
-        />
-        <div className={mainContainer({ type, isWeekSingleMasterView })} ref={scrollRef}>
-          {filteredMasters.length > 0 && !isWeekSingleMasterView && (
-            <>
-              <div className={columnHeadContainer({ type })}>
-                {filteredMasters.map((master, idx) => (
-                  <CalendarColumnHead
-                    key={`${master.id}-head`}
-                    master={master}
-                    idx={idx}
-                    type={type}
-                  />
-                ))}
-              </div>
+  const closeEventModal = () => {
+    setSelectedEvent(null);
+  };
 
-              <div className={dataContainer({ type })}>
-                <CalendarTimeScale type={type} date={date} time={time} setTime={setTime} />
-                {type !== CalendarViewType.MONTH &&
-                  filteredMasters.map((master) => {
-                    const columnData = calendar?.find(
-                      (schedule) => String(schedule.masterId) === String(master.id),
-                    );
-                    return (
-                      <CalendarColumn
-                        key={`${master.id}-col`}
-                        data={columnData}
-                        master={master}
-                        type={type}
-                        date={date}
+  return (
+    <>
+      <div className='flex h-[calc(100%-62px)] w-full'>
+        <div className='w-full flex flex-col'>
+          <CalendarControls
+            date={date}
+            setDate={setDate}
+            toDate={toDate}
+            setToDate={setToDate}
+            type={type}
+            setType={setType}
+            scrollToCurrentTime={scrollToCurrentTime}
+            params={params}
+            setParams={setParams}
+            masters={masters ?? []}
+            masterIds={masterIds}
+            setMasterIds={setMasterIds}
+            statuses={statuses}
+            setStatuses={setStatuses}
+          />
+          <div className={mainContainer({ type, isWeekSingleMasterView })} ref={scrollRef}>
+            {filteredMasters.length > 0 && !isWeekSingleMasterView && (
+              <>
+                <div className={columnHeadContainer({ type })}>
+                  {filteredMasters.map((master, idx) => (
+                    <CalendarColumnHead
+                      key={`${master.id}-head`}
+                      master={master}
+                      idx={idx}
+                      type={type}
+                    />
+                  ))}
+                </div>
+
+                <div className={dataContainer({ type })}>
+                  <CalendarTimeScale type={type} date={date} time={time} setTime={setTime} />
+                  {type !== CalendarViewType.MONTH &&
+                    filteredMasters.map((master) => {
+                      const columnData = calendar?.find(
+                        (schedule) => String(schedule.masterId) === String(master.id),
+                      );
+                      return (
+                        <CalendarColumn
+                          key={`${master.id}-col`}
+                          data={columnData}
+                          master={master}
+                          type={type}
+                          date={date}
+                          setDate={setDate}
+                          setToDate={setToDate}
+                          setType={setType}
+                          time={time}
+                          setTime={setTime}
+                          selectEvent={setSelectedEvent}
+                        />
+                      );
+                    })}
+                  {type === CalendarViewType.MONTH &&
+                    new Date(params.rangeFromDate).getTime() + 28 * 24 * 60 * 60 * 1000 <=
+                      new Date(params.rangeToDate).getTime() && (
+                      <CalendarMonthView
+                        params={params}
                         setDate={setDate}
                         setToDate={setToDate}
                         setType={setType}
-                        time={time}
-                        setTime={setTime}
                       />
-                    );
-                  })}
-                {type === CalendarViewType.MONTH &&
-                  new Date(params.rangeFromDate).getTime() + 28 * 24 * 60 * 60 * 1000 <=
-                    new Date(params.rangeToDate).getTime() && (
-                    <CalendarMonthView
-                      params={params}
-                      setDate={setDate}
-                      setToDate={setToDate}
-                      setType={setType}
-                    />
-                  )}
-              </div>
-            </>
-          )}
-          {isWeekSingleMasterView && (
-            <CalendarWeekSingleMasterView
-              date={date}
-              time={time}
-              setTime={setTime}
-              data={calendar?.find(
-                (schedule) => String(schedule.masterId) === String(filteredMasters[0].id),
-              )}
-              master={filteredMasters[0]}
-              setDate={setDate}
-              setToDate={setToDate}
-              setType={setType}
-            />
-          )}
-          {filteredMasters.length === 0 && <AppPlaceholder />}
+                    )}
+                </div>
+              </>
+            )}
+            {isWeekSingleMasterView && (
+              <CalendarWeekSingleMasterView
+                date={date}
+                time={time}
+                setTime={setTime}
+                data={calendar?.find(
+                  (schedule) => String(schedule.masterId) === String(filteredMasters[0].id),
+                )}
+                master={filteredMasters[0]}
+                setDate={setDate}
+                setToDate={setToDate}
+                setType={setType}
+              />
+            )}
+            {filteredMasters.length === 0 && <AppPlaceholder />}
+          </div>
         </div>
       </div>
-    </div>
+      <AsideModal open={!!selectedEvent} handleClose={closeEventModal}>
+        {selectedEvent && <EventInfo event={selectedEvent} />}
+      </AsideModal>
+    </>
   );
 }

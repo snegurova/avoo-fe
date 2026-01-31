@@ -1,5 +1,5 @@
 import React, { useState, useRef, useCallback, useEffect } from 'react';
-import { CalendarItem } from '@avoo/axios/types/apiTypes';
+import { CalendarItem, PrivateEvent } from '@avoo/axios/types/apiTypes';
 import { tv } from 'tailwind-variants';
 import { MasterWithRelationsEntity } from '@avoo/axios/types/apiTypes';
 import { CalendarViewType } from '@avoo/hooks/types/calendarViewType';
@@ -7,6 +7,9 @@ import CalendarEvent from '@/_components/CalendarEvent/CalendarEvent';
 import { timeUtils } from '@avoo/shared';
 import { PX_IN_MINUTE } from '@/_constants/time';
 import CalendarCurrentTime from '../CalendarCurrentTime/CalendarCurrentTime';
+import { useRouter } from 'next/navigation';
+import { appRoutes } from '@/_routes/routes';
+import { useToast } from '@/_hooks/useToast';
 
 const DAY_CELLS = Array.from({ length: 96 });
 const WEEK_CELLS = Array.from({ length: 7 });
@@ -23,6 +26,7 @@ type Props = {
   setType: React.Dispatch<React.SetStateAction<CalendarViewType>>;
   setTime: React.Dispatch<React.SetStateAction<number>>;
   isSingleWeek?: boolean;
+  selectEvent?: (event: PrivateEvent | null) => void;
 };
 
 const col = tv({
@@ -72,8 +76,11 @@ export default function CalendarColumn(props: Props) {
     setType,
     setTime,
     isSingleWeek = false,
+    selectEvent,
   } = props;
   const ref = useRef<HTMLDivElement | null>(null);
+  const router = useRouter();
+  const toast = useToast();
 
   const [showEvents, setShowEvents] = useState<number>(1);
 
@@ -109,7 +116,20 @@ export default function CalendarColumn(props: Props) {
     const target = e.target as HTMLElement;
     const isAvailable = target.classList.contains('available-time');
 
-    return [hours, mins, isAvailable, master];
+    const selectedDateTime = new Date(date);
+    selectedDateTime.setHours(hours, mins, 0, 0);
+    const cuurentDateTime = new Date();
+
+    if (selectedDateTime < cuurentDateTime) return;
+
+    if (!isAvailable) {
+      toast.info('Selected time is out of available working hours');
+    }
+
+    router.push(
+      appRoutes.OrderCreate +
+        `?masterId=${master.id}&date=${timeUtils.formatDateTimeRounded(date, hours * 60 + mins)}`,
+    );
   };
 
   const onWeekDayClick = (idx: number) => {
@@ -121,6 +141,12 @@ export default function CalendarColumn(props: Props) {
     setToDate(timeUtils.toDayEnd(newDate));
     setType(CalendarViewType.DAY);
   };
+
+
+  // Handler to select event and put event object into state
+  const handleEventSelect = useCallback((event: PrivateEvent) => {
+    if (selectEvent) selectEvent(event);
+  }, [selectEvent]);
 
   return (
     <>
@@ -145,7 +171,12 @@ export default function CalendarColumn(props: Props) {
           ))}
           {data &&
             data.days[0].events.map((event) => (
-              <CalendarEvent key={`${event.id}-${type}`} event={event} type={type} />
+              <CalendarEvent
+                key={`${event.id}-${type}`}
+                event={event}
+                type={type}
+                onEventSelect={handleEventSelect}
+              />
             ))}
           {timeUtils.isSameDay(date, new Date()) && (
             <CalendarCurrentTime time={time} setTime={setTime} isSingleWeek={isSingleWeek} />
@@ -172,7 +203,12 @@ export default function CalendarColumn(props: Props) {
                   <>
                     <div className='flex flex-col gap-0.5'>
                       {slicedEvents.map((event) => (
-                        <CalendarEvent key={`${event.id}-${type}`} event={event} type={type} />
+                        <CalendarEvent
+                          key={`${event.id}-${type}`}
+                          event={event}
+                          type={type}
+                          onEventSelect={handleEventSelect}
+                        />
                       ))}
                     </div>
                     {data.days[idx].events.length > showEvents && (
