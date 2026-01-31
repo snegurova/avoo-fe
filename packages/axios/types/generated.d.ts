@@ -660,6 +660,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/orders/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["OrdersController_getById"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/orders/{id}/status": {
         parameters: {
             query?: never;
@@ -944,10 +960,11 @@ export interface components {
         UserEntity: {
             id: number;
             email: string;
-            avatarUrl: string | null;
-            avatarPreviewUrl: string | null;
             timezone: string;
             isEmailVerify: boolean;
+            avatarUrl?: string;
+            avatarPreviewUrl?: string;
+            referralCode?: string;
         };
         UserResponseDto: {
             token: string;
@@ -1013,13 +1030,13 @@ export interface components {
         MasterEntity: {
             id: number;
             name: string | null;
-            headline: string | null;
+            headline?: string;
             email: string;
             phone: string | null;
             avatarUrl: string | null;
             avatarPreviewUrl: string | null;
             languages: components["schemas"]["Language"][] | null;
-            bio?: string | null;
+            bio?: string;
         };
         CategoryEntity: {
             id: number;
@@ -1074,12 +1091,18 @@ export interface components {
             master: components["schemas"]["MasterEntity"];
             customer: components["schemas"]["CustomerInfoDto"];
             user: components["schemas"]["UserEntity"];
+            /** Format: date-time */
+            createdAt: string;
+            /** Format: date-time */
+            updatedAt: string;
         };
         BusinessInfoEntity: {
             name: string | null;
+            headline?: string;
             description: string | null;
             phone: string | null;
             address: string | null;
+            policy?: string;
             avatarUrl: string | null;
             languages: components["schemas"]["Language"][] | null;
             location_lat: number | null;
@@ -1088,10 +1111,11 @@ export interface components {
         UserWithRelationsEntity: {
             id: number;
             email: string;
-            avatarUrl: string | null;
-            avatarPreviewUrl: string | null;
             timezone: string;
             isEmailVerify: boolean;
+            avatarUrl?: string;
+            avatarPreviewUrl?: string;
+            referralCode?: string;
             masters: components["schemas"]["MasterEntity"][];
             services: components["schemas"]["ServiceEntity"][];
             orders: components["schemas"]["OrderEntity"][];
@@ -1124,10 +1148,11 @@ export interface components {
         UserProfileEntity: {
             id: number;
             email: string;
-            avatarUrl: string | null;
-            avatarPreviewUrl: string | null;
             timezone: string;
             isEmailVerify: boolean;
+            avatarUrl?: string;
+            avatarPreviewUrl?: string;
+            referralCode?: string;
             businessInfo: components["schemas"]["BusinessInfoEntity"] | null;
         };
         UpdateProfileDto: {
@@ -1136,6 +1161,16 @@ export interface components {
              * @example My Beauty Salon
              */
             name?: string;
+            /**
+             * @description Headline
+             * @example My Beauty Salon
+             */
+            headline?: Record<string, never>;
+            /**
+             * @description Policy text
+             * @example Our policy
+             */
+            policy?: Record<string, never>;
             /**
              * @description User phone
              * @example +48512345678
@@ -1164,12 +1199,10 @@ export interface components {
             /**
              * @description Media IDs
              * @example [
-             *       1,
-             *       2,
-             *       3
+             *       1
              *     ]
              */
-            mediaIds: string[];
+            mediaIds: number[];
         };
         ShortMasterInfoDto: {
             id: number;
@@ -1299,7 +1332,7 @@ export interface components {
              *       3
              *     ]
              */
-            mediaIds: string[];
+            mediaIds: number[];
             /**
              * @description Is the service active
              * @default true
@@ -1311,7 +1344,7 @@ export interface components {
              *       1
              *     ]
              */
-            masterIds?: string[];
+            masterIds?: number[];
         };
         CreateCombinationDto: {
             /**
@@ -1331,7 +1364,7 @@ export interface components {
              *       2
              *     ]
              */
-            serviceIds: string[];
+            serviceIds: number[];
             /**
              * @description ID of the master associated with the combination
              * @example 1
@@ -1353,10 +1386,10 @@ export interface components {
              * @description Array of service IDs included in the combination
              * @example [
              *       1,
-             *       3
+             *       2
              *     ]
              */
-            serviceIds: string[];
+            serviceIds: number[];
         };
         UpdateServiceDto: {
             /**
@@ -1395,7 +1428,7 @@ export interface components {
              *       1
              *     ]
              */
-            masterIds?: string[];
+            masterIds?: number[];
         };
         MediaEntity: {
             id: number;
@@ -1517,6 +1550,7 @@ export interface components {
             notes?: string;
         };
         CreateCustomerDto: {
+            /** @example 1 */
             id?: number;
             /**
              * @description Name of the customer
@@ -1752,7 +1786,12 @@ export interface components {
          */
         OrderStatus: "PENDING" | "CONFIRMED" | "COMPLETED" | "EXPIRED" | "CANCELED";
         QueryCalendarByDatesPrivateDto: {
-            /** @description Master IDs */
+            /**
+             * @description Master IDs
+             * @example [
+             *       1
+             *     ]
+             */
             masterIds?: number[];
             /**
              * @description Calendar start date (local, YYYY-MM-DD)
@@ -1806,7 +1845,12 @@ export interface components {
             note: string | null;
         };
         CreateCalendarExceptionDto: {
-            /** @description Master IDs */
+            /**
+             * @description Master IDs
+             * @example [
+             *       1
+             *     ]
+             */
             masterIds?: number[];
             /**
              * Format: date-time
@@ -2249,7 +2293,7 @@ export interface components {
              *       1
              *     ]
              */
-            mastersId?: string[];
+            masterIds?: number[];
         };
         UpdateWorkingHourBreakDto: {
             /**
@@ -3746,7 +3790,14 @@ export interface operations {
     };
     MastersController_findAll: {
         parameters: {
-            query?: never;
+            query?: {
+                /** @description Filter by name, email or phone */
+                search?: string;
+                /** @description Page number */
+                page?: number;
+                /** @description Items per page */
+                limit?: number;
+            };
             header?: never;
             path?: never;
             cookie?: never;
@@ -3760,7 +3811,10 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["SuccessResponseDto"] & {
-                        data?: components["schemas"]["MasterEntity"][];
+                        data?: {
+                            items?: components["schemas"]["MasterEntity"][];
+                            pagination?: components["schemas"]["PaginationDto"];
+                        };
                     };
                 };
             };
@@ -4243,6 +4297,39 @@ export interface operations {
                             items?: components["schemas"]["OrderEntity"][];
                             pagination?: components["schemas"]["PaginationDto"];
                         };
+                    };
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    OrdersController_getById: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Get order by id */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SuccessResponseDto"] & {
+                        data?: components["schemas"]["OrderEntity"];
                     };
                 };
             };
@@ -5042,12 +5129,8 @@ export interface operations {
                 page?: number;
                 /** @description Items per page */
                 limit?: number;
-                /** @description Filter by name */
-                name?: string;
-                /** @description Filter by email */
-                email?: string;
-                /** @description Filter by phone */
-                phone?: string;
+                /** @description Filter by name, email or phone */
+                search?: string;
             };
             header?: never;
             path?: never;

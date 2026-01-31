@@ -12,6 +12,7 @@ import CheckCircle from '@/_icons/CheckCircle';
 type Props = {
   event: PrivateEvent;
   type: CalendarViewType;
+  onEventSelect?: (event: PrivateEvent) => void;
 };
 
 const container = tv({
@@ -63,11 +64,13 @@ const icon = tv({
 });
 
 export default function CalendarEvent(props: Props) {
-  const { event, type } = props;
+  const { event, type, onEventSelect } = props;
 
   const onEventClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
-    alert(`Event clicked: ${event.title}`);
+    if (onEventSelect) {
+      onEventSelect(event);
+    }
   };
 
   return (

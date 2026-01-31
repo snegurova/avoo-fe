@@ -15,7 +15,7 @@ export default function MastersPage() {
 
   const [searchQuery, setSearchQuery] = useState('');
 
-  const masters = masterHooks.useGetMastersProfileInfo();
+  const masters = masterHooks.useGetMastersProfileInfo()?.items;
   const filtered = masterHooks.useFilterMasters(masters, searchQuery);
 
   const router = useRouter();
