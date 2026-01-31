@@ -36,8 +36,7 @@ export const CalendarSection = () => {
     month: 'short',
   });
 
-  const mastersData = masterHooks.useGetMastersProfileInfo();
-
+  const mastersData = masterHooks.useGetMastersProfileInfo()?.items;
   const masters = useMemo((): Master[] => {
     if (!mastersData) return [];
     return mastersData.map((master) => ({
