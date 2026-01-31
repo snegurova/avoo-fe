@@ -1,10 +1,10 @@
-import { View } from 'react-native';
 import Layout from '@/shared/Layout/Layout';
+import { CalendarSection } from '@/components/CalendarSection/CalendarSection';
 
 export const HomeScreen = () => {
   return (
     <Layout hasBottomTab={true}>
-      <View />
+      <CalendarSection />
     </Layout>
   );
 };
