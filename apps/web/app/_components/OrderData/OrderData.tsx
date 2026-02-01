@@ -15,6 +15,7 @@ type Props = {
   orderId: number;
   onClose: () => void;
   refetchCalendar: () => void;
+  isOutOfSchedule?: boolean;
 };
 
 enum Mode {
@@ -24,7 +25,7 @@ enum Mode {
 }
 
 export default function OrderData(props: Props) {
-  const { orderId, onClose, refetchCalendar } = props;
+  const { orderId, onClose, refetchCalendar, isOutOfSchedule } = props;
   const [mode, setMode] = useState<Mode>(Mode.View);
   const { data: order, refetch } = orderHooks.useGetOrderById(orderId);
   const [timeAgo, setTimeAgo] = React.useState<string>('');
@@ -61,7 +62,13 @@ export default function OrderData(props: Props) {
       {order && (
         <div className='overflow-y-auto overflow-x-hidden h-full'>
           {mode === Mode.View && (
-            <OrderView order={order} onEdit={onEdit} timeAgo={timeAgo} endTime={endTime} />
+            <OrderView
+              order={order}
+              onEdit={onEdit}
+              timeAgo={timeAgo}
+              endTime={endTime}
+              isOutOfSchedule={isOutOfSchedule}
+            />
           )}
           {mode === Mode.Edit && (
             <OrderEdit
@@ -69,6 +76,7 @@ export default function OrderData(props: Props) {
               onClose={onClose}
               refetchCalendar={refetchCalendar}
               refetchOrder={refetch}
+              isOutOfSchedule={isOutOfSchedule}
             />
           )}
           {mode === Mode.Confirmation && (
@@ -79,6 +87,7 @@ export default function OrderData(props: Props) {
               onClose={onClose}
               refetchCalendar={refetchCalendar}
               refetchOrder={refetch}
+              isOutOfSchedule={isOutOfSchedule}
             />
           )}
         </div>

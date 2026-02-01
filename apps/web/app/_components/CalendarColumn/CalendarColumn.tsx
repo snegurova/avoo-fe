@@ -26,7 +26,7 @@ type Props = {
   setType: React.Dispatch<React.SetStateAction<CalendarViewType>>;
   setTime: React.Dispatch<React.SetStateAction<number>>;
   isSingleWeek?: boolean;
-  selectOrder?: (eventId: number | null) => void;
+  selectOrder?: (event: PrivateEvent | null) => void;
   availableBooking: boolean;
 };
 
@@ -148,7 +148,7 @@ export default function CalendarColumn(props: Props) {
 
   const handleOrderSelect = useCallback(
     (event: PrivateEvent) => {
-      if (selectOrder) selectOrder(event.id);
+      if (selectOrder) selectOrder(event);
     },
     [selectOrder],
   );

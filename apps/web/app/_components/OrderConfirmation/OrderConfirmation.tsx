@@ -9,7 +9,7 @@ import { orderHooks } from '@avoo/hooks';
 import { Controller } from 'react-hook-form';
 import FormCounter from '@/_components/FormCounter/FormCounter';
 import { OrderStatus } from '@avoo/hooks/types/orderStatus';
-import InfoIcon from '@/_icons/InfoIcon';
+import ErrorIcon from '@/_icons/ErrorIcon';
 import FormTextArea from '@/_components/FormTextArea/FormTextArea';
 
 type Props = {
@@ -19,10 +19,12 @@ type Props = {
   onClose: () => void;
   refetchCalendar: () => void;
   refetchOrder: () => void;
+  isOutOfSchedule?: boolean;
 };
 
 export default function OrderConfirmation(props: Props) {
-  const { order, timeAgo, endTime, onClose, refetchCalendar, refetchOrder } = props;
+  const { order, timeAgo, endTime, onClose, refetchCalendar, refetchOrder, isOutOfSchedule } =
+    props;
   const [error, setError] = React.useState<string | null>(null);
   const isPending = useApiStatusStore((state) => state.isPending);
 
@@ -79,10 +81,15 @@ export default function OrderConfirmation(props: Props) {
               {timeUtils.getTime(order.date)}
               {endTime && ` - ${endTime}`}
             </span>
-            <div className='relative before:content-[""] before:absolute before:w-px before:top-0.5 before:bottom-0.5 before:bg-black before:-left-2.5'>
+            <div className='relative before:content-[""] before:absolute before:w-px before:top-0.5 before:bottom-0.5 before:bg-black before:-left-2.5 flex gap-2'>
               <span className='text-[10px] font-medium text-white leading-none px-1.5 py-1 flex items-center justify-center rounded-2xl capitalize bg-orange-500'>
                 {order.status.toLowerCase()}
               </span>
+              {isOutOfSchedule && (
+                <span className='text-[10px] font-medium text-white leading-none px-1.5 py-1 flex items-center justify-center rounded-2xl capitalize bg-red-800'>
+                  Out of schedule
+                </span>
+              )}
             </div>
           </div>
         </div>
@@ -135,7 +142,7 @@ export default function OrderConfirmation(props: Props) {
             />
             {error && (
               <div className='flex flex-row gap-4 items-center'>
-                <InfoIcon className='shrink-0 w-6 h-6 fill-red-800' />
+                <ErrorIcon className='shrink-0 w-6 h-6 fill-red-800' />
                 <p className='text-sm text-red-800'>{error}</p>
               </div>
             )}

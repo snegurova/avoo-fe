@@ -15,7 +15,7 @@ type Props = {
 };
 
 const selectButton = tv({
-  base: 'rounded-2xl cursor-pointer flex items-center text-gray-800 border border-gray-200 bg-transparent gap-2 px-3 py-[7px] text-sm leading-none',
+  base: 'rounded-2xl cursor-pointer flex items-center text-gray-800 border border-gray-200 bg-transparent gap-2 px-3 py-[7px] text-sm leading-none hover:bg-gray-100 focus:bg-gray-100 transition-colors',
 });
 
 const selectIcon = tv({

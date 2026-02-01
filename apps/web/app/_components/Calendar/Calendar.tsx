@@ -54,7 +54,13 @@ const dataContainer = tv({
   },
 });
 
-export default function Calendar() {
+type Props = {
+  isWidget?: boolean;
+};
+
+export default function Calendar(props: Props) {
+  const { isWidget = false } = props;
+
   const scrollRef = useRef<HTMLDivElement | null>(null);
   const [date, setDate] = useState<Date>(timeUtils.toDayBegin(new Date()));
   const [toDate, setToDate] = useState<Date>(timeUtils.toDayEnd(new Date()));
@@ -66,7 +72,7 @@ export default function Calendar() {
     rangeToDate: timeUtils.formatDate(toDate),
   });
   const [time, setTime] = useState(timeUtils.getMinutesInDay(new Date().toString()));
-  const [selectedOrder, setSelectedOrder] = useState<number | null>(null);
+  const [selectedOrder, setSelectedOrder] = useState<PrivateEvent | null>(null);
 
   useEffect(() => {
     setParams((prev) => ({
@@ -138,9 +144,9 @@ export default function Calendar() {
   }, [type, filteredMasters]);
 
   const closeOrderModal = () => {
-    const id = selectedOrder;
+    const id = selectedOrder?.id;
     setTimeout(() => {
-      setSelectedOrder((prev) => (prev === id ? null : prev));
+      setSelectedOrder((prev) => (prev?.id === id ? null : prev));
     }, 0);
   };
 
@@ -163,6 +169,7 @@ export default function Calendar() {
             setMasterIds={setMasterIds}
             statuses={statuses}
             setStatuses={setStatuses}
+            isWidget={isWidget}
           />
           <div className={mainContainer({ type, isWeekSingleMasterView })} ref={scrollRef}>
             {filteredMasters.length > 0 && !isWeekSingleMasterView && (
@@ -236,7 +243,12 @@ export default function Calendar() {
       </div>
       <AsideModal open={!!selectedOrder} handleClose={closeOrderModal}>
         {selectedOrder && (
-          <OrderData orderId={selectedOrder} onClose={closeOrderModal} refetchCalendar={refetch} />
+          <OrderData
+            orderId={selectedOrder.id}
+            onClose={closeOrderModal}
+            refetchCalendar={refetch}
+            isOutOfSchedule={selectedOrder.isOutOfSchedule}
+          />
         )}
       </AsideModal>
     </>

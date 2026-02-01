@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Order, MasterWithRelationsEntity } from '@avoo/axios/types/apiTypes';
 import { Button, ButtonFit, ButtonIntent, ButtonType } from '@/_components/Button/Button';
-import { timeUtils } from '@avoo/shared';
 import { useApiStatusStore } from '@avoo/store';
 import ServiceElement from '@/_components/ServiceElement/ServiceElement';
 import CustomerElement from '@/_components/CustomerElement/CustomerElement';
@@ -12,7 +11,7 @@ import { masterHooks } from '@avoo/hooks';
 import SearchField from '@/_components/SearchField/SearchField';
 import MasterElement from '../MasterElement/MasterElement';
 import FormCounter from '@/_components/FormCounter/FormCounter';
-import InfoIcon from '@/_icons/InfoIcon';
+import ErrorIcon from '@/_icons/ErrorIcon';
 import FormDatePicker from '@/_components/FormDatePicker/FormDatePicker';
 import FormTimePicker from '@/_components/FormTimePicker/FormTimePicker';
 
@@ -21,10 +20,11 @@ type Props = {
   onClose: () => void;
   refetchCalendar: () => void;
   refetchOrder: () => void;
+  isOutOfSchedule?: boolean;
 };
 
 export default function OrderEdit(props: Props) {
-  const { order, onClose, refetchCalendar, refetchOrder } = props;
+  const { order, onClose, refetchCalendar, refetchOrder, isOutOfSchedule } = props;
   const [selectedMaster, setSelectedMaster] = React.useState<MasterWithRelationsEntity | undefined>(
     order.master,
   );
@@ -83,10 +83,15 @@ export default function OrderEdit(props: Props) {
   return (
     <form className='h-full' onSubmit={handleSubmit}>
       <div className='flex flex-col gap-8 '>
-        <div className='flex flex-col gap-2'>
+        <div className='flex flex-col gap-2 items-start'>
           <div className='flex items-center justify-between gap-6 pr-6'>
             <span className='text-2xl font-medium tracking-wider'>Edit Booking</span>
           </div>
+          {isOutOfSchedule && (
+            <span className='text-[10px] font-medium text-white leading-none px-1.5 py-1 flex items-center justify-center rounded-2xl capitalize bg-red-800'>
+              Out of schedule
+            </span>
+          )}
         </div>
         <div className='flex flex-col gap-3'>
           <h3 className='font-medium tracking-wider'>Service</h3>
@@ -181,7 +186,7 @@ export default function OrderEdit(props: Props) {
 
             {error && (
               <div className='flex flex-row gap-4 items-center'>
-                <InfoIcon className='shrink-0 w-6 h-6 fill-red-800' />
+                <ErrorIcon className='shrink-0 w-6 h-6 fill-red-800' />
                 <p className='text-sm text-red-800'>{error}</p>
               </div>
             )}

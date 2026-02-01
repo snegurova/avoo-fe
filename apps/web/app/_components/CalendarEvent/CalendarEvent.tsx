@@ -8,6 +8,8 @@ import { CalendarViewType } from '@avoo/hooks/types/calendarViewType';
 import BookmarkCheck from '@/_icons/BookmarkCheck';
 import SearchActivity from '@/_icons/SearchActivity';
 import CheckCircle from '@/_icons/CheckCircle';
+import ErrorIcon from '@/_icons/ErrorIcon';
+import useMediaQuery from '@mui/material/useMediaQuery';
 
 type Props = {
   event: PrivateEvent;
@@ -42,8 +44,19 @@ const eventItem = tv({
   },
 });
 
+const textWrapper = tv({
+  base: 'flex gap-1 shrink-0',
+  variants: {
+    type: {
+      [CalendarViewType.DAY]: 'flex-col lg:flex-row lg:items-center',
+      [CalendarViewType.WEEK]: 'items-center',
+      [CalendarViewType.MONTH]: 'items-center',
+    },
+  },
+});
+
 const eventLabel = tv({
-  base: 'text-[10px] font-medium text-white leading-none px-1.5 py-1 flex items-center justify-center absolute top-0.5 right-0.5 rounded-2xl capitalize',
+  base: 'text-[10px] font-medium text-white leading-none px-1.5 py-1 flex items-center justify-center rounded-2xl capitalize',
   variants: {
     status: {
       [OrderStatus.PENDING]: 'bg-orange-500',
@@ -63,6 +76,17 @@ const icon = tv({
   },
 });
 
+const iconError = tv({
+  base: 'shrink-0 fill-red-800',
+  variants: {
+    type: {
+      [CalendarViewType.DAY]: 'w-3 h-3 lg:w-4.5 lg:h-4.5',
+      [CalendarViewType.WEEK]: 'w-3 h-3',
+      [CalendarViewType.MONTH]: 'w-3 h-3',
+    },
+  },
+});
+
 export default function CalendarEvent(props: Props) {
   const { event, type, onEventSelect } = props;
 
@@ -72,6 +96,8 @@ export default function CalendarEvent(props: Props) {
       onEventSelect(event);
     }
   };
+
+  const desktop = useMediaQuery('(min-width:1024px)');
 
   return (
     <>
@@ -94,13 +120,18 @@ export default function CalendarEvent(props: Props) {
             className={eventItem({ status: event.status, type })}
             onClick={onEventClick}
           >
-            {type === CalendarViewType.DAY && event.status === OrderStatus.PENDING && (
-              <div className={eventLabel({ status: event.status })}>
-                {event.status.toLowerCase()}
-              </div>
-            )}
-            {type !== CalendarViewType.DAY && (
-              <>
+            <div className='hidden lg:flex absolute top-0.5 right-0.5 items-center gap-1'>
+              {type === CalendarViewType.DAY && event.isOutOfSchedule && (
+                <ErrorIcon className={iconError({ type })} />
+              )}
+              {type === CalendarViewType.DAY && event.status === OrderStatus.PENDING && (
+                <div className={eventLabel({ status: event.status })}>
+                  {event.status.toLowerCase()}
+                </div>
+              )}
+            </div>
+            {(type !== CalendarViewType.DAY || !desktop) && (
+              <div className='flex gap-0.5'>
                 {event.status === OrderStatus.PENDING && (
                   <SearchActivity className={icon({ status: event.status })} />
                 )}
@@ -110,18 +141,32 @@ export default function CalendarEvent(props: Props) {
                 {event.status === OrderStatus.COMPLETED && (
                   <CheckCircle className={icon({ status: event.status })} />
                 )}
-              </>
+                {type === CalendarViewType.DAY && event.isOutOfSchedule && (
+                  <ErrorIcon className={iconError({ type })} />
+                )}
+                {type === CalendarViewType.DAY && !desktop && (
+                  <span className='text-xs font-medium text-inherit text-start leading-[1.15]'>
+                    {timeUtils.getTime(event.start)}
+                  </span>
+                )}
+              </div>
             )}
-            <div className='flex gap-1 shrink-0 items-center'>
-              <span className='text-xs font-medium text-inherit leading-[1.15]'>
-                {timeUtils.getTime(event.start)}
-              </span>
+            <div className={textWrapper({ type })}>
+              {(type !== CalendarViewType.DAY || desktop) && (
+                <span className='text-xs font-medium text-inherit text-start leading-[1.15]'>
+                  {timeUtils.getTime(event.start)}
+                </span>
+              )}
               {typeof event.customerName === 'string' && (
-                <span className='text-xs text-inherit leading-[1.15]'>{event.customerName}</span>
+                <span className='text-xs text-inherit leading-[1.15] text-start'>
+                  {event.customerName}
+                </span>
               )}
             </div>
             {type === CalendarViewType.DAY && (
-              <h3 className='text-xs font-inherit text-inherit leading-[1.15]'>{event.title}</h3>
+              <h3 className='text-xs font-inherit text-inherit leading-[1.15] text-start'>
+                {event.title}
+              </h3>
             )}
           </button>
         </div>
