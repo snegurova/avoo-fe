@@ -1,3 +1,4 @@
+import { MediaType } from '@avoo/hooks/types/mediaType';
 import type { components, operations } from './generated';
 import { OrderType } from '@avoo/hooks/types/orderType';
 
@@ -132,3 +133,10 @@ export type CreatePrivateOrdersRequest = {
   ordersData: CreatePrivateOrder[];
   customerData: CreateCustomerRequest | FindCustomerRequest;
 };
+
+/* Media */
+export type UploadMediaRequest = {
+  file: File;
+  type: MediaType;
+};
+export type UploadMediaResponse = components['schemas']['MediaEntity'];

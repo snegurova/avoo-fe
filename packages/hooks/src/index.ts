@@ -15,3 +15,4 @@ export * from './formHooks';
 export * from './profileHooks';
 export * from './orderHooks';
 export * from './customerHooks';
+export * from './mediaHooks';

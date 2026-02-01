@@ -145,6 +145,7 @@ export const servicesHooks = {
       register,
       control,
       setValue,
+      getValues,
       handleSubmit,
       formState: { errors },
     } = useForm<CreateServiceFormData>({
@@ -189,6 +190,7 @@ export const servicesHooks = {
       register,
       control,
       setValue,
+      getValues,
       handleSubmit: handleSubmit(utils.submitAdapter<CreateServiceRequest>(createService)),
       errors,
     };

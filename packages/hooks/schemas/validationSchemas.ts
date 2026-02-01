@@ -2,6 +2,7 @@ import * as yup from 'yup';
 import { VALID_LANGUAGE_CODES } from '@avoo/constants';
 import { OrderStatus } from '@avoo/hooks/types/orderStatus';
 import { OrderType } from '@avoo/hooks/types/orderType';
+import { MediaType } from '@avoo/hooks/types/mediaType';
 
 export const registerSchema = yup.object({
   name: yup.string().nullable().trim(),

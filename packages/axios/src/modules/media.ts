@@ -1,11 +1,16 @@
-import { BaseResponse } from '@avoo/axios/types/apiTypes';
+import { BaseResponse, UploadMediaRequest, UploadMediaResponse } from '@avoo/axios/types/apiTypes';
 import { apiClient } from '@avoo/axios/src/apiClient';
 
 const MEDIA_ENDPOINT = '/media';
 
 export const mediaApi = {
-  async uploadMedia() {
-    const res = await apiClient.post<BaseResponse>(MEDIA_ENDPOINT);
+  async uploadMedia(data: UploadMediaRequest) {
+    const formData = new FormData();
+    formData.append('file', data.file);
+    formData.append('type', data.type);
+    const res = await apiClient.post<BaseResponse<UploadMediaResponse>>(MEDIA_ENDPOINT, formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    });
     return res.data;
   },
 };
