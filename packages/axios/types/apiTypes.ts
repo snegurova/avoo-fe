@@ -119,6 +119,7 @@ type PrivateWorkingDayByDates = Omit<
   'events'
 > & {
   events: PrivateEventWithMaster[];
+  totalEvents: number;
 };
 
 export type GetCalendarByDatesResponse = Omit<

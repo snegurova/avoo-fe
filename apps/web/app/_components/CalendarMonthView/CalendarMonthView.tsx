@@ -51,7 +51,7 @@ export default function CalendarMonthView(props: Props) {
   const ref = useRef<HTMLDivElement | null>(null);
   const [showEvents, setShowEvents] = useState<number>(1);
 
-  const { data: calendar, refetch } = calendarHooks.useGetCalendarByDates(params);
+  const { data: calendar } = calendarHooks.useGetCalendarByDates(params);
 
   const calculateShowEvents = useCallback(() => {
     if (!ref.current) return;
@@ -90,7 +90,7 @@ export default function CalendarMonthView(props: Props) {
       className={grid({ count: calendar ? (calendar.days.length as 28 | 35 | 42) : 28 })}
     >
       {calendar &&
-        calendar.days.map(({ date, events, isWorkingDay }, idx) => {
+        calendar.days.map(({ date, events, isWorkingDay, totalEvents }, idx) => {
           const dayDate = new Date(date);
           const day: DateStatus = timeUtils.getDateStatus(dayDate);
           const slicedEvents = events.length > showEvents ? events.slice(0, showEvents) : events;
@@ -109,9 +109,9 @@ export default function CalendarMonthView(props: Props) {
                       <CalendarEvent key={eIdx} event={event} type={CalendarViewType.MONTH} />
                     ))}
                   </div>
-                  {slicedEvents.length < events.length && (
+                  {showEvents < totalEvents && (
                     <div className='text-[10px] text-gray-600 leading-none'>
-                      +{events.length - showEvents} more
+                      +{totalEvents - showEvents} more
                     </div>
                   )}
                 </div>
