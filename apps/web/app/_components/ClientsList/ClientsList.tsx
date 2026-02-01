@@ -6,6 +6,7 @@ import ArrowDownIcon from '@/_icons/ArrowDownIcon';
 import ArrowUpIcon from '@/_icons/ArrowUpIcon';
 import { customerHooks } from '@avoo/hooks';
 import type { components } from '@avoo/axios/types/generated';
+import type { GetCustomersResponse } from '@avoo/axios/types/apiTypes';
 import { sortByName, SortDirection } from '@avoo/shared';
 import ClientListItem from '@/_components/ClientListItem/ClientListItem';
 
@@ -13,19 +14,19 @@ type CustomerInfoDto = components['schemas']['CustomerInfoDto'];
 
 type Props = {
   onEdit: (id: number) => void;
-  customers?: CustomerInfoDto[] | null;
+  customers?: CustomerInfoDto[] | GetCustomersResponse | null;
 };
 
 export const ClientsList: React.FC<Props> = ({ onEdit, customers: customersProp }) => {
   const customersFromHook = customerHooks.useGetCustomers();
-  const customers = customersProp ?? customersFromHook;
+  const customersSource = customersProp ?? customersFromHook;
+  const items: CustomerInfoDto[] = Array.isArray(customersSource)
+    ? customersSource
+    : customersSource?.items ?? [];
   const [sortDirection, setSortDirection] = useState<SortDirection>(null);
 
-  const sorted = useMemo(
-    () => sortByName(customers ?? [], sortDirection),
-    [customers, sortDirection],
-  );
-  if (!customers || (customers && customers.length === 0)) {
+  const sorted = useMemo(() => sortByName(items ?? [], sortDirection), [items, sortDirection]);
+  if (!items || items.length === 0) {
     return <div className='py-8 text-center text-gray-500'>No clients yet</div>;
   }
 

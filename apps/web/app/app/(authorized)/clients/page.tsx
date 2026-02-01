@@ -14,7 +14,7 @@ export default function ClientsPage() {
 
   const [searchQuery, setSearchQuery] = React.useState('');
 
-  const customers = customerHooks.useGetCustomers();
+  const customers = customerHooks.useGetCustomers()?.items ?? null;
 
   const filtered = customerHooks.useFilterCustomers(customers, searchQuery);
 
