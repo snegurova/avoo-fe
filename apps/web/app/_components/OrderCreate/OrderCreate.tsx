@@ -88,7 +88,7 @@ export default function OrderCreate() {
           control={control}
           render={({ field }) => (
             <CustomerSelect
-              value={field.value ? { ...field.value, phone: field.value.phone ?? '' } : field.value}
+              value={field.value}
               onChange={field.onChange}
               error={errors.customerData?.message}
             />
