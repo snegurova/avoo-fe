@@ -42,7 +42,7 @@ export default function OrderData(props: Props) {
   const endTime = useMemo(
     () =>
       order && order.service
-        ? timeUtils.getMinutesInDay(order.date) + order.service.durationMinutes
+        ? timeUtils.getEndTime(order.date, order.service.durationMinutes)
         : null,
     [order],
   );

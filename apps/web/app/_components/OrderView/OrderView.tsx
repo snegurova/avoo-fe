@@ -11,7 +11,7 @@ type Props = {
   order: Order;
   onEdit: () => void;
   timeAgo: string;
-  endTime: number | null;
+  endTime: string | null;
 };
 
 export default function OrderView(props: Props) {
@@ -38,7 +38,7 @@ export default function OrderView(props: Props) {
           </div>
           <span className='text-sm tracking-wider'>
             {timeUtils.getTime(order.date)}
-            {endTime && ` - ${timeUtils.getTimeFromMinutes(endTime)}`}
+            {endTime && ` - ${endTime}`}
           </span>
         </div>
         <div className='flex flex-col gap-3'>

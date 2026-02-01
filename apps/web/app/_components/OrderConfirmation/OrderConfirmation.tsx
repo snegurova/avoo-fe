@@ -15,7 +15,7 @@ import FormTextArea from '@/_components/FormTextArea/FormTextArea';
 type Props = {
   order: Order;
   timeAgo: string;
-  endTime: number | null;
+  endTime: string | null;
   onClose: () => void;
   refetchCalendar: () => void;
   refetchOrder: () => void;
@@ -77,7 +77,7 @@ export default function OrderConfirmation(props: Props) {
           <div className='flex gap-5 items-center'>
             <span className='text-sm tracking-wider'>
               {timeUtils.getTime(order.date)}
-              {endTime && ` - ${timeUtils.getTimeFromMinutes(endTime)}`}
+              {endTime && ` - ${endTime}`}
             </span>
             <div className='relative before:content-[""] before:absolute before:w-px before:top-0.5 before:bottom-0.5 before:bg-black before:-left-2.5'>
               <span className='text-[10px] font-medium text-white leading-none px-1.5 py-1 flex items-center justify-center rounded-2xl capitalize bg-orange-500'>

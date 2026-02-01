@@ -31,7 +31,7 @@ type Props = {
 };
 
 const col = tv({
-  base: 'flex-1 border-gray-300 grow relative bg-gray-100',
+  base: 'flex-1 border-gray-300 grow relative bg-gray-100 overflow-hidden',
   variants: {
     type: {
       [CalendarViewType.DAY]: 'border-r min-w-25 md:min-w-55 2xl:min-w-90',

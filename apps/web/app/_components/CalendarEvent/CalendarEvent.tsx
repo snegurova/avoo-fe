@@ -75,16 +75,16 @@ export default function CalendarEvent(props: Props) {
 
   return (
     <>
-      {event.status === OrderStatus.PENDING ||
-      event.status === OrderStatus.CONFIRMED ||
-      event.status === OrderStatus.COMPLETED ? (
+      {(event.status === OrderStatus.PENDING ||
+        event.status === OrderStatus.CONFIRMED ||
+        event.status === OrderStatus.COMPLETED) && (
         <div
           className={container({ type })}
           style={
             type === CalendarViewType.DAY
               ? {
                   top: `${timeUtils.getMinutesInDay(event.start) * PX_IN_MINUTE}px`,
-                  height: `${(timeUtils.getMinutesInDay(event.end) - timeUtils.getMinutesInDay(event.start)) * PX_IN_MINUTE}px`,
+                  height: `${timeUtils.getMinutesDifference(event.start, event.end) * PX_IN_MINUTE}px`,
                 }
               : undefined
           }
@@ -125,7 +125,7 @@ export default function CalendarEvent(props: Props) {
             )}
           </button>
         </div>
-      ) : null}
+      )}
     </>
   );
 }
