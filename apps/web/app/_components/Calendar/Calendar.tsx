@@ -114,7 +114,7 @@ export default function Calendar() {
     scrollRef.current.scrollTo(scrollOptions);
   };
 
-  const { data: calendar, refetch } = calendarHooks.useGetCalendar(params);
+  const { data: calendar, refetch } = calendarHooks.useGetCalendar(params, type);
   const masters = masterHooks.useGetMastersProfileInfo()?.items;
 
   const filteredMasters = useMemo(() => {
