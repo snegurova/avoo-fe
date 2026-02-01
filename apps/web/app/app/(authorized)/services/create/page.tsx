@@ -26,14 +26,14 @@ export default function ServicesCreatePage() {
 
   return (
     <AppWrapper>
-      <div className='p-11'>
+      <div className='p-11 overflow-y-auto'>
         <Typography variant='h1'>Add service</Typography>
         <CreateServiceForm
           id='create-new-service'
           control={control}
           errors={errors}
           categories={categories || []}
-          masters={masters || []}
+          masters={masters?.items || []}
           setValue={setValue}
           onSubmit={handleSubmit}
         >
