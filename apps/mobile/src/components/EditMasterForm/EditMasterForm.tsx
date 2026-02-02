@@ -3,10 +3,13 @@ import { useEffect } from 'react';
 import { Text } from 'react-native-paper';
 import FormTextInput from '@/shared/FormTextInput';
 import LanguageSelector from '@/shared/LanguageSelector/LanguageSelector';
-import { masterHooks } from '@avoo/hooks';
+import { masterHooks, filesHooks } from '@avoo/hooks';
 import { colors } from '@avoo/design-tokens';
 import { MasterWithRelationsEntityResponse } from '@avoo/axios/types/apiTypes';
 import { BottomSheetHeader } from '@/shared/BottomSheetHeader/BottomSheetHeader';
+import AvatarUpload from '../Avatar/AvatarUpload';
+import { FILE_UPLOAD_TYPE_ENUM } from '@avoo/axios/types/apiEnums';
+import { UploadFile } from '@avoo/shared';
 
 type Props = {
   master: MasterWithRelationsEntityResponse;
@@ -14,10 +17,24 @@ type Props = {
 };
 
 const EditMasterForm = ({ master, onClose }: Props) => {
-  const { control, handleSubmit, errors, reset } = masterHooks.useUpdateMasterForm({
+  const { control, handleSubmit, errors, reset, setValue, watch } = masterHooks.useUpdateMasterForm({
     master,
     onSuccess: onClose,
   });
+
+  const { uploadFile, isPending: isUploadingAvatar } = filesHooks.useUploadFile({
+    onSuccess: (data) => {
+      if (data?.url) setValue('avatarUrl', data.url);
+      if (data?.previewUrl) setValue('avatarPreviewUrl', data.previewUrl);
+    },
+  });
+
+  const avatarPreviewUrl = watch('avatarPreviewUrl');
+  const avatarUrl = watch('avatarUrl');
+
+  const handleImageSelected = (file: UploadFile) => {
+    uploadFile({ file, type: FILE_UPLOAD_TYPE_ENUM.AVATAR });
+  };
 
   const { deleteMaster, isPending: isDeleting } = masterHooks.useDeleteMaster({
     onSuccess: () => {
@@ -31,6 +48,9 @@ const EditMasterForm = ({ master, onClose }: Props) => {
         email: master.email || '',
         name: master.name || '',
         bio: master.bio || '',
+        headline: master.headline || '',
+        avatarUrl: master.avatarUrl || '',
+        avatarPreviewUrl: master.avatarPreviewUrl || '',
         phone: master.phone || '',
         languages: master.languages || [],
       });
@@ -44,6 +64,17 @@ const EditMasterForm = ({ master, onClose }: Props) => {
         contentContainerStyle={{ padding: 16, paddingBottom: 24 }}
         keyboardShouldPersistTaps='handled'
       >
+        <View className='mb-8 items-center'>
+          <AvatarUpload
+            size={150}
+            iconSize={120}
+            editIconSize={24}
+            imageUri={avatarPreviewUrl || avatarUrl}
+            onImageSelected={handleImageSelected}
+            isUploading={isUploadingAvatar}
+          />
+        </View>
+
         <View style={{ marginBottom: 16 }}>
           <Text style={{ marginBottom: 8 }}>Email *</Text>
           <FormTextInput
@@ -63,6 +94,16 @@ const EditMasterForm = ({ master, onClose }: Props) => {
             control={control}
             placeholder='Jane Smith'
             error={errors.name?.message}
+          />
+        </View>
+
+        <View style={{ marginBottom: 16 }}>
+          <Text style={{ marginBottom: 8 }}>Headline</Text>
+          <FormTextInput
+            name='headline'
+            control={control}
+            placeholder='Hairdresser'
+            error={errors.headline?.message}
           />
         </View>
 
