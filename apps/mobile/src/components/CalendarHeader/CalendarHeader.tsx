@@ -4,7 +4,7 @@ import { Text } from 'react-native-paper';
 import { MaterialIcons } from '@/shared/icons';
 import { colors } from '@avoo/design-tokens';
 import { OrderStatus } from '@avoo/hooks/types/orderStatus';
-import { timeUtils } from '@avoo/shared';
+import { timeUtils, isFullSelection } from '@avoo/shared';
 import { CalendarView } from '@avoo/axios/types/apiTypes';
 import { CalendarViewTypeSheet } from '../CalendarViewTypeSheet/CalendarViewTypeSheet';
 import { CalendarMastersSheet } from '../CalendarMastersSheet/CalendarMastersSheet';
@@ -46,10 +46,11 @@ export const CalendarHeader = (props: Props) => {
   const [isMastersSheetVisible, setIsMastersSheetVisible] = useState(false);
   const [isStatusesSheetVisible, setIsStatusesSheetVisible] = useState(false);
 
-  const isAllTeamSelected =
-    selectedMasterIds.size === 0 || selectedMasterIds.size === masters.length;
-  const isAllStatusesSelected =
-    selectedStatuses.size === 0 || selectedStatuses.size === CALENDAR_STATUSES.length;
+  const isAllTeamSelected = isFullSelection(selectedMasterIds.size, masters.length);
+  const isAllStatusesSelected = isFullSelection(
+    selectedStatuses.size,
+    CALENDAR_STATUSES.length,
+  );
 
   const getSelectedMastersText = () => {
     if (isAllTeamSelected) return 'All masters';

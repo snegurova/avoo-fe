@@ -1,10 +1,10 @@
 import { useState, useMemo, useEffect } from 'react';
 import { View } from 'react-native';
 import { Text } from 'react-native-paper';
-import { colors } from '@avoo/design-tokens';
+import { CALENDAR_STATUSES } from '../CalendarStatusesSheet/CalendarStatusesSheet';
 import { CalendarHeader } from '../CalendarHeader/CalendarHeader';
 import { calendarHooks, masterHooks } from '@avoo/hooks';
-import { timeUtils } from '@avoo/shared';
+import { timeUtils, isFullSelection } from '@avoo/shared';
 import { OrderStatus } from '@avoo/hooks/types/orderStatus';
 import { CalendarView, PrivateCalendarQueryParams } from '@avoo/axios/types/apiTypes';
 import { useCalendarAppointments } from '@/hooks/calendarHooks';
@@ -37,32 +37,31 @@ export const CalendarSection = () => {
   });
 
   const mastersData = masterHooks.useGetMastersProfileInfo()?.items;
-  const masters = useMemo((): Master[] => {
+  const masters: Master[] = useMemo(() => {
     if (!mastersData) return [];
-    return mastersData.map((master) => ({
+    return mastersData.map((master): Master => ({
       id: String(master.id),
       name: master.name || 'Unknown',
       initial: (master.name || 'U').charAt(0).toUpperCase(),
-      avatarColor: colors.primary[400],
     }));
   }, [mastersData]);
 
   const filteredMasters = useMemo(() => {
-    if (selectedMasterIds.size === 0 || selectedMasterIds.size === masters.length) {
+    if (isFullSelection(selectedMasterIds.size, masters.length)) {
       return masters;
     }
     return masters.filter((m) => selectedMasterIds.has(m.id));
   }, [masters, selectedMasterIds]);
 
   const masterIdsForApi = useMemo(() => {
-    if (selectedMasterIds.size === 0 || selectedMasterIds.size === masters.length) {
+    if (isFullSelection(selectedMasterIds.size, masters.length)) {
       return undefined;
     }
     return Array.from(selectedMasterIds).map(Number);
   }, [selectedMasterIds, masters.length]);
 
   const statusesForApi = useMemo(() => {
-    if (selectedStatuses.size === 0 || selectedStatuses.size === 5) {
+    if (isFullSelection(selectedStatuses.size, CALENDAR_STATUSES.length)) {
       return undefined;
     }
     return Array.from(selectedStatuses);

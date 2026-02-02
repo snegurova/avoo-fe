@@ -4,6 +4,7 @@ import { MaterialIcons } from '@/shared/icons';
 import { colors } from '@avoo/design-tokens';
 import { tv } from 'tailwind-variants';
 import { OrderStatus } from '@avoo/hooks/types/orderStatus';
+import { isFullSelection } from '@avoo/shared';
 import { CustomBottomSheet } from '@/shared/CustomBottomSheet/CustomBottomSheet';
 
 export const CALENDAR_STATUSES = [
@@ -23,8 +24,10 @@ type Props = {
 
 export const CalendarStatusesSheet = (props: Props) => {
   const { visible, onClose, selectedStatuses, setSelectedStatuses } = props;
-  const isAllStatusesSelected =
-    selectedStatuses.size === 0 || selectedStatuses.size === CALENDAR_STATUSES.length;
+  const isAllStatusesSelected = isFullSelection(
+    selectedStatuses.size,
+    CALENDAR_STATUSES.length,
+  );
 
   const handleAllStatusesToggle = () => {
     if (isAllStatusesSelected) {

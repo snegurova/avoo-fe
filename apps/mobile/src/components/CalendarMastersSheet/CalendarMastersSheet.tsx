@@ -3,6 +3,7 @@ import { Text } from 'react-native-paper';
 import { MaterialIcons } from '@/shared/icons';
 import { colors } from '@avoo/design-tokens';
 import { tv } from 'tailwind-variants';
+import { isFullSelection } from '@avoo/shared';
 import { CustomBottomSheet } from '@/shared/CustomBottomSheet/CustomBottomSheet';
 import { Master } from '../CalendarSection/CalendarSection';
 
@@ -27,8 +28,7 @@ const checkbox = tv({
 export const CalendarMastersSheet = (props: Props) => {
   const { visible, onClose, masters, selectedMasterIds, setSelectedMasterIds } = props;
   
-  const isAllTeamSelected =
-    selectedMasterIds.size === 0 || selectedMasterIds.size === masters.length;
+  const isAllTeamSelected = isFullSelection(selectedMasterIds.size, masters.length);
 
   const handleAllTeamToggle = () => {
     if (isAllTeamSelected) {
