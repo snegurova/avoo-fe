@@ -20,7 +20,7 @@ export default function MastersScreen() {
   const bottomBarHeight = layoutHooks.useBottomBarHeight();
 
   const masters = masterHooks.useGetMastersProfileInfo()?.items;
-  const filteredMasters = masterHooks.useFilterMasters(masters, searchQuery);
+  const filteredMasters = masterHooks.useFilterMasters(masters ?? [], searchQuery);
   const [selectedMaster, setSelectedMaster] = useState<MasterWithRelationsEntityResponse | null>(
     null,
   );
@@ -73,10 +73,18 @@ export default function MastersScreen() {
           />
         </View>
 
-        <CustomBottomSheet visible={!!selectedMaster} onClose={handleCloseModal}>
+        <CustomBottomSheet
+          visible={!!selectedMaster}
+          onClose={handleCloseModal}
+          disableSwipeToClose
+        >
           {selectedMaster && <EditMasterForm master={selectedMaster} onClose={handleCloseModal} />}
         </CustomBottomSheet>
-        <CustomBottomSheet visible={isCreateMasterFormVisible} onClose={closeCreateForm}>
+        <CustomBottomSheet
+          visible={isCreateMasterFormVisible}
+          onClose={closeCreateForm}
+          disableSwipeToClose
+        >
           <CreateMasterForm onClose={handleMasterCreated} />
         </CustomBottomSheet>
       </Layout>

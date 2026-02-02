@@ -1,6 +1,8 @@
 import { OrderStatus } from '@avoo/hooks/types/orderStatus';
+import { FileInput } from '@avoo/shared';
 import type { components, operations } from './generated';
 import { OrderType } from '@avoo/hooks/types/orderType';
+import { FILE_UPLOAD_TYPE_ENUM, ObjectValues } from './apiEnums';
 
 export type Error = {
   field: string;
@@ -57,10 +59,7 @@ export type GetMastersResponse = {
   pagination: components['schemas']['PaginationDto'];
 };
 
-type MasterBaseForCreate = Omit<
-  components['schemas']['MasterEntity'],
-  'id' | 'avatarUrl' | 'avatarPreviewUrl'
->;
+type MasterBaseForCreate = Omit<components['schemas']['MasterEntity'], 'id'>;
 export type CreateMasterRequest = {
   email: MasterBaseForCreate['email'];
 } & Partial<Omit<MasterBaseForCreate, 'email'>>;
@@ -129,7 +128,10 @@ export type GetCalendarByDatesResponse = Omit<
   days: PrivateWorkingDayByDates[];
 };
 
+export type OrderStatusValue = components['schemas']['OrderStatus'];
+
 export enum CalendarView {
+  Day = 'day',
   Week = 'week',
   Month = 'month',
   Year = 'year',
@@ -165,3 +167,12 @@ export type CreatePrivateOrdersRequest = {
 export type UpdateOrderRequest = Omit<components['schemas']['UpdateOrderDto'], 'status'> & {
   status?: OrderStatus.CONFIRMED | OrderStatus.CANCELED;
 };
+/** Files */
+export type FileUpload = components['schemas']['UploadFileDto']['type'];
+
+export type FileUploadType = ObjectValues<typeof FILE_UPLOAD_TYPE_ENUM>;
+export type UploadFileRequest = {
+  type: FileUploadType;
+  file: FileInput;
+};
+export type FileUploadResponse = components['schemas']['FileResponseDto'];

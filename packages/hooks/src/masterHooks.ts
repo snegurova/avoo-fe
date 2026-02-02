@@ -5,7 +5,6 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import {
   createMasterSchema,
   CreateMasterFormData,
-  updateMasterSchema,
 } from '../schemas/validationSchemas';
 
 import { masterApi } from '@avoo/axios';
@@ -49,6 +48,8 @@ export const masterHooks = {
     const {
       control,
       handleSubmit,
+      setValue,
+      watch,
       formState: { errors },
     } = useForm<CreateMasterFormData>({
       resolver: yupResolver(createMasterSchema),
@@ -57,6 +58,9 @@ export const masterHooks = {
         email: '',
         name: '',
         bio: '',
+        headline: '',
+        avatarUrl: '',
+        avatarPreviewUrl: '',
         phone: '',
         languages: [],
       },
@@ -84,6 +88,8 @@ export const masterHooks = {
     return {
       control,
       handleSubmit: handleSubmit(utils.submitAdapter<CreateMasterRequest>(createMasterMutation)),
+      setValue,
+      watch,
       errors,
       isPending,
     };
@@ -92,15 +98,20 @@ export const masterHooks = {
     const {
       control,
       handleSubmit,
+      setValue,
+      watch,
       formState: { errors },
       reset,
     } = useForm<CreateMasterFormData>({
-      resolver: yupResolver(updateMasterSchema),
+      resolver: yupResolver(createMasterSchema),
       mode: 'onSubmit',
       defaultValues: {
         email: master.email || '',
         name: master.name || '',
         bio: master.bio || '',
+        headline: master.headline || '',
+        avatarUrl: master.avatarUrl || '',
+        avatarPreviewUrl: master.avatarPreviewUrl || '',
         phone: master.phone || '',
         languages: master.languages || [],
       },
@@ -128,6 +139,8 @@ export const masterHooks = {
     return {
       control,
       handleSubmit: handleSubmit(utils.submitAdapter<CreateMasterRequest>(updateMasterMutation)),
+      setValue,
+      watch,
       errors,
       isPending,
       reset,

@@ -16,3 +16,4 @@ export * from './profileHooks';
 export * from './orderHooks';
 export * from './customerHooks';
 export * from './useIntervalAction';
+export * from './filesHooks';

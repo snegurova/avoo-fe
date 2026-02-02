@@ -1,0 +1,87 @@
+import { useMemo, useState } from 'react';
+import { View } from 'react-native';
+import { CALENDAR_ORDER_VARIANT, CalendarOrder } from '../CalendarOrder/CalendarOrder';
+import { Appointment } from '@/hooks/calendarHooks';
+import CalendarMaster from '../CalendarMaster/CalendarMaster';
+import { calendarConfig } from '../CalendarSection/calendarConfig';
+import { calendarUtils } from '@/utils/calendarUtils';
+import { TimelineGridLayout } from '../TimelineGridLayout/TimelineGridLayout';
+import { TimelineColumn } from '../TimelineColumn/TimelineColumn';
+import { CurrentTimeLine } from '../CurrentTimeLine/CurrentTimeLine';
+import { Master } from '../CalendarSection/CalendarSection';
+
+
+
+type Props = {
+  masters: Master[];
+  appointments: Appointment[];
+};
+
+export const CalendarDayView = (props: Props) => {
+  const { masters, appointments } = props;
+
+  const [rightWidth, setRightWidth] = useState(0);
+
+  const availableWidth = Math.max(0, rightWidth - calendarConfig.timeline.timeScaleWidth);
+
+  const colWidth = useMemo(
+    () =>
+      calendarUtils.getDayViewColWidth(
+        availableWidth,
+        masters.length,
+        calendarConfig.dayView.baseColWidth,
+      ),
+    [availableWidth, masters.length],
+  );
+
+  const contentWidth = useMemo(() => colWidth * masters.length, [colWidth, masters.length]);
+
+  const appointmentsByMaster = useMemo(() => {
+    const map = new Map<string, Appointment[]>();
+    for (const a of appointments) {
+      const arr = map.get(a.masterId) ?? [];
+      arr.push(a);
+      map.set(a.masterId, arr);
+    }
+    return map;
+  }, [appointments]);
+
+  return (
+    <View className="flex-1" onLayout={(e) => setRightWidth(e.nativeEvent.layout.width)}>
+      <TimelineGridLayout headerHeight={calendarConfig.dayView.headerHeight}>
+        <View className="flex-row" style={{ width: contentWidth }}>
+          {masters.map((master, index) => {
+            const masterAppointments = appointmentsByMaster.get(master.id) ?? [];
+            const isLast = index === masters.length - 1;
+            return (
+              <View
+                key={master.id}
+                style={{ width: colWidth }}
+                className={isLast ? 'relative' : 'border-r border-gray-200 relative'}
+              >
+                <CalendarMaster master={master} headerHeight={calendarConfig.dayView.headerHeight} />
+                <TimelineColumn columnKey={`day-${master.id}`} width={colWidth} borderRight={false}>
+                  {masterAppointments.map((apt) => (
+                    <CalendarOrder
+                      key={apt.id}
+                      variant={CALENDAR_ORDER_VARIANT.DAY}
+                      appointment={apt}
+                      top={calendarUtils.calculateTop(apt.startTime, calendarConfig.timeline.slotHeight)}
+                      height={calendarUtils.calculateHeight(
+                        apt.startTime,
+                        apt.endTime,
+                        calendarConfig.timeline.slotHeight,
+                      )}
+                      onPress={() => {}}
+                    />
+                  ))}
+                  <CurrentTimeLine />
+                </TimelineColumn>
+              </View>
+            );
+          })}
+        </View>
+      </TimelineGridLayout>
+    </View>
+  );
+};
