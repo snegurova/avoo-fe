@@ -173,4 +173,24 @@ export const timeUtils = {
     };
     return dateObj.toLocaleDateString('en-US', options);
   },
+  getHumanDuration(durationMinutes: number): string {
+    const hours = Math.floor(durationMinutes / 60);
+    const minutes = durationMinutes % 60;
+    const hoursPart = hours > 0 ? `${hours}h` : '';
+    const minutesPart = minutes > 0 ? ` ${minutes} mins` : '00 mins';
+    return `${hoursPart} ${minutesPart}`.trim();
+  },
+  getMinutesDifference(start: string, end: string): number {
+    const startDate = new Date(start);
+    const endDate = new Date(end);
+    return Math.floor((endDate.getTime() - startDate.getTime()) / 60000);
+  },
+  getEndTime(start: string, durationMinutes: number): string {
+    const startDate = new Date(start);
+    const endDate = new Date(startDate.getTime() + durationMinutes * 60000);
+
+    const hours = endDate.getHours().toString().padStart(2, '0');
+    const minutes = endDate.getMinutes().toString().padStart(2, '0');
+    return `${hours}:${minutes}`;
+  },
 };

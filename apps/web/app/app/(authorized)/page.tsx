@@ -5,48 +5,40 @@ import Chip from '@mui/material/Chip';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
+import AppWrapper from '@/_components/AppWrapper/AppWrapper';
+import { Typography } from '@mui/material';
+import Calendar from '@/_components/Calendar/Calendar';
 
 export default function DashboardPage() {
   return (
-    <div>
-      <div className=''>DashboardPage</div>
-      <div>
-        <Chip label='Pending' color='pending' size='small' />
-        <Chip label='Out of Schedule' color='outOfSchedule' size='small' />
-      </div>
-      <div className='pl-4'>
-        <RadioGroup
-          aria-labelledby='demo-radio-buttons-group-label'
-          defaultValue='female'
-          name='radio-buttons-group'
-        >
-          <FormControlLabel
-            value='Not available'
-            checked
-            control={<Radio />}
-            label='Not available'
-          />
-          <FormControlLabel
-            value='Wrong service selected'
-            control={<Radio />}
-            label='Wrong service selected'
-          />
-          <FormControlLabel value='Other' control={<Radio />} label='Other' />
-        </RadioGroup>
-      </div>
-      <div className='flex gap-4 w-75 justify-between'>
-        <Button fullWidth color='secondary' variant='outlined'>
-          Reject
-        </Button>
-        <Button fullWidth color='secondary' variant='contained'>
-          Confirm
-        </Button>
-      </div>
-      <div>
-        <Checkbox defaultChecked />
-        <Checkbox />
-        <Checkbox disabled />
-        <Checkbox disabled checked />
+    <div className='flex flex-col lg:grid lg:grid-cols-3 gap-8 w-full h-full'>
+      <AppWrapper className='lg:col-span-2 order-2 lg:order-1'>
+        <div className='p-4 flex justify-between items-center'>
+          <Typography component='h1' variant='h1'>
+            Calendar
+          </Typography>
+        </div>
+        <Calendar isWidget />
+      </AppWrapper>
+      <div className='flex flex-col md:flex-row lg:flex-col gap-8 order-1 lg:order-2'>
+        <div className='md:flex-1 lg:flex-none'>
+          <AppWrapper isWidget>
+            <div className='p-4 flex justify-between items-center'>
+              <Typography component='h1' variant='h1'>
+                New notifications
+              </Typography>
+            </div>
+          </AppWrapper>
+        </div>
+        <div className='md:flex-1 lg:flex-none'>
+          <AppWrapper isWidget>
+            <div className='p-4 flex justify-between items-center'>
+              <Typography component='h1' variant='h1'>
+                Next appointments
+              </Typography>
+            </div>
+          </AppWrapper>
+        </div>
       </div>
     </div>
   );

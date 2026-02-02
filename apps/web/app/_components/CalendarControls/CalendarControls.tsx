@@ -55,10 +55,11 @@ type Props = {
       | undefined
       | ((prev: OrderStatus[] | undefined) => OrderStatus[] | undefined),
   ) => void;
+  isWidget?: boolean;
 };
 
 const controlsButton = tv({
-  base: 'cursor-pointer text-gray-800 border border-gray-200 bg-transparent px-3 py-2.5 text-sm leading-none transition-colors',
+  base: 'cursor-pointer text-gray-800 border border-gray-200 bg-transparent px-3 py-2.5 text-sm leading-none transition-colors hover:bg-gray-100 focus:bg-gray-100',
   variants: {
     variant: {
       full: 'rounded-2xl',
@@ -86,9 +87,15 @@ export default function CalendarControls(props: Props) {
     setMasterIds,
     statuses,
     setStatuses,
+    isWidget,
   } = props;
 
   const tabletUp = useMediaQuery('(min-width:768px)');
+  const desktopLargeUp = useMediaQuery('(min-width:1280px)');
+  const showOptions = useMemo(
+    () => (isWidget ? desktopLargeUp : tabletUp),
+    [tabletUp, desktopLargeUp, isWidget],
+  );
 
   const setCurrentDate = (type: CalendarViewType) => {
     const today = new Date();
@@ -339,7 +346,7 @@ export default function CalendarControls(props: Props) {
           </button>
         </div>
         <SelectButton label={type} options={viewOptions} type={ElementStyleType.OUTLINE} />
-        {tabletUp ? (
+        {showOptions ? (
           <>
             <CheckboxesButton
               addCount

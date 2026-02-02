@@ -2,11 +2,7 @@ import { useMemo } from 'react';
 import { utils } from '@avoo/hooks/utils/utils';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import {
-  createMasterSchema,
-  CreateMasterFormData,
-  updateMasterSchema,
-} from '../schemas/validationSchemas';
+import { createMasterSchema, CreateMasterFormData } from '../schemas/validationSchemas';
 
 import { masterApi } from '@avoo/axios';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
@@ -16,6 +12,7 @@ import {
   MasterWithRelationsEntityResponse,
   CreateMasterRequest,
   GetMastersResponse,
+  GetMastersQueryParams,
 } from '@avoo/axios/types/apiTypes';
 import { ApiStatus } from '@avoo/hooks/types/apiTypes';
 import { queryKeys } from './queryKeys';
@@ -30,10 +27,10 @@ type UseUpdateMasterFormParams = {
 };
 
 export const masterHooks = {
-  useGetMastersProfileInfo: () => {
+  useGetMastersProfileInfo: (params: GetMastersQueryParams = {}) => {
     const { data: profileInfoData, isPending } = useQuery<BaseResponse<GetMastersResponse>, Error>({
-      queryKey: queryKeys.masters.all,
-      queryFn: masterApi.getMastersInfo,
+      queryKey: [queryKeys.masters.all, queryKeys.masters.byParams(params)],
+      queryFn: () => masterApi.getMastersInfo(params),
     });
 
     utils.useSetPendingApi(isPending);
@@ -48,6 +45,8 @@ export const masterHooks = {
     const {
       control,
       handleSubmit,
+      setValue,
+      watch,
       formState: { errors },
     } = useForm<CreateMasterFormData>({
       resolver: yupResolver(createMasterSchema),
@@ -57,6 +56,8 @@ export const masterHooks = {
         name: '',
         bio: '',
         headline: '',
+        avatarUrl: '',
+        avatarPreviewUrl: '',
         phone: '',
         languages: [],
       },
@@ -84,6 +85,8 @@ export const masterHooks = {
     return {
       control,
       handleSubmit: handleSubmit(utils.submitAdapter<CreateMasterRequest>(createMasterMutation)),
+      setValue,
+      watch,
       errors,
       isPending,
     };
@@ -92,16 +95,20 @@ export const masterHooks = {
     const {
       control,
       handleSubmit,
+      setValue,
+      watch,
       formState: { errors },
       reset,
     } = useForm<CreateMasterFormData>({
-      resolver: yupResolver(updateMasterSchema),
+      resolver: yupResolver(createMasterSchema),
       mode: 'onSubmit',
       defaultValues: {
         email: master.email || '',
         name: master.name || '',
         bio: master.bio || '',
         headline: master.headline || '',
+        avatarUrl: master.avatarUrl || '',
+        avatarPreviewUrl: master.avatarPreviewUrl || '',
         phone: master.phone || '',
         languages: master.languages || [],
       },
@@ -129,6 +136,8 @@ export const masterHooks = {
     return {
       control,
       handleSubmit: handleSubmit(utils.submitAdapter<CreateMasterRequest>(updateMasterMutation)),
+      setValue,
+      watch,
       errors,
       isPending,
       reset,

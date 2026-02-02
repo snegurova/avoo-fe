@@ -3,9 +3,10 @@ import React, { useMemo } from 'react';
 import Link from 'next/link';
 import { routerHooks } from '@/_hooks/routerHooks';
 import { tv } from 'tailwind-variants';
+import { appRoutes } from '@/_routes/routes';
 
 type Props = {
-  href: string;
+  href: appRoutes;
   icon: React.ReactNode;
   label: string;
   onClick?: () => void;

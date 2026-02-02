@@ -5,7 +5,7 @@ import ScheduleIcon from '@/_icons/ScheduleIcon';
 import { TIME_FORMAT, DATE_TIME_FORMAT } from '@/_constants/dateFormats';
 
 type Props = {
-  date: string;
+  date?: string;
   onChange: (newDate: string) => void;
 };
 

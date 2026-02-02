@@ -16,5 +16,7 @@ export * from './formHooks';
 export * from './profileHooks';
 export * from './orderHooks';
 export * from './customerHooks';
+export * from './useIntervalAction';
+export * from './filesHooks';
 export * from './usePhoneField';
 export * from './useLanguagePicker';

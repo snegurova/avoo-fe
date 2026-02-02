@@ -42,7 +42,7 @@ const hooks = {
 };
 
 const iconButton = tv({
-  base: 'inline-flex items-center justify-center transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer',
+  base: 'inline-flex items-center justify-center transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer transition-colors',
   variants: {
     size: {
       [IconButtonSize.Small]: 'p-1 text-xs',
@@ -57,15 +57,21 @@ const iconButton = tv({
       [IconButtonRounded.Full]: 'rounded-full',
     },
     variant: {
-      [IconButtonVariant.Default]: 'text-slate-500 hover:text-slate-700',
+      [IconButtonVariant.Default]:
+        'text-slate-500 hover:text-slate-700 border-gray-200 hover:bg-gray-100 focus:bg-gray-100',
       [IconButtonVariant.Primary]: 'text-blue-600 hover:text-blue-700',
       [IconButtonVariant.Secondary]: 'text-gray-600 hover:text-gray-700',
+    },
+    border: {
+      true: 'border',
+      false: '',
     },
   },
   defaultVariants: {
     size: IconButtonSize.Medium,
     rounded: IconButtonRounded.Md,
     variant: IconButtonVariant.Default,
+    border: false,
   },
 });
 
@@ -78,18 +84,18 @@ type Props = {
   className?: string;
   ariaLabel?: string;
   disabled?: boolean;
+  border?: boolean;
 };
 
 export const IconButton = (props: Props) => {
-  const { icon, onClick, size, rounded, variant, className, ariaLabel, disabled } = props;
-
+  const { icon, onClick, size, rounded, variant, className, ariaLabel, disabled, border } = props;
   const handleClick = hooks.useOnClick({ disabled, onClick });
 
   return (
     <button
       onClick={handleClick}
       disabled={disabled}
-      className={iconButton({ size, rounded, variant, className })}
+      className={iconButton({ size, rounded, variant, border, className })}
       aria-label={ariaLabel}
       type='button'
     >
