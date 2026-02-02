@@ -101,7 +101,10 @@ export type CalendarItem = components['schemas']['PrivateCalendarResponseDto'];
 
 export type PrivateEvent = components['schemas']['PrivateEventDto'];
 
+export type OrderStatusValue = components['schemas']['OrderStatus'];
+
 export enum CalendarView {
+  Day = 'day',
   Week = 'week',
   Month = 'month',
   Year = 'year',
