@@ -80,7 +80,7 @@ export default function AddMasterForm() {
             <label htmlFor='name' className='text-sm block mb-1'>
               Display Name
             </label>
-            <FormInput id='name' {...nameField} />
+            <FormInput id='name' {...nameField} value={nameField.value ?? ''} />
           </div>
 
           <div>
@@ -96,7 +96,7 @@ export default function AddMasterForm() {
             <label htmlFor='email' className='text-sm block mb-1'>
               Email
             </label>
-            <FormInput id='email' type='email' {...emailField} />
+            <FormInput id='email' type='email' {...emailField} value={emailField.value ?? ''} />
           </div>
 
           <div>
