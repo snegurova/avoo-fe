@@ -5,6 +5,7 @@ export * from './masterHooks';
 export * from './scheduleHooks';
 export * from './calendarHooks';
 export * from './languageHooks';
+export * from './phoneHooks';
 export * from '../schemas/validationSchemas';
 export * from '../client/queryClient';
 export * from './categoriesHooks';

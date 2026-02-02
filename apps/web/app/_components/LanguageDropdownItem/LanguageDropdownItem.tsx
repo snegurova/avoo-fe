@@ -8,7 +8,8 @@ type Props = {
   onSelect: (code: LanguageCode) => void;
 };
 
-export default function LanguageDropdownItem({ code, onSelect }: Readonly<Props>) {
+export default function LanguageDropdownItem(props: Readonly<Props>) {
+  const { code, onSelect } = props;
   return (
     <button
       type='button'

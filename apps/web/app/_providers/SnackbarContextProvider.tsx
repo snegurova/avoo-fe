@@ -31,7 +31,7 @@ export const SnackbarProvider = ({
   const [severity, setSeverity] = useState<AlertColor>('info');
   const [isLoading, setIsLoading] = useState(false);
   const [anchorOrigin, setAnchorOrigin] = useState<AnchorOrigin>(
-    defaultAnchor ?? { vertical: AnchorVertical.Top, horizontal: AnchorHorizontal.Right },
+    defaultAnchor ?? { vertical: AnchorVertical.TOP, horizontal: AnchorHorizontal.RIGHT },
   );
 
   const show = (
@@ -52,7 +52,7 @@ export const SnackbarProvider = ({
   const close = () => {
     setOpen(false);
     setAnchorOrigin(
-      defaultAnchor ?? { vertical: AnchorVertical.Top, horizontal: AnchorHorizontal.Right },
+      defaultAnchor ?? { vertical: AnchorVertical.TOP, horizontal: AnchorHorizontal.RIGHT },
     );
   };
 

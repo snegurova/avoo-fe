@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { PHONE_CODE_OPTIONS } from '@avoo/constants';
 import { useRef } from 'react';
 
-type PhoneFieldLike = {
+export type PhoneFieldLike = {
   value?: unknown;
   onChange: (v: string) => void;
 };
@@ -49,7 +49,7 @@ export function usePhoneField(field: PhoneFieldLike) {
   const lastFormattedRef = useRef((field.value ?? '')?.toString());
 
   const MAX_E164 = 15;
-  const MAX_NATIONAL = 12; 
+  const MAX_NATIONAL = 12;
 
   useEffect(() => {
     const parsed = parsePhoneValue(field.value);
@@ -104,7 +104,10 @@ export function usePhoneField(field: PhoneFieldLike) {
     phoneNumber: initialNumber,
     setCountryCode: setCode,
     setPhoneNumber: setNumber,
-    maxNationalLength: Math.max(0, Math.min(MAX_NATIONAL, MAX_E164 - (countryCode.replace('+', '') || '').length)),
+    maxNationalLength: Math.max(
+      0,
+      Math.min(MAX_NATIONAL, MAX_E164 - (countryCode.replace('+', '') || '').length),
+    ),
   };
 
   return result;

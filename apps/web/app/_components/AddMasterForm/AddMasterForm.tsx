@@ -8,10 +8,10 @@ import { AvatarUpload, AvatarSize } from '@/_components/AvatarUpload/AvatarUploa
 import FormInput from '@/_components/FormInput/FormInput';
 import FormLanguageSearch from '@/_components/FormLanguageSearch/FormLanguageSearch';
 import PhoneCodeSelect from '@/_components/PhoneCodeSelect/PhoneCodeSelect';
-import { masterHooks, usePhoneField } from '@avoo/hooks';
-import { sharedInputClass } from '@/_styles/formMixins';
+import { masterHooks, phoneHooks } from '@avoo/hooks';
 import { appRoutes } from '@/_routes/routes';
 import { useToast } from '@/_hooks/useToast';
+import FormTextarea from '../FormTextArea/FormTextArea';
 
 export default function AddMasterForm() {
   const router = useRouter();
@@ -40,7 +40,8 @@ export default function AddMasterForm() {
   const { field: emailField } = useController({ name: 'email', control });
   const { field: phoneField } = useController({ name: 'phone', control });
 
-  const { countryCode, phoneNumber, setCountryCode, setPhoneNumber } = usePhoneField(phoneField);
+  const { countryCode, phoneNumber, setCountryCode, setPhoneNumber } =
+    phoneHooks.usePhoneField(phoneField);
 
   const handlePhoneCodeChange = useCallback(
     (code: string) => setCountryCode(code),
@@ -76,30 +77,26 @@ export default function AddMasterForm() {
 
         <div className='grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8 lg:gap-x-6 lg:gap-y-8'>
           <div>
-            <label htmlFor='name' className='text-sm block mb-1'>Display Name</label>
-            <FormInput id='name' {...nameField} classNames={{ input: sharedInputClass }} />
+            <label htmlFor='name' className='text-sm block mb-1'>
+              Display Name
+            </label>
+            <FormInput id='name' {...nameField} />
           </div>
 
           <div>
-            <label htmlFor='headline' className='text-sm block mb-1'>Headline</label>
-            <FormInput
-              id='headline'
-              {...headlineField}
-              value={headlineField.value ?? ''}
-              classNames={{ input: sharedInputClass }}
-            />
+            <label htmlFor='headline' className='text-sm block mb-1'>
+              Headline
+            </label>
+            <FormInput id='headline' {...headlineField} value={headlineField.value ?? ''} />
           </div>
         </div>
 
         <div className='grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8 lg:gap-x-6 lg:gap-y-8'>
           <div>
-            <label htmlFor='email' className='text-sm block mb-1'>Email</label>
-            <FormInput
-              id='email'
-              type='email'
-              {...emailField}
-              classNames={{ input: sharedInputClass }}
-            />
+            <label htmlFor='email' className='text-sm block mb-1'>
+              Email
+            </label>
+            <FormInput id='email' type='email' {...emailField} />
           </div>
 
           <div>
@@ -123,32 +120,33 @@ export default function AddMasterForm() {
                   value={phoneNumber}
                   onChange={handlePhoneNumberChange}
                   onBlur={phoneField.onBlur}
-                  classNames={{ input: sharedInputClass }}
                 />
               </div>
             </div>
           </div>
         </div>
 
-        <div className='flex items-center justify-between mb-1'>
-          <label htmlFor='bio' className='text-sm'>About</label>
-          <div className='text-sm text-gray-600'>{(bioField.value ?? '').length}/200</div>
-        </div>
         <div>
-          <textarea
+          <FormTextarea
+            id='bio'
+            name={bioField.name}
+            value={bioField.value ?? ''}
             onChange={bioField.onChange}
             onBlur={bioField.onBlur}
-            name={bioField.name}
             ref={bioField.ref}
-            value={bioField.value ?? ''}
-            className='block w-full text-sm text-gray-600 border border-gray-200 p-3 rounded-lg min-h-[70px] focus:outline-none focus:ring-1 focus:ring-purple-800'
+            label='About'
+            helperText='Information will display on the platform.'
+            maxLength={200}
+            classNames={{
+              textarea:
+                'block w-full text-sm text-gray-600 border border-gray-200 p-3 rounded-lg min-h-[70px] focus:outline-none focus:ring-1 focus:ring-purple-800',
+            }}
           />
-          <div className='mt-1 text-xs text-gray-500'>
-            Information will display on the platform.
-          </div>
         </div>
 
-        <label htmlFor='languages' className='text-sm block mb-1'>Languages</label>
+        <label htmlFor='languages' className='text-sm block mb-1'>
+          Languages
+        </label>
         <p className='text-xs text-gray-500'>Add languages in which the service is offered</p>
         <FormLanguageSearch
           name={languagesField.name}

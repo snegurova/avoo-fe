@@ -8,7 +8,6 @@ import {
   IconButtonRounded,
   IconButtonVariant,
 } from '@/_components/IconButton/IconButton';
-import { colors, typography } from '@avoo/design-tokens';
 import { LANGUAGE_NAMES, type LanguageCode } from '@avoo/constants';
 
 type Props = {
@@ -21,9 +20,8 @@ export default function LanguageChip({ code, onRemove }: Readonly<Props>) {
     <div
       key={code}
       className='flex items-center gap-3 bg-primary-100 text-sm text-gray-800 px-4 py-2 rounded-full'
-      style={{ backgroundColor: colors.primary[100] }}
     >
-      <span style={{ fontSize: typography.fontSize.xs }}>
+      <span className="text-xs">
         {LANGUAGE_NAMES[code]} ({code.toUpperCase()})
       </span>
       <IconButton

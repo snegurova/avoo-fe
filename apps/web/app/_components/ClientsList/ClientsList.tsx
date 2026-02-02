@@ -5,22 +5,20 @@ import { IconButton } from '@/_components/IconButton/IconButton';
 import ArrowDownIcon from '@/_icons/ArrowDownIcon';
 import ArrowUpIcon from '@/_icons/ArrowUpIcon';
 import { customerHooks } from '@avoo/hooks';
-import type { components } from '@avoo/axios/types/generated';
-import type { GetCustomersResponse } from '@avoo/axios/types/apiTypes';
+import type { CustomerInfoResponse, GetCustomersResponse} from '@avoo/axios/types/apiTypes';
 import { sortByName, SortDirection } from '@avoo/shared';
 import ClientListItem from '@/_components/ClientListItem/ClientListItem';
 
-type CustomerInfoDto = components['schemas']['CustomerInfoDto'];
 
 type Props = {
   onEdit: (id: number) => void;
-  customers?: CustomerInfoDto[] | GetCustomersResponse | null;
+  customers?: CustomerInfoResponse[] | GetCustomersResponse | null;
 };
 
 export const ClientsList: React.FC<Props> = ({ onEdit, customers: customersProp }) => {
   const customersFromHook = customerHooks.useGetCustomers();
   const customersSource = customersProp ?? customersFromHook;
-  const items: CustomerInfoDto[] = Array.isArray(customersSource)
+  const items: CustomerInfoResponse[] = Array.isArray(customersSource)
     ? customersSource
     : customersSource?.items ?? [];
   const [sortDirection, setSortDirection] = useState<SortDirection>(null);

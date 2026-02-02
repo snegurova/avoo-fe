@@ -1,6 +1,5 @@
 import { PHONE_CODE_OPTIONS } from '@avoo/constants';
-import { sharedInputClass } from '@/_styles/formMixins';
-import React, { useCallback, useMemo, useState, useEffect } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import ArrowDownIcon from '@/_icons/ArrowDownIcon';
 import ArrowUpIcon from '@/_icons/ArrowUpIcon';
 
@@ -23,14 +22,6 @@ export default function PhoneCodeSelect({ value, onChange, id, className }: Read
   const handleBlur = useCallback(() => setIsOpen(false), []);
   const handleMouseDown = useCallback(() => setIsOpen((prev) => !prev), []);
 
-  useEffect(() => {
-    const prev = document.body.style.overflowX;
-    if (isOpen) document.body.style.overflowX = 'hidden';
-    return () => {
-      document.body.style.overflowX = prev;
-    };
-  }, [isOpen]);
-
   const options = useMemo(
     () =>
       PHONE_CODE_OPTIONS.map((opt) => (
@@ -41,11 +32,6 @@ export default function PhoneCodeSelect({ value, onChange, id, className }: Read
     [],
   );
 
-  const combinedClassName =
-    (className ? className + ' ' : '') +
-    sharedInputClass +
-    ' text-sm appearance-none pr-10 box-border leading-[44px] py-0';
-
   return (
     <div className='relative inline-block h-[44px]'>
       <select
@@ -55,7 +41,7 @@ export default function PhoneCodeSelect({ value, onChange, id, className }: Read
         onFocus={handleFocus}
         onBlur={handleBlur}
         onMouseDown={handleMouseDown}
-        className={combinedClassName}
+        className='p-3 w-full h-[44px] rounded-[8px] border border-gray-200 bg-transparent focus:outline-none focus:ring-1 focus:ring-purple-800 text-sm appearance-none pr-10 box-border leading-[44px] py-0'
         aria-label='Country code'
       >
         {options}

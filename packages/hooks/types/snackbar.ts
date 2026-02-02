@@ -1,12 +1,12 @@
 export enum AnchorVertical {
-  Top = 'top',
-  Bottom = 'bottom',
+  TOP = 'top',
+  BOTTOM = 'bottom',
 }
 
 export enum AnchorHorizontal {
-  Left = 'left',
-  Center = 'center',
-  Right = 'right',
+  LEFT = 'left',
+  CENTER = 'center',
+  RIGHT = 'right',
 }
 
 export type AnchorOrigin = {
