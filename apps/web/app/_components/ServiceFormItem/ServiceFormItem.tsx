@@ -1,6 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import SearchField from '@/_components/SearchField/SearchField';
-import { CreatePrivateOrder, Service, MasterWithRelationsEntity } from '@avoo/axios/types/apiTypes';
+import {
+  CreatePrivateOrder,
+  Service,
+  MasterWithRelationsEntity,
+  GetMastersQueryParams,
+} from '@avoo/axios/types/apiTypes';
 import { servicesHooks } from '@avoo/hooks';
 import { masterHooks } from '@avoo/hooks';
 import ServiceElement from '../ServiceElement/ServiceElement';
@@ -42,6 +47,7 @@ export default function ServiceFormItem(props: Props) {
 
   const [selectedMaster, setSelectedMaster] = useState<MasterWithRelationsEntity | null>(null);
   const [masterSearch, setMasterSearch] = useState('');
+  const [masterParams, setMasterParams] = useState<GetMastersQueryParams>({ limit: 100 });
 
   const { params, queryParams, setSearchQuery } = servicesHooks.useServicesQuery();
 
@@ -51,7 +57,14 @@ export default function ServiceFormItem(props: Props) {
     isActive: true,
   });
 
-  const masters = masterHooks.useGetMastersProfileInfo()?.items;
+  const masters = masterHooks.useGetMastersProfileInfo(masterParams)?.items;
+
+  useEffect(() => {
+    setMasterParams((prev) => ({
+      ...prev,
+      search: masterSearch.trim() || undefined,
+    }));
+  }, [masterSearch]);
 
   useEffect(() => {
     if (isEmptyObject(initialParams)) return;
@@ -62,23 +75,28 @@ export default function ServiceFormItem(props: Props) {
     }
   }, [initialParams]);
 
-  const selectService = ({ id }: { id: number }) => {
+  const selectService = (val: { id: number } | null) => {
+    if (!val) return;
     const newOrders = [...value];
-    newOrders[index] = { ...newOrders[index], serviceId: id };
+    newOrders[index] = { ...newOrders[index], serviceId: val.id };
     onChange(newOrders);
 
     setSelectedService(
-      services?.pages.flatMap((page) => page?.data?.items).find((service) => service?.id === id) ||
-        null,
+      services?.pages
+        .flatMap((page) => page?.data?.items)
+        .find((service) => service?.id === val.id) || null,
     );
   };
 
-  const selectMaster = ({ id }: { id: number }) => {
+  const selectMaster = (val: { id: number } | null) => {
+    if (!val) {
+      return;
+    }
     const newOrders = [...value];
-    newOrders[index] = { ...newOrders[index], masterId: id };
+    newOrders[index] = { ...newOrders[index], masterId: val.id };
     onChange(newOrders);
 
-    setSelectedMaster(masters?.find((master) => master.id === id) || null);
+    setSelectedMaster(masters?.find((master) => master.id === val.id) || null);
   };
 
   const ServiceElementWrapped: React.FC<{

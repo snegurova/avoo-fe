@@ -14,11 +14,12 @@ type Props = {
   setDate: React.Dispatch<React.SetStateAction<Date>>;
   setToDate: React.Dispatch<React.SetStateAction<Date>>;
   setType: React.Dispatch<React.SetStateAction<CalendarViewType>>;
+  availableBooking: boolean;
 };
 
 export default function CalendarWeekSingleMasterView(props: Props) {
-  const { date, time, setTime, data, master, setDate, setToDate, setType } = props;
-
+  const { date, time, setTime, data, master, setDate, setToDate, setType, availableBooking } =
+    props;
   return (
     <>
       <div className='pl-10.5 shrink-0 sticky top-0 min-w-185.5 md:min-w-395.5 z-8 bg-white'>
@@ -49,6 +50,7 @@ export default function CalendarWeekSingleMasterView(props: Props) {
               setToDate={setToDate}
               setType={setType}
               isSingleWeek
+              availableBooking={availableBooking}
             />
           ))}
       </div>

@@ -641,7 +641,7 @@ export interface paths {
         delete?: never;
         options?: never;
         head?: never;
-        patch?: never;
+        patch: operations["OrdersController_updateOrder"];
         trace?: never;
     };
     "/orders/{id}/status": {
@@ -1584,6 +1584,34 @@ export interface components {
              * @enum {string}
              */
             status?: "PENDING" | "CONFIRMED" | "COMPLETED" | "EXPIRED" | "CANCELED";
+        };
+        UpdateOrderDto: {
+            /**
+             * @description Status of the order
+             * @enum {string}
+             */
+            status?: "PENDING" | "CONFIRMED" | "COMPLETED" | "EXPIRED" | "CANCELED";
+            /**
+             * Format: date-time
+             * @description Date of the service in UTC
+             * @example 2026-03-19T07:00:00Z
+             */
+            date?: string;
+            /**
+             * @description ID of the master assigned to the order
+             * @example 1
+             */
+            masterId?: number;
+            /**
+             * @description Duration of the service in minutes
+             * @example 30
+             */
+            duration?: number;
+            /**
+             * @description Additional notes for the order
+             * @example Please arrive 10 minutes early
+             */
+            notes?: string;
         };
         CreatePublicOrderDto: {
             /** @enum {string} */
@@ -4273,6 +4301,52 @@ export interface operations {
             };
             /** @description Bad Request */
             400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    OrdersController_updateOrder: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateOrderDto"];
+            };
+        };
+        responses: {
+            /** @description Order updated successfully */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SuccessResponseDto"] & {
+                        data?: components["schemas"]["OrderEntity"];
+                    };
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Not Found */
+            404: {
                 headers: {
                     [name: string]: unknown;
                 };

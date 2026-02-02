@@ -7,7 +7,7 @@ import AddIcon from '@/_icons/AddIcon';
 
 type Props<R, T extends { id: number }> = {
   label: string;
-  value: R | { id: number } | null;
+  value: R | { id: number } | undefined | {};
   searchMode: boolean;
   onChange: (value: R | { id: number }) => void;
   items: T[];

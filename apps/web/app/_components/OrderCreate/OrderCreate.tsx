@@ -79,7 +79,9 @@ export default function OrderCreate() {
   };
 
   return (
-    <div className={`h-[calc(100%-${WRAPPER_HEADER_HEIGHT})] overflow-y-auto flex`}>
+    <div
+      className={`h-[calc(100%-${WRAPPER_HEADER_HEIGHT})] overflow-y-auto overflow-x-hidden flex`}
+    >
       <form className='px-12 w-full flex flex-col gap-6' onSubmit={handleSubmit}>
         <Controller
           name='customerData'
