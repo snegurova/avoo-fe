@@ -1,5 +1,7 @@
+import { FileInput } from '@avoo/shared';
 import type { components, operations } from './generated';
 import { OrderType } from '@avoo/hooks/types/orderType';
+import { FILE_UPLOAD_TYPE_ENUM, ObjectValues } from './apiEnums';
 
 export type Error = {
   field: string;
@@ -58,7 +60,7 @@ export type GetMastersResponse = {
 
 type MasterBaseForCreate = Omit<
   components['schemas']['MasterEntity'],
-  'id' | 'avatarUrl' | 'avatarPreviewUrl'
+  'id'
 >;
 export type CreateMasterRequest = {
   email: MasterBaseForCreate['email'];
@@ -129,3 +131,13 @@ export type CreatePrivateOrdersRequest = {
   ordersData: CreatePrivateOrder[];
   customerData: CreateCustomerRequest | FindCustomerRequest;
 };
+
+/** Files */
+export type FileUpload = components['schemas']['UploadFileDto']['type'];
+
+export type FileUploadType = ObjectValues<typeof FILE_UPLOAD_TYPE_ENUM>;
+export type UploadFileRequest = {
+  type: FileUploadType;
+  file: FileInput;
+};
+export type FileUploadResponse = components['schemas']['FileResponseDto'];
