@@ -1,5 +1,7 @@
 import { useMemo } from 'react';
 import { VALID_LANGUAGE_CODES, LANGUAGE_NAMES } from '@avoo/constants';
+import { useLanguagePicker } from './useLanguagePicker';
+import { Control, FieldValues, Path } from 'react-hook-form';
 
 export const languageHooks = {
   useFilterLanguages: (searchQuery: string) => {
@@ -14,4 +16,6 @@ export const languageHooks = {
       });
     }, [searchQuery]);
   },
+  useLanguagePicker: <T extends FieldValues>(control: Control<T>, name: Path<T>) =>
+    useLanguagePicker(control, name),
 };

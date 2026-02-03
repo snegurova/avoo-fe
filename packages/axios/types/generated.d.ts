@@ -148,22 +148,6 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/update-avatar": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch: operations["UsersController_updateUserAvatar"];
-        trace?: never;
-    };
     "/password": {
         parameters: {
             query?: never;
@@ -484,6 +468,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/media/upload": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["MediasController_createMedia"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/masters": {
         parameters: {
             query?: never;
@@ -508,7 +508,7 @@ export interface paths {
             cookie?: never;
         };
         get: operations["MastersController_findOne"];
-        put: operations["MastersController_updateProfile"];
+        put: operations["MastersController_update"];
         post?: never;
         delete: operations["MastersController_deleteById"];
         options?: never;
@@ -530,22 +530,6 @@ export interface paths {
         options?: never;
         head?: never;
         patch?: never;
-        trace?: never;
-    };
-    "/masters/{id}/update-avatar": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch: operations["MastersController_updateUserAvatar"];
         trace?: never;
     };
     "/public/masters": {
@@ -628,6 +612,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/files": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["FilesController_upload"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/orders": {
         parameters: {
             query?: never;
@@ -657,7 +657,7 @@ export interface paths {
         delete?: never;
         options?: never;
         head?: never;
-        patch?: never;
+        patch: operations["OrdersController_updateOrder"];
         trace?: never;
     };
     "/orders/{id}/status": {
@@ -1115,10 +1115,6 @@ export interface components {
             /** @example 10 */
             perPage: number;
         };
-        UploadFileDto: {
-            /** Format: binary */
-            file: string;
-        };
         UpdatePasswordRequestDto: {
             /** @example password123 */
             oldPassword: string;
@@ -1165,6 +1161,16 @@ export interface components {
              * @example Professional beauty services
              */
             description?: string;
+            /**
+             * @description url to image
+             * @example https://example.com/uploads/avatar/me.webp
+             */
+            avatarUrl?: Record<string, never>;
+            /**
+             * @description previewUrl to image
+             * @example https://example.com/uploads/avatar/me.peview.webp
+             */
+            avatarPreviewUrl?: Record<string, never>;
             /**
              * @description Business address
              * @example 123 Main St, City, Country
@@ -1456,6 +1462,16 @@ export interface components {
              */
             phone?: Record<string, never>;
             /**
+             * @description url to image
+             * @example https://example.com/uploads/avatar/me.webp
+             */
+            avatarUrl?: Record<string, never>;
+            /**
+             * @description previewUrl to image
+             * @example https://example.com/uploads/avatar/me.peview.webp
+             */
+            avatarPreviewUrl?: Record<string, never>;
+            /**
              * @description Languages spoken by the master
              * @example [
              *       "pl",
@@ -1491,6 +1507,16 @@ export interface components {
              */
             phone?: Record<string, never>;
             /**
+             * @description url to image
+             * @example https://example.com/uploads/avatar/me.webp
+             */
+            avatarUrl?: Record<string, never>;
+            /**
+             * @description previewUrl to image
+             * @example https://example.com/uploads/avatar/me.peview.webp
+             */
+            avatarPreviewUrl?: Record<string, never>;
+            /**
              * @description Languages spoken by the master
              * @example [
              *       "pl",
@@ -1499,7 +1525,13 @@ export interface components {
              */
             languages?: components["schemas"]["Language"][];
         };
-        UpdateMasterAvatarDto: {
+        FileResponseDto: {
+            url: string;
+            previewUrl: string;
+        };
+        UploadFileDto: {
+            /** @enum {string} */
+            type: "avatar" | "certificate";
             /** Format: binary */
             file: string;
         };
@@ -1568,6 +1600,34 @@ export interface components {
              * @enum {string}
              */
             status?: "PENDING" | "CONFIRMED" | "COMPLETED" | "EXPIRED" | "CANCELED";
+        };
+        UpdateOrderDto: {
+            /**
+             * @description Status of the order
+             * @enum {string}
+             */
+            status?: "PENDING" | "CONFIRMED" | "COMPLETED" | "EXPIRED" | "CANCELED";
+            /**
+             * Format: date-time
+             * @description Date of the service in UTC
+             * @example 2026-03-19T07:00:00Z
+             */
+            date?: string;
+            /**
+             * @description ID of the master assigned to the order
+             * @example 1
+             */
+            masterId?: number;
+            /**
+             * @description Duration of the service in minutes
+             * @example 30
+             */
+            duration?: number;
+            /**
+             * @description Additional notes for the order
+             * @example Please arrive 10 minutes early
+             */
+            notes?: string;
         };
         CreatePublicOrderDto: {
             /** @enum {string} */
@@ -2700,41 +2760,6 @@ export interface operations {
             };
         };
     };
-    UsersController_updateUserAvatar: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "multipart/form-data": components["schemas"]["UploadFileDto"];
-            };
-        };
-        responses: {
-            /** @description Avatar updated */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["SuccessResponseDto"] & {
-                        data?: components["schemas"]["UserEntity"];
-                    };
-                };
-            };
-            /** @description Bad Request */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-        };
-    };
     UsersController_updatePasswordInProfile: {
         parameters: {
             query?: never;
@@ -3737,6 +3762,41 @@ export interface operations {
             };
         };
     };
+    MediasController_createMedia: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "multipart/form-data": components["schemas"]["UploadMediaRequestDto"];
+            };
+        };
+        responses: {
+            /** @description Upload media */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SuccessResponseDto"] & {
+                        data?: components["schemas"]["MediaResponseDto"];
+                    };
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
     MastersController_findAll: {
         parameters: {
             query?: {
@@ -3846,7 +3906,7 @@ export interface operations {
             };
         };
     };
-    MastersController_updateProfile: {
+    MastersController_update: {
         parameters: {
             query?: never;
             header?: never;
@@ -3861,7 +3921,7 @@ export interface operations {
             };
         };
         responses: {
-            /** @description Master profile updated successfully */
+            /** @description Master updated successfully */
             200: {
                 headers: {
                     [name: string]: unknown;
@@ -3959,60 +4019,33 @@ export interface operations {
             };
         };
     };
-    MastersController_updateUserAvatar: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "multipart/form-data": components["schemas"]["UpdateMasterAvatarDto"];
-            };
-        };
-        responses: {
-            /** @description Avatar updated */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["SuccessResponseDto"] & {
-                        data?: components["schemas"]["MasterEntity"];
-                    };
-                };
-            };
-            /** @description Bad Request */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-        };
-    };
     MastersPublicController_findAll: {
         parameters: {
-            query?: never;
+            query?: {
+                /** @description Filter by name, email or phone */
+                search?: string;
+                /** @description Page number */
+                page?: number;
+                /** @description Items per page */
+                limit?: number;
+            };
             header?: never;
             path?: never;
             cookie?: never;
         };
         requestBody?: never;
         responses: {
-            /** @description List of all masters */
+            /** @description List of masters */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
                     "application/json": components["schemas"]["SuccessResponseDto"] & {
-                        data?: components["schemas"]["MasterEntity"][];
+                        data?: {
+                            items?: components["schemas"]["MasterEntity"][];
+                            pagination?: components["schemas"]["PaginationDto"];
+                        };
                     };
                 };
             };
@@ -4173,6 +4206,41 @@ export interface operations {
             };
         };
     };
+    FilesController_upload: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "multipart/form-data": components["schemas"]["UploadFileDto"];
+            };
+        };
+        responses: {
+            /** @description Upload media */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SuccessResponseDto"] & {
+                        data?: components["schemas"]["FileResponseDto"];
+                    };
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
     OrdersController_findAllOwn: {
         parameters: {
             query?: {
@@ -4284,6 +4352,52 @@ export interface operations {
             };
             /** @description Bad Request */
             400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    OrdersController_updateOrder: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateOrderDto"];
+            };
+        };
+        responses: {
+            /** @description Order updated successfully */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SuccessResponseDto"] & {
+                        data?: components["schemas"]["OrderEntity"];
+                    };
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Not Found */
+            404: {
                 headers: {
                     [name: string]: unknown;
                 };

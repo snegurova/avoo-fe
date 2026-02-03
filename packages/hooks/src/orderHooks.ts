@@ -4,6 +4,7 @@ import {
   CreatePrivateOrdersRequest,
   UpdateOrderStatusRequest,
   PrivateOrderQueryParams,
+  UpdateOrderRequest,
   Order,
   BaseResponse,
   Service,
@@ -17,8 +18,10 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import {
   createPrivateOrdersSchema,
   updateOrderStatusSchema,
+  updateOrderSchema,
   CreatePrivateOrdersData,
   UpdateOrderStatusData,
+  UpdateOrderData,
 } from '../schemas/validationSchemas';
 import { OrderType } from '@avoo/hooks/types/orderType';
 import { OrderStatus } from '../types/orderStatus';
@@ -32,8 +35,9 @@ type UseCreateOrderFormParams = {
   onSuccess?: () => void;
 };
 
-type UseUpdateOrderStatusParams = {
+type UseUpdateOrderParams = {
   id: number;
+  order: UpdateOrderRequest;
   onSuccess?: () => void;
 };
 
@@ -114,7 +118,44 @@ export const orderHooks = {
       setSelectedServices,
     };
   },
-  useUpdateOrderStatus: ({ id, onSuccess }: UseUpdateOrderStatusParams) => {
+  useUpdateOrder: ({ id, order, onSuccess }: UseUpdateOrderParams) => {
+    const {
+      control,
+      handleSubmit,
+      formState: { errors },
+      setValue,
+    } = useForm<UpdateOrderData>({
+      resolver: yupResolver(updateOrderSchema),
+      mode: 'onSubmit',
+      defaultValues: { ...order },
+    });
+
+    const queryClient = useQueryClient();
+
+    const { mutate, isPending, error } = useMutation<
+      BaseResponse<Order>,
+      Error,
+      UpdateOrderRequest
+    >({
+      mutationFn: (data: UpdateOrderRequest) => orderApi.updateOrder(id, data),
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: queryKeys.orders.all });
+        onSuccess?.();
+      },
+    });
+
+    utils.useSetPendingApi(isPending);
+
+    return {
+      control,
+      handleSubmit: handleSubmit(utils.submitAdapter<UpdateOrderRequest>(mutate)),
+      errors,
+      isPending,
+      setValue,
+      error,
+    };
+  },
+  useUpdateOrderStatus: ({ id, onSuccess }: UseUpdateOrderParams) => {
     const {
       control,
       handleSubmit,
@@ -147,5 +188,21 @@ export const orderHooks = {
       errors,
       isPending,
     };
+  },
+  useGetOrderById: (id: number) => {
+    const {
+      data: orderData,
+      isPending,
+      refetch,
+    } = useQuery<BaseResponse<Order>, Error>({
+      queryKey: ['order', queryKeys.orders.byId(id)],
+      queryFn: () => orderApi.getOrderById(id),
+    });
+    utils.useSetPendingApi(isPending);
+
+    if (orderData?.status === ApiStatus.SUCCESS && orderData.data) {
+      return { data: orderData.data, refetch };
+    }
+    return { data: null, refetch };
   },
 };

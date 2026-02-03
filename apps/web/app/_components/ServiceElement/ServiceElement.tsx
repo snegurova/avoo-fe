@@ -1,6 +1,6 @@
 import React from 'react';
 import { tv } from 'tailwind-variants';
-import { Service } from '@avoo/axios/types/apiTypes';
+import { MasterWithRelationsEntity, Service } from '@avoo/axios/types/apiTypes';
 import { currencyUtils, timeUtils } from '@avoo/shared';
 import { CURRENCY } from '@/_constants/currency';
 import Avatar, { AvatarSize } from '@/_components/Avatar/Avatar';
@@ -11,6 +11,7 @@ type Props = {
   onClick?: () => void;
   isCard?: boolean;
   hideMasters?: boolean;
+  master?: MasterWithRelationsEntity;
 };
 
 const wrapperStyles = tv({
@@ -24,7 +25,7 @@ const wrapperStyles = tv({
 });
 
 export default function ServiceElement(props: Props) {
-  const { item, onClick, isCard, hideMasters = false } = props;
+  const { item, onClick, isCard, hideMasters = false, master } = props;
 
   const Wrapper = isCard ? 'div' : 'button';
 
@@ -53,6 +54,17 @@ export default function ServiceElement(props: Props) {
               </li>
             ))}
           </ul>
+        )}
+        {isCard && master && (
+          <div className='flex items-center gap-1'>
+            <Avatar
+              name={master.name ?? ''}
+              size={AvatarSize.Small}
+              src={master.avatarUrl ?? undefined}
+              bgColor={colors.primary[200]}
+            />
+            <span className='text-gray-700 text-xs'>{master.name}</span>
+          </div>
         )}
       </div>
       <div className=''>{currencyUtils.formatPrice(item.price, CURRENCY)}</div>

@@ -14,7 +14,7 @@ import FormTextArea from '@/_components/FormTextArea/FormTextArea';
 import { isEmptyObject } from '@avoo/shared';
 
 type Props = {
-  value?: CreateCustomerRequest | FindCustomerRequest;
+  value?: CreateCustomerRequest | FindCustomerRequest | {};
   onChange: (customer: CreateCustomerRequest | FindCustomerRequest) => void;
   error?: string;
 };
@@ -27,7 +27,7 @@ export function CustomerSelect({ value, onChange, error }: Props) {
   useEffect(() => {
     setParams((prev) => ({
       ...prev,
-      name: search.trim() || undefined,
+      search: search.trim() || undefined,
     }));
   }, [search]);
 
@@ -47,7 +47,7 @@ export function CustomerSelect({ value, onChange, error }: Props) {
   };
 
   const isCustomerValues = (
-    obj: CreateCustomerRequest | FindCustomerRequest | undefined,
+    obj: CreateCustomerRequest | FindCustomerRequest | {} | undefined,
   ): obj is CreateCustomerRequest => {
     return !!(
       obj &&
@@ -64,7 +64,7 @@ export function CustomerSelect({ value, onChange, error }: Props) {
     <div className='w-full'>
       <SearchField
         label='Client'
-        value={value || null}
+        value={value}
         onChange={onChange}
         items={items}
         search={search}

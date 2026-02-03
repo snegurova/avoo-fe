@@ -1,5 +1,6 @@
 import { useContext } from 'react';
 import { SnackbarContext } from '../_providers/SnackbarContextProvider';
+import { AnchorOrigin } from '@avoo/hooks/types/snackbar';
 
 export const useToast = () => {
   const context = useContext(SnackbarContext);
@@ -11,10 +12,14 @@ export const useToast = () => {
   const { show, close } = context;
 
   return {
-    success: (msg: string) => show(msg, { severity: 'success' }),
-    error: (msg: string) => show(msg, { severity: 'error' }),
-    info: (msg: string) => show(msg, { severity: 'info' }),
-    loading: (msg: string) => show(msg, { severity: 'info', loading: true }),
+    success: (msg: string, anchorOrigin?: AnchorOrigin) =>
+      show(msg, { severity: 'success', anchorOrigin }),
+    error: (msg: string, anchorOrigin?: AnchorOrigin) =>
+      show(msg, { severity: 'error', anchorOrigin }),
+    info: (msg: string, anchorOrigin?: AnchorOrigin) =>
+      show(msg, { severity: 'info', anchorOrigin }),
+    loading: (msg: string, anchorOrigin?: AnchorOrigin) =>
+      show(msg, { severity: 'info', loading: true, anchorOrigin }),
     close,
   };
 };

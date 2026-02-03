@@ -10,7 +10,8 @@ type Props = {
   onPress?: (master: MasterWithRelationsEntityResponse) => void;
 };
 
-export const MasterListItem = ({ master, onPress }: Props) => {
+export const MasterListItem = (props: Props) => {
+  const { master, onPress } = props;
   const languages = master.languages || [];
 
   const handlePress = () => {
@@ -30,18 +31,20 @@ export const MasterListItem = ({ master, onPress }: Props) => {
           backgroundColor={colors.primary[200]}
           size={50}
           uri={master.avatarPreviewUrl || master.avatarUrl}
-          name={master.name}
+          name={master.name ?? master.email}
         />
         <View className='flex-1'>
           <Text variant='titleMedium' className='mb-2' style={styles.titleMedium}>
-            {master.name}
+            {master.name ?? master.email}
           </Text>
-          <Text
-            variant='bodyMedium'
+          {master.name && (
+            <Text
+              variant='bodyMedium'
               style={[styles.bodyMedium, master.phone ? { marginBottom: 8 } : null]}
             >
-            {master.email}
-          </Text>
+              {master.email}
+            </Text>
+          )}
           {master.phone && (
             <Text variant='bodyMedium' style={styles.bodyMedium}>
               {master.phone}

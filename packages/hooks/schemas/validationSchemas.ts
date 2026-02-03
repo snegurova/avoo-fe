@@ -59,18 +59,26 @@ export const createMasterSchema = yup.object({
   email: yup.string().required('Email is required').email('Please enter a valid email').trim(),
   name: yup
     .string()
-    .required('Name is required')
-    .min(2, 'Name must be at least 2 characters')
-    .trim(),
+    .nullable()
+    .transform((value) => (value && value.trim() ? value.trim() : null)),
   bio: yup
     .string()
     .nullable()
+    .transform((value) => (value && value.trim() ? value.trim() : null)),
+  headline: yup
+    .string()
+    .nullable()
     .transform((value) => (value && value.trim() ? value.trim() : null))
-    .test('bio-min-length', 'Bio must be longer than or equal to 10 characters', function (value) {
-      if (!value) return true;
-      return value.length >= 10;
-    }),
+    .max(100, 'Headline must be at most 100 characters'),
   phone: yup
+    .string()
+    .nullable()
+    .transform((value) => (value && value.trim() ? value.trim() : null)),
+  avatarUrl: yup
+    .string()
+    .nullable()
+    .transform((value) => (value && value.trim() ? value.trim() : null)),
+  avatarPreviewUrl: yup
     .string()
     .nullable()
     .transform((value) => (value && value.trim() ? value.trim() : null)),
@@ -84,38 +92,6 @@ export const createMasterSchema = yup.object({
     )
     .nullable()
     .transform((value) => (value && value.length > 0 ? value : null))
-    .default([]),
-});
-
-export const updateMasterSchema = yup.object({
-  email: yup.string().required('Email is required').email('Please enter a valid email').trim(),
-  name: yup
-    .string()
-    .required('Name is required')
-    .min(2, 'Name must be at least 2 characters')
-    .trim(),
-  bio: yup
-    .string()
-    .nullable()
-    .transform((value) => (value && value.trim() ? value.trim() : null))
-    .test('bio-min-length', 'Bio must be longer than or equal to 10 characters', function (value) {
-      if (!value) return true;
-      return value.length >= 10;
-    }),
-  phone: yup
-    .string()
-    .nullable()
-    .transform((value) => (value && value.trim() ? value.trim() : null)),
-  languages: yup
-    .array()
-    .of(
-      yup
-        .string()
-        .oneOf([...VALID_LANGUAGE_CODES], 'Invalid language code')
-        .required(),
-    )
-    .nullable()
-    .transform((value) => (value && value.length > 0 ? value : []))
     .default([]),
 });
 
@@ -187,6 +163,14 @@ export const updateOrderStatusSchema = yup.object({
     .required('Status is required'),
 });
 
+export const updateOrderSchema = yup.object({
+  status: yup.string().oneOf([OrderStatus.CONFIRMED, OrderStatus.CANCELED]).optional(),
+  duration: yup.number().positive().optional(),
+  notes: yup.string().optional(),
+  date: yup.string().optional(),
+  masterId: yup.number().optional(),
+});
+
 export const createServiceSchema = yup.object({
   name: yup.string().min(3).required(),
   description: yup.string().min(5).required(),
@@ -207,4 +191,5 @@ export type CreateMasterFormData = yup.InferType<typeof createMasterSchema>;
 export type CreatePrivateOrdersData = yup.InferType<typeof createPrivateOrdersSchema>;
 export type UpdateOrderStatusData = yup.InferType<typeof updateOrderStatusSchema>;
 export type OrdersData = yup.InferType<typeof ordersDataSchema>;
+export type UpdateOrderData = yup.InferType<typeof updateOrderSchema>;
 export type CreateServiceFormData = yup.InferType<typeof createServiceSchema>;

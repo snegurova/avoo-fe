@@ -11,12 +11,12 @@ type Props = {
 };
 
 const selectButton = tv({
-  base: 'rounded-2xl cursor-pointer flex items-center',
+  base: 'rounded-2xl cursor-pointer flex items-center transition-colors',
   variants: {
     type: {
       solid: 'text-white bg-black gap-6 px-6 py-2.5',
       outline:
-        'text-gray-800 border border-gray-200 bg-transparent gap-2 px-3 py-2.5 text-sm leading-none',
+        'text-gray-800 border border-gray-200 bg-transparent gap-2 px-3 py-2.5 text-sm leading-none hover:bg-gray-100 focus:bg-gray-100',
     },
   },
 });
