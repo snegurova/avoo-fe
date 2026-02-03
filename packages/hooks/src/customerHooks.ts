@@ -13,7 +13,7 @@ import { useMemo } from 'react';
 import { ApiStatus } from '@avoo/hooks/types/apiTypes';
 
 export const customerHooks = {
-  useGetCustomers: (params: GetCustomersQueryParams) => {
+  useGetCustomers: (params?: GetCustomersQueryParams) => {
     const memoParams = useMemo<GetCustomersQueryParams>(
       () => ({
         ...params,

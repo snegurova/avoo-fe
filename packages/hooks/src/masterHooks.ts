@@ -2,10 +2,7 @@ import { useMemo } from 'react';
 import { utils } from '@avoo/hooks/utils/utils';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import {
-  createMasterSchema,
-  CreateMasterFormData,
-} from '../schemas/validationSchemas';
+import { createMasterSchema, CreateMasterFormData } from '../schemas/validationSchemas';
 
 import { masterApi } from '@avoo/axios';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';

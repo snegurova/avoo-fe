@@ -77,7 +77,7 @@ export type FindCustomerRequest = {
   id: number;
 };
 export type GetCustomersResponse = {
-  items: components['schemas']['CustomerInfoDto'][];
+  items: CustomerInfoResponse[];
   pagination: components['schemas']['PaginationDto'];
 };
 export type GetCustomersQueryParams =
