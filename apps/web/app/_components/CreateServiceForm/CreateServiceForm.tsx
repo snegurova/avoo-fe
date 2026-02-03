@@ -36,7 +36,7 @@ export default function CreateServiceForm(props: Props) {
     control,
     name: 'masterIds',
     defaultValue: [],
-  }) as number[]; // say TS that it's an array of numbers, because useWatch returns all types
+  }) as number[];
 
   const mastersById = useMemo(() => {
     return new Map(masters.map((m) => [m.id, m]));
@@ -51,7 +51,7 @@ export default function CreateServiceForm(props: Props) {
   const handleRemoveMaster = (id: number) => {
     setValue(
       'masterIds',
-      masterIds?.filter((mid) => mid !== id),
+      masterIds?.filter((masterId) => masterId !== id),
       {
         shouldDirty: true,
         shouldValidate: true,

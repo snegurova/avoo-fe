@@ -14,6 +14,7 @@ import { useDebounce } from './useDebounce';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { CreateServiceFormData, createServiceSchema } from '../schemas/validationSchemas';
+import { queryKeys } from './queryKeys';
 
 const DEFAULT_LIMIT = 10;
 
@@ -127,7 +128,7 @@ export const servicesHooks = {
           },
         );
         queryClient.invalidateQueries({
-          queryKey: ['categories'],
+          queryKey: queryKeys.categories.all,
         });
       },
     });
@@ -171,10 +172,10 @@ export const servicesHooks = {
       },
       onSuccess: () => {
         queryClient.invalidateQueries({
-          queryKey: ['categories'],
+          queryKey: queryKeys.categories.all,
         });
         queryClient.invalidateQueries({
-          queryKey: ['services'],
+          queryKey: queryKeys.services.all,
         });
 
         onSuccess?.();

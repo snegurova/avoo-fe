@@ -50,6 +50,11 @@ export default function ServicesCreatePage() {
     }
   };
 
+  const onRemoveMedia = (id: number) => {
+    toast.info('Removed ' + id);
+    setMedias(medias.filter((media) => media.id !== id));
+  };
+
   return (
     <AppWrapper>
       <div className='p-11 overflow-y-auto'>
@@ -63,19 +68,19 @@ export default function ServicesCreatePage() {
           setValue={setValue}
           onSubmit={handleSubmit}
         >
-          <ServiceGalleryUpload id='gallery-upload' medias={medias} onFilePicked={onFilePicked} />
+          <ServiceGalleryUpload
+            id='gallery-upload'
+            medias={medias}
+            onFilePicked={onFilePicked}
+            onRemove={onRemoveMedia}
+            isUploading={isUploading}
+          />
         </CreateServiceForm>
       </div>
 
       <section id='create-new-service-controls'>
         <div className='w-full flex gap-8 justify-end p-8'>
-          <Button
-            color='secondary'
-            variant='outlined'
-            sx={{
-              height: '44px',
-            }}
-          >
+          <Button color='secondary' variant='outlined'>
             Cancel
           </Button>
           <Button
@@ -83,9 +88,7 @@ export default function ServicesCreatePage() {
             type='submit'
             color='secondary'
             variant='contained'
-            sx={{
-              height: '44px',
-            }}
+            disabled={isUploading}
           >
             Save
           </Button>

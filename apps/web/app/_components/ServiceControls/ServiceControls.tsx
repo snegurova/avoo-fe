@@ -27,9 +27,6 @@ export default function ServiceControls(props: Props) {
               variant='outlined'
               loading={isPending}
               disabled={isPending}
-              sx={{
-                height: '44px',
-              }}
             >
               Add service
             </Button>

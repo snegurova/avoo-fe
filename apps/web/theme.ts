@@ -288,6 +288,7 @@ const theme = createTheme({
     MuiButton: {
       styleOverrides: {
         root: ({ ownerState }: { ownerState?: { variant?: string; color?: string } }) => ({
+          minHeight: 44,
           ...(ownerState?.variant === 'outlined' &&
             ownerState?.color === 'primary' && {
               color: colors.primary[700],

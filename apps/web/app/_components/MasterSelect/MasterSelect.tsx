@@ -35,11 +35,13 @@ export default function MasterSelect(props: Props) {
               labelId='master-label'
               value={selectedIds.map(String)}
               onChange={(event) => {
-                const value = event.target.value as string[];
-                field.onChange(value.map(Number));
+                const value = event.target.value;
+                if (Array.isArray(value)) {
+                  field.onChange(value.map(Number));
+                }
               }}
               renderValue={(selected) =>
-                (selected as string[])
+                selected
                   .map((id) => masters.find((m) => m.id === Number(id))?.name)
                   .filter(Boolean)
                   .join(', ')

@@ -1,9 +1,11 @@
 import { useRef } from 'react';
+import { tv } from 'tailwind-variants';
 
 type Props = {
   title: string;
   description: string;
   buttonTitle: string;
+  isUploading: boolean;
   accept?: string;
   onFilePicked: (file: File | null) => void;
   fileError?: string;
@@ -22,15 +24,36 @@ export default function DragAndDropZone(props: Props) {
     fileError,
     file,
     icon,
+    isUploading,
     className,
   } = props;
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+
+  const buttonVariants = tv({
+    base: 'w-full text- border-1 border-dashed border-primary-400 hover:bg-white border-primary-100 hover:border-primary-500 rounded-lg p-6 text-center cursor-pointer flex flex-col items-center justify-center gap-2 transition-colors',
+    variants: {
+      isUploading: {
+        true: 'pointer-events-none border-2 border-blue-400 animate-pulse bg-blue-50',
+        false: '',
+      },
+    },
+  });
+
+  const iconVariants = tv({
+    base: 'rounded-full w-10 h-10 lg:w-20 lg:h-20 bg-primary-50 hover:bg-primary-100 flex items-center justify-center transition-colors',
+    variants: {
+      isUploading: {
+        true: 'bg-primary-100',
+        false: '',
+      },
+    },
+  });
+
   return (
     <div className={className}>
       <button
         type='button'
         aria-label='Upload dnd file'
-        className='w-full text-center border-2 border-dashed bg-gray-50 hover:bg-white border-primary-100 hover:border-primary-400 hover:border-primary-500 rounded-lg p-6 text-center cursor-pointer flex flex-col items-center justify-center gap-2 transition-colors'
         onDragOver={(e) => e.preventDefault()}
         onDrop={(e) => {
           e.preventDefault();
@@ -38,12 +61,10 @@ export default function DragAndDropZone(props: Props) {
           onFilePicked(dropped);
         }}
         onClick={() => fileInputRef.current?.click()}
+        disabled={isUploading}
+        className={buttonVariants({ isUploading })}
       >
-        {icon ? (
-          <div className='rounded-full w-10 h-10 lg:w-20 lg:h-20 bg-primary-100 hover:bg-primary-200 flex items-center justify-center transition-colors'>
-            {icon}
-          </div>
-        ) : null}
+        {icon ? <div className={iconVariants({ isUploading })}>{icon}</div> : null}
 
         <p className='mb-2 font-semibold'>{file ? file.name : title}</p>
         <p className='text-sm text-gray-500 mb-4'>{description}</p>
@@ -58,6 +79,7 @@ export default function DragAndDropZone(props: Props) {
           accept={accept}
           className='hidden'
           onChange={(e) => onFilePicked(e.target.files?.[0] ?? null)}
+          disabled={isUploading}
         />
         {fileError && <p className='text-sm text-red-500 mt-2'>{fileError}</p>}
       </button>
