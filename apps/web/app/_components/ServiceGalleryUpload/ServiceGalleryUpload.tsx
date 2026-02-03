@@ -1,4 +1,3 @@
-import React, { useRef } from 'react';
 import DragAndDropZone from '../DragAndDropZone/DragAndDropZone';
 import { colors } from '@avoo/design-tokens';
 import { UploadMediaResponse } from '@avoo/axios/types/apiTypes';
@@ -102,6 +101,7 @@ export default function ServiceGalleryUpload(props: Props) {
                 onFilePicked={onFilePicked}
                 icon={<BackupIcon fill={colors.primary[300]} width={60} height={60} />}
                 isUploading={isUploading}
+                className='min-w-[477px]'
               />
             </div>
           )}

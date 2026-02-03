@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import React, { useRef } from 'react';
 import { tv } from 'tailwind-variants';
 
 type Props = {
@@ -22,7 +22,6 @@ export default function DragAndDropZone(props: Props) {
     accept = '.jpg,.png',
     onFilePicked,
     fileError,
-    file,
     icon,
     isUploading,
     className,
@@ -66,10 +65,14 @@ export default function DragAndDropZone(props: Props) {
       >
         {icon ? <div className={iconVariants({ isUploading })}>{icon}</div> : null}
 
-        <p className='mb-2 font-semibold'>{file ? file.name : title}</p>
-        <p className='text-sm text-gray-500 mb-4'>{description}</p>
+        <p className='mb-2 font-semibold'>
+          {isUploading ? 'Uploading file. Please wait...' : title}
+        </p>
+        <p className='text-sm text-gray-500 mb-4'>
+          {isUploading ? 'It may take a few seconds' : description}
+        </p>
         <span className='px-4 py-2 border border-primary-700 text-primary-700 hover:bg-primary-50 hover:text-primary-500 rounded-md inline-block transition-colors transition-text-colors'>
-          {buttonTitle}
+          {isUploading ? 'Uploading...' : buttonTitle}
         </span>
         <input
           id='dndFileInput'
