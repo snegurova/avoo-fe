@@ -392,14 +392,16 @@ const theme = createTheme({
     },
     MuiOutlinedInput: {
       styleOverrides: {
-        root: {
+        root: ({ ownerState }) => ({
           borderRadius: radius.md,
-          height: '44px',
-          '& input': {
-            height: '44px',
-            boxSizing: 'border-box',
-          },
-        },
+          ...(ownerState?.multiline
+            ? {
+                alignItems: 'stretch',
+              }
+            : {
+                height: 44,
+              }),
+        }),
       },
     },
     MuiMenu: {

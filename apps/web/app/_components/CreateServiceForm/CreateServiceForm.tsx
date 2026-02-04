@@ -32,11 +32,10 @@ type Props = {
 
 export default function CreateServiceForm(props: Props) {
   const { id, children, control, errors, categories, masters, onSubmit, setValue } = props;
-  const masterIds = useWatch<CreateServiceFormData>({
+  const masterIds = useWatch<CreateServiceFormData, 'masterIds'>({
     control,
     name: 'masterIds',
-    defaultValue: [],
-  }) as number[];
+  });
 
   const mastersById = useMemo(() => {
     return new Map(masters.map((m) => [m.id, m]));
@@ -147,17 +146,6 @@ export default function CreateServiceForm(props: Props) {
                     multiline
                     rows={3}
                     placeholder='Short description for the service'
-                    sx={{
-                      '& .MuiOutlinedInput-root': {
-                        height: '90px',
-                        alignItems: 'stretch',
-                      },
-
-                      '& .MuiOutlinedInput-inputMultiline': {
-                        height: '100%',
-                        boxSizing: 'border-box',
-                      },
-                    }}
                   />
                 )}
               />
