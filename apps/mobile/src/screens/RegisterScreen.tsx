@@ -1,6 +1,6 @@
 import { Text, View, TouchableWithoutFeedback, Keyboard, Pressable } from 'react-native';
 import  Layout from '@/shared/Layout/Layout';
-import RegistrationForm from '@/components/RegistrationForm';
+import RegistrationForm from '@/components/RegistrationForm/RegistrationForm';
 import { RootScreens, RootStackScreenProps } from '@/types/navigation';
 
 type Props = RootStackScreenProps<RootScreens.RegisterScreen>;
@@ -9,7 +9,7 @@ export default function RegisterScreen(props: Props) {
   const { navigation } = props;
 
   return (
-    <Layout centerContent={true}>
+    <Layout centerContent={true} isHeaderHidden={true}>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View className='w-full'>
           <Text className='text-3xl font-bold text-center mb-2'>AVOO App</Text>

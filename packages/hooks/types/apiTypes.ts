@@ -1,5 +1,4 @@
-export enum apiStatus {
+export enum ApiStatus {
   SUCCESS = 'success',
   ERROR = 'error',
 }
-

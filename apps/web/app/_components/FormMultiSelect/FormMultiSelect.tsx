@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
@@ -42,8 +42,13 @@ export const FormMultiSelect = (props: Props) => {
     } = event;
     onChange?.(typeof value === 'string' ? value.split(',') : value);
   };
-  const ITEM_HEIGHT = 48;
-  const ITEM_PADDING_TOP = 8;
+
+  const selectLabelsValue = useMemo(() => {
+    return options
+      .filter((option) => selected.includes(option.value))
+      .map((option) => option.label)
+      .join(', ');
+  }, [options, selected]);
 
   return (
     <div className={className}>
@@ -51,25 +56,12 @@ export const FormMultiSelect = (props: Props) => {
         <InputLabel id={`multiple-${name}-label`}>{label}</InputLabel>
         <Select
           labelId={`multiple-${name}-label`}
-          id={id ? id : `multiple-${name}`}
+          id={id ?? `multiple-${name}`}
           multiple
           value={selected}
           onChange={handleChange}
           input={<OutlinedInput label={label} />}
-          renderValue={(selected) =>
-            options
-              .filter((o) => selected.includes(o.value))
-              .map((o) => o.label)
-              .join(', ')
-          }
-          MenuProps={{
-            PaperProps: {
-              style: {
-                maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-                width: 250,
-              },
-            },
-          }}
+          renderValue={() => selectLabelsValue}
         >
           {options.map((option) => (
             <MenuItem key={option.label} value={option.value}>

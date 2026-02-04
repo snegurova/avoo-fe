@@ -3,13 +3,17 @@ import { userApi } from '@avoo/axios';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import {
   BaseResponse,
+  CertificateResponse,
   UserMediaResponse,
   UserProfileResponse,
   UserUpdateAvatarResponse,
+  UpdateProfile,
 } from '@avoo/axios/types/apiTypes';
 import { FileInput } from '@avoo/shared';
-import { apiStatus } from '../types/apiTypes';
+import { ApiStatus } from '../types/apiTypes';
 import { queryKeys } from './queryKeys';
+import { appendFileToForm, buildCertificateForm } from './utils/formDataHelpers';
+import { CreateCertificatePayload } from '@avoo/axios/types/certificate';
 
 export const userHooks = {
   useGetUserProfile: () => {
@@ -23,7 +27,7 @@ export const userHooks = {
 
     utils.useSetPendingApi(isPending);
 
-    const profileInfo = userProfileData?.status === apiStatus.SUCCESS ? userProfileData.data : null;
+    const profileInfo = userProfileData?.status === ApiStatus.SUCCESS ? userProfileData.data : null;
 
     const visualProfileInfo = {
       name: profileInfo?.businessInfo?.name ?? 'Salon Name not set',
@@ -33,6 +37,8 @@ export const userHooks = {
       phone: profileInfo?.businessInfo?.phone ?? 'Phone not set',
       avatarUrl: profileInfo?.avatarPreviewUrl ?? profileInfo?.avatarUrl ?? null,
       avatarPreviewUrl: profileInfo?.avatarPreviewUrl ?? null,
+      location_lat: profileInfo?.businessInfo?.location_lat ?? null,
+      location_lon: profileInfo?.businessInfo?.location_lon ?? null,
     };
 
     const visualLanguages = profileInfo?.businessInfo?.languages ?? null;
@@ -50,7 +56,7 @@ export const userHooks = {
 
     utils.useSetPendingApi(isPending);
 
-    if (userMediaData?.status === apiStatus.SUCCESS) {
+    if (userMediaData?.status === ApiStatus.SUCCESS) {
       return userMediaData.data;
     }
 
@@ -59,12 +65,16 @@ export const userHooks = {
   usePatchUserProfileAvatar: () => {
     const queryClient = useQueryClient();
 
-    const { mutate: handleUpdateAvatar, isPending } = useMutation<
-      BaseResponse<UserUpdateAvatarResponse>,
-      Error,
-      FileInput
-    >({
-      mutationFn: userApi.updateAvatar,
+    const {
+      mutate: handleUpdateAvatar,
+      mutateAsync: handleUpdateAvatarAsync,
+      isPending,
+    } = useMutation<BaseResponse<UserUpdateAvatarResponse>, Error, FileInput>({
+      mutationFn: async (file) => {
+        const form = new FormData();
+        await appendFileToForm(form, 'file', file);
+        return userApi.updateAvatar(form);
+      },
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: queryKeys.user.profile() });
       },
@@ -74,6 +84,57 @@ export const userHooks = {
 
     return {
       handleUpdateAvatar,
+      handleUpdateAvatarAsync,
+    };
+  },
+  usePostCertificate: () => {
+    const queryClient = useQueryClient();
+
+    const { mutate: handleAddCertificate, isPending } = useMutation<
+      BaseResponse<CertificateResponse>,
+      Error,
+      CreateCertificatePayload
+    >({
+      mutationFn: (payload) => {
+        return (async () => {
+          const form = await buildCertificateForm(payload);
+          return userApi.createCertificate(form);
+        })();
+      },
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: queryKeys.user.profile() });
+        queryClient.invalidateQueries({ queryKey: queryKeys.user.certificates() });
+      },
+    });
+
+    utils.useSetPendingApi(isPending);
+
+    return {
+      handleAddCertificate,
+    };
+  },
+  useUpdateProfile: () => {
+    const queryClient = useQueryClient();
+
+    const { mutate, mutateAsync, isPending } = useMutation<
+      BaseResponse<UserProfileResponse>,
+      Error,
+      UpdateProfile
+    >({
+      mutationFn: (payload) => {
+        return userApi.updateProfile(payload);
+      },
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: queryKeys.user.profile() });
+      },
+    });
+
+    utils.useSetPendingApi(isPending);
+
+    return {
+      handleUpdateProfile: mutate,
+      handleUpdateProfileAsync: mutateAsync,
+      isPending,
     };
   },
 };

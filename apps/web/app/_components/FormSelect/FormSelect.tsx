@@ -1,6 +1,5 @@
-import React from 'react';
-import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
-import { SelectChangeEvent } from 'node_modules/@mui/material';
+import React, { useCallback } from 'react';
+import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material';
 
 export type Option = { label: string; value: string };
 
@@ -31,15 +30,19 @@ export const FormSelect = (props: Props) => {
     onChange,
   } = props;
 
-  const handleChange = (event: SelectChangeEvent) => {
-    onChange(event.target.value as string);
-  };
+  const handleChange = useCallback(
+    (event: SelectChangeEvent) => {
+      onChange(event.target.value);
+    },
+    [onChange],
+  );
+
   return (
     <FormControl size={size} fullWidth sx={{ mt: 2 }} disabled={disabled}>
       <InputLabel id={`${name}-select-label`}>{label}</InputLabel>
       <Select
         labelId={`${name}-select-label`}
-        id={id ? id : `${name}-select`}
+        id={id ?? `${name}-select`}
         value={value}
         label={label}
         onChange={handleChange}

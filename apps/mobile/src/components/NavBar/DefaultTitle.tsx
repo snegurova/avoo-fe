@@ -1,12 +1,13 @@
-import { Text, Pressable, StyleSheet } from 'react-native';
+import { Pressable } from 'react-native';
+import { Text, useTheme } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import { RootScreens, RootNavigationProp } from '@/types/navigation';
-import { colors, spacing, radius, typography } from '@avoo/design-tokens';
 import Dropdown, { MenuItem } from '@/shared/Dropdown/Dropdown';
 import { Ionicons } from '@expo/vector-icons';
 
 export default function DefaultTitle() {
   const navigation = useNavigation<RootNavigationProp>();
+  const theme = useTheme();
 
   const defaultItems: MenuItem[] = [
     { label: 'New Post', onPress: () => navigation.navigate(RootScreens.AddPostScreen) },
@@ -16,34 +17,15 @@ export default function DefaultTitle() {
   return (
     <Dropdown
       trigger={(isOpen) => (
-        <Pressable style={styles.defaultButton}>
-          <Text style={styles.defaultButtonText}>Add</Text>
-          <Ionicons name={isOpen ? 'chevron-up' : 'chevron-down'} size={16} color={colors.white} />
+        <Pressable className="flex-row items-center justify-center min-w-[109px] h-[44px] bg-black rounded-xl px-md py-xs gap-lg">
+          <Text variant="labelMedium" style={{ color: theme.colors.onPrimary }}>
+            Add
+          </Text>
+          <Ionicons name={isOpen ? 'chevron-up' : 'chevron-down'} size={16} color={theme.colors.onPrimary} />
         </Pressable>
       )}
       items={defaultItems}
     />
   );
 }
-
-const styles = StyleSheet.create({
-  defaultButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    minWidth: 109,
-    height: 44,
-    backgroundColor: colors.black,
-    borderRadius: radius.xl,
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.xs,
-    gap: spacing.xs,
-  },
-  defaultButtonText: {
-    color: colors.white,
-    fontSize: typography.fontSize.sm,
-    fontWeight: typography.fontWeight.medium,
-    marginRight: spacing.xs,
-  },
-});
 

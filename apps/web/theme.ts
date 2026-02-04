@@ -1,13 +1,78 @@
 'use client';
 import { createTheme } from '@mui/material/styles';
 import { Roboto } from 'next/font/google';
-import { colors, radius, typography } from '@avoo/design-tokens';
+import type {} from '@mui/x-date-pickers/themeAugmentation';
+import { colors, breakpoints, radius, typography } from '@avoo/design-tokens';
 
 const roboto = Roboto({
   weight: ['400', '500', '700'],
   subsets: ['latin'],
   display: 'swap',
 });
+
+declare module '@mui/material/IconButton' {
+  interface IconButtonPropsVariantOverrides {
+    avatarEdit: true;
+  }
+}
+
+declare module '@mui/material/styles' {
+  interface Mixins {
+    menu: {
+      itemHeight: number;
+      itemPaddingTop: number;
+      visibleItems: number;
+      partialVisibleItem: number;
+      width: number | string;
+    };
+    formInput: {
+      height: number | string;
+      borderRadius: number | string;
+      borderColor: string;
+      focusRingColor: string;
+      background: string;
+      padding: string;
+    };
+    searchInput: {
+      height: number | string;
+      borderRadius: number | string;
+      iconSize: number | string;
+      iconMarginLeft: number | string;
+      widthMd: string;
+      widthLg: string;
+      mrMd: number | string;
+      mrLg: number | string;
+    };
+  }
+
+  interface MixinsOptions {
+    menu?: {
+      itemHeight?: number;
+      itemPaddingTop?: number;
+      visibleItems?: number;
+      partialVisibleItem?: number;
+      width?: number | string;
+    };
+    formInput?: {
+      height?: number | string;
+      borderRadius?: number | string;
+      borderColor?: string;
+      focusRingColor?: string;
+      background?: string;
+      padding?: string;
+    };
+    searchInput?: {
+      height?: number | string;
+      borderRadius?: number | string;
+      iconSize?: number | string;
+      iconMarginLeft?: number | string;
+      widthMd?: string;
+      widthLg?: string;
+      mrMd?: number | string;
+      mrLg?: number | string;
+    };
+  }
+}
 
 const theme = createTheme({
   colorSchemes: { light: true, dark: false },
@@ -18,9 +83,9 @@ const theme = createTheme({
     fontWeightMedium: Number(typography.fontWeight.medium),
     fontWeightBold: Number(typography.fontWeight.bold),
     h1: {
-      fontSize: typography.fontSize['2xl'],
-      fontWeight: typography.fontWeight.bold,
-      lineHeight: 1.1,
+      fontSize: typography.fontSize.xl,
+      fontWeight: typography.fontWeight.medium,
+      lineHeight: 1.5,
     },
     h2: {
       fontSize: typography.fontSize.xl,
@@ -130,6 +195,33 @@ const theme = createTheme({
     borderRadiusLg: radius.lg,
     borderRadiusXl: radius.xl,
   },
+  mixins: {
+    menu: {
+      itemHeight: 48,
+      itemPaddingTop: 8,
+      visibleItems: 4,
+      partialVisibleItem: 0.5,
+      width: 250,
+    },
+    formInput: {
+      height: 44,
+      borderRadius: radius.md,
+      borderColor: colors.gray[200],
+      focusRingColor: colors.primary[800],
+      background: 'transparent',
+      padding: '0.75rem',
+    },
+    searchInput: {
+      height: 44,
+      borderRadius: 18,
+      iconSize: 24,
+      iconMarginLeft: 12,
+      widthMd: '306px',
+      widthLg: '306px',
+      mrMd: 32,
+      mrLg: 48,
+    },
+  },
   components: {
     MuiChip: {
       styleOverrides: {
@@ -149,6 +241,187 @@ const theme = createTheme({
           fontWeight: typography.fontWeight.medium,
         },
       },
+    },
+    MuiDatePicker: {
+      defaultProps: {
+        slotProps: {
+          textField: {
+            size: 'small',
+            fullWidth: true,
+          },
+        },
+      },
+    },
+
+    MuiTimePicker: {
+      defaultProps: {
+        slotProps: {
+          textField: {
+            size: 'small',
+            fullWidth: true,
+          },
+        },
+      },
+    },
+
+    MuiPickersTextField: {
+      styleOverrides: {
+        root: {
+          '& .MuiPickersInputBase-root': {
+            borderRadius: 0,
+            paddingLeft: 14,
+            paddingRight: 14,
+            position: 'relative',
+          },
+
+          '& .MuiPickersOutlinedInput-notchedOutline': {
+            borderColor: colors.gray[200],
+          },
+          '& .MuiPickersInputBase-root:hover .MuiPickersOutlinedInput-notchedOutline': {
+            borderColor: colors.gray[200],
+          },
+          '& .MuiPickersInputBase-root.Mui-focused:not(.Mui-error) .MuiPickersOutlinedInput-notchedOutline':
+            {
+              borderColor: colors.primary[500],
+            },
+          '& .MuiPickersInputBase-root.Mui-focused .MuiPickersOutlinedInput-notchedOutline': {
+            borderWidth: 1,
+          },
+          '& .MuiPickersInputBase-root.Mui-focused.Mui-error .MuiPickersOutlinedInput-notchedOutline':
+            {
+              borderColor: colors.red[500],
+            },
+          '& .MuiPickersSectionList-root': {
+            padding: '8px 0',
+            fontSize: typography.fontSize.sm,
+            lineHeight: 1.15,
+            color: 'var(--color-gray-800)',
+            width: 'min-content',
+          },
+        },
+      },
+    },
+    MuiFormControl: {
+      styleOverrides: {
+        root: {
+          '& label + .MuiInputBase-root': {
+            marginTop: '4px',
+          },
+        },
+      },
+    },
+    MuiInputBase: {
+      styleOverrides: {
+        root: {
+          '&::before': {
+            borderBottom: 'none',
+          },
+          '&:hover:not(.Mui-disabled)::before': {
+            borderBottom: 'none',
+          },
+          '&.Mui-focused::before': {
+            borderBottom: 'none',
+          },
+        },
+      },
+    },
+
+    MuiInputAdornment: {
+      styleOverrides: {
+        root: () => ({
+          '& span': {
+            fontSize: typography.fontSize.sm,
+            color: 'var(--color-gray-800)',
+          },
+          '& .MuiButtonBase-root': {
+            position: 'absolute',
+            top: '0',
+            right: '0',
+            bottom: '0',
+            left: '0',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'end',
+            paddingRight: 20,
+          },
+          '& .MuiButtonBase-root:hover': {
+            backgroundColor: 'transparent',
+          },
+          '& .MuiButtonBase-root:active': {
+            backgroundColor: 'transparent',
+          },
+          '& .MuiButtonBase-root:focus': {
+            backgroundColor: 'transparent',
+          },
+          margin: 0,
+        }),
+      },
+    },
+    MuiButton: {
+      styleOverrides: {
+        root: ({ ownerState }: { ownerState?: { variant?: string; color?: string } }) => ({
+          ...(ownerState?.variant === 'outlined' &&
+            ownerState?.color === 'primary' && {
+              color: colors.primary[700],
+              borderColor: colors.primary[700],
+              '&:hover': { backgroundColor: colors.primary[50] },
+            }),
+        }),
+      },
+    },
+    MuiIconButton: {
+      styleOverrides: {
+        root: () => ({
+          '&.avatar-edit': {
+            width: 44,
+            height: 44,
+            padding: '12px',
+            borderRadius: '50%',
+            border: '1px solid',
+            borderColor: colors.gray[200],
+            backgroundColor: colors.white,
+            boxShadow: '0 1px 2px rgba(0,0,0,0.05)',
+            color: colors.gray[300],
+            '&:hover': { backgroundColor: colors.primary[50], borderColor: colors.gray[200] },
+            '&:active': { backgroundColor: colors.primary[50] },
+            '&.Mui-focusVisible': { boxShadow: `0 0 0 2px ${colors.primary[500]}` },
+          },
+        }),
+      },
+    },
+    MuiOutlinedInput: {
+      styleOverrides: {
+        root: {
+          borderRadius: 18,
+          height: '44px',
+          paddingLeft: 0,
+          '& input': {
+            height: '44px',
+            boxSizing: 'border-box',
+          },
+        },
+      },
+    },
+    MuiMenu: {
+      styleOverrides: {
+        paper: ({ theme }) => {
+          const menu = theme.mixins.menu;
+          const visibleCount = menu.visibleItems + menu.partialVisibleItem;
+          return {
+            maxHeight: menu.itemHeight * visibleCount + menu.itemPaddingTop,
+            width: menu.width,
+          };
+        },
+      },
+    },
+  },
+  breakpoints: {
+    values: {
+      xs: breakpoints.xs,
+      sm: breakpoints.sm,
+      md: breakpoints.md,
+      lg: breakpoints.lg,
+      xl: breakpoints.xl,
     },
   },
 });

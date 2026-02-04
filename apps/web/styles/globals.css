@@ -4,16 +4,43 @@
 @theme {
   --font-inter: 'Inter', sans-serif;
   --font-roboto: 'Roboto', sans-serif;
-  --color-primary: #bb94ce;
-  --color-secondary: #e8deee;
-  --color-light: #f8f6fc;
-  --color-dark: #8a51ab;
-  --color-border: #e2e2e2;
-  --color-border2: #eef0f2;
-  --color-logo: #4d4d4d;
-  --color-avatar: #bab0d8;
+  --color-primary-50: #f8f6fc;
+  --color-primary-100: #e8deee;
+  --color-primary-200: #d6bce6;
+  --color-primary-300: #bf96d7;
+  --color-primary-400: #b281cf;
+  --color-primary-500: #a063c4;
+  --color-primary-600: #8a51ab;
+  --color-primary-700: #6f418a;
+  --color-primary-800: #5d3774;
+  --color-primary-900: #432854;
 }
 
 body {
   @apply font-roboto;
+}
+
+/* Hide visible scrollbars but keep scrolling behavior
+   - Targets the page's main scroll container and any element with `.hide-scrollbar`.
+   Notes: hiding scrollbars can affect discoverability/accessibility. Consider using
+   this only where needed (e.g. inner panels). */
+main,
+.hide-scrollbar {
+  /* Firefox */
+  scrollbar-width: none;
+  /* IE 10+ */
+  -ms-overflow-style: none;
+  /* Smooth scrolling on iOS */
+  -webkit-overflow-scrolling: touch;
+}
+
+main::-webkit-scrollbar,
+.hide-scrollbar::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
+main::-webkit-scrollbar-thumb,
+.hide-scrollbar::-webkit-scrollbar-thumb {
+  background: transparent;
 }

@@ -1,7 +1,7 @@
 import { Text, View, TouchableWithoutFeedback, Keyboard, Pressable } from 'react-native';
 import  Layout from '@/shared/Layout/Layout';
 import { RootScreens, RootStackScreenProps } from '@/types/navigation';
-import ForgotPasswordForm from '@/components/ForgotPasswordForm';
+import ForgotPasswordForm from '@/components/ForgotPasswordForm/ForgotPasswordForm';
 
 type Props = RootStackScreenProps<RootScreens.ForgotPasswordScreen>;
 
@@ -9,7 +9,7 @@ export default function ForgotPasswordScreen(props: Props) {
   const { navigation } = props;
 
   return (
-    <Layout centerContent={true}>
+    <Layout centerContent={true} isHeaderHidden={true}>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View className='w-full'>
           <Text className='text-3xl font-bold text-center mb-2'>Forgot Password</Text>

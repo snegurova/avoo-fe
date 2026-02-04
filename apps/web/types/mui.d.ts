@@ -2,6 +2,45 @@ import '@mui/material/styles';
 import '@mui/material/Chip';
 
 declare module '@mui/material/styles' {
+  interface Mixins {
+    menu: {
+      itemHeight: number;
+      itemPaddingTop: number;
+      visibleItems: number;
+      partialVisibleItem: number;
+      width: number;
+    };
+    searchInput: {
+      height: number;
+      borderRadius: number;
+      iconSize: number;
+      iconMarginLeft: number;
+      widthMd: string;
+      widthLg: string;
+      mrMd: number;
+      mrLg: number;
+    };
+  }
+  interface MixinsOptions {
+    menu?: {
+      itemHeight?: number;
+      itemPaddingTop?: number;
+      visibleItems?: number;
+      partialVisibleItem?: number;
+      width?: number;
+    };
+    searchInput?: {
+      height?: number;
+      borderRadius?: number;
+      iconSize?: number;
+      iconMarginLeft?: number;
+      widthMd?: string;
+      widthLg?: string;
+      mrMd?: number;
+      mrLg?: number;
+    };
+  }
+
   interface Palette {
     pending: Palette['primary'];
   }

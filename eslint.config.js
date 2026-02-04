@@ -15,6 +15,7 @@ export default defineConfig([
     '**/.next/**',
     '**/build/**',
     '**/coverage/**',
+    '**/storybook-static/**',
   ]),
   js.configs.recommended,
   {
@@ -33,7 +34,11 @@ export default defineConfig([
     rules: {
       ...tseslint.configs.recommended.rules,
       'no-unused-vars': 'off',
-      '@typescript-eslint/no-unused-vars': ['error'],
+      '@typescript-eslint/no-unused-vars': [
+        'error',
+        { argsIgnorePattern: '^_', varsIgnorePattern: '^_' },
+      ],
+
       'no-console': 'error',
       '@typescript-eslint/ban-ts-comment': 'off',
     },
@@ -65,6 +70,19 @@ export default defineConfig([
     rules: {
       '@typescript-eslint/no-namespace': 'off',
       '@typescript-eslint/no-empty-object-type': 'off',
+    },
+  },
+  {
+    files: ['**/tailwind.config.ts'],
+    rules: {
+      '@typescript-eslint/no-require-imports': 'off',
+    },
+  },
+  {
+    files: ['**/fonts/fonts.ts'],
+    rules: {
+      '@typescript-eslint/no-require-imports': 'off',
+      '@typescript-eslint/no-var-requires': 'off',
     },
   },
 ]);

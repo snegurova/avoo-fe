@@ -5,32 +5,30 @@ import { appRoutes } from '@/_routes/routes';
 import { userHooks } from '@avoo/hooks';
 import { ProfileLanguages } from '@/_components/ProfileLanguages/ProfileLanguages';
 import { ProfileCertificates } from '@/_components/ProfileCertificates/ProfileCertificates';
-import AvatarUpload from '@/_components/AvatarUpload/AvatarUpload';
+import Avatar from '@/_components/Avatar/Avatar';
+import AvatarLoader from '@/_components/AvatarLoader/AvatarLoader';
+import { AvatarSize } from '@/_components/AvatarUpload/AvatarUpload';
 import { IconButton } from '@/_components/IconButton/IconButton';
 import { useApiStatusStore } from '@avoo/store';
 
 export const ProfileInfo = () => {
   const router = useRouter();
   const { visualProfileInfo, visualLanguages } = userHooks.useGetUserProfile();
-  const { handleUpdateAvatar } = userHooks.usePatchUserProfileAvatar();
   const isPending = useApiStatusStore((state) => state.isPending);
 
   const handleNavigate = () => {
     router.push(appRoutes.EditProfile);
   };
 
-  const handleImageSelect = (file: File) => {
-    handleUpdateAvatar(file);
-  };
-
   return (
     <>
-      <div className='flex justify-center mb-4'>
-        <AvatarUpload
-          imageUri={visualProfileInfo.avatarPreviewUrl}
-          onImageSelected={handleImageSelect}
-          isLoading={isPending}
+      <div className='flex justify-center mb-4 relative'>
+        <Avatar
+          name={visualProfileInfo.name ?? 'Avatar'}
+          size={AvatarSize.LARGE}
+          src={visualProfileInfo.avatarUrl}
         />
+        {isPending && <AvatarLoader size={AvatarSize.LARGE} />}
       </div>
       <div className='bg-white border border-blue-500 rounded-xl p-4 mx-5 mb-4 relative'>
         <div className='absolute top-4 right-4'>

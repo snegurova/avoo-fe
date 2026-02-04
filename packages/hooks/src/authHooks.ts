@@ -25,7 +25,7 @@ import {
   VerifyCodeResponse,
   ResetPasswordRequest,
 } from '@avoo/axios/types/apiTypes';
-import { apiStatus } from '../types/apiTypes';
+import { ApiStatus } from '../types/apiTypes';
 import {
   RegisterCustomRequest,
   ForgotPasswordRequest as ForgotPasswordRequestType,
@@ -85,7 +85,7 @@ export const authHooks = {
     >({
       mutationFn: authApi.register,
       onSuccess: (response) => {
-        if (response.status === apiStatus.SUCCESS) {
+        if (response.status === ApiStatus.SUCCESS) {
           setIsAuthenticated(true);
           onSuccess?.();
         }
@@ -125,8 +125,11 @@ export const authHooks = {
       LoginRequest
     >({
       mutationFn: authApi.login,
+      meta: {
+        successMessage: 'Login successful',
+      },
       onSuccess: (response) => {
-        if (response.status === apiStatus.SUCCESS) {
+        if (response.status === ApiStatus.SUCCESS) {
           setIsAuthenticated(true);
           setAccessToken(response.data?.token);
           onSuccess?.();
@@ -187,7 +190,7 @@ export const authHooks = {
     >({
       mutationFn: authApi.verifyCode,
       onSuccess: (response) => {
-        if (response.status === apiStatus.SUCCESS) {
+        if (response.status === ApiStatus.SUCCESS) {
           setAccessToken(response.data?.token);
           onSuccess?.();
         }
@@ -213,7 +216,7 @@ export const authHooks = {
       errors,
     };
   },
-  useResetPasswordForm: ({ token, onSuccess }: UseResetPasswordFormParams = {}) => {
+  useResetPasswordForm: ({ onSuccess }: UseResetPasswordFormParams = {}) => {
     const {
       register,
       control,
@@ -229,13 +232,13 @@ export const authHooks = {
     });
 
     const { mutate: resetPassword, isPending } = useMutation<
-      BaseResponse<{}>,
+      BaseResponse<Record<string, never>>,
       Error,
       ResetPasswordRequest
     >({
       mutationFn: authApi.resetPassword,
       onSuccess: (response) => {
-        if (response.status === apiStatus.SUCCESS) {
+        if (response.status === ApiStatus.SUCCESS) {
           onSuccess?.();
         }
       },
@@ -252,13 +255,13 @@ export const authHooks = {
   },
   useSendCode: ({ onSuccess }: UseSendCodeParams = {}) => {
     const { mutate: sendCodeHandler, isPending } = useMutation<
-      BaseResponse<{}>,
+      BaseResponse<Record<string, never>>,
       Error,
       ForgotPasswordRequestType
     >({
       mutationFn: authApi.forgotPassword,
       onSuccess: (response, variables) => {
-        if (response.status === apiStatus.SUCCESS) {
+        if (response.status === ApiStatus.SUCCESS) {
           onSuccess?.(variables.email);
         }
       },

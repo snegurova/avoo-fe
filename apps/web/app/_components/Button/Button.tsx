@@ -13,6 +13,12 @@ export enum ButtonFit {
   Inline = 'inline',
 }
 
+export enum ButtonType {
+  Button = 'button',
+  Submit = 'submit',
+  Reset = 'reset',
+}
+
 type UseOnClickParams = {
   disabled?: boolean;
   loading?: boolean;
@@ -35,11 +41,15 @@ const hooks = {
 };
 
 const button = tv({
-  base: 'inline-flex items-center justify-center rounded-md font-medium transition px-4 py-2 cursor-pointer focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:cursor-not-allowed',
+  base: 'inline-flex items-center justify-center min-w-40  font-medium hover:shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 cursor-pointer disabled:cursor-not-allowed rounded-lg py-3.5 px-6 leading-none transition-colors',
   variants: {
     intent: {
-      primary: 'bg-blue-600 text-white hover:bg-blue-700 disabled:bg-blue-300',
-      secondary: 'bg-gray-200 text-gray-900 hover:bg-gray-300 disabled:bg-gray-100',
+      primary:
+        'bg-black text-white hover:bg-primary-500  focus:bg-primary-500 disabled:bg-gray-500',
+      secondary:
+        'bg-white text-black border-black border hover:border-primary-500 focus:border-primary-500 hover:text-primary-500 focus:text-primary-500 disabled:text-gray-500 disabled:text-gray-500',
+      cancel: 'bg-transparent text-black border border-black hover:bg-gray-100',
+      submit: 'bg-black text-white hover:bg-gray-800',
     },
     fit: {
       fill: 'w-full',
@@ -51,20 +61,36 @@ const button = tv({
 
 export type Props = {
   children: JSX.Element | string;
-  fit: ButtonFit;
-  intent: ButtonIntent;
+  fit?: ButtonFit;
+  intent?: ButtonIntent;
   disabled?: boolean;
   loading?: boolean;
   onClick?: React.MouseEventHandler;
+  type?: ButtonType;
+  className?: string;
 };
 
 export const Button = (props: Props) => {
-  const { children, fit, intent, disabled = false, loading = false, onClick } = props;
+  const {
+    children,
+    fit = ButtonFit.Inline,
+    intent = ButtonIntent.Primary,
+    disabled = false,
+    loading = false,
+    onClick,
+    type = ButtonType.Button,
+    className,
+  } = props;
 
   const handleClick = hooks.useOnClick({ disabled, loading, onClick });
 
   return (
-    <button className={button({ intent, fit })} disabled={disabled} onClick={handleClick}>
+    <button
+      type={type}
+      className={button({ intent, fit, className })}
+      disabled={disabled}
+      onClick={handleClick}
+    >
       {loading ? 'loading...' : children}
     </button>
   );

@@ -24,6 +24,7 @@
     "build-storybook": "storybook build"
   },
   "dependencies": {
+    "@avoo/constants": "workspace:*",
     "@avoo/hooks": "workspace:*",
     "@avoo/shared": "workspace:^",
     "@avoo/store": "workspace:*",

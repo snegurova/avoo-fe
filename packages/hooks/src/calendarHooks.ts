@@ -1,45 +1,100 @@
 import { utils } from '@avoo/hooks/utils/utils';
 import { calendarApi } from '@avoo/axios';
-import { PrivateCalendarQueryParams } from '@avoo/axios/types/apiTypes';
 
-import { BaseResponse, GetCalendarResponse } from '@avoo/axios/types/apiTypes';
-import { apiStatus } from '@avoo/hooks/types/apiTypes';
+import {
+  BaseResponse,
+  GetCalendarResponse,
+  GetCalendarByDatesResponse,
+  PrivateCalendarByDatesQueryParams,
+  PrivateCalendarQueryParams,
+} from '@avoo/axios/types/apiTypes';
+import { ApiStatus } from '@avoo/hooks/types/apiTypes';
 import { useQuery } from '@tanstack/react-query';
 import { useMemo } from 'react';
 import { queryKeys } from './queryKeys';
+import { CalendarViewType } from '@avoo/hooks/types/calendarViewType';
 
 export const calendarHooks = {
-  useGetCalendar: ({
-    masterId,
-    view,
-    rangeFromDate,
-    rangeToDate,
-    serviceId,
-    combinationId,
-  }: PrivateCalendarQueryParams) => {
+  useGetCalendar: (
+    {
+      masterIds,
+      view,
+      rangeFromDate,
+      rangeToDate,
+      serviceId,
+      combinationId,
+      orderStatus,
+    }: PrivateCalendarQueryParams,
+    type: CalendarViewType,
+  ) => {
     const memoParams = useMemo<PrivateCalendarQueryParams>(
       () => ({
-        masterId,
+        masterIds,
         view,
         rangeFromDate,
         rangeToDate,
         serviceId,
         combinationId,
+        orderStatus,
       }),
-      [masterId, view, rangeFromDate, rangeToDate, serviceId, combinationId],
+      [masterIds, view, rangeFromDate, rangeToDate, serviceId, combinationId, orderStatus],
     );
 
-    const { data: calendarData, isPending } = useQuery<BaseResponse<GetCalendarResponse>, Error>({
-      queryKey: queryKeys.calendar.byParams(memoParams),
+    const {
+      data: calendarData,
+      isPending,
+      refetch,
+    } = useQuery<BaseResponse<GetCalendarResponse>, Error>({
+      queryKey: ['calendar', queryKeys.calendar.byParams(memoParams)],
       queryFn: () => calendarApi.getCalendar(memoParams),
+      enabled: type !== CalendarViewType.MONTH,
     });
 
     utils.useSetPendingApi(isPending);
 
-    if (calendarData?.status === apiStatus.SUCCESS && calendarData.data) {
-      return calendarData.data;
+    if (calendarData?.status === ApiStatus.SUCCESS && calendarData.data) {
+      return { data: calendarData.data, refetch };
     }
 
-    return null;
+    return { data: null, refetch };
+  },
+  useGetCalendarByDates: ({
+    masterIds,
+    view,
+    rangeFromDate,
+    rangeToDate,
+    serviceId,
+    combinationId,
+    orderStatus,
+  }: PrivateCalendarQueryParams) => {
+    const memoParams = useMemo<PrivateCalendarByDatesQueryParams>(
+      () => ({
+        masterIds,
+        view,
+        rangeFromDate,
+        rangeToDate,
+        serviceId,
+        combinationId,
+        orderStatus,
+      }),
+      [masterIds, view, rangeFromDate, rangeToDate, serviceId, combinationId, orderStatus],
+    );
+
+    const {
+      data: calendarData,
+      isPending,
+      refetch,
+    } = useQuery<BaseResponse<GetCalendarByDatesResponse>, Error>({
+      queryKey: ['monthCalendar', queryKeys.monthCalendar.byParams(memoParams)],
+      queryFn: () => calendarApi.getCalendarByDates(memoParams),
+    });
+
+    utils.useSetPendingApi(isPending);
+
+    if (calendarData?.status === ApiStatus.SUCCESS && calendarData.data) {
+      return { data: calendarData.data, refetch };
+    }
+
+    return { data: null, refetch };
   },
 };

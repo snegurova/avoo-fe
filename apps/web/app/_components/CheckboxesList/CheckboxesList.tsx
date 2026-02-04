@@ -1,0 +1,58 @@
+import React from 'react';
+import { tv } from 'tailwind-variants';
+import Checkbox from '@mui/material/Checkbox';
+import FormControlLabel from '@mui/material/FormControlLabel';
+
+type Props = {
+  options: {
+    label: string;
+    handler: () => void;
+    items?: { label: string | null; id: number | string; handler: () => void }[];
+  }[];
+  values: ((string | number)[] | undefined)[];
+};
+
+const dropdown = tv({
+  base: 'absolute top-full min-w-max translate-y-2 overflow-hidden rounded-2xl z-15 right-0 bg-white border border-gray-200 py-4 px-3 translate-x-2',
+});
+
+export default function CheckboxesList(props: Props) {
+  const { options, values } = props;
+
+  return (
+    <div className={dropdown()}>
+      {options.map((option, index) => (
+        <div
+          key={index}
+          className='mb-2 last:mb-0 not-last:border-b not-last:border-b-primary-100 not-last:pb-2 not-last:mb-2'
+        >
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={!values[index] || values[index]?.length >= (option.items?.length || 0)}
+                onChange={option.handler}
+                size='small'
+              />
+            }
+            label={option.label}
+          />
+          {option.items &&
+            option.items.map((item, idx) => (
+              <div key={idx} className='pl-6'>
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={!values[index] || values[index]?.includes(item.id || '')}
+                      onChange={item.handler}
+                      size='small'
+                    />
+                  }
+                  label={item.label}
+                />
+              </div>
+            ))}
+        </div>
+      ))}
+    </div>
+  );
+}

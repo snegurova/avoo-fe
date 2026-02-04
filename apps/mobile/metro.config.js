@@ -9,5 +9,8 @@ const { withNativeWind } = require('nativewind/metro');
 
 module.exports = withNativeWind(
   withStorybook(config),
-  { input: './global.css' }
+  { 
+    input: './global.css',
+    inlineRem: 16, 
+  }
 );

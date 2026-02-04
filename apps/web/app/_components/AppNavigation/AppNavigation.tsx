@@ -1,16 +1,55 @@
 'use client';
-import React from 'react';
+import React, { useState, useCallback } from 'react';
 import Link from 'next/link';
 import { appRoutes } from '@/_routes/routes';
 import AppNavigationItem from '../AppNavigationItem/AppNavigationItem';
+import { tv } from 'tailwind-variants';
+import { routerHooks } from '@/_hooks/routerHooks';
 import HomeIcon from '@/_icons/HomeIcon';
 import CalendarIcon from '@/_icons/CalendarIcon';
 import GroupsIcon from '@/_icons/GroupsIcon';
 import BookIcon from '@/_icons/BookIcon';
 import MosaicIcon from '@/_icons/MosaicIcon';
 import CoPresentIcon from '@/_icons/CoPresentIcon';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import ArrowDownIcon from '@/_icons/ArrowDownIcon';
+import ArrowUpIcon from '@/_icons/ArrowUpIcon';
+import TimeOffModal from '../TimeOffModal/TimeOffModal';
 
-export default function AppNavigation() {
+type Props = {
+  menuOpen: boolean;
+  setMenuOpen: (open: boolean) => void;
+};
+
+const overlayStyles = tv({
+  base: 'fixed top-0 bottom-0 left-0 right-0 bg-primary-100/50 lg:static h-full z-20 inset-0 transition-opacity duration-300',
+  variants: {
+    open: {
+      true: 'opacity-100 pointer-events-auto',
+      false: 'opacity-0 pointer-events-none',
+    },
+  },
+});
+
+const sidebarStyles = tv({
+  base: `
+    fixed top-0 left-0 z-30 w-55 border-r border-gray-100 bg-white h-full transform transition-transform duration-300 ease-out lg:static lg:translate-x-0
+  `,
+  variants: {
+    open: {
+      true: 'translate-x-0',
+      false: '-translate-x-full lg:translate-x-0',
+    },
+  },
+});
+
+export default function AppNavigation({ menuOpen, setMenuOpen }: Props) {
+  const desktopAbove = useMediaQuery('(min-width:1024px)');
+  const isOpen = desktopAbove || menuOpen;
+
+  const [calendarOpen, setCalendarOpen] = useState(false);
+  const [isTimeOffOpen, setIsTimeOffOpen] = useState(false);
+
   const items = [
     {
       href: appRoutes.Home,
@@ -21,6 +60,7 @@ export default function AppNavigation() {
       href: appRoutes.Calendar,
       icon: <CalendarIcon />,
       label: 'Calendar',
+      hasDropdown: true,
     },
     {
       href: appRoutes.Clients,
@@ -43,23 +83,100 @@ export default function AppNavigation() {
       label: 'Posts',
     },
   ];
-  return (
-    <aside className='h-full min-w-55 border-r border-border'>
-      <nav className='flex flex-col py-7 gap-15'>
-        <div className='px-8'>
-          <Link href={appRoutes.Home} className='font-inter font-semibold text-4xl text-logo'>
-            Avoo
-          </Link>
-        </div>
+  const calendarNav = tv({
+    base: 'flex items-center gap-3.5 hover:bg-primary-100 focus:bg-primary-100 transition-colors',
+    variants: { active: { true: 'bg-primary-50' } },
+  });
 
-        <ul className='flex flex-col'>
-          {items.map((item) => (
-            <li key={item.href}>
-              <AppNavigationItem href={item.href} icon={item.icon} label={item.label} />
-            </li>
-          ))}
-        </ul>
-      </nav>
+  const handleCalendarToggle = useCallback((e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setCalendarOpen((s) => !s);
+  }, []);
+
+  const handleOpenTimeOff = useCallback(() => {
+    setIsTimeOffOpen(true);
+  }, []);
+
+  const handleCloseMenu = useCallback(() => {
+    setMenuOpen(false);
+    setCalendarOpen(false);
+  }, []);
+
+  return (
+    <aside className={overlayStyles({ open: isOpen })} onClick={handleCloseMenu}>
+      <div className={sidebarStyles({ open: isOpen })} onClick={(e) => e.stopPropagation()}>
+        <nav className='flex h-full flex-col py-7 gap-15'>
+          <div className='px-8 shrink-0'>
+            <Link
+              href={appRoutes.Home}
+              className='font-inter font-semibold text-4xl text-gray-600'
+              onClick={handleCloseMenu}
+            >
+              Avoo
+            </Link>
+          </div>
+
+          <ul className='flex flex-col overflow-y-auto flex-1'>
+            {items.map((item) => (
+              <li key={item.href}>
+                {item.hasDropdown ? (
+                  (() => {
+                    const isActive = routerHooks.useIsActivePage(item.href);
+                    const cls = calendarNav({ active: isActive });
+                    return (
+                      <>
+                        <div className={`${cls} relative flex items-center justify-between`}>
+                          <Link
+                            href={item.href}
+                            className='flex items-center grow px-8 py-3 gap-3.5'
+                            onClick={handleCloseMenu}
+                          >
+                            {item.icon}
+                            <span className=''>{item.label}</span>
+                          </Link>
+
+                          <button
+                            type='button'
+                            className='absolute right-0 top-0 bottom-0 pl-3 pr-6 flex items-center hover:bg-muted cursor-pointer'
+                            onClick={handleCalendarToggle}
+                            aria-expanded={calendarOpen}
+                            aria-haspopup='true'
+                          >
+                            {calendarOpen ? <ArrowUpIcon /> : <ArrowDownIcon />}
+                          </button>
+                        </div>
+
+                        {calendarOpen && (
+                          <ul className='flex flex-col'>
+                            <li>
+                              <button
+                                type='button'
+                                className='w-full text-left pl-20.5 pr-6 py-3 hover:bg-primary-100 focus:bg-primary-100 transition-colors cursor-pointer'
+                                onClick={handleOpenTimeOff}
+                              >
+                                Time off
+                              </button>
+                            </li>
+                          </ul>
+                        )}
+                      </>
+                    );
+                  })()
+                ) : (
+                  <AppNavigationItem
+                    href={item.href}
+                    icon={item.icon}
+                    label={item.label}
+                    onClick={handleCloseMenu}
+                  />
+                )}
+              </li>
+            ))}
+          </ul>
+          <TimeOffModal isOpen={isTimeOffOpen} onClose={() => setIsTimeOffOpen(false)} />
+        </nav>
+      </div>
     </aside>
   );
 }

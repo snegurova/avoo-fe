@@ -1,18 +1,21 @@
 import Layout from '@/shared/Layout/Layout';
-import ProfileInfo from '@/components/ProfileInfo/ProfileInfo';
-import { ProfilePosts } from '@/components/ProfilePosts/ProfilePosts';
-import { ProfileGallery } from '@/components/ProfileGallery/ProfileGallery';
-import { ProfileMaster } from '@/components/ProfileMaster/ProfileMaster';
-import { ProfileSchedule } from '@/components/ProfileSchedule/ProfileSchedule';
+import { View } from 'react-native';
+
+import { NotificationsSection } from '@/components/NotificationsSection/NotificationSection';
+import { AppointmentsSection } from '@/components/AppointmentsSection/AppointmentsSection';
+import { CalendarSection } from '@/components/CalendarSection/CalendarSection';
+
 
 export const HomeScreen = () => {
   return (
     <Layout hasBottomTab={true}>
-      <ProfileInfo />
-      <ProfilePosts />
-      <ProfileGallery />
-      <ProfileMaster />
-      <ProfileSchedule />
+       <View className='gap-8'>
+        <NotificationsSection />
+              <AppointmentsSection />
+              <CalendarSection />
+      </View>
     </Layout>
   );
 };
+
+export default HomeScreen;

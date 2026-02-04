@@ -8,7 +8,7 @@ import {
   ScheduleEntity,
   ScheduleUpdateResponse,
 } from '@avoo/axios/types/apiTypes';
-import { apiStatus } from '@avoo/hooks/types/apiTypes';
+import { ApiStatus } from '@avoo/hooks/types/apiTypes';
 import { queryKeys } from './queryKeys';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
@@ -98,7 +98,7 @@ export const scheduleHooks = {
 
     utils.useSetPendingApi(isPending);
 
-    if (schedulesData?.status === apiStatus.SUCCESS && schedulesData.data) {
+    if (schedulesData?.status === ApiStatus.SUCCESS && schedulesData.data) {
       return schedulesData.data;
     }
 

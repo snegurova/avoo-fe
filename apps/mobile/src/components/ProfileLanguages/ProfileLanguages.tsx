@@ -17,7 +17,7 @@ export const ProfileLanguages = (props: Props) => {
   };
 
   return (
-    <View className='flex-row items-center justify-between px-5 py-3'>
+    <View className='flex-row items-center justify-between py-3'>
       <View className='flex-row items-center gap-2'>
         <Text className='text-base text-slate-900'>
           {languages?.join(' ') ?? 'Languages not set'}
