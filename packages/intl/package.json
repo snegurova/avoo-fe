@@ -1,0 +1,14 @@
+{
+  "name": "@avoo/intl",
+  "version": "0.0.1",
+  "main": "src/index.ts",
+  "type": "module",
+  "private": true,
+  "exports": {
+    ".": "./src/index.ts",
+    "./messages/*": "./src/messages/*.ts"
+  },
+  "dependencies": {
+    "react-intl": "^8.1.3"
+  }
+}
