@@ -360,6 +360,7 @@ const theme = createTheme({
     MuiButton: {
       styleOverrides: {
         root: ({ ownerState }: { ownerState?: { variant?: string; color?: string } }) => ({
+          minHeight: 44,
           ...(ownerState?.variant === 'outlined' &&
             ownerState?.color === 'primary' && {
               color: colors.primary[700],
@@ -391,15 +392,16 @@ const theme = createTheme({
     },
     MuiOutlinedInput: {
       styleOverrides: {
-        root: {
-          borderRadius: 18,
-          height: '44px',
-          paddingLeft: 0,
-          '& input': {
-            height: '44px',
-            boxSizing: 'border-box',
-          },
-        },
+        root: ({ ownerState }) => ({
+          borderRadius: radius.md,
+          ...(ownerState?.multiline
+            ? {
+                alignItems: 'stretch',
+              }
+            : {
+                height: 44,
+              }),
+        }),
       },
     },
     MuiMenu: {
@@ -411,6 +413,13 @@ const theme = createTheme({
             maxHeight: menu.itemHeight * visibleCount + menu.itemPaddingTop,
             width: menu.width,
           };
+        },
+      },
+    },
+    MuiSnackbar: {
+      styleOverrides: {
+        root: {
+          marginTop: '70px',
         },
       },
     },

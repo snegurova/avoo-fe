@@ -6,6 +6,7 @@ import EditSquareIcon from '@/_icons/EditSquareIcon';
 import ContentCopyIcon from '@/_icons/ContentCopyIcon';
 import { IconButton } from '@mui/material';
 import { useApiStatusStore } from '@avoo/store';
+import { tv } from 'tailwind-variants';
 
 type Props = {
   id: number;
@@ -13,18 +14,38 @@ type Props = {
   durationMinutes: number;
   price: number;
   currency: string;
+  isActive: boolean;
   onDelete: (id: number) => void;
 };
 
 export default function ServiceCard(props: Props) {
-  const { id, name, durationMinutes, price, currency, onDelete } = props;
+  const { id, name, durationMinutes, price, currency, isActive, onDelete } = props;
 
   const isPending = useApiStatusStore((state) => state.isPending);
 
-  return (
-    <div className='relative border border-gray-200 rounded-lg overflow-hidden'>
-      <span className='absolute left-0 top-0 h-full w-2 bg-primary-200 rounded-l-lg' />
+  const wrapper = tv({
+    base: 'relative border border-gray-200 rounded-lg overflow-hidden',
+    variants: {
+      isActive: {
+        true: '',
+        false: 'bg-gray-100',
+      },
+    },
+  });
 
+  const statusIndicator = tv({
+    base: 'absolute left-0 top-0 h-full w-2 rounded-l-lg',
+    variants: {
+      isActive: {
+        true: 'bg-primary-200',
+        false: 'bg-gray-300',
+      },
+    },
+  });
+
+  return (
+    <div className={wrapper({ isActive })}>
+      <span className={statusIndicator({ isActive })} />
       <div className='flex items-center justify-between px-4 py-3'>
         <div>
           <h3 className='text-base font-medium'>{name}</h3>

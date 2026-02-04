@@ -2,7 +2,7 @@ import { OrderStatus } from '@avoo/hooks/types/orderStatus';
 import { FileInput } from '@avoo/shared';
 import type { components, operations } from './generated';
 import { OrderType } from '@avoo/hooks/types/orderType';
-import { FILE_UPLOAD_TYPE_ENUM, ObjectValues } from './apiEnums';
+import { FILE_UPLOAD_TYPE_ENUM, MEDIA_TYPE_ENUM, ObjectValues } from './apiEnums';
 
 export type Error = {
   field: string;
@@ -28,6 +28,9 @@ export type GetServiceResponse = {
 export type GetCategoriesResponse = Category[];
 export type GetPrivateCategoriesResponse =
   components['schemas']['ServicesGroupByCategoriesResponseDto'];
+export type CreateServiceRequest = components['schemas']['CreateServiceDto'];
+export type CreateServiceResponse = components['schemas']['ServiceEntity'];
+
 /** Auth */
 export type LoginRequest = components['schemas']['LoginRequestDto'];
 export type RegisterRequest = components['schemas']['CreateUserDto'];
@@ -181,3 +184,14 @@ export type UploadFileRequest = {
   file: FileInput;
 };
 export type FileUploadResponse = components['schemas']['FileResponseDto'];
+
+/* Media */
+
+export type MediaUpload = components['schemas']['UploadMediaDto']['type'];
+export type MediaUploadType = ObjectValues<typeof MEDIA_TYPE_ENUM>;
+
+export type UploadMediaRequest = {
+  file: FileInput;
+  type: MediaUploadType;
+};
+export type UploadMediaResponse = components['schemas']['MediaEntity'];

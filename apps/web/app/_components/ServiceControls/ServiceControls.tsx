@@ -1,6 +1,8 @@
 import { Button, InputAdornment, TextField, Typography } from '@mui/material';
 import SearchIcon from '@/_icons/SearchIcon';
 import { useApiStatusStore } from '@avoo/store';
+import { appRoutes } from '@/_routes/routes';
+import Link from 'next/link';
 
 type Props = {
   setSearchQuery: (value: string) => void;
@@ -12,21 +14,23 @@ export default function ServiceControls(props: Props) {
 
   return (
     <div className='p-4 flex flex-wrap items-center gap-y-3'>
-      <div className='flex flex-wrap md:flex-nowrap w-full items-center gap-y-2 gap-x-2'>
+      <div className='flex flex-wrap md:flex-nowrap w-full items-center gap-y-2'>
         <Typography component='h1' variant='h1' className='order-1'>
           Services
         </Typography>
 
         <div className='order-2 md:order-3 ml-auto md:ml-0'>
-          <Button
-            fullWidth
-            color='secondary'
-            variant='outlined'
-            loading={isPending}
-            disabled={isPending}
-          >
-            Add service
-          </Button>
+          <Link href={appRoutes.CreateService}>
+            <Button
+              fullWidth
+              color='secondary'
+              variant='outlined'
+              loading={isPending}
+              disabled={isPending}
+            >
+              Add service
+            </Button>
+          </Link>
         </div>
 
         <div className='order-3 md:order-2 w-full md:w-auto md:ml-auto'>
@@ -58,6 +62,7 @@ export default function ServiceControls(props: Props) {
                     <SearchIcon
                       style={{
                         marginLeft: '12px',
+                        marginRight: '10px',
                         fill: 'var(--color-gray-500)',
                       }}
                     />
