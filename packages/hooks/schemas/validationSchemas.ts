@@ -2,6 +2,7 @@ import * as yup from 'yup';
 import { VALID_LANGUAGE_CODES } from '@avoo/constants';
 import { OrderStatus } from '@avoo/hooks/types/orderStatus';
 import { OrderType } from '@avoo/hooks/types/orderType';
+import { MediaType } from '@avoo/hooks/types/mediaType';
 
 export const registerSchema = yup.object({
   name: yup.string().nullable().trim(),
@@ -170,6 +171,17 @@ export const updateOrderSchema = yup.object({
   masterId: yup.number().optional(),
 });
 
+export const createServiceSchema = yup.object({
+  name: yup.string().min(3).required(),
+  description: yup.string().min(5).required(),
+  price: yup.number().min(1).required(),
+  categoryId: yup.number().required(),
+  durationMinutes: yup.number().min(1).required(),
+  isActive: yup.boolean().required(),
+  mediaIds: yup.array().of(yup.number().required()).required(),
+  masterIds: yup.array().of(yup.number().required()).required().default([]),
+});
+
 export type RegisterFormData = yup.InferType<typeof registerSchema>;
 export type LoginFormData = yup.InferType<typeof loginSchema>;
 export type ForgotPasswordFormData = yup.InferType<typeof forgotPasswordSchema>;
@@ -180,3 +192,4 @@ export type CreatePrivateOrdersData = yup.InferType<typeof createPrivateOrdersSc
 export type UpdateOrderStatusData = yup.InferType<typeof updateOrderStatusSchema>;
 export type OrdersData = yup.InferType<typeof ordersDataSchema>;
 export type UpdateOrderData = yup.InferType<typeof updateOrderSchema>;
+export type CreateServiceFormData = yup.InferType<typeof createServiceSchema>;

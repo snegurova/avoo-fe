@@ -4,7 +4,6 @@ import { createContext, useState, ReactNode } from 'react';
 import { Snackbar, Alert, AlertColor, CircularProgress } from '@mui/material';
 import { AnchorHorizontal, AnchorOrigin, AnchorVertical } from '@avoo/hooks/types/snackbar';
 
-
 export type SnackbarContextType = {
   show: (
     message: string,
