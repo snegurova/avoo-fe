@@ -75,6 +75,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@avoo/intl@workspace:packages/intl"
   dependencies:
+    "@formatjs/cli": "npm:^6.12.2"
     react-intl: "npm:^8.1.3"
   languageName: unknown
   linkType: soft
@@ -2502,6 +2503,35 @@ __metadata:
   version: 0.2.10
   resolution: "@floating-ui/utils@npm:0.2.10"
   checksum: 10c0/e9bc2a1730ede1ee25843937e911ab6e846a733a4488623cd353f94721b05ec2c9ec6437613a2ac9379a94c2fd40c797a2ba6fa1df2716f5ce4aa6ddb1cf9ea4
+  languageName: node
+  linkType: hard
+
+"@formatjs/cli@npm:^6.12.2":
+  version: 6.12.2
+  resolution: "@formatjs/cli@npm:6.12.2"
+  peerDependencies:
+    "@glimmer/syntax": ^0.84.3 || ^0.95.0
+    "@vue/compiler-core": 3.5.27
+    content-tag: ^4.1.0
+    vue: 3.5.27
+  peerDependenciesMeta:
+    "@glimmer/env":
+      optional: true
+    "@glimmer/reference":
+      optional: true
+    "@glimmer/syntax":
+      optional: true
+    "@glimmer/validator":
+      optional: true
+    "@vue/compiler-core":
+      optional: true
+    content-tag:
+      optional: true
+    vue:
+      optional: true
+  bin:
+    formatjs: bin/formatjs
+  checksum: 10c0/d22123027a7137ea0c3075e188f20c56201084f0dc93fd0a8a6c0c456ee0fb7ab3e8b053546d3493d83d2680a9a3e528b5a8fce0a66addce4af323d3c3d0ca07
   languageName: node
   linkType: hard
 
