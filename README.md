@@ -86,6 +86,14 @@ cd apps/mobile && yarn dev
 
 ---
 
+## Extract messages
+
+```bash
+yarn intl:extract
+```
+
+---
+
 ## Dev Client (one-time per platform)
 
 Dev Client is needed if you use native modules beyond Expo Go.

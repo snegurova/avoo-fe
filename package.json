@@ -43,7 +43,8 @@
     "test": "turbo run test",
     "prepare": "husky install",
     "types": "yarn workspace @avoo/axios types",
-    "next-type": "yarn workspace web next-type"
+    "next-type": "yarn workspace web next-type",
+    "intl:extract": "yarn workspace @avoo/intl intl:extract"
   },
   "lint-staged": {
     "**/*.{js,jsx,ts,tsx}": [
