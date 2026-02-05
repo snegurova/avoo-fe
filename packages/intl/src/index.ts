@@ -17,5 +17,3 @@ export const MESSAGES: Record<Locale, Record<string, string>> = {
   pl,
   uk,
 };
-
-export * from './messages/public/home/topSection';
