@@ -1,13 +1,27 @@
 import { utils } from '@avoo/hooks/utils/utils';
-import { GetServiceResponse, ServicesQueryParams } from '@avoo/axios/types/apiTypes';
+import {
+  CreateServiceRequest,
+  CreateServiceResponse,
+  GetServiceResponse,
+  ServicesQueryParams,
+} from '@avoo/axios/types/apiTypes';
 
 import { BaseResponse } from '@avoo/axios/types/apiTypes';
 import { InfiniteData, useInfiniteQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useMemo, useState } from 'react';
 import { servicesApi } from '@avoo/axios/src/modules/services';
 import { useDebounce } from './useDebounce';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { CreateServiceFormData, createServiceSchema } from '../schemas/validationSchemas';
+import { queryKeys } from './queryKeys';
 
 const DEFAULT_LIMIT = 10;
+
+type UseServiceCreateFormParams = {
+  onSuccess?: () => void;
+  onError?: (error: Error) => void;
+};
 
 export const servicesHooks = {
   useGetServicesInfinite: ({
@@ -114,7 +128,7 @@ export const servicesHooks = {
           },
         );
         queryClient.invalidateQueries({
-          queryKey: ['categories'],
+          queryKey: queryKeys.categories.all,
         });
       },
     });
@@ -124,6 +138,62 @@ export const servicesHooks = {
     return {
       deleteServiceMutation,
       deleteServiceMutationAsync: deleteServiceMutation.mutateAsync,
+    };
+  },
+
+  useCreateServiceForm: ({ onSuccess, onError }: UseServiceCreateFormParams) => {
+    const {
+      register,
+      control,
+      setValue,
+      getValues,
+      handleSubmit,
+      formState: { errors },
+    } = useForm<CreateServiceFormData>({
+      resolver: yupResolver(createServiceSchema),
+      mode: 'onSubmit',
+      defaultValues: {
+        durationMinutes: 15,
+        mediaIds: [],
+        masterIds: [],
+        isActive: true,
+      },
+    });
+    const queryClient = useQueryClient();
+
+    const { mutate: createService, isPending } = useMutation<
+      BaseResponse<CreateServiceResponse>,
+      Error,
+      CreateServiceRequest
+    >({
+      mutationFn: servicesApi.createService,
+      meta: {
+        successMessage: 'Service created successfully',
+      },
+      onSuccess: () => {
+        queryClient.invalidateQueries({
+          queryKey: queryKeys.categories.all,
+        });
+        queryClient.invalidateQueries({
+          queryKey: queryKeys.services.all,
+        });
+
+        onSuccess?.();
+      },
+      onError: (error) => {
+        onError?.(error);
+      },
+    });
+
+    utils.useSetPendingApi(isPending);
+
+    return {
+      register,
+      control,
+      setValue,
+      getValues,
+      handleSubmit: handleSubmit(utils.submitAdapter<CreateServiceRequest>(createService)),
+      errors,
     };
   },
 };
