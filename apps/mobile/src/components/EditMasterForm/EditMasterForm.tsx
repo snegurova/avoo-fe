@@ -3,10 +3,11 @@ import { useEffect } from 'react';
 import { Text } from 'react-native-paper';
 import FormTextInput from '@/shared/FormTextInput';
 import LanguageSelector from '@/shared/LanguageSelector/LanguageSelector';
-import { masterHooks, filesHooks } from '@avoo/hooks';
+import { masterHooks, filesHooks, utils } from '@avoo/hooks';
 import { colors } from '@avoo/design-tokens';
 import { MasterWithRelationsEntityResponse } from '@avoo/axios/types/apiTypes';
 import { BottomSheetHeader } from '@/shared/BottomSheetHeader/BottomSheetHeader';
+import { ConfirmModal } from '@/shared/ConfirmModal/ConfirmModal';
 import AvatarUpload from '../Avatar/AvatarUpload';
 import { FILE_UPLOAD_TYPE_ENUM } from '@avoo/axios/types/apiEnums';
 import { UploadFile } from '@avoo/shared';
@@ -17,6 +18,8 @@ type Props = {
 };
 
 const EditMasterForm = ({ master, onClose }: Props) => {
+  const { value: isDeleteConfirmVisible, enable: openDeleteConfirm, disable: closeDeleteConfirm } = utils.useBooleanState(false);
+
   const { control, handleSubmit, errors, reset, setValue, watch } = masterHooks.useUpdateMasterForm({
     master,
     onSuccess: onClose,
@@ -141,7 +144,7 @@ const EditMasterForm = ({ master, onClose }: Props) => {
         <Pressable
           className='py-3 mt-4 bg-white rounded-md'
           style={{ borderWidth: 1, borderColor: colors.red[800] }}
-          onPress={() => deleteMaster(master.id)}
+          onPress={openDeleteConfirm}
           disabled={isDeleting}
         >
           <Text
@@ -157,6 +160,16 @@ const EditMasterForm = ({ master, onClose }: Props) => {
           </Text>
         </Pressable>
       </ScrollView>
+      <ConfirmModal
+        visible={isDeleteConfirmVisible}
+        onClose={closeDeleteConfirm}
+        title='Delete master'
+        description='Are you sure you want to permanently delete this master profile? All related information will be removed and cannot be recovered.'
+        onCancel={closeDeleteConfirm}
+        onConfirm={() => deleteMaster(master.id)}
+        onConfirmText='Delete Master'
+        onCancelText='Cancel'
+      />
     </View>
   );
 };
