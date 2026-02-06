@@ -53,6 +53,10 @@ export const Modal = (props: Props) => {
   const { isOpen, onClose, children, variant = ModalVariant.CENTER } = props;
   const style = variant === ModalVariant.PANEL ? panelStyle : centerStyle;
   const mergedStyle = { ...style, ...props.contentStyle };
+  const slotProps =
+    variant === ModalVariant.PANEL
+      ? { backdrop: { sx: { backgroundColor: 'transparent' } } }
+      : undefined;
 
   return (
     <MuiModal
@@ -60,7 +64,7 @@ export const Modal = (props: Props) => {
       onClose={onClose}
       aria-labelledby='modal-modal-title'
       aria-describedby='modal-modal-description'
-      slotProps={{ backdrop: { sx: { backgroundColor: 'transparent' } } }}
+      slotProps={slotProps}
     >
       <Box sx={mergedStyle} className='hide-scrollbar'>
         {variant === ModalVariant.CENTER && (
