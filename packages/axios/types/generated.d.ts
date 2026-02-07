@@ -468,22 +468,6 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/media/upload": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["MediasController_createMedia"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/masters": {
         parameters: {
             query?: never;
@@ -2381,6 +2365,25 @@ export interface components {
             /** @description List of working hours ( Mon-Fri (Sunday, Saturday Day off)), if start date is Monday */
             workingHours?: components["schemas"]["UpdateWorkingHourDto"][];
         };
+        QueryScheduleDto: {
+            /**
+             * @description Page number
+             * @default 1
+             */
+            page: number;
+            /**
+             * @description Items per page
+             * @default 10
+             */
+            limit: number;
+            /**
+             * @description Master IDs
+             * @example [
+             *       1
+             *     ]
+             */
+            masterIds?: number[];
+        };
         UpdateCustomerDto: {
             /**
              * @description Name of the customer
@@ -2422,6 +2425,15 @@ export interface components {
              * @example 1
              */
             serviceId: number;
+            /**
+             * @description Up to 5 media ids for the post
+             * @example [
+             *       1,
+             *       2,
+             *       3
+             *     ]
+             */
+            mediaIds: number[];
         };
     };
     responses: never;
@@ -3762,41 +3774,6 @@ export interface operations {
             };
         };
     };
-    MediasController_createMedia: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "multipart/form-data": components["schemas"]["UploadMediaRequestDto"];
-            };
-        };
-        responses: {
-            /** @description Upload media */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["SuccessResponseDto"] & {
-                        data?: components["schemas"]["MediaResponseDto"];
-                    };
-                };
-            };
-            /** @description Bad Request */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-        };
-    };
     MastersController_findAll: {
         parameters: {
             query?: {
@@ -3806,6 +3783,8 @@ export interface operations {
                 page?: number;
                 /** @description Items per page */
                 limit?: number;
+                /** @description Service ID */
+                serviceId?: number;
             };
             header?: never;
             path?: never;
@@ -4028,6 +4007,8 @@ export interface operations {
                 page?: number;
                 /** @description Items per page */
                 limit?: number;
+                /** @description Service ID */
+                serviceId?: number;
             };
             header?: never;
             path?: never;
@@ -4792,8 +4773,8 @@ export interface operations {
                 page?: number;
                 /** @description Items per page */
                 limit?: number;
-                /** @description Filter by master ID */
-                masterId?: number;
+                /** @description Master IDs */
+                masterIds?: number[];
             };
             header?: never;
             path?: never;

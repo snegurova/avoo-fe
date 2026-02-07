@@ -56,9 +56,9 @@ export default function ServicesCreatePage() {
   };
 
   return (
-    <AppWrapper>
-      <div className='p-11 overflow-y-auto'>
-        <Typography variant='h1'>Add service</Typography>
+    <AppWrapper withPadding>
+      <Typography variant='h1'>Add service</Typography>
+      <div className='overflow-y-auto'>
         <CreateServiceForm
           id='create-new-service'
           control={control}

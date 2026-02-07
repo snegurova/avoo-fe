@@ -25,7 +25,7 @@ export const FormTimeSelect = (props: Props) => {
   );
 
   return (
-    <FormControl size='small' variant='standard' disabled={disabled}>
+    <FormControl size='small' disabled={disabled} fullWidth>
       <InputLabel id={`${name}-select-label`}>{label}</InputLabel>
       <Select
         labelId={`${name}-select-label`}

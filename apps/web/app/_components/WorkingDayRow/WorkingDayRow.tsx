@@ -1,4 +1,4 @@
-import { Checkbox, Typography } from '@mui/material';
+import { Switch, Typography } from '@mui/material';
 import {
   Control,
   Controller,
@@ -12,24 +12,25 @@ import { FormTimeSelect } from '../FormTimeSelect/FormTimeSelect';
 import React from 'react';
 import { ScheduleCreateFormData } from '@avoo/hooks/schemas/schedulesValidationSchemas';
 import AddOutlinedIcon from '@/_icons/AddOutlinedIcon';
-import RemoveOutlinedIcon from '@/_icons/RemoveOutlinedIcon';
 import IconButton from '@mui/material/IconButton';
+import { scheduleHooks } from '@avoo/hooks';
+import { colors } from '@avoo/design-tokens';
+import CloseIcon from '@/_icons/CloseIcon';
+import { tv } from 'tailwind-variants';
 import {
-  ScheduleKey,
-  START_MINUTE,
-  END_MINUTE,
-  BREAK_START_MINUTES,
   BREAK_END_MINUTES,
+  BREAK_START_MINUTES,
   DAYS_NAME,
-  scheduleHooks,
-} from '@avoo/hooks';
+  END_MINUTE,
+  START_MINUTE,
+} from '@avoo/constants/src/calendar';
 
 type Props = {
   index: number;
   control: Control<ScheduleCreateFormData>;
   watch: UseFormWatch<ScheduleCreateFormData>;
   setValue: UseFormSetValue<ScheduleCreateFormData>;
-  scheduleType?: ScheduleKey;
+  scheduleType?: string;
 };
 
 export const WorkingDayRow = (props: Props) => {
@@ -77,108 +78,130 @@ export const WorkingDayRow = (props: Props) => {
     }
   };
 
+  const cardDayVariant = tv({
+    base: 'flex flex-row justify-between items-center px-4 py-2 bg-primary-50',
+    variants: {
+      enabled: {
+        true: '',
+        false: 'text-gray-500',
+      },
+    },
+  });
   return (
     <>
-      <div className='flex flex-row gap-1 justify-between  mb-px items-center'>
-        <div className='flex justify-end items-center'>
-          <Controller
-            name={`workingHours.${index}.enabled`}
-            control={control}
-            defaultValue={true}
-            render={({ field }) => (
-              <Checkbox
-                value={field.value}
-                checked={field.value}
-                onChange={(e) => onChangeChecked(e, field, index)}
-              />
-            )}
-          />
-          <Typography sx={{ width: '100px', display: 'flex', alignItems: 'center' }}>
+      <div className='border border-gray-200 rounded-lg'>
+        <div className={cardDayVariant({ enabled })}>
+          <Typography variant='h4'>
             {scheduleType === 'weekly' ? DAYS_NAME[dayField - 1] : `Day ${dayField}`}
           </Typography>
-        </div>
-        <div className='flex justify-end items-center'>
-          <Controller
-            name={`workingHours.${index}.startTimeMinutes`}
-            control={control}
-            render={({ field }) => (
-              <FormTimeSelect
-                name={`workingHours.${index}.startTimeMinutes`}
-                value={String(field.value)}
-                options={scheduleHooks.useWorkingHoursOptions()}
-                onChange={(val) => field.onChange(Number(val))}
-                disabled={!enabled}
-              />
-            )}
-          />
 
-          <Controller
-            name={`workingHours.${index}.endTimeMinutes`}
-            control={control}
-            render={({ field }) => (
-              <FormTimeSelect
-                name={`workingHours.${index}.endTimeMinutes`}
-                value={String(field.value)}
-                options={scheduleHooks.useWorkingHoursOptions()}
-                onChange={(val) => field.onChange(Number(val))}
-                disabled={!enabled}
+          <div className='flex justify-end items-center'>
+            <Controller
+              name={`workingHours.${index}.enabled`}
+              control={control}
+              defaultValue={true}
+              render={({ field }) => (
+                <>
+                  <Typography variant='body2'>{field.value ? 'Working day' : 'Day off'}</Typography>
+                  <Switch
+                    value={field.value}
+                    checked={field.value}
+                    onChange={(e) => onChangeChecked(e, field, index)}
+                  />
+                </>
+              )}
+            />
+          </div>
+        </div>
+        {enabled && (
+          <div className='flex justify-between items-center px-4 py-2'>
+            <Controller
+              name={`workingHours.${index}.startTimeMinutes`}
+              control={control}
+              render={({ field }) => (
+                <FormTimeSelect
+                  name={`workingHours.${index}.startTimeMinutes`}
+                  value={String(field.value)}
+                  options={scheduleHooks.useWorkingHoursOptions()}
+                  onChange={(val) => field.onChange(Number(val))}
+                  disabled={!enabled}
+                />
+              )}
+            />
+            <span className='p-4'>to</span>
+
+            <Controller
+              name={`workingHours.${index}.endTimeMinutes`}
+              control={control}
+              render={({ field }) => (
+                <FormTimeSelect
+                  name={`workingHours.${index}.endTimeMinutes`}
+                  value={String(field.value)}
+                  options={scheduleHooks.useWorkingHoursOptions()}
+                  onChange={(val) => field.onChange(Number(val))}
+                  disabled={!enabled}
+                />
+              )}
+            />
+          </div>
+        )}
+        <div id='breaks'>
+          {breaksFields.map((br, brIndex) => (
+            <div key={br.id} className='flex flex-row justify-between items-center px-4 py-2'>
+              <Typography variant='h4' color={colors.gray[600]} sx={{ px: 1.5 }}>
+                Break
+              </Typography>
+              <Controller
+                name={`workingHours.${index}.breaks.${brIndex}.breakStartTimeMinutes`}
+                control={control}
+                render={({ field }) => (
+                  <FormTimeSelect
+                    name={`workingHours.${index}.breaks.${brIndex}.breakStartTimeMinutes`}
+                    value={String(field.value)}
+                    options={scheduleHooks.useWorkingHoursOptions()}
+                    onChange={(val) => field.onChange(Number(val))}
+                  />
+                )}
               />
-            )}
-          />
+              <span className='p-4'>to</span>
+              <Controller
+                name={`workingHours.${index}.breaks.${brIndex}.breakEndTimeMinutes`}
+                control={control}
+                render={({ field }) => (
+                  <FormTimeSelect
+                    name={`workingHours.${index}.breaks.${brIndex}.breakEndTimeMinutes`}
+                    value={String(field.value)}
+                    options={scheduleHooks.useWorkingHoursOptions()}
+                    onChange={(val) => field.onChange(Number(val))}
+                  />
+                )}
+              />
+              <div className='px-1 pl-4'>
+                <IconButton onClick={() => removeBreak(brIndex)}>
+                  <CloseIcon />
+                </IconButton>
+              </div>
+            </div>
+          ))}
+          {enabled && (
+            <div className='flex items-center px-4 py-2'>
+              <IconButton
+                onClick={() =>
+                  appendBreak({
+                    breakStartTimeMinutes: BREAK_START_MINUTES,
+                    breakEndTimeMinutes: BREAK_END_MINUTES,
+                  })
+                }
+              >
+                <AddOutlinedIcon fill={colors.primary[700]} />
+              </IconButton>
+              <Typography variant='h4' color={colors.primary[700]}>
+                Add break
+              </Typography>
+            </div>
+          )}
         </div>
       </div>
-      {breaksFields.map((br, brIndex) => (
-        <div key={br.id} className='flex flex-row gap-1 justify-center items-center mb-px'>
-          <Typography variant='body2' color='secondary'>
-            Break
-          </Typography>
-          <Controller
-            name={`workingHours.${index}.breaks.${brIndex}.breakStartTimeMinutes`}
-            control={control}
-            render={({ field }) => (
-              <FormTimeSelect
-                name={`workingHours.${index}.breaks.${brIndex}.breakStartTimeMinutes`}
-                value={String(field.value)}
-                options={scheduleHooks.useWorkingHoursOptions()}
-                onChange={(val) => field.onChange(Number(val))}
-              />
-            )}
-          />
-          <Controller
-            name={`workingHours.${index}.breaks.${brIndex}.breakEndTimeMinutes`}
-            control={control}
-            render={({ field }) => (
-              <FormTimeSelect
-                name={`workingHours.${index}.breaks.${brIndex}.breakEndTimeMinutes`}
-                value={String(field.value)}
-                options={scheduleHooks.useWorkingHoursOptions()}
-                onChange={(val) => field.onChange(Number(val))}
-              />
-            )}
-          />
-
-          <IconButton onClick={() => removeBreak(brIndex)}>
-            <RemoveOutlinedIcon />
-          </IconButton>
-        </div>
-      ))}
-      {enabled && (
-        <div className='flex flex-row gap-1 justify-center items-center mb-px'>
-          <IconButton
-            onClick={() =>
-              appendBreak({
-                breakStartTimeMinutes: BREAK_START_MINUTES,
-                breakEndTimeMinutes: BREAK_END_MINUTES,
-              })
-            }
-          >
-            <AddOutlinedIcon />
-          </IconButton>
-          <Typography variant='body2' color='secondary'>
-            Add break
-          </Typography>
-        </div>
-      )}
     </>
   );
 };

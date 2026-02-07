@@ -1,7 +1,10 @@
 import React, { useCallback } from 'react';
 import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material';
 
-export type Option = { label: string; value: string };
+export type Option = {
+  label: string;
+  value: string;
+};
 
 export type Props = {
   id?: string;
@@ -17,7 +20,7 @@ export type Props = {
   onChange: (value: string) => void;
 };
 
-export const FormSelect = (props: Props) => {
+export function FormSelect(props: Props) {
   const {
     id,
     name,
@@ -56,4 +59,4 @@ export const FormSelect = (props: Props) => {
       {error && <p className='text-sm text-red-600'>{error}</p>}
     </FormControl>
   );
-};
+}

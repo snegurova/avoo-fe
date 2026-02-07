@@ -6,14 +6,20 @@ import {
   ScheduleUpdateResponse,
 } from '@avoo/axios/types/apiTypes';
 import { apiClient } from '@avoo/axios/src/apiClient';
-import { ScheduleCreateFormData, ScheduleUpdateFormData } from '@avoo/hooks/schemas/schedulesValidationSchemas';
+import {
+  ScheduleCreateFormData,
+  ScheduleUpdateFormData,
+} from '@avoo/hooks/schemas/schedulesValidationSchemas';
+import { QuerySchedules } from '@avoo/axios/types/apiTypes';
 
 const GET_SCHEDULES_ENDPOINT = '/schedules';
 
 export const scheduleApi = {
-  async getSchedules() {
-    const response =
-      await apiClient.get<BaseResponse<GetSchedulesResponse>>(GET_SCHEDULES_ENDPOINT);
+  async getSchedules(params: QuerySchedules) {
+    const response = await apiClient.get<BaseResponse<GetSchedulesResponse>>(
+      GET_SCHEDULES_ENDPOINT,
+      { params },
+    );
     return response.data;
   },
   async getScheduleById(id: number) {

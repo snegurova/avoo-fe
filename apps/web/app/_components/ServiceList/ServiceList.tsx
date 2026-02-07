@@ -67,7 +67,7 @@ export default function ServiceList(props: Props) {
 
   return (
     <>
-      <div className='p-4 grid grid-cols-1 lg:grid-cols-[240px_1fr] gap-6'>
+      <div className='py-4 grid grid-cols-1 lg:grid-cols-[240px_1fr] gap-6'>
         <div className='lg:overflow-visible lg:border lg:border-gray-200 lg:gap-0 lg:rounded-lg lg:p-4 lg:overflow-x-hidden lg:h-max'>
           <Typography variant='h6' className='hidden lg:block' sx={{ mb: 2 }}>
             Categories

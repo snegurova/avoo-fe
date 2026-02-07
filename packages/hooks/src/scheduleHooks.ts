@@ -1,74 +1,37 @@
+import { useInfiniteQuery, useMutation, useQuery } from '@tanstack/react-query';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+
 import { utils } from '@avoo/hooks/utils/utils';
 import { scheduleApi } from '@avoo/axios';
-
 import {
   BaseResponse,
   GetSchedulesResponse,
   ScheduleCreateResponse,
   ScheduleEntity,
+  SchedulesQueryParams,
   ScheduleUpdateResponse,
 } from '@avoo/axios/types/apiTypes';
 import { ApiStatus } from '@avoo/hooks/types/apiTypes';
-import { queryKeys } from './queryKeys';
-import { useMutation, useQuery } from '@tanstack/react-query';
-import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
 import {
   scheduleUpdateSchema,
   ScheduleUpdateFormData,
   ScheduleCreateFormData,
   scheduleCreateSchema,
 } from '../schemas/schedulesValidationSchemas';
+import { timeUtils } from '@avoo/shared';
+import { END_MINUTE, START_MINUTE } from '@avoo/constants/src/calendar';
+
+const DEFAULT_LIMIT = 10;
 
 type UseCreateScheduleFormParams = {
   onSuccess?: () => void;
-  onError?: () => void;
+  onError?: (error: Error) => void;
 };
 type UseUpdateScheduleFormParams = {
   onSuccess?: () => void;
   defaultValues?: ScheduleUpdateFormData;
 };
-
-export const getNextMonday = (date: Date): Date => {
-  const result = new Date(date);
-  const day = result.getDay(); // 0 = Sun, 1 = Mon, ..., 6 = Sat
-  const daysToAdd = (8 - day) % 7 || 7;
-  result.setDate(result.getDate() + daysToAdd);
-  return result;
-};
-
-export const toLocalDateISO = (date: Date): string => {
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, '0'); // 0-based
-  const day = String(date.getDate()).padStart(2, '0');
-
-  return `${year}-${month}-${day}`;
-};
-
-export const TYPE_OF_SCHEDULE = {
-  weekly: { name: 'Weekly', pattern: 7, workingDaysCount: 5 },
-  '2x2': { name: '2 on / 2 off', pattern: 4, workingDaysCount: 2 },
-  '3x2': { name: '3 on / 2 off', pattern: 5, workingDaysCount: 3 },
-  '2x1': { name: '2 on / 1 off', pattern: 3, workingDaysCount: 2 },
-  custom: { name: 'Custom', pattern: 1, workingDaysCount: 1 },
-};
-
-export type ScheduleKey = keyof typeof TYPE_OF_SCHEDULE;
-
-export const DAYS_NAME = [
-  'Monday',
-  'Tuesday',
-  'Wednesday',
-  'Thursday',
-  'Friday',
-  'Saturday',
-  'Sunday',
-];
-
-export const START_MINUTE = 9 * 60;
-export const END_MINUTE = 18 * 60;
-export const BREAK_START_MINUTES = 13 * 60;
-export const BREAK_END_MINUTES = 14 * 60;
 
 export const scheduleHooks = {
   useWorkingHoursOptions: () =>
@@ -83,26 +46,24 @@ export const scheduleHooks = {
               .padStart(2, '0')}:30`,
       value: String(i * 30),
     })),
-
-  useScheduleOptions: () =>
-    (Object.keys(TYPE_OF_SCHEDULE) as ScheduleKey[]).map((key) => ({
-      label: TYPE_OF_SCHEDULE[key].name,
-      value: key,
-    })),
-
-  useGetSchedules: () => {
-    const { data: schedulesData, isPending } = useQuery<BaseResponse<GetSchedulesResponse>, Error>({
-      queryKey: queryKeys.schedules.all,
-      queryFn: scheduleApi.getSchedules,
+  useGetSchedulesInfinite: ({ limit = DEFAULT_LIMIT, masterIds }: SchedulesQueryParams) => {
+    const filterParams = { limit, masterIds };
+    const query = useInfiniteQuery<BaseResponse<GetSchedulesResponse>, Error>({
+      queryKey: ['schedules', 'list', filterParams],
+      queryFn: ({ pageParam = 1 }) =>
+        scheduleApi.getSchedules({ ...filterParams, page: pageParam as number }),
+      initialPageParam: 1,
+      getNextPageParam: (lastPage) => {
+        const { currentPage, total } = lastPage.data?.pagination || { currentPage: 0, total: 0 };
+        return currentPage * limit < total ? currentPage + 1 : undefined;
+      },
     });
+
+    const isPending = query.isFetching;
 
     utils.useSetPendingApi(isPending);
 
-    if (schedulesData?.status === ApiStatus.SUCCESS && schedulesData.data) {
-      return schedulesData.data;
-    }
-
-    return null;
+    return query;
   },
   useGetScheduleById: (id: number): ScheduleEntity => {
     const { data: scheduleData, isPending } = useQuery<BaseResponse<ScheduleEntity>, Error>({
@@ -112,7 +73,7 @@ export const scheduleHooks = {
 
     utils.useSetPendingApi(isPending);
 
-    if (scheduleData?.status === apiStatus.SUCCESS && scheduleData.data) {
+    if (scheduleData?.status === ApiStatus.SUCCESS && scheduleData.data) {
       return scheduleData.data;
     }
 
@@ -134,7 +95,7 @@ export const scheduleHooks = {
         pattern: 7,
         patternType: 'weekly',
         mastersIds: [],
-        startAt: toLocalDateISO(getNextMonday(new Date())),
+        startAt: timeUtils.getNextMonday(new Date()),
         endAt: null,
         workingHours: Array.from({ length: 7 }).map((_, i) => ({
           enabled: i < 5,
@@ -153,12 +114,12 @@ export const scheduleHooks = {
     >({
       mutationFn: scheduleApi.createSchedule,
       onSuccess: (response) => {
-        if (response.status === apiStatus.SUCCESS) {
+        if (response.status === ApiStatus.SUCCESS) {
           onSuccess?.();
         }
       },
-      onError: () => {
-        onError?.();
+      onError: (error) => {
+        onError?.(error);
       },
     });
 
@@ -195,7 +156,7 @@ export const scheduleHooks = {
     >({
       mutationFn: scheduleApi.updateSchedule,
       onSuccess: (response) => {
-        if (response.status === apiStatus.SUCCESS) {
+        if (response.status === ApiStatus.SUCCESS) {
           onSuccess?.();
         }
       },
