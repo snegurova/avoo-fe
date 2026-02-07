@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Pressable, ScrollView, TextInput } from 'react-native';
+import { View, Text, Pressable, ScrollView } from 'react-native';
 import { CustomBottomSheet } from '@/shared/CustomBottomSheet/CustomBottomSheet';
+import { SearchInput } from '@/shared/SearchInput/SearchInput';
 import { LANGUAGE_NAMES, type LanguageCode } from '@avoo/constants';
 import { languageHooks } from '@avoo/hooks';
 import { colors } from '@avoo/design-tokens';
@@ -55,12 +56,9 @@ export const LanguageSelectionModal = (props: Props) => {
         onMoveShouldSetResponder={() => true}
         onResponderTerminationRequest={() => false}
       >
-        <View className='flex-row items-center px-3 mb-4 bg-gray-50 border border-gray-200 rounded-lg'>
-          <MaterialIcons name='search' size={20} color={colors.gray[500]} />
-          <TextInput
-            className='flex-1 py-3 text-base text-black ml-2'
+        <View className='mb-4'>
+          <SearchInput
             placeholder='Search languages...'
-            placeholderTextColor={colors.gray[400]}
             value={searchQuery}
             onChangeText={setSearchQuery}
           />

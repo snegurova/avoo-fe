@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#E2E8F0',
     borderRadius: 8,
-    backgroundColor: '#F8FAFC',
+    backgroundColor: '#FFFFFF',
   },
   input: {
     flex: 1,

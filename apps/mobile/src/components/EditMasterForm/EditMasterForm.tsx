@@ -2,6 +2,7 @@ import { View, Pressable, ScrollView } from 'react-native';
 import { useEffect } from 'react';
 import { Text } from 'react-native-paper';
 import FormTextInput from '@/shared/FormTextInput';
+import { FormPhoneField } from '@/shared/FormPhoneField/FormPhoneField';
 import LanguageSelector from '@/shared/LanguageSelector/LanguageSelector';
 import { masterHooks, filesHooks } from '@avoo/hooks';
 import { colors } from '@avoo/design-tokens';
@@ -119,16 +120,13 @@ const EditMasterForm = ({ master, onClose }: Props) => {
           />
         </View>
 
-        <View style={{ marginBottom: 16 }}>
-          <Text style={{ marginBottom: 8 }}>Phone</Text>
-          <FormTextInput
-            name='phone'
-            control={control}
-            placeholder='+45112233'
-            keyboardType='phone-pad'
-            error={errors.phone?.message}
-          />
-        </View>
+        <FormPhoneField
+          name='phone'
+          control={control}
+          label='Phone'
+          placeholder='066-66-78-890'
+          error={errors.phone?.message}
+        />
 
         <View style={{ marginBottom: 16 }}>
           <LanguageSelector
