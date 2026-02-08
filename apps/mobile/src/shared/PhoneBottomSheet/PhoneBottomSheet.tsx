@@ -30,7 +30,7 @@ export const PhoneBottomSheet = (props: Props) => {
 
   const [searchQuery, setSearchQuery] = useState('');
 
-  const filteredCodes = phoneHooks.useFilterPhoneCodes(searchQuery);
+  const filteredCodes = phoneHooks.useFilterCodesByQuery(searchQuery);
 
   return (
     <CustomBottomSheet

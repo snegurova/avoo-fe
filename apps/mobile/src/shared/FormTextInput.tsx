@@ -3,7 +3,6 @@ import { Control, FieldValues, Path, useController } from 'react-hook-form';
 import {
   View,
   TextInput,
-  StyleSheet,
   TouchableOpacity,
   ViewStyle,
   TextInputProps,
@@ -11,7 +10,6 @@ import {
   StyleProp,
   Text,
 } from 'react-native';
-
 
 type Props<T extends FieldValues> = TextInputProps & {
   accessoryRight?: React.ReactNode;
@@ -21,7 +19,7 @@ type Props<T extends FieldValues> = TextInputProps & {
   style?: StyleProp<TextStyle>;
   name: Path<T>;
   control: Control<T>;
-}
+};
 
 export default function FormTextInput<T extends FieldValues>(props: Props<T>) {
   const {
@@ -40,19 +38,22 @@ export default function FormTextInput<T extends FieldValues>(props: Props<T>) {
   });
 
   return (
-    <View style={[styles.container, containerStyle]}>
-      <View style={styles.inputContainer}>
+    <View className='w-full' style={containerStyle}>
+      <View
+        className={`flex-row items-center border rounded-lg bg-white ${error ? 'border-red-500' : 'border-gray-200'}`}
+      >
         <TextInput
-          style={[styles.input, error && styles.inputError, style]}
+          className='flex-1 text-base text-gray-900 p-4'
           placeholderTextColor='#94A3B8'
           value={field.value}
           onChangeText={field.onChange}
           onBlur={field.onBlur}
+          style={style}
           {...rest}
         />
         {accessoryRight && (
           <TouchableOpacity
-            style={styles.iconContainer}
+            className='justify-center items-center pr-4'
             onPress={onAccessoryRightPress}
             disabled={!onAccessoryRightPress}
             hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
@@ -61,44 +62,9 @@ export default function FormTextInput<T extends FieldValues>(props: Props<T>) {
           </TouchableOpacity>
         )}
       </View>
-      {error && <Text style={styles.errorText}>{error}</Text>}
+      {error && <Text className='text-red-500 text-xs mt-1 ml-1'>{error}</Text>}
     </View>
   );
-};
+}
 
 FormTextInput.displayName = 'FormTextInput';
-
-
-const styles = StyleSheet.create({
-  container: {
-    width: '100%',
-  },
-  inputContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    borderWidth: 1,
-    borderColor: '#E2E8F0',
-    borderRadius: 8,
-    backgroundColor: '#FFFFFF',
-  },
-  input: {
-    flex: 1,
-    fontSize: 16,
-    color: '#0F172A',
-    padding: 16,
-  },
-  inputError: {
-    borderColor: '#EF4444',
-  },
-  iconContainer: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingRight: 16,
-  },
-  errorText: {
-    color: '#EF4444',
-    fontSize: 12,
-    marginTop: 4,
-    marginLeft: 4,
-  },
-});

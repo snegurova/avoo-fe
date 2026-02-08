@@ -29,7 +29,6 @@ type UseUpdateMasterFormParams = {
 export const masterHooks = {
   useGetMastersProfileInfo: (params: GetMastersQueryParams = {}) => {
     const { data: profileInfoData, isPending } = useQuery<BaseResponse<GetMastersResponse>, Error>({
-      // TODO: TICKET AVOO-410
       queryKey: queryKeys.masters.all,
       queryFn: () => masterApi.getMastersInfo(params),
     });
