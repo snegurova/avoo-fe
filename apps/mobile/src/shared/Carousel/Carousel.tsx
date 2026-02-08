@@ -3,6 +3,7 @@ import { View, Pressable, FlatList, NativeScrollEvent, NativeSyntheticEvent } fr
 import { Text } from 'react-native-paper';
 import { MaterialIcons } from '@/shared/icons';
 import { colors } from '@avoo/design-tokens';
+import { ACTION_PILL_SIZE, ActionPillButton } from '@/shared/ActionPillButton/ActionPillButton';
 
 type Keyable = { id: string };
 
@@ -49,9 +50,7 @@ export function Carousel<T extends Keyable>(props: Props<T>) {
         bounces={false}
         showsHorizontalScrollIndicator={false}
         onMomentumScrollEnd={onMomentumScrollEnd}
-        renderItem={({ item }) => (
-          <View style={{ width: containerWidth }}>{renderItem(item)}</View>
-        )}
+        renderItem={({ item }) => <View style={{ width: containerWidth }}>{renderItem(item)}</View>}
       />
 
       <View className='flex-row items-center justify-between mt-4'>
@@ -76,16 +75,12 @@ export function Carousel<T extends Keyable>(props: Props<T>) {
             />
           ))}
         </View>
-
-        <Pressable
+        <ActionPillButton
+          label='Next'
+          size={ACTION_PILL_SIZE.SM}
           onPress={handleScrollNext}
           disabled={activeIndex === data.length - 1}
-          className='flex-row items-center border border-gray-200 rounded-full py-1 px-4 gap-2'
-          style={{ opacity: activeIndex === data.length - 1 ? 0.5 : 1 }}
-        >
-          <Text variant='bodySmall'>Next</Text>
-          <MaterialIcons name='arrow-forward' size={14} />
-        </Pressable>
+        />
       </View>
     </View>
   );

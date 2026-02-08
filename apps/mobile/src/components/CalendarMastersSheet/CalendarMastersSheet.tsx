@@ -5,12 +5,12 @@ import { colors } from '@avoo/design-tokens';
 import { tv } from 'tailwind-variants';
 import { isFullSelection } from '@avoo/shared';
 import { CustomBottomSheet } from '@/shared/CustomBottomSheet/CustomBottomSheet';
-import { Master } from '../CalendarSection/CalendarSection';
+import type { ShortMasterInfo } from '@avoo/axios/types/apiTypes';
 
 type Props = {
   visible: boolean;
   onClose: () => void;
-  masters: Master[];
+  masters: ShortMasterInfo[];
   selectedMasterIds: Set<string>;
   setSelectedMasterIds: (ids: Set<string>) => void;
 };
@@ -32,9 +32,9 @@ export const CalendarMastersSheet = (props: Props) => {
 
   const handleAllTeamToggle = () => {
     if (isAllTeamSelected) {
-      setSelectedMasterIds(masters.length > 0 ? new Set([masters[0].id]) : new Set());
+      setSelectedMasterIds(masters.length > 0 ? new Set([String(masters[0].id)]) : new Set());
     } else {
-      setSelectedMasterIds(new Set(masters.map((m) => m.id)));
+      setSelectedMasterIds(new Set(masters.map((m) => String(m.id))));
     }
   };
 
@@ -66,12 +66,12 @@ export const CalendarMastersSheet = (props: Props) => {
         </Pressable>
 
         {masters.map((master) => {
-          const isSelected = isAllTeamSelected || selectedMasterIds.has(master.id);
+          const isSelected = isAllTeamSelected || selectedMasterIds.has(String(master.id));
           return (
             <Pressable
               key={master.id}
               className='px-4 py-4 border-dashed border-primary-500'
-              onPress={() => handleMasterToggle(master.id)}
+              onPress={() => handleMasterToggle(String(master.id))}
             >
               <View className='flex-row items-center'>
                 <View className={checkbox({ selected: isSelected })}>

@@ -94,7 +94,7 @@ export type GetSchedulesResponse = {
 };
 
 /** Calendar */
-
+export type ShortMasterInfo = components['schemas']['ShortMasterInfoDto'];
 export type PrivateEvent = Omit<components['schemas']['PrivateEventDto'], 'status'> & {
   status: OrderStatus;
 };

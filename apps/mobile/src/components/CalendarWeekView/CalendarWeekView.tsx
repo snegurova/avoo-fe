@@ -8,11 +8,11 @@ import { TimelineGridLayout } from '../TimelineGridLayout/TimelineGridLayout';
 import { calendarUtils } from '@/utils/calendarUtils';
 import { WEEK_DAYS } from '@avoo/constants';
 import { calendarConfig } from '../CalendarSection/calendarConfig';
-import { Master } from '../CalendarSection/CalendarSection';
+import type { ShortMasterInfo } from '@avoo/axios/types/apiTypes';
 import { WeekViewHeader } from '../WeekViewHeader/WeekViewHeader';
 
 type Props = {
-  masters: Master[];
+  masters: ShortMasterInfo[];
   appointments: Appointment[];
   weekStart: Date;
 };
@@ -30,7 +30,7 @@ export const CalendarWeekView = (props: Props) => {
 
   const { headerHeight, dayWidth } = calendarConfig.weekSingleMaster;
   const slotHeight = calendarConfig.timeline.slotHeight;
-  const masterId = masters?.[0]?.id;
+  const masterId = masters?.[0]?.id != null ? String(masters[0].id) : undefined;
   return (
     <View className='flex-1'>
       {isSingleMaster ? (
@@ -41,7 +41,7 @@ export const CalendarWeekView = (props: Props) => {
               {weekDays.map((day, idx) => {
                 const dateKey = calendarUtils.toDateKeyLocal(day);
                 const dayAppointments = appointments
-                  .filter((a) => a.masterId === masterId && a.date === dateKey)
+                  .filter((a) => String(a.master.id) === masterId && a.date === dateKey)
                   .map((apt) => ({
                     ...apt,
                     top: calendarUtils.calculateTop(apt.startTime, slotHeight),
@@ -108,7 +108,7 @@ export const CalendarWeekView = (props: Props) => {
                   {weekDays.map((day, idx) => {
                     const dateKey = calendarUtils.toDateKeyLocal(day);
                     const cellAppointments = appointments.filter(
-                      (a) => a.masterId === master.id && a.date === dateKey,
+                      (a) => String(a.master.id) === String(master.id) && a.date === dateKey,
                     );
                     const isLastDay = idx === weekDays.length - 1;
                     return (

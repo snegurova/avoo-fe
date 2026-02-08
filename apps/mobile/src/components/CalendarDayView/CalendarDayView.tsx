@@ -8,12 +8,10 @@ import { calendarUtils } from '@/utils/calendarUtils';
 import { TimelineGridLayout } from '../TimelineGridLayout/TimelineGridLayout';
 import { TimelineColumn } from '../TimelineColumn/TimelineColumn';
 import { CurrentTimeLine } from '../CurrentTimeLine/CurrentTimeLine';
-import { Master } from '../CalendarSection/CalendarSection';
-
-
+import type { ShortMasterInfo } from '@avoo/axios/types/apiTypes';
 
 type Props = {
-  masters: Master[];
+  masters: ShortMasterInfo[];
   appointments: Appointment[];
 };
 
@@ -38,20 +36,21 @@ export const CalendarDayView = (props: Props) => {
 
   const appointmentsByMaster = useMemo(() => {
     const map = new Map<string, Appointment[]>();
-    for (const a of appointments) {
-      const arr = map.get(a.masterId) ?? [];
-      arr.push(a);
-      map.set(a.masterId, arr);
+    for (const appointment of appointments) {
+      const key = String(appointment.master.id);
+      const arr = map.get(key) ?? [];
+      arr.push(appointment);
+      map.set(key, arr);
     }
     return map;
   }, [appointments]);
 
   return (
-    <View className="flex-1" onLayout={(e) => setRightWidth(e.nativeEvent.layout.width)}>
+    <View className='flex-1' onLayout={(e) => setRightWidth(e.nativeEvent.layout.width)}>
       <TimelineGridLayout headerHeight={calendarConfig.dayView.headerHeight}>
-        <View className="flex-row" style={{ width: contentWidth }}>
+        <View className='flex-row' style={{ width: contentWidth }}>
           {masters.map((master, index) => {
-            const masterAppointments = appointmentsByMaster.get(master.id) ?? [];
+            const masterAppointments = appointmentsByMaster.get(String(master.id)) ?? [];
             const isLast = index === masters.length - 1;
             return (
               <View
@@ -59,14 +58,20 @@ export const CalendarDayView = (props: Props) => {
                 style={{ width: colWidth }}
                 className={isLast ? 'relative' : 'border-r border-gray-200 relative'}
               >
-                <CalendarMaster master={master} headerHeight={calendarConfig.dayView.headerHeight} />
+                <CalendarMaster
+                  master={master}
+                  headerHeight={calendarConfig.dayView.headerHeight}
+                />
                 <TimelineColumn columnKey={`day-${master.id}`} width={colWidth} borderRight={false}>
                   {masterAppointments.map((apt) => (
                     <CalendarOrder
                       key={apt.id}
                       variant={CALENDAR_ORDER_VARIANT.DAY}
                       appointment={apt}
-                      top={calendarUtils.calculateTop(apt.startTime, calendarConfig.timeline.slotHeight)}
+                      top={calendarUtils.calculateTop(
+                        apt.startTime,
+                        calendarConfig.timeline.slotHeight,
+                      )}
                       height={calendarUtils.calculateHeight(
                         apt.startTime,
                         apt.endTime,
