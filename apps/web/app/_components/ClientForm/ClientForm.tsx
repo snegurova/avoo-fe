@@ -7,7 +7,6 @@ import FormTextarea from '../FormTextArea/FormTextArea';
 import ToggleSwitch from '../ToggleSwitch/ToggleSwitch';
 import { customerHooks } from '@avoo/hooks';
 import HistoryCard from '../HistoryCard/HistoryCard';
-import { mockHistory } from './mockHistory';
 import { useToast } from '@/_hooks/useToast';
 
 export type FormValues = {
@@ -26,6 +25,49 @@ type ClientFormProps = {
   id: number | null;
   notifyInitial?: boolean;
 };
+
+const mockHistory = [
+  {
+    dateDay: '12',
+    dateMonth: 'Sep',
+    time: '09:15',
+    title: 'Haircut',
+    duration: '1h 30min',
+    master: 'Master Anna',
+    price: '65 Euro',
+    note: 'Note: ipsum dolor sit amet consectetur.',
+  },
+  {
+    dateDay: '01',
+    dateMonth: 'Oct',
+    time: '14:00',
+    title: 'Coloring',
+    duration: '2h',
+    master: 'Anna',
+    price: '120 Euro',
+    note: 'Note: ipsum dolor sit amet consectetur. Turpis lorem lectus egestas quam integer. Ac urna integer massa eu purus volutpat venenatis risus tincidunt.',
+  },
+  {
+    dateDay: '22',
+    dateMonth: 'Nov',
+    time: '11:30',
+    title: 'Styling',
+    duration: '45min',
+    master: 'Master Olga',
+    price: '40 Euro',
+    note: 'Quick styling session.',
+  },
+  {
+    dateDay: '05',
+    dateMonth: 'Dec',
+    time: '16:45',
+    title: 'Consultation',
+    duration: '30min',
+    master: 'Ivan',
+    price: 'Free',
+    note: 'Initial consultation.',
+  },
+];
 
 export default function ClientForm({ ...props }: ClientFormProps) {
   const { initial, onClose, onRequestClose, onDirtyChange, id, notifyInitial = true } = props;

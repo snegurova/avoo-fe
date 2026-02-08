@@ -5,7 +5,7 @@ import { Modal, ModalVariant } from '@/_components/Modal/Modal';
 import { customerHooks } from '@avoo/hooks';
 import type { CustomerInfoResponse } from '@avoo/axios/types/apiTypes';
 import ClientForm from '../ClientForm/ClientForm';
-import UnsavedChangesModal from '../UnsavedChangesModal/UnsavedChangesModal';
+import ConfirmationModal from '../ConfirmationModal/ConfirmationModal';
 
 type Props = {
   id: number | null;
@@ -51,13 +51,16 @@ export const ClientEditModal: React.FC<Props> = ({ id, client, open, onClose }) 
         </Modal>
       )}
 
-      <UnsavedChangesModal
+      <ConfirmationModal
         isOpen={showUnsavedConfirm}
         onCancel={() => setShowUnsavedConfirm(false)}
         onDiscard={() => {
           setShowUnsavedConfirm(false);
           onClose();
         }}
+        title='Unsaved changes'
+        description='You having unsaved changes. Are you sure you want to leave?'
+        confirmText='Discard changes'
       />
     </>
   );
