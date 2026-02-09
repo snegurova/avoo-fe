@@ -120,7 +120,10 @@ export default function Calendar(props: Props) {
     scrollRef.current.scrollTo(scrollOptions);
   };
 
-  const { data: calendar, refetch } = calendarHooks.useGetCalendar(params, type);
+  const { data: calendar, refetch } = calendarHooks.useGetCalendar(params, {
+    enabled: type !== CalendarViewType.MONTH,
+  });
+
   const masters = masterHooks.useGetMastersProfileInfo()?.items;
 
   const filteredMasters = useMemo(() => {
@@ -190,7 +193,7 @@ export default function Calendar(props: Props) {
                   {type !== CalendarViewType.MONTH &&
                     filteredMasters.map((master) => {
                       const columnData = calendar?.find(
-                        (schedule) => String(schedule.masterId) === String(master.id),
+                        (schedule) => String(schedule.master?.id) === String(master.id),
                       );
                       return (
                         <CalendarColumn
@@ -228,7 +231,7 @@ export default function Calendar(props: Props) {
                 time={time}
                 setTime={setTime}
                 data={calendar?.find(
-                  (schedule) => String(schedule.masterId) === String(filteredMasters[0].id),
+                  (schedule) => String(schedule.master?.id) === String(filteredMasters[0].id),
                 )}
                 master={filteredMasters[0]}
                 setDate={setDate}
@@ -237,7 +240,13 @@ export default function Calendar(props: Props) {
                 availableBooking={!selectedOrder}
               />
             )}
-            {filteredMasters.length === 0 && <AppPlaceholder />}
+            {filteredMasters.length === 0 && (
+              <AppPlaceholder
+                title='No masters found'
+                icon='calendar'
+                description='No masters found'
+              />
+            )}
           </div>
         </div>
       </div>

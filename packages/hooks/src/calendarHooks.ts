@@ -12,21 +12,11 @@ import { ApiStatus } from '@avoo/hooks/types/apiTypes';
 import { useQuery } from '@tanstack/react-query';
 import { useMemo } from 'react';
 import { queryKeys } from './queryKeys';
-import { CalendarViewType } from '@avoo/hooks/types/calendarViewType';
 
 export const calendarHooks = {
-  useGetCalendar: (
-    {
-      masterIds,
-      view,
-      rangeFromDate,
-      rangeToDate,
-      serviceId,
-      combinationId,
-      orderStatus,
-    }: PrivateCalendarQueryParams,
-    type: CalendarViewType,
-  ) => {
+  useGetCalendar: (params: PrivateCalendarQueryParams, options?: { enabled?: boolean }) => {
+    const { masterIds, view, rangeFromDate, rangeToDate, serviceId, combinationId, orderStatus } =
+      params;
     const memoParams = useMemo<PrivateCalendarQueryParams>(
       () => ({
         masterIds,
@@ -47,7 +37,7 @@ export const calendarHooks = {
     } = useQuery<BaseResponse<GetCalendarResponse>, Error>({
       queryKey: ['calendar', queryKeys.calendar.byParams(memoParams)],
       queryFn: () => calendarApi.getCalendar(memoParams),
-      enabled: type !== CalendarViewType.MONTH,
+      enabled: options?.enabled ?? true,
     });
 
     utils.useSetPendingApi(isPending);
