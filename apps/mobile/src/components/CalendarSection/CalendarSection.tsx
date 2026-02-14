@@ -3,7 +3,7 @@ import { View } from 'react-native';
 import { Text } from 'react-native-paper';
 import { CALENDAR_STATUSES } from '../CalendarStatusesSheet/CalendarStatusesSheet';
 import { CalendarHeader } from '../CalendarHeader/CalendarHeader';
-import { calendarHooks } from '@avoo/hooks';
+import { calendarHooks, masterHooks } from '@avoo/hooks';
 import { timeUtils, isFullSelection } from '@avoo/shared';
 import { OrderStatus } from '@avoo/hooks/types/orderStatus';
 import type { PrivateCalendarQueryParams } from '@avoo/axios/types/apiTypes';
@@ -28,7 +28,8 @@ export const CalendarSection = () => {
   const dateString = timeUtils.formatShortDateLabel(date);
 
   const { data: calendarData } = calendarHooks.useGetCalendar(params);
-  const masters = calendarMobileHooks.useCalendarMasters(calendarData ?? null);
+  const mastersFromResponse = calendarMobileHooks.useCalendarMasters(calendarData ?? null);
+  const masters = masterHooks.useStableMasters(mastersFromResponse);
 
   const filteredMasters = useMemo(() => {
     if (isFullSelection(selectedMasterIds.size, masters.length)) {
