@@ -28,7 +28,7 @@ export default function App() {
       <SafeAreaProvider>
         <NavigationContainer>
           <QueryClientProvider client={queryClient}>
-            <StatusBar style='auto' />
+            <StatusBar style='dark' />
             <PaperProvider theme={paperTheme}>
               <AppContainer />
               <NotificationPopUp />
