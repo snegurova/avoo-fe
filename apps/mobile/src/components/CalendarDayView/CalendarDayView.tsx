@@ -1,13 +1,17 @@
+// CalendarDayView.tsx
 import { useMemo, useState } from 'react';
 import { View } from 'react-native';
+
 import { CALENDAR_ORDER_VARIANT, CalendarOrder } from '../CalendarOrder/CalendarOrder';
-import { Appointment } from '@/hooks/calendarHooks';
-import CalendarMaster from '../CalendarMaster/CalendarMaster';
-import { calendarConfig } from '../CalendarSection/calendarConfig';
-import { calendarUtils } from '@/utils/calendarUtils';
+import { CalendarDayViewHeader } from '../CalendarDayViewHeader/CalendarDayViewHeader';
 import { TimelineGridLayout } from '../TimelineGridLayout/TimelineGridLayout';
 import { TimelineColumn } from '../TimelineColumn/TimelineColumn';
 import { CurrentTimeLine } from '../CurrentTimeLine/CurrentTimeLine';
+
+import { calendarConfig } from '../CalendarSection/calendarConfig';
+import { calendarUtils } from '@/utils/calendarUtils';
+
+import type { Appointment } from '@/hooks/calendarHooks';
 import type { ShortMasterInfo } from '@avoo/axios/types/apiTypes';
 
 type Props = {
@@ -15,12 +19,10 @@ type Props = {
   appointments: Appointment[];
 };
 
-export const CalendarDayView = (props: Props) => {
-  const { masters, appointments } = props;
+export const CalendarDayView = ({ masters, appointments }: Props) => {
+  const [containerWidth, setContainerWidth] = useState(0);
 
-  const [rightWidth, setRightWidth] = useState(0);
-
-  const availableWidth = Math.max(0, rightWidth - calendarConfig.timeline.timeScaleWidth);
+  const availableWidth = Math.max(0, containerWidth - calendarConfig.timeline.timeScaleWidth);
 
   const colWidth = useMemo(
     () =>
@@ -46,8 +48,13 @@ export const CalendarDayView = (props: Props) => {
   }, [appointments]);
 
   return (
-    <View className='flex-1' onLayout={(e) => setRightWidth(e.nativeEvent.layout.width)}>
-      <TimelineGridLayout headerHeight={calendarConfig.dayView.headerHeight}>
+    <View className='flex-1' onLayout={(e) => setContainerWidth(e.nativeEvent.layout.width)}>
+      <TimelineGridLayout
+        headerHeight={calendarConfig.dayView.headerHeight}
+        stickyHeader={
+          <CalendarDayViewHeader masters={masters} contentWidth={contentWidth} colWidth={colWidth} />
+        }
+      >
         <View className='flex-row' style={{ width: contentWidth }}>
           {masters.map((master, index) => {
             const masterAppointments = appointmentsByMaster.get(String(master.id)) ?? [];
@@ -58,10 +65,6 @@ export const CalendarDayView = (props: Props) => {
                 style={{ width: colWidth }}
                 className={isLast ? 'relative' : 'border-r border-gray-200 relative'}
               >
-                <CalendarMaster
-                  master={master}
-                  headerHeight={calendarConfig.dayView.headerHeight}
-                />
                 <TimelineColumn columnKey={`day-${master.id}`} width={colWidth} borderRight={false}>
                   {masterAppointments.map((apt) => (
                     <CalendarOrder

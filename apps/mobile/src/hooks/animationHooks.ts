@@ -1,9 +1,22 @@
 import { useRef, useCallback } from 'react';
-import { Animated, Easing, PanResponder } from 'react-native';
+import {
+  Animated,
+  Easing,
+  NativeScrollEvent,
+  NativeSyntheticEvent,
+  PanResponder,
+  ScrollView,
+} from 'react-native';
 
 type UseBottomSheetAnimationProps = {
   onClose: () => void;
   disableSwipeToClose?: boolean;
+};
+
+const clampScrollX = (e: NativeScrollEvent) => {
+  const { contentOffset, contentSize, layoutMeasurement } = e;
+  const maxX = Math.max(0, contentSize.width - layoutMeasurement.width);
+  return Math.min(maxX, Math.max(0, contentOffset.x));
 };
 
 export const animationHooks = {
@@ -74,5 +87,26 @@ export const animationHooks = {
       close,
       panResponder,
     };
+  },
+
+  useSyncedHorizontalScroll() {
+    const headerScrollRef = useRef<ScrollView>(null);
+    const lastXRef = useRef(0);
+    const rafRef = useRef<number | null>(null);
+
+    const onBodyHorizontalScroll = useCallback((e: NativeSyntheticEvent<NativeScrollEvent>) => {
+      const x = clampScrollX(e.nativeEvent);
+
+      if (Math.abs(x - lastXRef.current) < 0.01) return;
+      lastXRef.current = x;
+
+      if (rafRef.current != null) return;
+      rafRef.current = requestAnimationFrame(() => {
+        headerScrollRef.current?.scrollTo({ x: lastXRef.current, animated: false });
+        rafRef.current = null;
+      });
+    }, []);
+
+    return { headerScrollRef, onBodyHorizontalScroll };
   },
 };

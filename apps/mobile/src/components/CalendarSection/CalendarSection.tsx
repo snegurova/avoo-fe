@@ -1,6 +1,7 @@
 import { useState, useMemo, useEffect } from 'react';
 import { View } from 'react-native';
 import { Text } from 'react-native-paper';
+import { layoutHooks } from '@/hooks/layoutHooks';
 import { CALENDAR_STATUSES } from '../CalendarStatusesSheet/CalendarStatusesSheet';
 import { CalendarHeader } from '../CalendarHeader/CalendarHeader';
 import { calendarHooks } from '@avoo/hooks';
@@ -14,6 +15,7 @@ import { CalendarWeekView } from '../CalendarWeekView/CalendarWeekView';
 import { CalendarMonthView } from '../CalendarMonthView/CalendarMonthView';
 
 export const CalendarSection = () => {
+  const bottomBarHeight = layoutHooks.useBottomBarHeight();
   const [date, setDate] = useState<Date>(timeUtils.toDayBegin(new Date()));
   const [toDate, setToDate] = useState<Date>(timeUtils.toDayEnd(new Date()));
   const [viewType, setViewType] = useState<CalendarViewType>(CalendarViewType.DAY);
@@ -28,6 +30,7 @@ export const CalendarSection = () => {
   const dateString = timeUtils.formatShortDateLabel(date);
 
   const { data: calendarData } = calendarHooks.useGetCalendar(params);
+
   const masters = calendarMobileHooks.useCalendarMasters(calendarData ?? null);
 
   const filteredMasters = useMemo(() => {
@@ -68,8 +71,9 @@ export const CalendarSection = () => {
     return new Date(mid.getFullYear(), mid.getMonth(), 1, 12, 0, 0, 0);
   }, [date, toDate]);
 
+
   return (
-    <View className='flex-1 bg-white rounded-xl border border-gray-200 overflow-hidden'>
+    <View className='flex-1 bg-white rounded-xl border border-gray-200 overflow-hidden' style={{ marginBottom: bottomBarHeight }}>
       <Text variant='titleLarge' className='px-4 pt-3'>
         Calendar
       </Text>

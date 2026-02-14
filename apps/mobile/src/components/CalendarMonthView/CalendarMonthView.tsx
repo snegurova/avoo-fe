@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { View } from 'react-native';
+import { ScrollView, View } from 'react-native';
 import { Text } from 'react-native-paper';
 import { colors } from '@avoo/design-tokens';
 import { tv } from 'tailwind-variants';
@@ -61,8 +61,11 @@ export const CalendarMonthView = (props: Props) => {
   }, [appointments]);
 
   return (
-    <View className='flex-1'>
-      <View className='flex-row border-b border-gray-200'>
+    <ScrollView 
+    showsVerticalScrollIndicator={false}
+    stickyHeaderIndices={[0]}
+    className='flex-1'>
+      <View className='flex-row border-b border-gray-200 bg-white'>
         {WEEK_DAYS.map((day) => (
           <View key={day} className='flex-1 py-2 items-center'>
             <Text variant='labelSmall' style={{ color: colors.gray[600] }}>
@@ -122,6 +125,6 @@ export const CalendarMonthView = (props: Props) => {
           );
         })}
       </View>
-    </View>
+    </ScrollView>
   );
 };
