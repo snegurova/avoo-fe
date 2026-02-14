@@ -31,8 +31,9 @@ export const servicesHooks = {
     maxPrice,
     search,
     isActive,
+    masterIds,
   }: ServicesQueryParams) => {
-    const filterParams = { limit, categoryId, minPrice, maxPrice, search, isActive };
+    const filterParams = { limit, categoryId, minPrice, maxPrice, search, isActive, masterIds };
     const query = useInfiniteQuery<BaseResponse<GetServiceResponse>, Error>({
       queryKey: ['services', 'list', filterParams],
       queryFn: ({ pageParam = 1 }) =>
@@ -55,6 +56,7 @@ export const servicesHooks = {
       limit: DEFAULT_LIMIT,
       categoryId: null,
       search: '',
+      masterIds: [],
     });
 
     const [selectedCategoryName, setSelectedCategoryName] = useState<string>('All categories');
@@ -76,6 +78,13 @@ export const servicesHooks = {
       setSelectedCategoryName(name);
     };
 
+    const setMasterIds = (masterIds: number[]) => {
+      setParams((prev) => ({
+        ...prev,
+        masterIds,
+      }));
+    };
+
     const debouncedSearch = useDebounce(params.search, 400);
 
     const queryParams: ServicesQueryParams = useMemo(
@@ -83,8 +92,9 @@ export const servicesHooks = {
         limit: params.limit,
         search: debouncedSearch,
         ...(params.categoryId !== null && { categoryId: params.categoryId }),
+        ...(params.masterIds.length > 0 && { masterIds: params.masterIds }),
       }),
-      [params.limit, params.categoryId, debouncedSearch],
+      [params.limit, params.categoryId, debouncedSearch, params.masterIds],
     );
 
     return {
@@ -93,6 +103,7 @@ export const servicesHooks = {
       selectedCategoryName,
       setSearchQuery,
       setCategory,
+      setMasterIds,
     };
   },
   useDeleteService: () => {

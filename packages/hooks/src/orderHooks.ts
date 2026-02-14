@@ -26,6 +26,7 @@ import {
 import { OrderType } from '@avoo/hooks/types/orderType';
 import { OrderStatus } from '../types/orderStatus';
 import { timeUtils } from '@avoo/shared';
+import { AxiosError } from 'axios';
 
 type UseCreateOrderFormParams = {
   order: {
@@ -94,7 +95,7 @@ export const orderHooks = {
 
     const queryClient = useQueryClient();
 
-    const { mutate, isPending } = useMutation<
+    const { mutate, isPending, error } = useMutation<
       BaseResponse<Order[]>,
       Error,
       CreatePrivateOrdersRequest
@@ -114,6 +115,8 @@ export const orderHooks = {
       getValues,
       errors,
       isPending,
+      apiError:
+        error instanceof AxiosError ? error.response?.data?.errorMessage || error.message : null,
       selectedServices,
       setSelectedServices,
     };

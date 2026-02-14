@@ -19,7 +19,8 @@ export type ServicesQueryParams = Omit<PrivateServiceQueryParams, 'page'>;
 export type Category = components['schemas']['CategoryEntity'];
 export type CategoryWithServicesCount = components['schemas']['ServiceWithCategoryDto'];
 export type Service = components['schemas']['ServiceEntity'];
-export type PrivateServiceQueryParams = components['schemas']['QueryServicesDto'];
+export type PrivateServiceQueryParams =
+  operations['ServicesController_findAllByOwner']['parameters']['query'];
 export type GetServiceResponse = {
   items: Service[];
   pagination: components['schemas']['PaginationDto'];
@@ -84,7 +85,7 @@ export type GetCustomersResponse = {
   pagination: components['schemas']['PaginationDto'];
 };
 export type GetCustomersQueryParams =
-  operations['CustomersController_findAll']['parameters']['query'];
+  operations['CustomersController_findAllByOwner']['parameters']['query'];
 export type Customer = components['schemas']['CustomerInfoDto'];
 
 /** Schedule */
@@ -190,3 +191,9 @@ export type UploadMediaRequest = {
   type: MediaUploadType;
 };
 export type UploadMediaResponse = components['schemas']['MediaEntity'];
+
+/* Combination */
+
+export type Combination = components['schemas']['CombinationEntity'];
+export type GetCombinationsQueryParams =
+  operations['CombinationsController_findAllByOwner']['parameters']['query'];

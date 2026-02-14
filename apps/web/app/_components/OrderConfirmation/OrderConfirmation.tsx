@@ -56,9 +56,18 @@ export default function OrderConfirmation(props: Props) {
 
   useEffect(() => {
     if (apiError) {
+      type ApiErrorWithResponse = {
+        response?: {
+          data?: {
+            errorMessage?: string;
+          };
+        };
+        message: string;
+      };
+
       const errorMessage =
         typeof apiError === 'object' && 'response' in apiError
-          ? (apiError as any).response?.data?.errorMessage || apiError.message
+          ? (apiError as ApiErrorWithResponse).response?.data?.errorMessage || apiError.message
           : apiError.message;
       setError(errorMessage);
     } else {
@@ -98,24 +107,25 @@ export default function OrderConfirmation(props: Props) {
           {serviceData && <ServiceElement item={serviceData} isCard master={order.master} />}
 
           <div className=''>
-            <label
-              className='block mb-1 text-sm tracking-wider font-medium'
-              htmlFor='confirmation-notes'
-            >
-              Notes
-            </label>
             <Controller
               name='notes'
               control={control}
               render={({ field }) => (
                 <div className=''>
                   <FormTextArea
-                    className='resize-none'
-                    rows={3}
                     id='confirmation-notes'
-                    value={field.value}
+                    name='confirmation-notes'
+                    value={field.value || ''}
                     onChange={field.onChange}
+                    label='Notes'
+                    helperText='Additional information for the master'
+                    maxLength={200}
                     error={errors?.notes?.message}
+                    classNames={{
+                      label: 'block font-medium',
+                      textarea:
+                        'block w-full text-sm text-black border border-gray-200 p-3 rounded-lg min-h-[70px] focus:outline-none focus:ring-1 focus:ring-purple-800',
+                    }}
                   />
                 </div>
               )}

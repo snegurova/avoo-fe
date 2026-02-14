@@ -104,7 +104,7 @@ export default function AddMasterForm() {
               Phone
             </label>
             <div className='flex items-stretch gap-6 md:gap-8 lg:gap-6'>
-              <div className='w-[84px] flex-shrink-0'>
+              <div className='w-[84px] shrink-0'>
                 <PhoneCodeSelect
                   id='phone-code'
                   value={countryCode}

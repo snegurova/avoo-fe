@@ -49,7 +49,7 @@ export default function ServiceFormItem(props: Props) {
   const [masterSearch, setMasterSearch] = useState('');
   const [masterParams, setMasterParams] = useState<GetMastersQueryParams>({ limit: 100 });
 
-  const { params, queryParams, setSearchQuery } = servicesHooks.useServicesQuery();
+  const { params, queryParams, setSearchQuery, setMasterIds } = servicesHooks.useServicesQuery();
 
   const { data: services } = servicesHooks.useGetServicesInfinite({
     ...queryParams,
@@ -72,6 +72,7 @@ export default function ServiceFormItem(props: Props) {
     if (initialParams.masterId) {
       const master = masters?.find((m) => m.id === initialParams.masterId) || null;
       setSelectedMaster(master);
+      setMasterIds(master ? [master.id] : []);
     }
   }, [initialParams]);
 
@@ -81,11 +82,16 @@ export default function ServiceFormItem(props: Props) {
     newOrders[index] = { ...newOrders[index], serviceId: val.id };
     onChange(newOrders);
 
-    setSelectedService(
+    const newService =
       services?.pages
         .flatMap((page) => page?.data?.items)
-        .find((service) => service?.id === val.id) || null,
-    );
+        .find((service) => service?.id === val.id) || null;
+
+    setSelectedService(newService);
+    setMasterParams((prev) => ({
+      ...prev,
+      serviceId: newService?.id || undefined,
+    }));
   };
 
   const selectMaster = (val: { id: number } | null) => {
@@ -97,6 +103,7 @@ export default function ServiceFormItem(props: Props) {
     onChange(newOrders);
 
     setSelectedMaster(masters?.find((master) => master.id === val.id) || null);
+    setMasterIds(val.id ? [val.id] : []);
   };
 
   const ServiceElementWrapped: React.FC<{
@@ -181,16 +188,20 @@ export default function ServiceFormItem(props: Props) {
           )}
         </div>
         <div className=''>
-          <label className='block mb-2 font-medium' htmlFor={`notes-${index}`}>
-            Notes
-          </label>
           <FormTextArea
-            className='resize-none'
-            rows={3}
             id={`notes-${index}`}
+            name={`notes-${index}`}
             value={order.notes || ''}
             onChange={onNotesChange}
+            label='Notes'
+            helperText='Additional information for the master'
+            maxLength={200}
             error={errors?.notes?.message}
+            classNames={{
+              label: 'block font-medium',
+              textarea:
+                'block w-full text-sm text-black border border-gray-200 p-3 rounded-lg min-h-[70px] focus:outline-none focus:ring-1 focus:ring-purple-800',
+            }}
           />
         </div>
       </div>

@@ -16,6 +16,7 @@ import AppPlaceholder from '@/_components/AppPlaceholder/AppPlaceholder';
 import CalendarWeekSingleMasterView from '@/_components/CalendarWeekSingleMasterView/CalendarWeekSingleMasterView';
 import AsideModal from '@/_components/AsideModal/AsideModal';
 import OrderData from '@/_components/OrderData/OrderData';
+import CalendarEventIcon from '@/_icons/CalendarEventIcon';
 
 const columnHeadContainer = tv({
   base: 'sticky bg-white z-10 ',
@@ -242,9 +243,9 @@ export default function Calendar(props: Props) {
             )}
             {filteredMasters.length === 0 && (
               <AppPlaceholder
-                title='No masters found'
-                icon='calendar'
-                description='No masters found'
+                title='No schedules'
+                icon={<CalendarEventIcon className='w-20 h-20 lg:w-25 lg:h-25 fill-primary-300' />}
+                description='There are currently no schedules to display. Choose masters to see their schedules here.'
               />
             )}
           </div>
