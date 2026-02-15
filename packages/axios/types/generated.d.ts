@@ -228,38 +228,6 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/certificates": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["UsersController_getAllCertificates"];
-        put?: never;
-        post: operations["UsersController_createCertificate"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/certificates/{certificateId}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["UsersController_getOneCertificate"];
-        put?: never;
-        post?: never;
-        delete: operations["UsersController_deleteUserCertificate"];
-        options?: never;
-        head?: never;
-        patch: operations["UsersController_updateUserCertificate"];
-        trace?: never;
-    };
     "/services": {
         parameters: {
             query?: never;
@@ -607,6 +575,38 @@ export interface paths {
         put?: never;
         post: operations["FilesController_upload"];
         delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/certificates": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["CertificatesController_getAllCertificates"];
+        put?: never;
+        post: operations["CertificatesController_createCertificate"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/certificates/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["CertificatesController_getOneCertificate"];
+        put: operations["CertificatesController_updateUserCertificate"];
+        post?: never;
+        delete: operations["CertificatesController_deleteUserCertificate"];
         options?: never;
         head?: never;
         patch?: never;
@@ -1181,65 +1181,12 @@ export interface components {
         ShortMasterInfoDto: {
             id: number;
             avatarPreviewUrl: string | null;
+            name: string | null;
         };
         GetProfileLanguagesDto: {
             /** @enum {string} */
             language: "ar" | "bn" | "da" | "de" | "en" | "es" | "fi" | "fr" | "hr" | "hi" | "is" | "it" | "ja" | "ko" | "la" | "lv" | "nl" | "no" | "pl" | "pt" | "ro" | "sv" | "tr" | "uk" | "vi" | "zh" | "fa";
             masters: components["schemas"]["ShortMasterInfoDto"][];
-        };
-        CertificateEntity: {
-            id: number;
-            /** @description Certificate title */
-            title: string;
-            /** @description Certificate description */
-            description?: Record<string, never>;
-            /**
-             * Format: date-time
-             * @description Certificate issue date
-             */
-            issueDate: string;
-            /** @description Certificate file URL */
-            url: string;
-            /** @description Certificate preview URL */
-            previewUrl?: Record<string, never>;
-            /** @description Salon (user) ID */
-            userId: number;
-            /** @description Master ID (optional) */
-            masterId?: Record<string, never>;
-            /** Format: date-time */
-            createdAt: string;
-            /** Format: date-time */
-            updatedAt: string;
-        };
-        UploadCertificateFormDto: {
-            /** @description Certificate title */
-            title: string;
-            /**
-             * @description Issue date (YYYY-MM-DD)
-             * @example 2026-01-01
-             */
-            issueDate: string;
-            /** Format: binary */
-            file: string;
-            /** @description Master ID (optional). If omitted certificate will be for whole salon */
-            masterId?: number;
-            /** @description Certificate description */
-            description?: string;
-        };
-        UploadCertificateDto: {
-            /** @description Certificate title */
-            title: string;
-            /**
-             * @description Issue date (YYYY-MM-DD)
-             * @example 2026-01-01
-             */
-            issueDate: string;
-            /** @description Certificate description */
-            description?: string;
-            /** @description Master ID (optional). If omitted certificate will be for whole salon */
-            masterId?: number;
-            /** Format: binary */
-            file: string;
         };
         QueryServicesDto: {
             /**
@@ -1519,6 +1466,56 @@ export interface components {
             /** Format: binary */
             file: string;
         };
+        CertificateEntity: {
+            id: number;
+            /** @description Certificate title */
+            title: string;
+            /** @description Certificate description */
+            description?: Record<string, never>;
+            /**
+             * Format: date-time
+             * @description Certificate issue date
+             */
+            issueDate: string;
+            /** @description Certificate file URL */
+            url: string;
+            /** @description Certificate preview URL */
+            previewUrl?: Record<string, never>;
+            /** @description Salon (user) ID */
+            userId: number;
+            /** @description Master ID (optional) */
+            masterId?: Record<string, never>;
+            /** Format: date-time */
+            createdAt: string;
+            /** Format: date-time */
+            updatedAt: string;
+        };
+        UploadCertificateDto: {
+            /** @description Certificate title */
+            title: string;
+            /**
+             * @description Issue date (YYYY-MM-DD)
+             * @example 2026-01-01
+             */
+            issueDate: string;
+            /**
+             * @description url to image
+             * @example https://example.com/uploads/avatar/me.webp
+             */
+            url: string;
+            /**
+             * @description previewUrl to image
+             * @example https://example.com/uploads/avatar/me.peview.webp
+             */
+            previewUrl?: Record<string, never>;
+            /** @description Certificate description */
+            description?: string;
+            /**
+             * @description Master ID (optional)
+             * @example 1
+             */
+            masterId?: number;
+        };
         CreatePrivateOrderDto: {
             /** @enum {string} */
             type: "SERVICE" | "COMBINATION";
@@ -1769,11 +1766,8 @@ export interface components {
              * @example 1
              */
             userId: number;
-            /**
-             * @description Master ID
-             * @example 1
-             */
-            masterId?: Record<string, never>;
+            /** @description Master */
+            master?: components["schemas"]["ShortMasterInfoDto"];
             /**
              * @description Range from date
              * @example 2026-01-01
@@ -2036,7 +2030,37 @@ export interface components {
             /** @description List of working days */
             days: components["schemas"]["PrivateWorkingDayByDatesDto"][];
         };
-        PublicEventDto: {
+        PublicCalendarResponseDto: {
+            /**
+             * @description User ID
+             * @example 1
+             */
+            userId: number;
+            /**
+             * @description Master ID
+             * @example 1
+             */
+            master: components["schemas"]["ShortMasterInfoDto"];
+            /**
+             * Format: date-time
+             * @description Range from date
+             * @example 2026-01-01T00:00:00Z
+             */
+            rangeFromDate: string;
+            /**
+             * Format: date-time
+             * @description Range to date
+             * @example 2026-01-09T00:00:00Z
+             */
+            rangeToDate: string;
+            /** @example 1 */
+            serviceId?: number;
+            /** @example 1 */
+            combinationId?: number;
+            /** @description List of working days */
+            days: string[];
+        };
+        BaseEventDto: {
             /** @example 101 */
             id: number;
             /** @example Client appointment */
@@ -2057,85 +2081,7 @@ export interface components {
              */
             end: string;
         };
-        PublicWorkingDayDto: {
-            /**
-             * Format: date-time
-             * @description Range date in UTC
-             * @example 2026-01-01T22:00:00.000Z
-             */
-            utcDateFrom: string;
-            /**
-             * Format: date-time
-             * @description Range date to in UTC
-             * @example 2026-01-09T22:00:00.000Z
-             */
-            utcDateTo: string;
-            /**
-             * @description Range to date
-             * @example 2026-01-09
-             */
-            date: string;
-            /**
-             * @description Weekday
-             * @example Mon
-             */
-            weekday: string;
-            /**
-             * @description Is schedule accessible for this day(if we out of schedule range)
-             * @example true
-             */
-            isAccessible: boolean;
-            /**
-             * @description Is working day for this schedule(if salon not work on this day)
-             * @example true
-             */
-            isWorkingDay: boolean;
-            /** @description Availability */
-            availability: components["schemas"]["AvailabilityDto"][];
-            /**
-             * @description Exceptions
-             * @example [
-             *       {
-             *         "start": "2026-01-09T09:30:00.000Z",
-             *         "end": "2026-01-09T10:00:00.000Z"
-             *       }
-             *     ]
-             */
-            exceptions: string[];
-            /** @description Events */
-            events: components["schemas"]["PublicEventDto"][];
-        };
-        PublicCalendarResponseDto: {
-            /**
-             * @description User ID
-             * @example 1
-             */
-            userId: number;
-            /**
-             * @description Master ID
-             * @example 1
-             */
-            masterId: number;
-            /**
-             * Format: date-time
-             * @description Range from date
-             * @example 2026-01-01T00:00:00Z
-             */
-            rangeFromDate: string;
-            /**
-             * Format: date-time
-             * @description Range to date
-             * @example 2026-01-09T00:00:00Z
-             */
-            rangeToDate: string;
-            /** @example 1 */
-            serviceId?: number;
-            /** @example 1 */
-            combinationId?: number;
-            /** @description List of working days */
-            days: components["schemas"]["PublicWorkingDayDto"][];
-        };
-        BaseEventDto: {
+        PublicEventDto: {
             /** @example 101 */
             id: number;
             /** @example Client appointment */
@@ -2959,175 +2905,6 @@ export interface operations {
                 content: {
                     "application/json": components["schemas"]["SuccessResponseDto"] & {
                         data?: components["schemas"]["GetProfileLanguagesDto"][];
-                    };
-                };
-            };
-            /** @description Bad Request */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-        };
-    };
-    UsersController_getAllCertificates: {
-        parameters: {
-            query?: {
-                /** @description Master ID to filter by (optional). If omitted, returns salon-level certificates */
-                masterId?: number;
-                page?: number;
-                limit?: number;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description All certificates */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["SuccessResponseDto"] & {
-                        data?: {
-                            items?: components["schemas"]["CertificateEntity"][];
-                            pagination?: components["schemas"]["PaginationDto"];
-                        };
-                    };
-                };
-            };
-            /** @description Bad Request */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-        };
-    };
-    UsersController_createCertificate: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "multipart/form-data": components["schemas"]["UploadCertificateFormDto"];
-            };
-        };
-        responses: {
-            /** @description Created certificate */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["SuccessResponseDto"] & {
-                        data?: components["schemas"]["CertificateEntity"];
-                    };
-                };
-            };
-        };
-    };
-    UsersController_getOneCertificate: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                certificateId: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description One certificate by id */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["SuccessResponseDto"] & {
-                        data?: components["schemas"]["CertificateEntity"];
-                    };
-                };
-            };
-            /** @description Bad Request */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-        };
-    };
-    UsersController_deleteUserCertificate: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                certificateId: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Delete certificate by id */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["SuccessResponseDto"] & {
-                        data?: components["schemas"]["CertificateEntity"];
-                    };
-                };
-            };
-            /** @description Bad Request */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-        };
-    };
-    UsersController_updateUserCertificate: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                certificateId: number;
-            };
-            cookie?: never;
-        };
-        /** @description Fields to update (partial) */
-        requestBody?: {
-            content: {
-                "application/json": components["schemas"]["UploadCertificateDto"];
-            };
-        };
-        responses: {
-            /** @description Updated certificate */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["SuccessResponseDto"] & {
-                        data?: components["schemas"]["CertificateEntity"];
                     };
                 };
             };
@@ -4222,6 +3999,174 @@ export interface operations {
             };
         };
     };
+    CertificatesController_getAllCertificates: {
+        parameters: {
+            query?: {
+                /** @description Master ID to filter by (optional). If omitted, returns salon-level certificates */
+                masterId?: number;
+                page?: number;
+                limit?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description All certificates */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SuccessResponseDto"] & {
+                        data?: {
+                            items?: components["schemas"]["CertificateEntity"][];
+                            pagination?: components["schemas"]["PaginationDto"];
+                        };
+                    };
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    CertificatesController_createCertificate: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UploadCertificateDto"];
+            };
+        };
+        responses: {
+            /** @description Created certificate */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SuccessResponseDto"] & {
+                        data?: components["schemas"]["CertificateEntity"];
+                    };
+                };
+            };
+        };
+    };
+    CertificatesController_getOneCertificate: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Get certificate by id */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SuccessResponseDto"] & {
+                        data?: components["schemas"]["CertificateEntity"];
+                    };
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    CertificatesController_updateUserCertificate: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UploadCertificateDto"];
+            };
+        };
+        responses: {
+            /** @description Updated certificate */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SuccessResponseDto"] & {
+                        data?: components["schemas"]["CertificateEntity"];
+                    };
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    CertificatesController_deleteUserCertificate: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Delete certificate by id */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SuccessResponseDto"] & {
+                        data?: components["schemas"]["CertificateEntity"];
+                    };
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
     OrdersController_findAllOwn: {
         parameters: {
             query?: {
@@ -4677,8 +4622,6 @@ export interface operations {
     CalendarPublicController_getCalendarView: {
         parameters: {
             query: {
-                /** @description Filter by user ID */
-                userId: number;
                 /** @description Master IDs */
                 masterIds?: number[];
                 /** @description Calendar start date (local, YYYY-MM-DD) */
@@ -4691,6 +4634,8 @@ export interface operations {
                 combinationId?: number;
                 /** @description User timezone */
                 timezone?: string;
+                /** @description Filter by user ID */
+                userId: number;
             };
             header?: never;
             path?: never;
@@ -4723,8 +4668,6 @@ export interface operations {
     CalendarPublicController_getCalendarByDates: {
         parameters: {
             query: {
-                /** @description Filter by user ID */
-                userId: number;
                 /** @description Master IDs */
                 masterIds?: number[];
                 /** @description Calendar start date (local, YYYY-MM-DD) */
@@ -4737,6 +4680,8 @@ export interface operations {
                 combinationId?: number;
                 /** @description User timezone */
                 timezone?: string;
+                /** @description Filter by user ID */
+                userId: number;
             };
             header?: never;
             path?: never;

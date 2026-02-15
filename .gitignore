@@ -42,6 +42,7 @@ lerna-debug.log*
 .temp
 .tmp
 .lh
+.cache
 
 .DS_Store
 .vscode

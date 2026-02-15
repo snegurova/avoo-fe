@@ -9,15 +9,16 @@ import { timeUtils } from '@avoo/shared';
 
 type Props = {
   client: CustomerInfoResponse;
-  onEdit?: (id: number) => void;
+  onEdit?: (client: CustomerInfoResponse) => void;
+  isSelected?: boolean;
 };
 
-const ClientListItem: React.FC<Props> = ({ client, onEdit }) => {
+const ClientListItem: React.FC<Props> = ({ client, onEdit, isSelected }) => {
   const clientDisplayName = client.name || 'No name';
   const phone = client.phone || 'No phone';
   const formattedLastVisit = timeUtils.formatLastVisitDate(client.lastVisit) ?? '-';
   const handleOpenDetails = () => {
-    onEdit?.(client.id);
+    onEdit?.(client);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
@@ -28,7 +29,12 @@ const ClientListItem: React.FC<Props> = ({ client, onEdit }) => {
   };
 
   return (
-    <div className='bg-white rounded-lg lg:rounded-none p-4 lg:py-6 lg:px-8 border border-gray-200 lg:border-l-0 lg:border-r-0'>
+    <div
+      className={`rounded-lg lg:rounded-none p-4 lg:py-6 lg:px-8 border lg:border-l-0 lg:border-r-0 transition-colors duration-300 ease-in-out ${
+        isSelected ? 'bg-primary-50 border-primary-200' : 'bg-white border-gray-200'
+      }`}
+      data-selected={isSelected ? 'true' : 'false'}
+    >
       <div
         className='flex items-center gap-4 w-full lg:hidden cursor-pointer'
         role='button'

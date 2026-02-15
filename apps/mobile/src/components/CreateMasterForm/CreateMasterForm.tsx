@@ -7,6 +7,7 @@ import AvatarUpload from '../Avatar/AvatarUpload';
 import { ScrollView } from 'react-native-gesture-handler';
 import { FILE_UPLOAD_TYPE_ENUM } from '@avoo/axios/types/apiEnums';
 import { UploadFile } from '@avoo/shared';
+import { FormPhoneField } from '@/shared/FormPhoneField/FormPhoneField';
 
 type Props = {
   onClose: () => void;
@@ -89,16 +90,13 @@ const CreateMasterForm = ({ onClose }: Props) => {
           />
         </View>
 
-        <View className='mb-4'>
-          <Text className='mb-2'>Phone</Text>
-          <FormTextInput
-            name='phone'
-            control={control}
-            placeholder='+45112233'
-            keyboardType='phone-pad'
-            error={errors.phone?.message}
-          />
-        </View>
+        <FormPhoneField
+          name='phone'
+          control={control}
+          label='Phone'
+          placeholder='066-66-78-890'
+          error={errors.phone?.message}
+        />
 
         <View className='mb-4'>
           <LanguageSelector name='languages' control={control} error={errors.languages?.message} />

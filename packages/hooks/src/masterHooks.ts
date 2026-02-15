@@ -29,7 +29,7 @@ type UseUpdateMasterFormParams = {
 export const masterHooks = {
   useGetMastersProfileInfo: (params: GetMastersQueryParams = {}) => {
     const { data: profileInfoData, isPending } = useQuery<BaseResponse<GetMastersResponse>, Error>({
-      queryKey: [queryKeys.masters.all, queryKeys.masters.byParams(params)],
+      queryKey: queryKeys.masters.all,
       queryFn: () => masterApi.getMastersInfo(params),
     });
 

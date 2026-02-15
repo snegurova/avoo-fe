@@ -3,25 +3,20 @@ import { View } from 'react-native';
 import { Text } from 'react-native-paper';
 import { CALENDAR_STATUSES } from '../CalendarStatusesSheet/CalendarStatusesSheet';
 import { CalendarHeader } from '../CalendarHeader/CalendarHeader';
-import { calendarHooks, masterHooks } from '@avoo/hooks';
+import { calendarHooks } from '@avoo/hooks';
 import { timeUtils, isFullSelection } from '@avoo/shared';
 import { OrderStatus } from '@avoo/hooks/types/orderStatus';
-import { CalendarView, PrivateCalendarQueryParams } from '@avoo/axios/types/apiTypes';
-import { useCalendarAppointments } from '@/hooks/calendarHooks';
+import type { PrivateCalendarQueryParams } from '@avoo/axios/types/apiTypes';
+import { CalendarViewType } from '@avoo/hooks/types/calendarViewType';
+import { calendarMobileHooks } from '@/hooks/calendarHooks';
 import { CalendarDayView } from '../CalendarDayView/CalendarDayView';
 import { CalendarWeekView } from '../CalendarWeekView/CalendarWeekView';
 import { CalendarMonthView } from '../CalendarMonthView/CalendarMonthView';
 
-export type Master = {
-  id: string;
-  name: string;
-  initial: string;
-};
-
 export const CalendarSection = () => {
   const [date, setDate] = useState<Date>(timeUtils.toDayBegin(new Date()));
   const [toDate, setToDate] = useState<Date>(timeUtils.toDayEnd(new Date()));
-  const [viewType, setViewType] = useState<CalendarView>(CalendarView.Day);
+  const [viewType, setViewType] = useState<CalendarViewType>(CalendarViewType.DAY);
   const [params, setParams] = useState<PrivateCalendarQueryParams>({
     rangeFromDate: timeUtils.formatDate(date),
     rangeToDate: timeUtils.formatDate(toDate),
@@ -30,27 +25,16 @@ export const CalendarSection = () => {
   const [selectedMasterIds, setSelectedMasterIds] = useState<Set<string>>(new Set());
   const [selectedStatuses, setSelectedStatuses] = useState<Set<OrderStatus>>(new Set());
 
-  const dateString = date.toLocaleDateString('en-US', {
-    weekday: 'short',
-    day: 'numeric',
-    month: 'short',
-  });
+  const dateString = timeUtils.formatShortDateLabel(date);
 
-  const mastersData = masterHooks.useGetMastersProfileInfo()?.items;
-  const masters: Master[] = useMemo(() => {
-    if (!mastersData) return [];
-    return mastersData.map((master): Master => ({
-      id: String(master.id),
-      name: master.name || 'Unknown',
-      initial: (master.name || 'U').charAt(0).toUpperCase(),
-    }));
-  }, [mastersData]);
+  const { data: calendarData } = calendarHooks.useGetCalendar(params);
+  const masters = calendarMobileHooks.useCalendarMasters(calendarData ?? null);
 
   const filteredMasters = useMemo(() => {
     if (isFullSelection(selectedMasterIds.size, masters.length)) {
       return masters;
     }
-    return masters.filter((m) => selectedMasterIds.has(m.id));
+    return masters.filter((m) => selectedMasterIds.has(String(m.id)));
   }, [masters, selectedMasterIds]);
 
   const masterIdsForApi = useMemo(() => {
@@ -77,9 +61,7 @@ export const CalendarSection = () => {
     }));
   }, [date, toDate, masterIdsForApi, statusesForApi]);
 
-  const calendarData = calendarHooks.useGetCalendar(params);
-  const appointments = useCalendarAppointments(calendarData);
-
+  const appointments = calendarMobileHooks.useCalendarAppointments(calendarData ?? null);
 
   const monthAnchor = useMemo(() => {
     const mid = new Date((date.getTime() + toDate.getTime()) / 2);
@@ -107,13 +89,13 @@ export const CalendarSection = () => {
         setSelectedStatuses={setSelectedStatuses}
       />
 
-      {viewType === CalendarView.Day && (
+      {viewType === CalendarViewType.DAY && (
         <CalendarDayView masters={filteredMasters} appointments={appointments} />
       )}
-      {viewType === CalendarView.Week  && (
+      {viewType === CalendarViewType.WEEK && (
         <CalendarWeekView masters={filteredMasters} appointments={appointments} weekStart={date} />
       )}
-      {viewType === CalendarView.Month && (
+      {viewType === CalendarViewType.MONTH && (
         <CalendarMonthView appointments={appointments} month={monthAnchor} />
       )}
     </View>

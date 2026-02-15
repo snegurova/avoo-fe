@@ -1,6 +1,6 @@
 import { View } from 'react-native';
 import { Text } from 'react-native-paper';
-import { colors } from '@avoo/design-tokens';
+import { PillText } from '@/shared/PillText/PillText';
 import { AppointmentCard } from '../AppointmentCard/AppointmentCard';
 import { Carousel } from '@/shared/Carousel/Carousel';
 import { OrderStatusEnum, OrderStatusType } from '@avoo/axios/types/apiEnums';
@@ -89,16 +89,10 @@ const mockAppointments: Appointment[] = [
 
 export const AppointmentsSection = () => {
   return (
-    <View
-      className='bg-white rounded-2xl p-5 border border-gray-200'
-    >
+    <View className='bg-white rounded-2xl p-5 border border-gray-200'>
       <View className='flex-row items-center justify-between mb-4'>
         <Text variant='titleLarge'>Next appointments</Text>
-        <View className='px-3 py-1 rounded-xl border border-gray-200'>
-          <Text variant='bodySmall' style={{ color: colors.gray[700] }}>
-            Starting next
-          </Text>
-        </View>
+        <PillText>Starting next</PillText>
       </View>
 
       <Carousel

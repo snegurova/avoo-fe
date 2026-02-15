@@ -5,35 +5,36 @@ import { colors } from '@avoo/design-tokens';
 import { CalendarView } from '@avoo/axios/types/apiTypes';
 import { CustomBottomSheet } from '@/shared/CustomBottomSheet/CustomBottomSheet';
 import { CalendarMonthIcon, ViewDayIcon, ViewWeekIcon } from '@/icons';
+import { CalendarViewType } from '@avoo/hooks/types/calendarViewType';
 
 type Props = {
   visible: boolean;
   onClose: () => void;
-  setViewType: (view: CalendarView) => void;
+  setViewType: (view: CalendarViewType) => void;
   setDate: (date: Date) => void;
   setToDate: (date: Date) => void;
 };
 
 const setCurrentDate = (
-  type: CalendarView,
+  type: CalendarViewType,
   setDate: (d: Date) => void,
   setToDate: (d: Date) => void,
 ) => {
   const today = new Date();
   switch (type) {
-    case CalendarView.Day: {
+    case CalendarViewType.DAY: {
       const range = timeUtils.getDayRange(today);
       setDate(range.start);
       setToDate(range.end);
       break;
     }
-    case CalendarView.Week: {
+    case CalendarViewType.WEEK: {
       const range = timeUtils.getWeekRange(today);
       setDate(range.start);
       setToDate(range.end);
       break;
     }
-    case CalendarView.Month: {
+    case CalendarViewType.MONTH: {
       const range = timeUtils.getMonthRange(today);
       setDate(range.start);
       setToDate(range.end);
@@ -46,7 +47,7 @@ const setCurrentDate = (
 
 export const CalendarViewTypeSheet = (props: Props) => {
   const { visible, onClose, setViewType, setDate, setToDate } = props;
-  const handleViewPress = (view: CalendarView) => {
+  const handleViewPress = (view: CalendarViewType) => {
     setViewType(view);
     onClose();
     setCurrentDate(view, setDate, setToDate);
@@ -56,7 +57,7 @@ export const CalendarViewTypeSheet = (props: Props) => {
     <CustomBottomSheet visible={visible} onClose={onClose} snapToContent>
       <Pressable
         className='px-6 py-4 border-b border-gray-200 flex-row items-center gap-2'
-        onPress={() => handleViewPress(CalendarView.Day)}
+        onPress={() => handleViewPress(CalendarViewType.DAY)}
       >
         <ViewDayIcon size={24} color={colors.black} />
         <Text variant='titleMedium'>
@@ -65,7 +66,7 @@ export const CalendarViewTypeSheet = (props: Props) => {
       </Pressable>
       <Pressable
         className='px-6 py-4 border-b border-gray-200 flex-row items-center gap-2'
-        onPress={() => handleViewPress(CalendarView.Week)}
+        onPress={() => handleViewPress(CalendarViewType.WEEK)}
       >
         <ViewWeekIcon size={24} color={colors.black} />
         <Text variant='titleMedium'>
@@ -74,7 +75,7 @@ export const CalendarViewTypeSheet = (props: Props) => {
       </Pressable>
       <Pressable
         className='px-6 py-4 flex-row items-center gap-2'
-        onPress={() => handleViewPress(CalendarView.Month)}
+        onPress={() => handleViewPress(CalendarViewType.MONTH)}
       >
         <CalendarMonthIcon size={24} color={colors.black} />
         <Text variant='titleMedium'>

@@ -11,6 +11,7 @@ export const CALENDAR_ORDER_VARIANT = {
   WEEK: 'week',
   MONTH: 'month',
   DAY: 'day',
+  WIDGET: 'widget',
 } as const;
 
 type BaseProps = {
@@ -26,6 +27,10 @@ type MonthProps = BaseProps & {
   variant: typeof CALENDAR_ORDER_VARIANT.MONTH;
 };
 
+type WidgetProps = BaseProps & {
+  variant: typeof CALENDAR_ORDER_VARIANT.WIDGET;
+};
+
 type DayProps = BaseProps & {
   variant: typeof CALENDAR_ORDER_VARIANT.DAY;
   top: number;
@@ -34,7 +39,7 @@ type DayProps = BaseProps & {
   zIndex?: number;
 };
 
-export type Props = WeekProps | DayProps | MonthProps;
+export type Props = WeekProps | DayProps | MonthProps | WidgetProps;
 
 const orderCard = tv({
   base: 'border',
@@ -75,6 +80,7 @@ const VARIANT_LAYOUT_CLASS: Record<Props['variant'], string> = {
   [CALENDAR_ORDER_VARIANT.MONTH]:
     'mb-1 rounded-md px-0.5 overflow-hidden flex-row items-center gap-0.5',
   [CALENDAR_ORDER_VARIANT.DAY]: 'absolute mx-1 rounded-lg p-2 overflow-hidden min-h-[40px]',
+  [CALENDAR_ORDER_VARIANT.WIDGET]: 'rounded-md px-0.5 overflow-hidden flex-row items-center gap-0.5'
 };
 
 export function CalendarOrder(props: Props) {
@@ -121,7 +127,7 @@ export function CalendarOrder(props: Props) {
         >
           {appointment.startTime} {appointment.clientName}
         </Text>
-      ) : variant === CALENDAR_ORDER_VARIANT.MONTH ? (
+      ) : variant === CALENDAR_ORDER_VARIANT.MONTH || variant === CALENDAR_ORDER_VARIANT.WIDGET ? (
         <>
           {calendarIcon}
           <Text

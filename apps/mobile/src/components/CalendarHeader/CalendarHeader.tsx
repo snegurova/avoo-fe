@@ -5,21 +5,20 @@ import { MaterialIcons } from '@/shared/icons';
 import { colors } from '@avoo/design-tokens';
 import { OrderStatus } from '@avoo/hooks/types/orderStatus';
 import { timeUtils, isFullSelection } from '@avoo/shared';
-import { CalendarView } from '@avoo/axios/types/apiTypes';
+import { type ShortMasterInfo } from '@avoo/axios/types/apiTypes';
 import { CalendarViewTypeSheet } from '../CalendarViewTypeSheet/CalendarViewTypeSheet';
 import { CalendarMastersSheet } from '../CalendarMastersSheet/CalendarMastersSheet';
 import { CalendarStatusesSheet, CALENDAR_STATUSES } from '../CalendarStatusesSheet/CalendarStatusesSheet';
-import { Master } from '../CalendarSection/CalendarSection';
-
+import { CalendarViewType } from '@avoo/hooks/types/calendarViewType';
 
 type Props = {
   dateString: string;
-  masters: Master[];
+  masters: ShortMasterInfo[];
   date: Date;
   setDate: (date: Date) => void;
   setToDate: (date: Date) => void;
-  viewType: CalendarView;
-  setViewType: (view: CalendarView) => void;
+  viewType: CalendarViewType;
+  setViewType: (view: CalendarViewType) => void;
   monthAnchor: Date;
   selectedMasterIds: Set<string>;
   setSelectedMasterIds: (ids: Set<string>) => void;
@@ -56,8 +55,8 @@ export const CalendarHeader = (props: Props) => {
     if (isAllTeamSelected) return 'All masters';
     if (selectedMasterIds.size === 0) return 'No masters';
     if (selectedMasterIds.size === 1) {
-      const master = masters.find((m) => selectedMasterIds.has(m.id));
-      return master?.name || 'All masters';
+      const master = masters.find((m) => selectedMasterIds.has(String(m.id)));
+      return master?.name ?? 'All masters';
     }
     return `${selectedMasterIds.size} masters`;
   };
@@ -76,19 +75,19 @@ export const CalendarHeader = (props: Props) => {
 
   const setPreviousDate = () => {
     switch (viewType) {
-      case CalendarView.Day: {
+      case CalendarViewType.DAY: {
         const range = timeUtils.getDayRange(new Date(date.getTime() - 24 * 60 * 60 * 1000));
         setDate(range.start);
         setToDate(range.end);
         break;
       }
-      case CalendarView.Week: {
+      case CalendarViewType.WEEK: {
         const range = timeUtils.getWeekRange(new Date(date.getTime() - 7 * 24 * 60 * 60 * 1000));
         setDate(range.start);
         setToDate(range.end);
         break;
       }
-      case CalendarView.Month: {
+      case CalendarViewType.MONTH: {
         const prevMonth = new Date(date.getTime() + 7 * 24 * 60 * 60 * 1000);
         prevMonth.setMonth(prevMonth.getMonth() - 1);
         const range = timeUtils.getMonthRange(prevMonth);
@@ -103,19 +102,19 @@ export const CalendarHeader = (props: Props) => {
 
   const setNextDate = () => {
     switch (viewType) {
-      case CalendarView.Day: {
+      case CalendarViewType.DAY: {
         const range = timeUtils.getDayRange(new Date(date.getTime() + 24 * 60 * 60 * 1000));
         setDate(range.start);
         setToDate(range.end);
         break;
       }
-      case CalendarView.Week: {
+      case CalendarViewType.WEEK: {
         const range = timeUtils.getWeekRange(new Date(date.getTime() + 7 * 24 * 60 * 60 * 1000));
         setDate(range.start);
         setToDate(range.end);
         break;
       }
-      case CalendarView.Month: {
+      case CalendarViewType.MONTH: {
         const nextMonth = new Date(date.getTime() + 7 * 24 * 60 * 60 * 1000);
         nextMonth.setMonth(nextMonth.getMonth() + 1);
         const range = timeUtils.getMonthRange(nextMonth);
@@ -129,7 +128,7 @@ export const CalendarHeader = (props: Props) => {
   };
 
   const displayedDateLabel =
-    viewType === CalendarView.Month
+    viewType === CalendarViewType.MONTH
       ? monthAnchor.toLocaleDateString('en-US', { month: 'long' })
       : dateString;
 
