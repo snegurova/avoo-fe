@@ -8,7 +8,7 @@ import {
   GetCustomersResponse,
 } from '@avoo/axios/types/apiTypes';
 import { queryKeys } from './queryKeys';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery, useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
 import { useMemo } from 'react';
 import { ApiStatus } from '@avoo/hooks/types/apiTypes';
 
@@ -33,6 +33,31 @@ export const customerHooks = {
     }
 
     return { pagination: null, items: [] };
+  },
+  useGetCustomersInfinite: (params?: GetCustomersQueryParams) => {
+    const memoParams = useMemo<GetCustomersQueryParams>(
+      () => ({
+        ...params,
+      }),
+      [params],
+    );
+
+    const query = useInfiniteQuery<BaseResponse<GetCustomersResponse>, Error>({
+      queryKey: ['customers', 'infinite', queryKeys.customers.byParams(memoParams)],
+      queryFn: ({ pageParam = 1 }) =>
+        customerApi.getCustomers({ ...memoParams, page: pageParam as number }),
+      initialPageParam: 1,
+      getNextPageParam: (lastPage) => {
+        const { currentPage, total } = lastPage.data?.pagination || { currentPage: 0, total: 0 };
+        return currentPage * (memoParams.limit ?? 10) < total ? currentPage + 1 : undefined;
+      },
+    });
+
+    const isPending = query.isFetching;
+
+    utils.useSetPendingApi(isPending);
+
+    return query;
   },
 
   useGetCustomerById: (id?: number | null) => {

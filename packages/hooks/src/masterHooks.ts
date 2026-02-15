@@ -5,7 +5,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { createMasterSchema, CreateMasterFormData } from '../schemas/validationSchemas';
 
 import { masterApi } from '@avoo/axios';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useQuery, useInfiniteQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 
 import {
   BaseResponse,
@@ -40,6 +40,24 @@ export const masterHooks = {
     }
 
     return null;
+  },
+  useGetMastersInfinite: (params: GetMastersQueryParams = {}) => {
+    const query = useInfiniteQuery<BaseResponse<GetMastersResponse>, Error>({
+      queryKey: [queryKeys.masters.infinite, queryKeys.masters.byParams(params)],
+      queryFn: ({ pageParam = 1 }) =>
+        masterApi.getMastersInfo({ ...params, page: pageParam as number }),
+      initialPageParam: 1,
+      getNextPageParam: (lastPage) => {
+        const { currentPage, total } = lastPage.data?.pagination || { currentPage: 0, total: 0 };
+        return currentPage * (params.limit ?? 10) < total ? currentPage + 1 : undefined;
+      },
+    });
+
+    const isPending = query.isFetching;
+
+    utils.useSetPendingApi(isPending);
+
+    return query;
   },
   useCreateMasterForm: ({ onSuccess }: UseCreateMasterFormParams = {}) => {
     const {

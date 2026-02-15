@@ -102,7 +102,18 @@ export const orderHooks = {
     >({
       mutationFn: orderApi.createOrder,
       onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: queryKeys.orders.all });
+        queryClient.invalidateQueries({
+          queryKey: [
+            queryKeys.orders.all,
+            queryKeys.orders.byParams,
+            queryKeys.customers.all,
+            queryKeys.customers.byParams,
+            queryKeys.calendar.all,
+            queryKeys.calendar.byParams,
+            queryKeys.monthCalendar.all,
+            queryKeys.monthCalendar.byParams,
+          ],
+        });
         onSuccess?.();
       },
     });

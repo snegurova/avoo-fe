@@ -1,5 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import { Order, MasterWithRelationsEntity } from '@avoo/axios/types/apiTypes';
+import React, { useEffect, useMemo, useState } from 'react';
+import {
+  Order,
+  MasterWithRelationsEntity,
+  GetMastersQueryParams,
+} from '@avoo/axios/types/apiTypes';
 import { Button, ButtonFit, ButtonIntent, ButtonType } from '@/_components/Button/Button';
 import { useApiStatusStore } from '@avoo/store';
 import ServiceElement from '@/_components/ServiceElement/ServiceElement';
@@ -38,6 +42,7 @@ export default function OrderEdit(props: Props) {
     order.master,
   );
   const [masterSearch, setMasterSearch] = useState('');
+  const [masterParams, setMasterParams] = useState<GetMastersQueryParams>({ limit: 10 });
   const [error, setError] = React.useState<string | null>(null);
   const isPending = useApiStatusStore((state) => state.isPending);
 
@@ -62,7 +67,26 @@ export default function OrderEdit(props: Props) {
     },
   });
 
-  const masters = masterHooks.useGetMastersProfileInfo()?.items;
+  const {
+    data: mastersData,
+    fetchNextPage: fetchNextMastersPage,
+    hasNextPage: hasMoreMasters,
+  } = masterHooks.useGetMastersInfinite(masterParams);
+
+  const masters = useMemo(
+    () =>
+      (mastersData?.pages.flatMap((page) => page?.data?.items) || []).filter(
+        (item): item is MasterWithRelationsEntity => item !== undefined,
+      ),
+    [mastersData],
+  );
+
+  useEffect(() => {
+    setMasterParams((prev) => ({
+      ...prev,
+      search: masterSearch.trim() || undefined,
+    }));
+  }, [masterSearch]);
 
   useEffect(() => {
     if (apiError) {
@@ -160,12 +184,14 @@ export default function OrderEdit(props: Props) {
                     label='Master'
                     value={field.value}
                     onChange={onMasterChange}
-                    items={masters || []}
+                    items={masters}
                     search={masterSearch}
                     setSearch={setMasterSearch}
                     ItemElement={MasterElement}
                     searchMode={false}
                     error={errors?.masterId?.message}
+                    hasMore={hasMoreMasters}
+                    fetchNextPage={fetchNextMastersPage}
                   />
                 )}
               />

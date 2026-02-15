@@ -1,13 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { IconButton } from '@/_components/IconButton/IconButton';
 import SearchIcon from '@/_icons/SearchIcon';
 import { SearchInput } from '@/_components/SearchInput/SearchInput';
 import { ClickAwayListener } from '@mui/material';
 import AddIcon from '@/_icons/AddIcon';
+import { useApiStatusStore } from '@avoo/store';
 
 type Props<R, T extends { id: number }> = {
   label: string;
-  value: R | { id: number } | undefined | {};
+  value: R | { id: number } | undefined | object;
   searchMode: boolean;
   onChange: (value: R | { id: number }) => void;
   items: T[];
@@ -18,6 +19,8 @@ type Props<R, T extends { id: number }> = {
   placeholder?: string;
   className?: string;
   error?: string;
+  hasMore?: boolean;
+  fetchNextPage?: () => void;
 };
 
 export default function SearchField<R, T extends { id: number }>(props: Props<R, T>) {
@@ -34,8 +37,12 @@ export default function SearchField<R, T extends { id: number }>(props: Props<R,
     placeholder = 'Search by name, email, phone',
     className = '',
     error,
+    hasMore,
+    fetchNextPage,
   } = props;
   const [isActive, setIsActive] = useState(false);
+  const listRef = useRef<HTMLUListElement>(null);
+  const isPending = useApiStatusStore((state) => state.isPending);
 
   const onSearchBtnClick = () => {
     setIsActive(true);
@@ -61,6 +68,14 @@ export default function SearchField<R, T extends { id: number }>(props: Props<R,
     setIsActive(false);
   };
 
+  const handleScroll = (e: React.UIEvent<HTMLUListElement>) => {
+    if (!listRef.current || !hasMore || !fetchNextPage || isPending) return;
+    const { scrollTop, scrollHeight, clientHeight } = e.currentTarget;
+
+    if (scrollHeight - scrollTop <= clientHeight + 50) {
+      fetchNextPage();
+    }
+  };
   return (
     <ClickAwayListener onClickAway={onClickAway}>
       <div className={`${!searchMode ? 'mb-3' : ''} ${className}`}>
@@ -97,7 +112,11 @@ export default function SearchField<R, T extends { id: number }>(props: Props<R,
                   </button>
                 </div>
               )}
-              <ul className='flex flex-col gap-2 max-h-80 overflow-y-auto'>
+              <ul
+                className='flex flex-col gap-2 max-h-80 overflow-y-auto'
+                ref={listRef}
+                onScroll={handleScroll}
+              >
                 {items.length > 0 &&
                   items.map((item) => (
                     <li key={label + item.id}>

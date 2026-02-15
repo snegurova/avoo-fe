@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import SearchField from '@/_components/SearchField/SearchField';
 import {
   CreatePrivateOrder,
@@ -47,17 +47,41 @@ export default function ServiceFormItem(props: Props) {
 
   const [selectedMaster, setSelectedMaster] = useState<MasterWithRelationsEntity | null>(null);
   const [masterSearch, setMasterSearch] = useState('');
-  const [masterParams, setMasterParams] = useState<GetMastersQueryParams>({ limit: 100 });
+  const [masterParams, setMasterParams] = useState<GetMastersQueryParams>({ limit: 10 });
 
   const { params, queryParams, setSearchQuery, setMasterIds } = servicesHooks.useServicesQuery();
 
-  const { data: services } = servicesHooks.useGetServicesInfinite({
+  const {
+    data,
+    fetchNextPage: fetchNextServicesPage,
+    hasNextPage: hasMoreServices,
+  } = servicesHooks.useGetServicesInfinite({
     ...queryParams,
-    limit: 100,
+    limit: 10,
     isActive: true,
   });
 
-  const masters = masterHooks.useGetMastersProfileInfo(masterParams)?.items;
+  const services = useMemo(
+    () =>
+      (data?.pages.flatMap((page) => page?.data?.items) || []).filter(
+        (item): item is Service => item !== undefined,
+      ),
+    [data],
+  );
+
+  const {
+    data: mastersData,
+    fetchNextPage: fetchNextMastersPage,
+    hasNextPage: hasMoreMasters,
+  } = masterHooks.useGetMastersInfinite(masterParams);
+
+  const masters = useMemo(
+    () =>
+      (mastersData?.pages.flatMap((page) => page?.data?.items) || []).filter(
+        (item): item is MasterWithRelationsEntity => item !== undefined,
+      ),
+    [mastersData],
+  );
 
   useEffect(() => {
     setMasterParams((prev) => ({
@@ -82,10 +106,7 @@ export default function ServiceFormItem(props: Props) {
     newOrders[index] = { ...newOrders[index], serviceId: val.id };
     onChange(newOrders);
 
-    const newService =
-      services?.pages
-        .flatMap((page) => page?.data?.items)
-        .find((service) => service?.id === val.id) || null;
+    const newService = services?.find((service) => service?.id === val.id) || null;
 
     setSelectedService(newService);
     setMasterParams((prev) => ({
@@ -148,13 +169,15 @@ export default function ServiceFormItem(props: Props) {
             label='Service'
             value={order.serviceId ? { id: order.serviceId } : null}
             onChange={selectService}
-            items={services?.pages?.[0]?.data?.items ?? []}
+            items={services}
             search={params.search ?? ''}
             setSearch={setSearchQuery}
             ItemElement={ServiceElementWrapped}
             searchMode={!order.serviceId}
             placeholder='Search by service name'
             error={errors?.serviceId?.message}
+            hasMore={hasMoreServices}
+            fetchNextPage={fetchNextServicesPage}
           />
           {selectedService && <ServiceElement item={selectedService} isCard />}
         </div>
@@ -163,12 +186,14 @@ export default function ServiceFormItem(props: Props) {
             label='Master'
             value={order.masterId ? { id: order.masterId } : null}
             onChange={selectMaster}
-            items={masters || []}
+            items={masters}
             search={masterSearch}
             setSearch={setMasterSearch}
             ItemElement={MasterElement}
             searchMode={!order.masterId}
             error={errors?.masterId?.message}
+            hasMore={hasMoreMasters}
+            fetchNextPage={fetchNextMastersPage}
           />
           {selectedMaster && <MasterElement item={selectedMaster} isCard />}
         </div>

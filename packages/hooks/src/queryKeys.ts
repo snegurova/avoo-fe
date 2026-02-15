@@ -11,6 +11,7 @@ export const queryKeys = {
   masters: {
     all: ['masters'] as const,
     byParams: (params: GetMastersQueryParams) => [...queryKeys.masters.all, params] as const,
+    infinite: ['mastersInfinite'] as const,
   },
   schedules: {
     all: ['schedules'] as const,

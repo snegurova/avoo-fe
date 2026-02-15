@@ -23,7 +23,7 @@ type Props = {
 
 export function CustomerSelect({ value, onChange, error }: Props) {
   const [search, setSearch] = useState('');
-  const [params, setParams] = useState<GetCustomersQueryParams>({ limit: 100 });
+  const [params, setParams] = useState<GetCustomersQueryParams>({ limit: 4 });
   const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(null);
   const [phone, setPhone] = useState('');
 
@@ -34,11 +34,15 @@ export function CustomerSelect({ value, onChange, error }: Props) {
     }));
   }, [search]);
 
-  const { items } = customerHooks.useGetCustomers(params);
+  const { data, fetchNextPage, hasNextPage } = customerHooks.useGetCustomersInfinite(params);
+
+  const items = (data?.pages.flatMap((page) => page?.data?.items) || []).filter(
+    (item): item is Customer => item !== undefined,
+  );
 
   useEffect(() => {
     if (value && !isEmptyObject(value) && 'id' in value) {
-      const customer = items.find((item) => item.id === value.id) || null;
+      const customer = items.find((item) => item?.id === value.id) || null;
       setSelectedCustomer(customer);
     } else {
       setSelectedCustomer(null);
@@ -101,6 +105,8 @@ export function CustomerSelect({ value, onChange, error }: Props) {
         onAddClick={addClientFields}
         searchMode={isEmptyObject(value)}
         error={error?.message}
+        hasMore={hasNextPage}
+        fetchNextPage={fetchNextPage}
       />
       {isCustomerValues(value) && (
         <div className='grid gap-3'>
