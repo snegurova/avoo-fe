@@ -31,7 +31,11 @@ export default function CheckboxesList(props: Props) {
               <FormControlLabel
                 control={
                   <Checkbox
-                    checked={!values[index] || values[index]?.length >= (option.items?.length || 0)}
+                    checked={
+                      !Array.isArray(values[index]) ||
+                      (Array.isArray(values[index]) &&
+                        values[index].length >= (option.items?.length || 0))
+                    }
                     onChange={option.handler}
                     size='small'
                   />
@@ -44,7 +48,10 @@ export default function CheckboxesList(props: Props) {
                     <FormControlLabel
                       control={
                         <Checkbox
-                          checked={!values[index] || values[index]?.includes(item.id || '')}
+                          checked={
+                            !values[index] ||
+                            (Array.isArray(values[index]) && values[index].includes(item.id || ''))
+                          }
                           onChange={item.handler}
                           size='small'
                         />
