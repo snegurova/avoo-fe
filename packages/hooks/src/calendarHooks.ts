@@ -15,8 +15,16 @@ import { queryKeys } from './queryKeys';
 
 export const calendarHooks = {
   useGetCalendar: (params: PrivateCalendarQueryParams, options?: { enabled?: boolean }) => {
-    const { masterIds, view, rangeFromDate, rangeToDate, serviceId, combinationId, orderStatus } =
-      params;
+    const {
+      masterIds,
+      view,
+      rangeFromDate,
+      rangeToDate,
+      serviceId,
+      combinationId,
+      orderStatus,
+      orderIsOutOfSchedule,
+    } = params;
     const memoParams = useMemo<PrivateCalendarQueryParams>(
       () => ({
         masterIds,
@@ -26,8 +34,18 @@ export const calendarHooks = {
         serviceId,
         combinationId,
         orderStatus,
+        orderIsOutOfSchedule,
       }),
-      [masterIds, view, rangeFromDate, rangeToDate, serviceId, combinationId, orderStatus],
+      [
+        masterIds,
+        view,
+        rangeFromDate,
+        rangeToDate,
+        serviceId,
+        combinationId,
+        orderStatus,
+        orderIsOutOfSchedule,
+      ],
     );
 
     const {
@@ -56,6 +74,7 @@ export const calendarHooks = {
     serviceId,
     combinationId,
     orderStatus,
+    orderIsOutOfSchedule,
   }: PrivateCalendarQueryParams) => {
     const memoParams = useMemo<PrivateCalendarByDatesQueryParams>(
       () => ({
@@ -66,8 +85,18 @@ export const calendarHooks = {
         serviceId,
         combinationId,
         orderStatus,
+        orderIsOutOfSchedule,
       }),
-      [masterIds, view, rangeFromDate, rangeToDate, serviceId, combinationId, orderStatus],
+      [
+        masterIds,
+        view,
+        rangeFromDate,
+        rangeToDate,
+        serviceId,
+        combinationId,
+        orderStatus,
+        orderIsOutOfSchedule,
+      ],
     );
 
     const {

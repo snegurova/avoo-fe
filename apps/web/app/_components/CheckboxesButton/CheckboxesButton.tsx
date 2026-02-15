@@ -11,7 +11,7 @@ type Props = {
     handler: () => void;
     items?: { label: string | null; id: number | string; handler: () => void }[];
   }[];
-  values: ((string | number)[] | undefined)[];
+  values: ((string | number)[] | boolean | undefined)[];
 };
 
 const selectButton = tv({
@@ -39,7 +39,7 @@ export default function CheckboxesButton(props: Props) {
     values.forEach((val, index) => {
       if (val === undefined) {
         count += options[index].items?.length || 0;
-      } else {
+      } else if (Array.isArray(val)) {
         count += val.length;
       }
     });
@@ -66,7 +66,6 @@ export default function CheckboxesButton(props: Props) {
     <div className='relative' ref={ref}>
       <button className={selectButton()} onClick={toggleOpen}>
         {addCount &&
-          options.length === 1 &&
           (options[0].items?.length ? (
             <span className='w-5 h-5 flex items-center justify-center rounded-full bg-primary-500 text-white text-sm font-medium -mr-1'>
               {counter}

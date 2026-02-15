@@ -67,6 +67,7 @@ export default function Calendar(props: Props) {
   const [toDate, setToDate] = useState<Date>(timeUtils.toDayEnd(new Date()));
   const [masterIds, setMasterIds] = useState<number[] | undefined>(undefined);
   const [statuses, setStatuses] = useState<OrderStatus[] | undefined>(undefined);
+  const [orderIsOutOfSchedule, setOrderIsOutOfSchedule] = useState<boolean | undefined>(undefined);
   const [type, setType] = useState<CalendarViewType>(CalendarViewType.DAY);
   const [params, setParams] = useState<PrivateCalendarQueryParams>({
     rangeFromDate: timeUtils.formatDate(date),
@@ -82,8 +83,9 @@ export default function Calendar(props: Props) {
       rangeToDate: timeUtils.formatDate(toDate),
       masterIds,
       orderStatus: statuses,
+      orderIsOutOfSchedule,
     }));
-  }, [date, toDate, masterIds, statuses]);
+  }, [date, toDate, masterIds, statuses, orderIsOutOfSchedule]);
 
   const scrollToCurrentTime = () => {
     if (
@@ -173,6 +175,8 @@ export default function Calendar(props: Props) {
             setMasterIds={setMasterIds}
             statuses={statuses}
             setStatuses={setStatuses}
+            orderIsOutOfSchedule={orderIsOutOfSchedule}
+            setOrderIsOutOfSchedule={setOrderIsOutOfSchedule}
             isWidget={isWidget}
           />
           <div className={mainContainer({ type, isWeekSingleMasterView })} ref={scrollRef}>

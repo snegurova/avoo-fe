@@ -9,7 +9,7 @@ type Props = {
     handler: () => void;
     items?: { label: string | null; id: number | string; handler: () => void }[];
   }[];
-  values: ((string | number)[] | undefined)[];
+  values: ((string | number)[] | boolean | undefined)[];
 };
 
 const dropdown = tv({
@@ -26,31 +26,43 @@ export default function CheckboxesList(props: Props) {
           key={index}
           className='mb-2 last:mb-0 not-last:border-b not-last:border-b-primary-100 not-last:pb-2 not-last:mb-2'
         >
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={!values[index] || values[index]?.length >= (option.items?.length || 0)}
-                onChange={option.handler}
-                size='small'
+          {option.items && (
+            <>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={!values[index] || values[index]?.length >= (option.items?.length || 0)}
+                    onChange={option.handler}
+                    size='small'
+                  />
+                }
+                label={option.label}
               />
-            }
-            label={option.label}
-          />
-          {option.items &&
-            option.items.map((item, idx) => (
-              <div key={idx} className='pl-6'>
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      checked={!values[index] || values[index]?.includes(item.id || '')}
-                      onChange={item.handler}
-                      size='small'
+              {option.items &&
+                option.items.map((item, idx) => (
+                  <div key={idx} className='pl-6'>
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          checked={!values[index] || values[index]?.includes(item.id || '')}
+                          onChange={item.handler}
+                          size='small'
+                        />
+                      }
+                      label={item.label}
                     />
-                  }
-                  label={item.label}
-                />
-              </div>
-            ))}
+                  </div>
+                ))}
+            </>
+          )}
+          {!option.items && (
+            <FormControlLabel
+              control={
+                <Checkbox checked={!!values[index]} onChange={option.handler} size='small' />
+              }
+              label={option.label}
+            />
+          )}
         </div>
       ))}
     </div>

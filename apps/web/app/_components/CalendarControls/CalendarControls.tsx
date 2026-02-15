@@ -55,6 +55,10 @@ type Props = {
       | undefined
       | ((prev: OrderStatus[] | undefined) => OrderStatus[] | undefined),
   ) => void;
+  orderIsOutOfSchedule: boolean | undefined;
+  setOrderIsOutOfSchedule: (
+    value: boolean | undefined | ((prev: boolean | undefined) => boolean | undefined),
+  ) => void;
   isWidget?: boolean;
 };
 
@@ -87,6 +91,8 @@ export default function CalendarControls(props: Props) {
     setMasterIds,
     statuses,
     setStatuses,
+    orderIsOutOfSchedule,
+    setOrderIsOutOfSchedule,
     isWidget,
   } = props;
 
@@ -310,6 +316,22 @@ export default function CalendarControls(props: Props) {
     [masters],
   );
 
+  const outOfCheduleOptions = useMemo(
+    () => ({
+      label: 'Only out of schedule',
+      handler: () => {
+        setOrderIsOutOfSchedule((prev) => {
+          if (prev === undefined) {
+            return true;
+          } else {
+            return undefined;
+          }
+        });
+      },
+    }),
+    [],
+  );
+
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <div className='bg-primary-50 px-4 py-3 flex gap-3 relative'>
@@ -357,16 +379,16 @@ export default function CalendarControls(props: Props) {
             <CheckboxesButton
               addCount
               label='Statuses'
-              options={[statusesOptions]}
-              values={[statuses]}
+              options={[statusesOptions, outOfCheduleOptions]}
+              values={[statuses, orderIsOutOfSchedule]}
             />
           </>
         ) : (
           <div className='absolute right-4 bottom-[calc(100%+26px)] translate-y-1/2 z-11'>
             <CheckboxesButton
               label='Options'
-              options={[mastersOptions, statusesOptions]}
-              values={[masterIds, statuses]}
+              options={[mastersOptions, statusesOptions, outOfCheduleOptions]}
+              values={[masterIds, statuses, orderIsOutOfSchedule]}
             />
           </div>
         )}
