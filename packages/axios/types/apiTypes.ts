@@ -148,6 +148,21 @@ export type PrivateCalendarQueryParams = Omit<
   'view'
 > & { view?: CalendarView };
 
+/** Exceptions (Time off) */
+export type Exception = components['schemas']['CalendarExceptionEntity'];
+
+export type CreateExceptionRequest = components['schemas']['CreateCalendarExceptionDto'];
+
+export type GetExceptionsResponse = {
+  items: components['schemas']['CalendarExceptionEntity'][];
+  pagination: components['schemas']['PaginationDto'];
+};
+
+export type CreateExceptionResponse = components['schemas']['CalendarExceptionEntity'][];
+
+export type GetExceptionsQueryParams =
+  operations['CalendarController_findAll']['parameters']['query'];
+
 /** File types - re-exported from @avoo/shared for backward compatibility */
 export type { FileInput, UploadFile } from '@avoo/shared';
 

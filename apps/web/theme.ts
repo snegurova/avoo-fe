@@ -303,11 +303,16 @@ const theme = createTheme({
     },
     MuiFormControl: {
       styleOverrides: {
-        root: {
+        root: () => ({
           '& label + .MuiInputBase-root': {
             marginTop: '4px',
           },
-        },
+          '& .MuiOutlinedInput-root': {
+            '& .MuiOutlinedInput-notchedOutline': { borderColor: colors.gray[200] },
+            '&:hover .MuiOutlinedInput-notchedOutline': { borderColor: colors.gray[200] },
+            '&.Mui-focused .MuiOutlinedInput-notchedOutline': { borderColor: colors.primary[500] },
+          },
+        }),
       },
     },
     MuiInputBase: {

@@ -1,5 +1,5 @@
 export const VALUE_DATE_FORMAT = 'YYYY-MM-DD';
-export const DATE_DISPLAY_FORMAT = 'ddd DD MMM YYYY';
+export const DATE_DISPLAY_FORMAT = 'MMMM D, YYYY';
 export const TIME_FORMAT = 'HH:mm';
 export const DATE_PICKER_FORMAT = 'DD MMM YYYY';
 export const DATE_TIME_FORMAT = 'YYYY-MM-DDTHH:mm:ss';

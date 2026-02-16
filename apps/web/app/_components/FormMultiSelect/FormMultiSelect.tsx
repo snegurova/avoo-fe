@@ -52,7 +52,7 @@ export const FormMultiSelect = (props: Props) => {
 
   return (
     <div className={className}>
-      <FormControl size={size} fullWidth sx={{ mt: 2 }} disabled={disabled}>
+      <FormControl size={size} fullWidth disabled={disabled}>
         <InputLabel id={`multiple-${name}-label`}>{label}</InputLabel>
         <Select
           labelId={`multiple-${name}-label`}
@@ -64,7 +64,7 @@ export const FormMultiSelect = (props: Props) => {
           renderValue={() => selectLabelsValue}
         >
           {options.map((option) => (
-            <MenuItem key={option.label} value={option.value}>
+            <MenuItem key={option.value} value={option.value}>
               <Checkbox checked={selected.includes(option.value)} />
               <ListItemText primary={option.label} />
             </MenuItem>

@@ -4,6 +4,7 @@ import {
   PrivateOrderQueryParams,
   GetCustomersQueryParams,
   GetMastersQueryParams,
+  GetExceptionsQueryParams,
 } from '@avoo/axios/types/apiTypes';
 
 export const queryKeys = {
@@ -40,6 +41,10 @@ export const queryKeys = {
     all: ['monthCalendar'] as const,
     byParams: (params: PrivateCalendarQueryParams) =>
       [...queryKeys.monthCalendar.all, params] as const,
+  },
+  exceptions: {
+    all: ['exceptions'] as const,
+    byParams: (params: GetExceptionsQueryParams) => [...queryKeys.exceptions.all, params] as const,
   },
   orders: {
     all: ['orders'] as const,
