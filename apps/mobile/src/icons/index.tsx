@@ -13,4 +13,5 @@ export { ViewDayIcon } from './ViewDayIcon';
 export { ViewWeekIcon } from './ViewWeekIcon';
 export { EditIcon } from './EditIcon';
 export { PersonIcon } from './PersonIcon';
+export { SettingsIcon } from './SettingsIcon';
 

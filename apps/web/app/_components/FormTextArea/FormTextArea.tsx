@@ -2,7 +2,7 @@ import React, { forwardRef, TextareaHTMLAttributes } from 'react';
 import { tv } from 'tailwind-variants';
 
 const textarea = tv({
-  base: 'block w-full rounded-lg border p-3 text-gray-900 focus:outline-none focus-within:[border-color:var(--color-primary-700)] text-sm',
+  base: 'block w-full rounded-lg border p-2 text-gray-900 focus:outline-none focus:ring-1 focus:ring-purple-800 text-sm',
   variants: {
     error: {
       true: 'border-red-500',
@@ -37,6 +37,7 @@ type Props = Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, 'className'> & {
     helper?: string;
     error?: string;
   };
+  textareaClassAppend?: string;
 };
 
 const FormTextarea = forwardRef<HTMLTextAreaElement, Props>((props, ref) => {
@@ -48,6 +49,7 @@ const FormTextarea = forwardRef<HTMLTextAreaElement, Props>((props, ref) => {
     error,
     classNames,
     value,
+    textareaClassAppend,
     ...rest
   } = props;
 
@@ -55,9 +57,10 @@ const FormTextarea = forwardRef<HTMLTextAreaElement, Props>((props, ref) => {
   const valStr = String(value ?? '');
   const length = valStr.length;
 
-  const textareaClassName = classNames?.textarea
+  const textareaClassNameBase = classNames?.textarea
     ? classNames.textarea
     : textarea({ error: hasError });
+  const textareaClassName = `${textareaClassNameBase} ${textareaClassAppend ?? ''}`.trim();
 
   const containerClassName = classNames?.container || container();
   const headerClassName = classNames?.header || header();

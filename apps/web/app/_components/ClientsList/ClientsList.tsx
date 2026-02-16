@@ -5,22 +5,22 @@ import { IconButton } from '@/_components/IconButton/IconButton';
 import ArrowDownIcon from '@/_icons/ArrowDownIcon';
 import ArrowUpIcon from '@/_icons/ArrowUpIcon';
 import { customerHooks } from '@avoo/hooks';
-import type { CustomerInfoResponse, GetCustomersResponse} from '@avoo/axios/types/apiTypes';
+import type { CustomerInfoResponse, GetCustomersResponse } from '@avoo/axios/types/apiTypes';
 import { sortByName, SortDirection } from '@avoo/shared';
 import ClientListItem from '@/_components/ClientListItem/ClientListItem';
 
-
 type Props = {
-  onEdit: (id: number) => void;
+  onEdit: (client: CustomerInfoResponse) => void;
   customers?: CustomerInfoResponse[] | GetCustomersResponse | null;
+  selectedId?: number | null;
 };
 
-export const ClientsList: React.FC<Props> = ({ onEdit, customers: customersProp }) => {
+export const ClientsList: React.FC<Props> = ({ onEdit, customers: customersProp, selectedId }) => {
   const customersFromHook = customerHooks.useGetCustomers();
   const customersSource = customersProp ?? customersFromHook;
   const items: CustomerInfoResponse[] = Array.isArray(customersSource)
     ? customersSource
-    : customersSource?.items ?? [];
+    : (customersSource?.items ?? []);
   const [sortDirection, setSortDirection] = useState<SortDirection>(null);
 
   const sorted = useMemo(() => sortByName(items ?? [], sortDirection), [items, sortDirection]);
@@ -30,7 +30,7 @@ export const ClientsList: React.FC<Props> = ({ onEdit, customers: customersProp 
 
   return (
     <div>
-      <div className='hidden lg:flex items-center gap-3 px-8 py-3 mb-8 text-sm text-black font-semibold bg-primary-50'>
+      <div className='hidden lg:flex items-center gap-3 px-8 py-3 text-sm text-black font-semibold bg-primary-50'>
         <div className='w-1/4'>
           <div className='flex items-center gap-4 pl-2.5'>
             <span>Client name</span>
@@ -57,7 +57,12 @@ export const ClientsList: React.FC<Props> = ({ onEdit, customers: customersProp 
 
       <div className='flex flex-col gap-4 lg:gap-0'>
         {sorted.map((client) => (
-          <ClientListItem key={client.id} client={client} onEdit={onEdit} />
+          <ClientListItem
+            key={client.id}
+            client={client}
+            onEdit={onEdit}
+            isSelected={client.id === selectedId}
+          />
         ))}
       </div>
     </div>
