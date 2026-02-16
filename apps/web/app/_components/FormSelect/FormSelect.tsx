@@ -15,6 +15,7 @@ export type Props = {
   defaultValue?: string;
   placeholder?: string;
   disabled?: boolean;
+  required?: boolean;
   error?: string | boolean;
   size?: 'small' | 'medium';
   onChange: (value: string) => void;
@@ -28,6 +29,7 @@ export function FormSelect(props: Props) {
     options,
     value,
     disabled = false,
+    required = false,
     error,
     size = 'small',
     onChange,
@@ -41,8 +43,10 @@ export function FormSelect(props: Props) {
   );
 
   return (
-    <FormControl size={size} fullWidth sx={{ mt: 2 }} disabled={disabled}>
-      <InputLabel id={`${name}-select-label`}>{label}</InputLabel>
+    <FormControl size={size} fullWidth disabled={disabled} error={!!error}>
+      <InputLabel id={`${name}-select-label`} required={required}>
+        {label}
+      </InputLabel>
       <Select
         labelId={`${name}-select-label`}
         id={id ?? `${name}-select`}

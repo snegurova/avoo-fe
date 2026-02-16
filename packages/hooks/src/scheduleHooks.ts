@@ -13,14 +13,14 @@ import {
   ScheduleUpdateResponse,
 } from '@avoo/axios/types/apiTypes';
 import { ApiStatus } from '@avoo/hooks/types/apiTypes';
+import { timeUtils } from '@avoo/shared';
+import { END_MINUTE, START_MINUTE } from '@avoo/constants/src/calendar';
 import {
   scheduleUpdateSchema,
   ScheduleUpdateFormData,
   ScheduleCreateFormData,
   scheduleCreateSchema,
 } from '../schemas/schedulesValidationSchemas';
-import { timeUtils } from '@avoo/shared';
-import { END_MINUTE, START_MINUTE } from '@avoo/constants/src/calendar';
 
 const DEFAULT_LIMIT = 10;
 
@@ -91,7 +91,7 @@ export const scheduleHooks = {
       resolver: yupResolver(scheduleCreateSchema),
       mode: 'onSubmit',
       defaultValues: {
-        name: 'Default working schedule',
+        name: 'Working schedule',
         pattern: 7,
         patternType: 'weekly',
         mastersIds: [],

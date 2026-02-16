@@ -252,6 +252,7 @@ const theme = createTheme({
             size: 'small',
             fullWidth: true,
           },
+          openPickerIcon: { className: 'fill-gray-800 w-4 h-4' },
         },
       },
     },
@@ -266,7 +267,11 @@ const theme = createTheme({
         },
       },
     },
-
+    MuiTextField: {
+      defaultProps: {
+        InputLabelProps: { shrink: true },
+      },
+    },
     MuiPickersTextField: {
       styleOverrides: {
         root: {
@@ -279,6 +284,10 @@ const theme = createTheme({
 
           '& .MuiPickersOutlinedInput-notchedOutline': {
             borderColor: colors.gray[200],
+            '& legend': {
+              display: 'none',
+            },
+            top: 0,
           },
           '& .MuiPickersInputBase-root:hover .MuiPickersOutlinedInput-notchedOutline': {
             borderColor: colors.gray[200],
@@ -303,14 +312,8 @@ const theme = createTheme({
           },
         },
       },
-    },
-    MuiFormControl: {
-      styleOverrides: {
-        root: {
-          '& label + .MuiInputBase-root': {
-            marginTop: '4px',
-          },
-        },
+      defaultProps: {
+        InputLabelProps: { shrink: true },
       },
     },
     MuiInputBase: {
@@ -361,6 +364,29 @@ const theme = createTheme({
       },
     },
     MuiButton: {
+      variants: [
+        {
+          props: { variant: 'chip' },
+          style: {
+            borderRadius: '18px',
+            textTransform: 'none',
+            padding: '5px 12px',
+            minHeight: 26,
+            minWidth: 68,
+            backgroundColor: colors.white,
+            color: colors.gray[500],
+            border: `1px solid ${colors.gray[200]}`,
+            fontSize: '12px',
+            lineHeight: '14px',
+            letterSpacing: '0',
+            fontWeight: typography.fontWeight.regular,
+            '&:hover': {
+              backgroundColor: colors.gray[100],
+              borderColor: colors.gray[200],
+            },
+          },
+        },
+      ],
       styleOverrides: {
         root: ({
           theme,
@@ -372,11 +398,13 @@ const theme = createTheme({
           '.confirmation-modal &': {
             minWidth: 'auto',
           },
-          minHeight: 44,
-          minWidth: 130,
-          [theme.breakpoints.up('md')]: {
-            minWidth: 170,
-          },
+          ...(ownerState?.variant !== 'chip' && {
+            minHeight: 44,
+            minWidth: 130,
+            [theme.breakpoints.up('md')]: {
+              minWidth: 170,
+            },
+          }),
           ...(ownerState?.variant === 'outlined' &&
             ownerState?.color === 'primary' && {
               color: colors.primary[700],
@@ -401,7 +429,6 @@ const theme = createTheme({
           padding: 0,
           display: 'inline-flex',
           alignItems: 'center',
-          overflow: 'visible',
         },
         switchBase: () => ({
           padding: (TRACK_H - KNOB) / 2,
@@ -469,10 +496,26 @@ const theme = createTheme({
         }),
       },
     },
+    MuiInputLabel: {
+      styleOverrides: {
+        root: {
+          position: 'relative',
+          transform: 'none',
+          marginBottom: '4px',
+          fontSize: '14px',
+          fontWeight: 500,
+          color: 'inherit',
+          '&.Mui-focused': {
+            color: 'primary.main',
+          },
+        },
+      },
+    },
     MuiOutlinedInput: {
       styleOverrides: {
         root: ({ ownerState }) => ({
           borderRadius: radius.md,
+          marginTop: '0px',
           ...(ownerState?.multiline
             ? {
                 alignItems: 'stretch',
@@ -481,6 +524,12 @@ const theme = createTheme({
                 height: 44,
               }),
         }),
+        notchedOutline: {
+          '& legend': {
+            display: 'none',
+          },
+          top: 0,
+        },
       },
     },
     MuiMenu: {

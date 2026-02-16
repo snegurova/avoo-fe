@@ -1,32 +1,30 @@
 import React, { useEffect } from 'react';
 import { Controller, useFieldArray } from 'react-hook-form';
-import dayjs from 'dayjs';
 import { masterHooks, scheduleHooks } from '@avoo/hooks';
 import { FormSelect } from '../FormSelect/FormSelect';
 import { FormMultiSelect } from '../FormMultiSelect/FormMultiSelect';
-import { DateSelect } from '../DateSelect/DateSelect';
-import FormInput from '../FormInput/FormInput';
 import { getAllErrorMessages } from '@/_utils/formError';
 import { WorkingDayRow } from '../WorkingDayRow/WorkingDayRow';
-import { Button } from '@mui/material';
+import { Button, TextField } from '@mui/material';
 import { useToast } from '@/_hooks/useToast';
 import { END_MINUTE, SCHEDULE_OPTIONS, START_MINUTE } from '@avoo/constants/src/calendar';
 import { timeUtils } from '@avoo/shared';
+import FormDatePicker from '../FormDatePicker/FormDatePicker';
+import { VALUE_DATE_FORMAT } from '@/_constants/dateFormats';
 
 export const ScheduleAddForm = () => {
   const toast = useToast();
 
-  const { control, register, handleSubmit, setValue, watch, errors } =
-    scheduleHooks.useCreateScheduleForm({
-      onSuccess: () => {
-        toast.success('Schedule added successfully');
-      },
-      onError: (error) => {
-        toast.error(`Schedule add failed: ${error.message}`);
-      },
-    });
+  const { control, handleSubmit, setValue, watch, errors } = scheduleHooks.useCreateScheduleForm({
+    onSuccess: () => {
+      toast.success('Schedule added successfully');
+    },
+    onError: (error) => {
+      toast.error(`Schedule add failed: ${error.message}`);
+    },
+  });
 
-  const { fields, replace, append } = useFieldArray({
+  const { fields, replace, append, remove } = useFieldArray({
     control,
     name: 'workingHours',
   });
@@ -68,17 +66,36 @@ export const ScheduleAddForm = () => {
       breaks: [],
     };
     append(newDay);
+    setValue('pattern', fields.length + 1);
   };
 
   const errorsList = getAllErrorMessages(errors);
 
   return (
     <>
-      <form id='create-new-schedule' className='space-y-6 mt-8' onSubmit={handleSubmit}>
-        <div className='grid grid-cols-1 lg:grid-cols-[1.2fr_2fr] gap-4 relative'>
+      <form
+        id='create-new-schedule'
+        className='space-y-6 mt-8 overflow-y-auto'
+        onSubmit={handleSubmit}
+      >
+        <div className='grid grid-cols-1 lg:grid-cols-[1.2fr_2fr] gap-4'>
           <div className='lg:overflow-visible lg:border lg:border-gray-200 lg:gap-0 lg:rounded-lg lg:p-4 lg:overflow-x-hidden lg:h-max'>
             <div className='flex flex-col gap-4'>
-              <FormInput {...register('name')} label='Name' />
+              <Controller
+                name='name'
+                control={control}
+                render={({ field }) => (
+                  <TextField
+                    {...field}
+                    required
+                    fullWidth
+                    value={field.value ?? ''}
+                    label='Name'
+                    error={!!errors.name}
+                    helperText={errors.name?.message}
+                  />
+                )}
+              />
 
               <Controller
                 name='patternType'
@@ -86,13 +103,14 @@ export const ScheduleAddForm = () => {
                 defaultValue='weekly'
                 render={({ field }) => (
                   <FormSelect
+                    error={!!errors.patternType}
                     name='patternType'
                     label='Type'
+                    required
                     options={SCHEDULE_OPTIONS}
                     value={field.value}
                     onChange={(value) => {
                       field.onChange(value);
-
                       const selectedOption = SCHEDULE_OPTIONS.find(
                         (option) => option.value === value,
                       );
@@ -109,6 +127,8 @@ export const ScheduleAddForm = () => {
                 control={control}
                 render={({ field }) => (
                   <FormMultiSelect
+                    error={!!errors.mastersIds}
+                    required
                     name='mastersIds'
                     label='Apply to'
                     options={mastersOptions}
@@ -123,10 +143,12 @@ export const ScheduleAddForm = () => {
                 control={control}
                 defaultValue={timeUtils.getNextMonday(new Date())}
                 render={({ field }) => (
-                  <DateSelect
-                    name='startAt'
+                  <FormDatePicker
+                    error={errors.startAt?.message}
                     label='Start date'
-                    value={dayjs(field.value)}
+                    valueFormat={VALUE_DATE_FORMAT}
+                    required
+                    date={field.value}
                     onChange={(value) => field.onChange(value)}
                   />
                 )}
@@ -135,20 +157,28 @@ export const ScheduleAddForm = () => {
                 name='endAt'
                 control={control}
                 render={({ field }) => (
-                  <DateSelect
-                    name='startAt'
+                  <FormDatePicker
+                    error={errors.endAt?.message}
                     label='End date'
-                    value={field.value ? dayjs(field.value) : null}
+                    valueFormat={VALUE_DATE_FORMAT}
+                    date={field.value}
                     onChange={(value) => field.onChange(value)}
                   />
                 )}
               />
             </div>
+            {errorsList.length > 0 && (
+              <div className='text-red-600 text-sm space-y-1'>
+                {errorsList.map((msg, idx) => (
+                  <p key={idx}>{msg}</p>
+                ))}
+              </div>
+            )}
           </div>
 
-          <div className='border border-gray-200'>
+          <div>
             <p className='mb-8 font-medium'>Schedule {scheduleType}</p>
-            <div className='flex flex-col'>
+            <div className='flex flex-col gap-4'>
               {fields.map((field, index) => (
                 <WorkingDayRow
                   key={field.id}
@@ -157,6 +187,8 @@ export const ScheduleAddForm = () => {
                   watch={watch}
                   scheduleType={scheduleType}
                   setValue={setValue}
+                  onRemove={() => remove(index)}
+                  disabledRemove={index === 0 && fields.length === 1}
                 />
               ))}
               {scheduleType === 'custom' && (
@@ -167,14 +199,6 @@ export const ScheduleAddForm = () => {
             </div>
           </div>
         </div>
-
-        {errorsList.length > 0 && (
-          <div className='text-red-600 text-sm space-y-1'>
-            {errorsList.map((msg, idx) => (
-              <p key={idx}>{msg}</p>
-            ))}
-          </div>
-        )}
       </form>
       <section id='create-new-schedule-controls'>
         <div className='w-full flex gap-8 justify-end p-8'>

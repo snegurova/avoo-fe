@@ -1,4 +1,4 @@
-import { Switch, Typography } from '@mui/material';
+import { Button, Switch, Typography } from '@mui/material';
 import {
   Control,
   Controller,
@@ -31,10 +31,12 @@ type Props = {
   watch: UseFormWatch<ScheduleCreateFormData>;
   setValue: UseFormSetValue<ScheduleCreateFormData>;
   scheduleType?: string;
+  onRemove?: (index: number) => void;
+  disabledRemove?: boolean;
 };
 
 export const WorkingDayRow = (props: Props) => {
-  const { index, control, watch, setValue, scheduleType } = props;
+  const { index, control, watch, setValue, scheduleType, onRemove, disabledRemove } = props;
 
   const enabled = useWatch({
     control,
@@ -91,9 +93,21 @@ export const WorkingDayRow = (props: Props) => {
     <>
       <div className='border border-gray-200 rounded-lg'>
         <div className={cardDayVariant({ enabled })}>
-          <Typography variant='h4'>
-            {scheduleType === 'weekly' ? DAYS_NAME[dayField - 1] : `Day ${dayField}`}
-          </Typography>
+          <div className='flex justify-start items-center gap-2'>
+            <Typography variant='h4'>
+              {scheduleType === 'weekly' ? DAYS_NAME[dayField - 1] : `Day ${index + 1}`}
+            </Typography>
+            {scheduleType === 'custom' && (
+              <Button
+                variant='chip'
+                size='small'
+                onClick={() => onRemove?.(index)}
+                disabled={disabledRemove}
+              >
+                Remove
+              </Button>
+            )}
+          </div>
 
           <div className='flex justify-end items-center'>
             <Controller
@@ -101,14 +115,14 @@ export const WorkingDayRow = (props: Props) => {
               control={control}
               defaultValue={true}
               render={({ field }) => (
-                <>
+                <div className='flex items-center gap-2'>
                   <Typography variant='body2'>{field.value ? 'Working day' : 'Day off'}</Typography>
                   <Switch
                     value={field.value}
                     checked={field.value}
                     onChange={(e) => onChangeChecked(e, field, index)}
                   />
-                </>
+                </div>
               )}
             />
           </div>
