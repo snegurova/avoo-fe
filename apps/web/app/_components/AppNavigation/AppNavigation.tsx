@@ -148,7 +148,7 @@ export default function AppNavigation({ menuOpen, setMenuOpen }: Props) {
                         </div>
 
                         {calendarOpen && (
-                          <ul className='flex flex-col font-weight-300'>
+                          <ul className='flex flex-col font-light text-sm'>
                             <li>
                               <button
                                 type='button'
