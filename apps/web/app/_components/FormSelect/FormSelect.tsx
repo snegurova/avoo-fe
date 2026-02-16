@@ -21,7 +21,7 @@ export type Props = {
   onChange: (value: string) => void;
 };
 
-export function FormSelect(props: Props) {
+export const FormSelect = (props: Props) => {
   const {
     id,
     name,
@@ -63,4 +63,4 @@ export function FormSelect(props: Props) {
       {error && <p className='text-sm text-red-600'>{error}</p>}
     </FormControl>
   );
-}
+};
