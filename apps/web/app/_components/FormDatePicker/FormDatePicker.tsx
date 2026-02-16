@@ -40,10 +40,11 @@ export default function FormDatePicker(props: Props) {
             required,
             error: isError,
             sx: {
+              '& span': {
+                fontSize: 16,
+              },
               '& .MuiPickersInputBase-root': {
-                borderRadius: '8px',
-                paddingLeft: 14,
-                paddingRight: 14,
+                borderRadius: 1,
                 minHeight: 44,
               },
             },
