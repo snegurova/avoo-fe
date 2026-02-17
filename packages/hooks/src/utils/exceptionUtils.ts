@@ -80,7 +80,7 @@ export const formValuesToPayload = (
   data: ExceptionFormData,
   masters?: MasterInfo[],
 ): CreateExceptionRequest => {
-  const isWholeDay = data.wholeDay === 'whole';
+  const isWholeDay = data.wholeDay === WholeDay.Whole;
 
   return {
     masterIds: normalizeMasterIds(data.staff, masters),

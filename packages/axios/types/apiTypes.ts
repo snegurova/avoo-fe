@@ -84,7 +84,7 @@ export type GetCustomersResponse = {
   pagination: components['schemas']['PaginationDto'];
 };
 export type GetCustomersQueryParams =
-  operations['CustomersController_findAll']['parameters']['query'];
+  operations['CustomersController_findAllByOwner']['parameters']['query'];
 export type Customer = components['schemas']['CustomerInfoDto'];
 
 /** Schedule */
@@ -161,7 +161,7 @@ export type GetExceptionsResponse = {
 export type CreateExceptionResponse = components['schemas']['CalendarExceptionEntity'][];
 
 export type GetExceptionsQueryParams =
-  operations['CalendarController_findAll']['parameters']['query'];
+  operations['CalendarExceptionsController_findAll']['parameters']['query'];
 
 /** File types - re-exported from @avoo/shared for backward compatibility */
 export type { FileInput, UploadFile } from '@avoo/shared';

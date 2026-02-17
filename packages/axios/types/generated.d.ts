@@ -644,38 +644,6 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/calendar/exceptions": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["CalendarController_findAll"];
-        put?: never;
-        post: operations["CalendarController_createException"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/calendar/exceptions/{id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post?: never;
-        delete: operations["CalendarController_deleteException"];
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/calendar/by-dates": {
         parameters: {
             query?: never;
@@ -852,6 +820,38 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/calendar-exceptions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["CalendarExceptionsController_findAll"];
+        put?: never;
+        post: operations["CalendarExceptionsController_createException"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/calendar-exceptions/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete: operations["CalendarExceptionsController_deleteException"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/posts": {
         parameters: {
             query?: never;
@@ -971,6 +971,7 @@ export interface components {
             isActive: boolean;
             services: components["schemas"]["ServiceEntity"];
             masters: components["schemas"]["MasterEntity"];
+            userId: number;
         };
         ServiceEntity: {
             id: number;
@@ -1415,6 +1416,11 @@ export interface components {
              */
             durationMinutes: number;
             /**
+             * @description Is the combination active
+             * @default true
+             */
+            isActive: boolean;
+            /**
              * @description Service IDs included in the combination
              * @example [
              *       1,
@@ -1770,61 +1776,6 @@ export interface components {
              * @example true
              */
             orderIsOutOfSchedule?: boolean;
-        };
-        CalendarExceptionEntity: {
-            id: number;
-            userId: number;
-            masterId: number | null;
-            /** Format: date-time */
-            dateFrom: string;
-            /** Format: date-time */
-            dateTo: string;
-            /** @enum {string} */
-            type: "SICK_LEAVE" | "VACATION" | "PERSONAL_OFF" | "HOLIDAY_OFF" | "OTHER_OFF" | "PERSONAL_WORKING" | "HOLIDAY_WORKING" | "VACATION_WORKING" | "OTHER_WORKING";
-            startTimeMinutes: number;
-            endTimeMinutes: number;
-            note: string | null;
-        };
-        CreateCalendarExceptionDto: {
-            /**
-             * @description Master IDs
-             * @example [
-             *       1
-             *     ]
-             */
-            masterIds?: number[];
-            /**
-             * Format: date-time
-             * @description Range from date, UTC instant of a local midnight
-             * @example 2026-01-05T23:00:00Z
-             */
-            dateFrom: string;
-            /**
-             * Format: date-time
-             * @description Range to date, UTC instant of a local midnight
-             * @example 2026-01-06T23:00:00Z
-             */
-            dateTo: string;
-            /**
-             * @description Type of exception
-             * @enum {string}
-             */
-            type: "SICK_LEAVE" | "VACATION" | "PERSONAL_OFF" | "HOLIDAY_OFF" | "OTHER_OFF" | "PERSONAL_WORKING" | "HOLIDAY_WORKING" | "VACATION_WORKING" | "OTHER_WORKING";
-            /**
-             * @description Start time of exception in minutes
-             * @example 540
-             */
-            startTimeMinutes: number;
-            /**
-             * @description End time of exception in minutes
-             * @example 1080
-             */
-            endTimeMinutes: number;
-            /**
-             * @description Note
-             * @example Need to rest
-             */
-            note?: string;
         };
         PrivateEventWithMasterDto: {
             /** @example 101 */
@@ -2266,6 +2217,61 @@ export interface components {
              */
             notes?: string;
             isNotificationEnable?: boolean;
+        };
+        CalendarExceptionEntity: {
+            id: number;
+            userId: number;
+            masterId: number | null;
+            /** Format: date-time */
+            dateFrom: string;
+            /** Format: date-time */
+            dateTo: string;
+            /** @enum {string} */
+            type: "SICK_LEAVE" | "VACATION" | "PERSONAL_OFF" | "HOLIDAY_OFF" | "OTHER_OFF" | "PERSONAL_WORKING" | "HOLIDAY_WORKING" | "VACATION_WORKING" | "OTHER_WORKING";
+            startTimeMinutes: number;
+            endTimeMinutes: number;
+            note: string | null;
+        };
+        CreateCalendarExceptionDto: {
+            /**
+             * @description Master IDs
+             * @example [
+             *       1
+             *     ]
+             */
+            masterIds?: number[];
+            /**
+             * Format: date-time
+             * @description Range from date, UTC instant of a local midnight
+             * @example 2026-01-05T23:00:00Z
+             */
+            dateFrom: string;
+            /**
+             * Format: date-time
+             * @description Range to date, UTC instant of a local midnight
+             * @example 2026-01-06T23:00:00Z
+             */
+            dateTo: string;
+            /**
+             * @description Type of exception
+             * @enum {string}
+             */
+            type: "SICK_LEAVE" | "VACATION" | "PERSONAL_OFF" | "HOLIDAY_OFF" | "OTHER_OFF" | "PERSONAL_WORKING" | "HOLIDAY_WORKING" | "VACATION_WORKING" | "OTHER_WORKING";
+            /**
+             * @description Start time of exception in minutes
+             * @example 540
+             */
+            startTimeMinutes: number;
+            /**
+             * @description End time of exception in minutes
+             * @example 1080
+             */
+            endTimeMinutes: number;
+            /**
+             * @description Note
+             * @example Need to rest
+             */
+            note?: string;
         };
         PostEntity: {
             id: number;
@@ -4373,113 +4379,6 @@ export interface operations {
             };
         };
     };
-    CalendarController_findAll: {
-        parameters: {
-            query?: {
-                /** @description Page number */
-                page?: number;
-                /** @description Items per page */
-                limit?: number;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Calendar exception entities */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["SuccessResponseDto"] & {
-                        data?: {
-                            items?: components["schemas"]["CalendarExceptionEntity"][];
-                            pagination?: components["schemas"]["PaginationDto"];
-                        };
-                    };
-                };
-            };
-            /** @description Bad Request */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-        };
-    };
-    CalendarController_createException: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["CreateCalendarExceptionDto"];
-            };
-        };
-        responses: {
-            /** @description Calendar exception entities */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["SuccessResponseDto"] & {
-                        data?: components["schemas"]["CalendarExceptionEntity"][];
-                    };
-                };
-            };
-            /** @description Bad Request */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-        };
-    };
-    CalendarController_deleteException: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Calendar exception entity */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["SuccessResponseDto"] & {
-                        data?: components["schemas"]["CalendarExceptionEntity"];
-                    };
-                };
-            };
-            /** @description Bad Request */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-        };
-    };
     CalendarController_getCalendarByDates: {
         parameters: {
             query: {
@@ -5086,6 +4985,113 @@ export interface operations {
                 content: {
                     "application/json": components["schemas"]["SuccessResponseDto"] & {
                         data?: components["schemas"]["CustomerInfoDto"];
+                    };
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    CalendarExceptionsController_findAll: {
+        parameters: {
+            query?: {
+                /** @description Page number */
+                page?: number;
+                /** @description Items per page */
+                limit?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Calendar exception entities */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SuccessResponseDto"] & {
+                        data?: {
+                            items?: components["schemas"]["CalendarExceptionEntity"][];
+                            pagination?: components["schemas"]["PaginationDto"];
+                        };
+                    };
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    CalendarExceptionsController_createException: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateCalendarExceptionDto"];
+            };
+        };
+        responses: {
+            /** @description Calendar exception entities */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SuccessResponseDto"] & {
+                        data?: components["schemas"]["CalendarExceptionEntity"][];
+                    };
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    CalendarExceptionsController_deleteException: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Calendar exception entity */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SuccessResponseDto"] & {
+                        data?: components["schemas"]["CalendarExceptionEntity"];
                     };
                 };
             };

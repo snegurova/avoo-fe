@@ -8,7 +8,7 @@ import {
 } from '@avoo/axios/types/apiTypes';
 import { apiClient } from '@avoo/axios/src/apiClient';
 
-const EXCEPTIONS_ENDPOINT = '/calendar/exceptions';
+const EXCEPTIONS_ENDPOINT = '/calendar-exceptions';
 
 export const exceptionApi = {
   async getExceptions(params?: GetExceptionsQueryParams) {

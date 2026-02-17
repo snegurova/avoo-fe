@@ -1,6 +1,6 @@
 import { exceptionApi } from '@avoo/axios/src/modules/exception';
 import { queryKeys } from './queryKeys';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient, useInfiniteQuery } from '@tanstack/react-query';
 import { useMemo } from 'react';
 import {
   GetExceptionsQueryParams,
@@ -11,9 +11,14 @@ import {
 } from '@avoo/axios/types/apiTypes';
 import { ApiStatus } from '@avoo/hooks/types/apiTypes';
 import { utils } from '@avoo/hooks/utils/utils';
-import { WholeDay, TimeOffMode } from '@avoo/hooks/types/timeOffType';
+import { WholeDay, TimeOffMode, TimeOffType } from '@avoo/hooks/types/timeOffType';
 import { masterHooks } from './masterHooks';
-import { formValuesToPayload, buildMastersLabel, MasterInfo } from './utils/exceptionUtils';
+import {
+  formValuesToPayload,
+  buildMastersLabel,
+  MasterInfo,
+  ExceptionFormData,
+} from './utils/exceptionUtils';
 import { useForm } from 'react-hook-form';
 import dayjs from 'dayjs';
 import { VALUE_DATE_FORMAT } from '../../../apps/web/app/_constants/dateFormats';
@@ -39,6 +44,27 @@ export const exceptionHooks = {
     return null;
   },
 
+  useGetExceptionsInfinite: (params: GetExceptionsQueryParams = {}) => {
+    const DEFAULT_LIMIT = 10;
+    const { limit = DEFAULT_LIMIT } = params;
+    const filterParams = { ...params, limit };
+
+    const infiniteQuery = useInfiniteQuery<BaseResponse<GetExceptionsResponse>, Error>({
+      queryKey: ['exceptions', 'list', filterParams],
+      queryFn: ({ pageParam = 1 }) =>
+        exceptionApi.getExceptions({ ...filterParams, page: pageParam as number }),
+      initialPageParam: 1,
+      getNextPageParam: (lastPage) => {
+        const { currentPage, total } = lastPage.data?.pagination || { currentPage: 0, total: 0 };
+        return currentPage * limit < total ? currentPage + 1 : undefined;
+      },
+    });
+
+    utils.useSetPendingApi(infiniteQuery.isFetching);
+
+    return infiniteQuery;
+  },
+
   useCreateException: (onSuccess?: () => void) => {
     const queryClient = useQueryClient();
     const { mutate, isPending } = useMutation<
@@ -59,18 +85,6 @@ export const exceptionHooks = {
   },
 
   useCreateExceptionForm: (onSuccess?: (args?: { mastersLabel?: string }) => void) => {
-    type FormValues = {
-      type: string;
-      mode: TimeOffMode;
-      staff: string[];
-      wholeDay: WholeDay;
-      startDate: string;
-      startTime: string;
-      endDate: string;
-      endTime: string;
-      note: string;
-    };
-
     const queryClient = useQueryClient();
 
     const { mutate, isPending } = useMutation<
@@ -94,10 +108,10 @@ export const exceptionHooks = {
       getValues,
       reset,
       formState: { errors },
-    } = useForm<FormValues>({
+    } = useForm<ExceptionFormData>({
       mode: 'onSubmit',
       defaultValues: {
-        type: 'personal',
+        type: TimeOffType.Personal,
         mode: TimeOffMode.TimeOff,
         staff: ['all'],
         wholeDay: WholeDay.Partial,
@@ -109,9 +123,13 @@ export const exceptionHooks = {
       },
     });
 
-    const masters = masterHooks.useGetMastersProfileInfo()?.items as MasterInfo[] | undefined;
+    const mastersResponse = masterHooks.useGetMastersProfileInfo();
+    const masters: MasterInfo[] | undefined = mastersResponse?.items?.map((master) => ({
+      id: master.id,
+      name: master.name,
+    }));
 
-    const submit = (data: FormValues) => {
+    const submit = (data: ExceptionFormData) => {
       const payload = formValuesToPayload(data, masters);
       const mastersLabel = buildMastersLabel(data.staff, masters);
       mutate(payload, {
@@ -124,7 +142,7 @@ export const exceptionHooks = {
 
     return {
       control,
-      handleSubmit: handleSubmit(utils.submitAdapter<FormValues>(submit)),
+      handleSubmit: handleSubmit(utils.submitAdapter<ExceptionFormData>(submit)),
       setValue,
       watch,
       errors,

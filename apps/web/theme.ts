@@ -2,7 +2,7 @@
 import { createTheme } from '@mui/material/styles';
 import { Roboto } from 'next/font/google';
 import type {} from '@mui/x-date-pickers/themeAugmentation';
-import { colors, breakpoints, radius, typography, switchToken } from '@avoo/design-tokens';
+import { colors, breakpoints, radius, typography } from '@avoo/design-tokens';
 import type { Theme } from '@mui/material/styles';
 
 const roboto = Roboto({
@@ -10,8 +10,6 @@ const roboto = Roboto({
   subsets: ['latin'],
   display: 'swap',
 });
-
-const { TRACK_W, TRACK_H, KNOB, MOVE_X } = switchToken;
 
 declare module '@mui/material/IconButton' {
   interface IconButtonPropsVariantOverrides {
@@ -394,62 +392,6 @@ const theme = createTheme({
               color: 'white',
               '&:hover': { backgroundColor: 'grey.500' },
             },
-          }),
-        }),
-      },
-    },
-    MuiSwitch: {
-      styleOverrides: {
-        root: {
-          width: TRACK_W,
-          height: TRACK_H,
-          padding: 0,
-          display: 'inline-flex',
-          alignItems: 'center',
-          overflow: 'visible',
-        },
-        switchBase: () => ({
-          padding: (TRACK_H - KNOB) / 2,
-          '&.Mui-checked': {
-            transform: `translateX(${MOVE_X}px)`,
-            color: colors.white,
-            '& .MuiSwitch-thumb': {
-              backgroundColor: colors.primary[800],
-            },
-            '& + .MuiSwitch-track': {
-              backgroundColor: colors.purple[300],
-              opacity: 1,
-            },
-          },
-          '&.Mui-focusVisible': {
-            boxShadow: `0 0 0 4px ${colors.primary[100]}`,
-          },
-          '&.Mui-disabled': {
-            '& .MuiSwitch-thumb': {
-              boxShadow: 'none',
-            },
-            '& + .MuiSwitch-track': {
-              opacity: 0.6,
-            },
-          },
-        }),
-        thumb: {
-          width: KNOB,
-          height: KNOB,
-          boxShadow: '0 1px 2px rgba(0,0,0,0.08)',
-          backgroundColor: colors.gray[500],
-          margin: 0,
-          display: 'block',
-        },
-        track: ({ theme }: { theme: Theme }) => ({
-          borderRadius: TRACK_H / 2,
-          height: TRACK_H,
-          minHeight: TRACK_H,
-          backgroundColor: colors.gray[200],
-          opacity: 1,
-          boxSizing: 'border-box',
-          transition: theme.transitions.create(['background-color'], {
-            duration: theme.transitions.duration.short,
           }),
         }),
       },

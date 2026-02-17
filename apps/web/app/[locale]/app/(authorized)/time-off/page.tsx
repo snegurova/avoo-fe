@@ -7,14 +7,43 @@ import EditCalendarIcon from '@/_icons/EditCalendarIcon';
 import { appRoutes } from '@/_routes/routes';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useCallback, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
+import { useDebounce } from '@avoo/hooks/src/useDebounce';
 import { Exception } from '@avoo/axios/types/apiTypes';
-import { exceptionHooks } from '@avoo/hooks';
+import { exceptionHooks, masterHooks } from '@avoo/hooks';
 
 export default function TimeOffPage() {
   const [searchQuery, setSearchQuery] = useState('');
-  const exceptionsData = exceptionHooks.useGetExceptions();
-  const items: Exception[] = exceptionsData?.items ?? [];
+  const DEFAULT_LIMIT = 10;
+  const debouncedSearch = useDebounce(searchQuery, 400);
+  const queryParams = useMemo(
+    () => ({ limit: DEFAULT_LIMIT, search: debouncedSearch }),
+    [debouncedSearch],
+  );
+  const { data, fetchNextPage, hasNextPage } = exceptionHooks.useGetExceptionsInfinite(queryParams);
+
+  const exceptions: Exception[] = useMemo(
+    () => data?.pages.flatMap((page) => page.data?.items ?? []) ?? [],
+    [data],
+  );
+  const mastersResponse = masterHooks.useGetMastersProfileInfo({ limit: 500 });
+  const masters = mastersResponse?.items ?? [];
+
+  const filteredMasters = useMemo(() => {
+    if (!masters) return [];
+    const query = (searchQuery ?? '').trim().toLowerCase();
+    if (!query) return masters;
+    return masters.filter((master) => (master.name ?? '').toLowerCase().includes(query));
+  }, [masters, searchQuery]);
+
+  const filteredExceptions = useMemo(() => {
+    const queryNormalized = (searchQuery ?? '').trim();
+    if (!queryNormalized) return exceptions;
+    const masterIds = new Set(filteredMasters.map((master) => master.id));
+    return exceptions.filter(
+      (exception) => exception.masterId != null && masterIds.has(exception.masterId),
+    );
+  }, [exceptions, filteredMasters, searchQuery]);
 
   const router = useRouter();
 
@@ -24,7 +53,7 @@ export default function TimeOffPage() {
 
   return (
     <AppWrapper className='flex-1 min-h-0'>
-      <div className='flex-1 min-h-0 overflow-auto hide-scrollbar p-6'>
+      <div className='flex-1 min-h-0 overflow-auto hide-scrollbar'>
         <Controls
           title='Schedule exception'
           onAddItem={handleAddTimeOff}
@@ -33,24 +62,31 @@ export default function TimeOffPage() {
           onSearchChange={setSearchQuery}
           placeholder='Search by master`s name'
           variant={ControlsVariant.StackedSearch}
+          className='sticky top-0 z-10 bg-white px-6 pt-6 lg:px-11 lg:pt-14'
         />
 
-        {items.length === 0 ? (
-          <AppPlaceholder
-            title='No time off added yet'
-            icon={<EditCalendarIcon className='w-20 h-20 lg:w-25 lg:h-25 fill-primary-300' />}
-            description={
-              <p>
-                <Link href={appRoutes.AddTimeOff} className='text-primary-300 font-bold'>
-                  Add time off
-                </Link>
-                , vacations, breaks, or unavailable hours to keep the schedule accurate.
-              </p>
-            }
-          />
-        ) : (
-          <TimeOffList items={items} />
-        )}
+        <div className='px-11 pb-11'>
+          {filteredExceptions.length === 0 ? (
+            <AppPlaceholder
+              title='No time off added yet'
+              icon={<EditCalendarIcon className='w-20 h-20 lg:w-25 lg:h-25 fill-primary-300' />}
+              description={
+                <p>
+                  <Link href={appRoutes.AddTimeOff} className='text-primary-300 font-bold'>
+                    Add time off
+                  </Link>
+                  , vacations, breaks, or unavailable hours to keep the schedule accurate.
+                </p>
+              }
+            />
+          ) : (
+            <TimeOffList
+              items={filteredExceptions}
+              incrementPage={fetchNextPage}
+              hasMore={!!hasNextPage}
+            />
+          )}
+        </div>
       </div>
     </AppWrapper>
   );

@@ -14,6 +14,13 @@ type Props = {
   onClose: () => void;
 };
 
+type FormValues = {
+  name: string;
+  phone: string;
+  email: string;
+  notes: string;
+};
+
 export const ClientEditModal: React.FC<Props> = ({ id, client, open, onClose }) => {
   const queriedCustomer = customerHooks.useGetCustomerById(id);
   const customer = client ?? queriedCustomer;
@@ -64,11 +71,4 @@ export const ClientEditModal: React.FC<Props> = ({ id, client, open, onClose }) 
       />
     </>
   );
-};
-
-type FormValues = {
-  name: string;
-  phone: string;
-  email: string;
-  notes: string;
 };
