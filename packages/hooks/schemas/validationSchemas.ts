@@ -59,8 +59,9 @@ export const createMasterSchema = yup.object({
   email: yup.string().required('Email is required').email('Please enter a valid email').trim(),
   name: yup
     .string()
-    .nullable()
-    .transform((value) => (value && value.trim() ? value.trim() : null)),
+    .trim()
+    .required('Name is required')
+    .min(3, 'Name must be at least 3 characters'),
   bio: yup
     .string()
     .nullable()

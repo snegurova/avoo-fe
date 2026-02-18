@@ -1,5 +1,6 @@
-import { useMemo } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { utils } from '@avoo/hooks/utils/utils';
+import type { ShortMasterInfo } from '@avoo/axios/types/apiTypes';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { createMasterSchema, CreateMasterFormData } from '../schemas/validationSchemas';
@@ -27,6 +28,18 @@ type UseUpdateMasterFormParams = {
 };
 
 export const masterHooks = {
+  useStableMasters(mastersFromResponse: ShortMasterInfo[]): ShortMasterInfo[] {
+    const [stableMasters, setStableMasters] = useState<ShortMasterInfo[]>([]);
+    useEffect(() => {
+      if (mastersFromResponse.length === 0) return;
+      setStableMasters((prev) => {
+        const byId = new Map(prev.map((m) => [m.id, m]));
+        mastersFromResponse.forEach((m) => byId.set(m.id, m));
+        return Array.from(byId.values());
+      });
+    }, [mastersFromResponse]);
+    return stableMasters;
+  },
   useGetMastersProfileInfo: (params: GetMastersQueryParams = {}) => {
     const { data: profileInfoData, isPending } = useQuery<BaseResponse<GetMastersResponse>, Error>({
       queryKey: [queryKeys.masters.all, queryKeys.masters.byParams(params)],
