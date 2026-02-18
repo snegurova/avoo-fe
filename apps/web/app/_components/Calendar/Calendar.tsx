@@ -82,7 +82,7 @@ export default function Calendar(props: Props) {
       rangeFromDate: timeUtils.formatDate(date),
       rangeToDate: timeUtils.formatDate(toDate),
       masterIds,
-      orderStatus: statuses,
+      orderStatuses: statuses,
       orderIsOutOfSchedule,
     }));
   }, [date, toDate, masterIds, statuses, orderIsOutOfSchedule]);

@@ -22,7 +22,7 @@ export const calendarHooks = {
       rangeToDate,
       serviceId,
       combinationId,
-      orderStatus,
+      orderStatuses,
       orderIsOutOfSchedule,
     } = params;
     const memoParams = useMemo<PrivateCalendarQueryParams>(
@@ -33,7 +33,7 @@ export const calendarHooks = {
         rangeToDate,
         serviceId,
         combinationId,
-        orderStatus,
+        orderStatuses,
         orderIsOutOfSchedule,
       }),
       [
@@ -43,7 +43,7 @@ export const calendarHooks = {
         rangeToDate,
         serviceId,
         combinationId,
-        orderStatus,
+        orderStatuses,
         orderIsOutOfSchedule,
       ],
     );
@@ -73,7 +73,7 @@ export const calendarHooks = {
     rangeToDate,
     serviceId,
     combinationId,
-    orderStatus,
+    orderStatuses,
     orderIsOutOfSchedule,
   }: PrivateCalendarQueryParams) => {
     const memoParams = useMemo<PrivateCalendarByDatesQueryParams>(
@@ -84,7 +84,7 @@ export const calendarHooks = {
         rangeToDate,
         serviceId,
         combinationId,
-        orderStatus,
+        orderStatuses,
         orderIsOutOfSchedule,
       }),
       [
@@ -94,7 +94,7 @@ export const calendarHooks = {
         rangeToDate,
         serviceId,
         combinationId,
-        orderStatus,
+        orderStatuses,
         orderIsOutOfSchedule,
       ],
     );
