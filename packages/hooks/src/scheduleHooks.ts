@@ -94,7 +94,7 @@ export const scheduleHooks = {
         name: 'Working schedule',
         pattern: 7,
         patternType: 'weekly',
-        mastersIds: [],
+        masterIds: [],
         startAt: timeUtils.getNextMonday(new Date()),
         endAt: null,
         workingHours: Array.from({ length: 7 }).map((_, i) => ({

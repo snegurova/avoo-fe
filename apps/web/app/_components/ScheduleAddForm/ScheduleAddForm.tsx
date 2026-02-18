@@ -123,13 +123,13 @@ export const ScheduleAddForm = () => {
               />
 
               <Controller
-                name='mastersIds'
+                name='masterIds'
                 control={control}
                 render={({ field }) => (
                   <FormMultiSelect
-                    error={!!errors.mastersIds}
+                    error={!!errors.masterIds}
                     required
-                    name='mastersIds'
+                    name='masterIds'
                     label='Apply to'
                     options={mastersOptions}
                     selected={((field.value ?? []) as number[]).map((v) => v.toString())}

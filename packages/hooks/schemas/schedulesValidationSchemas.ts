@@ -116,7 +116,7 @@ export const scheduleCreateSchema = yup.object({
     )
     .required(),
 
-  mastersIds: yup.array().of(yup.number()),
+  masterIds: yup.array().of(yup.number()),
 });
 
 export type ScheduleCreateFormData = yup.InferType<typeof scheduleCreateSchema>;
