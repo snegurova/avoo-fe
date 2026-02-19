@@ -89,8 +89,14 @@ export type GetCustomersQueryParams =
 export type Customer = components['schemas']['CustomerInfoDto'];
 
 /** Schedule */
+
+export type ScheduleEntity = components['schemas']['ScheduleEntity'];
+export type ScheduleUpdateResponse = components['schemas']['UpdateScheduleDto'];
+export type ScheduleCreateResponse = components['schemas']['CreateScheduleDto'];
+export type QuerySchedules = components['schemas']['QueryScheduleDto'];
+export type SchedulesQueryParams = Omit<QuerySchedules, 'page'>;
 export type GetSchedulesResponse = {
-  items: components['schemas']['ScheduleEntity'][];
+  items: ScheduleEntity[];
   pagination: components['schemas']['PaginationDto'];
 };
 
@@ -148,6 +154,21 @@ export type PrivateCalendarQueryParams = Omit<
   operations['CalendarController_getCalendar']['parameters']['query'],
   'view'
 > & { view?: CalendarView };
+
+/** Exceptions (Time off) */
+export type Exception = components['schemas']['CalendarExceptionEntity'];
+
+export type CreateExceptionRequest = components['schemas']['CreateCalendarExceptionDto'];
+
+export type GetExceptionsResponse = {
+  items: components['schemas']['CalendarExceptionEntity'][];
+  pagination: components['schemas']['PaginationDto'];
+};
+
+export type CreateExceptionResponse = components['schemas']['CalendarExceptionEntity'][];
+
+export type GetExceptionsQueryParams =
+  operations['CalendarExceptionsController_findAll']['parameters']['query'];
 
 /** File types - re-exported from @avoo/shared for backward compatibility */
 export type { FileInput, UploadFile } from '@avoo/shared';

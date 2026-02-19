@@ -1,13 +1,16 @@
+'use client';
+
 import React from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import FormInput, { AccessoryPosition } from '../FormInput/FormInput';
 import LockIcon from '@/_icons/LockIcon';
 import ModalActions from '../ModalActions/ModalActions';
 import FormTextarea from '../FormTextArea/FormTextArea';
-import ToggleSwitch from '../ToggleSwitch/ToggleSwitch';
 import { customerHooks } from '@avoo/hooks';
 import HistoryCard from '../HistoryCard/HistoryCard';
+
 import { useToast } from '@/_hooks/useToast';
+import NotificationField from '../NotificationField/NotificationField';
 
 export type FormValues = {
   name: string;
@@ -112,10 +115,6 @@ export default function ClientForm({ ...props }: ClientFormProps) {
 
   const loading = update.isPending;
 
-  const makeToggleHandler = (field: { value?: boolean; onChange: (checked: boolean) => void }) => {
-    return () => field.onChange(!field.value);
-  };
-
   const handleCancel = React.useCallback(() => {
     (onRequestClose ?? onClose)();
   }, [onRequestClose, onClose]);
@@ -167,26 +166,11 @@ export default function ClientForm({ ...props }: ClientFormProps) {
           )}
         />
 
-        <div className='flex items-center justify-between mt-2'>
-          <div className='text-sm'>
-            <div>Notification</div>
-            <p className='text-xs text-gray-500 mt-1 break-words'>
-              Automatically sending appointment information to client via email
-            </p>
-          </div>
-
-          <Controller
-            name='isNotificationEnable'
-            control={control}
-            render={({ field }) => (
-              <ToggleSwitch
-                ariaLabel='Toggle send notifications'
-                checked={!!field.value}
-                onChange={makeToggleHandler(field)}
-              />
-            )}
-          />
-        </div>
+        <Controller
+          name='isNotificationEnable'
+          control={control}
+          render={({ field }) => <NotificationField field={field} />}
+        />
       </div>
 
       <div>

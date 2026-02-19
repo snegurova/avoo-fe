@@ -4,6 +4,7 @@ import { tv } from 'tailwind-variants';
 type Props = {
   children: ReactNode;
   isWidget?: boolean;
+  withPadding?: boolean;
   className?: string;
 };
 
@@ -13,11 +14,15 @@ const wrapper = tv({
     isWidget: {
       true: 'min-h-fit',
     },
+    withPadding: {
+      true: 'px-11 pt-14',
+      false: '',
+    },
   },
 });
 
 export default function AppWrapper(props: Props) {
-  const { children, isWidget = false, className = '' } = props;
+  const { children, isWidget = false, withPadding = false, className = '' } = props;
 
-  return <div className={wrapper({ isWidget }) + ' ' + className}>{children}</div>;
+  return <div className={wrapper({ isWidget, withPadding }) + ' ' + className}>{children}</div>;
 }

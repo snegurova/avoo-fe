@@ -2,7 +2,7 @@
 import { createTheme } from '@mui/material/styles';
 import { Roboto } from 'next/font/google';
 import type {} from '@mui/x-date-pickers/themeAugmentation';
-import { colors, breakpoints, radius, typography, switchToken } from '@avoo/design-tokens';
+import { colors, breakpoints, radius, typography } from '@avoo/design-tokens';
 import type { Theme } from '@mui/material/styles';
 
 const roboto = Roboto({
@@ -10,8 +10,6 @@ const roboto = Roboto({
   subsets: ['latin'],
   display: 'swap',
 });
-
-const { TRACK_W, TRACK_H, KNOB, MOVE_X } = switchToken;
 
 declare module '@mui/material/IconButton' {
   interface IconButtonPropsVariantOverrides {
@@ -252,6 +250,7 @@ const theme = createTheme({
             size: 'small',
             fullWidth: true,
           },
+          openPickerIcon: { className: 'fill-gray-800 w-4 h-4' },
         },
       },
     },
@@ -266,7 +265,11 @@ const theme = createTheme({
         },
       },
     },
-
+    MuiTextField: {
+      defaultProps: {
+        InputLabelProps: { shrink: true },
+      },
+    },
     MuiPickersTextField: {
       styleOverrides: {
         root: {
@@ -279,6 +282,10 @@ const theme = createTheme({
 
           '& .MuiPickersOutlinedInput-notchedOutline': {
             borderColor: colors.gray[200],
+            '& legend': {
+              display: 'none',
+            },
+            top: 0,
           },
           '& .MuiPickersInputBase-root:hover .MuiPickersOutlinedInput-notchedOutline': {
             borderColor: colors.gray[200],
@@ -303,14 +310,22 @@ const theme = createTheme({
           },
         },
       },
+      defaultProps: {
+        InputLabelProps: { shrink: true },
+      },
     },
     MuiFormControl: {
       styleOverrides: {
-        root: {
+        root: () => ({
           '& label + .MuiInputBase-root': {
             marginTop: '4px',
           },
-        },
+          '& .MuiOutlinedInput-root': {
+            '& .MuiOutlinedInput-notchedOutline': { borderColor: colors.gray[200] },
+            '&:hover .MuiOutlinedInput-notchedOutline': { borderColor: colors.gray[200] },
+            '&.Mui-focused .MuiOutlinedInput-notchedOutline': { borderColor: colors.primary[500] },
+          },
+        }),
       },
     },
     MuiInputBase: {
@@ -361,6 +376,29 @@ const theme = createTheme({
       },
     },
     MuiButton: {
+      variants: [
+        {
+          props: { variant: 'chip' },
+          style: {
+            borderRadius: '18px',
+            textTransform: 'none',
+            padding: '5px 12px',
+            minHeight: 26,
+            minWidth: 68,
+            backgroundColor: colors.white,
+            color: colors.gray[500],
+            border: `1px solid ${colors.gray[200]}`,
+            fontSize: '12px',
+            lineHeight: '14px',
+            letterSpacing: '0',
+            fontWeight: typography.fontWeight.regular,
+            '&:hover': {
+              backgroundColor: colors.gray[100],
+              borderColor: colors.gray[200],
+            },
+          },
+        },
+      ],
       styleOverrides: {
         root: ({
           theme,
@@ -372,11 +410,13 @@ const theme = createTheme({
           '.confirmation-modal &': {
             minWidth: 'auto',
           },
-          minHeight: 44,
-          minWidth: 130,
-          [theme.breakpoints.up('md')]: {
-            minWidth: 170,
-          },
+          ...(ownerState?.variant !== 'chip' && {
+            minHeight: 44,
+            minWidth: 130,
+            [theme.breakpoints.up('md')]: {
+              minWidth: 170,
+            },
+          }),
           ...(ownerState?.variant === 'outlined' &&
             ownerState?.color === 'primary' && {
               color: colors.primary[700],
@@ -389,62 +429,6 @@ const theme = createTheme({
               color: 'white',
               '&:hover': { backgroundColor: 'grey.500' },
             },
-          }),
-        }),
-      },
-    },
-    MuiSwitch: {
-      styleOverrides: {
-        root: {
-          width: TRACK_W,
-          height: TRACK_H,
-          padding: 0,
-          display: 'inline-flex',
-          alignItems: 'center',
-          overflow: 'visible',
-        },
-        switchBase: () => ({
-          padding: (TRACK_H - KNOB) / 2,
-          '&.Mui-checked': {
-            transform: `translateX(${MOVE_X}px)`,
-            color: colors.white,
-            '& .MuiSwitch-thumb': {
-              backgroundColor: colors.primary[800],
-            },
-            '& + .MuiSwitch-track': {
-              backgroundColor: colors.purple[300],
-              opacity: 1,
-            },
-          },
-          '&.Mui-focusVisible': {
-            boxShadow: `0 0 0 4px ${colors.primary[100]}`,
-          },
-          '&.Mui-disabled': {
-            '& .MuiSwitch-thumb': {
-              boxShadow: 'none',
-            },
-            '& + .MuiSwitch-track': {
-              opacity: 0.6,
-            },
-          },
-        }),
-        thumb: {
-          width: KNOB,
-          height: KNOB,
-          boxShadow: '0 1px 2px rgba(0,0,0,0.08)',
-          backgroundColor: colors.gray[500],
-          margin: 0,
-          display: 'block',
-        },
-        track: ({ theme }: { theme: Theme }) => ({
-          borderRadius: TRACK_H / 2,
-          height: TRACK_H,
-          minHeight: TRACK_H,
-          backgroundColor: colors.gray[200],
-          opacity: 1,
-          boxSizing: 'border-box',
-          transition: theme.transitions.create(['background-color'], {
-            duration: theme.transitions.duration.short,
           }),
         }),
       },
@@ -469,10 +453,26 @@ const theme = createTheme({
         }),
       },
     },
+    MuiInputLabel: {
+      styleOverrides: {
+        root: {
+          position: 'relative',
+          transform: 'none',
+          marginBottom: '4px',
+          fontSize: '14px',
+          fontWeight: 500,
+          color: 'inherit',
+          '&.Mui-focused': {
+            color: 'primary.main',
+          },
+        },
+      },
+    },
     MuiOutlinedInput: {
       styleOverrides: {
         root: ({ ownerState }) => ({
           borderRadius: radius.md,
+          marginTop: '0px',
           ...(ownerState?.multiline
             ? {
                 alignItems: 'stretch',
@@ -481,6 +481,12 @@ const theme = createTheme({
                 height: 44,
               }),
         }),
+        notchedOutline: {
+          '& legend': {
+            display: 'none',
+          },
+          top: 0,
+        },
       },
     },
     MuiMenu: {
