@@ -14,7 +14,6 @@ import CoPresentIcon from '@/_icons/CoPresentIcon';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import ArrowDownIcon from '@/_icons/ArrowDownIcon';
 import ArrowUpIcon from '@/_icons/ArrowUpIcon';
-import TimeOffModal from '../TimeOffModal/TimeOffModal';
 
 type Props = {
   menuOpen: boolean;
@@ -48,7 +47,6 @@ export default function AppNavigation({ menuOpen, setMenuOpen }: Props) {
   const isOpen = desktopAbove || menuOpen;
 
   const [calendarOpen, setCalendarOpen] = useState(false);
-  const [isTimeOffOpen, setIsTimeOffOpen] = useState(false);
 
   const items = [
     {
@@ -94,14 +92,14 @@ export default function AppNavigation({ menuOpen, setMenuOpen }: Props) {
     setCalendarOpen((s) => !s);
   }, []);
 
-  const handleOpenTimeOff = useCallback(() => {
-    setIsTimeOffOpen(true);
-  }, []);
-
   const handleCloseMenu = useCallback(() => {
     setMenuOpen(false);
     setCalendarOpen(false);
   }, []);
+
+  const handleNavClick = useCallback(() => {
+    if (!desktopAbove) handleCloseMenu();
+  }, [desktopAbove, handleCloseMenu]);
 
   return (
     <aside className={overlayStyles({ open: isOpen })} onClick={handleCloseMenu}>
@@ -148,15 +146,23 @@ export default function AppNavigation({ menuOpen, setMenuOpen }: Props) {
                         </div>
 
                         {calendarOpen && (
-                          <ul className='flex flex-col'>
-                            <li>
-                              <button
-                                type='button'
-                                className='w-full text-left pl-20.5 pr-6 py-3 hover:bg-primary-100 focus:bg-primary-100 transition-colors cursor-pointer'
-                                onClick={handleOpenTimeOff}
+                          <ul className='flex flex-col font-light text-sm'>
+                            <li className='w-full'>
+                              <Link
+                                href={appRoutes.TimeOff}
+                                className='block w-full text-left pl-20 pr-4 py-2 text-sm hover:bg-primary-100 focus:bg-primary-100 transition-colors cursor-pointer'
+                                onClick={handleNavClick}
                               >
-                                Time off
-                              </button>
+                                Schedule exception
+                              </Link>
+                            </li>
+                            <li className='w-full'>
+                              <Link
+                                href={appRoutes.WorkingHours}
+                                className='block w-full text-left pl-20.5 pr-6 py-3 hover:bg-primary-100 focus:bg-primary-100 transition-colors cursor-pointer'
+                              >
+                                Working hours
+                              </Link>
                             </li>
                           </ul>
                         )}
@@ -174,7 +180,6 @@ export default function AppNavigation({ menuOpen, setMenuOpen }: Props) {
               </li>
             ))}
           </ul>
-          <TimeOffModal isOpen={isTimeOffOpen} onClose={() => setIsTimeOffOpen(false)} />
         </nav>
       </div>
     </aside>

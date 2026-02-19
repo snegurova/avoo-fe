@@ -13,7 +13,7 @@ export default function ServiceControls(props: Props) {
   const isPending = useApiStatusStore((state) => state.isPending);
 
   return (
-    <div className='p-4 flex flex-wrap items-center gap-y-3'>
+    <div className='pb-4 flex flex-wrap items-center gap-y-3'>
       <div className='flex flex-wrap md:flex-nowrap w-full items-center gap-y-2'>
         <Typography component='h1' variant='h1' className='order-1'>
           Services

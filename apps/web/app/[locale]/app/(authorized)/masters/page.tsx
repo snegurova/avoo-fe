@@ -22,7 +22,7 @@ export default function MastersPage() {
   const router = useRouter();
 
   const handleAddMaster = useCallback(() => {
-    router.push(`${appRoutes.Masters}/add-master`);
+    router.push(`${appRoutes.AddMaster}`);
   }, [router]);
 
   const handleEditMaster = useCallback((master: MasterWithRelationsEntityResponse) => {

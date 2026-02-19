@@ -116,22 +116,6 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/public/users/{id}/services": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["UsersPublicController_findAllServices"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/public/users/{id}": {
         parameters: {
             query?: never;
@@ -220,134 +204,6 @@ export interface paths {
             cookie?: never;
         };
         get: operations["UsersController_getProfileLanguages"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/services": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["ServicesController_findAllOwn"];
-        put?: never;
-        post: operations["ServicesController_create"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/services/group-by-categories": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["ServicesController_getServicesGroupByCategories"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/services/combination": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["ServicesController_createCombination"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/services/combination/{id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put: operations["ServicesController_updateCombinationById"];
-        post?: never;
-        delete: operations["ServicesController_deleteCombinationById"];
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/services/{id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put: operations["ServicesController_updateById"];
-        post?: never;
-        delete: operations["ServicesController_deleteById"];
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/public/services": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["ServicesPublicController_findAll"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/public/services/combination": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["ServicesPublicController_findCombination"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/public/services/{id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["ServicesPublicController_findById"];
         put?: never;
         post?: never;
         delete?: never;
@@ -468,22 +324,6 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/masters/{id}/combinations": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["MastersController_findAllCombinations"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/public/masters": {
         parameters: {
             query?: never;
@@ -516,14 +356,126 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/public/masters/{id}/services": {
+    "/files": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["MastersPublicController_findAllServices"];
+        get?: never;
+        put?: never;
+        post: operations["FilesController_upload"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/certificates": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["CertificatesController_getAll"];
+        put?: never;
+        post: operations["CertificatesController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/certificates/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["CertificatesController_findOne"];
+        put: operations["CertificatesController_update"];
+        post?: never;
+        delete: operations["CertificatesController_delete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/services": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["ServicesController_findAllByOwner"];
+        put?: never;
+        post: operations["ServicesController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/services/group-by-categories": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["ServicesController_getGroupByCategories"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/services/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["ServicesController_findOneByOwner"];
+        put: operations["ServicesController_update"];
+        post?: never;
+        delete: operations["ServicesController_delete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/public/services": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["ServicesPublicController_findAll"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/public/services/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["ServicesPublicController_findById"];
         put?: never;
         post?: never;
         delete?: never;
@@ -564,49 +516,49 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/files": {
+    "/combinations": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get?: never;
+        get: operations["CombinationsController_findAllByOwner"];
         put?: never;
-        post: operations["FilesController_upload"];
+        post: operations["CombinationsController_create"];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/certificates": {
+    "/combinations/{id}": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["CertificatesController_getAllCertificates"];
-        put?: never;
-        post: operations["CertificatesController_createCertificate"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/certificates/{id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["CertificatesController_getOneCertificate"];
-        put: operations["CertificatesController_updateUserCertificate"];
+        get: operations["CombinationsController_findOne"];
+        put: operations["CombinationsController_update"];
         post?: never;
-        delete: operations["CertificatesController_deleteUserCertificate"];
+        delete: operations["CombinationsController_delete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/public/combinations": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["CombinationsPublicController_findAll"];
+        put?: never;
+        post?: never;
+        delete?: never;
         options?: never;
         head?: never;
         patch?: never;
@@ -687,38 +639,6 @@ export interface paths {
         put?: never;
         post?: never;
         delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/calendar/exceptions": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["CalendarController_findAll"];
-        put?: never;
-        post: operations["CalendarController_createException"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/calendar/exceptions/{id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post?: never;
-        delete: operations["CalendarController_deleteException"];
         options?: never;
         head?: never;
         patch?: never;
@@ -875,7 +795,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["CustomersController_findAll"];
+        get: operations["CustomersController_findAllByOwner"];
         put?: never;
         post?: never;
         delete?: never;
@@ -895,6 +815,38 @@ export interface paths {
         put: operations["CustomersController_changeClientInfo"];
         post?: never;
         delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/calendar-exceptions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["CalendarExceptionsController_findAll"];
+        put?: never;
+        post: operations["CalendarExceptionsController_createException"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/calendar-exceptions/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete: operations["CalendarExceptionsController_deleteException"];
         options?: never;
         head?: never;
         patch?: never;
@@ -997,13 +949,13 @@ export interface components {
         Language: "ar" | "bn" | "da" | "de" | "en" | "es" | "fi" | "fr" | "hr" | "hi" | "is" | "it" | "ja" | "ko" | "la" | "lv" | "nl" | "no" | "pl" | "pt" | "ro" | "sv" | "tr" | "uk" | "vi" | "zh" | "fa";
         MasterEntity: {
             id: number;
-            name: string | null;
-            headline?: string;
+            name: string;
             email: string;
-            phone: string | null;
-            avatarUrl: string | null;
-            avatarPreviewUrl: string | null;
-            languages: components["schemas"]["Language"][] | null;
+            headline?: string;
+            phone?: string;
+            avatarUrl?: string;
+            avatarPreviewUrl?: string;
+            languages?: components["schemas"]["Language"][];
             bio?: string;
         };
         CategoryEntity: {
@@ -1011,6 +963,15 @@ export interface components {
             name: string;
             description: string;
             image_url: string;
+        };
+        CombinationEntity: {
+            id: number;
+            name: string;
+            durationMinutes: number;
+            isActive: boolean;
+            services: components["schemas"]["ServiceEntity"];
+            masters: components["schemas"]["MasterEntity"];
+            userId: number;
         };
         ServiceEntity: {
             id: number;
@@ -1021,14 +982,8 @@ export interface components {
             durationMinutes: number;
             isActive: boolean;
             masters: components["schemas"]["MasterEntity"][];
+            combinations: components["schemas"]["CombinationEntity"][];
             user: components["schemas"]["UserEntity"];
-        };
-        CombinationEntity: {
-            id: number;
-            name: string;
-            durationMinutes: number;
-            services: components["schemas"]["ServiceEntity"];
-            master: components["schemas"]["MasterEntity"];
         };
         CustomerInfoDto: {
             id: number;
@@ -1088,16 +1043,6 @@ export interface components {
             services: components["schemas"]["ServiceEntity"][];
             orders: components["schemas"]["OrderEntity"][];
             businessInfo: components["schemas"]["BusinessInfoEntity"] | null;
-        };
-        PaginationDto: {
-            /** @example 100 */
-            total: number;
-            /** @example 1 */
-            currentPage: number;
-            /** @example 10 */
-            totalPages: number;
-            /** @example 10 */
-            perPage: number;
         };
         UpdatePasswordRequestDto: {
             /** @example password123 */
@@ -1180,176 +1125,13 @@ export interface components {
         };
         ShortMasterInfoDto: {
             id: number;
-            avatarPreviewUrl: string | null;
-            name: string | null;
+            name: string;
+            avatarPreviewUrl?: string;
         };
         GetProfileLanguagesDto: {
             /** @enum {string} */
             language: "ar" | "bn" | "da" | "de" | "en" | "es" | "fi" | "fr" | "hr" | "hi" | "is" | "it" | "ja" | "ko" | "la" | "lv" | "nl" | "no" | "pl" | "pt" | "ro" | "sv" | "tr" | "uk" | "vi" | "zh" | "fa";
             masters: components["schemas"]["ShortMasterInfoDto"][];
-        };
-        QueryServicesDto: {
-            /**
-             * @description Page number
-             * @default 1
-             */
-            page: number;
-            /**
-             * @description Items per page
-             * @default 10
-             */
-            limit: number;
-            /** @description Filter by category ID */
-            categoryId?: number;
-            /** @description Minimum price */
-            minPrice?: number;
-            /** @description Maximum price */
-            maxPrice?: number;
-            /** @description Search keyword (in name) */
-            search?: string;
-            /** @description Filter by active status */
-            isActive?: boolean;
-        };
-        ServiceWithCategoryDto: {
-            id: number;
-            name: string;
-            totalServices: number;
-        };
-        ServicesGroupByCategoriesResponseDto: {
-            categories: components["schemas"]["ServiceWithCategoryDto"][];
-            total: number;
-        };
-        CreateServiceDto: {
-            /**
-             * @description Name of the service
-             * @example Haircut
-             */
-            name: string;
-            /**
-             * @description Description of the service
-             * @example A stylish haircut for men
-             */
-            description: string;
-            /**
-             * @description Price of the service
-             * @example 25.5
-             */
-            price: number;
-            /**
-             * @description ID of the category the service belongs to
-             * @example 1
-             */
-            categoryId: number;
-            /**
-             * @description Duration of the service in minutes
-             * @example 60
-             */
-            durationMinutes: number;
-            /**
-             * @description Media IDs
-             * @example [
-             *       1,
-             *       2,
-             *       3
-             *     ]
-             */
-            mediaIds: number[];
-            /**
-             * @description Is the service active
-             * @default true
-             */
-            isActive: boolean;
-            /**
-             * @description List of master IDs who can perform this service
-             * @example [
-             *       1
-             *     ]
-             */
-            masterIds?: number[];
-        };
-        CreateCombinationDto: {
-            /**
-             * @description Name of the service combination
-             * @example Relaxing Massage Combo
-             */
-            name: string;
-            /**
-             * @description Duration of the combination in minutes
-             * @example 90
-             */
-            durationMinutes: number;
-            /**
-             * @description Array of service IDs included in the combination
-             * @example [
-             *       1,
-             *       2
-             *     ]
-             */
-            serviceIds: number[];
-            /**
-             * @description ID of the master associated with the combination
-             * @example 1
-             */
-            masterId: number;
-        };
-        UpdateCombinationDto: {
-            /**
-             * @description Name of the service combination
-             * @example Relaxing Spa Package
-             */
-            name: string;
-            /**
-             * @description Duration of the combination in minutes
-             * @example 75
-             */
-            durationMinutes: number;
-            /**
-             * @description Array of service IDs included in the combination
-             * @example [
-             *       1,
-             *       2
-             *     ]
-             */
-            serviceIds: number[];
-        };
-        UpdateServiceDto: {
-            /**
-             * @description Name of the service
-             * @example Haircut
-             */
-            name: string;
-            /**
-             * @description Description of the service
-             * @example A stylish haircut for men
-             */
-            description: string;
-            /**
-             * @description Price of the service
-             * @example 25.5
-             */
-            price: number;
-            /**
-             * @description ID of the category the service belongs to
-             * @example 1
-             */
-            categoryId: number;
-            /**
-             * @description Duration of the service in minutes
-             * @example 60
-             */
-            durationMinutes: number;
-            /**
-             * @description Is the service active
-             * @default true
-             */
-            isActive: boolean;
-            /**
-             * @description List of master IDs who can perform this service
-             * @example [
-             *       1
-             *     ]
-             */
-            masterIds?: number[];
         };
         MediaEntity: {
             id: number;
@@ -1366,6 +1148,16 @@ export interface components {
             /** Format: binary */
             file: string;
         };
+        PaginationDto: {
+            /** @example 100 */
+            total: number;
+            /** @example 1 */
+            currentPage: number;
+            /** @example 10 */
+            totalPages: number;
+            /** @example 10 */
+            perPage: number;
+        };
         CreateMasterDto: {
             /**
              * @description Master email address (must be unique)
@@ -1376,7 +1168,7 @@ export interface components {
              * @description Master name (required)
              * @example Jane Smith
              */
-            name?: Record<string, never>;
+            name: string;
             /**
              * @description Headline
              * @example Hairdresser
@@ -1421,7 +1213,7 @@ export interface components {
              * @description Master name (required)
              * @example Jane Smith
              */
-            name?: Record<string, never>;
+            name: string;
             /**
              * @description Headline
              * @example Hairdresser
@@ -1515,6 +1307,134 @@ export interface components {
              * @example 1
              */
             masterId?: number;
+        };
+        ServiceWithCategoryDto: {
+            id: number;
+            name: string;
+            totalServices: number;
+        };
+        ServicesGroupByCategoriesResponseDto: {
+            categories: components["schemas"]["ServiceWithCategoryDto"][];
+            total: number;
+        };
+        CreateServiceDto: {
+            /**
+             * @description Name of the service
+             * @example Haircut
+             */
+            name: string;
+            /**
+             * @description Description of the service
+             * @example A stylish haircut for men
+             */
+            description: string;
+            /**
+             * @description Price of the service
+             * @example 25.5
+             */
+            price: number;
+            /**
+             * @description ID of the category the service belongs to
+             * @example 1
+             */
+            categoryId: number;
+            /**
+             * @description Duration of the service in minutes
+             * @example 60
+             */
+            durationMinutes: number;
+            /**
+             * @description Media IDs
+             * @example [
+             *       1,
+             *       2,
+             *       3
+             *     ]
+             */
+            mediaIds: number[];
+            /**
+             * @description Is the service active
+             * @default true
+             */
+            isActive: boolean;
+            /**
+             * @description List of master IDs who can perform this service
+             * @example [
+             *       1
+             *     ]
+             */
+            masterIds?: number[];
+        };
+        UpdateServiceDto: {
+            /**
+             * @description Name of the service
+             * @example Haircut
+             */
+            name: string;
+            /**
+             * @description Description of the service
+             * @example A stylish haircut for men
+             */
+            description: string;
+            /**
+             * @description Price of the service
+             * @example 25.5
+             */
+            price: number;
+            /**
+             * @description ID of the category the service belongs to
+             * @example 1
+             */
+            categoryId: number;
+            /**
+             * @description Duration of the service in minutes
+             * @example 60
+             */
+            durationMinutes: number;
+            /**
+             * @description Is the service active
+             * @default true
+             */
+            isActive: boolean;
+            /**
+             * @description List of master IDs who can perform this service
+             * @example [
+             *       1
+             *     ]
+             */
+            masterIds?: number[];
+        };
+        CombinationDto: {
+            /**
+             * @description Name of the service combination
+             * @example Relaxing Massage Combo
+             */
+            name: string;
+            /**
+             * @description Duration of the combination in minutes
+             * @example 90
+             */
+            durationMinutes: number;
+            /**
+             * @description Is the combination active
+             * @default true
+             */
+            isActive: boolean;
+            /**
+             * @description Service IDs included in the combination
+             * @example [
+             *       1,
+             *       2
+             *     ]
+             */
+            serviceIds: number[];
+            /**
+             * @description Master IDs associated with the combination
+             * @example [
+             *       1
+             *     ]
+             */
+            masterIds?: number[];
         };
         CreatePrivateOrderDto: {
             /** @enum {string} */
@@ -1657,6 +1577,11 @@ export interface components {
             customerData: components["schemas"]["CreatePublicCustomerDto"];
             /** @example 59BCEF4C */
             referralCode?: Record<string, never>;
+            /**
+             * @description Salon Id
+             * @example 1
+             */
+            userId: number;
         };
         AvailabilityDto: {
             /**
@@ -1851,61 +1776,6 @@ export interface components {
              * @example true
              */
             orderIsOutOfSchedule?: boolean;
-        };
-        CalendarExceptionEntity: {
-            id: number;
-            userId: number;
-            masterId: number | null;
-            /** Format: date-time */
-            dateFrom: string;
-            /** Format: date-time */
-            dateTo: string;
-            /** @enum {string} */
-            type: "SICK_LEAVE" | "VACATION" | "PERSONAL_OFF" | "HOLIDAY_OFF" | "OTHER_OFF" | "PERSONAL_WORKING" | "HOLIDAY_WORKING" | "VACATION_WORKING" | "OTHER_WORKING";
-            startTimeMinutes: number;
-            endTimeMinutes: number;
-            note: string | null;
-        };
-        CreateCalendarExceptionDto: {
-            /**
-             * @description Master IDs
-             * @example [
-             *       1
-             *     ]
-             */
-            masterIds?: number[];
-            /**
-             * Format: date-time
-             * @description Range from date, UTC instant of a local midnight
-             * @example 2026-01-05T23:00:00Z
-             */
-            dateFrom: string;
-            /**
-             * Format: date-time
-             * @description Range to date, UTC instant of a local midnight
-             * @example 2026-01-06T23:00:00Z
-             */
-            dateTo: string;
-            /**
-             * @description Type of exception
-             * @enum {string}
-             */
-            type: "SICK_LEAVE" | "VACATION" | "PERSONAL_OFF" | "HOLIDAY_OFF" | "OTHER_OFF" | "PERSONAL_WORKING" | "HOLIDAY_WORKING" | "VACATION_WORKING" | "OTHER_WORKING";
-            /**
-             * @description Start time of exception in minutes
-             * @example 540
-             */
-            startTimeMinutes: number;
-            /**
-             * @description End time of exception in minutes
-             * @example 1080
-             */
-            endTimeMinutes: number;
-            /**
-             * @description Note
-             * @example Need to rest
-             */
-            note?: string;
         };
         PrivateEventWithMasterDto: {
             /** @example 101 */
@@ -2348,6 +2218,61 @@ export interface components {
             notes?: string;
             isNotificationEnable?: boolean;
         };
+        CalendarExceptionEntity: {
+            id: number;
+            userId: number;
+            masterId: number | null;
+            /** Format: date-time */
+            dateFrom: string;
+            /** Format: date-time */
+            dateTo: string;
+            /** @enum {string} */
+            type: "SICK_LEAVE" | "VACATION" | "PERSONAL_OFF" | "HOLIDAY_OFF" | "OTHER_OFF" | "PERSONAL_WORKING" | "HOLIDAY_WORKING" | "VACATION_WORKING" | "OTHER_WORKING";
+            startTimeMinutes: number;
+            endTimeMinutes: number;
+            note: string | null;
+        };
+        CreateCalendarExceptionDto: {
+            /**
+             * @description Master IDs
+             * @example [
+             *       1
+             *     ]
+             */
+            masterIds?: number[];
+            /**
+             * Format: date-time
+             * @description Range from date, UTC instant of a local midnight
+             * @example 2026-01-05T23:00:00Z
+             */
+            dateFrom: string;
+            /**
+             * Format: date-time
+             * @description Range to date, UTC instant of a local midnight
+             * @example 2026-01-06T23:00:00Z
+             */
+            dateTo: string;
+            /**
+             * @description Type of exception
+             * @enum {string}
+             */
+            type: "SICK_LEAVE" | "VACATION" | "PERSONAL_OFF" | "HOLIDAY_OFF" | "OTHER_OFF" | "PERSONAL_WORKING" | "HOLIDAY_WORKING" | "VACATION_WORKING" | "OTHER_WORKING";
+            /**
+             * @description Start time of exception in minutes
+             * @example 540
+             */
+            startTimeMinutes: number;
+            /**
+             * @description End time of exception in minutes
+             * @example 1080
+             */
+            endTimeMinutes: number;
+            /**
+             * @description Note
+             * @example Need to rest
+             */
+            note?: string;
+        };
         PostEntity: {
             id: number;
             description: string | null;
@@ -2636,61 +2561,12 @@ export interface operations {
             };
         };
     };
-    UsersPublicController_findAllServices: {
-        parameters: {
-            query?: {
-                /** @description Page number */
-                page?: number;
-                /** @description Items per page */
-                limit?: number;
-                /** @description Filter by category ID */
-                categoryId?: number;
-                /** @description Minimum price */
-                minPrice?: number;
-                /** @description Maximum price */
-                maxPrice?: number;
-                /** @description Search keyword (in name, description, user name, or master name) */
-                search?: string;
-            };
-            header?: never;
-            path: {
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description List of all user's services */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["SuccessResponseDto"] & {
-                        data?: {
-                            items?: components["schemas"]["ServiceEntity"][];
-                            pagination?: components["schemas"]["PaginationDto"];
-                        };
-                    };
-                };
-            };
-            /** @description Bad Request */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-        };
-    };
     UsersPublicController_findOne: {
         parameters: {
             query?: never;
             header?: never;
             path: {
-                id: string;
+                id: number;
             };
             cookie?: never;
         };
@@ -2905,412 +2781,6 @@ export interface operations {
                 content: {
                     "application/json": components["schemas"]["SuccessResponseDto"] & {
                         data?: components["schemas"]["GetProfileLanguagesDto"][];
-                    };
-                };
-            };
-            /** @description Bad Request */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-        };
-    };
-    ServicesController_findAllOwn: {
-        parameters: {
-            query?: {
-                /** @description Page number */
-                page?: number;
-                /** @description Items per page */
-                limit?: number;
-                /** @description Filter by category ID */
-                categoryId?: number;
-                /** @description Minimum price */
-                minPrice?: number;
-                /** @description Maximum price */
-                maxPrice?: number;
-                /** @description Search keyword (in name) */
-                search?: string;
-                /** @description Filter by active status */
-                isActive?: boolean;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description List of all services */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["SuccessResponseDto"] & {
-                        data?: {
-                            items?: components["schemas"]["ServiceEntity"][];
-                            pagination?: components["schemas"]["PaginationDto"];
-                        };
-                    };
-                };
-            };
-            /** @description Bad Request */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-        };
-    };
-    ServicesController_create: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["CreateServiceDto"];
-            };
-        };
-        responses: {
-            /** @description Service created successfully */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["SuccessResponseDto"] & {
-                        data?: components["schemas"]["ServiceEntity"];
-                    };
-                };
-            };
-            /** @description Bad Request */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-        };
-    };
-    ServicesController_getServicesGroupByCategories: {
-        parameters: {
-            query?: {
-                /** @description Search by service name */
-                search?: string;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Count of services in all categories */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["SuccessResponseDto"] & {
-                        data?: components["schemas"]["ServicesGroupByCategoriesResponseDto"];
-                    };
-                };
-            };
-            /** @description Bad Request */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-        };
-    };
-    ServicesController_createCombination: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["CreateCombinationDto"];
-            };
-        };
-        responses: {
-            /** @description Combination created successfully */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["SuccessResponseDto"] & {
-                        data?: components["schemas"]["CombinationEntity"];
-                    };
-                };
-            };
-            /** @description Bad Request */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-        };
-    };
-    ServicesController_updateCombinationById: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["UpdateCombinationDto"];
-            };
-        };
-        responses: {
-            /** @description Combination updated successfully */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["SuccessResponseDto"] & {
-                        data?: components["schemas"]["CombinationEntity"];
-                    };
-                };
-            };
-            /** @description Bad Request */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-        };
-    };
-    ServicesController_deleteCombinationById: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Combination deleted successfully */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["SuccessResponseDto"] & {
-                        data?: components["schemas"]["CombinationEntity"];
-                    };
-                };
-            };
-            /** @description Bad Request */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-        };
-    };
-    ServicesController_updateById: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["UpdateServiceDto"];
-            };
-        };
-        responses: {
-            /** @description Service updated successfully */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["SuccessResponseDto"] & {
-                        data?: components["schemas"]["ServiceEntity"];
-                    };
-                };
-            };
-            /** @description Bad Request */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-        };
-    };
-    ServicesController_deleteById: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Service deleted successfully */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["SuccessResponseDto"] & {
-                        data?: components["schemas"]["ServiceEntity"];
-                    };
-                };
-            };
-            /** @description Bad Request */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-        };
-    };
-    ServicesPublicController_findAll: {
-        parameters: {
-            query?: {
-                /** @description Page number */
-                page?: number;
-                /** @description Items per page */
-                limit?: number;
-                /** @description Filter by category ID */
-                categoryId?: number;
-                /** @description Minimum price */
-                minPrice?: number;
-                /** @description Maximum price */
-                maxPrice?: number;
-                /** @description Search keyword (in name, description, user name, or master name) */
-                search?: string;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description List of all services */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["SuccessResponseDto"] & {
-                        data?: {
-                            items?: components["schemas"]["ServiceEntity"][];
-                            pagination?: components["schemas"]["PaginationDto"];
-                        };
-                    };
-                };
-            };
-            /** @description Bad Request */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-        };
-    };
-    ServicesPublicController_findCombination: {
-        parameters: {
-            query: {
-                services: string;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Combination found successfully */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["SuccessResponseDto"] & {
-                        data?: components["schemas"]["CombinationEntity"];
-                    };
-                };
-            };
-            /** @description Bad Request */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-        };
-    };
-    ServicesPublicController_findById: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Service found successfully */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["SuccessResponseDto"] & {
-                        data?: components["schemas"]["ServiceEntity"];
                     };
                 };
             };
@@ -3732,49 +3202,6 @@ export interface operations {
             };
         };
     };
-    MastersController_findAllCombinations: {
-        parameters: {
-            query?: {
-                /** @description Page number */
-                page?: number;
-                /** @description Items per page */
-                limit?: number;
-                /** @description Search keyword to filter combinations by name */
-                search?: string;
-            };
-            header?: never;
-            path: {
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description List of master's combinations */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["SuccessResponseDto"] & {
-                        data?: {
-                            items?: components["schemas"]["CombinationEntity"][];
-                            pagination?: components["schemas"]["PaginationDto"];
-                        };
-                    };
-                };
-            };
-            /** @description Bad Request */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-        };
-    };
     MastersPublicController_findAll: {
         parameters: {
             query?: {
@@ -3823,7 +3250,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                id: string;
+                id: number;
             };
             cookie?: never;
         };
@@ -3851,7 +3278,210 @@ export interface operations {
             };
         };
     };
-    MastersPublicController_findAllServices: {
+    FilesController_upload: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "multipart/form-data": components["schemas"]["UploadFileDto"];
+            };
+        };
+        responses: {
+            /** @description Upload media */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SuccessResponseDto"] & {
+                        data?: components["schemas"]["FileResponseDto"];
+                    };
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    CertificatesController_getAll: {
+        parameters: {
+            query?: {
+                /** @description Master ID to filter by (optional). If omitted, returns salon-level certificates */
+                masterId?: number;
+                page?: number;
+                limit?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description All certificates */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SuccessResponseDto"] & {
+                        data?: {
+                            items?: components["schemas"]["CertificateEntity"][];
+                            pagination?: components["schemas"]["PaginationDto"];
+                        };
+                    };
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    CertificatesController_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UploadCertificateDto"];
+            };
+        };
+        responses: {
+            /** @description Created certificate */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SuccessResponseDto"] & {
+                        data?: components["schemas"]["CertificateEntity"];
+                    };
+                };
+            };
+        };
+    };
+    CertificatesController_findOne: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Get certificate by id */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SuccessResponseDto"] & {
+                        data?: components["schemas"]["CertificateEntity"];
+                    };
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    CertificatesController_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UploadCertificateDto"];
+            };
+        };
+        responses: {
+            /** @description Updated certificate */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SuccessResponseDto"] & {
+                        data?: components["schemas"]["CertificateEntity"];
+                    };
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    CertificatesController_delete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Delete certificate by id */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SuccessResponseDto"] & {
+                        data?: components["schemas"]["CertificateEntity"];
+                    };
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    ServicesController_findAllByOwner: {
         parameters: {
             query?: {
                 /** @description Page number */
@@ -3860,22 +3490,24 @@ export interface operations {
                 limit?: number;
                 /** @description Filter by category ID */
                 categoryId?: number;
+                /** @description Filter by master IDs */
+                masterIds?: number[];
                 /** @description Minimum price */
                 minPrice?: number;
                 /** @description Maximum price */
                 maxPrice?: number;
-                /** @description Search keyword (in name, description, user name, or master name) */
+                /** @description Search keyword (in name) */
                 search?: string;
+                /** @description Filter by active status */
+                isActive?: boolean;
             };
             header?: never;
-            path: {
-                id: string;
-            };
+            path?: never;
             cookie?: never;
         };
         requestBody?: never;
         responses: {
-            /** @description List of all master's services */
+            /** @description List of all services */
             200: {
                 headers: {
                     [name: string]: unknown;
@@ -3886,6 +3518,262 @@ export interface operations {
                             items?: components["schemas"]["ServiceEntity"][];
                             pagination?: components["schemas"]["PaginationDto"];
                         };
+                    };
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    ServicesController_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateServiceDto"];
+            };
+        };
+        responses: {
+            /** @description Service created successfully */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SuccessResponseDto"] & {
+                        data?: components["schemas"]["ServiceEntity"];
+                    };
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    ServicesController_getGroupByCategories: {
+        parameters: {
+            query?: {
+                /** @description Search by service name */
+                search?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Count of services in all categories */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SuccessResponseDto"] & {
+                        data?: components["schemas"]["ServicesGroupByCategoriesResponseDto"];
+                    };
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    ServicesController_findOneByOwner: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Get service by id */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SuccessResponseDto"] & {
+                        data?: components["schemas"]["ServiceEntity"];
+                    };
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    ServicesController_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateServiceDto"];
+            };
+        };
+        responses: {
+            /** @description Service updated successfully */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SuccessResponseDto"] & {
+                        data?: components["schemas"]["ServiceEntity"];
+                    };
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    ServicesController_delete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Service deleted successfully */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SuccessResponseDto"] & {
+                        data?: components["schemas"]["ServiceEntity"];
+                    };
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    ServicesPublicController_findAll: {
+        parameters: {
+            query?: {
+                /** @description Page number */
+                page?: number;
+                /** @description Items per page */
+                limit?: number;
+                /** @description Filter by category ID */
+                categoryId?: number;
+                /** @description Filter by salon ID */
+                userId?: number;
+                /** @description Filter by master IDs */
+                masterIds?: number[];
+                /** @description Minimum price */
+                minPrice?: number;
+                /** @description Maximum price */
+                maxPrice?: number;
+                /** @description Search keyword (in name, description, user name, or master name) */
+                search?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description List of all services */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SuccessResponseDto"] & {
+                        data?: {
+                            items?: components["schemas"]["ServiceEntity"][];
+                            pagination?: components["schemas"]["PaginationDto"];
+                        };
+                    };
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    ServicesPublicController_findById: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Service found successfully */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SuccessResponseDto"] & {
+                        data?: components["schemas"]["ServiceEntity"];
                     };
                 };
             };
@@ -3936,7 +3824,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                id: string;
+                id: number;
             };
             cookie?: never;
         };
@@ -3964,47 +3852,20 @@ export interface operations {
             };
         };
     };
-    FilesController_upload: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "multipart/form-data": components["schemas"]["UploadFileDto"];
-            };
-        };
-        responses: {
-            /** @description Upload media */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["SuccessResponseDto"] & {
-                        data?: components["schemas"]["FileResponseDto"];
-                    };
-                };
-            };
-            /** @description Bad Request */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-        };
-    };
-    CertificatesController_getAllCertificates: {
+    CombinationsController_findAllByOwner: {
         parameters: {
             query?: {
-                /** @description Master ID to filter by (optional). If omitted, returns salon-level certificates */
-                masterId?: number;
+                /** @description Search keyword to filter combinations by name */
+                search?: string;
+                /** @description Master IDs */
+                masterIds?: number[];
+                /** @description Is the combination active */
+                isActive?: boolean;
+                /** @description Service IDs */
+                serviceIds?: number[];
+                /** @description Page number */
                 page?: number;
+                /** @description Items per page */
                 limit?: number;
             };
             header?: never;
@@ -4013,7 +3874,7 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
-            /** @description All certificates */
+            /** @description List of combinations */
             200: {
                 headers: {
                     [name: string]: unknown;
@@ -4021,7 +3882,7 @@ export interface operations {
                 content: {
                     "application/json": components["schemas"]["SuccessResponseDto"] & {
                         data?: {
-                            items?: components["schemas"]["CertificateEntity"][];
+                            items?: components["schemas"]["CombinationEntity"][];
                             pagination?: components["schemas"]["PaginationDto"];
                         };
                     };
@@ -4038,7 +3899,7 @@ export interface operations {
             };
         };
     };
-    CertificatesController_createCertificate: {
+    CombinationsController_create: {
         parameters: {
             query?: never;
             header?: never;
@@ -4047,42 +3908,18 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["UploadCertificateDto"];
+                "application/json": components["schemas"]["CombinationDto"];
             };
         };
         responses: {
-            /** @description Created certificate */
+            /** @description Combination created successfully */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
                     "application/json": components["schemas"]["SuccessResponseDto"] & {
-                        data?: components["schemas"]["CertificateEntity"];
-                    };
-                };
-            };
-        };
-    };
-    CertificatesController_getOneCertificate: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Get certificate by id */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["SuccessResponseDto"] & {
-                        data?: components["schemas"]["CertificateEntity"];
+                        data?: components["schemas"]["CombinationEntity"];
                     };
                 };
             };
@@ -4097,7 +3934,40 @@ export interface operations {
             };
         };
     };
-    CertificatesController_updateUserCertificate: {
+    CombinationsController_findOne: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Get combination */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SuccessResponseDto"] & {
+                        data?: components["schemas"]["CombinationEntity"];
+                    };
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    CombinationsController_update: {
         parameters: {
             query?: never;
             header?: never;
@@ -4108,18 +3978,18 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["UploadCertificateDto"];
+                "application/json": components["schemas"]["CombinationDto"];
             };
         };
         responses: {
-            /** @description Updated certificate */
+            /** @description Combination updated successfully */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
                     "application/json": components["schemas"]["SuccessResponseDto"] & {
-                        data?: components["schemas"]["CertificateEntity"];
+                        data?: components["schemas"]["CombinationEntity"];
                     };
                 };
             };
@@ -4134,7 +4004,7 @@ export interface operations {
             };
         };
     };
-    CertificatesController_deleteUserCertificate: {
+    CombinationsController_delete: {
         parameters: {
             query?: never;
             header?: never;
@@ -4145,14 +4015,61 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
-            /** @description Delete certificate by id */
+            /** @description Combination deleted successfully */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
                     "application/json": components["schemas"]["SuccessResponseDto"] & {
-                        data?: components["schemas"]["CertificateEntity"];
+                        data?: components["schemas"]["CombinationEntity"];
+                    };
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    CombinationsPublicController_findAll: {
+        parameters: {
+            query?: {
+                /** @description Search keyword to filter combinations by name */
+                search?: string;
+                /** @description Filter by salon ID */
+                userId?: number;
+                /** @description Master IDs */
+                masterIds?: number[];
+                /** @description Service IDs */
+                serviceIds?: number[];
+                /** @description Page number */
+                page?: number;
+                /** @description Items per page */
+                limit?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description List of combinations */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SuccessResponseDto"] & {
+                        data?: {
+                            items?: components["schemas"]["CombinationEntity"][];
+                            pagination?: components["schemas"]["PaginationDto"];
+                        };
                     };
                 };
             };
@@ -4292,7 +4209,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                id: string;
+                id: number;
             };
             cookie?: never;
         };
@@ -4338,7 +4255,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                id: string;
+                id: number;
             };
             cookie?: never;
         };
@@ -4448,113 +4365,6 @@ export interface operations {
                 content: {
                     "application/json": components["schemas"]["SuccessResponseDto"] & {
                         data?: components["schemas"]["PrivateCalendarResponseDto"][];
-                    };
-                };
-            };
-            /** @description Bad Request */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-        };
-    };
-    CalendarController_findAll: {
-        parameters: {
-            query?: {
-                /** @description Page number */
-                page?: number;
-                /** @description Items per page */
-                limit?: number;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Calendar exception entities */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["SuccessResponseDto"] & {
-                        data?: {
-                            items?: components["schemas"]["CalendarExceptionEntity"][];
-                            pagination?: components["schemas"]["PaginationDto"];
-                        };
-                    };
-                };
-            };
-            /** @description Bad Request */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-        };
-    };
-    CalendarController_createException: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["CreateCalendarExceptionDto"];
-            };
-        };
-        responses: {
-            /** @description Calendar exception entities */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["SuccessResponseDto"] & {
-                        data?: components["schemas"]["CalendarExceptionEntity"][];
-                    };
-                };
-            };
-            /** @description Bad Request */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-        };
-    };
-    CalendarController_deleteException: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Calendar exception entity */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["SuccessResponseDto"] & {
-                        data?: components["schemas"]["CalendarExceptionEntity"];
                     };
                 };
             };
@@ -5111,7 +4921,7 @@ export interface operations {
             };
         };
     };
-    CustomersController_findAll: {
+    CustomersController_findAllByOwner: {
         parameters: {
             query?: {
                 /** @description Page number */
@@ -5175,6 +4985,113 @@ export interface operations {
                 content: {
                     "application/json": components["schemas"]["SuccessResponseDto"] & {
                         data?: components["schemas"]["CustomerInfoDto"];
+                    };
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    CalendarExceptionsController_findAll: {
+        parameters: {
+            query?: {
+                /** @description Page number */
+                page?: number;
+                /** @description Items per page */
+                limit?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Calendar exception entities */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SuccessResponseDto"] & {
+                        data?: {
+                            items?: components["schemas"]["CalendarExceptionEntity"][];
+                            pagination?: components["schemas"]["PaginationDto"];
+                        };
+                    };
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    CalendarExceptionsController_createException: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateCalendarExceptionDto"];
+            };
+        };
+        responses: {
+            /** @description Calendar exception entities */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SuccessResponseDto"] & {
+                        data?: components["schemas"]["CalendarExceptionEntity"][];
+                    };
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    CalendarExceptionsController_deleteException: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Calendar exception entity */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SuccessResponseDto"] & {
+                        data?: components["schemas"]["CalendarExceptionEntity"];
                     };
                 };
             };

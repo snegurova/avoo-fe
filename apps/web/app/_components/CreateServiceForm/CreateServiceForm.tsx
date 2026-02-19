@@ -62,7 +62,7 @@ export default function CreateServiceForm(props: Props) {
 
   return (
     <form id={id} onSubmit={onSubmit}>
-      <div className='mt-4'>
+      <>
         <Typography variant='h3'>Basic detail</Typography>
         <div className='mt-4'>
           <div className='grid grid-cols-2 gap-8'>
@@ -156,7 +156,7 @@ export default function CreateServiceForm(props: Props) {
             </FormControl>
           </div>
         </div>
-      </div>
+      </>
       <div className='mt-8'>
         <Typography variant='h3'>Masters</Typography>
         <div className='grid grid-cols-2 gap-8 mt-4'>
