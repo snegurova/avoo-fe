@@ -21,4 +21,5 @@ export * from './filesHooks';
 export * from './usePhoneField';
 export * from './useLanguagePicker';
 export * from './mediaHooks';
+export * from './combinationHooks';
 export * from './exceptionHooks';

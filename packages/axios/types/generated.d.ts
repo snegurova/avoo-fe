@@ -901,6 +901,8 @@ export interface components {
             field: string;
             /** @example Email is not valid */
             message: string;
+            /** @example 1 */
+            value: number;
         };
         ErrorResponseDto: {
             /** @example error */
@@ -1770,7 +1772,7 @@ export interface components {
              *       "PENDING"
              *     ]
              */
-            orderStatus?: components["schemas"]["OrderStatus"][];
+            orderStatuses?: components["schemas"]["OrderStatus"][];
             /**
              * @description Include orders in calendar
              * @example true
@@ -2109,28 +2111,27 @@ export interface components {
         };
         CreateScheduleDto: {
             /**
-             * @description Schedule name (optional)
+             * @description Schedule name
              * @example Work schedule
              */
-            name?: Record<string, never>;
+            name: string;
             /**
              * @description Schedule pattern( must be the same as working hours items count)
              * @example 7
              */
             pattern: number;
             /**
-             * Format: date-time
-             * @description Schedule start date(future date)
-             * @example 2026-01-01T00:00:00.000Z
+             * @description Calendar exception start date (local, YYYY-MM-DD)
+             * @example 2026-01-09
              */
             startAt: string;
-            /**
-             * @description Schedule end date (optional)
-             * @example 2026-10-28T00:00:00.000Z
-             */
-            endAt?: Record<string, never>;
             /** @description List of working hours ( Mon-Fri (Sunday, Saturday Day off)), if start date is Monday */
             workingHours: components["schemas"]["CreateWorkingHourDto"][];
+            /**
+             * @description Calendar exception start date (local, YYYY-MM-DD)
+             * @example 2026-01-09
+             */
+            endAt: string;
             /**
              * @description Array of master IDs to apply schedule. If omitted, applies to all.
              * @example [
@@ -2169,15 +2170,15 @@ export interface components {
         };
         UpdateScheduleDto: {
             /**
-             * @description Schedule name (optional)
+             * @description Schedule name
              * @example Work schedule
              */
-            name?: Record<string, never>;
+            name?: string;
             /**
-             * @description Schedule end date (optional)
-             * @example 2026-10-28T00:00:00.000Z
+             * @description Calendar exception start date (local, YYYY-MM-DD)
+             * @example 2026-01-09
              */
-            endAt?: Record<string, never>;
+            endAt?: string;
             /** @description List of working hours ( Mon-Fri (Sunday, Saturday Day off)), if start date is Monday */
             workingHours?: components["schemas"]["UpdateWorkingHourDto"][];
         };
@@ -2234,22 +2235,13 @@ export interface components {
         };
         CreateCalendarExceptionDto: {
             /**
-             * @description Master IDs
-             * @example [
-             *       1
-             *     ]
-             */
-            masterIds?: number[];
-            /**
-             * Format: date-time
-             * @description Range from date, UTC instant of a local midnight
-             * @example 2026-01-05T23:00:00Z
+             * @description Calendar exception start date (local, YYYY-MM-DD)
+             * @example 2026-01-09
              */
             dateFrom: string;
             /**
-             * Format: date-time
-             * @description Range to date, UTC instant of a local midnight
-             * @example 2026-01-06T23:00:00Z
+             * @description Calendar exception start date (local, YYYY-MM-DD)
+             * @example 2026-01-09
              */
             dateTo: string;
             /**
@@ -2267,6 +2259,13 @@ export interface components {
              * @example 1080
              */
             endTimeMinutes: number;
+            /**
+             * @description Master IDs
+             * @example [
+             *       1
+             *     ]
+             */
+            masterIds?: number[];
             /**
              * @description Note
              * @example Need to rest
@@ -4347,7 +4346,7 @@ export interface operations {
                 /** @description User timezone */
                 timezone?: string;
                 /** @description Filter by order status */
-                orderStatus?: components["schemas"]["OrderStatus"][];
+                orderStatuses?: components["schemas"]["OrderStatus"][];
                 /** @description Include orders in calendar */
                 orderIsOutOfSchedule?: boolean;
             };
@@ -4397,7 +4396,7 @@ export interface operations {
                 /** @description Limit of events */
                 limitEvents?: number;
                 /** @description Filter by order status */
-                orderStatus?: components["schemas"]["OrderStatus"][];
+                orderStatuses?: components["schemas"]["OrderStatus"][];
                 /** @description Include orders in calendar */
                 orderIsOutOfSchedule?: boolean;
             };
@@ -4814,7 +4813,6 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                id: number;
                 workingHourId: number;
             };
             cookie?: never;
@@ -4852,7 +4850,6 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                id: number;
                 workingHourId: number;
                 breakId: number;
             };
@@ -4891,7 +4888,6 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                id: number;
                 workingHourId: number;
                 breakId: number;
             };

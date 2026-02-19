@@ -101,7 +101,18 @@ export const orderHooks = {
     >({
       mutationFn: orderApi.createOrder,
       onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: queryKeys.orders.all });
+        queryClient.invalidateQueries({
+          queryKey: [
+            queryKeys.orders.all,
+            queryKeys.orders.byParams,
+            queryKeys.customers.all,
+            queryKeys.customers.byParams,
+            queryKeys.calendar.all,
+            queryKeys.calendar.byParams,
+            queryKeys.monthCalendar.all,
+            queryKeys.monthCalendar.byParams,
+          ],
+        });
         onSuccess?.();
       },
     });
@@ -132,11 +143,7 @@ export const orderHooks = {
 
     const queryClient = useQueryClient();
 
-    const { mutate, isPending, error } = useMutation<
-      BaseResponse<Order>,
-      Error,
-      UpdateOrderRequest
-    >({
+    const { mutate, isPending } = useMutation<BaseResponse<Order>, Error, UpdateOrderRequest>({
       mutationFn: (data: UpdateOrderRequest) => orderApi.updateOrder(id, data),
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: queryKeys.orders.all });
@@ -152,7 +159,6 @@ export const orderHooks = {
       errors,
       isPending,
       setValue,
-      error,
     };
   },
   useUpdateOrderStatus: ({ id, onSuccess }: UseUpdateOrderParams) => {

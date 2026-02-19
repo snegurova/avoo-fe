@@ -1,5 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import { Order, MasterWithRelationsEntity } from '@avoo/axios/types/apiTypes';
+import React, { useEffect, useMemo, useState } from 'react';
+import {
+  Order,
+  MasterWithRelationsEntity,
+  GetMastersQueryParams,
+} from '@avoo/axios/types/apiTypes';
 import { Button, ButtonFit, ButtonIntent, ButtonType } from '@/_components/Button/Button';
 import { useApiStatusStore } from '@avoo/store';
 import ServiceElement from '@/_components/ServiceElement/ServiceElement';
@@ -29,16 +33,13 @@ export default function OrderEdit(props: Props) {
     order.master,
   );
   const [masterSearch, setMasterSearch] = useState('');
+  const [masterParams, setMasterParams] = useState<GetMastersQueryParams>({ limit: 10 });
   const [error, setError] = React.useState<string | null>(null);
   const isPending = useApiStatusStore((state) => state.isPending);
+  const errorMessage = useApiStatusStore((s) => s.errorMessage);
+  const isError = useApiStatusStore((s) => s.isError);
 
-  const {
-    control,
-    handleSubmit,
-    errors,
-    setValue,
-    error: apiError,
-  } = orderHooks.useUpdateOrder({
+  const { control, handleSubmit, errors, setValue } = orderHooks.useUpdateOrder({
     order: {
       duration: order.duration,
       notes: typeof order.notes === 'string' ? order.notes : '',
@@ -53,19 +54,34 @@ export default function OrderEdit(props: Props) {
     },
   });
 
-  const masters = masterHooks.useGetMastersProfileInfo()?.items;
+  const {
+    data: mastersData,
+    fetchNextPage: fetchNextMastersPage,
+    hasNextPage: hasMoreMasters,
+  } = masterHooks.useGetMastersInfinite(masterParams);
+
+  const masters = useMemo(
+    () =>
+      (mastersData?.pages.flatMap((page) => page?.data?.items) || []).filter(
+        (item): item is MasterWithRelationsEntity => item !== undefined,
+      ),
+    [mastersData],
+  );
 
   useEffect(() => {
-    if (apiError) {
-      const errorMessage =
-        typeof apiError === 'object' && 'response' in apiError
-          ? (apiError as any).response?.data?.errorMessage || apiError.message
-          : apiError.message;
+    setMasterParams((prev) => ({
+      ...prev,
+      search: masterSearch.trim() || undefined,
+    }));
+  }, [masterSearch]);
+
+  useEffect(() => {
+    if (isError && !!errorMessage) {
       setError(errorMessage);
     } else {
       setError(null);
     }
-  }, [apiError]);
+  }, [isError, errorMessage]);
 
   const onMasterChange = (value: number | { id: number } | undefined) => {
     let masterId = undefined;
@@ -98,24 +114,25 @@ export default function OrderEdit(props: Props) {
           {order.service && <ServiceElement item={order.service} isCard />}
           <div className='flex flex-col gap-3'>
             <div className=''>
-              <label
-                className='block mb-1 text-sm tracking-wider font-medium'
-                htmlFor='confirmation-notes'
-              >
-                Notes
-              </label>
               <Controller
                 name='notes'
                 control={control}
                 render={({ field }) => (
                   <div className=''>
                     <FormTextArea
-                      className='resize-none'
-                      rows={3}
                       id='confirmation-notes'
-                      value={field.value}
+                      name='confirmation-notes'
+                      value={field.value || ''}
                       onChange={field.onChange}
+                      label='Notes'
+                      helperText='Additional information for the master'
+                      maxLength={200}
                       error={errors?.notes?.message}
+                      classNames={{
+                        label: 'block font-medium',
+                        textarea:
+                          'block w-full text-sm text-black border border-gray-200 p-3 rounded-lg min-h-[70px] focus:outline-none focus:ring-1 focus:ring-purple-800',
+                      }}
                     />
                   </div>
                 )}
@@ -150,12 +167,14 @@ export default function OrderEdit(props: Props) {
                     label='Master'
                     value={field.value}
                     onChange={onMasterChange}
-                    items={masters || []}
+                    items={masters}
                     search={masterSearch}
                     setSearch={setMasterSearch}
                     ItemElement={MasterElement}
                     searchMode={false}
                     error={errors?.masterId?.message}
+                    hasMore={hasMoreMasters}
+                    fetchNextPage={fetchNextMastersPage}
                   />
                 )}
               />
