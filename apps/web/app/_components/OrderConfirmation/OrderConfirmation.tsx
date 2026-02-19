@@ -27,6 +27,8 @@ export default function OrderConfirmation(props: Props) {
     props;
   const [error, setError] = React.useState<string | null>(null);
   const isPending = useApiStatusStore((state) => state.isPending);
+  const errorMessage = useApiStatusStore((s) => s.errorMessage);
+  const isError = useApiStatusStore((s) => s.isError);
 
   const serviceData = useMemo((): Service | null => {
     if (!order.service) return null;
@@ -35,13 +37,7 @@ export default function OrderConfirmation(props: Props) {
     return service;
   }, [order]);
 
-  const {
-    control,
-    handleSubmit,
-    errors,
-    setValue,
-    error: apiError,
-  } = orderHooks.useUpdateOrder({
+  const { control, handleSubmit, errors, setValue } = orderHooks.useUpdateOrder({
     order: {
       duration: order.duration,
       notes: typeof order.notes === 'string' ? order.notes : '',
@@ -55,25 +51,12 @@ export default function OrderConfirmation(props: Props) {
   });
 
   useEffect(() => {
-    if (apiError) {
-      type ApiErrorWithResponse = {
-        response?: {
-          data?: {
-            errorMessage?: string;
-          };
-        };
-        message: string;
-      };
-
-      const errorMessage =
-        typeof apiError === 'object' && 'response' in apiError
-          ? (apiError as ApiErrorWithResponse).response?.data?.errorMessage || apiError.message
-          : apiError.message;
+    if (isError && !!errorMessage) {
       setError(errorMessage);
     } else {
       setError(null);
     }
-  }, [apiError]);
+  }, [isError, errorMessage]);
 
   return (
     <form className='h-full'>

@@ -18,6 +18,8 @@ const WRAPPER_HEADER_HEIGHT = '62px';
 
 export default function OrderCreate() {
   const isPending = useApiStatusStore((state) => state.isPending);
+  const errorMessage = useApiStatusStore((s) => s.errorMessage);
+  const isError = useApiStatusStore((s) => s.isError);
   const router = useRouter();
   const searchParams = useSearchParams();
   const toast = useToast();
@@ -40,7 +42,7 @@ export default function OrderCreate() {
     }
   }, []);
 
-  const { control, handleSubmit, errors, selectedServices, setSelectedServices, apiError } =
+  const { control, handleSubmit, errors, selectedServices, setSelectedServices } =
     orderHooks.useCreateOrder({
       order: {
         masterId: initialParams.masterId,
@@ -60,10 +62,10 @@ export default function OrderCreate() {
   });
 
   useEffect(() => {
-    if (apiError) {
-      toast.error(apiError);
+    if (isError && !!errorMessage) {
+      toast.error(errorMessage);
     }
-  }, [apiError]);
+  }, [isError, errorMessage]);
 
   const { fields, append, remove } = useFieldArray({
     control,

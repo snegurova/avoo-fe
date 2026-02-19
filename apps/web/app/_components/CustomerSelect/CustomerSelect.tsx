@@ -92,6 +92,33 @@ export function CustomerSelect({ value, onChange, error }: Props) {
     [setPhoneNumber],
   );
 
+  const handleNameChange = useCallback(
+    (evt: React.ChangeEvent<HTMLInputElement>) => {
+      if (isCustomerValues(value)) {
+        onChange({ ...value, name: evt.target.value });
+      }
+    },
+    [onChange, value],
+  );
+
+  const handleEmailChange = useCallback(
+    (evt: React.ChangeEvent<HTMLInputElement>) => {
+      if (isCustomerValues(value)) {
+        onChange({ ...value, email: evt.target.value });
+      }
+    },
+    [onChange, value],
+  );
+
+  const handleNotesChange = useCallback(
+    (evt: React.ChangeEvent<HTMLTextAreaElement>) => {
+      if (isCustomerValues(value)) {
+        onChange({ ...value, notes: evt.target.value });
+      }
+    },
+    [onChange, value],
+  );
+
   return (
     <div className='w-full'>
       <SearchField
@@ -119,7 +146,7 @@ export function CustomerSelect({ value, onChange, error }: Props) {
               placeholder='Enter name'
               id='name'
               value={value.name}
-              onChange={(e) => onChange({ ...value, name: e.target.value })}
+              onChange={handleNameChange}
               error={error?.name?.message}
             />
           </div>
@@ -132,7 +159,7 @@ export function CustomerSelect({ value, onChange, error }: Props) {
               placeholder='Enter email'
               id='email'
               value={value.email}
-              onChange={(e) => onChange({ ...value, email: e.target.value })}
+              onChange={handleEmailChange}
               error={error?.email?.message}
             />
           </div>
@@ -167,7 +194,7 @@ export function CustomerSelect({ value, onChange, error }: Props) {
               id='notes'
               name='notes'
               value={value.notes ?? ''}
-              onChange={(e) => onChange({ ...value, notes: e.target.value })}
+              onChange={handleNotesChange}
               label='Notes'
               helperText='Additional information about the client'
               maxLength={200}

@@ -27,15 +27,6 @@ type Props = {
   isOutOfSchedule?: boolean;
 };
 
-interface ApiErrorWithResponse {
-  response?: {
-    data?: {
-      errorMessage?: string;
-    };
-  };
-  message: string;
-}
-
 export default function OrderEdit(props: Props) {
   const { order, onClose, refetchCalendar, refetchOrder, isOutOfSchedule } = props;
   const [selectedMaster, setSelectedMaster] = React.useState<MasterWithRelationsEntity | undefined>(
@@ -45,14 +36,10 @@ export default function OrderEdit(props: Props) {
   const [masterParams, setMasterParams] = useState<GetMastersQueryParams>({ limit: 10 });
   const [error, setError] = React.useState<string | null>(null);
   const isPending = useApiStatusStore((state) => state.isPending);
+  const errorMessage = useApiStatusStore((s) => s.errorMessage);
+  const isError = useApiStatusStore((s) => s.isError);
 
-  const {
-    control,
-    handleSubmit,
-    errors,
-    setValue,
-    error: apiError,
-  } = orderHooks.useUpdateOrder({
+  const { control, handleSubmit, errors, setValue } = orderHooks.useUpdateOrder({
     order: {
       duration: order.duration,
       notes: typeof order.notes === 'string' ? order.notes : '',
@@ -89,16 +76,12 @@ export default function OrderEdit(props: Props) {
   }, [masterSearch]);
 
   useEffect(() => {
-    if (apiError) {
-      const errorMessage =
-        typeof apiError === 'object' && 'response' in apiError
-          ? (apiError as ApiErrorWithResponse).response?.data?.errorMessage || apiError.message
-          : apiError.message;
+    if (isError && !!errorMessage) {
       setError(errorMessage);
     } else {
       setError(null);
     }
-  }, [apiError]);
+  }, [isError, errorMessage]);
 
   const onMasterChange = (value: number | { id: number } | undefined) => {
     let masterId = undefined;

@@ -329,7 +329,7 @@ export default function CalendarControls(props: Props) {
         });
       },
     }),
-    [],
+    [orderIsOutOfSchedule],
   );
 
   return (
