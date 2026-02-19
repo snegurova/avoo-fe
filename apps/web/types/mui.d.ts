@@ -92,3 +92,9 @@ declare module '@mui/material/Chip' {
     outOfSchedule: true;
   }
 }
+
+declare module '@mui/material/Button' {
+  interface ButtonPropsVariantOverrides {
+    chip: true;
+  }
+}

@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function CaledarIcon(
+export default function CalendarIcon(
   props: React.SVGProps<SVGSVGElement> & { ownerState?: unknown },
 ) {
   const { ownerState: _ownerState, ...restProps } = props;
