@@ -8,19 +8,19 @@ type Props = {
   setSearchQuery: (value: string) => void;
 };
 
-export default function ServiceControls(props: Props) {
+export default function SchedulesControls(props: Props) {
   const { setSearchQuery } = props;
   const isPending = useApiStatusStore((state) => state.isPending);
 
   return (
-    <div className='pb-4 flex flex-wrap items-center gap-y-3'>
+    <div className='pb-8 flex flex-wrap items-center gap-y-3'>
       <div className='flex flex-wrap md:flex-nowrap w-full items-center gap-y-2'>
         <Typography component='h1' variant='h1' className='order-1'>
-          Services
+          Working schedules
         </Typography>
 
         <div className='order-2 md:order-3 ml-auto md:ml-0'>
-          <Link href={appRoutes.CreateService}>
+          <Link href={appRoutes.WorkingHoursCreate}>
             <Button
               fullWidth
               color='secondary'
@@ -28,7 +28,7 @@ export default function ServiceControls(props: Props) {
               loading={isPending}
               disabled={isPending}
             >
-              Add service
+              Setup new schedule
             </Button>
           </Link>
         </div>
@@ -37,7 +37,7 @@ export default function ServiceControls(props: Props) {
           <TextField
             size='small'
             fullWidth
-            placeholder='Search service name'
+            placeholder='Search by schedule name or master'
             onChange={(e) => setSearchQuery(e.target.value)}
             sx={{
               width: {

@@ -4,7 +4,7 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
-import { Checkbox, ListItemText } from '@mui/material';
+import { Checkbox, FormHelperText, ListItemText } from '@mui/material';
 
 export type Option = { label: string; value: string };
 
@@ -16,6 +16,7 @@ export type Props = {
   options: Option[];
   selected: string[];
   placeholder?: string;
+  required?: boolean;
   disabled?: boolean;
   error?: string | boolean;
   selectAll?: boolean;
@@ -32,6 +33,8 @@ export const FormMultiSelect = (props: Props) => {
     options,
     size = 'small',
     selected,
+    required = false,
+    error,
     onChange,
     disabled,
     className,
@@ -53,7 +56,9 @@ export const FormMultiSelect = (props: Props) => {
   return (
     <div className={className}>
       <FormControl size={size} fullWidth disabled={disabled}>
-        <InputLabel id={`multiple-${name}-label`}>{label}</InputLabel>
+        <InputLabel id={`multiple-${name}-label`} required={required}>
+          {label}
+        </InputLabel>
         <Select
           labelId={`multiple-${name}-label`}
           id={id ?? `multiple-${name}`}
@@ -70,6 +75,7 @@ export const FormMultiSelect = (props: Props) => {
             </MenuItem>
           ))}
         </Select>
+        {error && <FormHelperText>{error}</FormHelperText>}
       </FormControl>
     </div>
   );

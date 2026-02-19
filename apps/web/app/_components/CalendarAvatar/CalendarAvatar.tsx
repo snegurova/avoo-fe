@@ -19,9 +19,9 @@ const avatar = tv({
   base: 'rounded-full mx-auto flex items-center justify-center text-xl font-medium',
   variants: {
     size: {
-      [AvatarSize.Small]: 'w-4 h-4',
-      [AvatarSize.Medium]: 'w-8 h-8',
-      [AvatarSize.Large]: 'w-8 h-8 md:w-10 md:h-10',
+      [AvatarSize.Small]: 'w-4 h-4 text-xs',
+      [AvatarSize.Medium]: 'w-8 h-8 text-sm',
+      [AvatarSize.Large]: 'w-8 h-8 md:w-10 md:h-10 text-base',
     },
     addName: {
       true: 'mb-1 md:mb-2',

@@ -25,7 +25,7 @@ export default function ServicesPage() {
   );
 
   return (
-    <AppWrapper>
+    <AppWrapper withPadding>
       <ServiceControls setSearchQuery={setSearchQuery} />
       {params.search === '' && !categories ? (
         <AppPlaceholder

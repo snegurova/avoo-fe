@@ -146,7 +146,7 @@ export default function AppNavigation({ menuOpen, setMenuOpen }: Props) {
                         </div>
 
                         {calendarOpen && (
-                          <ul className='flex flex-col'>
+                          <ul className='flex flex-col font-light text-sm'>
                             <li className='w-full'>
                               <Link
                                 href={appRoutes.TimeOff}
@@ -154,6 +154,14 @@ export default function AppNavigation({ menuOpen, setMenuOpen }: Props) {
                                 onClick={handleNavClick}
                               >
                                 Schedule exception
+                              </Link>
+                            </li>
+                            <li className='w-full'>
+                              <Link
+                                href={appRoutes.WorkingHours}
+                                className='block w-full text-left pl-20.5 pr-6 py-3 hover:bg-primary-100 focus:bg-primary-100 transition-colors cursor-pointer'
+                              >
+                                Working hours
                               </Link>
                             </li>
                           </ul>
