@@ -10,19 +10,36 @@ import ShareIcon from '@/_icons/ShareIcon';
 import DeleteIcon from '@/_icons/DeleteIcon';
 import EditSquareIcon from '@/_icons/EditSquareIcon';
 import IconLink from '@/_components/IconLink/IconLink';
+import { IconButton } from '@/_components/IconButton/IconButton';
 
 type Props = {
   master: MasterWithRelationsEntityResponse;
+  onEdit?: (master: MasterWithRelationsEntityResponse) => void;
+  isSelected?: boolean;
 };
 
-export const MasterListItem = ({ master }: Props) => {
+export const MasterListItem = ({ master, onEdit, isSelected }: Props) => {
   const displayName = master.name || 'No name';
   const phone = master.phone || 'No phone';
   const languagesArr = master.languages || [];
 
+  const handleOpenDetails = () => {
+    onEdit?.(master);
+  };
+
   return (
-    <div className='bg-white rounded-lg lg:rounded-none p-4 lg:py-6 lg:px-8 border border-gray-200 lg:border-l-0 lg:border-r-0'>
-      <div className='flex items-center gap-4 w-full lg:hidden'>
+    <div
+      className={`rounded-lg lg:rounded-none p-4 lg:py-6 lg:px-8 border lg:border-l-0 lg:border-r-0 transition-colors duration-300 ease-in-out ${
+        isSelected ? 'bg-primary-50 border-primary-200' : 'bg-white border-gray-200'
+      }`}
+      data-selected={isSelected ? 'true' : 'false'}
+    >
+      <button
+        type='button'
+        className='flex items-center gap-4 w-full lg:hidden cursor-pointer text-left'
+        onClick={handleOpenDetails}
+        aria-label={`Open ${displayName} details`}
+      >
         <div className='flex-shrink-0'>
           <Avatar
             name={displayName}
@@ -59,7 +76,7 @@ export const MasterListItem = ({ master }: Props) => {
         <div className='hidden md:flex md:w-1/4 md:flex-col md:items-end'>
           <MasterLanguageList languages={languagesArr} showLabel />
         </div>
-      </div>
+      </button>
 
       <div className='hidden lg:flex items-center gap-3 w-full min-w-0'>
         <div className='flex items-center gap-3 w-1/5'>
@@ -92,7 +109,12 @@ export const MasterListItem = ({ master }: Props) => {
           <MasterLanguageList languages={languagesArr} />
         </div>
         <div className='w-12 flex items-center gap-2'>
-          <IconLink icon={<EditSquareIcon />} href='#' label='Edit' />
+          <IconButton
+            icon={<EditSquareIcon />}
+            ariaLabel='Edit master'
+            onClick={handleOpenDetails}
+            className='rounded-full w-10 h-10 flex items-center justify-center hover:text-primary-700 focus:text-primary-700 transition-colors'
+          />
           <IconLink icon={<ShareIcon />} href='#' label='Share' />
           <IconLink icon={<DeleteIcon />} href='#' label='Delete' />
         </div>

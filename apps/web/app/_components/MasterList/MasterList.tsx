@@ -10,9 +10,11 @@ import { sortByName, SortDirection } from '@avoo/shared';
 
 type Props = {
   masters: MasterWithRelationsEntityResponse[] | null;
+  onEdit?: (master: MasterWithRelationsEntityResponse) => void;
+  selectedId?: number | null;
 };
 
-export const MasterList = ({ masters }: Props) => {
+export const MasterList = ({ masters, onEdit, selectedId }: Props) => {
   const [sortDirection, setSortDirection] = useState<SortDirection>(null);
 
   const sorted = useMemo(() => sortByName(masters ?? [], sortDirection), [masters, sortDirection]);
@@ -50,7 +52,12 @@ export const MasterList = ({ masters }: Props) => {
       </div>
       <div className='flex flex-col gap-4 lg:gap-0'>
         {sorted.map((master) => (
-          <MasterListItem key={master.id} master={master} />
+          <MasterListItem
+            key={master.id}
+            master={master}
+            onEdit={onEdit}
+            isSelected={master.id === selectedId}
+          />
         ))}
       </div>
     </div>
