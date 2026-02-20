@@ -5,6 +5,7 @@ import AddMoreButton from '../AddMoreButton/AddMoreButton';
 import BackupIcon from '@/_icons/BackupIcon';
 import { tv } from 'tailwind-variants';
 import CloseIcon from '@/_icons/CloseIcon';
+import AddIcon from '@/_icons/AddIcon';
 
 type Props = {
   id: string;
@@ -82,11 +83,16 @@ export default function ServiceGalleryUpload(props: Props) {
 
               {!isLast(medias.length, 4) && (
                 <li className='h-[274px] col-span-1'>
-                  <AddMoreButton
-                    variant='overlay'
+                  <DragAndDropZone
+                    title='Select a file or drag and drop here'
+                    description='Upload up to 5 images (JPG, PNG only, max 10MB each)'
+                    buttonTitle='Select file'
                     accept={accept}
                     onFilePicked={onFilePicked}
+                    icon={<AddIcon fill={colors.primary[300]} width={60} height={60} />}
                     isUploading={isUploading}
+                    displayButton={false}
+                    variant='outline'
                   />
                 </li>
               )}

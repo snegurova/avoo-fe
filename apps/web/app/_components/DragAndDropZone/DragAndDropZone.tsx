@@ -6,6 +6,8 @@ type Props = {
   description: string;
   buttonTitle: string;
   isUploading: boolean;
+  displayButton?: boolean;
+  variant?: 'outline' | 'base';
   accept?: string;
   onFilePicked: (file: File | null) => void;
   fileError?: string;
@@ -24,6 +26,8 @@ export default function DragAndDropZone(props: Props) {
     fileError,
     icon,
     isUploading,
+    variant = 'base',
+    displayButton = true,
     className,
   } = props;
   const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -41,6 +45,10 @@ export default function DragAndDropZone(props: Props) {
   const iconVariants = tv({
     base: 'rounded-full w-10 h-10 lg:w-20 lg:h-20 bg-primary-50 hover:bg-primary-100 flex items-center justify-center transition-colors',
     variants: {
+      variant: {
+        outline: 'border-1 border-gray-100 bg-white',
+        base: '',
+      },
       isUploading: {
         true: 'bg-primary-100',
         false: '',
@@ -63,7 +71,7 @@ export default function DragAndDropZone(props: Props) {
         disabled={isUploading}
         className={buttonVariants({ isUploading })}
       >
-        {icon ? <div className={iconVariants({ isUploading })}>{icon}</div> : null}
+        {icon ? <div className={iconVariants({ isUploading, variant })}>{icon}</div> : null}
 
         <p className='mb-2 font-semibold'>
           {isUploading ? 'Uploading file. Please wait...' : title}
@@ -71,9 +79,11 @@ export default function DragAndDropZone(props: Props) {
         <p className='text-sm text-gray-500 mb-4'>
           {isUploading ? 'It may take a few seconds' : description}
         </p>
-        <span className='px-4 py-2 border border-primary-700 text-primary-700 hover:bg-primary-50 hover:text-primary-500 rounded-md inline-block transition-colors transition-text-colors'>
-          {isUploading ? 'Uploading...' : buttonTitle}
-        </span>
+        {displayButton && (
+          <span className='px-4 py-2 border border-primary-700 text-primary-700 hover:bg-primary-50 hover:text-primary-500 rounded-md inline-block transition-colors transition-text-colors'>
+            {isUploading ? 'Uploading...' : buttonTitle}
+          </span>
+        )}
         <input
           id='dndFileInput'
           ref={fileInputRef}
