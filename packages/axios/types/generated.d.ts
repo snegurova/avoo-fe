@@ -1679,7 +1679,8 @@ export interface components {
              * @example [
              *       {
              *         "start": "2026-01-09T09:30:00.000Z",
-             *         "end": "2026-01-09T10:00:00.000Z"
+             *         "end": "2026-01-09T10:00:00.000Z",
+             *         "type": "SEEK_LEAVE"
              *       }
              *     ]
              */
