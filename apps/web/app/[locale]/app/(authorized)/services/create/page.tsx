@@ -3,13 +3,13 @@ import { useRouter } from 'next/navigation';
 import { Button, Typography } from '@mui/material';
 import { categoriesHooks, masterHooks, mediaHooks, servicesHooks } from '@avoo/hooks';
 import AppWrapper from '@/_components/AppWrapper/AppWrapper';
-import CreateServiceForm from '@/_components/CreateServiceForm/CreateServiceForm';
 import ServiceGalleryUpload from '@/_components/ServiceGalleryUpload/ServiceGalleryUpload';
 import { useToast } from '@/_hooks/useToast';
 import { appRoutes } from '@/_routes/routes';
 import { MEDIA_TYPE_ENUM } from '@avoo/axios/types/apiEnums';
 import { useState } from 'react';
 import { UploadMediaResponse } from '@avoo/axios/types/apiTypes';
+import ServiceAddForm from '@/_components/ServiceAddForm/ServiceAddForm';
 
 export default function ServicesCreatePage() {
   const router = useRouter();
@@ -59,13 +59,12 @@ export default function ServicesCreatePage() {
     <AppWrapper withPadding>
       <Typography variant='h1'>Add service</Typography>
       <div className='overflow-y-auto'>
-        <CreateServiceForm
+        <ServiceAddForm
           id='create-new-service'
           control={control}
           errors={errors}
           categories={categories || []}
           masters={masters?.items || []}
-          setValue={setValue}
           onSubmit={handleSubmit}
         >
           <ServiceGalleryUpload
@@ -75,7 +74,7 @@ export default function ServicesCreatePage() {
             onRemove={onRemoveMedia}
             isUploading={isUploading}
           />
-        </CreateServiceForm>
+        </ServiceAddForm>
       </div>
 
       <section id='create-new-service-controls'>

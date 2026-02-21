@@ -8,16 +8,14 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import React, { useMemo } from 'react';
-import { Control, Controller, UseFormSetValue, useWatch } from 'react-hook-form';
-import { FieldErrors } from 'react-hook-form';
+import React from 'react';
+import { Control, Controller, FieldErrors } from 'react-hook-form';
 import { Category } from '@avoo/axios/types/apiTypes';
 import { MasterWithRelationsEntityResponse } from '@avoo/axios/types/apiTypes';
 import { timeUtils } from '@avoo/shared';
 import { CreateServiceFormData } from '@avoo/hooks';
-import MasterSelect from '@/_components/MasterSelect/MasterSelect';
 import CategorySelect from '@/_components/CategorySelect/CategorySelect';
-import MasterSelectCard from '@/_components/MasterSelectCard/MasterSelectCard';
+import MasterAutoCompleteSelect from '@/_components/MasterAutoCompleteSelect/MasterAutoCompleteSelect';
 
 type Props = {
   id: string;
@@ -26,38 +24,11 @@ type Props = {
   control: Control<CreateServiceFormData>;
   errors: FieldErrors<CreateServiceFormData>;
   children: React.ReactNode;
-  setValue: UseFormSetValue<CreateServiceFormData>;
   onSubmit?: () => void;
 };
 
-export default function CreateServiceForm(props: Props) {
-  const { id, children, control, errors, categories, masters, onSubmit, setValue } = props;
-  const masterIds = useWatch<CreateServiceFormData, 'masterIds'>({
-    control,
-    name: 'masterIds',
-  });
-
-  const mastersById = useMemo(() => {
-    return new Map(masters.map((m) => [m.id, m]));
-  }, [masters]);
-
-  const selectedMasters = useMemo(() => {
-    return masterIds
-      ?.map((id) => mastersById.get(id))
-      .filter((m): m is MasterWithRelationsEntityResponse => m != null);
-  }, [masterIds, mastersById]);
-
-  const handleRemoveMaster = (id: number) => {
-    setValue(
-      'masterIds',
-      masterIds?.filter((masterId) => masterId !== id),
-      {
-        shouldDirty: true,
-        shouldValidate: true,
-      },
-    );
-  };
-
+export default function ServiceAddForm(props: Props) {
+  const { id, children, control, errors, categories, masters, onSubmit } = props;
   const durationOptions = timeUtils.getDurationOptionsRange(15, 300, 15);
 
   return (
@@ -158,27 +129,21 @@ export default function CreateServiceForm(props: Props) {
         </div>
       </>
       <div className='mt-8'>
-        <Typography variant='h3'>Masters</Typography>
-        <div className='grid grid-cols-2 gap-8 mt-4'>
-          <MasterSelect
-            control={control}
-            error={errors.masterIds?.message || ''}
-            masters={masters}
-          />
+        <div className='bg-primary-50 p-2 rounded-lg'>
+          <Typography variant='h3'>Masters</Typography>
         </div>
-        <ul id='masters-list' className='flex gap-4 mt-6'>
-          {selectedMasters?.map((master) => (
-            <li key={master.id}>
-              <MasterSelectCard
-                id={master.id}
-                name={master.name || ''}
-                specialty={master.headline || ''}
-                avatarUrl={(master.avatarUrl ?? master.avatarPreviewUrl) || ''}
-                onRemove={handleRemoveMaster}
-              />
-            </li>
-          ))}
-        </ul>
+        <div className='mt-2'>
+          <FormControl fullWidth error={!!errors.masterIds?.message}>
+            <Controller
+              name='masterIds'
+              control={control}
+              render={({ field }) => <MasterAutoCompleteSelect masters={masters} {...field} />}
+            />
+            {errors.masterIds?.message && (
+              <FormHelperText>{errors.masterIds?.message}</FormHelperText>
+            )}
+          </FormControl>
+        </div>
       </div>
       <div id='gallery-upload' className='mt-8'>
         <div className='bg-primary-50 p-2 rounded-lg'>

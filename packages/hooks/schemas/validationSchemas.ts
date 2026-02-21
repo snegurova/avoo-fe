@@ -2,7 +2,6 @@ import * as yup from 'yup';
 import { VALID_LANGUAGE_CODES } from '@avoo/constants';
 import { OrderStatus } from '@avoo/hooks/types/orderStatus';
 import { OrderType } from '@avoo/hooks/types/orderType';
-import { MediaType } from '@avoo/hooks/types/mediaType';
 
 export const registerSchema = yup.object({
   name: yup.string().nullable().trim(),
@@ -206,7 +205,12 @@ export const createServiceSchema = yup.object({
   durationMinutes: yup.number().min(1).required(),
   isActive: yup.boolean().required(),
   mediaIds: yup.array().of(yup.number().required()).required(),
-  masterIds: yup.array().of(yup.number().required()).required().default([]),
+  masterIds: yup
+    .array()
+    .of(yup.number().required())
+    .required()
+    .default([])
+    .min(1, 'At least one master is required'),
 });
 
 export type RegisterFormData = yup.InferType<typeof registerSchema>;
