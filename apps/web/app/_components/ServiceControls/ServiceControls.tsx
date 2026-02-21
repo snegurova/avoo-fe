@@ -23,7 +23,7 @@ export default function ServiceControls(props: Props) {
           <Link href={appRoutes.CreateService}>
             <Button
               fullWidth
-              color='secondary'
+              color='primary'
               variant='outlined'
               loading={isPending}
               disabled={isPending}

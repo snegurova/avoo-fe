@@ -23,7 +23,7 @@ export default function SchedulesControls(props: Props) {
           <Link href={appRoutes.WorkingHoursCreate}>
             <Button
               fullWidth
-              color='secondary'
+              color='primary'
               variant='outlined'
               loading={isPending}
               disabled={isPending}

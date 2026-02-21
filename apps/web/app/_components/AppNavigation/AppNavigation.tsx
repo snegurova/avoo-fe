@@ -160,6 +160,7 @@ export default function AppNavigation({ menuOpen, setMenuOpen }: Props) {
                               <Link
                                 href={appRoutes.WorkingHours}
                                 className='block w-full text-left pl-20.5 pr-6 py-3 hover:bg-primary-100 focus:bg-primary-100 transition-colors cursor-pointer'
+                                onClick={handleNavClick}
                               >
                                 Working hours
                               </Link>
