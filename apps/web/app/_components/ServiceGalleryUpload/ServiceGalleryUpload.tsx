@@ -1,9 +1,10 @@
-import DragAndDropZone from '../DragAndDropZone/DragAndDropZone';
+import { tv } from 'tailwind-variants';
+import { useMediaQuery } from '@mui/material';
 import { colors } from '@avoo/design-tokens';
 import { UploadMediaResponse } from '@avoo/axios/types/apiTypes';
-import AddMoreButton from '../AddMoreButton/AddMoreButton';
+import DragAndDropZone from '@/_components/DragAndDropZone/DragAndDropZone';
+import AddMoreButton from '@/_components/AddMoreButton/AddMoreButton';
 import BackupIcon from '@/_icons/BackupIcon';
-import { tv } from 'tailwind-variants';
 import CloseIcon from '@/_icons/CloseIcon';
 import AddIcon from '@/_icons/AddIcon';
 
@@ -17,11 +18,13 @@ type Props = {
 
 export default function ServiceGalleryUpload(props: Props) {
   const { id, medias, onFilePicked, onRemove, isUploading } = props;
-
+  const isMobile = useMediaQuery('(max-width: 767px)');
   const accept = '.jpg,.png';
 
+  const imagePerRow = isMobile ? 3 : 4;
+
   const imageVariants = tv({
-    base: 'h-[274px] rounded-lg overflow-hidden relative overflow-hidden group transition-opacity',
+    base: 'gallery-item-height rounded-lg overflow-hidden relative overflow-hidden group transition-opacity',
     variants: {
       wide: {
         true: 'col-span-2',
@@ -31,11 +34,18 @@ export default function ServiceGalleryUpload(props: Props) {
   });
 
   const isWide = (index: number) => {
+    if (isMobile) {
+      const i = index % 5;
+      return i === 4;
+    }
     const i = index % 12;
     return i === 3 || i === 5 || i === 11;
   };
 
   const isLast = (total: number, itemPerRow: number) => {
+    if (isMobile) {
+      return total % 5 === 0;
+    }
     return total % itemPerRow === 0;
   };
 
@@ -44,7 +54,10 @@ export default function ServiceGalleryUpload(props: Props) {
       {
         <>
           {medias.length > 0 ? (
-            <ul id='gallery-uploader' className='grid grid-cols-5 gap-4 w-full relative'>
+            <ul
+              id='gallery-uploader'
+              className='grid grid-cols-3 md:grid-cols-5 gap-1 lg:gap-4 w-full relative'
+            >
               {medias.map((media, index) => {
                 const wide = isWide(index);
                 const lastIndex = index === medias.length - 1;
@@ -54,22 +67,17 @@ export default function ServiceGalleryUpload(props: Props) {
 
                     <button
                       onClick={() => onRemove(media.id)}
-                      className='
-        absolute top-0 right-0 
-        border-1 border-gray-100
-        w-8 h-8 bg-white hover:bg-primary-50
-        text-black rounded-full 
-        flex items-center justify-center 
-        opacity-0 group-hover:opacity-100 
-        duration-200 z-20
-        cursor-pointer
-      '
+                      className='gallery-remove-button'
                       type='button'
                     >
-                      <CloseIcon fill={colors.black} width={20} height={20} />
+                      <CloseIcon
+                        fill={colors.black}
+                        width={isMobile ? 16 : 20}
+                        height={isMobile ? 16 : 20}
+                      />
                     </button>
 
-                    {lastIndex && isLast(medias.length, 4) && (
+                    {lastIndex && isLast(medias.length, imagePerRow) && (
                       <AddMoreButton
                         variant='inline'
                         accept={accept}
@@ -81,11 +89,10 @@ export default function ServiceGalleryUpload(props: Props) {
                 );
               })}
 
-              {!isLast(medias.length, 4) && (
-                <li className='h-[274px] col-span-1'>
+              {!isLast(medias.length, imagePerRow) && (
+                <li className='gallery-item-height col-span-1'>
                   <DragAndDropZone
-                    title='Select a file or drag and drop here'
-                    description='Upload up to 5 images (JPG, PNG only, max 10MB each)'
+                    title='Add photo'
                     buttonTitle='Select file'
                     accept={accept}
                     onFilePicked={onFilePicked}
@@ -108,7 +115,7 @@ export default function ServiceGalleryUpload(props: Props) {
                 onFilePicked={onFilePicked}
                 icon={<BackupIcon fill={colors.primary[300]} width={60} height={60} />}
                 isUploading={isUploading}
-                className='min-w-[477px]'
+                className='lg:min-w-[477px] min-w-[270px] gallery-item-height'
               />
             </div>
           )}

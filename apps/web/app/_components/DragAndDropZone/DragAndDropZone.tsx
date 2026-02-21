@@ -3,9 +3,9 @@ import { tv } from 'tailwind-variants';
 
 type Props = {
   title: string;
-  description: string;
   buttonTitle: string;
   isUploading: boolean;
+  description?: string;
   displayButton?: boolean;
   variant?: 'outline' | 'base';
   accept?: string;
@@ -19,7 +19,7 @@ type Props = {
 export default function DragAndDropZone(props: Props) {
   const {
     title = 'Upload file',
-    description = 'Drag and drop or click to upload',
+    description,
     buttonTitle = 'SELECT FILE',
     accept = '.jpg,.png',
     onFilePicked,
@@ -33,7 +33,7 @@ export default function DragAndDropZone(props: Props) {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const buttonVariants = tv({
-    base: 'w-full text- border-1 border-dashed border-primary-400 hover:bg-white border-primary-100 hover:border-primary-500 rounded-lg p-6 text-center cursor-pointer flex flex-col items-center justify-center gap-2 transition-colors',
+    base: 'drag-and-drop-zone',
     variants: {
       isUploading: {
         true: 'pointer-events-none border-2 border-blue-400 animate-pulse bg-blue-50',
@@ -43,7 +43,7 @@ export default function DragAndDropZone(props: Props) {
   });
 
   const iconVariants = tv({
-    base: 'rounded-full w-10 h-10 lg:w-20 lg:h-20 bg-primary-50 hover:bg-primary-100 flex items-center justify-center transition-colors',
+    base: 'drag-and-drop-icon',
     variants: {
       variant: {
         outline: 'border-1 border-gray-100 bg-white',
@@ -73,16 +73,17 @@ export default function DragAndDropZone(props: Props) {
       >
         {icon ? <div className={iconVariants({ isUploading, variant })}>{icon}</div> : null}
 
-        <p className='mb-2 font-semibold'>
-          {isUploading ? 'Uploading file. Please wait...' : title}
+        <p className='lg:mb-2 text-xs lg:text-sm font-semibold '>
+          {isUploading ? 'Uploading...' : title}
         </p>
-        <p className='text-sm text-gray-500 mb-4'>
-          {isUploading ? 'It may take a few seconds' : description}
-        </p>
+
+        {description && (
+          <p className='text-xs lg:text-sm text-gray-500 lg:mb-4'>
+            {isUploading ? 'It may take a few seconds' : description}
+          </p>
+        )}
         {displayButton && (
-          <span className='px-4 py-2 border border-primary-700 text-primary-700 hover:bg-primary-50 hover:text-primary-500 rounded-md inline-block transition-colors transition-text-colors'>
-            {isUploading ? 'Uploading...' : buttonTitle}
-          </span>
+          <span className='drag-and-drop-button'>{isUploading ? 'Uploading...' : buttonTitle}</span>
         )}
         <input
           id='dndFileInput'
