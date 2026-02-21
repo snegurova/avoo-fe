@@ -971,8 +971,8 @@ export interface components {
             name: string;
             durationMinutes: number;
             isActive: boolean;
-            services: components["schemas"]["ServiceEntity"];
-            masters: components["schemas"]["MasterEntity"];
+            services: components["schemas"]["ServiceEntity"][];
+            masters: components["schemas"]["MasterEntity"][];
             userId: number;
         };
         ServiceEntity: {
@@ -1679,7 +1679,8 @@ export interface components {
              * @example [
              *       {
              *         "start": "2026-01-09T09:30:00.000Z",
-             *         "end": "2026-01-09T10:00:00.000Z"
+             *         "end": "2026-01-09T10:00:00.000Z",
+             *         "type": "SEEK_LEAVE"
              *       }
              *     ]
              */
@@ -3031,6 +3032,8 @@ export interface operations {
                 limit?: number;
                 /** @description Service ID */
                 serviceId?: number;
+                /** @description Combination ID */
+                combinationId?: number;
             };
             header?: never;
             path?: never;
@@ -3212,6 +3215,8 @@ export interface operations {
                 limit?: number;
                 /** @description Service ID */
                 serviceId?: number;
+                /** @description Combination ID */
+                combinationId?: number;
             };
             header?: never;
             path?: never;

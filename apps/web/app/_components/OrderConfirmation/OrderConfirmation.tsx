@@ -11,6 +11,7 @@ import FormCounter from '@/_components/FormCounter/FormCounter';
 import { OrderStatus } from '@avoo/hooks/types/orderStatus';
 import ErrorIcon from '@/_icons/ErrorIcon';
 import FormTextArea from '@/_components/FormTextArea/FormTextArea';
+import CombinationElement from '@/_components/CombinationElement/CombinationElement';
 
 type Props = {
   order: Order;
@@ -32,9 +33,12 @@ export default function OrderConfirmation(props: Props) {
 
   const serviceData = useMemo((): Service | null => {
     if (!order.service) return null;
-    const service = { ...order.service, durationMinutes: order.duration };
+    return { ...order.service, durationMinutes: order.duration };
+  }, [order]);
 
-    return service;
+  const combinationData = useMemo(() => {
+    if (!order.combination) return null;
+    return { ...order.combination, durationMinutes: order.duration };
   }, [order]);
 
   const { control, handleSubmit, errors, setValue } = orderHooks.useUpdateOrder({
@@ -88,7 +92,9 @@ export default function OrderConfirmation(props: Props) {
         <div className='flex flex-col gap-3'>
           <h3 className='font-medium tracking-wider'>Service</h3>
           {serviceData && <ServiceElement item={serviceData} isCard master={order.master} />}
-
+          {combinationData && (
+            <CombinationElement item={combinationData} isCard master={order.master} hideMasters />
+          )}
           <div className=''>
             <Controller
               name='notes'

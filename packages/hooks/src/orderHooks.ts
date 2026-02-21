@@ -8,6 +8,7 @@ import {
   Order,
   BaseResponse,
   Service,
+  Combination,
 } from '@avoo/axios/types/apiTypes';
 import { ApiStatus } from '@avoo/hooks/types/apiTypes';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
@@ -69,6 +70,7 @@ export const orderHooks = {
   },
   useCreateOrder: ({ order, onSuccess }: UseCreateOrderFormParams) => {
     const [selectedServices, setSelectedServices] = useState<(Service | null)[]>([null]);
+    const [selectedCombinations, setSelectedCombinations] = useState<Combination[]>([]);
     const {
       control,
       handleSubmit,
@@ -78,6 +80,7 @@ export const orderHooks = {
       resolver: yupResolver(createPrivateOrdersSchema),
       context: {
         services: selectedServices ?? [],
+        combinations: selectedCombinations ?? [],
       },
       mode: 'onSubmit',
       defaultValues: {
@@ -127,6 +130,8 @@ export const orderHooks = {
       isPending,
       selectedServices,
       setSelectedServices,
+      selectedCombinations,
+      setSelectedCombinations,
     };
   },
   useUpdateOrder: ({ id, order, onSuccess }: UseUpdateOrderParams) => {

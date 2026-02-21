@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { orderHooks, combinationHooks } from '@avoo/hooks';
 import { useApiStatusStore } from '@avoo/store';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -12,6 +12,9 @@ import { OrderQueryParams } from '@avoo/hooks/types/orderQueryParams';
 import { OrderType } from '@avoo/hooks/types/orderType';
 import { timeUtils } from '@avoo/shared';
 import { useToast } from '@/_hooks/useToast';
+import CombinationProposition from '@/_components/CombinationProposition/CombinationProposition';
+import CombinationForm from '@/_components/CombinationForm/CombinationForm';
+import { MasterWithRelationsEntity, CreatePrivateOrder } from '@avoo/axios/types/apiTypes';
 
 const SERVICES_KEY_IN_ORDER_CREATE = 'ordersData';
 const WRAPPER_HEADER_HEIGHT = '62px';
@@ -23,18 +26,24 @@ export default function OrderCreate() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const toast = useToast();
+  const [showCombination, setShowCombination] = useState(true);
+  const [selectedMasters, setSelectedMasters] = useState<(MasterWithRelationsEntity | null)[]>([
+    null,
+  ]);
 
-  const parsedQuery = Object.fromEntries(
-    Object.values(OrderQueryParams).map((key) => [key, searchParams.get(key)]),
-  ) as Record<OrderQueryParams, string | null>;
+  const initialParams = useMemo(() => {
+    const parsedQuery = Object.fromEntries(
+      Object.values(OrderQueryParams).map((key) => [key, searchParams.get(key)]),
+    ) as Record<OrderQueryParams, string | null>;
 
-  const initialParams = {
-    masterId:
-      parsedQuery.masterId && !Number.isNaN(Number(parsedQuery.masterId))
-        ? Number(parsedQuery.masterId)
-        : undefined,
-    date: parsedQuery.date ?? undefined,
-  };
+    return {
+      masterId:
+        parsedQuery.masterId && !Number.isNaN(Number(parsedQuery.masterId))
+          ? Number(parsedQuery.masterId)
+          : undefined,
+      date: parsedQuery.date ?? undefined,
+    };
+  }, [searchParams]);
 
   useEffect(() => {
     if (searchParams.toString()) {
@@ -42,23 +51,22 @@ export default function OrderCreate() {
     }
   }, []);
 
-  const { control, handleSubmit, errors, selectedServices, setSelectedServices } =
-    orderHooks.useCreateOrder({
-      order: {
-        masterId: initialParams.masterId,
-        date: initialParams.date,
-      },
-      onSuccess: () => {
-        router.replace(appRoutes.Calendar);
-      },
-    });
-
-  const combinations = combinationHooks.useGetCombinations({
-    serviceIds: selectedServices
-      .filter((service): service is NonNullable<typeof service> => Boolean(service))
-      .map((service) => service.id),
-    isActive: true,
-    masterIds: initialParams.masterId ? [initialParams.masterId] : undefined,
+  const {
+    control,
+    handleSubmit,
+    errors,
+    selectedServices,
+    setSelectedServices,
+    selectedCombinations,
+    setSelectedCombinations,
+  } = orderHooks.useCreateOrder({
+    order: {
+      masterId: initialParams.masterId,
+      date: initialParams.date,
+    },
+    onSuccess: () => {
+      router.replace(appRoutes.Calendar);
+    },
   });
 
   useEffect(() => {
@@ -96,6 +104,77 @@ export default function OrderCreate() {
     setSelectedServices((prev) => [...prev, null]);
   };
 
+  const combinations = combinationHooks.useGetCombinations({
+    serviceIds: selectedServices
+      .filter((service): service is NonNullable<typeof service> => Boolean(service))
+      .map((service) => service.id),
+    isActive: true,
+    masterIds: fields[0]?.masterId ? [fields[0].masterId] : undefined,
+  });
+
+  useEffect(() => {
+    if (
+      selectedServices.length < 2 ||
+      combinations?.items.length === 0 ||
+      selectedCombinations.length > 0
+    ) {
+      setShowCombination(false);
+      return;
+    }
+    setShowCombination(true);
+  }, [combinations, selectedServices, selectedCombinations]);
+
+  const onCancelCombination = () => {
+    setShowCombination(false);
+  };
+
+  const onApplyCombination = () => {
+    if (!combinations?.items.length) return;
+
+    const combination = combinations.items[0];
+    const masterId = fields[0]?.masterId;
+    const date = fields[0]?.date;
+    const notes = fields[0]?.notes;
+
+    setSelectedCombinations([combination]);
+
+    remove();
+    append({
+      type: OrderType.Combination,
+      masterId,
+      date,
+      notes,
+      combinationId: combination.id,
+    });
+  };
+
+  const onSplitCombination = () => {
+    let countDuration = 0;
+    const ordersData: CreatePrivateOrder[] = [];
+
+    selectedServices.forEach((service, index) => {
+      ordersData.push({
+        type: OrderType.Service,
+        serviceId: service?.id,
+        masterId: selectedMasters[index]?.id ?? fields[0].masterId,
+        date: fields[0].date
+          ? timeUtils.convertDateToString(
+              timeUtils.addMinutesToDate(new Date(fields[0].date), countDuration),
+            )
+          : '',
+        notes: index === 0 ? fields[0].notes : '',
+      });
+
+      if (service) {
+        countDuration += service.durationMinutes;
+      }
+    });
+
+    remove();
+    append(ordersData);
+    setSelectedCombinations([]);
+  };
+
   return (
     <div
       className={`h-[calc(100%-${WRAPPER_HEADER_HEIGHT})] overflow-y-auto overflow-x-hidden flex`}
@@ -115,32 +194,55 @@ export default function OrderCreate() {
         <Controller
           name='ordersData'
           control={control}
-          render={({ field }) => (
-            <ServiceForm
-              value={field.value}
-              onChange={field.onChange}
-              initialParams={initialParams}
-              selectedServices={selectedServices}
-              setSelectedServices={setSelectedServices}
-              remove={remove}
-              errors={Array.isArray(errors.ordersData) ? errors.ordersData : []}
-            />
-          )}
+          render={({ field }) =>
+            fields[0]?.type === OrderType.Service ? (
+              <ServiceForm
+                value={field.value}
+                onChange={field.onChange}
+                initialParams={initialParams}
+                selectedServices={selectedServices}
+                setSelectedServices={setSelectedServices}
+                selectedMasters={selectedMasters}
+                setSelectedMasters={setSelectedMasters}
+                remove={remove}
+                errors={Array.isArray(errors.ordersData) ? errors.ordersData : []}
+              />
+            ) : (
+              <CombinationForm
+                value={field.value}
+                onChange={field.onChange}
+                selectedCombination={selectedCombinations[0]}
+                errors={Array.isArray(errors.ordersData) ? errors.ordersData[0] : {}}
+                selectedMasters={selectedMasters}
+                setSelectedMasters={setSelectedMasters}
+                splitCombination={onSplitCombination}
+              />
+            )
+          }
         />
-        {selectedServices.length > 0 && selectedServices[selectedServices.length - 1] && (
-          <div className=''>
-            <button
-              type='button'
-              onClick={addService}
-              className='flex gap-2 items-center font-medium text-sm group cursor-pointer rounded-lg px-4 py-2.5 hover:bg-primary-100 focus:bg-primary-100 transition-colors'
-            >
-              <div className='shrink-0'>
-                <AddCircleIcon className='fill-primary-900' />
-              </div>
-              <span className='text-primary-900 font-medium underline'>Add more service</span>
-            </button>
-          </div>
+        {showCombination && combinations?.items.length && (
+          <CombinationProposition
+            data={combinations?.items[0]}
+            onCancel={onCancelCombination}
+            onApply={onApplyCombination}
+          />
         )}
+        {selectedServices.length > 0 &&
+          selectedServices[selectedServices.length - 1] &&
+          fields[0]?.type === OrderType.Service && (
+            <div className=''>
+              <button
+                type='button'
+                onClick={addService}
+                className='flex gap-2 items-center font-medium text-sm group cursor-pointer rounded-lg px-4 py-2.5 hover:bg-primary-100 focus:bg-primary-100 transition-colors'
+              >
+                <div className='shrink-0'>
+                  <AddCircleIcon className='fill-primary-900' />
+                </div>
+                <span className='text-primary-900 font-medium underline'>Add more service</span>
+              </button>
+            </div>
+          )}
         <div className='flex gap-8 mt-6 pb-15'>
           <Button
             disabled={isPending}

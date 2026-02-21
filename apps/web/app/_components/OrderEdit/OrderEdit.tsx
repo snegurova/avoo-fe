@@ -8,16 +8,16 @@ import { Button, ButtonFit, ButtonIntent, ButtonType } from '@/_components/Butto
 import { useApiStatusStore } from '@avoo/store';
 import ServiceElement from '@/_components/ServiceElement/ServiceElement';
 import CustomerElement from '@/_components/CustomerElement/CustomerElement';
-import { orderHooks } from '@avoo/hooks';
+import { orderHooks, masterHooks } from '@avoo/hooks';
 import FormTextArea from '@/_components/FormTextArea/FormTextArea';
 import { Controller } from 'react-hook-form';
-import { masterHooks } from '@avoo/hooks';
 import SearchField from '@/_components/SearchField/SearchField';
 import MasterElement from '../MasterElement/MasterElement';
 import FormCounter from '@/_components/FormCounter/FormCounter';
 import ErrorIcon from '@/_icons/ErrorIcon';
 import FormDatePicker from '@/_components/FormDatePicker/FormDatePicker';
 import FormTimePicker from '@/_components/FormTimePicker/FormTimePicker';
+import CombinationElement from '@/_components/CombinationElement/CombinationElement';
 
 type Props = {
   order: Order;
@@ -53,6 +53,22 @@ export default function OrderEdit(props: Props) {
       onClose();
     },
   });
+
+  useEffect(() => {
+    setMasterParams((prev) => {
+      if (order.service) {
+        return {
+          ...prev,
+          serviceId: order.service.id,
+        };
+      } else if (order.combination) {
+        return {
+          ...prev,
+          combinationId: order.combination.id,
+        };
+      }
+    });
+  }, [order]);
 
   const {
     data: mastersData,
@@ -112,6 +128,9 @@ export default function OrderEdit(props: Props) {
         <div className='flex flex-col gap-3'>
           <h3 className='font-medium tracking-wider'>Service</h3>
           {order.service && <ServiceElement item={order.service} isCard />}
+          {order.combination && (
+            <CombinationElement item={order.combination} isCard master={order.master} hideMasters />
+          )}
           <div className='flex flex-col gap-3'>
             <div className=''>
               <Controller
