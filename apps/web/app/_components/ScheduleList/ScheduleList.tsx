@@ -1,9 +1,10 @@
-import { useApiStatusStore } from '@avoo/store';
-import ConfirmationDialog from '../ConfirmationDialog/ConfirmationDialog';
 import { useEffect, useRef, useState } from 'react';
-import { useToast } from '@/_hooks/useToast';
+import { useApiStatusStore } from '@avoo/store';
+import { scheduleHooks } from '@avoo/hooks';
 import { ScheduleEntity } from '@avoo/axios/types/apiTypes';
-import ScheduleListItem from '../ScheduleListItem/ScheduleListItem';
+import { useToast } from '@/_hooks/useToast';
+import ConfirmationDialog from '@/_components/ConfirmationDialog/ConfirmationDialog';
+import ScheduleListItem from '@/_components/ScheduleListItem/ScheduleListItem';
 
 type Props = {
   hasMore: boolean;
@@ -18,6 +19,8 @@ export default function ScheduleList(props: Props) {
 
   const isPending = useApiStatusStore((state) => state.isPending);
 
+  const { deleteScheduleMutationAsync } = scheduleHooks.useDeleteSchedule();
+
   const [scheduleIdToDelete, setScheduleIdToDelete] = useState<number | null>(null);
 
   const handleOpenDeleteDialog = (id: number) => {
@@ -30,6 +33,7 @@ export default function ScheduleList(props: Props) {
     handleCloseDeleteDialog();
     if (!scheduleIdToDelete) return;
     try {
+      await deleteScheduleMutationAsync(scheduleIdToDelete);
       toast.success('Schedule deleted successfully');
     } catch {
       toast.error('Failed to delete schedule');

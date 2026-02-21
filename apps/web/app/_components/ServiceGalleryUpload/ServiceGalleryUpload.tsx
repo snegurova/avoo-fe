@@ -93,6 +93,7 @@ export default function ServiceGalleryUpload(props: Props) {
                     isUploading={isUploading}
                     displayButton={false}
                     variant='outline'
+                    className='h-full'
                   />
                 </li>
               )}

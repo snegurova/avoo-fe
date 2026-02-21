@@ -1,3 +1,5 @@
+import React, { useState } from 'react';
+import { Controller } from 'react-hook-form';
 import {
   FormControl,
   FormHelperText,
@@ -8,31 +10,72 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import React from 'react';
-import { Control, Controller, FieldErrors } from 'react-hook-form';
-import { Category } from '@avoo/axios/types/apiTypes';
+import { Category, UploadMediaResponse } from '@avoo/axios/types/apiTypes';
 import { MasterWithRelationsEntityResponse } from '@avoo/axios/types/apiTypes';
+import { MEDIA_TYPE_ENUM } from '@avoo/axios/types/apiEnums';
+import { mediaHooks, servicesHooks } from '@avoo/hooks';
 import { timeUtils } from '@avoo/shared';
-import { CreateServiceFormData } from '@avoo/hooks';
 import CategorySelect from '@/_components/CategorySelect/CategorySelect';
 import MasterAutoCompleteSelect from '@/_components/MasterAutoCompleteSelect/MasterAutoCompleteSelect';
+import ServiceGalleryUpload from '@/_components/ServiceGalleryUpload/ServiceGalleryUpload';
+import { useToast } from '@/_hooks/useToast';
+import { appRoutes } from '@/_routes/routes';
+import { useRouter } from 'next/navigation';
 
 type Props = {
-  id: string;
   categories: Category[];
   masters: MasterWithRelationsEntityResponse[];
-  control: Control<CreateServiceFormData>;
-  errors: FieldErrors<CreateServiceFormData>;
-  children: React.ReactNode;
-  onSubmit?: () => void;
 };
 
 export default function ServiceAddForm(props: Props) {
-  const { id, children, control, errors, categories, masters, onSubmit } = props;
+  const { categories, masters } = props;
+
+  const router = useRouter();
+  const toast = useToast();
+
   const durationOptions = timeUtils.getDurationOptionsRange(15, 300, 15);
 
+  const [medias, setMedias] = useState<UploadMediaResponse[]>([]);
+
+  const { uploadMedia, isUploading } = mediaHooks.useUploadMedia({
+    onSuccess: (data) => {
+      toast.success('Media has been uploaded!');
+      setValue('mediaIds', [...getValues('mediaIds'), data.id]);
+      setMedias([...medias, data]);
+    },
+    onError: (error) => {
+      toast.error('Failed to upload media: ' + error.message);
+    },
+  });
+
+  const onFilePicked = (file: File | null) => {
+    if (file) {
+      uploadMedia({
+        file,
+        type: MEDIA_TYPE_ENUM.SERVICE,
+      });
+    }
+  };
+
+  const onRemoveMedia = (id: number) => {
+    toast.info('Removed ' + id);
+    setMedias(medias.filter((media) => media.id !== id));
+  };
+
+  const { control, setValue, getValues, handleSubmit, errors } = servicesHooks.useCreateServiceForm(
+    {
+      onSuccess: () => {
+        toast.success('Service has been created!');
+        router.replace(appRoutes.Services);
+      },
+      onError: (error) => {
+        toast.error('Failed to create service: ' + error.message);
+      },
+    },
+  );
+
   return (
-    <form id={id} onSubmit={onSubmit}>
+    <form id='create-new-service' onSubmit={handleSubmit}>
       <>
         <Typography variant='h3'>Basic detail</Typography>
         <div className='mt-4'>
@@ -149,7 +192,15 @@ export default function ServiceAddForm(props: Props) {
         <div className='bg-primary-50 p-2 rounded-lg'>
           <Typography variant='h3'>Gallery</Typography>
         </div>
-        <div className='mt-2'>{children}</div>
+        <div className='mt-2'>
+          <ServiceGalleryUpload
+            id='gallery-upload'
+            medias={medias}
+            onFilePicked={onFilePicked}
+            onRemove={onRemoveMedia}
+            isUploading={isUploading}
+          />
+        </div>
       </div>
       <div className='mt-8 flex items-center justify-between'>
         <Typography variant='h5'>Available for online booking</Typography>

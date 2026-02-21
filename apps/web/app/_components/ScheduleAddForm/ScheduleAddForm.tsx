@@ -1,23 +1,30 @@
+import { useRouter } from 'next/navigation';
 import React, { useEffect } from 'react';
 import { Controller, useFieldArray } from 'react-hook-form';
-import { masterHooks, scheduleHooks } from '@avoo/hooks';
-import { FormSelect } from '../FormSelect/FormSelect';
-import { FormMultiSelect } from '../FormMultiSelect/FormMultiSelect';
-import { getAllErrorMessages } from '@/_utils/formError';
-import { WorkingDayRow } from '../WorkingDayRow/WorkingDayRow';
 import { Button, TextField } from '@mui/material';
-import { useToast } from '@/_hooks/useToast';
+
 import { END_MINUTE, SCHEDULE_OPTIONS, START_MINUTE } from '@avoo/constants/src/calendar';
+import { masterHooks, scheduleHooks } from '@avoo/hooks';
 import { timeUtils } from '@avoo/shared';
-import FormDatePicker from '../FormDatePicker/FormDatePicker';
+
+import { FormSelect } from '@/_components/FormSelect/FormSelect';
+import { FormMultiSelect } from '@/_components/FormMultiSelect/FormMultiSelect';
+import FormDatePicker from '@/_components/FormDatePicker/FormDatePicker';
+import { WorkingDayRow } from '@/_components/WorkingDayRow/WorkingDayRow';
+import { appRoutes } from '@/_routes/routes';
+import { getAllErrorMessages } from '@/_utils/formError';
+import { useToast } from '@/_hooks/useToast';
 import { VALUE_DATE_FORMAT } from '@/_constants/dateFormats';
 
 export const ScheduleAddForm = () => {
   const toast = useToast();
 
+  const router = useRouter();
+
   const { control, handleSubmit, setValue, watch, errors } = scheduleHooks.useCreateScheduleForm({
     onSuccess: () => {
       toast.success('Schedule added successfully');
+      router.replace(appRoutes.WorkingHours);
     },
     onError: (error) => {
       toast.error(`Schedule add failed: ${error.message}`);
