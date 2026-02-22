@@ -30,6 +30,7 @@ export default function OrderCreate() {
   const [selectedMasters, setSelectedMasters] = useState<(MasterWithRelationsEntity | null)[]>([
     null,
   ]);
+  const [startDate, setStartDate] = useState<string | null>(null);
 
   const initialParams = useMemo(() => {
     const parsedQuery = Object.fromEntries(
@@ -65,7 +66,7 @@ export default function OrderCreate() {
       date: initialParams.date,
     },
     onSuccess: () => {
-      router.replace(appRoutes.Calendar);
+      router.push(`${appRoutes.Calendar}?date=${startDate}`);
     },
   });
 
@@ -79,6 +80,12 @@ export default function OrderCreate() {
     control,
     name: SERVICES_KEY_IN_ORDER_CREATE,
   });
+
+  useEffect(() => {
+    if (fields[0]?.date) {
+      setStartDate(fields[0].date);
+    }
+  }, [fields]);
 
   const addService = () => {
     const prevOrder = fields[fields.length - 1];

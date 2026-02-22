@@ -103,8 +103,8 @@ export const orderHooks = {
       CreatePrivateOrdersRequest
     >({
       mutationFn: orderApi.createOrder,
-      onSuccess: () => {
-        queryClient.invalidateQueries({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries({
           queryKey: [
             queryKeys.orders.all,
             queryKeys.orders.byParams,

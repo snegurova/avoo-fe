@@ -2,9 +2,8 @@ import React, { useEffect, useState, useRef, useMemo } from 'react';
 import CalendarColumn from '@/_components/CalendarColumn/CalendarColumn';
 import CalendarColumnHead from '@/_components/CalendarColumnHead/CalendarColumnHead';
 import CalendarTimeScale from '@/_components/CalendarTimeScale/CalendarTimeScale';
-import { calendarHooks } from '@avoo/hooks';
+import { calendarHooks, masterHooks } from '@avoo/hooks';
 import { PrivateCalendarQueryParams, PrivateEvent } from '@avoo/axios/types/apiTypes';
-import { masterHooks } from '@avoo/hooks';
 import CalendarControls from '@/_components/CalendarControls/CalendarControls';
 import { CalendarViewType } from '@avoo/hooks/types/calendarViewType';
 import { timeUtils } from '@avoo/shared';
@@ -17,6 +16,9 @@ import CalendarWeekSingleMasterView from '@/_components/CalendarWeekSingleMaster
 import AsideModal from '@/_components/AsideModal/AsideModal';
 import OrderData from '@/_components/OrderData/OrderData';
 import CalendarClockIcon from '@/_icons/CalendarClockIcon';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { appRoutes } from '@/_routes/routes';
+import { OrderQueryParams } from '@avoo/hooks/types/orderQueryParams';
 
 const columnHeadContainer = tv({
   base: 'sticky bg-white z-10 ',
@@ -55,6 +57,12 @@ const dataContainer = tv({
   },
 });
 
+type ScrollOptions = {
+  top?: number;
+  left?: number;
+  behavior?: 'auto' | 'smooth';
+};
+
 type Props = {
   isWidget?: boolean;
 };
@@ -76,6 +84,9 @@ export default function Calendar(props: Props) {
   const [time, setTime] = useState(timeUtils.getMinutesInDay(new Date().toString()));
   const [selectedOrder, setSelectedOrder] = useState<PrivateEvent | null>(null);
 
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
   useEffect(() => {
     setParams((prev) => ({
       ...prev,
@@ -95,11 +106,7 @@ export default function Calendar(props: Props) {
     )
       return;
 
-    let scrollOptions: {
-      top?: number;
-      left?: number;
-      behavior?: 'auto' | 'smooth';
-    } = {
+    let scrollOptions: ScrollOptions = {
       behavior: 'smooth',
     };
     if (
@@ -142,7 +149,29 @@ export default function Calendar(props: Props) {
     )
       return;
 
-    scrollToCurrentTime();
+    const date = searchParams.get(OrderQueryParams.Date);
+    if (date) {
+      const parsedDate = timeUtils.toDayBegin(new Date(date));
+      setDate(parsedDate);
+      setToDate(timeUtils.toDayEnd(parsedDate));
+
+      if (searchParams.toString()) {
+        router.replace(appRoutes.Calendar);
+      }
+
+      if (!scrollRef.current) return;
+
+      let scrollOptions: ScrollOptions = {
+        behavior: 'smooth',
+        top:
+          timeUtils.getMinutesInDay(date) * PX_IN_MINUTE -
+          (scrollRef.current.clientHeight - 76) / 2,
+      };
+
+      scrollRef.current.scrollTo(scrollOptions);
+    } else {
+      scrollToCurrentTime();
+    }
   }, [type, filteredMasters]);
 
   const isWeekSingleMasterView = useMemo(() => {
