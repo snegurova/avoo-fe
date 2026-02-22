@@ -99,14 +99,15 @@ export default function OrderEdit(props: Props) {
     }
   }, [isError, errorMessage]);
 
-  const onMasterChange = (value: number | { id: number } | undefined) => {
-    let masterId = undefined;
+  const onMasterChange = (value: number | { id: number } | object) => {
+    let masterId = null;
 
     if (typeof value === 'number') {
       masterId = value;
     } else if (value && typeof value === 'object' && 'id' in value) {
       masterId = value.id;
     }
+
     setValue('masterId', masterId);
     const master = masters?.find((m) => m.id === masterId) || undefined;
     setSelectedMaster(master);
@@ -184,13 +185,13 @@ export default function OrderEdit(props: Props) {
                 render={({ field }) => (
                   <SearchField
                     label='Master'
-                    value={field.value}
+                    value={field.value ?? undefined}
                     onChange={onMasterChange}
                     items={masters}
                     search={masterSearch}
                     setSearch={setMasterSearch}
                     ItemElement={MasterElement}
-                    searchMode={false}
+                    searchMode={!field.value}
                     error={errors?.masterId?.message}
                     hasMore={hasMoreMasters}
                     fetchNextPage={fetchNextMastersPage}

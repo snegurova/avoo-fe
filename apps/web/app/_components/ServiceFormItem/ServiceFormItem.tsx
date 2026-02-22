@@ -97,10 +97,11 @@ export default function ServiceFormItem(props: Props) {
   }, [masterSearch]);
 
   useEffect(() => {
-    if (isEmptyObject(initialParams)) return;
+    if (isEmptyObject(initialParams) || !masters) return;
 
     if (initialParams.masterId) {
       const master = masters?.find((m) => m.id === initialParams.masterId) || null;
+
       setSelectedMasters((prev) => {
         const newMasters = [...prev];
         newMasters[index] = master;
@@ -108,7 +109,7 @@ export default function ServiceFormItem(props: Props) {
       });
       setMasterIds(master ? [master.id] : []);
     }
-  }, []);
+  }, [masters]);
 
   const selectService = (val: { id: number } | null) => {
     if (!val) return;

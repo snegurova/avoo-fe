@@ -140,6 +140,7 @@ export const orderHooks = {
       handleSubmit,
       formState: { errors },
       setValue,
+      getValues,
     } = useForm<UpdateOrderData>({
       resolver: yupResolver(updateOrderSchema),
       mode: 'onSubmit',
@@ -160,10 +161,18 @@ export const orderHooks = {
 
     return {
       control,
-      handleSubmit: handleSubmit(utils.submitAdapter<UpdateOrderRequest>(mutate)),
+      handleSubmit: handleSubmit((data) => {
+        const cleanedData: UpdateOrderRequest = {
+          ...data,
+          masterId: data.masterId ?? undefined,
+        };
+
+        mutate(cleanedData);
+      }),
       errors,
       isPending,
       setValue,
+      getValues,
     };
   },
   useUpdateOrderStatus: ({ id, onSuccess }: UseUpdateOrderParams) => {
