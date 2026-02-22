@@ -15,6 +15,8 @@ import { useToast } from '@/_hooks/useToast';
 import CombinationProposition from '@/_components/CombinationProposition/CombinationProposition';
 import CombinationForm from '@/_components/CombinationForm/CombinationForm';
 import { MasterWithRelationsEntity, CreatePrivateOrder } from '@avoo/axios/types/apiTypes';
+import Calendar from '@/_components/Calendar/Calendar';
+import { CalendarType } from '@avoo/hooks/types/calendarType';
 
 const SERVICES_KEY_IN_ORDER_CREATE = 'ordersData';
 const WRAPPER_HEADER_HEIGHT = '62px';
@@ -182,11 +184,35 @@ export default function OrderCreate() {
     setSelectedCombinations([]);
   };
 
+  const setDateAndMasterInLastItem = (
+    field: { value: CreatePrivateOrder[]; onChange: (value: CreatePrivateOrder[]) => void },
+    date: string,
+    master: MasterWithRelationsEntity,
+  ) => {
+    const updatedOrders = [...field.value];
+    const lastIndex = updatedOrders.length - 1;
+
+    setSelectedMasters((prev) => {
+      const newMasters = [...prev];
+      newMasters[lastIndex] = master;
+      return newMasters;
+    });
+
+    updatedOrders[lastIndex] = {
+      ...updatedOrders[lastIndex],
+      date,
+      masterId: master.id,
+    };
+
+    field.onChange(updatedOrders);
+  };
+
   return (
-    <div
-      className={`h-[calc(100%-${WRAPPER_HEADER_HEIGHT})] overflow-y-auto overflow-x-hidden flex`}
-    >
-      <form className='px-12 w-full flex flex-col gap-6' onSubmit={handleSubmit}>
+    <div className={`h-[calc(100%-${WRAPPER_HEADER_HEIGHT})]  flex`}>
+      <form
+        className='px-8 w-full flex flex-col gap-6 overflow-y-auto overflow-x-hidden'
+        onSubmit={handleSubmit}
+      >
         <Controller
           name='customerData'
           control={control}
@@ -271,7 +297,19 @@ export default function OrderCreate() {
           </Button>
         </div>
       </form>
-      <div className='w-100 shrink-0'></div>
+      <div className='hidden lg:block lg:w-75 xl:w-100'>
+        <Controller
+          name='ordersData'
+          control={control}
+          render={({ field }) => (
+            <Calendar
+              calendarType={CalendarType.SELECTOR}
+              onClickDateTime={(date, master) => setDateAndMasterInLastItem(field, date, master)}
+              selectedMasterId={fields[field.value.length - 1]?.masterId}
+            />
+          )}
+        />
+      </div>
     </div>
   );
 }

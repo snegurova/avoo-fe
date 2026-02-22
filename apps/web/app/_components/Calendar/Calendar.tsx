@@ -3,7 +3,11 @@ import CalendarColumn from '@/_components/CalendarColumn/CalendarColumn';
 import CalendarColumnHead from '@/_components/CalendarColumnHead/CalendarColumnHead';
 import CalendarTimeScale from '@/_components/CalendarTimeScale/CalendarTimeScale';
 import { calendarHooks, masterHooks } from '@avoo/hooks';
-import { PrivateCalendarQueryParams, PrivateEvent } from '@avoo/axios/types/apiTypes';
+import {
+  MasterWithRelationsEntity,
+  PrivateCalendarQueryParams,
+  PrivateEvent,
+} from '@avoo/axios/types/apiTypes';
 import CalendarControls from '@/_components/CalendarControls/CalendarControls';
 import { CalendarViewType } from '@avoo/hooks/types/calendarViewType';
 import { timeUtils } from '@avoo/shared';
@@ -19,6 +23,18 @@ import CalendarClockIcon from '@/_icons/CalendarClockIcon';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { appRoutes } from '@/_routes/routes';
 import { OrderQueryParams } from '@avoo/hooks/types/orderQueryParams';
+import { CalendarType } from '@avoo/hooks/types/calendarType';
+
+const calendarWrapper = tv({
+  base: 'flex w-full',
+  variants: {
+    calendarType: {
+      [CalendarType.REGULAR]: 'h-[calc(100%-62px)]',
+      [CalendarType.WIDGET]: 'h-[calc(100%-62px)]',
+      [CalendarType.SELECTOR]: 'h-full',
+    },
+  },
+});
 
 const columnHeadContainer = tv({
   base: 'sticky bg-white z-10 ',
@@ -64,16 +80,20 @@ type ScrollOptions = {
 };
 
 type Props = {
-  isWidget?: boolean;
+  calendarType?: CalendarType;
+  onClickDateTime?: (date: string, master: MasterWithRelationsEntity) => void;
+  selectedMasterId?: number;
 };
 
 export default function Calendar(props: Props) {
-  const { isWidget = false } = props;
+  const { calendarType = CalendarType.REGULAR, onClickDateTime, selectedMasterId } = props;
 
   const scrollRef = useRef<HTMLDivElement | null>(null);
   const [date, setDate] = useState<Date>(timeUtils.toDayBegin(new Date()));
   const [toDate, setToDate] = useState<Date>(timeUtils.toDayEnd(new Date()));
-  const [masterIds, setMasterIds] = useState<number[] | undefined>(undefined);
+  const [masterIds, setMasterIds] = useState<number[] | undefined>(
+    selectedMasterId ? [selectedMasterId] : undefined,
+  );
   const [statuses, setStatuses] = useState<OrderStatus[] | undefined>(undefined);
   const [orderIsOutOfSchedule, setOrderIsOutOfSchedule] = useState<boolean | undefined>(undefined);
   const [type, setType] = useState<CalendarViewType>(CalendarViewType.DAY);
@@ -86,7 +106,6 @@ export default function Calendar(props: Props) {
 
   const router = useRouter();
   const searchParams = useSearchParams();
-
   useEffect(() => {
     setParams((prev) => ({
       ...prev,
@@ -185,9 +204,16 @@ export default function Calendar(props: Props) {
     }, 0);
   };
 
+  const selectMasterIdByClick = (date: string, master: MasterWithRelationsEntity) => {
+    if (!onClickDateTime) return;
+    setMasterIds([master.id]);
+
+    onClickDateTime(date, master);
+  };
+
   return (
     <>
-      <div className='flex h-[calc(100%-62px)] w-full'>
+      <div className={calendarWrapper({ calendarType })}>
         <div className='w-full flex flex-col'>
           <CalendarControls
             date={date}
@@ -206,7 +232,7 @@ export default function Calendar(props: Props) {
             setStatuses={setStatuses}
             orderIsOutOfSchedule={orderIsOutOfSchedule}
             setOrderIsOutOfSchedule={setOrderIsOutOfSchedule}
-            isWidget={isWidget}
+            calendarType={calendarType}
           />
           <div className={mainContainer({ type, isWeekSingleMasterView })} ref={scrollRef}>
             {filteredMasters.length > 0 && !isWeekSingleMasterView && (
@@ -218,6 +244,7 @@ export default function Calendar(props: Props) {
                       master={master}
                       idx={idx}
                       type={type}
+                      calendarType={calendarType}
                     />
                   ))}
                 </div>
@@ -243,6 +270,8 @@ export default function Calendar(props: Props) {
                           setTime={setTime}
                           selectOrder={setSelectedOrder}
                           availableBooking={!selectedOrder}
+                          calendarType={calendarType}
+                          onClickDateTime={selectMasterIdByClick}
                         />
                       );
                     })}
