@@ -6,7 +6,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { createMasterSchema, CreateMasterFormData } from '../schemas/validationSchemas';
 
 import { masterApi } from '@avoo/axios';
-import { useQuery, useMutation, useQueryClient, useInfiniteQuery } from '@tanstack/react-query';
+import { useQuery, useInfiniteQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 
 import {
   BaseResponse,
@@ -42,7 +42,7 @@ export const masterHooks = {
   },
   useGetMastersProfileInfo: (params: GetMastersQueryParams = {}) => {
     const { data: profileInfoData, isPending } = useQuery<BaseResponse<GetMastersResponse>, Error>({
-      queryKey: queryKeys.masters.all,
+      queryKey: [queryKeys.masters.all, queryKeys.masters.byParams(params)],
       queryFn: () => masterApi.getMastersInfo(params),
     });
 
@@ -54,25 +54,23 @@ export const masterHooks = {
 
     return null;
   },
-  useGetMastersProfileInfoInfinite: (params: GetMastersQueryParams = {}) => {
-    const DEFAULT_LIMIT = 10;
-    const { limit = DEFAULT_LIMIT } = params;
-    const filterParams = { ...params, limit };
-
-    const infiniteQuery = useInfiniteQuery<BaseResponse<GetMastersResponse>, Error>({
-      queryKey: ['masters', 'list', filterParams],
+  useGetMastersInfinite: (params: GetMastersQueryParams = {}) => {
+    const query = useInfiniteQuery<BaseResponse<GetMastersResponse>, Error>({
+      queryKey: [queryKeys.masters.infinite, queryKeys.masters.byParams(params)],
       queryFn: ({ pageParam = 1 }) =>
-        masterApi.getMastersInfo({ ...filterParams, page: pageParam as number }),
+        masterApi.getMastersInfo({ ...params, page: pageParam as number }),
       initialPageParam: 1,
       getNextPageParam: (lastPage) => {
         const { currentPage, total } = lastPage.data?.pagination || { currentPage: 0, total: 0 };
-        return currentPage * limit < total ? currentPage + 1 : undefined;
+        return currentPage * (params.limit ?? 10) < total ? currentPage + 1 : undefined;
       },
     });
 
-    utils.useSetPendingApi(infiniteQuery.isFetching);
+    const isPending = query.isFetching;
 
-    return infiniteQuery;
+    utils.useSetPendingApi(isPending);
+
+    return query;
   },
   useCreateMasterForm: ({ onSuccess }: UseCreateMasterFormParams = {}) => {
     const {

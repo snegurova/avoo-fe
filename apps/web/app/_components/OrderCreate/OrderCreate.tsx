@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { orderHooks } from '@avoo/hooks';
+import { orderHooks, combinationHooks } from '@avoo/hooks';
 import { useApiStatusStore } from '@avoo/store';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Button, ButtonFit, ButtonIntent, ButtonType } from '@/_components/Button/Button';
@@ -11,14 +11,18 @@ import AddCircleIcon from '@/_icons/AddCircleIcon';
 import { OrderQueryParams } from '@avoo/hooks/types/orderQueryParams';
 import { OrderType } from '@avoo/hooks/types/orderType';
 import { timeUtils } from '@avoo/shared';
+import { useToast } from '@/_hooks/useToast';
 
 const SERVICES_KEY_IN_ORDER_CREATE = 'ordersData';
 const WRAPPER_HEADER_HEIGHT = '62px';
 
 export default function OrderCreate() {
   const isPending = useApiStatusStore((state) => state.isPending);
+  const errorMessage = useApiStatusStore((s) => s.errorMessage);
+  const isError = useApiStatusStore((s) => s.isError);
   const router = useRouter();
   const searchParams = useSearchParams();
+  const toast = useToast();
 
   const parsedQuery = Object.fromEntries(
     Object.values(OrderQueryParams).map((key) => [key, searchParams.get(key)]),
@@ -48,6 +52,20 @@ export default function OrderCreate() {
         router.replace(appRoutes.Calendar);
       },
     });
+
+  const combinations = combinationHooks.useGetCombinations({
+    serviceIds: selectedServices
+      .filter((service): service is NonNullable<typeof service> => Boolean(service))
+      .map((service) => service.id),
+    isActive: true,
+    masterIds: initialParams.masterId ? [initialParams.masterId] : undefined,
+  });
+
+  useEffect(() => {
+    if (isError && !!errorMessage) {
+      toast.error(errorMessage);
+    }
+  }, [isError, errorMessage]);
 
   const { fields, append, remove } = useFieldArray({
     control,
@@ -88,9 +106,9 @@ export default function OrderCreate() {
           control={control}
           render={({ field }) => (
             <CustomerSelect
-              value={field.value}
+              value={field.value ?? undefined}
               onChange={field.onChange}
-              error={errors.customerData?.message}
+              error={errors.customerData}
             />
           )}
         />
