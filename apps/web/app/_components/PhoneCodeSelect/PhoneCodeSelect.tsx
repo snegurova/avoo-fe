@@ -33,7 +33,7 @@ export default function PhoneCodeSelect({ value, onChange, id, className }: Read
   );
 
   return (
-    <div className='relative inline-block h-[44px]'>
+    <div className={`relative h-full w-full ${className ?? ''}`}>
       <select
         id={id}
         value={value}

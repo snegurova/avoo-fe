@@ -6,7 +6,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { createMasterSchema, CreateMasterFormData } from '../schemas/validationSchemas';
 
 import { masterApi } from '@avoo/axios';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient, useInfiniteQuery } from '@tanstack/react-query';
 
 import {
   BaseResponse,
@@ -53,6 +53,26 @@ export const masterHooks = {
     }
 
     return null;
+  },
+  useGetMastersProfileInfoInfinite: (params: GetMastersQueryParams = {}) => {
+    const DEFAULT_LIMIT = 10;
+    const { limit = DEFAULT_LIMIT } = params;
+    const filterParams = { ...params, limit };
+
+    const infiniteQuery = useInfiniteQuery<BaseResponse<GetMastersResponse>, Error>({
+      queryKey: ['masters', 'list', filterParams],
+      queryFn: ({ pageParam = 1 }) =>
+        masterApi.getMastersInfo({ ...filterParams, page: pageParam as number }),
+      initialPageParam: 1,
+      getNextPageParam: (lastPage) => {
+        const { currentPage, total } = lastPage.data?.pagination || { currentPage: 0, total: 0 };
+        return currentPage * limit < total ? currentPage + 1 : undefined;
+      },
+    });
+
+    utils.useSetPendingApi(infiniteQuery.isFetching);
+
+    return infiniteQuery;
   },
   useCreateMasterForm: ({ onSuccess }: UseCreateMasterFormParams = {}) => {
     const {
@@ -110,7 +130,7 @@ export const masterHooks = {
       handleSubmit,
       setValue,
       watch,
-      formState: { errors },
+      formState: { errors, isDirty },
       reset,
     } = useForm<CreateMasterFormData>({
       resolver: yupResolver(createMasterSchema),
@@ -154,13 +174,14 @@ export const masterHooks = {
       errors,
       isPending,
       reset,
+      isDirty,
     };
   },
   useDeleteMaster: ({ onSuccess }: { onSuccess?: () => void } = {}) => {
     const queryClient = useQueryClient();
 
     const { mutate: deleteMasterMutation, isPending } = useMutation<
-      BaseResponse<void>,
+      BaseResponse<MasterWithRelationsEntityResponse>,
       Error,
       number
     >({

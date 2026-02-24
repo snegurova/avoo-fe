@@ -9,8 +9,10 @@ import MasterLanguageList from '@/_components/MasterLanguageList/MasterLanguageL
 import ShareIcon from '@/_icons/ShareIcon';
 import DeleteIcon from '@/_icons/DeleteIcon';
 import EditSquareIcon from '@/_icons/EditSquareIcon';
-import IconLink from '@/_components/IconLink/IconLink';
 import { IconButton } from '@/_components/IconButton/IconButton';
+import ConfirmationModal from '../ConfirmationModal/ConfirmationModal';
+import { masterHooks } from '@avoo/hooks';
+import { useToast } from '@/_hooks/useToast';
 
 type Props = {
   master: MasterWithRelationsEntityResponse;
@@ -19,13 +21,31 @@ type Props = {
 };
 
 export const MasterListItem = ({ master, onEdit, isSelected }: Props) => {
+  const toast = useToast();
+  const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = React.useState(false);
   const displayName = master.name || 'No name';
   const phone = master.phone || 'No phone';
   const languagesArr = master.languages || [];
 
+  const { deleteMaster, isPending: isDeletePending } = masterHooks.useDeleteMaster({
+    onSuccess: () => {
+      const masterName = master.name?.trim() || 'Master';
+      toast.info(`Master ${masterName} was deleted!`);
+      setIsDeleteConfirmOpen(false);
+    },
+  });
+
   const handleOpenDetails = () => {
     onEdit?.(master);
   };
+
+  const handleDeleteClick = React.useCallback(() => {
+    setIsDeleteConfirmOpen(true);
+  }, []);
+
+  const handleConfirmDelete = React.useCallback(() => {
+    deleteMaster(master.id);
+  }, [deleteMaster, master.id]);
 
   return (
     <div
@@ -73,7 +93,7 @@ export const MasterListItem = ({ master, onEdit, isSelected }: Props) => {
           </div>
         </div>
 
-        <div className='hidden md:flex md:w-1/4 md:flex-col md:items-end'>
+        <div className='hidden md:flex md:w-1/4 md:flex-col'>
           <MasterLanguageList languages={languagesArr} showLabel />
         </div>
       </button>
@@ -108,17 +128,36 @@ export const MasterListItem = ({ master, onEdit, isSelected }: Props) => {
         <div className='w-1/5 break-words whitespace-normal'>
           <MasterLanguageList languages={languagesArr} />
         </div>
-        <div className='w-12 flex items-center gap-2'>
+        <div className='w-12 flex items-center gap-0'>
           <IconButton
             icon={<EditSquareIcon />}
             ariaLabel='Edit master'
             onClick={handleOpenDetails}
-            className='rounded-full w-10 h-10 flex items-center justify-center hover:text-primary-700 focus:text-primary-700 transition-colors'
+            className='flex items-center justify-center p-2.5'
           />
-          <IconLink icon={<ShareIcon />} href='#' label='Share' />
-          <IconLink icon={<DeleteIcon />} href='#' label='Delete' />
+          <IconButton
+            icon={<ShareIcon />}
+            ariaLabel='Share'
+            className='flex items-center justify-center p-2.5'
+          />
+          <IconButton
+            icon={<DeleteIcon />}
+            ariaLabel='Delete'
+            onClick={handleDeleteClick}
+            className='flex items-center justify-center p-2.5'
+          />
         </div>
       </div>
+
+      <ConfirmationModal
+        isOpen={isDeleteConfirmOpen}
+        onCancel={() => setIsDeleteConfirmOpen(false)}
+        onConfirm={handleConfirmDelete}
+        title='Delete master'
+        description='Are you sure you want to permanently delete this master profile? All related information will be removed and cannot be recovered.'
+        confirmText='Delete master'
+        submitDisabled={isDeletePending}
+      />
     </div>
   );
 };

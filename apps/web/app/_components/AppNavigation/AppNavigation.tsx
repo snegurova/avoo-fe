@@ -149,19 +149,19 @@ export default function AppNavigation({ menuOpen, setMenuOpen }: Props) {
                           <ul className='flex flex-col font-light text-sm'>
                             <li className='w-full'>
                               <Link
-                                href={appRoutes.TimeOff}
-                                className='block w-full text-left pl-20 pr-4 py-2 text-sm hover:bg-primary-100 focus:bg-primary-100 transition-colors cursor-pointer'
-                                onClick={handleNavClick}
+                                href={appRoutes.WorkingHours}
+                                className='block w-full text-left pl-20 pr-4 py-2 hover:bg-primary-100 focus:bg-primary-100 transition-colors cursor-pointer'
                               >
-                                Schedule exception
+                                Working schedule
                               </Link>
                             </li>
                             <li className='w-full'>
                               <Link
-                                href={appRoutes.WorkingHours}
-                                className='block w-full text-left pl-20.5 pr-6 py-3 hover:bg-primary-100 focus:bg-primary-100 transition-colors cursor-pointer'
+                                href={appRoutes.TimeOff}
+                                className='block w-full text-left pl-20 pr-4 py-2 hover:bg-primary-100 focus:bg-primary-100 transition-colors cursor-pointer'
+                                onClick={handleNavClick}
                               >
-                                Working hours
+                                Schedule exception
                               </Link>
                             </li>
                           </ul>

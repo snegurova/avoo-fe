@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { appRoutes } from '@/_routes/routes';
 import Controls from '@/_components/Controls/Controls';
@@ -12,11 +12,19 @@ import type { MasterWithRelationsEntityResponse } from '@avoo/axios/types/apiTyp
 
 export default function MastersPage() {
   const [searchQuery, setSearchQuery] = useState('');
+  const DEFAULT_LIMIT = 10;
   const [editingMaster, setEditingMaster] = useState<MasterWithRelationsEntityResponse | null>(
     null,
   );
 
-  const masters = masterHooks.useGetMastersProfileInfo()?.items;
+  const queryParams = useMemo(() => ({ limit: DEFAULT_LIMIT }), []);
+  const { data, fetchNextPage, hasNextPage } =
+    masterHooks.useGetMastersProfileInfoInfinite(queryParams);
+
+  const masters = useMemo(
+    () => data?.pages.flatMap((page) => page.data?.items ?? []) ?? [],
+    [data],
+  );
   const filtered = masterHooks.useFilterMasters(masters ?? null, searchQuery);
 
   const router = useRouter();
@@ -34,23 +42,24 @@ export default function MastersPage() {
   }, []);
 
   return (
-    <AppWrapper>
+    <AppWrapper className='flex-1 min-h-0'>
       <div className='p-6 flex-1 min-h-0 overflow-auto hide-scrollbar'>
-        <div className='mb-8'>
-          <Controls
-            title='Masters'
-            onAddItem={handleAddMaster}
-            addLabel='New master'
-            searchValue={searchQuery}
-            onSearchChange={setSearchQuery}
-            placeholder='Search by name, phone or email'
-          />
-        </div>
+        <Controls
+          title='Masters'
+          onAddItem={handleAddMaster}
+          addLabel='New master'
+          searchValue={searchQuery}
+          onSearchChange={setSearchQuery}
+          placeholder='Search by name, phone or email'
+          className='mb-8 sticky top-0 z-10 bg-white px-6 pt-6 lg:px-11 lg:pt-14'
+        />
 
         <MasterList
           masters={filtered}
           onEdit={handleEditMaster}
           selectedId={editingMaster?.id ?? null}
+          incrementPage={fetchNextPage}
+          hasMore={!!hasNextPage}
         />
 
         <MasterEditModal
