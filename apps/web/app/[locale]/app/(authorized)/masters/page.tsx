@@ -18,8 +18,7 @@ export default function MastersPage() {
   );
 
   const queryParams = useMemo(() => ({ limit: DEFAULT_LIMIT }), []);
-  const { data, fetchNextPage, hasNextPage } =
-    masterHooks.useGetMastersProfileInfoInfinite(queryParams);
+  const { data, fetchNextPage, hasNextPage } = masterHooks.useGetMastersInfinite(queryParams);
 
   const masters = useMemo(
     () => data?.pages.flatMap((page) => page.data?.items ?? []) ?? [],
