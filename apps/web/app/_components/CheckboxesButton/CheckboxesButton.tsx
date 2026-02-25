@@ -15,7 +15,7 @@ type Props = {
 };
 
 const selectButton = tv({
-  base: 'rounded-2xl cursor-pointer flex items-center text-gray-800 border border-gray-200 bg-transparent gap-2 px-3 py-[7px] text-sm leading-none hover:bg-gray-100 focus:bg-gray-100 transition-colors',
+  base: 'rounded-2xl cursor-pointer flex items-center text-gray-800 border border-gray-200 bg-transparent gap-2 px-3 py-[7px] text-sm leading-none hover:bg-gray-100 focus:bg-gray-100 transition-colors h-full min-h-8.75',
 });
 
 const selectIcon = tv({
@@ -63,7 +63,7 @@ export default function CheckboxesButton(props: Props) {
   };
 
   return (
-    <div className='relative' ref={ref}>
+    <div className='relative h-full' ref={ref}>
       <button className={selectButton()} onClick={toggleOpen}>
         {addCount &&
           (options[0].items?.length ? (

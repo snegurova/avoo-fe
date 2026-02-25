@@ -215,6 +215,16 @@ export type UploadMediaResponse = components['schemas']['MediaEntity'];
 
 /* Combination */
 
-export type Combination = components['schemas']['CombinationEntity'];
+export type Combination = Omit<
+  components['schemas']['CombinationEntity'],
+  'services' | 'masters'
+> & {
+  services: Service[];
+  masters: MasterWithRelationsEntity[];
+};
 export type GetCombinationsQueryParams =
   operations['CombinationsController_findAllByOwner']['parameters']['query'];
+export type GetCombinationsResponse = {
+  items: Combination[];
+  pagination: components['schemas']['PaginationDto'];
+};

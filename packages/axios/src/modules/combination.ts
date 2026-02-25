@@ -1,11 +1,15 @@
-import { BaseResponse, GetCombinationsQueryParams, Combination } from '@avoo/axios/types/apiTypes';
+import {
+  BaseResponse,
+  GetCombinationsQueryParams,
+  GetCombinationsResponse,
+} from '@avoo/axios/types/apiTypes';
 import { apiClient } from '@avoo/axios/src/apiClient';
 
 const COMBINATION_ENDPOINT = '/combinations';
 
 export const combinationApi = {
   async getCombinations(params: GetCombinationsQueryParams) {
-    const res = await apiClient.get<BaseResponse<Combination[]>>(COMBINATION_ENDPOINT, {
+    const res = await apiClient.get<BaseResponse<GetCombinationsResponse>>(COMBINATION_ENDPOINT, {
       params,
       paramsSerializer: (params) => {
         const searchParams = new URLSearchParams();

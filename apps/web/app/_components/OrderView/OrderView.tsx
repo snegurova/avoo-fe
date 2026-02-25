@@ -6,7 +6,7 @@ import CustomerElement from '@/_components/CustomerElement/CustomerElement';
 import { Button, ButtonFit, ButtonIntent } from '@/_components/Button/Button';
 import { timeUtils } from '@avoo/shared';
 import { useApiStatusStore } from '@avoo/store';
-import ErrorIcon from '@/_icons/ErrorIcon';
+import CombinationElement from '@/_components/CombinationElement/CombinationElement';
 
 type Props = {
   order: Order;
@@ -22,9 +22,12 @@ export default function OrderView(props: Props) {
 
   const serviceData = useMemo((): Service | null => {
     if (!order.service) return null;
-    const service = { ...order.service, durationMinutes: order.duration };
+    return { ...order.service, durationMinutes: order.duration };
+  }, [order]);
 
-    return service;
+  const combinationData = useMemo(() => {
+    if (!order.combination) return null;
+    return { ...order.combination, durationMinutes: order.duration };
   }, [order]);
 
   return (
@@ -54,6 +57,9 @@ export default function OrderView(props: Props) {
         <div className='flex flex-col gap-3'>
           <h3 className='font-medium tracking-wider'>Service</h3>
           {serviceData && <ServiceElement item={serviceData} isCard master={order.master} />}
+          {combinationData && (
+            <CombinationElement item={combinationData} isCard master={order.master} />
+          )}
           {order.notes && typeof order.notes === 'string' && (
             <p className='text-xs text-gray-500'>Note: {order.notes}</p>
           )}
