@@ -1,7 +1,6 @@
 import React from 'react';
-import { CreatePrivateOrder } from '@avoo/axios/types/apiTypes';
-import ServiceFormItem from '../ServiceFormItem/ServiceFormItem';
-import { Service } from '@avoo/axios/types/apiTypes';
+import { CreatePrivateOrder, MasterWithRelationsEntity, Service } from '@avoo/axios/types/apiTypes';
+import ServiceFormItem from '@/_components/ServiceFormItem/ServiceFormItem';
 
 type Props = {
   value: CreatePrivateOrder[];
@@ -16,11 +15,26 @@ type Props = {
   ) => void;
   remove: (index: number) => void;
   errors?: unknown[];
+  selectedMasters: (MasterWithRelationsEntity | null)[];
+  setSelectedMasters: (
+    masters:
+      | (MasterWithRelationsEntity | null)[]
+      | ((prev: (MasterWithRelationsEntity | null)[]) => (MasterWithRelationsEntity | null)[]),
+  ) => void;
 };
 
 export default function ServiceForm(props: Props) {
-  const { value, onChange, initialParams, selectedServices, setSelectedServices, remove, errors } =
-    props;
+  const {
+    value,
+    onChange,
+    initialParams,
+    selectedServices,
+    setSelectedServices,
+    remove,
+    errors,
+    selectedMasters,
+    setSelectedMasters,
+  } = props;
   const currentService = (index: number): Service | null => {
     return selectedServices[index] || null;
   };
@@ -55,6 +69,8 @@ export default function ServiceForm(props: Props) {
           selectedService={currentService(index)}
           setSelectedService={(service: Service | null) => changeCurrentService(index, service)}
           remove={arr.length > 1 && index === arr.length - 1 ? () => removeEl(index) : null}
+          selectedMasters={selectedMasters}
+          setSelectedMasters={setSelectedMasters}
           errors={
             Array.isArray(errors)
               ? (errors[index] as { [key: string]: { message: string } }) || {}

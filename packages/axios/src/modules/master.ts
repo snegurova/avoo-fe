@@ -31,7 +31,9 @@ export const masterApi = {
     return response.data;
   },
   async deleteMaster(id: number) {
-    const response = await apiClient.delete<BaseResponse<void>>(`${MASTERS_ENDPOINT}${id}`);
+    const response = await apiClient.delete<BaseResponse<MasterWithRelationsEntityResponse>>(
+      `${MASTERS_ENDPOINT}${id}`,
+    );
     return response.data;
   },
 };

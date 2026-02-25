@@ -22,6 +22,7 @@ import CalendarViewMonth from '@/_icons/CalendarViewMonth';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { ElementStyleType } from '@avoo/hooks/types/elementStyleType';
 import { DATE_PICKER_FORMAT } from '@/_constants/dateFormats';
+import { CalendarType } from '@avoo/hooks/types/calendarType';
 
 const STATUSES_ITEMS = [
   { label: 'Pending', id: OrderStatus.PENDING },
@@ -55,7 +56,11 @@ type Props = {
       | undefined
       | ((prev: OrderStatus[] | undefined) => OrderStatus[] | undefined),
   ) => void;
-  isWidget?: boolean;
+  orderIsOutOfSchedule: boolean | undefined;
+  setOrderIsOutOfSchedule: (
+    value: boolean | undefined | ((prev: boolean | undefined) => boolean | undefined),
+  ) => void;
+  calendarType: CalendarType;
 };
 
 const controlsButton = tv({
@@ -74,6 +79,17 @@ const icon = tv({
   base: 'w-4 h-4 fill-black',
 });
 
+const showOptionsWrapper = tv({
+  base: 'absolute right-4 bottom-[calc(100%+30px)] translate-y-1/2 z-11',
+  variants: {
+    calendarType: {
+      [CalendarType.REGULAR]: '',
+      [CalendarType.WIDGET]: '',
+      [CalendarType.SELECTOR]: '',
+    },
+  },
+});
+
 export default function CalendarControls(props: Props) {
   const {
     date,
@@ -87,15 +103,22 @@ export default function CalendarControls(props: Props) {
     setMasterIds,
     statuses,
     setStatuses,
-    isWidget,
+    orderIsOutOfSchedule,
+    setOrderIsOutOfSchedule,
+    calendarType,
   } = props;
 
   const tabletUp = useMediaQuery('(min-width:768px)');
   const desktopLargeUp = useMediaQuery('(min-width:1280px)');
-  const showOptions = useMemo(
-    () => (isWidget ? desktopLargeUp : tabletUp),
-    [tabletUp, desktopLargeUp, isWidget],
-  );
+  const showOptions = useMemo(() => {
+    if (calendarType === CalendarType.REGULAR) {
+      return desktopLargeUp;
+    } else if (calendarType === CalendarType.WIDGET) {
+      return tabletUp;
+    } else {
+      return false;
+    }
+  }, [tabletUp, desktopLargeUp, calendarType]);
 
   const setCurrentDate = (type: CalendarViewType) => {
     const today = new Date();
@@ -310,6 +333,22 @@ export default function CalendarControls(props: Props) {
     [masters],
   );
 
+  const outOfCheduleOptions = useMemo(
+    () => ({
+      label: 'Only out of schedule',
+      handler: () => {
+        setOrderIsOutOfSchedule((prev) => {
+          if (prev === undefined) {
+            return true;
+          } else {
+            return undefined;
+          }
+        });
+      },
+    }),
+    [orderIsOutOfSchedule],
+  );
+
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <div className='bg-primary-50 px-4 py-3 flex gap-3 relative'>
@@ -357,16 +396,16 @@ export default function CalendarControls(props: Props) {
             <CheckboxesButton
               addCount
               label='Statuses'
-              options={[statusesOptions]}
-              values={[statuses]}
+              options={[statusesOptions, outOfCheduleOptions]}
+              values={[statuses, orderIsOutOfSchedule]}
             />
           </>
         ) : (
-          <div className='absolute right-4 bottom-[calc(100%+26px)] translate-y-1/2 z-11'>
+          <div className={showOptionsWrapper({ calendarType })}>
             <CheckboxesButton
               label='Options'
-              options={[mastersOptions, statusesOptions]}
-              values={[masterIds, statuses]}
+              options={[mastersOptions, statusesOptions, outOfCheduleOptions]}
+              values={[masterIds, statuses, orderIsOutOfSchedule]}
             />
           </div>
         )}

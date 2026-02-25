@@ -98,21 +98,47 @@ export const createMasterSchema = yup.object({
 
 export const customerSchema = yup
   .object({
-    id: yup.number().optional(),
+    id: yup.number().nullable().optional(),
     name: yup.string().optional(),
     phone: yup.string().optional(),
     email: yup.string().email('Invalid email').optional(),
     notes: yup.string().optional(),
   })
-  .required('Choose a client')
-  .test('customer-id-or-phone', 'Select an existing client or create a new one', (value) => {
-    if (!value) return false;
+  .nullable()
+  .test('customer-validation', function (value) {
+    // If completely missing
+    if (!value || Object.keys(value).length === 0) {
+      return this.createError({
+        message: 'Choose a client or create a new one',
+      });
+    }
 
     if (typeof value.id === 'number') {
       return true;
     }
 
-    return typeof value.phone === 'string' && value.phone.trim().length > 0;
+    if (!value.name?.trim()) {
+      return this.createError({
+        path: `${this.path}.name`,
+        message: 'Name is required',
+      });
+    }
+
+    if (!value.phone?.trim()) {
+      return this.createError({
+        path: `${this.path}.phone`,
+        message: 'Phone is required',
+      });
+    }
+
+    if (!value.email?.trim()) {
+      return this.createError({
+        path: `${this.path}.email`,
+        message: 'Email is required',
+      });
+    }
+
+    return true;
   });
 
 export const ordersDataSchema = yup
@@ -169,7 +195,7 @@ export const updateOrderSchema = yup.object({
   duration: yup.number().positive().optional(),
   notes: yup.string().optional(),
   date: yup.string().optional(),
-  masterId: yup.number().optional(),
+  masterId: yup.number().nullable().optional(),
 });
 
 export const createServiceSchema = yup.object({

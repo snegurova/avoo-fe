@@ -1,13 +1,16 @@
+'use client';
+
 import React from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import FormInput, { AccessoryPosition } from '../FormInput/FormInput';
 import LockIcon from '@/_icons/LockIcon';
 import ModalActions from '../ModalActions/ModalActions';
 import FormTextarea from '../FormTextArea/FormTextArea';
-import ToggleSwitch from '../ToggleSwitch/ToggleSwitch';
 import { customerHooks } from '@avoo/hooks';
 import HistoryCard from '../HistoryCard/HistoryCard';
+
 import { useToast } from '@/_hooks/useToast';
+import NotificationField from '../NotificationField/NotificationField';
 
 export type FormValues = {
   name: string;
@@ -69,7 +72,7 @@ const mockHistory = [
   },
 ];
 
-export default function ClientForm({ ...props }: ClientFormProps) {
+export default function ClientEditForm({ ...props }: ClientFormProps) {
   const { initial, onClose, onRequestClose, onDirtyChange, id, notifyInitial = true } = props;
 
   const update = customerHooks.useUpdateCustomer();
@@ -112,10 +115,6 @@ export default function ClientForm({ ...props }: ClientFormProps) {
 
   const loading = update.isPending;
 
-  const makeToggleHandler = (field: { value?: boolean; onChange: (checked: boolean) => void }) => {
-    return () => field.onChange(!field.value);
-  };
-
   const handleCancel = React.useCallback(() => {
     (onRequestClose ?? onClose)();
   }, [onRequestClose, onClose]);
@@ -132,25 +131,26 @@ export default function ClientForm({ ...props }: ClientFormProps) {
           <FormInput id='name' {...register('name')} />
         </div>
 
-        <div>
-          <label htmlFor='email' className='text-sm'>
-            Email address *
-          </label>
-          <FormInput
-            id='email'
-            {...register('email')}
-            readOnly
-            className='cursor-default'
-            accessory={<LockIcon className='text-gray-400' />}
-            accessoryPosition={AccessoryPosition.Right}
-          />
-        </div>
-
-        <div>
-          <label htmlFor='phone' className='text-sm'>
-            Phone
-          </label>
-          <FormInput id='phone' {...register('phone')} />
+        <div className='flex items-stretch gap-3'>
+          <div>
+            <label htmlFor='email' className='text-sm'>
+              Email address *
+            </label>
+            <FormInput
+              id='email'
+              {...register('email')}
+              readOnly
+              className='cursor-default'
+              accessory={<LockIcon className='text-gray-400' />}
+              accessoryPosition={AccessoryPosition.Right}
+            />
+          </div>
+          <div>
+            <label htmlFor='phone' className='text-sm'>
+              Phone
+            </label>
+            <FormInput id='phone' {...register('phone')} />
+          </div>
         </div>
 
         <Controller
@@ -167,26 +167,11 @@ export default function ClientForm({ ...props }: ClientFormProps) {
           )}
         />
 
-        <div className='flex items-center justify-between mt-2'>
-          <div className='text-sm'>
-            <div>Notification</div>
-            <p className='text-xs text-gray-500 mt-1 break-words'>
-              Automatically sending appointment information to client via email
-            </p>
-          </div>
-
-          <Controller
-            name='isNotificationEnable'
-            control={control}
-            render={({ field }) => (
-              <ToggleSwitch
-                ariaLabel='Toggle send notifications'
-                checked={!!field.value}
-                onChange={makeToggleHandler(field)}
-              />
-            )}
-          />
-        </div>
+        <Controller
+          name='isNotificationEnable'
+          control={control}
+          render={({ field }) => <NotificationField field={field} />}
+        />
       </div>
 
       <div>

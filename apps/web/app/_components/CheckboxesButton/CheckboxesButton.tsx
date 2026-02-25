@@ -11,11 +11,11 @@ type Props = {
     handler: () => void;
     items?: { label: string | null; id: number | string; handler: () => void }[];
   }[];
-  values: ((string | number)[] | undefined)[];
+  values: ((string | number)[] | boolean | undefined)[];
 };
 
 const selectButton = tv({
-  base: 'rounded-2xl cursor-pointer flex items-center text-gray-800 border border-gray-200 bg-transparent gap-2 px-3 py-[7px] text-sm leading-none hover:bg-gray-100 focus:bg-gray-100 transition-colors',
+  base: 'rounded-2xl cursor-pointer flex items-center text-gray-800 border border-gray-200 bg-transparent gap-2 px-3 py-[7px] text-sm leading-none hover:bg-gray-100 focus:bg-gray-100 transition-colors h-full min-h-8.75',
 });
 
 const selectIcon = tv({
@@ -39,7 +39,7 @@ export default function CheckboxesButton(props: Props) {
     values.forEach((val, index) => {
       if (val === undefined) {
         count += options[index].items?.length || 0;
-      } else {
+      } else if (Array.isArray(val)) {
         count += val.length;
       }
     });
@@ -63,10 +63,9 @@ export default function CheckboxesButton(props: Props) {
   };
 
   return (
-    <div className='relative' ref={ref}>
+    <div className='relative h-full' ref={ref}>
       <button className={selectButton()} onClick={toggleOpen}>
         {addCount &&
-          options.length === 1 &&
           (options[0].items?.length ? (
             <span className='w-5 h-5 flex items-center justify-center rounded-full bg-primary-500 text-white text-sm font-medium -mr-1'>
               {counter}

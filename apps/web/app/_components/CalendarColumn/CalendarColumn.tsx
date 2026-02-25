@@ -1,15 +1,15 @@
 import React, { useState, useRef, useCallback, useEffect } from 'react';
-import { CalendarItem, PrivateEvent } from '@avoo/axios/types/apiTypes';
+import { CalendarItem, PrivateEvent, MasterWithRelationsEntity } from '@avoo/axios/types/apiTypes';
 import { tv } from 'tailwind-variants';
-import { MasterWithRelationsEntity } from '@avoo/axios/types/apiTypes';
 import { CalendarViewType } from '@avoo/hooks/types/calendarViewType';
 import CalendarEvent from '@/_components/CalendarEvent/CalendarEvent';
 import { timeUtils } from '@avoo/shared';
 import { PX_IN_MINUTE } from '@/_constants/time';
-import CalendarCurrentTime from '../CalendarCurrentTime/CalendarCurrentTime';
+import CalendarCurrentTime from '@/_components/CalendarCurrentTime/CalendarCurrentTime';
 import { useRouter } from 'next/navigation';
 import { AppRoutes } from '@/_routes/routes';
 import { useToast } from '@/_hooks/useToast';
+import { CalendarType } from '@avoo/hooks/types/calendarType';
 import { localizationHooks } from '@/_hooks/localizationHooks';
 
 const DAY_CELLS = Array.from({ length: 96 });
@@ -29,13 +29,15 @@ type Props = {
   isSingleWeek?: boolean;
   selectOrder?: (event: PrivateEvent | null) => void;
   availableBooking: boolean;
+  calendarType: CalendarType;
+  onClickDateTime?: (date: string, master: MasterWithRelationsEntity) => void;
 };
 
 const col = tv({
   base: 'flex-1 border-gray-300 grow relative bg-gray-100 overflow-hidden',
   variants: {
     type: {
-      [CalendarViewType.DAY]: 'border-r min-w-25 md:min-w-55 2xl:min-w-90',
+      [CalendarViewType.DAY]: 'border-r min-w-25 md:min-w-55',
       [CalendarViewType.WEEK]: 'not-last:border-b min-h-38 md:min-h-40 flex flex-row flex-nowrap',
       [CalendarViewType.MONTH]: '',
     },
@@ -43,7 +45,29 @@ const col = tv({
       false: '',
       true: '2xl:min-w-55',
     },
+    calendarType: {
+      [CalendarType.REGULAR]: '',
+      [CalendarType.WIDGET]: '',
+      [CalendarType.SELECTOR]: '',
+    },
   },
+  compoundVariants: [
+    {
+      calendarType: CalendarType.REGULAR,
+      type: CalendarViewType.DAY,
+      className: 'md:min-w-55 2xl:min-w-90',
+    },
+    {
+      calendarType: CalendarType.WIDGET,
+      type: CalendarViewType.DAY,
+      className: 'lg:min-w-25 xl:min-w-55',
+    },
+    {
+      calendarType: CalendarType.SELECTOR,
+      type: CalendarViewType.DAY,
+      className: 'lg:min-w-25',
+    },
+  ],
 });
 
 const cell = tv({
@@ -80,6 +104,8 @@ export default function CalendarColumn(props: Props) {
     isSingleWeek = false,
     selectOrder,
     availableBooking,
+    calendarType,
+    onClickDateTime,
   } = props;
   const ref = useRef<HTMLDivElement | null>(null);
   const router = useRouter();
@@ -130,11 +156,15 @@ export default function CalendarColumn(props: Props) {
       toast.info('Selected time is out of available working hours');
     }
 
-    router.push(
-      `${localizationHooks.useWithLocale(AppRoutes.OrderCreate)}?masterId=${master.id}&date=${encodeURIComponent(
-        timeUtils.formatDateTimeRounded(date, hours * 60 + mins),
-      )}`,
-    );
+    if (onClickDateTime) {
+      onClickDateTime(timeUtils.formatDateTimeRounded(date, hours * 60 + mins), master);
+    } else {
+      router.push(
+        `${localizationHooks.useWithLocale(AppRoutes.OrderCreate)}?masterId=${master.id}&date=${encodeURIComponent(
+          timeUtils.formatDateTimeRounded(date, hours * 60 + mins),
+        )}`,
+      );
+    }
   };
 
   const onWeekDayClick = (idx: number) => {
@@ -157,7 +187,7 @@ export default function CalendarColumn(props: Props) {
   return (
     <>
       {type === CalendarViewType.DAY && (
-        <div className={col({ type, isSingleWeek })} onClick={onAvailabelTimeClick}>
+        <div className={col({ type, isSingleWeek, calendarType })} onClick={onAvailabelTimeClick}>
           {data &&
             data.days[0].availability?.map((avail, idx) => (
               <div

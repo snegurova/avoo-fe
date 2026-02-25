@@ -14,7 +14,6 @@ import CoPresentIcon from '@/_icons/CoPresentIcon';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import ArrowDownIcon from '@/_icons/ArrowDownIcon';
 import ArrowUpIcon from '@/_icons/ArrowUpIcon';
-import TimeOffModal from '../TimeOffModal/TimeOffModal';
 import { localizationHooks } from '@/_hooks/localizationHooks';
 
 type Props = {
@@ -49,7 +48,6 @@ export default function AppNavigation({ menuOpen, setMenuOpen }: Props) {
   const isOpen = desktopAbove || menuOpen;
 
   const [calendarOpen, setCalendarOpen] = useState(false);
-  const [isTimeOffOpen, setIsTimeOffOpen] = useState(false);
 
   const items = [
     {
@@ -95,14 +93,14 @@ export default function AppNavigation({ menuOpen, setMenuOpen }: Props) {
     setCalendarOpen((s) => !s);
   }, []);
 
-  const handleOpenTimeOff = useCallback(() => {
-    setIsTimeOffOpen(true);
-  }, []);
-
   const handleCloseMenu = useCallback(() => {
     setMenuOpen(false);
     setCalendarOpen(false);
   }, []);
+
+  const handleNavClick = useCallback(() => {
+    if (!desktopAbove) handleCloseMenu();
+  }, [desktopAbove, handleCloseMenu]);
 
   return (
     <aside className={overlayStyles({ open: isOpen })} onClick={handleCloseMenu}>
@@ -150,21 +148,21 @@ export default function AppNavigation({ menuOpen, setMenuOpen }: Props) {
 
                         {calendarOpen && (
                           <ul className='flex flex-col font-light text-sm'>
-                            <li>
-                              <button
-                                type='button'
-                                className='w-full text-left pl-20.5 pr-6 py-3 hover:bg-primary-100 focus:bg-primary-100 transition-colors cursor-pointer'
-                                onClick={handleOpenTimeOff}
-                              >
-                                Time off
-                              </button>
-                            </li>
                             <li className='w-full'>
                               <Link
                                 href={localizationHooks.useWithLocale(AppRoutes.WorkingHours)}
-                                className='block w-full text-left pl-20.5 pr-6 py-3 hover:bg-primary-100 focus:bg-primary-100 transition-colors cursor-pointer'
+                                className='block w-full text-left pl-20 pr-4 py-2 hover:bg-primary-100 focus:bg-primary-100 transition-colors cursor-pointer'
                               >
-                                Working hours
+                                Working schedule
+                              </Link>
+                            </li>
+                            <li className='w-full'>
+                              <Link
+                                href={localizationHooks.useWithLocale(AppRoutes.TimeOff)}
+                                className='block w-full text-left pl-20 pr-4 py-2 hover:bg-primary-100 focus:bg-primary-100 transition-colors cursor-pointer'
+                                onClick={handleNavClick}
+                              >
+                                Schedule exception
                               </Link>
                             </li>
                           </ul>
@@ -183,7 +181,6 @@ export default function AppNavigation({ menuOpen, setMenuOpen }: Props) {
               </li>
             ))}
           </ul>
-          <TimeOffModal isOpen={isTimeOffOpen} onClose={() => setIsTimeOffOpen(false)} />
         </nav>
       </div>
     </aside>

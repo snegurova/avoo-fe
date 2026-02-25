@@ -11,6 +11,7 @@ import FormCounter from '@/_components/FormCounter/FormCounter';
 import { OrderStatus } from '@avoo/hooks/types/orderStatus';
 import ErrorIcon from '@/_icons/ErrorIcon';
 import FormTextArea from '@/_components/FormTextArea/FormTextArea';
+import CombinationElement from '@/_components/CombinationElement/CombinationElement';
 
 type Props = {
   order: Order;
@@ -27,21 +28,20 @@ export default function OrderConfirmation(props: Props) {
     props;
   const [error, setError] = React.useState<string | null>(null);
   const isPending = useApiStatusStore((state) => state.isPending);
+  const errorMessage = useApiStatusStore((s) => s.errorMessage);
+  const isError = useApiStatusStore((s) => s.isError);
 
   const serviceData = useMemo((): Service | null => {
     if (!order.service) return null;
-    const service = { ...order.service, durationMinutes: order.duration };
-
-    return service;
+    return { ...order.service, durationMinutes: order.duration };
   }, [order]);
 
-  const {
-    control,
-    handleSubmit,
-    errors,
-    setValue,
-    error: apiError,
-  } = orderHooks.useUpdateOrder({
+  const combinationData = useMemo(() => {
+    if (!order.combination) return null;
+    return { ...order.combination, durationMinutes: order.duration };
+  }, [order]);
+
+  const { control, handleSubmit, errors, setValue } = orderHooks.useUpdateOrder({
     order: {
       duration: order.duration,
       notes: typeof order.notes === 'string' ? order.notes : '',
@@ -55,16 +55,12 @@ export default function OrderConfirmation(props: Props) {
   });
 
   useEffect(() => {
-    if (apiError) {
-      const errorMessage =
-        typeof apiError === 'object' && 'response' in apiError
-          ? (apiError as any).response?.data?.errorMessage || apiError.message
-          : apiError.message;
+    if (isError && !!errorMessage) {
       setError(errorMessage);
     } else {
       setError(null);
     }
-  }, [apiError]);
+  }, [isError, errorMessage]);
 
   return (
     <form className='h-full'>
@@ -96,26 +92,29 @@ export default function OrderConfirmation(props: Props) {
         <div className='flex flex-col gap-3'>
           <h3 className='font-medium tracking-wider'>Service</h3>
           {serviceData && <ServiceElement item={serviceData} isCard master={order.master} />}
-
+          {combinationData && (
+            <CombinationElement item={combinationData} isCard master={order.master} hideMasters />
+          )}
           <div className=''>
-            <label
-              className='block mb-1 text-sm tracking-wider font-medium'
-              htmlFor='confirmation-notes'
-            >
-              Notes
-            </label>
             <Controller
               name='notes'
               control={control}
               render={({ field }) => (
                 <div className=''>
                   <FormTextArea
-                    className='resize-none'
-                    rows={3}
                     id='confirmation-notes'
-                    value={field.value}
+                    name='confirmation-notes'
+                    value={field.value || ''}
                     onChange={field.onChange}
+                    label='Notes'
+                    helperText='Additional information for the master'
+                    maxLength={200}
                     error={errors?.notes?.message}
+                    classNames={{
+                      label: 'block font-medium',
+                      textarea:
+                        'block w-full text-sm text-black border border-gray-200 p-3 rounded-lg min-h-[70px] focus:outline-none focus:ring-1 focus:ring-purple-800',
+                    }}
                   />
                 </div>
               )}

@@ -14,7 +14,7 @@ import { useToast } from '@/_hooks/useToast';
 import FormTextarea from '../FormTextArea/FormTextArea';
 import { localizationHooks } from '@/_hooks/localizationHooks';
 
-export default function AddMasterForm() {
+export default function MasterAddForm() {
   const router = useRouter();
   const [localAvatar, setLocalAvatar] = useState<string | null>(null);
 
@@ -104,13 +104,12 @@ export default function AddMasterForm() {
             <label htmlFor='phone' className='text-sm block mb-1'>
               Phone
             </label>
-            <div className='flex items-stretch gap-6 md:gap-8 lg:gap-6'>
+            <div className='flex items-stretch gap-3'>
               <div className='w-[84px] flex-shrink-0'>
                 <PhoneCodeSelect
                   id='phone-code'
                   value={countryCode}
                   onChange={handlePhoneCodeChange}
-                  className='w-full h-full'
                 />
               </div>
 

@@ -19,7 +19,8 @@ export type ServicesQueryParams = Omit<PrivateServiceQueryParams, 'page'>;
 export type Category = components['schemas']['CategoryEntity'];
 export type CategoryWithServicesCount = components['schemas']['ServiceWithCategoryDto'];
 export type Service = components['schemas']['ServiceEntity'];
-export type PrivateServiceQueryParams = components['schemas']['QueryServicesDto'];
+export type PrivateServiceQueryParams =
+  operations['ServicesController_findAllByOwner']['parameters']['query'];
 export type GetServiceResponse = {
   items: Service[];
   pagination: components['schemas']['PaginationDto'];
@@ -84,7 +85,7 @@ export type GetCustomersResponse = {
   pagination: components['schemas']['PaginationDto'];
 };
 export type GetCustomersQueryParams =
-  operations['CustomersController_findAll']['parameters']['query'];
+  operations['CustomersController_findAllByOwner']['parameters']['query'];
 export type Customer = components['schemas']['CustomerInfoDto'];
 
 /** Schedule */
@@ -154,6 +155,21 @@ export type PrivateCalendarQueryParams = Omit<
   'view'
 > & { view?: CalendarView };
 
+/** Exceptions (Time off) */
+export type Exception = components['schemas']['CalendarExceptionEntity'];
+
+export type CreateExceptionRequest = components['schemas']['CreateCalendarExceptionDto'];
+
+export type GetExceptionsResponse = {
+  items: components['schemas']['CalendarExceptionEntity'][];
+  pagination: components['schemas']['PaginationDto'];
+};
+
+export type CreateExceptionResponse = components['schemas']['CalendarExceptionEntity'][];
+
+export type GetExceptionsQueryParams =
+  operations['CalendarExceptionsController_findAll']['parameters']['query'];
+
 /** File types - re-exported from @avoo/shared for backward compatibility */
 export type { FileInput, UploadFile } from '@avoo/shared';
 
@@ -196,3 +212,19 @@ export type UploadMediaRequest = {
   type: MediaUploadType;
 };
 export type UploadMediaResponse = components['schemas']['MediaEntity'];
+
+/* Combination */
+
+export type Combination = Omit<
+  components['schemas']['CombinationEntity'],
+  'services' | 'masters'
+> & {
+  services: Service[];
+  masters: MasterWithRelationsEntity[];
+};
+export type GetCombinationsQueryParams =
+  operations['CombinationsController_findAllByOwner']['parameters']['query'];
+export type GetCombinationsResponse = {
+  items: Combination[];
+  pagination: components['schemas']['PaginationDto'];
+};

@@ -33,7 +33,7 @@ export default function PhoneCodeSelect({ value, onChange, id, className }: Read
   );
 
   return (
-    <div className='relative inline-block h-[44px]'>
+    <div className={`relative h-full w-full ${className ?? ''}`}>
       <select
         id={id}
         value={value}
@@ -41,7 +41,7 @@ export default function PhoneCodeSelect({ value, onChange, id, className }: Read
         onFocus={handleFocus}
         onBlur={handleBlur}
         onMouseDown={handleMouseDown}
-        className='p-3 w-full h-[44px] rounded-[8px] border border-gray-200 bg-transparent focus:outline-none focus:ring-1 focus:ring-purple-800 text-sm appearance-none pr-10 box-border leading-[44px] py-0'
+        className={`p-3 w-full h-11 rounded-lg border border-gray-200 bg-transparent focus:outline-none focus:ring-1 focus:ring-purple-800 text-sm appearance-none pr-10 box-border leading-none py-0 ${className ?? ''}`}
         aria-label='Country code'
       >
         {options}

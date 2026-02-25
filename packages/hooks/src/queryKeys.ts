@@ -4,12 +4,15 @@ import {
   PrivateOrderQueryParams,
   GetCustomersQueryParams,
   GetMastersQueryParams,
+  GetCombinationsQueryParams,
+  GetExceptionsQueryParams,
 } from '@avoo/axios/types/apiTypes';
 
 export const queryKeys = {
   masters: {
     all: ['masters'] as const,
     byParams: (params: GetMastersQueryParams) => [...queryKeys.masters.all, params] as const,
+    infinite: ['mastersInfinite'] as const,
   },
   schedules: {
     all: ['schedules'] as const,
@@ -41,9 +44,18 @@ export const queryKeys = {
     byParams: (params: PrivateCalendarQueryParams) =>
       [...queryKeys.monthCalendar.all, params] as const,
   },
+  exceptions: {
+    all: ['exceptions'] as const,
+    byParams: (params: GetExceptionsQueryParams) => [...queryKeys.exceptions.all, params] as const,
+  },
   orders: {
     all: ['orders'] as const,
     byId: (id: number) => [...queryKeys.orders.all, id] as const,
     byParams: (params: PrivateOrderQueryParams) => [...queryKeys.orders.all, params] as const,
+  },
+  combinations: {
+    all: ['combinations'] as const,
+    byParams: (params: GetCombinationsQueryParams) =>
+      [...queryKeys.combinations.all, params] as const,
   },
 } as const;

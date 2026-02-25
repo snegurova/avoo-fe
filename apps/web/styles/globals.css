@@ -4,6 +4,7 @@
 @theme {
   --font-inter: 'Inter', sans-serif;
   --font-roboto: 'Roboto', sans-serif;
+  --color-black: #141a23;
   --color-primary-50: #f8f6fc;
   --color-primary-100: #e8deee;
   --color-primary-200: #d6bce6;

@@ -8,3 +8,4 @@ export { calendarApi } from './modules/calendar';
 export { orderApi } from './modules/order';
 export { customerApi } from './modules/customer';
 export { filesApi } from './modules/files';
+export { combinationApi } from './modules/combination';

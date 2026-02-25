@@ -15,6 +15,8 @@ export enum AppRoutes {
   Posts = '/app/profile/posts',
   Gallery = '/app/profile/gallery',
   Calendar = '/app/calendar',
+  TimeOff = '/app/time-off',
+  AddTimeOff = '/app/time-off/add-time-off',
   Clients = '/app/clients',
   Services = '/app/services',
   AddPost = '/app/add-post',

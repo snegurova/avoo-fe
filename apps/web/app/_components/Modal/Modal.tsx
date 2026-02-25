@@ -1,6 +1,7 @@
 import React, { ReactNode } from 'react';
 import MuiModal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
+import Slide from '@mui/material/Slide';
 import CloseIcon from '@/_icons/CloseIcon';
 import { IconButton } from '@mui/material';
 
@@ -37,6 +38,8 @@ const panelStyle = {
   right: 0,
   transform: 'none',
   width: { xs: '100vw', md: 465 },
+  height: '100vh',
+  minHeight: '100vh',
   maxHeight: '100vh',
   bgcolor: 'background.paper',
   border: '1px solid',
@@ -46,6 +49,7 @@ const panelStyle = {
   pb: '44px',
   px: { xs: '20px', md: '48px' },
   overflow: 'auto',
+  boxSizing: 'border-box',
   transition: 'background-color 200ms ease-in-out, border-color 300ms ease-in-out',
 };
 
@@ -53,10 +57,28 @@ export const Modal = (props: Props) => {
   const { isOpen, onClose, children, variant = ModalVariant.CENTER } = props;
   const style = variant === ModalVariant.PANEL ? panelStyle : centerStyle;
   const mergedStyle = { ...style, ...props.contentStyle };
-  const slotProps =
-    variant === ModalVariant.PANEL
-      ? { backdrop: { sx: { backgroundColor: 'transparent' } } }
-      : undefined;
+  const isPanel = variant === ModalVariant.PANEL;
+  const slotProps = isPanel ? { backdrop: { sx: { backgroundColor: 'transparent' } } } : undefined;
+
+  const content = (
+    <Box sx={mergedStyle} className='hide-scrollbar'>
+      {variant === ModalVariant.CENTER && (
+        <IconButton
+          onClick={onClose}
+          sx={{
+            position: 'absolute',
+            top: 4,
+            right: 4,
+            zIndex: 10,
+          }}
+        >
+          <CloseIcon />
+        </IconButton>
+      )}
+
+      <Box sx={{ width: '100%' }}>{children}</Box>
+    </Box>
+  );
 
   return (
     <MuiModal
@@ -65,24 +87,15 @@ export const Modal = (props: Props) => {
       aria-labelledby='modal-modal-title'
       aria-describedby='modal-modal-description'
       slotProps={slotProps}
+      closeAfterTransition={isPanel}
     >
-      <Box sx={mergedStyle} className='hide-scrollbar'>
-        {variant === ModalVariant.CENTER && (
-          <IconButton
-            onClick={onClose}
-            sx={{
-              position: 'absolute',
-              top: 4,
-              right: 4,
-              zIndex: 10,
-            }}
-          >
-            <CloseIcon />
-          </IconButton>
-        )}
-
-        <Box sx={{ width: '100%' }}>{children}</Box>
-      </Box>
+      {isPanel ? (
+        <Slide direction='left' in={isOpen} timeout={300} mountOnEnter unmountOnExit>
+          {content}
+        </Slide>
+      ) : (
+        content
+      )}
     </MuiModal>
   );
 };
