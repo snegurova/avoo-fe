@@ -2,13 +2,14 @@
 
 import React, { useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
-import { appRoutes } from '@/_routes/routes';
+import { AppRoutes } from '@/_routes/routes';
 import Controls from '@/_components/Controls/Controls';
 import { IconButton } from '@/_components/IconButton/IconButton';
 import { routerHooks } from '@/_hooks/routerHooks';
 import { masterHooks } from '@avoo/hooks';
 import MasterList from '@/_components/MasterList/MasterList';
 import AppWrapper from '@/_components/AppWrapper/AppWrapper';
+import { localizationHooks } from '@/_hooks/localizationHooks';
 
 export default function MastersPage() {
   const handleBackClick = routerHooks.useHandleNavigateToHomeClick();
@@ -21,7 +22,7 @@ export default function MastersPage() {
   const router = useRouter();
 
   const handleAddMaster = useCallback(() => {
-    router.push(`${appRoutes.Masters}/add-master`);
+    router.push(localizationHooks.useWithLocale(AppRoutes.AddMaster));
   }, [router]);
 
   return (
@@ -41,7 +42,6 @@ export default function MastersPage() {
         </div>
 
         <MasterList masters={filtered} />
-        
       </div>
     </AppWrapper>
   );

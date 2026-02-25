@@ -3,12 +3,15 @@
 import { SectionHeader } from '@/_components/SectionHeader/SectionHeader';
 import { IconButton } from '@/_components/IconButton/IconButton';
 import { routerHooks } from '@/_hooks/routerHooks';
-import { appRoutes } from '@/_routes/routes';
+import { AppRoutes } from '@/_routes/routes';
 import { CertificatesList } from '@/_components/CertificatesList/CertificatesList';
 import { CertificateAdd } from '@/_components/CertificateAdd/CertificateAdd';
+import { localizationHooks } from '@/_hooks/localizationHooks';
 
 export default function CertificatesPage() {
-  const handleBackClick = routerHooks.useBackWithFallback(appRoutes.Profile);
+  const handleBackClick = routerHooks.useBackWithFallback(
+    localizationHooks.useWithLocale(AppRoutes.Profile),
+  );
 
   return (
     <div className='container mx-auto p-4 max-w-4xl'>

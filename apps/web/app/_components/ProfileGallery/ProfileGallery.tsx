@@ -3,15 +3,16 @@
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { userHooks } from '@avoo/hooks';
-import { appRoutes } from '@/_routes/routes';
+import { AppRoutes } from '@/_routes/routes';
 import { SectionHeader } from '@/_components/SectionHeader/SectionHeader';
+import { localizationHooks } from '@/_hooks/localizationHooks';
 
 export const ProfileGallery = () => {
   const userMedia = userHooks.useGetUserMedia();
   const router = useRouter();
 
   const handleNavigate = () => {
-    router.push(appRoutes.Gallery);
+    router.push(localizationHooks.useWithLocale(AppRoutes.Gallery));
   };
 
   const hasItems = userMedia?.items && userMedia.items.length > 0;
@@ -31,7 +32,10 @@ export const ProfileGallery = () => {
       {!hasItems && (
         <div className='text-center py-8'>
           <p className='text-sm text-slate-500 mb-2'>Show clients your place and service</p>
-          <Link href={appRoutes.Gallery} className='text-sm text-blue-600 underline'>
+          <Link
+            href={localizationHooks.useWithLocale(AppRoutes.Gallery)}
+            className='text-sm text-blue-600 underline'
+          >
             Add gallery
           </Link>
         </div>

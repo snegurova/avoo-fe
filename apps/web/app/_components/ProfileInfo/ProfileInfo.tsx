@@ -1,7 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { appRoutes } from '@/_routes/routes';
+import { AppRoutes } from '@/_routes/routes';
 import { userHooks } from '@avoo/hooks';
 import { ProfileLanguages } from '@/_components/ProfileLanguages/ProfileLanguages';
 import { ProfileCertificates } from '@/_components/ProfileCertificates/ProfileCertificates';
@@ -10,6 +10,7 @@ import AvatarLoader from '@/_components/AvatarLoader/AvatarLoader';
 import { AvatarSize } from '@/_components/AvatarUpload/AvatarUpload';
 import { IconButton } from '@/_components/IconButton/IconButton';
 import { useApiStatusStore } from '@avoo/store';
+import { localizationHooks } from '@/_hooks/localizationHooks';
 
 export const ProfileInfo = () => {
   const router = useRouter();
@@ -17,7 +18,7 @@ export const ProfileInfo = () => {
   const isPending = useApiStatusStore((state) => state.isPending);
 
   const handleNavigate = () => {
-    router.push(appRoutes.EditProfile);
+    router.push(localizationHooks.useWithLocale(AppRoutes.EditProfile));
   };
 
   return (

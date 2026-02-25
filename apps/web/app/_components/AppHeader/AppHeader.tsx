@@ -5,12 +5,13 @@ import AppProfileSelect from '@/_components/AppProfileSelect/AppProfileSelect';
 import NotificationsIcon from '@/_icons/NotificationsIcon';
 import ShareIcon from '@/_icons/ShareIcon';
 import IconLink from '@/_components/IconLink/IconLink';
-import { appRoutes } from '@/_routes/routes';
+import { AppRoutes } from '@/_routes/routes';
 import SelectButton from '../SelectButton/SelectButton';
 import { useRouter } from 'next/navigation';
 import { IconButton } from '../IconButton/IconButton';
 import MenuIcon from '@/_icons/MenuIcon';
 import useMediaQuery from '@mui/material/useMediaQuery';
+import { localizationHooks } from '@/_hooks/localizationHooks';
 
 type Props = {
   setMenuOpen: (open: boolean) => void;
@@ -24,13 +25,13 @@ export default function AppHeader({ setMenuOpen }: Props) {
     {
       label: 'New Booking',
       handler: () => {
-        router.push(appRoutes.OrderCreate);
+        router.push(localizationHooks.useWithLocale(AppRoutes.OrderCreate));
       },
     },
     {
       label: 'New Post',
       handler: () => {
-        router.push(appRoutes.AddPost);
+        router.push(localizationHooks.useWithLocale(AppRoutes.AddPost));
       },
     },
   ];
@@ -60,7 +61,7 @@ export default function AppHeader({ setMenuOpen }: Props) {
           <div className='flex items-center gap-2'>
             <ShareIcon className='transition-colors' />
             <IconLink
-              href={appRoutes.Notifications}
+              href={localizationHooks.useWithLocale(AppRoutes.Notifications)}
               icon={<NotificationsIcon className='transition-colors' />}
               label='Notifications'
             />

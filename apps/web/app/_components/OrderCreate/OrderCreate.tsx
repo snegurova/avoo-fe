@@ -6,11 +6,12 @@ import { Button, ButtonFit, ButtonIntent, ButtonType } from '@/_components/Butto
 import { CustomerSelect } from '../CustomerSelect/CustomerSelect';
 import { Controller, useFieldArray } from 'react-hook-form';
 import ServiceForm from '../ServiceForm/ServiceForm';
-import { appRoutes } from '@/_routes/routes';
+import { AppRoutes } from '@/_routes/routes';
 import AddCircleIcon from '@/_icons/AddCircleIcon';
 import { OrderQueryParams } from '@avoo/hooks/types/orderQueryParams';
 import { OrderType } from '@avoo/hooks/types/orderType';
 import { timeUtils } from '@avoo/shared';
+import { localizationHooks } from '@/_hooks/localizationHooks';
 
 const SERVICES_KEY_IN_ORDER_CREATE = 'ordersData';
 const WRAPPER_HEADER_HEIGHT = '62px';
@@ -34,7 +35,7 @@ export default function OrderCreate() {
 
   useEffect(() => {
     if (searchParams.toString()) {
-      router.replace(appRoutes.OrderCreate);
+      router.replace(localizationHooks.useWithLocale(AppRoutes.OrderCreate));
     }
   }, []);
 
@@ -45,7 +46,7 @@ export default function OrderCreate() {
         date: initialParams.date,
       },
       onSuccess: () => {
-        router.replace(appRoutes.Calendar);
+        router.replace(localizationHooks.useWithLocale(AppRoutes.Calendar));
       },
     });
 

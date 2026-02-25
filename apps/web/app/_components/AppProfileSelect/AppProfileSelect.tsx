@@ -4,9 +4,10 @@ import React, { useState, useCallback } from 'react';
 import { userHooks } from '@avoo/hooks';
 import DropdownList from '@/_components/DropdownList/DropdownList';
 import { useRouter } from 'next/navigation';
-import { appRoutes } from '@/_routes/routes';
+import { AppRoutes } from '@/_routes/routes';
 import { authHooks } from '@avoo/hooks';
 import { CalendarAvatar, AvatarSize } from '@/_components/CalendarAvatar/CalendarAvatar';
+import { localizationHooks } from '@/_hooks/localizationHooks';
 
 export default function AppProfileSelect() {
   const [isOpen, setIsOpen] = useState(false);
@@ -18,7 +19,7 @@ export default function AppProfileSelect() {
     {
       label: 'Profile',
       handler: () => {
-        router.push(appRoutes.Profile);
+        router.push(localizationHooks.useWithLocale(AppRoutes.Profile));
       },
     },
     {

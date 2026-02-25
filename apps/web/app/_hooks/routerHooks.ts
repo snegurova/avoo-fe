@@ -2,16 +2,18 @@
 
 import { useRouter, usePathname } from 'next/navigation';
 import { useCallback } from 'react';
-import { appRoutes } from '@/_routes/routes';
+import { AppRoutes } from '@/_routes/routes';
+import { Route } from 'next';
+import { localizationHooks } from '@/_hooks/localizationHooks';
 
 export const routerHooks = {
   useHandleNavigateToHomeClick: () => {
     const router = useRouter();
     return useCallback(() => {
-      router.push(appRoutes.Home);
+      router.push(localizationHooks.useWithLocale(AppRoutes.Home));
     }, [router]);
   },
-  useBackWithFallback: (fallback: appRoutes, backTo?: appRoutes) => {
+  useBackWithFallback: (fallback: Route, backTo?: Route) => {
     const router = useRouter();
     return useCallback(() => {
       if (backTo) {
@@ -21,8 +23,8 @@ export const routerHooks = {
       }
     }, [router, fallback, backTo]);
   },
-  useIsValidRoute: (path: string | null): path is appRoutes => {
-    const validRoutes = new Set<string>(Object.values(appRoutes));
+  useIsValidRoute: (path: string | null): path is AppRoutes => {
+    const validRoutes = new Set<string>(Object.values(AppRoutes));
 
     if (path === null) return false;
     return validRoutes.has(path);

@@ -1,7 +1,7 @@
 'use client';
 import React, { useState, useCallback } from 'react';
 import Link from 'next/link';
-import { appRoutes } from '@/_routes/routes';
+import { AppRoutes } from '@/_routes/routes';
 import AppNavigationItem from '../AppNavigationItem/AppNavigationItem';
 import { tv } from 'tailwind-variants';
 import { routerHooks } from '@/_hooks/routerHooks';
@@ -15,6 +15,7 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import ArrowDownIcon from '@/_icons/ArrowDownIcon';
 import ArrowUpIcon from '@/_icons/ArrowUpIcon';
 import TimeOffModal from '../TimeOffModal/TimeOffModal';
+import { localizationHooks } from '@/_hooks/localizationHooks';
 
 type Props = {
   menuOpen: boolean;
@@ -52,33 +53,33 @@ export default function AppNavigation({ menuOpen, setMenuOpen }: Props) {
 
   const items = [
     {
-      href: appRoutes.Home,
+      href: localizationHooks.useWithLocale(AppRoutes.Home),
       icon: <HomeIcon />,
       label: 'Home',
     },
     {
-      href: appRoutes.Calendar,
+      href: localizationHooks.useWithLocale(AppRoutes.Calendar),
       icon: <CalendarIcon />,
       label: 'Calendar',
       hasDropdown: true,
     },
     {
-      href: appRoutes.Clients,
+      href: localizationHooks.useWithLocale(AppRoutes.Clients),
       icon: <CoPresentIcon />,
       label: 'Clients',
     },
     {
-      href: appRoutes.Services,
+      href: localizationHooks.useWithLocale(AppRoutes.Services),
       icon: <BookIcon />,
       label: 'Services',
     },
     {
-      href: appRoutes.Masters,
+      href: localizationHooks.useWithLocale(AppRoutes.Masters),
       icon: <GroupsIcon />,
       label: 'Masters',
     },
     {
-      href: appRoutes.Posts,
+      href: localizationHooks.useWithLocale(AppRoutes.Posts),
       icon: <MosaicIcon />,
       label: 'Posts',
     },
@@ -109,7 +110,7 @@ export default function AppNavigation({ menuOpen, setMenuOpen }: Props) {
         <nav className='flex h-full flex-col py-7 gap-15'>
           <div className='px-8 shrink-0'>
             <Link
-              href={appRoutes.Home}
+              href={localizationHooks.useWithLocale(AppRoutes.Home)}
               className='font-inter font-semibold text-4xl text-gray-600'
               onClick={handleCloseMenu}
             >
@@ -160,7 +161,7 @@ export default function AppNavigation({ menuOpen, setMenuOpen }: Props) {
                             </li>
                             <li className='w-full'>
                               <Link
-                                href={appRoutes.WorkingHours}
+                                href={localizationHooks.useWithLocale(AppRoutes.WorkingHours)}
                                 className='block w-full text-left pl-20.5 pr-6 py-3 hover:bg-primary-100 focus:bg-primary-100 transition-colors cursor-pointer'
                               >
                                 Working hours

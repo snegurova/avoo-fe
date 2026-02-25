@@ -1,4 +1,4 @@
-export enum appRoutes {
+export enum AppRoutes {
   Home = '/app',
   SignIn = '/app/sign-in',
   SignUp = '/app/sign-up',
@@ -8,6 +8,7 @@ export enum appRoutes {
   EditProfile = '/app/profile/edit-profile',
   EditLanguages = '/app/profile/edit-languages',
   Masters = '/app/masters',
+  AddMaster = '/app/masters/add-master',
   Certificates = '/app/profile/certificates',
   WorkingHours = '/app/calendar/working-hours',
   WorkingHoursCreate = '/app/calendar/working-hours/create',
