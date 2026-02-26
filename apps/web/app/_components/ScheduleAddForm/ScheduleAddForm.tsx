@@ -11,7 +11,7 @@ import { FormSelect } from '@/_components/FormSelect/FormSelect';
 import { FormMultiSelect } from '@/_components/FormMultiSelect/FormMultiSelect';
 import FormDatePicker from '@/_components/FormDatePicker/FormDatePicker';
 import { WorkingDayRow } from '@/_components/WorkingDayRow/WorkingDayRow';
-import { appRoutes } from '@/_routes/routes';
+import { AppRoutes } from '@/_routes/routes';
 import { getAllErrorMessages } from '@/_utils/formError';
 import { useToast } from '@/_hooks/useToast';
 import { VALUE_DATE_FORMAT } from '@/_constants/dateFormats';
@@ -24,7 +24,7 @@ export const ScheduleAddForm = () => {
   const { control, handleSubmit, setValue, watch, errors } = scheduleHooks.useCreateScheduleForm({
     onSuccess: () => {
       toast.success('Schedule added successfully');
-      router.replace(appRoutes.WorkingHours);
+      router.replace(AppRoutes.WorkingHours);
     },
     onError: (error) => {
       toast.error(`Schedule add failed: ${error.message}`);

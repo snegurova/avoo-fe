@@ -21,7 +21,7 @@ import AsideModal from '@/_components/AsideModal/AsideModal';
 import OrderData from '@/_components/OrderData/OrderData';
 import CalendarClockIcon from '@/_icons/CalendarClockIcon';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { appRoutes } from '@/_routes/routes';
+import { AppRoutes } from '@/_routes/routes';
 import { OrderQueryParams } from '@avoo/hooks/types/orderQueryParams';
 import { CalendarType } from '@avoo/hooks/types/calendarType';
 
@@ -175,7 +175,7 @@ export default function Calendar(props: Props) {
       setToDate(timeUtils.toDayEnd(parsedDate));
 
       if (searchParams.toString()) {
-        router.replace(appRoutes.Calendar);
+        router.replace(AppRoutes.Calendar);
       }
 
       if (!scrollRef.current) return;

@@ -4,7 +4,7 @@ import Controls, { ControlsVariant } from '@/_components/Controls/Controls';
 import TimeOffList from '@/_components/TimeOffList/TimeOffList';
 import AppPlaceholder from '@/_components/AppPlaceholder/AppPlaceholder';
 import EditCalendarIcon from '@/_icons/EditCalendarIcon';
-import { appRoutes } from '@/_routes/routes';
+import { AppRoutes } from '@/_routes/routes';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useCallback, useMemo, useState } from 'react';
@@ -48,7 +48,7 @@ export default function TimeOffPage() {
   const router = useRouter();
 
   const handleAddTimeOff = useCallback(() => {
-    router.push(`${appRoutes.AddTimeOff}`);
+    router.push(`${AppRoutes.AddTimeOff}`);
   }, [router]);
 
   return (
@@ -72,7 +72,7 @@ export default function TimeOffPage() {
               icon={<EditCalendarIcon className='w-20 h-20 lg:w-25 lg:h-25 fill-primary-300' />}
               description={
                 <p>
-                  <Link href={appRoutes.AddTimeOff} className='text-primary-300 font-bold'>
+                  <Link href={AppRoutes.AddTimeOff} className='text-primary-300 font-bold'>
                     Add time off
                   </Link>
                   , vacations, breaks, or unavailable hours to keep the schedule accurate.
