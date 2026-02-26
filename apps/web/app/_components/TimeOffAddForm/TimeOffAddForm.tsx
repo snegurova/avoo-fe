@@ -130,7 +130,10 @@ export default function TimeOffAddForm() {
       setValue('endDate', newDate ? newDate.format(VALUE_DATE_FORMAT) : ''),
     [setValue],
   );
-  const handleCancel = useCallback(() => router.push(appRoutes.TimeOff), [router]);
+  const handleCancel = useCallback(
+    () => router.push(localizationHooks.useWithLocale(AppRoutes.TimeOff)),
+    [router],
+  );
 
   return (
     <div className='py-7 px-5 md:px-11 flex-1 min-h-0 overflow-auto hide-scrollbar max-w-4xl xl:max-w-screen-xl xl:mx-auto'>
