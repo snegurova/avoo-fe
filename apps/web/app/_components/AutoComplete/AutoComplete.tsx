@@ -1,8 +1,8 @@
 import useAutocomplete, { UseAutocompleteProps } from '@mui/material/useAutocomplete';
 import { styled } from '@mui/material/styles';
 import { autocompleteClasses } from '@mui/material/Autocomplete';
-import SelectCardItem from '../SelectCardItem/SelectCardItem';
 import { colors } from '@avoo/design-tokens';
+import SelectCardItem from '@/_components/SelectCardItem/SelectCardItem';
 
 type BaseOption = {
   id: number;
