@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Controller } from 'react-hook-form';
+import { useRouter } from 'next/navigation';
 import {
   Button,
   FormControl,
@@ -20,8 +21,8 @@ import CategorySelect from '@/_components/CategorySelect/CategorySelect';
 import MasterAutoCompleteSelect from '@/_components/MasterAutoCompleteSelect/MasterAutoCompleteSelect';
 import ServiceGalleryUpload from '@/_components/ServiceGalleryUpload/ServiceGalleryUpload';
 import { useToast } from '@/_hooks/useToast';
-import { appRoutes } from '@/_routes/routes';
-import { useRouter } from 'next/navigation';
+import { AppRoutes } from '@/_routes/routes';
+import { localizationHooks } from '@/_hooks/localizationHooks';
 
 type Props = {
   categories: Category[];
@@ -67,7 +68,7 @@ export default function ServiceAddForm(props: Props) {
     {
       onSuccess: () => {
         toast.success('Service has been created!');
-        router.replace(appRoutes.Services);
+        router.replace(localizationHooks.useWithLocale(AppRoutes.Services));
       },
       onError: (error) => {
         toast.error('Failed to create service: ' + error.message);
