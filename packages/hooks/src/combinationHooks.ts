@@ -4,8 +4,8 @@ import {
   BaseResponse,
   GetCombinationsQueryParams,
   GetCombinationsResponse,
+  ApiStatus,
 } from '@avoo/axios/types/apiTypes';
-import { ApiStatus } from '@avoo/hooks/types/apiTypes';
 import { useQuery } from '@tanstack/react-query';
 import { queryKeys } from './queryKeys';
 import { useMemo } from 'react';

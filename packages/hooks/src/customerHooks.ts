@@ -6,11 +6,11 @@ import {
   CreateCustomerRequest,
   GetCustomersQueryParams,
   GetCustomersResponse,
+  ApiStatus,
 } from '@avoo/axios/types/apiTypes';
 import { queryKeys } from './queryKeys';
 import { useMutation, useQuery, useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
 import { useMemo } from 'react';
-import { ApiStatus } from '@avoo/hooks/types/apiTypes';
 
 export const customerHooks = {
   useGetCustomers: (params?: GetCustomersQueryParams) => {
