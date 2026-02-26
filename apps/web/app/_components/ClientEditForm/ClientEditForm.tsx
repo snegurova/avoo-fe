@@ -72,7 +72,7 @@ const mockHistory = [
   },
 ];
 
-export default function ClientForm({ ...props }: ClientFormProps) {
+export default function ClientEditForm({ ...props }: ClientFormProps) {
   const { initial, onClose, onRequestClose, onDirtyChange, id, notifyInitial = true } = props;
 
   const update = customerHooks.useUpdateCustomer();
@@ -131,25 +131,26 @@ export default function ClientForm({ ...props }: ClientFormProps) {
           <FormInput id='name' {...register('name')} />
         </div>
 
-        <div>
-          <label htmlFor='email' className='text-sm'>
-            Email address *
-          </label>
-          <FormInput
-            id='email'
-            {...register('email')}
-            readOnly
-            className='cursor-default'
-            accessory={<LockIcon className='text-gray-400' />}
-            accessoryPosition={AccessoryPosition.Right}
-          />
-        </div>
-
-        <div>
-          <label htmlFor='phone' className='text-sm'>
-            Phone
-          </label>
-          <FormInput id='phone' {...register('phone')} />
+        <div className='flex items-stretch gap-3'>
+          <div>
+            <label htmlFor='email' className='text-sm'>
+              Email address *
+            </label>
+            <FormInput
+              id='email'
+              {...register('email')}
+              readOnly
+              className='cursor-default'
+              accessory={<LockIcon className='text-gray-400' />}
+              accessoryPosition={AccessoryPosition.Right}
+            />
+          </div>
+          <div>
+            <label htmlFor='phone' className='text-sm'>
+              Phone
+            </label>
+            <FormInput id='phone' {...register('phone')} />
+          </div>
         </div>
 
         <Controller

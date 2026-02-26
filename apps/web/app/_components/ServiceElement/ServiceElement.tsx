@@ -55,7 +55,7 @@ export default function ServiceElement(props: Props) {
             ))}
           </ul>
         )}
-        {isCard && master && (
+        {isCard && master && !hideMasters && (
           <div className='flex items-center gap-1'>
             <Avatar
               name={master.name ?? ''}

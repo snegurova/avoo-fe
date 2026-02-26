@@ -35,8 +35,8 @@ export const userHooks = {
       address: profileInfo?.businessInfo?.address ?? 'Salon address not set',
       email: profileInfo?.email ?? 'Email not set',
       phone: profileInfo?.businessInfo?.phone ?? 'Phone not set',
-      avatarUrl: profileInfo?.avatarPreviewUrl ?? profileInfo?.avatarUrl ?? null,
-      avatarPreviewUrl: profileInfo?.avatarPreviewUrl ?? null,
+      avatarUrl: profileInfo?.avatarPreviewUrl ?? profileInfo?.avatarUrl,
+      avatarPreviewUrl: profileInfo?.avatarPreviewUrl,
       location_lat: profileInfo?.businessInfo?.location_lat ?? null,
       location_lon: profileInfo?.businessInfo?.location_lon ?? null,
     };

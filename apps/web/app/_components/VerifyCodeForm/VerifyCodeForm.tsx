@@ -4,9 +4,10 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { authHooks } from '@avoo/hooks';
 import { Button, ButtonFit, ButtonIntent } from '@/_components/Button/Button';
 import FormInput from '@/_components/FormInput/FormInput';
-import { appRoutes } from '@/_routes/routes';
+import { AppRoutes } from '@/_routes/routes';
 import { useApiStatusStore } from '@avoo/store';
 import { formatHooks } from '@avoo/hooks';
+import { localizationHooks } from '@/_hooks/localizationHooks';
 
 export default function VerifyCodeForm() {
   const isPending = useApiStatusStore((state) => state.isPending);
@@ -21,7 +22,7 @@ export default function VerifyCodeForm() {
   const { register, handleSubmit, errors } = authHooks.useVerifyCodeForm({
     email,
     onSuccess: () => {
-      router.push(appRoutes.ResetPassword);
+      router.push(localizationHooks.useWithLocale(AppRoutes.ResetPassword));
     },
   });
 

@@ -194,7 +194,7 @@ export const updateOrderSchema = yup.object({
   duration: yup.number().positive().optional(),
   notes: yup.string().optional(),
   date: yup.string().optional(),
-  masterId: yup.number().optional(),
+  masterId: yup.number().nullable().optional(),
 });
 
 export const createServiceSchema = yup.object({

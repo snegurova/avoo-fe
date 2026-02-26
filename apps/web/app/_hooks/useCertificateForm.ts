@@ -3,7 +3,7 @@
 import { useCallback, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
-import { appRoutes } from '@/_routes/routes';
+import { AppRoutes } from '@/_routes/routes';
 import { userHooks, masterHooks } from '@avoo/hooks';
 import {
   getFileValidationError,
@@ -12,6 +12,7 @@ import {
 } from '@/_utils/fileUtils';
 import { FileInput } from '@avoo/shared';
 import { OwnerType } from '@/_components/CertificateAdd/CertificateAdd';
+import { localizationHooks } from '@/_hooks/localizationHooks';
 
 type Values = {
   title: string;
@@ -74,7 +75,7 @@ export function useCertificateForm() {
         reset();
         setFile(null);
         setFileError(null);
-        router.push(appRoutes.Certificates);
+        router.push(localizationHooks.useWithLocale(AppRoutes.Certificates));
       },
     });
   };

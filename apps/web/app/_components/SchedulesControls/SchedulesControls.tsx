@@ -3,7 +3,8 @@ import { Button, InputAdornment, TextField, Typography } from '@mui/material';
 import { useApiStatusStore } from '@avoo/store';
 import { colors } from '@avoo/design-tokens';
 import SearchIcon from '@/_icons/SearchIcon';
-import { appRoutes } from '@/_routes/routes';
+import { AppRoutes } from '@/_routes/routes';
+import { localizationHooks } from '@/_hooks/localizationHooks';
 import SortOptions from '@/_components/SortOptions/SortOptions';
 
 type Props = {
@@ -26,7 +27,7 @@ export default function SchedulesControls(props: Props) {
             Working schedules
           </Typography>
           <div className='order-2 lg:order-3 w-full md:w-auto'>
-            <Link href={appRoutes.WorkingHoursCreate}>
+            <Link href={localizationHooks.useWithLocale(AppRoutes.WorkingHoursCreate)}>
               <Button
                 fullWidth
                 color='primary'

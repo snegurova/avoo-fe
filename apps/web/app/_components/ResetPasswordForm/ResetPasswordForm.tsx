@@ -4,10 +4,11 @@ import { useRouter } from 'next/navigation';
 import { authHooks } from '@avoo/hooks';
 import { Button, ButtonFit, ButtonIntent } from '@/_components/Button/Button';
 import FormInput from '@/_components/FormInput/FormInput';
-import { appRoutes } from '@/_routes/routes';
+import { AppRoutes } from '@/_routes/routes';
 import { useApiStatusStore } from '@avoo/store';
 import { utils } from '@avoo/hooks';
 import ShowPasswordToggler from '@/_components/ShowPasswordToggler/ShowPasswordToggler';
+import { localizationHooks } from '@/_hooks/localizationHooks';
 
 export default function ResetPasswordForm() {
   const isPending = useApiStatusStore((state) => state.isPending);
@@ -16,7 +17,7 @@ export default function ResetPasswordForm() {
 
   const { register, handleSubmit, errors } = authHooks.useResetPasswordForm({
     onSuccess: () => {
-      router.push(appRoutes.SignIn);
+      router.push(localizationHooks.useWithLocale(AppRoutes.SignIn));
     },
   });
 

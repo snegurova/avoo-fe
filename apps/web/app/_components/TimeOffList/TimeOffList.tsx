@@ -95,7 +95,7 @@ const TimeOffList = ({ items, onEdit, onDelete, incrementPage, hasMore }: Props)
       </div>
 
       <InfiniteList
-        className='flex flex-col overflow-y-auto gap-4 max-h-[70vh]'
+        className='flex flex-col overflow-y-auto gap-4 max-h-[50vh]'
         hasMore={hasMore}
         onLoadMore={incrementPage}
       >

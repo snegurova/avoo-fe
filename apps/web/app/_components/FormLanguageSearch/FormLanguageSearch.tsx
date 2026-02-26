@@ -15,18 +15,26 @@ type Props<T extends FieldValues> = {
   placeholder?: string;
   error?: string;
   className?: string;
+  splitOnDesktop?: boolean;
 };
 
 export default function FormLanguageSearch<T extends FieldValues>(props: Readonly<Props<T>>) {
-  const { name, control, placeholder = 'Search language', error, className } = props;
+  const {
+    name,
+    control,
+    placeholder = 'Search language',
+    error,
+    className,
+    splitOnDesktop = true,
+  } = props;
 
   const { selected, queryParams, setQueryParams, filtered, add, remove } =
     languageHooks.useLanguagePicker(control, name);
 
   return (
     <div className={`relative ${className ?? ''}`}>
-      <div className='mt-6 mb-6 lg:flex lg:items-start lg:gap-6'>
-        <div className='relative w-full lg:w-1/2'>
+      <div className={`mt-6 mb-6 ${splitOnDesktop ? 'lg:flex lg:items-start lg:gap-6' : ''}`}>
+        <div className={`relative w-full ${splitOnDesktop ? 'lg:w-1/2' : ''}`}>
           <SearchInput
             value={queryParams}
             onChange={setQueryParams}
@@ -43,7 +51,7 @@ export default function FormLanguageSearch<T extends FieldValues>(props: Readonl
           )}
         </div>
 
-        <div className='mt-4 lg:mt-0 lg:w-1/2 flex flex-wrap gap-3'>
+        <div className={`mt-4 ${splitOnDesktop ? 'lg:mt-0 lg:w-1/2' : ''} flex flex-wrap gap-3`}>
           {selected.map((code: LanguageCode) => (
             <LanguageChip key={code} code={code} onRemove={remove} />
           ))}

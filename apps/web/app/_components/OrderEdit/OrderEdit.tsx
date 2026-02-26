@@ -8,16 +8,16 @@ import { Button, ButtonFit, ButtonIntent, ButtonType } from '@/_components/Butto
 import { useApiStatusStore } from '@avoo/store';
 import ServiceElement from '@/_components/ServiceElement/ServiceElement';
 import CustomerElement from '@/_components/CustomerElement/CustomerElement';
-import { orderHooks } from '@avoo/hooks';
+import { orderHooks, masterHooks } from '@avoo/hooks';
 import FormTextArea from '@/_components/FormTextArea/FormTextArea';
 import { Controller } from 'react-hook-form';
-import { masterHooks } from '@avoo/hooks';
 import SearchField from '@/_components/SearchField/SearchField';
 import MasterElement from '../MasterElement/MasterElement';
 import FormCounter from '@/_components/FormCounter/FormCounter';
 import ErrorIcon from '@/_icons/ErrorIcon';
 import FormDatePicker from '@/_components/FormDatePicker/FormDatePicker';
 import FormTimePicker from '@/_components/FormTimePicker/FormTimePicker';
+import CombinationElement from '@/_components/CombinationElement/CombinationElement';
 
 type Props = {
   order: Order;
@@ -54,6 +54,22 @@ export default function OrderEdit(props: Props) {
     },
   });
 
+  useEffect(() => {
+    setMasterParams((prev) => {
+      if (order.service) {
+        return {
+          ...prev,
+          serviceId: order.service.id,
+        };
+      } else if (order.combination) {
+        return {
+          ...prev,
+          combinationId: order.combination.id,
+        };
+      }
+    });
+  }, [order]);
+
   const {
     data: mastersData,
     fetchNextPage: fetchNextMastersPage,
@@ -83,14 +99,15 @@ export default function OrderEdit(props: Props) {
     }
   }, [isError, errorMessage]);
 
-  const onMasterChange = (value: number | { id: number } | undefined) => {
-    let masterId = undefined;
+  const onMasterChange = (value: number | { id: number } | object) => {
+    let masterId = null;
 
     if (typeof value === 'number') {
       masterId = value;
     } else if (value && typeof value === 'object' && 'id' in value) {
       masterId = value.id;
     }
+
     setValue('masterId', masterId);
     const master = masters?.find((m) => m.id === masterId) || undefined;
     setSelectedMaster(master);
@@ -112,6 +129,9 @@ export default function OrderEdit(props: Props) {
         <div className='flex flex-col gap-3'>
           <h3 className='font-medium tracking-wider'>Service</h3>
           {order.service && <ServiceElement item={order.service} isCard />}
+          {order.combination && (
+            <CombinationElement item={order.combination} isCard master={order.master} hideMasters />
+          )}
           <div className='flex flex-col gap-3'>
             <div className=''>
               <Controller
@@ -165,13 +185,13 @@ export default function OrderEdit(props: Props) {
                 render={({ field }) => (
                   <SearchField
                     label='Master'
-                    value={field.value}
+                    value={field.value ?? undefined}
                     onChange={onMasterChange}
                     items={masters}
                     search={masterSearch}
                     setSearch={setMasterSearch}
                     ItemElement={MasterElement}
-                    searchMode={false}
+                    searchMode={!field.value}
                     error={errors?.masterId?.message}
                     hasMore={hasMoreMasters}
                     fetchNextPage={fetchNextMastersPage}

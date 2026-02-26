@@ -2,6 +2,7 @@
 import AppWrapper from '@/_components/AppWrapper/AppWrapper';
 import { Typography } from '@mui/material';
 import Calendar from '@/_components/Calendar/Calendar';
+import { CalendarType } from '@avoo/hooks/types/calendarType';
 
 export default function DashboardPage() {
   return (
@@ -12,7 +13,7 @@ export default function DashboardPage() {
             Calendar
           </Typography>
         </div>
-        <Calendar isWidget />
+        <Calendar calendarType={CalendarType.WIDGET} />
       </AppWrapper>
       <div className='flex flex-col md:flex-row lg:flex-col gap-8 order-1 lg:order-2'>
         <div className='md:flex-1 lg:flex-none'>

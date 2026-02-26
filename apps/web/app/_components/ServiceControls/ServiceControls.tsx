@@ -1,8 +1,9 @@
 import { Button, InputAdornment, TextField, Typography } from '@mui/material';
 import SearchIcon from '@/_icons/SearchIcon';
 import { useApiStatusStore } from '@avoo/store';
-import { appRoutes } from '@/_routes/routes';
+import { AppRoutes } from '@/_routes/routes';
 import Link from 'next/link';
+import { localizationHooks } from '@/_hooks/localizationHooks';
 
 type Props = {
   setSearchQuery: (value: string) => void;
@@ -20,7 +21,7 @@ export default function ServiceControls(props: Props) {
         </Typography>
 
         <div className='order-2 md:order-3 ml-auto md:ml-0'>
-          <Link href={appRoutes.CreateService}>
+          <Link href={localizationHooks.useWithLocale(AppRoutes.CreateService)}>
             <Button
               fullWidth
               color='primary'
