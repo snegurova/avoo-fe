@@ -15,7 +15,7 @@ export type BaseResponse<T> = {
   data: T | null;
 };
 /** Category && Services */
-export type ServicesQueryParams = Omit<PrivateServiceQueryParams, 'page'>;
+export type ServicesQueryParams = Omit<NonNullable<PrivateServiceQueryParams>, 'page'>;
 export type Category = components['schemas']['CategoryEntity'];
 export type CategoryWithServicesCount = components['schemas']['ServiceWithCategoryDto'];
 export type Service = components['schemas']['ServiceEntity'];

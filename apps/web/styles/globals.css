@@ -63,7 +63,7 @@ main::-webkit-scrollbar-thumb,
 
   .drag-and-drop-zone {
     @apply flex flex-col flex-1 items-center 
-    justify-center w-full h-full border-1 border-dashed border-primary-400 
+    justify-center w-full h-full border-1 border-dashed
     hover:bg-white border-primary-100 hover:border-primary-500 
     rounded-lg md:p-6 p-2 text-center cursor-pointer gap-2 transition-colors;
   }

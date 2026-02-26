@@ -46,7 +46,7 @@ export default function DragAndDropZone(props: Props) {
     base: 'drag-and-drop-icon',
     variants: {
       variant: {
-        outline: 'border-1 border-gray-100 bg-white',
+        outline: 'border-1 border-gray-100 bg-white hover:bg-primary-100',
         base: '',
       },
       isUploading: {

@@ -50,15 +50,15 @@ export default function ScheduleList(props: Props) {
 
   return (
     <>
-      <div>
-        <div className='grid grid-cols-[2fr_1.2fr_1.2fr_1.2fr_72px] gap-3 p-6 mb-8 text-sm text-black font-semibold bg-primary-50'>
-          <div>Schedule name</div>
-          <div>Applies to</div>
-          <div>Start date</div>
-          <div>End date</div>
-          <div>Actions</div>
-        </div>
-        <ul className='divide-y divide-gray-200' ref={listRef}>
+      <div className='hidden lg:grid grid-cols-[2fr_1.2fr_1.2fr_1.2fr_72px] gap-3 p-6 mb-8 text-sm text-black font-semibold bg-primary-50'>
+        <div>Schedule name</div>
+        <div>Applies to</div>
+        <div>Start date</div>
+        <div>End date</div>
+        <div>Actions</div>
+      </div>
+      <div className='overflow-y-auto'>
+        <ul className='flex flex-col gap-2 lg:block lg:divide-y lg:divide-gray-200' ref={listRef}>
           {schedules?.map((schedule) => (
             <li key={schedule.id}>
               <ScheduleListItem
