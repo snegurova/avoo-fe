@@ -95,7 +95,7 @@ export type GetCustomersResponse = {
   pagination: components['schemas']['PaginationDto'];
 };
 export type GetCustomersQueryParams =
-  operations['CustomersController_findAllByOwner']['parameters']['query'];
+  NonNullable<operations['CustomersController_findAllByOwner']['parameters']['query']>;
 export type Customer = components['schemas']['CustomerInfoDto'];
 
 /** Schedule */

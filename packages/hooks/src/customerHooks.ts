@@ -21,14 +21,15 @@ export const customerHooks = {
       [params],
     );
 
-    const { data: customersData, isPending } = useQuery<BaseResponse<GetCustomersResponse>, Error>({
+    const { data: customersData, isPending, isSuccess } = useQuery<BaseResponse<GetCustomersResponse>, Error>({
       queryKey: ['customers', queryKeys.customers.byParams(memoParams)],
       queryFn: () => customerApi.getCustomers(memoParams),
     });
 
     utils.useSetPendingApi(isPending);
 
-    if ((customersData?.status ?? '').toLowerCase() === ApiStatus.SUCCESS && customersData.data) {
+    if (isSuccess &&
+      customersData.status === ApiStatus.SUCCESS) {
       return customersData.data;
     }
 
@@ -61,15 +62,16 @@ export const customerHooks = {
   },
 
   useGetCustomerById: (id?: number | null) => {
+    if (!id) return null;
+
     const queryClient = useQueryClient();
 
-    const { data: customerData, isPending } = useQuery<
+    const { data: customerData, isPending, isSuccess } = useQuery<
       BaseResponse<CustomerInfoResponse> | null,
       Error
     >({
       queryKey: ['customer', id],
       queryFn: async () => {
-        if (!id) return null;
 
         const cached = queryClient.getQueryData<BaseResponse<CustomerInfoResponse[]>>(
           queryKeys.customers.all,
@@ -105,7 +107,8 @@ export const customerHooks = {
 
     utils.useSetPendingApi(isPending);
 
-    if ((customerData?.status ?? '').toLowerCase() === ApiStatus.SUCCESS && customerData.data) {
+    if (isSuccess && !!customerData &&
+      customerData.status === ApiStatus.SUCCESS) {
       return customerData.data;
     }
 
