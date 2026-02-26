@@ -233,7 +233,7 @@ export type Combination = Omit<
   masters: MasterWithRelationsEntity[];
 };
 export type GetCombinationsQueryParams =
-  operations['CombinationsController_findAllByOwner']['parameters']['query'];
+  NonNullable<operations['CombinationsController_findAllByOwner']['parameters']['query']>;
 export type GetCombinationsResponse = {
   items: Combination[];
   pagination: components['schemas']['PaginationDto'];

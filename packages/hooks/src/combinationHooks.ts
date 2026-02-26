@@ -27,7 +27,7 @@ export const combinationHooks = {
     >({
       queryKey: ['combinations', queryKeys.combinations.byParams(memoParams)],
       queryFn: () => combinationApi.getCombinations(memoParams),
-      enabled: params.serviceIds.length > 1,
+      enabled: params.serviceIds && params.serviceIds?.length > 1,
     });
 
     utils.useSetPendingApi(isPending);
