@@ -6,10 +6,11 @@ import AppWrapper from '@/_components/AppWrapper/AppWrapper';
 import CreateServiceForm from '@/_components/CreateServiceForm/CreateServiceForm';
 import ServiceGalleryUpload from '@/_components/ServiceGalleryUpload/ServiceGalleryUpload';
 import { useToast } from '@/_hooks/useToast';
-import { appRoutes } from '@/_routes/routes';
+import { AppRoutes } from '@/_routes/routes';
 import { MEDIA_TYPE_ENUM } from '@avoo/axios/types/apiEnums';
 import { useState } from 'react';
 import { UploadMediaResponse } from '@avoo/axios/types/apiTypes';
+import { localizationHooks } from '@/_hooks/localizationHooks';
 
 export default function ServicesCreatePage() {
   const router = useRouter();
@@ -22,7 +23,7 @@ export default function ServicesCreatePage() {
     {
       onSuccess: () => {
         toast.success('Service has been created!');
-        router.replace(appRoutes.Services);
+        router.replace(localizationHooks.useWithLocale(AppRoutes.Services));
       },
       onError: (error) => {
         toast.error('Failed to create service: ' + error.message);

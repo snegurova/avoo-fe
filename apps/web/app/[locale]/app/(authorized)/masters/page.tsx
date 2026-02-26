@@ -2,11 +2,12 @@
 
 import React, { useState, useCallback, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
-import { appRoutes } from '@/_routes/routes';
+import { AppRoutes } from '@/_routes/routes';
 import Controls from '@/_components/Controls/Controls';
 import { masterHooks } from '@avoo/hooks';
 import MasterList from '@/_components/MasterList/MasterList';
 import AppWrapper from '@/_components/AppWrapper/AppWrapper';
+import { localizationHooks } from '@/_hooks/localizationHooks';
 import MasterEditModal from '@/_components/MasterEditModal/MasterEditModal';
 import type { MasterWithRelationsEntityResponse } from '@avoo/axios/types/apiTypes';
 
@@ -29,7 +30,7 @@ export default function MastersPage() {
   const router = useRouter();
 
   const handleAddMaster = useCallback(() => {
-    router.push(`${appRoutes.AddMaster}`);
+    router.push(`${localizationHooks.useWithLocale(AppRoutes.AddMaster)}`);
   }, [router]);
 
   const handleEditMaster = useCallback((master: MasterWithRelationsEntityResponse) => {

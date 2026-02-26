@@ -6,9 +6,10 @@ import ServiceControls from '@/_components/ServiceControls/ServiceControls';
 import { servicesHooks } from '@avoo/hooks/src/servicesHooks';
 import { categoriesHooks } from '@avoo/hooks';
 import Link from 'next/link';
-import { appRoutes } from '@/_routes/routes';
+import { AppRoutes } from '@/_routes/routes';
 import AutoStoriesIcon from '@/_icons/AutoStoriesIcon';
 import AppPlaceholder from '@/_components/AppPlaceholder/AppPlaceholder';
+import { localizationHooks } from '@/_hooks/localizationHooks';
 
 export default function ServicesPage() {
   const currency = 'EUR';
@@ -34,7 +35,10 @@ export default function ServicesPage() {
           description={
             <p>
               Start by creating your first{' '}
-              <Link href={appRoutes.CreateService} className='text-primary-300'>
+              <Link
+                href={localizationHooks.useWithLocale(AppRoutes.CreateService)}
+                className='text-primary-300'
+              >
                 service
               </Link>{' '}
               to make it available for booking

@@ -4,8 +4,9 @@ import { useRouter } from 'next/navigation';
 import { authHooks } from '@avoo/hooks';
 import { Button, ButtonFit, ButtonIntent } from '@/_components/Button/Button';
 import FormInput from '@/_components/FormInput/FormInput';
-import { appRoutes } from '@/_routes/routes';
+import { AppRoutes } from '@/_routes/routes';
 import { useApiStatusStore } from '@avoo/store';
+import { localizationHooks } from '@/_hooks/localizationHooks';
 
 export default function ForgotPasswordForm() {
   const isPending = useApiStatusStore((state) => state.isPending);
@@ -14,7 +15,9 @@ export default function ForgotPasswordForm() {
 
   const { sendCodeHandler } = authHooks.useSendCode({
     onSuccess: (email: string) => {
-      router.push(`${appRoutes.VerifyCode}?email=${encodeURIComponent(email)}`);
+      router.push(
+        `${localizationHooks.useWithLocale(AppRoutes.VerifyCode)}?email=${encodeURIComponent(email)}`,
+      );
     },
   });
 

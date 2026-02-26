@@ -7,9 +7,10 @@ import { timeUtils } from '@avoo/shared';
 import { PX_IN_MINUTE } from '@/_constants/time';
 import CalendarCurrentTime from '@/_components/CalendarCurrentTime/CalendarCurrentTime';
 import { useRouter } from 'next/navigation';
-import { appRoutes } from '@/_routes/routes';
+import { AppRoutes } from '@/_routes/routes';
 import { useToast } from '@/_hooks/useToast';
 import { CalendarType } from '@avoo/hooks/types/calendarType';
+import { localizationHooks } from '@/_hooks/localizationHooks';
 
 const DAY_CELLS = Array.from({ length: 96 });
 const WEEK_CELLS = Array.from({ length: 7 });
@@ -159,7 +160,7 @@ export default function CalendarColumn(props: Props) {
       onClickDateTime(timeUtils.formatDateTimeRounded(date, hours * 60 + mins), master);
     } else {
       router.push(
-        `${appRoutes.OrderCreate}?masterId=${master.id}&date=${encodeURIComponent(
+        `${localizationHooks.useWithLocale(AppRoutes.OrderCreate)}?masterId=${master.id}&date=${encodeURIComponent(
           timeUtils.formatDateTimeRounded(date, hours * 60 + mins),
         )}`,
       );

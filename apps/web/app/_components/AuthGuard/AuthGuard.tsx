@@ -3,7 +3,8 @@
 import { useRouter, usePathname } from 'next/navigation';
 import { useAuthStore, useHydrationStore } from '@avoo/store';
 import { useEffect, ReactNode } from 'react';
-import { appRoutes } from '@/_routes/routes';
+import { AppRoutes } from '@/_routes/routes';
+import { localizationHooks } from '@/_hooks/localizationHooks';
 
 type Props = {
   children: ReactNode;
@@ -24,7 +25,7 @@ export const AuthGuard = (props: Props) => {
 
     if (!isAuthenticated && pathname) {
       const returnUrl = encodeURIComponent(pathname);
-      router.push(`${appRoutes.SignIn}?returnUrl=${returnUrl}`);
+      router.push(`${localizationHooks.useWithLocale(AppRoutes.SignIn)}?returnUrl=${returnUrl}`);
     }
   }, [isAuthenticated, hasHydrated, router, pathname]);
 

@@ -9,9 +9,10 @@ import FormInput from '@/_components/FormInput/FormInput';
 import FormLanguageSearch from '@/_components/FormLanguageSearch/FormLanguageSearch';
 import PhoneCodeSelect from '@/_components/PhoneCodeSelect/PhoneCodeSelect';
 import { masterHooks, phoneHooks } from '@avoo/hooks';
-import { appRoutes } from '@/_routes/routes';
+import { AppRoutes } from '@/_routes/routes';
 import { useToast } from '@/_hooks/useToast';
 import FormTextarea from '../FormTextArea/FormTextArea';
+import { localizationHooks } from '@/_hooks/localizationHooks';
 
 export default function MasterAddForm() {
   const router = useRouter();
@@ -21,12 +22,12 @@ export default function MasterAddForm() {
   const { control, handleSubmit, isPending } = masterHooks.useCreateMasterForm({
     onSuccess: () => {
       toast.success('New master added successfully');
-      router.push(appRoutes.Masters);
+      router.push(localizationHooks.useWithLocale(AppRoutes.Masters));
     },
   });
 
   const onCancel = useCallback(() => {
-    router.push(appRoutes.Masters);
+    router.push(localizationHooks.useWithLocale(AppRoutes.Masters));
   }, [router]);
 
   const onImageSelected = useCallback((file: File) => {

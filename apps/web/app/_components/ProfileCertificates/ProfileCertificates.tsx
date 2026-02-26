@@ -1,14 +1,15 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { appRoutes } from '@/_routes/routes';
+import { AppRoutes } from '@/_routes/routes';
 import { IconButton } from '@/_components/IconButton/IconButton';
+import { localizationHooks } from '@/_hooks/localizationHooks';
 
 export const ProfileCertificates = () => {
   const router = useRouter();
 
   const handleNavigate = () => {
-    router.push(appRoutes.Certificates);
+    router.push(localizationHooks.useWithLocale(AppRoutes.Certificates));
   };
 
   return (

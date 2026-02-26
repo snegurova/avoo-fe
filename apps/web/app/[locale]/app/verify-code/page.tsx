@@ -2,7 +2,8 @@ import { Metadata } from 'next/types';
 import { Suspense } from 'react';
 import VerifyCodeForm from '@/_components/VerifyCodeForm/VerifyCodeForm';
 import Link from 'next/link';
-import { appRoutes } from '@/_routes/routes';
+import { AppRoutes } from '@/_routes/routes';
+import { localizationHooks } from '@/_hooks/localizationHooks';
 
 export const metadata: Metadata = {
   title: 'Verify Code - AVOO App',
@@ -25,7 +26,10 @@ export default function VerifyCodePage() {
 
       <div className='sm:mx-auto sm:w-full sm:max-w-sm mt-4'>
         <p className='text-center text-gray-600'>
-          <Link href={appRoutes.SignIn} className='text-blue-600 hover:underline'>
+          <Link
+            href={localizationHooks.useWithLocale(AppRoutes.SignIn)}
+            className='text-blue-600 hover:underline'
+          >
             Back to login
           </Link>
         </p>
