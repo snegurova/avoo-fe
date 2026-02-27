@@ -4,6 +4,7 @@ import CalendarTimeScale from '@/_components/CalendarTimeScale/CalendarTimeScale
 import { CalendarViewType } from '@avoo/hooks/types/calendarViewType';
 import { CalendarItem } from '@avoo/axios/types/apiTypes';
 import { MasterWithRelationsEntity } from '@avoo/axios/types/apiTypes';
+import { CalendarType } from '@avoo/hooks/types/calendarType';
 
 type Props = {
   date: Date;
@@ -51,6 +52,7 @@ export default function CalendarWeekSingleMasterView(props: Props) {
               setType={setType}
               isSingleWeek
               availableBooking={availableBooking}
+              calendarType={CalendarType.REGULAR}
             />
           ))}
       </div>

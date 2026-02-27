@@ -14,13 +14,14 @@ import { masterHooks, exceptionHooks } from '@avoo/hooks';
 import type { CreateExceptionRequest } from '@avoo/axios/types/apiTypes';
 import { useRouter } from 'next/navigation';
 import { useToast } from '@/_hooks/useToast';
-import { appRoutes } from '@/_routes/routes';
+import { AppRoutes } from '@/_routes/routes';
 import {
   TimeOffMode,
   TimeOffType,
   timeOffTypeLabels,
   WholeDay,
 } from '@avoo/hooks/types/timeOffType';
+import { localizationHooks } from '@/_hooks/localizationHooks';
 
 type FormValues = {
   type: TimeOffType;
@@ -85,7 +86,7 @@ export default function TimeOffAddForm() {
       if (mastersLabel) {
         toast.success(`Time off for ${mastersLabel} added successfully`);
       }
-      router.push(appRoutes.TimeOff);
+      router.push(localizationHooks.useWithLocale(AppRoutes.TimeOff));
     });
 
   const values = watch();
@@ -129,7 +130,10 @@ export default function TimeOffAddForm() {
       setValue('endDate', newDate ? newDate.format(VALUE_DATE_FORMAT) : ''),
     [setValue],
   );
-  const handleCancel = useCallback(() => router.push(appRoutes.TimeOff), [router]);
+  const handleCancel = useCallback(
+    () => router.push(localizationHooks.useWithLocale(AppRoutes.TimeOff)),
+    [router],
+  );
 
   return (
     <div className='py-7 px-5 md:px-11 flex-1 min-h-0 overflow-auto hide-scrollbar max-w-4xl xl:max-w-screen-xl xl:mx-auto'>

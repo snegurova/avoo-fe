@@ -14,8 +14,8 @@ import {
   CreateMasterRequest,
   GetMastersResponse,
   GetMastersQueryParams,
+  ApiStatus,
 } from '@avoo/axios/types/apiTypes';
-import { ApiStatus } from '@avoo/hooks/types/apiTypes';
 import { queryKeys } from './queryKeys';
 
 type UseCreateMasterFormParams = {

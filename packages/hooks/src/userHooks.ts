@@ -8,9 +8,9 @@ import {
   UserProfileResponse,
   UserUpdateAvatarResponse,
   UpdateProfile,
+  ApiStatus,
 } from '@avoo/axios/types/apiTypes';
 import { FileInput } from '@avoo/shared';
-import { ApiStatus } from '../types/apiTypes';
 import { queryKeys } from './queryKeys';
 import { appendFileToForm, buildCertificateForm } from './utils/formDataHelpers';
 import { CreateCertificatePayload } from '@avoo/axios/types/certificate';

@@ -10,7 +10,7 @@ const RESET_PASSWORD_ENDPOINT = '/reset-password';
 
 
 export type RegisterCustomRequest = Omit<RegisterRequest, 'name'> & {
-  name?: string;
+  name?: string | null;
 };
 
 export type ForgotPasswordRequest = Omit<LoginRequest, 'password'>

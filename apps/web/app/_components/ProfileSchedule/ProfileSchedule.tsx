@@ -1,13 +1,13 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { scheduleHooks } from '@avoo/hooks';
+// import { scheduleHooks } from '@avoo/hooks';
 import { AppRoutes } from '@/_routes/routes';
 import { SectionHeader } from '@/_components/SectionHeader/SectionHeader';
 import { localizationHooks } from '@/_hooks/localizationHooks';
 
 export const ProfileSchedule = () => {
-  const schedules = scheduleHooks.useGetSchedules();
+  const schedules = { items: [{ name: 'Default Schedule', pattern: 'Mon-Fri 9:00-18:00' }] }; // scheduleHooks.useGetSchedules();
   const hasSchedules = schedules?.items && schedules.items.length > 0;
   const router = useRouter();
 

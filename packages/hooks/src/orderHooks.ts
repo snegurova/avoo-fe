@@ -9,8 +9,8 @@ import {
   BaseResponse,
   Service,
   Combination,
+  ApiStatus,
 } from '@avoo/axios/types/apiTypes';
-import { ApiStatus } from '@avoo/hooks/types/apiTypes';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useMemo, useState } from 'react';
 import { queryKeys } from './queryKeys';

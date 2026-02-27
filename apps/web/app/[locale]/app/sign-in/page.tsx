@@ -2,7 +2,7 @@ import { Metadata } from 'next/types';
 import LoginForm from '@/_components/LoginForm/LoginForm';
 import Link from 'next/link';
 import { AppRoutes } from '@/_routes/routes';
-import { localizationHooks } from '@/_hooks/localizationHooks';
+import { LocalizedLink } from '@/_components/LocalizedLink/LocalizedLink';
 
 export const metadata: Metadata = {
   title: 'Sign In - AVOO App',
@@ -24,12 +24,12 @@ export default function SignInPage() {
       <div className='sm:mx-auto sm:w-full sm:max-w-sm mt-4'>
         <p className='text-center text-gray-600'>
           No account?{' '}
-          <Link
-            href={localizationHooks.useWithLocale(AppRoutes.SignUp)}
+          <LocalizedLink
+            href={AppRoutes.SignUp}
             className='text-blue-600 hover:underline'
           >
             Sign up
-          </Link>
+          </LocalizedLink>
         </p>
 
         <div className='flex justify-between items-center mt-8 text-sm text-gray-600'>
