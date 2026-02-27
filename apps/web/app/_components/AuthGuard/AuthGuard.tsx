@@ -18,6 +18,8 @@ export const AuthGuard = (props: Props) => {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
   const hasHydrated = useHydrationStore((state) => state.hasHydrated);
 
+  const siginInWithLocaleRedirect = localizationHooks.useWithLocale(AppRoutes.SignIn)
+
   useEffect(() => {
     if (!hasHydrated) {
       return;
@@ -25,7 +27,7 @@ export const AuthGuard = (props: Props) => {
 
     if (!isAuthenticated && pathname) {
       const returnUrl = encodeURIComponent(pathname);
-      router.push(`${localizationHooks.useWithLocale(AppRoutes.SignIn)}?returnUrl=${returnUrl}`);
+      router.push(`${siginInWithLocaleRedirect}?returnUrl=${returnUrl}`);
     }
   }, [isAuthenticated, hasHydrated, router, pathname]);
 

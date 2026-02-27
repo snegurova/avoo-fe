@@ -2,7 +2,7 @@ import { Metadata } from 'next/types';
 import ResetPasswordForm from '@/_components/ResetPasswordForm/ResetPasswordForm';
 import Link from 'next/link';
 import { AppRoutes } from '@/_routes/routes';
-import { localizationHooks } from '@/_hooks/localizationHooks';
+import { LocalizedLink } from '@/_components/LocalizedLink/LocalizedLink';
 
 export const metadata: Metadata = {
   title: 'Reset Password - AVOO App',
@@ -23,12 +23,12 @@ export default function ResetPasswordPage() {
 
       <div className='sm:mx-auto sm:w-full sm:max-w-sm mt-4'>
         <p className='text-center text-gray-600'>
-          <Link
-            href={localizationHooks.useWithLocale(AppRoutes.SignIn)}
+          <LocalizedLink
+            href={AppRoutes.SignIn}
             className='text-blue-600 hover:underline'
           >
             Back to login
-          </Link>
+          </LocalizedLink>
         </p>
 
         <div className='flex justify-between items-center mt-8 text-sm text-gray-600'>
