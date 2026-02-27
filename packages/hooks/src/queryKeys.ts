@@ -55,6 +55,7 @@ export const queryKeys = {
   },
   combinations: {
     all: ['combinations'] as const,
+    public: ['publicCombinations'] as const,
     byParams: (params: GetCombinationsQueryParams) =>
       [...queryKeys.combinations.all, params] as const,
   },

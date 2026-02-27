@@ -1,6 +1,6 @@
 'use client';
-import React, { useState, useEffect, useCallback } from 'react';
-import { CreatePrivateOrdersData, customerHooks, phoneHooks } from '@avoo/hooks';
+import React, { useState, useEffect } from 'react';
+import { CreatePrivateOrdersData, customerHooks } from '@avoo/hooks';
 import {
   CreateCustomerRequest,
   FindCustomerRequest,
@@ -9,11 +9,10 @@ import {
 } from '@avoo/axios/types/apiTypes';
 import SearchField from '@/_components/SearchField/SearchField';
 import CustomerElement from '@/_components/CustomerElement/CustomerElement';
-import FormInput from '@/_components/FormInput/FormInput';
-import FormTextArea from '@/_components/FormTextArea/FormTextArea';
 import { isEmptyObject } from '@avoo/shared';
-import PhoneCodeSelect from '@/_components/PhoneCodeSelect/PhoneCodeSelect';
 import { FieldErrors } from 'react-hook-form';
+import CustomerCreate from '@/_components/CustomerCreate/CustomerCreate';
+import { isCustomerValues } from '@/_utils/isCustomerValues';
 
 type Props = {
   value?: CreateCustomerRequest | FindCustomerRequest | object;
@@ -53,71 +52,11 @@ export function CustomerSelect({ value, onChange, error }: Props) {
     onChange({ name: search.trim(), email: '', phone: '', notes: '' });
   };
 
-  const isCustomerValues = (
-    obj: CreateCustomerRequest | FindCustomerRequest | object | undefined,
-  ): obj is CreateCustomerRequest => {
-    return !!(
-      obj &&
-      typeof obj === 'object' &&
-      !Array.isArray(obj) &&
-      Object.prototype.hasOwnProperty.call(obj, 'name') &&
-      Object.prototype.hasOwnProperty.call(obj, 'email') &&
-      Object.prototype.hasOwnProperty.call(obj, 'phone') &&
-      Object.prototype.hasOwnProperty.call(obj, 'notes')
-    );
-  };
-
   useEffect(() => {
     if (isCustomerValues(value)) {
       onChange({ ...value, phone });
     }
   }, [phone]);
-
-  const { countryCode, phoneNumber, setCountryCode, setPhoneNumber } = phoneHooks.usePhoneField({
-    value: isCustomerValues(value) ? value.phone : '',
-    onChange: (newPhone) => {
-      if (isCustomerValues(value)) {
-        setPhone(newPhone);
-      }
-    },
-  });
-
-  const handlePhoneCodeChange = useCallback(
-    (code: string) => setCountryCode(code),
-    [setCountryCode],
-  );
-
-  const handlePhoneNumberChange = useCallback(
-    (evt: React.ChangeEvent<HTMLInputElement>) => setPhoneNumber(evt.target.value),
-    [setPhoneNumber],
-  );
-
-  const handleNameChange = useCallback(
-    (evt: React.ChangeEvent<HTMLInputElement>) => {
-      if (isCustomerValues(value)) {
-        onChange({ ...value, name: evt.target.value });
-      }
-    },
-    [onChange, value],
-  );
-
-  const handleEmailChange = useCallback(
-    (evt: React.ChangeEvent<HTMLInputElement>) => {
-      if (isCustomerValues(value)) {
-        onChange({ ...value, email: evt.target.value });
-      }
-    },
-    [onChange, value],
-  );
-
-  const handleNotesChange = useCallback(
-    (evt: React.ChangeEvent<HTMLTextAreaElement>) => {
-      if (isCustomerValues(value)) {
-        onChange({ ...value, notes: evt.target.value });
-      }
-    },
-    [onChange, value],
-  );
 
   return (
     <div className='w-full'>
@@ -136,76 +75,13 @@ export function CustomerSelect({ value, onChange, error }: Props) {
         fetchNextPage={fetchNextPage}
       />
       {isCustomerValues(value) && (
-        <div className='grid gap-3'>
-          <div className=''>
-            <label className='block mb-1 text-sm font-medium' htmlFor='name'>
-              Name
-            </label>
-            <FormInput
-              type='text'
-              placeholder='Enter name'
-              id='name'
-              value={value.name}
-              onChange={handleNameChange}
-              error={error?.name?.message}
-            />
-          </div>
-          <div className=''>
-            <label className='block mb-1 text-sm font-medium' htmlFor='email'>
-              Email
-            </label>
-            <FormInput
-              type='email'
-              placeholder='Enter email'
-              id='email'
-              value={value.email}
-              onChange={handleEmailChange}
-              error={error?.email?.message}
-            />
-          </div>
-          <div className=''>
-            <label className='block mb-1 text-sm font-medium' htmlFor='phone'>
-              Phone
-            </label>
-            <div className='flex items-stretch gap-6 md:gap-8 lg:gap-6'>
-              <div className='w-[84px] shrink-0'>
-                <PhoneCodeSelect
-                  id='phone-code'
-                  value={countryCode}
-                  onChange={handlePhoneCodeChange}
-                  className='w-full h-full'
-                />
-              </div>
-
-              <div className='flex-1'>
-                <FormInput
-                  type='text'
-                  placeholder='Enter phone'
-                  id='phone'
-                  value={phoneNumber}
-                  onChange={handlePhoneNumberChange}
-                  error={error?.phone?.message}
-                />
-              </div>
-            </div>
-          </div>
-          <div className=''>
-            <FormTextArea
-              id='notes'
-              name='notes'
-              value={value.notes ?? ''}
-              onChange={handleNotesChange}
-              label='Notes'
-              helperText='Additional information about the client'
-              maxLength={200}
-              classNames={{
-                label: 'block font-medium',
-                textarea:
-                  'block w-full text-sm text-black border border-gray-200 p-3 rounded-lg min-h-[70px] focus:outline-none focus:ring-1 focus:ring-purple-800',
-              }}
-            />
-          </div>
-        </div>
+        <CustomerCreate
+          phone={phone}
+          setPhone={setPhone}
+          value={value}
+          onChange={onChange}
+          error={error}
+        />
       )}
       {selectedCustomer && <CustomerElement item={selectedCustomer} isCard />}
     </div>

@@ -238,4 +238,10 @@ export const timeUtils = {
   addMinutesToDate(date: Date, minutes: number): Date {
     return new Date(date.getTime() + minutes * 60000);
   },
+  convertDateToTimeString(date: Date | string): string {
+    const d = typeof date === 'string' ? new Date(date) : date;
+    const hours = d.getHours().toString().padStart(2, '0');
+    const minutes = d.getMinutes().toString().padStart(2, '0');
+    return `${hours}:${minutes}`;
+  },
 };

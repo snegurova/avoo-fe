@@ -9,7 +9,7 @@ export enum ApiStatus {
   ERROR = 'error',
 }
 
-export type ErrorItemDto = components["schemas"]["ErrorItemDto"];
+export type ErrorItemDto = components['schemas']['ErrorItemDto'];
 
 export type SuccessResponse<T> = {
   status: ApiStatus.SUCCESS;
@@ -86,6 +86,13 @@ export type GetMastersQueryParams = operations['MastersController_findAll']['par
 /** Customer */
 export type CustomerInfoResponse = components['schemas']['CustomerInfoDto'];
 export type CreateCustomerRequest = components['schemas']['CreateCustomerDto'];
+export type CreatePublicCustomerRequest = Omit<
+  components['schemas']['CreateCustomerDto'],
+  'email' | 'name'
+> & {
+  email: string;
+  name: string;
+};
 
 export type FindCustomerRequest = {
   id: number;
@@ -94,8 +101,9 @@ export type GetCustomersResponse = {
   items: CustomerInfoResponse[];
   pagination: components['schemas']['PaginationDto'];
 };
-export type GetCustomersQueryParams =
-  NonNullable<operations['CustomersController_findAllByOwner']['parameters']['query']>;
+export type GetCustomersQueryParams = NonNullable<
+  operations['CustomersController_findAllByOwner']['parameters']['query']
+>;
 export type Customer = components['schemas']['CustomerInfoDto'];
 
 /** Schedule */
@@ -194,6 +202,15 @@ export type CreatePrivateOrder = Omit<components['schemas']['CreatePrivateOrderD
   type: OrderType;
 };
 
+export type CreatePublicOrder = Omit<components['schemas']['CreatePublicOrderDto'], 'type'> & {
+  type: OrderType;
+};
+
+export type CreatePublicOrdersRequest = {
+  ordersData: CreatePublicOrder[];
+  customerData: CreatePublicCustomerRequest;
+};
+
 export type CreatePrivateOrdersRequest = {
   ordersData: CreatePrivateOrder[];
   customerData: CreateCustomerRequest | FindCustomerRequest;
@@ -232,8 +249,9 @@ export type Combination = Omit<
   services: Service[];
   masters: MasterWithRelationsEntity[];
 };
-export type GetCombinationsQueryParams =
-  NonNullable<operations['CombinationsController_findAllByOwner']['parameters']['query']>;
+export type GetCombinationsQueryParams = NonNullable<
+  operations['CombinationsController_findAllByOwner']['parameters']['query']
+>;
 export type GetCombinationsResponse = {
   items: Combination[];
   pagination: components['schemas']['PaginationDto'];
