@@ -15,6 +15,7 @@ import { AppRoutes } from '@/_routes/routes';
 import { getAllErrorMessages } from '@/_utils/formError';
 import { useToast } from '@/_hooks/useToast';
 import { VALUE_DATE_FORMAT } from '@/_constants/dateFormats';
+import { localizationHooks } from '@/_hooks/localizationHooks';
 
 export const ScheduleAddForm = () => {
   const toast = useToast();
@@ -24,7 +25,7 @@ export const ScheduleAddForm = () => {
   const { control, handleSubmit, setValue, watch, errors } = scheduleHooks.useCreateScheduleForm({
     onSuccess: () => {
       toast.success('Schedule added successfully');
-      router.replace(AppRoutes.WorkingHours);
+      router.replace(localizationHooks.useWithLocale(AppRoutes.WorkingHours));
     },
     onError: (error) => {
       toast.error(`Schedule add failed: ${error.message}`);
