@@ -11,7 +11,7 @@ import { utils } from '@avoo/hooks';
 import ShowPasswordToggler from '@/_components/ShowPasswordToggler/ShowPasswordToggler';
 import { useEffect, useState } from 'react';
 import { localizationHooks } from '@/_hooks/localizationHooks';
-import { routerUtils } from '@/_hooks/routerUtils';
+import { routerUtils } from '@/_utils/routerUtils';
 
 export default function LoginForm() {
   const isPending = useApiStatusStore((state) => state.isPending);
