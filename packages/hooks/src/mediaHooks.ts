@@ -1,5 +1,5 @@
 import { mediaApi } from '@avoo/axios/src/modules/media';
-import { BaseResponse, UploadMediaRequest, UploadMediaResponse } from '@avoo/axios/types/apiTypes';
+import { ApiStatus, BaseResponse, UploadMediaRequest, UploadMediaResponse } from '@avoo/axios/types/apiTypes';
 import { utils } from '@avoo/hooks/utils/utils';
 import { useMutation } from '@tanstack/react-query';
 
@@ -20,6 +20,7 @@ export const mediaHooks = {
         successMessage: 'Media uploaded successfully',
       },
       onSuccess: (data) => {
+        if (data.status !== ApiStatus.SUCCESS || !data.data) return;
         onSuccess?.(data.data);
       },
       onError: (error) => {

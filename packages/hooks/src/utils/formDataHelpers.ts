@@ -1,27 +1,24 @@
 import { FileInput, UploadFile } from '@avoo/shared';
 import { CreateCertificatePayload } from '@avoo/axios/types/certificate';
 
-export async function appendFileToForm(form: FormData, key: string, file: FileInput) {
+export async function appendFileToForm(
+  form: FormData,
+  key: string,
+  file: FileInput
+) {
   if (file instanceof File) {
     form.append(key, file);
     return;
   }
-    
+
   const upload = file as UploadFile;
 
-  if (typeof window !== 'undefined') {
-    const res = await fetch(upload.uri);
-    const blob = await res.blob();
-    form.append(key, blob, upload.name ?? 'file');
-    return;
-  }
+  const res = await fetch(upload.uri);
+  const blob = await res.blob();
 
-  form.append(key, {
-    uri: upload.uri,
-    name: upload.name ?? 'file',
-    type: upload.type ?? 'application/octet-stream',
-  });
+  form.append(key, blob, upload.name ?? 'file');
 }
+
 
 export async function buildCertificateForm(payload: CreateCertificatePayload) {
   const form = new FormData();

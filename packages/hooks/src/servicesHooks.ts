@@ -1,5 +1,6 @@
 import { utils } from '@avoo/hooks/utils/utils';
 import {
+  ApiStatus,
   CreateServiceRequest,
   CreateServiceResponse,
   GetServiceResponse,
@@ -22,6 +23,14 @@ type UseServiceCreateFormParams = {
   onSuccess?: () => void;
   onError?: (error: Error) => void;
 };
+
+type ServicesState = {
+  limit: number;
+  categoryId: number | null;
+  search: string;
+  masterIds: number[];
+};
+
 
 export const servicesHooks = {
   useGetServicesInfinite: ({
@@ -52,7 +61,7 @@ export const servicesHooks = {
     return query;
   },
   useServicesQuery() {
-    const [params, setParams] = useState({
+    const [params, setParams] = useState<ServicesState>({
       limit: DEFAULT_LIMIT,
       categoryId: null,
       search: '',
@@ -120,7 +129,13 @@ export const servicesHooks = {
             if (!oldData) return oldData;
 
             const newPages = oldData.pages.map((page) => {
-              const newItems = page.data.items.filter((s) => s.id !== deletedId);
+              if (page.status !== ApiStatus.SUCCESS) {
+                return page;
+              }
+
+              const newItems = page.data.items.filter(
+                (s) => s.id !== deletedId
+              );
 
               return {
                 ...page,

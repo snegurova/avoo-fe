@@ -6,13 +6,14 @@ import EditSquareIcon from '@/_icons/EditSquareIcon';
 import { IconButton } from '@mui/material';
 import { useApiStatusStore } from '@avoo/store';
 import { tv } from 'tailwind-variants';
+import { Currency } from '@avoo/shared/src/types/currency';
 
 type Props = {
   id: number;
   name: string;
   durationMinutes: number;
   price: number;
-  currency: string;
+  currency: Currency;
   isActive: boolean;
   onDelete: (id: number) => void;
 };

@@ -7,11 +7,12 @@ import ConfirmationDialog from '../ConfirmationDialog/ConfirmationDialog';
 import { useEffect, useRef, useState } from 'react';
 import { servicesHooks } from '@avoo/hooks';
 import { useToast } from '@/_hooks/useToast';
+import { Currency } from '@avoo/shared/src/types/currency';
 
 type Props = {
   allServicesCount: number;
   hasMore: boolean;
-  currency: string;
+  currency: Currency;
   categorySidebarItems: CategoryWithServicesCount[] | null;
   services: Service[] | null;
   selectedCategoryId: number | null;

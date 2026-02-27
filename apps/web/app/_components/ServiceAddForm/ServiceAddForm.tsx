@@ -64,11 +64,13 @@ export default function ServiceAddForm(props: Props) {
     setMedias(medias.filter((media) => media.id !== id));
   };
 
+  const successPath = localizationHooks.useWithLocale(AppRoutes.Services);
+
   const { control, setValue, getValues, handleSubmit, errors } = servicesHooks.useCreateServiceForm(
     {
       onSuccess: () => {
         toast.success('Service has been created!');
-        router.replace(localizationHooks.useWithLocale(AppRoutes.Services));
+        router.replace(successPath);
       },
       onError: (error) => {
         toast.error('Failed to create service: ' + error.message);

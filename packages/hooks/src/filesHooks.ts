@@ -17,8 +17,16 @@ export const filesHooks = {
     >({
       mutationFn: async (payload) => {
         const body = new FormData();
+        if (typeof Blob !== 'undefined' && payload.file instanceof Blob) {
+          if (typeof File !== 'undefined' && payload.file instanceof File) {
+            body.append('file', payload.file, payload.file.name);
+          } else {
+            body.append('file', payload.file);
+          }
+        } else {
+          body.append('file', payload.file as unknown as Blob);
+        }
         body.append('type', payload.type);
-        body.append('file', payload.file);
         return filesApi.uploadFile(body);
       },
       onSuccess: (response) => {

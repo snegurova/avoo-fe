@@ -46,11 +46,11 @@ export const scheduleHooks = {
       label:
         i % 2 === 0
           ? `${Math.floor(i / 2)
-              .toString()
-              .padStart(2, '0')}:00`
+            .toString()
+            .padStart(2, '0')}:00`
           : `${Math.floor(i / 2)
-              .toString()
-              .padStart(2, '0')}:30`,
+            .toString()
+            .padStart(2, '0')}:30`,
       value: String(i * 30),
     })),
   useGetSchedulesInfinite: ({ limit = DEFAULT_LIMIT, masterIds }: SchedulesQueryParams) => {
@@ -72,7 +72,7 @@ export const scheduleHooks = {
 
     return query;
   },
-  useGetScheduleById: (id: number): ScheduleEntity => {
+  useGetScheduleById: (id: number): ScheduleEntity | null => {
     const { data: scheduleData, isPending } = useQuery<BaseResponse<ScheduleEntity>, Error>({
       queryKey: ['schedule', id],
       queryFn: () => scheduleApi.getScheduleById(id),
@@ -199,6 +199,9 @@ export const scheduleHooks = {
             if (!oldData) return oldData;
 
             const newPages = oldData.pages.map((page) => {
+              if (page.status !== ApiStatus.SUCCESS) {
+                return page;
+              }
               const newItems = page.data.items.filter((s) => s.id !== deletedId);
 
               return {

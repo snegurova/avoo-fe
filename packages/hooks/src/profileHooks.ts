@@ -25,6 +25,7 @@ export function buildUpdateProfilePayload(values: Record<string, unknown>): Upda
   return {
     name: parsedValues.name || undefined,
     phone: parsedValues.phone || undefined,
+    mediaIds: [],
     description: parsedValues.description || undefined,
     address: parsedValues.address || undefined,
     location_lat:

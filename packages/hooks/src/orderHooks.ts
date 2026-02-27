@@ -10,9 +10,11 @@ import {
   Service,
   Combination,
   ApiStatus,
+  CreateCustomerRequest,
+  FindCustomerRequest,
 } from '@avoo/axios/types/apiTypes';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import { queryKeys } from './queryKeys';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -42,21 +44,36 @@ type UseUpdateOrderParams = {
   onSuccess?: () => void;
 };
 
+
+
+function mapCustomer(
+  data: CreatePrivateOrdersData['customerData']
+): CreateCustomerRequest | FindCustomerRequest {
+  if (!data) {
+    throw new Error('Customer data is required');
+  }
+
+  if (data.id) {
+    return { id: data.id };
+  }
+
+  if (!data.phone) {
+    throw new Error('Phone is required for new customer');
+  }
+
+  return {
+    id: data.id ?? undefined,
+    name: data.name,
+    phone: data.phone,
+    email: data.email,
+    notes: data.notes,
+    isNotificationEnable: true,
+  };
+}
 export const orderHooks = {
   useGetOrders: (params: PrivateOrderQueryParams) => {
-    const memoParams = useMemo<PrivateOrderQueryParams>(
-      () => ({
-        page: params.page,
-        limit: params.limit,
-        status: params.status,
-        customerId: params.customerId,
-        masterId: params.masterId,
-      }),
-      [params],
-    );
-
     const { data: ordersData, isPending } = useQuery<BaseResponse<Order[]>, Error>({
-      queryKey: ['orders', queryKeys.orders.byParams(memoParams)],
+      queryKey: ['orders', queryKeys.orders.byParams(params)],
       queryFn: () => orderApi.getOrders(params),
     });
 
@@ -97,7 +114,7 @@ export const orderHooks = {
 
     const queryClient = useQueryClient();
 
-    const { mutate, isPending } = useMutation<
+    const { mutate: createOrder, isPending } = useMutation<
       BaseResponse<Order[]>,
       Error,
       CreatePrivateOrdersRequest
@@ -124,7 +141,19 @@ export const orderHooks = {
 
     return {
       control,
-      handleSubmit: handleSubmit(utils.submitAdapter<CreatePrivateOrdersRequest>(mutate)),
+      handleSubmit: handleSubmit((formData) => {
+        const payload: CreatePrivateOrdersRequest = {
+          ordersData: formData.ordersData.map(o => ({
+            ...o,
+            masterId: o.masterId,
+            date: o.date,
+            type: o.type!,
+          })),
+          customerData: mapCustomer(formData.customerData),
+        };
+
+        createOrder(payload);
+      }),
       getValues,
       errors,
       isPending,

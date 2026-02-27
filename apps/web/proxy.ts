@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { DEFAULT_LOCALE, SUPPORTED_LOCALES } from '@avoo/intl';
 
-export function middleware(req: NextRequest) {
+export function proxy(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
   if (pathname.startsWith('/_next') || pathname.startsWith('/api') || pathname.includes('.')) {

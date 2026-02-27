@@ -115,7 +115,18 @@ export const masterHooks = {
 
     return {
       control,
-      handleSubmit: handleSubmit(utils.submitAdapter<CreateMasterRequest>(createMasterMutation)),
+      handleSubmit: handleSubmit((formData) => {
+        const payload: CreateMasterRequest = {
+          name: formData.name,
+          email: formData.email,
+          bio: formData.bio ?? undefined,
+          headline: formData.headline ?? undefined,
+          avatarUrl: formData.avatarUrl ?? undefined,
+          phone: formData.phone ?? undefined,
+          languages: formData.languages ?? [],
+        };
+        createMasterMutation(payload);
+      }),
       setValue,
       watch,
       errors,
@@ -166,7 +177,18 @@ export const masterHooks = {
 
     return {
       control,
-      handleSubmit: handleSubmit(utils.submitAdapter<CreateMasterRequest>(updateMasterMutation)),
+      handleSubmit: handleSubmit((formData) => {
+        const payload: CreateMasterRequest = {
+          name: formData.name,
+          email: formData.email,
+          bio: formData.bio ?? undefined,
+          headline: formData.headline ?? undefined,
+          avatarUrl: formData.avatarUrl ?? undefined,
+          phone: formData.phone ?? undefined,
+          languages: formData.languages ?? [],
+        };
+        updateMasterMutation(payload);
+      }),
       setValue,
       watch,
       errors,

@@ -1,6 +1,9 @@
+import { Currency } from "./types/currency";
+
+
 export const currencyUtils = {
-  getCurrencySymbol(currency: string): string {
-    const SYMBOLS = {
+  getCurrencySymbol(currency: Currency): string {
+    const SYMBOLS: Record<Currency, string> = {
       USD: '$',
       EUR: '€',
       GBP: '£',
@@ -8,8 +11,8 @@ export const currencyUtils = {
     };
     return SYMBOLS[currency] || currency;
   },
-  getCurrencyName(currency: string): string {
-    const NAMES = {
+  getCurrencyName(currency: Currency): string {
+    const NAMES: Record<Currency, string> = {
       USD: 'US Dollar',
       EUR: 'Euro',
       GBP: 'British Pound',
@@ -18,10 +21,10 @@ export const currencyUtils = {
     return NAMES[currency] || currency;
   },
 
-  formatPrice(price: number, currency: string): string {
+  formatPrice(price: number, currency: Currency): string {
     return `${this.getCurrencySymbol(currency)}${price}`;
   },
-  formatNamePrice(price: number, currency: string): string {
+  formatNamePrice(price: number, currency: Currency): string {
     return `${price} ${this.getCurrencyName(currency)}`;
   },
 };
