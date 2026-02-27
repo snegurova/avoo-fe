@@ -17,8 +17,8 @@ import {
   ScheduleEntity,
   SchedulesQueryParams,
   ScheduleUpdateResponse,
+  ApiStatus,
 } from '@avoo/axios/types/apiTypes';
-import { ApiStatus } from '@avoo/hooks/types/apiTypes';
 import { timeUtils } from '@avoo/shared';
 import { END_MINUTE, START_MINUTE } from '@avoo/constants/src/calendar';
 import {

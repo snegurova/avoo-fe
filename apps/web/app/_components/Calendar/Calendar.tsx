@@ -24,6 +24,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { AppRoutes } from '@/_routes/routes';
 import { OrderQueryParams } from '@avoo/hooks/types/orderQueryParams';
 import { CalendarType } from '@avoo/hooks/types/calendarType';
+import { localizationHooks } from '@/_hooks/localizationHooks';
 
 const calendarWrapper = tv({
   base: 'flex w-full',
@@ -175,7 +176,7 @@ export default function Calendar(props: Props) {
       setToDate(timeUtils.toDayEnd(parsedDate));
 
       if (searchParams.toString()) {
-        router.replace(AppRoutes.Calendar);
+        router.replace(localizationHooks.useWithLocale(AppRoutes.Calendar));
       }
 
       if (!scrollRef.current) return;

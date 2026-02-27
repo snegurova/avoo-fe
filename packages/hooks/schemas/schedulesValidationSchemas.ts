@@ -63,7 +63,7 @@ export const scheduleCreateSchema = yup.object({
     .matches(/^\d{4}-\d{2}-\d{2}$/, 'startAt must be a valid ISO date')
     .test('start-before-end', 'Start date must be before end date', function (value) {
       const endAt = this.parent.endAt;
-      if (!endAt) return true;
+      if (!value || !endAt) return true;
       return value < endAt;
     }),
   endAt: yup
@@ -72,7 +72,7 @@ export const scheduleCreateSchema = yup.object({
     .matches(/^\d{4}-\d{2}-\d{2}$/, 'endAt must be a valid ISO date')
     .test('end-after-start', 'End date must be after start date', function (value) {
       const start = this.parent.startAt;
-      if (!this.parent.endAt) return true;
+      if (!value || !start) return true;
       return value > start;
     }),
 

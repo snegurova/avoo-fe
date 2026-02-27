@@ -4,9 +4,10 @@ import React from 'react';
 import Link from 'next/link';
 import { routerHooks } from '@/_hooks/routerHooks';
 import { tv } from 'tailwind-variants';
+import { Route } from 'next';
 
 type Props = {
-  href: string;
+  href: Route;
   icon: React.ReactNode;
   label: string;
 };

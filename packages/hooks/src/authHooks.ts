@@ -24,8 +24,8 @@ import {
   VerifyCodeRequest,
   VerifyCodeResponse,
   ResetPasswordRequest,
+  ApiStatus,
 } from '@avoo/axios/types/apiTypes';
-import { ApiStatus } from '../types/apiTypes';
 import {
   RegisterCustomRequest,
   ForgotPasswordRequest as ForgotPasswordRequestType,

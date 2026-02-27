@@ -4,6 +4,7 @@ import { FormattedMessage } from 'react-intl';
 import { messages } from '@avoo/intl/messages/public/home/topSection';
 import { AppRoutes } from '@/_routes/routes';
 import { localizationHooks } from '@/_hooks/localizationHooks';
+import Link from 'next/link';
 
 export default function HomePage() {
   return (

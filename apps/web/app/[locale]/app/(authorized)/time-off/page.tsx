@@ -11,6 +11,7 @@ import { useCallback, useMemo, useState } from 'react';
 import { useDebounce } from '@avoo/hooks/src/useDebounce';
 import { Exception } from '@avoo/axios/types/apiTypes';
 import { exceptionHooks, masterHooks } from '@avoo/hooks';
+import { localizationHooks } from '@/_hooks/localizationHooks';
 
 export default function TimeOffPage() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -48,7 +49,7 @@ export default function TimeOffPage() {
   const router = useRouter();
 
   const handleAddTimeOff = useCallback(() => {
-    router.push(`${AppRoutes.AddTimeOff}`);
+    router.push(localizationHooks.useWithLocale(AppRoutes.AddTimeOff));
   }, [router]);
 
   return (
@@ -72,7 +73,10 @@ export default function TimeOffPage() {
               icon={<EditCalendarIcon className='w-20 h-20 lg:w-25 lg:h-25 fill-primary-300' />}
               description={
                 <p>
-                  <Link href={AppRoutes.AddTimeOff} className='text-primary-300 font-bold'>
+                  <Link
+                    href={localizationHooks.useWithLocale(AppRoutes.AddTimeOff)}
+                    className='text-primary-300 font-bold'
+                  >
                     Add time off
                   </Link>
                   , vacations, breaks, or unavailable hours to keep the schedule accurate.

@@ -4,16 +4,26 @@ import type { components, operations } from './generated';
 import { OrderType } from '@avoo/hooks/types/orderType';
 import { FILE_UPLOAD_TYPE_ENUM, MEDIA_TYPE_ENUM, ObjectValues } from './apiEnums';
 
-export type Error = {
-  field: string;
-  message: string;
+export enum ApiStatus {
+  SUCCESS = 'success',
+  ERROR = 'error',
+}
+
+export type ErrorItemDto = components["schemas"]["ErrorItemDto"];
+
+export type SuccessResponse<T> = {
+  status: ApiStatus.SUCCESS;
+  data: T;
 };
-export type BaseResponse<T> = {
-  status: string;
-  errorMessage?: string;
-  errors?: Error[];
-  data: T | null;
+
+export type ErrorResponse = {
+  status: ApiStatus.ERROR;
+  data: null;
+  errorMessage: string;
+  errors?: ErrorItemDto[];
 };
+
+export type BaseResponse<T> = SuccessResponse<T> | ErrorResponse;
 /** Category && Services */
 export type ServicesQueryParams = Omit<NonNullable<PrivateServiceQueryParams>, 'page'>;
 export type Category = components['schemas']['CategoryEntity'];
@@ -85,7 +95,7 @@ export type GetCustomersResponse = {
   pagination: components['schemas']['PaginationDto'];
 };
 export type GetCustomersQueryParams =
-  operations['CustomersController_findAllByOwner']['parameters']['query'];
+  NonNullable<operations['CustomersController_findAllByOwner']['parameters']['query']>;
 export type Customer = components['schemas']['CustomerInfoDto'];
 
 /** Schedule */
@@ -223,7 +233,7 @@ export type Combination = Omit<
   masters: MasterWithRelationsEntity[];
 };
 export type GetCombinationsQueryParams =
-  operations['CombinationsController_findAllByOwner']['parameters']['query'];
+  NonNullable<operations['CombinationsController_findAllByOwner']['parameters']['query']>;
 export type GetCombinationsResponse = {
   items: Combination[];
   pagination: components['schemas']['PaginationDto'];

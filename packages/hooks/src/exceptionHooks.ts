@@ -8,8 +8,8 @@ import {
   CreateExceptionRequest,
   Exception,
   BaseResponse,
+  ApiStatus,
 } from '@avoo/axios/types/apiTypes';
-import { ApiStatus } from '@avoo/hooks/types/apiTypes';
 import { utils } from '@avoo/hooks/utils/utils';
 import { WholeDay, TimeOffMode, TimeOffType } from '@avoo/hooks/types/timeOffType';
 import { masterHooks } from './masterHooks';

@@ -1,28 +1,23 @@
 'use client';
 
-import type { ComponentProps } from 'react';
 import Link from 'next/link';
-import { useParams } from 'next/navigation';
-import { DEFAULT_LOCALE, Locale, SUPPORTED_LOCALES } from '@avoo/intl';
+import { ReactNode } from 'react';
+import { localizationHooks } from '@/_hooks/localizationHooks';
+import { AppRoutes } from '@/_routes/routes';
 
-type Props = ComponentProps<typeof Link>;
-
-export const LocalizedLink = (props: Props) => {
-  const { href, ...rest } = props;
-  const params = useParams();
-  const rawLocale = params?.locale;
-
-  const locale: Locale = SUPPORTED_LOCALES.includes(rawLocale as Locale)
-    ? (rawLocale as Locale)
-    : DEFAULT_LOCALE;
-
-  const localizedHref =
-    typeof href === 'string'
-      ? `/${locale}${href.startsWith('/') ? href : `/${href}`}`
-      : {
-          ...href,
-          pathname: `/${locale}${href.pathname}`,
-        };
-
-  return <Link href={localizedHref} {...rest} />;
+type Props = {
+  children: ReactNode;
+  href: AppRoutes;
+  className?: string;
 };
+
+export const LocalizedLink = (props: Props)=> {
+const { href, children, ...rest } = props;
+const hrefWithLocale = localizationHooks.useWithLocale(href)
+
+  return (
+    <Link href={hrefWithLocale} {...rest}>
+      {children}
+    </Link>
+  );
+}

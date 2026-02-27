@@ -4,4 +4,4 @@ export type UploadFile = {
   name?: string | null;
 };
 
-export type FileInput = File | UploadFile;
+export type FileInput = Blob | UploadFile;

@@ -9,7 +9,7 @@ export const localizationHooks = {
     return locale;
   },
   useWithLocale(path: AppRoutes) {
-    const locale = this.useGetLocale();
+    const locale = localizationHooks.useGetLocale();
     return `/${locale}${path}` as Route;
   },
 };
