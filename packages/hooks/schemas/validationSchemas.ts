@@ -217,7 +217,12 @@ export const createServiceSchema = yup.object({
   durationMinutes: yup.number().min(1).required(),
   isActive: yup.boolean().required(),
   mediaIds: yup.array().of(yup.number().required()).required(),
-  masterIds: yup.array().of(yup.number().required()).required().default([]),
+  masterIds: yup
+    .array()
+    .of(yup.number().required())
+    .required()
+    .default([])
+    .min(1, 'At least one master is required'),
 });
 
 export type RegisterFormData = yup.InferType<typeof registerSchema>;

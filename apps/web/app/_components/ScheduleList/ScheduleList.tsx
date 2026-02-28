@@ -1,9 +1,10 @@
-import { useApiStatusStore } from '@avoo/store';
-import ConfirmationDialog from '../ConfirmationDialog/ConfirmationDialog';
 import { useEffect, useRef, useState } from 'react';
-import { useToast } from '@/_hooks/useToast';
+import { useApiStatusStore } from '@avoo/store';
+import { scheduleHooks } from '@avoo/hooks';
 import { ScheduleEntity } from '@avoo/axios/types/apiTypes';
-import ScheduleListItem from '../ScheduleListItem/ScheduleListItem';
+import { useToast } from '@/_hooks/useToast';
+import ConfirmationDialog from '@/_components/ConfirmationDialog/ConfirmationDialog';
+import ScheduleListItem from '@/_components/ScheduleListItem/ScheduleListItem';
 
 type Props = {
   hasMore: boolean;
@@ -18,6 +19,8 @@ export default function ScheduleList(props: Props) {
 
   const isPending = useApiStatusStore((state) => state.isPending);
 
+  const { deleteScheduleMutationAsync } = scheduleHooks.useDeleteSchedule();
+
   const [scheduleIdToDelete, setScheduleIdToDelete] = useState<number | null>(null);
 
   const handleOpenDeleteDialog = (id: number) => {
@@ -30,6 +33,7 @@ export default function ScheduleList(props: Props) {
     handleCloseDeleteDialog();
     if (!scheduleIdToDelete) return;
     try {
+      await deleteScheduleMutationAsync(scheduleIdToDelete);
       toast.success('Schedule deleted successfully');
     } catch {
       toast.error('Failed to delete schedule');
@@ -46,15 +50,15 @@ export default function ScheduleList(props: Props) {
 
   return (
     <>
-      <div>
-        <div className='grid grid-cols-[2fr_1.2fr_1.2fr_1.2fr_72px] gap-3 p-6 mb-8 text-sm text-black font-semibold bg-primary-50'>
-          <div>Schedule name</div>
-          <div>Applies to</div>
-          <div>Start date</div>
-          <div>End date</div>
-          <div>Actions</div>
-        </div>
-        <ul className='divide-y divide-gray-200' ref={listRef}>
+      <div className='hidden lg:grid grid-cols-[2fr_1.2fr_1.2fr_1.2fr_72px] gap-3 p-6 mb-8 text-sm text-black font-semibold bg-primary-50'>
+        <div>Schedule name</div>
+        <div>Applies to</div>
+        <div>Start date</div>
+        <div>End date</div>
+        <div>Actions</div>
+      </div>
+      <div className='overflow-y-auto'>
+        <ul className='flex flex-col gap-2 lg:block lg:divide-y lg:divide-gray-200' ref={listRef}>
           {schedules?.map((schedule) => (
             <li key={schedule.id}>
               <ScheduleListItem

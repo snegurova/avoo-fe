@@ -19,7 +19,7 @@ export default function AddMoreButton(props: Props) {
     variants: {
       variant: {
         inline:
-          'absolute right-0 bottom-0 bg-white h-[50px] w-[150px] border-2 border-gray-200 flex flex-row items-center justify-center p-2 hover:bg-primary-50',
+          'absolute right-0 bottom-0 bg-white h-[36px] lg:h-[44px] w-[90px] lg:w-[150px] border-2 border-gray-200 flex flex-row items-center justify-center p-2 hover:bg-primary-50',
         overlay:
           'flex items-center justify-center border-2 border-dashed border-gray-300 hover:border-gray-400',
       },
@@ -42,7 +42,7 @@ export default function AddMoreButton(props: Props) {
   });
 
   const textVariants = tv({
-    base: 'font-medium font-weight-500 font-size-[14px]',
+    base: 'text-xs lg:text-base font-medium font-weight-500',
     variants: {
       variant: {
         inline: 'text-black',

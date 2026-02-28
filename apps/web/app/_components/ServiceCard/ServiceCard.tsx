@@ -3,7 +3,6 @@ import IconLink from '../IconLink/IconLink';
 import ShareIcon from '@/_icons/ShareIcon';
 import DeleteIcon from '@/_icons/DeleteIcon';
 import EditSquareIcon from '@/_icons/EditSquareIcon';
-import ContentCopyIcon from '@/_icons/ContentCopyIcon';
 import { IconButton } from '@mui/material';
 import { useApiStatusStore } from '@avoo/store';
 import { tv } from 'tailwind-variants';
@@ -65,11 +64,6 @@ export default function ServiceCard(props: Props) {
               href={'#'}
               icon={<EditSquareIcon className='transition-colors' />}
               label='Edit Service'
-            />
-            <IconLink
-              href={'#'}
-              icon={<ContentCopyIcon className='transition-colors' />}
-              label='Copy Service'
             />
             <IconLink
               href={'#'}

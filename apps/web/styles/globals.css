@@ -45,3 +45,36 @@ main::-webkit-scrollbar-thumb,
 .hide-scrollbar::-webkit-scrollbar-thumb {
   background: transparent;
 }
+
+@layer components {
+  .gallery-remove-button {
+    @apply absolute top-0 right-0 
+        border-1 border-gray-100
+        w-6 h-6 lg:w-8 lg:h-8 bg-white hover:bg-primary-50
+        text-black rounded-full 
+        flex items-center justify-center 
+        opacity-100
+        lg:opacity-0 lg:group-hover:opacity-100
+        duration-200 z-20
+        cursor-pointer;
+  }
+  .gallery-item-height {
+    @apply h-[165px] md:h-[190px] lg:h-[274px];
+  }
+
+  .drag-and-drop-zone {
+    @apply flex flex-col flex-1 items-center 
+    justify-center w-full h-full border-1 border-dashed
+    hover:bg-white border-primary-100 hover:border-primary-500 
+    rounded-lg md:p-6 p-2 text-center cursor-pointer gap-2 transition-colors;
+  }
+  .drag-and-drop-icon {
+    @apply rounded-full p-2 w-10 h-10 lg:w-20 lg:h-20 bg-primary-50 
+    hover:bg-primary-100 flex items-center justify-center transition-colors;
+  }
+  .drag-and-drop-button {
+    @apply px-2 py-2 lg:px-4 lg:py-2 text-xs lg:text-sm 
+      border border-primary-700 text-primary-700 hover:bg-primary-50 hover:text-primary-500 
+      rounded-md inline-block transition-colors;
+  }
+}

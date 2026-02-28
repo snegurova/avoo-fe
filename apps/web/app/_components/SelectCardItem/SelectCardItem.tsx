@@ -6,9 +6,9 @@ import CloseIcon from '@/_icons/CloseIcon';
 type Props = {
   id: number;
   name: string;
+  description: string;
   avatarUrl: string;
-  specialty: string;
-  onRemove: (id: number) => void;
+  onDelete: (id: number) => void;
 };
 
 const removeButtonSx = {
@@ -23,16 +23,16 @@ const removeButtonSx = {
   transform: 'translate(50%, -50%)',
 };
 
-export default function MasterSelectCard(props: Props) {
-  const { id, name, specialty, avatarUrl, onRemove } = props;
+export default function SelectCardItem(props: Props) {
+  const { id, name, description, avatarUrl, onDelete } = props;
   return (
-    <div className='bg-primary-50 p-2 rounded-lg flex items-center gap-4 justify-between border border-gray-100 relative'>
+    <div className='bg-primary-50 p-2 rounded-lg flex items-center gap-4 justify-between border border-gray-100 relative max-w-[300px]'>
       <Avatar name={name} src={avatarUrl} size={AvatarSize.Large} bgColor={colors.primary[200]} />
       <div>
         <p className='font-semibold'>{name}</p>
-        <p className='text-sm text-gray-500'>{specialty}</p>
+        <p className='text-sm text-gray-500'>{description}</p>
       </div>
-      <IconButton color='secondary' sx={removeButtonSx} onClick={() => onRemove(id)}>
+      <IconButton color='secondary' sx={removeButtonSx} onClick={() => onDelete(id)}>
         <CloseIcon fill={colors.black} width={12} height={12} />
       </IconButton>
     </div>
