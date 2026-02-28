@@ -35,6 +35,7 @@ export function buildUpdateProfilePayload(values: Record<string, unknown>): Upda
       typeof parsedValues.location_lon === 'number' && !Number.isNaN(parsedValues.location_lon)
         ? parsedValues.location_lon
         : undefined,
+    mediaIds: [],
   };
 }
 

@@ -166,4 +166,29 @@ export const exceptionHooks = {
 
     return { mutate, isPending };
   },
+
+  useUpdateException: (config?: { onSuccess?: () => void } | (() => void)) => {
+    const queryClient = useQueryClient();
+    const onSuccess = typeof config === 'function' ? config : config?.onSuccess;
+
+    const { mutate, isPending } = useMutation<
+      BaseResponse<Exception>,
+      Error,
+      { id: number; data: CreateExceptionRequest }
+    >({
+      mutationFn: ({ id, data }) => exceptionApi.updateException(id, data),
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: queryKeys.exceptions.all });
+        onSuccess?.();
+      },
+    });
+
+    utils.useSetPendingApi(isPending);
+
+    return {
+      updateException: (id: number, data: CreateExceptionRequest) => mutate({ id, data }),
+      isPending,
+      mutate,
+    };
+  },
 };

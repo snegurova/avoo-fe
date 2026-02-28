@@ -12,13 +12,12 @@ import InfiniteList from '../InfiniteList/InfiniteList';
 
 type Props = {
   items: Exception[] | null;
-  onEdit?: (id: number) => void;
-  onDelete?: (id: number) => void;
+  onEdit?: (item: Exception) => void;
   incrementPage?: () => void;
   hasMore?: boolean;
 };
 
-const TimeOffList = ({ items, onEdit, onDelete, incrementPage, hasMore }: Props) => {
+const TimeOffList = ({ items, onEdit, incrementPage, hasMore }: Props) => {
   const [sortDirection, setSortDirection] = useState<SortDirection>(null);
 
   const [list, setList] = useState(() => items ?? []);
@@ -66,43 +65,43 @@ const TimeOffList = ({ items, onEdit, onDelete, incrementPage, hasMore }: Props)
   if (uniqueList.length === 0) return null;
 
   return (
-    <div>
+    <div className='h-full min-h-0 flex flex-col'>
       {error ? <div className='px-8 py-2 text-sm'>{error}</div> : null}
-      <div className='hidden lg:flex sticky top-0 z-9 items-center gap-3 px-8 py-3 text-sm text-black font-semibold bg-primary-50'>
-        <div className='w-1/5'>
-          <div className='flex items-center gap-4 pl-2.5'>
-            <span>Master name</span>
-            <div className='flex flex-col'>
-              <IconButton
-                ariaLabel='sort-asc'
-                onClick={() => setSortDirection('asc')}
-                className='p-0 text-sm text-gray-400 hover:text-gray-700'
-                icon={<ArrowUpIcon width={14} height={14} />}
-              />
-              <IconButton
-                ariaLabel='sort-desc'
-                onClick={() => setSortDirection('desc')}
-                className='p-0 text-sm text-gray-400 hover:text-gray-700'
-                icon={<ArrowDownIcon width={14} height={14} />}
-              />
-            </div>
-          </div>
-        </div>
-        <div className='w-1/5'>Exception type</div>
-        <div className='w-1/5'>Date</div>
-        <div className='w-1/5'>Note</div>
-        <div className='w-12 text-right'>Actions</div>
-      </div>
-
       <InfiniteList
-        className='flex flex-col overflow-y-auto gap-4 max-h-[70vh]'
+        className='flex flex-col overflow-y-auto h-full min-h-0 max-h-full'
         hasMore={hasMore}
         onLoadMore={incrementPage}
       >
+        <div className='hidden lg:flex sticky top-0 z-9 items-center gap-3 px-8 py-3 text-sm text-black font-semibold bg-primary-50'>
+          <div className='w-1/5'>
+            <div className='flex items-center gap-4 pl-2.5'>
+              <span>Master name</span>
+              <div className='flex flex-col'>
+                <IconButton
+                  ariaLabel='sort-asc'
+                  onClick={() => setSortDirection('asc')}
+                  className='p-0 text-sm text-gray-400 hover:text-gray-700'
+                  icon={<ArrowUpIcon width={14} height={14} />}
+                />
+                <IconButton
+                  ariaLabel='sort-desc'
+                  onClick={() => setSortDirection('desc')}
+                  className='p-0 text-sm text-gray-400 hover:text-gray-700'
+                  icon={<ArrowDownIcon width={14} height={14} />}
+                />
+              </div>
+            </div>
+          </div>
+          <div className='w-1/5'>Exception type</div>
+          <div className='w-1/5'>Date</div>
+          <div className='w-1/5'>Note</div>
+          <div className='w-12 text-right'>Actions</div>
+        </div>
+
         <ul className='flex flex-col gap-4 lg:gap-0 mb-4'>
           {uniqueList.map((item) => (
             <li key={item.id}>
-              <TimeOffListItem item={item} onEdit={onEdit} onDelete={onDelete} />
+              <TimeOffListItem item={item} onEdit={onEdit} />
             </li>
           ))}
         </ul>

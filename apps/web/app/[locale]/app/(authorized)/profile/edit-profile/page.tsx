@@ -39,7 +39,7 @@ export default function EditProfilePage() {
           location_lat: visualProfileInfo?.location_lat ?? null,
           location_lon: visualProfileInfo?.location_lon ?? null,
           avatarPreviewUrl:
-            visualProfileInfo?.avatarPreviewUrl ?? visualProfileInfo?.avatarUrl ?? null,
+            visualProfileInfo?.avatarPreviewUrl ?? visualProfileInfo?.avatarUrl ?? undefined,
         }}
         onSubmit={handleSubmit}
         onCancel={handleBackClick}

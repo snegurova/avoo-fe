@@ -27,7 +27,7 @@ export default function ClientsPage() {
 
   return (
     <AppWrapper>
-      <div className='p-6 flex-1 min-h-0 overflow-auto hide-scrollbar'>
+      <div className='p-6 flex-1 min-h-0 overflow-auto lg:overflow-hidden hide-scrollbar flex flex-col'>
         <Controls
           title='Clients'
           searchValue={searchQuery}
@@ -42,7 +42,7 @@ export default function ClientsPage() {
           }
         />
 
-        <div className='bg-white rounded-md p-4'>
+        <div className='bg-white rounded-md p-4 flex-1 min-h-0 overflow-hidden'>
           <ClientsList
             onEdit={handleEdit}
             customers={filtered}

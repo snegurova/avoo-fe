@@ -17,14 +17,14 @@ export type ExceptionFormData = {
   note?: string;
 };
 
-export const timeToMinutes = (time: string) => {
-  const [hours, minutes] = time.split(':').map(Number);
+export const timeToMinutes = (time: string): number => {
+  const [hours, minutes] = (time || '').split(':').map(Number);
   if (!Number.isFinite(hours) || !Number.isFinite(minutes)) return 0;
   return hours * 60 + minutes;
 };
 
-export const toLocalMidnightIso = (date: string) =>
-  dayjs(date, VALUE_DATE_FORMAT).startOf('day').toISOString();
+export const toIsoDateString = (date: string) =>
+  dayjs(date, VALUE_DATE_FORMAT).format(VALUE_DATE_FORMAT);
 
 export const normalizeMasterIds = (staff: string[], availableMasters?: MasterInfo[]) => {
   if (staff.includes('all')) {
@@ -84,8 +84,8 @@ export const formValuesToPayload = (
 
   return {
     masterIds: normalizeMasterIds(data.staff, masters),
-    dateFrom: toLocalMidnightIso(data.startDate),
-    dateTo: toLocalMidnightIso(data.endDate),
+    dateFrom: toIsoDateString(data.startDate),
+    dateTo: toIsoDateString(data.endDate),
     type: mapTypeToApi(data.type, data.mode),
     startTimeMinutes: isWholeDay ? 0 : timeToMinutes(data.startTime),
     endTimeMinutes: isWholeDay ? 24 * 60 : timeToMinutes(data.endTime),
