@@ -5,6 +5,7 @@ type Props = {
   title: string;
   buttonTitle: string;
   isUploading: boolean;
+  isSmall?: boolean;
   description?: string;
   displayButton?: boolean;
   variant?: 'outline' | 'base';
@@ -26,6 +27,7 @@ export default function DragAndDropZone(props: Props) {
     fileError,
     icon,
     isUploading,
+    isSmall = false,
     variant = 'base',
     displayButton = true,
     className,
@@ -53,6 +55,10 @@ export default function DragAndDropZone(props: Props) {
         true: 'bg-primary-100',
         false: '',
       },
+      isSmall: {
+        true: 'w-12 h-12',
+        false: 'w-16 h-16',
+      },
     },
   });
 
@@ -71,7 +77,7 @@ export default function DragAndDropZone(props: Props) {
         disabled={isUploading}
         className={buttonVariants({ isUploading })}
       >
-        {icon ? <div className={iconVariants({ isUploading, variant })}>{icon}</div> : null}
+        {icon ? <div className={iconVariants({ isUploading, variant, isSmall })}>{icon}</div> : null}
 
         <p className='lg:mb-2 text-xs lg:text-sm font-semibold '>
           {isUploading ? 'Uploading...' : title}

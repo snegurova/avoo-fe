@@ -3,6 +3,8 @@ import {
   CreateServiceRequest,
   CreateServiceResponse,
   GetServiceResponse,
+  UpdateServiceRequest,
+  UpdateServiceResponse,
 } from '@avoo/axios/types/apiTypes';
 import { apiClient } from '@avoo/axios/src/apiClient';
 import { PrivateServiceQueryParams } from '@avoo/axios/types/apiTypes';
@@ -39,4 +41,11 @@ export const servicesApi = {
     const res = await apiClient.post<BaseResponse<CreateServiceResponse>>(SERVICES_ENDPOINT, data);
     return res.data;
   },
-};
+  async updateService(serviceId: number, data: UpdateServiceRequest) {
+    const res = await apiClient.put<BaseResponse<UpdateServiceResponse>>(
+      `${SERVICES_ENDPOINT}/${serviceId.toString()}`,
+      data,
+    );
+    return res.data;
+  },
+}

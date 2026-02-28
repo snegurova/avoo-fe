@@ -25,6 +25,9 @@ export const queryKeys = {
     all: ['categories'] as const,
     byParams: (params: string) => [...queryKeys.categories.all, params] as const,
   },
+  medias: {
+    all: ['medias'] as const,
+  },
   customers: {
     all: ['customers'] as const,
     byParams: (params: GetCustomersQueryParams) => [...queryKeys.customers.all, params] as const,

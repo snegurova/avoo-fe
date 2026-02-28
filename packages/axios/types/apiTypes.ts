@@ -9,7 +9,7 @@ export enum ApiStatus {
   ERROR = 'error',
 }
 
-export type ErrorItemDto = components["schemas"]["ErrorItemDto"];
+export type ErrorItemDto = components['schemas']['ErrorItemDto'];
 
 export type SuccessResponse<T> = {
   status: ApiStatus.SUCCESS;
@@ -41,6 +41,8 @@ export type GetPrivateCategoriesResponse =
   components['schemas']['ServicesGroupByCategoriesResponseDto'];
 export type CreateServiceRequest = components['schemas']['CreateServiceDto'];
 export type CreateServiceResponse = components['schemas']['ServiceEntity'];
+export type UpdateServiceRequest = components['schemas']['UpdateServiceDto'];
+export type UpdateServiceResponse = components['schemas']['ServiceEntity'];
 
 /** Auth */
 export type LoginRequest = components['schemas']['LoginRequestDto'];
@@ -94,8 +96,9 @@ export type GetCustomersResponse = {
   items: CustomerInfoResponse[];
   pagination: components['schemas']['PaginationDto'];
 };
-export type GetCustomersQueryParams =
-  NonNullable<operations['CustomersController_findAllByOwner']['parameters']['query']>;
+export type GetCustomersQueryParams = NonNullable<
+  operations['CustomersController_findAllByOwner']['parameters']['query']
+>;
 export type Customer = components['schemas']['CustomerInfoDto'];
 
 /** Schedule */
@@ -221,7 +224,20 @@ export type UploadMediaRequest = {
   file: FileInput;
   type: MediaUploadType;
 };
-export type UploadMediaResponse = components['schemas']['MediaEntity'];
+export type MediaEntity = components['schemas']['MediaEntity'];
+export type UploadMediaResponse = MediaEntity;
+export type GetMediaParams = NonNullable<
+  operations['MediasController_getAll']['parameters']['query']
+>;
+export type GetMediaResponse = {
+  items: components['schemas']['MediaEntity'][];
+  pagination: components['schemas']['PaginationDto'];
+};
+
+export type MediaQueryParams = Omit<GetMediaParams, 'page'>;
+export type DeleteMediaParams = NonNullable<
+  operations['MediasController_deleteById']['parameters']['query']
+>;
 
 /* Combination */
 
@@ -232,8 +248,9 @@ export type Combination = Omit<
   services: Service[];
   masters: MasterWithRelationsEntity[];
 };
-export type GetCombinationsQueryParams =
-  NonNullable<operations['CombinationsController_findAllByOwner']['parameters']['query']>;
+export type GetCombinationsQueryParams = NonNullable<
+  operations['CombinationsController_findAllByOwner']['parameters']['query']
+>;
 export type GetCombinationsResponse = {
   items: Combination[];
   pagination: components['schemas']['PaginationDto'];

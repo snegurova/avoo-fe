@@ -25,19 +25,29 @@ export default function AsideModal(props: Props) {
 
   useEffect(() => {
     if (!open) return;
-    const handleClickOutside = (event: PointerEvent) => {
+
+    const handleClickOutside = (event: MouseEvent) => {
       if (!modalRef.current) return;
-      if ((event.target as HTMLElement).closest('.MuiPopper-root')) {
-        return;
-      }
-      if (!modalRef.current.contains(event.target as Node)) {
-        handleClose();
-      }
+
+      const path = event.composedPath() as HTMLElement[];
+      if (path.includes(modalRef.current)) return;
+
+      const clickedInsideMuiMenu = path.some((el) => {
+        if (!(el instanceof HTMLElement)) return false;
+
+        const role = el.getAttribute('role');
+        return role === 'menu' || role === 'listbox';
+      });
+
+      if (clickedInsideMuiMenu) return;
+
+      handleClose();
     };
 
-    document.addEventListener('click', handleClickOutside, true);
+    document.addEventListener('mousedown', handleClickOutside);
+
     return () => {
-      document.removeEventListener('click', handleClickOutside, true);
+      document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [open, handleClose]);
 
@@ -49,7 +59,7 @@ export default function AsideModal(props: Props) {
         rounded={IconButtonRounded.Full}
         size={IconButtonSize.Large}
         border
-        className='absolute top-6 right-6'
+        className='absolute top-6 right-6 z-11'
       />
       {children}
     </div>

@@ -1,12 +1,17 @@
-import { Typography } from '@mui/material';
-import CategoryFilterItem from '../CategoryFilterItem/CategoryFilterItem';
-import ServiceCard from '../ServiceCard/ServiceCard';
-import { CategoryWithServicesCount, Service } from '@avoo/axios/types/apiTypes';
-import { useApiStatusStore } from '@avoo/store';
-import ConfirmationDialog from '../ConfirmationDialog/ConfirmationDialog';
 import { useEffect, useRef, useState } from 'react';
+import { IconButton, Typography } from '@mui/material';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { useApiStatusStore } from '@avoo/store';
 import { servicesHooks } from '@avoo/hooks';
+import { CategoryWithServicesCount, Service } from '@avoo/axios/types/apiTypes';
+import CategoryFilterItem from '@/_components/CategoryFilterItem/CategoryFilterItem';
+import ServiceCard from '@/_components/ServiceCard/ServiceCard';
+import ConfirmationDialog from '@/_components/ConfirmationDialog/ConfirmationDialog';
+import AsideModal from '@/_components/AsideModal/AsideModal';
+import ServiceUpdateForm from '@/_components/ServiceUpdateForm/ServiceUpdateForm';
 import { useToast } from '@/_hooks/useToast';
+import DeleteIcon from '@/_icons/DeleteIcon';
+import ShareIcon from '@/_icons/ShareIcon';
 
 type Props = {
   allServicesCount: number;
@@ -39,6 +44,9 @@ export default function ServiceList(props: Props) {
 
   const [serviceIdToDelete, setServiceIdToDelete] = useState<number | null>(null);
   const { deleteServiceMutationAsync } = servicesHooks.useDeleteService();
+  const isMobileOrTablet = useMediaQuery('(max-width: 1023px)');
+
+  const { selectedService, setSelectedService } = servicesHooks.useServicesControls();
 
   const handleOpenDeleteDialog = (id: number) => {
     setServiceIdToDelete(id);
@@ -64,6 +72,13 @@ export default function ServiceList(props: Props) {
       incrementPage();
     }
   }, [services?.length, hasMore]);
+
+  const handleServiceClick = (service: Service) => {
+    if (!isMobileOrTablet) {
+      return;
+    }
+    setSelectedService(service);
+  };
 
   return (
     <>
@@ -117,7 +132,7 @@ export default function ServiceList(props: Props) {
               >
                 <ul className='flex flex-col gap-4  mb-30'>
                   {services.map((service) => (
-                    <li key={service.id}>
+                    <li key={service.id} onClick={() => handleServiceClick(service)}>
                       <ServiceCard
                         id={service.id}
                         name={service.name}
@@ -125,7 +140,11 @@ export default function ServiceList(props: Props) {
                         price={service.price}
                         currency={currency}
                         isActive={service.isActive}
+                        isSelected={selectedService?.id === service.id}
                         onDelete={handleOpenDeleteDialog}
+                        onEdit={() => {
+                          setSelectedService(service);
+                        }}
                       />
                     </li>
                   ))}
@@ -150,6 +169,38 @@ export default function ServiceList(props: Props) {
         onConfirm={handleConfirmDelete}
         loading={isPending}
       />
+      <AsideModal open={!!selectedService} handleClose={() => setSelectedService(null)}>
+        {selectedService && (
+          <div className='w-full h-full overflow-y-auto'>
+            <div className='sticky top-[-1] flex items-center justify-between py-2 bg-white z-2'>
+              <Typography variant='h1'>Service</Typography>
+              <div className='flex flex-row gap-4 lg:hidden'>
+                <div className='bg-primary-50 w-10 h-10 rounded-lg flex items-center justify-center'>
+                  <IconButton aria-label='share'>
+                    <ShareIcon className='transition-colors' />
+                  </IconButton>
+                </div>
+                <div className='bg-primary-50 w-10 h-10 rounded-lg flex items-center justify-center'>
+                  <IconButton
+                    aria-label='delete'
+                    onClick={() => {
+                      handleOpenDeleteDialog(selectedService.id);
+                    }}
+                    loading={isPending}
+                    disabled={isPending}
+                  >
+                    <DeleteIcon className='transition-colors' />
+                  </IconButton>
+                </div>
+              </div>
+            </div>
+            <ServiceUpdateForm
+              service={selectedService}
+              onCancel={() => setSelectedService(null)}
+            />
+          </div>
+        )}
+      </AsideModal>
     </>
   );
 }

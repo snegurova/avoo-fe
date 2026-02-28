@@ -11,6 +11,7 @@ import {
   Switch,
   TextField,
   Typography,
+  useMediaQuery,
 } from '@mui/material';
 import { Category, UploadMediaResponse } from '@avoo/axios/types/apiTypes';
 import { MasterWithRelationsEntityResponse } from '@avoo/axios/types/apiTypes';
@@ -40,6 +41,7 @@ export default function ServiceAddForm(props: Props) {
   const [medias, setMedias] = useState<UploadMediaResponse[]>([]);
   const servicePath = localizationHooks.useWithLocale(AppRoutes.Services);
 
+  const isMobile = useMediaQuery('(max-width: 767px)');
 
   const { uploadMedia, isUploading } = mediaHooks.useUploadMedia({
     onSuccess: (data) => {
@@ -209,6 +211,7 @@ export default function ServiceAddForm(props: Props) {
                 onFilePicked={onFilePicked}
                 onRemove={onRemoveMedia}
                 isUploading={isUploading}
+                isSmall={isMobile}
               />
             </div>
           </div>

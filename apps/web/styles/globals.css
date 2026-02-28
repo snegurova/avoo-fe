@@ -55,7 +55,7 @@ main::-webkit-scrollbar-thumb,
         flex items-center justify-center 
         opacity-100
         lg:opacity-0 lg:group-hover:opacity-100
-        duration-200 z-20
+        duration-200 z-1
         cursor-pointer;
   }
   .gallery-item-height {
