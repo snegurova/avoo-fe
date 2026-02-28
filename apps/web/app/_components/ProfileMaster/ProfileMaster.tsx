@@ -2,17 +2,18 @@
 
 import { useRouter } from 'next/navigation';
 import { masterHooks } from '@avoo/hooks';
-import { appRoutes } from '@/_routes/routes';
+import { AppRoutes } from '@/_routes/routes';
 import { SectionHeader } from '@/_components/SectionHeader/SectionHeader';
 import Avatar, { AvatarSize } from '@/_components/Avatar/Avatar';
 import { colors } from '@avoo/design-tokens';
+import { localizationHooks } from '@/_hooks/localizationHooks';
 
 export const ProfileMaster = () => {
   const mastersInfo = masterHooks.useGetMastersProfileInfo()?.items;
   const router = useRouter();
 
   const handleNavigate = () => {
-    router.push(appRoutes.Masters);
+    router.push(localizationHooks.useWithLocale(AppRoutes.Masters));
   };
 
   return (

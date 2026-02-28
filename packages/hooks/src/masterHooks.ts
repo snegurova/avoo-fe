@@ -14,8 +14,8 @@ import {
   CreateMasterRequest,
   GetMastersResponse,
   GetMastersQueryParams,
+  ApiStatus,
 } from '@avoo/axios/types/apiTypes';
-import { ApiStatus } from '@avoo/hooks/types/apiTypes';
 import { queryKeys } from './queryKeys';
 
 type UseCreateMasterFormParams = {
@@ -128,7 +128,7 @@ export const masterHooks = {
       handleSubmit,
       setValue,
       watch,
-      formState: { errors },
+      formState: { errors, isDirty },
       reset,
     } = useForm<CreateMasterFormData>({
       resolver: yupResolver(createMasterSchema),
@@ -172,13 +172,14 @@ export const masterHooks = {
       errors,
       isPending,
       reset,
+      isDirty,
     };
   },
   useDeleteMaster: ({ onSuccess }: { onSuccess?: () => void } = {}) => {
     const queryClient = useQueryClient();
 
     const { mutate: deleteMasterMutation, isPending } = useMutation<
-      BaseResponse<void>,
+      BaseResponse<MasterWithRelationsEntityResponse>,
       Error,
       number
     >({

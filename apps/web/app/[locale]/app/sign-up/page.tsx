@@ -1,7 +1,8 @@
 import { Metadata } from 'next/types';
 import RegisterForm from '@/_components/RegisterForm/RegisterForm';
 import Link from 'next/link';
-import { appRoutes } from '@/_routes/routes';
+import { AppRoutes } from '@/_routes/routes';
+import { LocalizedLink } from '@/_components/LocalizedLink/LocalizedLink';
 
 export const metadata: Metadata = {
   title: 'Sign Up - AVOO App',
@@ -26,9 +27,12 @@ export default function SignUpPage() {
       <div className='sm:mx-auto sm:w-full sm:max-w-sm mt-4'>
         <p className='text-center text-gray-600'>
           Having account?{' '}
-          <Link href={appRoutes.SignIn} className='text-blue-600 hover:underline'>
+          <LocalizedLink
+            href={AppRoutes.SignIn}
+            className='text-blue-600 hover:underline'
+          >
             Log in
-          </Link>
+          </LocalizedLink>
         </p>
 
         <div className='flex justify-between items-center mt-8 text-sm text-gray-600'>

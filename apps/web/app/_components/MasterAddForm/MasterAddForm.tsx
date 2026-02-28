@@ -9,11 +9,12 @@ import FormInput from '@/_components/FormInput/FormInput';
 import FormLanguageSearch from '@/_components/FormLanguageSearch/FormLanguageSearch';
 import PhoneCodeSelect from '@/_components/PhoneCodeSelect/PhoneCodeSelect';
 import { masterHooks, phoneHooks } from '@avoo/hooks';
-import { appRoutes } from '@/_routes/routes';
+import { AppRoutes } from '@/_routes/routes';
 import { useToast } from '@/_hooks/useToast';
 import FormTextarea from '../FormTextArea/FormTextArea';
+import { localizationHooks } from '@/_hooks/localizationHooks';
 
-export default function AddMasterForm() {
+export default function MasterAddForm() {
   const router = useRouter();
   const [localAvatar, setLocalAvatar] = useState<string | null>(null);
 
@@ -21,12 +22,12 @@ export default function AddMasterForm() {
   const { control, handleSubmit, isPending } = masterHooks.useCreateMasterForm({
     onSuccess: () => {
       toast.success('New master added successfully');
-      router.push(appRoutes.Masters);
+      router.push(localizationHooks.useWithLocale(AppRoutes.Masters));
     },
   });
 
   const onCancel = useCallback(() => {
-    router.push(appRoutes.Masters);
+    router.push(localizationHooks.useWithLocale(AppRoutes.Masters));
   }, [router]);
 
   const onImageSelected = useCallback((file: File) => {
@@ -103,13 +104,12 @@ export default function AddMasterForm() {
             <label htmlFor='phone' className='text-sm block mb-1'>
               Phone
             </label>
-            <div className='flex items-stretch gap-6 md:gap-8 lg:gap-6'>
-              <div className='w-[84px] shrink-0'>
+            <div className='flex items-stretch gap-3'>
+              <div className='w-[84px] flex-shrink-0'>
                 <PhoneCodeSelect
                   id='phone-code'
                   value={countryCode}
                   onChange={handlePhoneCodeChange}
-                  className='w-full h-full'
                 />
               </div>
 

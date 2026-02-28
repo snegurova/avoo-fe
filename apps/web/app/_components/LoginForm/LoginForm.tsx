@@ -5,12 +5,13 @@ import Link from 'next/link';
 import { authHooks } from '@avoo/hooks';
 import { Button, ButtonFit, ButtonIntent } from '@/_components/Button/Button';
 import FormInput from '@/_components/FormInput/FormInput';
-import { appRoutes } from '@/_routes/routes';
-import { routerHooks } from '@/_hooks/routerHooks';
+import { AppRoutes } from '@/_routes/routes';
 import { useApiStatusStore } from '@avoo/store';
 import { utils } from '@avoo/hooks';
 import ShowPasswordToggler from '@/_components/ShowPasswordToggler/ShowPasswordToggler';
 import { useEffect, useState } from 'react';
+import { localizationHooks } from '@/_hooks/localizationHooks';
+import { routerUtils } from '@/_utils/routerUtils';
 
 export default function LoginForm() {
   const isPending = useApiStatusStore((state) => state.isPending);
@@ -22,15 +23,16 @@ export default function LoginForm() {
     const url = searchParams.get('returnUrl');
     if (url) {
       setReturnUrl(decodeURIComponent(url));
-      router.replace(appRoutes.SignIn);
     }
   }, [searchParams, router]);
 
   const { register, handleSubmit, errors } = authHooks.useLoginForm({
     onSuccess: () => {
-      const targetUrl =
-        returnUrl && routerHooks.useIsValidRoute(returnUrl) ? returnUrl : appRoutes.Home;
+      const targetUrl = returnUrl && routerUtils.isValidRoute(returnUrl)
+        ? routerUtils.toRoute(returnUrl)
+        : AppRoutes.Home;
       router.replace(targetUrl);
+
     },
   });
 
@@ -63,7 +65,10 @@ export default function LoginForm() {
         Log in
       </Button>
       <div className='text-center mt-2'>
-        <Link href={appRoutes.ForgotPassword} className='text-blue-600 hover:underline text-sm'>
+        <Link
+          href={localizationHooks.useWithLocale(AppRoutes.ForgotPassword)}
+          className='text-blue-600 hover:underline text-sm'
+        >
           Forgot password?
         </Link>
       </div>

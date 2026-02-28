@@ -2,8 +2,9 @@
 
 import { useRouter } from 'next/navigation';
 import { scheduleHooks } from '@avoo/hooks';
-import { appRoutes } from '@/_routes/routes';
+import { AppRoutes } from '@/_routes/routes';
 import { SectionHeader } from '@/_components/SectionHeader/SectionHeader';
+import { localizationHooks } from '@/_hooks/localizationHooks';
 
 export const ProfileSchedule = () => {
   const { data: schedulesData } = scheduleHooks.useGetSchedulesInfinite({ limit: 10 });
@@ -12,7 +13,7 @@ export const ProfileSchedule = () => {
   const router = useRouter();
 
   const handleNavigate = () => {
-    router.push(appRoutes.WorkingHours);
+    router.push(localizationHooks.useWithLocale(AppRoutes.WorkingHours));
   };
 
   return (

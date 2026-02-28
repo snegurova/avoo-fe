@@ -7,8 +7,8 @@ import {
   GetCalendarByDatesResponse,
   PrivateCalendarByDatesQueryParams,
   PrivateCalendarQueryParams,
+  ApiStatus,
 } from '@avoo/axios/types/apiTypes';
-import { ApiStatus } from '@avoo/hooks/types/apiTypes';
 import { useQuery } from '@tanstack/react-query';
 import { useMemo } from 'react';
 import { queryKeys } from './queryKeys';

@@ -52,7 +52,7 @@ export const servicesHooks = {
     return query;
   },
   useServicesQuery() {
-    const [params, setParams] = useState<ServicesQueryParams>({
+    const [params, setParams] = useState({
       limit: DEFAULT_LIMIT,
       categoryId: null,
       search: '',
@@ -87,7 +87,7 @@ export const servicesHooks = {
 
     const debouncedSearch = useDebounce(params.search, 400);
 
-    const queryParams: ServicesQueryParams = useMemo(
+    const queryParams = useMemo(
       () => ({
         limit: params.limit,
         search: debouncedSearch,

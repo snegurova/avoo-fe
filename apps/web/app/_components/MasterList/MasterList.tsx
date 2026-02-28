@@ -1,23 +1,71 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState } from 'react';
 import { MasterWithRelationsEntityResponse } from '@avoo/axios/types/apiTypes';
 import MasterListItem from '@/_components/MasterListItem/MasterListItem';
 import { IconButton } from '@/_components/IconButton/IconButton';
 import ArrowUpIcon from '@/_icons/ArrowUpIcon';
 import ArrowDownIcon from '@/_icons/ArrowDownIcon';
-import { sortByName, SortDirection } from '@avoo/shared';
+import { SortDirection, fetchAllAndSort } from '@avoo/shared';
+import { masterApi } from '@avoo/axios/src/modules/master';
+import InfiniteList from '../InfiniteList/InfiniteList';
 
 type Props = {
   masters: MasterWithRelationsEntityResponse[] | null;
+  onEdit?: (master: MasterWithRelationsEntityResponse) => void;
+  selectedId?: number | null;
+  incrementPage?: () => void;
+  hasMore?: boolean;
 };
 
-export const MasterList = ({ masters }: Props) => {
+export const MasterList = ({ masters, onEdit, selectedId, incrementPage, hasMore }: Props) => {
   const [sortDirection, setSortDirection] = useState<SortDirection>(null);
+  const [list, setList] = useState(() => masters ?? []);
+  const [error, setError] = useState<string | null>(null);
 
-  const sorted = useMemo(() => sortByName(masters ?? [], sortDirection), [masters, sortDirection]);
+  React.useEffect(() => {
+    if (!sortDirection) {
+      setList(masters ?? []);
+      setError(null);
+    }
+  }, [masters, sortDirection]);
 
-  if (!masters || masters.length === 0) {
+  React.useEffect(() => {
+    if (!sortDirection) return;
+
+    let isComponentMounted = true;
+    const fetchAndSort = async () => {
+      setError(null);
+      const sorted = await fetchAllAndSort(
+        (params) => masterApi.getMastersInfo(params),
+        (item: MasterWithRelationsEntityResponse) => item.name ?? '',
+        sortDirection,
+      );
+
+      if (isComponentMounted) {
+        setList(sorted);
+      }
+    };
+
+    fetchAndSort();
+
+    return () => {
+      isComponentMounted = false;
+    };
+  }, [sortDirection]);
+
+  const uniqueList = React.useMemo(() => {
+    const uniqueById = new Map<number, MasterWithRelationsEntityResponse>();
+    for (const item of list) {
+      if (!uniqueById.has(item.id)) {
+        uniqueById.set(item.id, item);
+      }
+    }
+
+    return Array.from(uniqueById.values());
+  }, [list]);
+
+  if (uniqueList.length === 0) {
     return <div className='py-8 text-center text-gray-500'>No masters yet</div>;
   }
 

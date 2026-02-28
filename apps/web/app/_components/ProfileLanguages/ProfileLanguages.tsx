@@ -1,8 +1,9 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { appRoutes } from '@/_routes/routes';
+import { AppRoutes } from '@/_routes/routes';
 import { IconButton } from '@/_components/IconButton/IconButton';
+import { localizationHooks } from '@/_hooks/localizationHooks';
 
 type Props = {
   languages: string[] | null;
@@ -13,7 +14,7 @@ export const ProfileLanguages = (props: Props) => {
   const router = useRouter();
 
   const handleNavigate = () => {
-    router.push(appRoutes.EditLanguages);
+    router.push(localizationHooks.useWithLocale(AppRoutes.EditLanguages));
   };
 
   return (

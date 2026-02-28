@@ -4,7 +4,7 @@ import React from 'react';
 import { Modal, ModalVariant } from '@/_components/Modal/Modal';
 import { customerHooks } from '@avoo/hooks';
 import type { CustomerInfoResponse } from '@avoo/axios/types/apiTypes';
-import ClientForm from '../ClientForm/ClientForm';
+import ClientEditForm from '../ClientEditForm/ClientEditForm';
 import ConfirmationModal from '../ConfirmationModal/ConfirmationModal';
 
 type Props = {
@@ -45,9 +45,9 @@ export const ClientEditModal: React.FC<Props> = ({ id, client, open, onClose }) 
 
   return (
     <>
-      {open && (
-        <Modal isOpen={open} onClose={onClose} variant={ModalVariant.PANEL}>
-          <ClientForm
+      <Modal isOpen={open} onClose={onClose} variant={ModalVariant.PANEL}>
+        {open ? (
+          <ClientEditForm
             initial={initial}
             onClose={onClose}
             onRequestClose={handleRequestClose}
@@ -55,8 +55,8 @@ export const ClientEditModal: React.FC<Props> = ({ id, client, open, onClose }) 
             id={id}
             notifyInitial={notifyInitial}
           />
-        </Modal>
-      )}
+        ) : null}
+      </Modal>
 
       <ConfirmationModal
         isOpen={showUnsavedConfirm}

@@ -1,8 +1,7 @@
 import { utils } from '@avoo/hooks/utils/utils';
-import { GetCategoriesResponse, GetPrivateCategoriesResponse } from '@avoo/axios/types/apiTypes';
+import { GetCategoriesResponse, GetPrivateCategoriesResponse, ApiStatus } from '@avoo/axios/types/apiTypes';
 
 import { BaseResponse } from '@avoo/axios/types/apiTypes';
-import { ApiStatus } from '@avoo/hooks/types/apiTypes';
 import { useQuery } from '@tanstack/react-query';
 import { categoriesApi } from '@avoo/axios';
 import { queryKeys } from './queryKeys';

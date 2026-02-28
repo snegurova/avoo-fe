@@ -1,4 +1,10 @@
-import { useInfiniteQuery, useMutation, useQuery } from '@tanstack/react-query';
+import {
+  InfiniteData,
+  useInfiniteQuery,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
@@ -11,8 +17,8 @@ import {
   ScheduleEntity,
   SchedulesQueryParams,
   ScheduleUpdateResponse,
+  ApiStatus,
 } from '@avoo/axios/types/apiTypes';
-import { ApiStatus } from '@avoo/hooks/types/apiTypes';
 import { timeUtils } from '@avoo/shared';
 import { END_MINUTE, START_MINUTE } from '@avoo/constants/src/calendar';
 import {
@@ -21,6 +27,7 @@ import {
   ScheduleCreateFormData,
   scheduleCreateSchema,
 } from '../schemas/schedulesValidationSchemas';
+import { queryKeys } from './queryKeys';
 
 const DEFAULT_LIMIT = 10;
 
@@ -107,16 +114,19 @@ export const scheduleHooks = {
       },
     });
 
+    const queryClient = useQueryClient();
+
     const { mutate: createSchedule, isPending } = useMutation<
       BaseResponse<ScheduleCreateResponse>,
       Error,
       ScheduleCreateFormData
     >({
       mutationFn: scheduleApi.createSchedule,
-      onSuccess: (response) => {
-        if (response.status === ApiStatus.SUCCESS) {
-          onSuccess?.();
-        }
+      onSuccess: () => {
+        queryClient.invalidateQueries({
+          queryKey: queryKeys.schedules.all,
+        });
+        onSuccess?.();
       },
       onError: (error) => {
         onError?.(error);
@@ -173,6 +183,51 @@ export const scheduleHooks = {
       setValue,
       updateSchedule,
       isPending,
+    };
+  },
+  useDeleteSchedule: () => {
+    const queryClient = useQueryClient();
+
+    const deleteScheduleMutation = useMutation({
+      mutationFn: (id: number) => scheduleApi.deleteSchedule(id),
+      onSuccess: (_, deletedId) => {
+        queryClient.setQueriesData<InfiniteData<BaseResponse<GetSchedulesResponse>>>(
+          {
+            predicate: (query) => query.queryKey[0] === 'schedules' && query.queryKey[1] === 'list',
+          },
+          (oldData) => {
+            if (!oldData) return oldData;
+
+            const newPages = oldData.pages.map((page) => {
+              const newItems = page.data.items.filter((s) => s.id !== deletedId);
+
+              return {
+                ...page,
+                data: {
+                  ...page.data,
+                  items: newItems,
+                  pagination: {
+                    ...page.data.pagination,
+                    total: Math.max(page.data.pagination.total - 1, 0),
+                  },
+                },
+              };
+            });
+
+            return { ...oldData, pages: newPages };
+          },
+        );
+        queryClient.invalidateQueries({
+          queryKey: queryKeys.schedules.all,
+        });
+      },
+    });
+
+    utils.useSetPendingApi(deleteScheduleMutation.isPending);
+
+    return {
+      deleteScheduleMutation,
+      deleteScheduleMutationAsync: deleteScheduleMutation.mutateAsync,
     };
   },
 };
