@@ -38,6 +38,8 @@ export default function ServiceAddForm(props: Props) {
   const durationOptions = timeUtils.getDurationOptionsRange(15, 300, 15);
 
   const [medias, setMedias] = useState<UploadMediaResponse[]>([]);
+  const servicePath = localizationHooks.useWithLocale(AppRoutes.Services);
+
 
   const { uploadMedia, isUploading } = mediaHooks.useUploadMedia({
     onSuccess: (data) => {
@@ -68,7 +70,7 @@ export default function ServiceAddForm(props: Props) {
     {
       onSuccess: () => {
         toast.success('Service has been created!');
-        router.replace(localizationHooks.useWithLocale(AppRoutes.Services));
+        router.replace(servicePath);
       },
       onError: (error) => {
         toast.error('Failed to create service: ' + error.message);
