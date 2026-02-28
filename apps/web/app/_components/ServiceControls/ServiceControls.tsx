@@ -24,7 +24,7 @@ export default function ServiceControls(props: Props) {
           <Link href={localizationHooks.useWithLocale(AppRoutes.CreateService)}>
             <Button
               fullWidth
-              color='secondary'
+              color='primary'
               variant='outlined'
               loading={isPending}
               disabled={isPending}

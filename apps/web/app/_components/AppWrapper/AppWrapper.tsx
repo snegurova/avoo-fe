@@ -15,7 +15,7 @@ const wrapper = tv({
       true: 'min-h-fit',
     },
     withPadding: {
-      true: 'px-11 pt-14',
+      true: 'px-5 pt-4 md:px-11 md:pt-14',
       false: '',
     },
   },

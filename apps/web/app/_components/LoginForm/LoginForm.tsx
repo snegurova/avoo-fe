@@ -6,12 +6,12 @@ import { authHooks } from '@avoo/hooks';
 import { Button, ButtonFit, ButtonIntent } from '@/_components/Button/Button';
 import FormInput from '@/_components/FormInput/FormInput';
 import { AppRoutes } from '@/_routes/routes';
-import { routerHooks } from '@/_hooks/routerHooks';
 import { useApiStatusStore } from '@avoo/store';
 import { utils } from '@avoo/hooks';
 import ShowPasswordToggler from '@/_components/ShowPasswordToggler/ShowPasswordToggler';
 import { useEffect, useState } from 'react';
 import { localizationHooks } from '@/_hooks/localizationHooks';
+import { routerUtils } from '@/_utils/routerUtils';
 
 export default function LoginForm() {
   const isPending = useApiStatusStore((state) => state.isPending);
@@ -23,15 +23,16 @@ export default function LoginForm() {
     const url = searchParams.get('returnUrl');
     if (url) {
       setReturnUrl(decodeURIComponent(url));
-      router.replace(localizationHooks.useWithLocale(AppRoutes.SignIn));
     }
   }, [searchParams, router]);
 
   const { register, handleSubmit, errors } = authHooks.useLoginForm({
     onSuccess: () => {
-      const targetUrl =
-        returnUrl && routerHooks.useIsValidRoute(returnUrl) ? returnUrl : AppRoutes.Home;
-      router.replace(localizationHooks.useWithLocale(targetUrl));
+      const targetUrl = returnUrl && routerUtils.isValidRoute(returnUrl)
+        ? routerUtils.toRoute(returnUrl)
+        : AppRoutes.Home;
+      router.replace(targetUrl);
+
     },
   });
 

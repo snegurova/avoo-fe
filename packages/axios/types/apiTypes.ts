@@ -25,7 +25,7 @@ export type ErrorResponse = {
 
 export type BaseResponse<T> = SuccessResponse<T> | ErrorResponse;
 /** Category && Services */
-export type ServicesQueryParams = Omit<PrivateServiceQueryParams, 'page'>;
+export type ServicesQueryParams = Omit<NonNullable<PrivateServiceQueryParams>, 'page'>;
 export type Category = components['schemas']['CategoryEntity'];
 export type CategoryWithServicesCount = components['schemas']['ServiceWithCategoryDto'];
 export type Service = components['schemas']['ServiceEntity'];
