@@ -6,13 +6,15 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useApiStatusStore } from '@avoo/store';
 import { useRouter } from 'next/navigation';
 import { Button, ButtonFit, ButtonIntent, ButtonType } from '@/_components/Button/Button';
-import { CustomerSelect } from '@/_components/CustomerSelect/CustomerSelect';
-import { Controller } from 'react-hook-form';
+import { Controller, useFieldArray } from 'react-hook-form';
 import { OrderType } from '@avoo/hooks/types/orderType';
 import { useToast } from '@/_hooks/useToast';
-import { Service } from '@avoo/axios/types/apiTypes';
+import { Service, CreatePublicOrder, MasterWithRelationsEntity } from '@avoo/axios/types/apiTypes';
 import { servicesHooks } from '@avoo/hooks';
 import { timeUtils } from '@avoo/shared';
+import CustomerCreate from '@/_components/CustomerCreate/CustomerCreate';
+
+const SERVICES_KEY_IN_ORDER_CREATE = 'ordersData';
 
 export default function PublicOrderCreatePage() {
   const params = useParams();
@@ -24,6 +26,10 @@ export default function PublicOrderCreatePage() {
   const toast = useToast();
   const [showCombination, setShowCombination] = useState(true);
   const [selectedSlot, setSelectedSlot] = useState<string | null>(null);
+  const [phone, setPhone] = useState('');
+  const [selectedMasters, setSelectedMasters] = useState<(MasterWithRelationsEntity | null)[]>([
+    null,
+  ]);
 
   const {
     control,
@@ -37,8 +43,13 @@ export default function PublicOrderCreatePage() {
     setSelectedCombinations,
   } = orderHooks.useCreatePublicOrder({
     onSuccess: () => {
-      router.push('/');
+      router.back();
     },
+  });
+
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: SERVICES_KEY_IN_ORDER_CREATE,
   });
 
   const { data: servicesData } = servicesHooks.useGetServicesInfinite({
@@ -114,7 +125,7 @@ export default function PublicOrderCreatePage() {
     values.ordersData = [
       {
         type: OrderType.Combination,
-        masterId: undefined,
+        masterId: fields[0]?.masterId,
         date: selectedSlot ?? '',
         notes: '',
         combinationId: combination.id,
@@ -124,18 +135,18 @@ export default function PublicOrderCreatePage() {
 
   const onSplitCombination = () => {
     let countDuration = 0;
-    const ordersData: any[] = [];
+    const ordersData: CreatePublicOrder[] = [];
     selectedServices.forEach((service, index) => {
       ordersData.push({
         type: OrderType.Service,
         serviceId: service?.id,
-        masterId: undefined,
+        masterId: selectedMasters[index]?.id ?? fields[0].masterId,
         date: selectedSlot
           ? timeUtils.convertDateToString(
               timeUtils.addMinutesToDate(new Date(selectedSlot), countDuration),
             )
           : '',
-        notes: index === 0 ? '' : '',
+        notes: '',
       });
       if (service) {
         countDuration += service.durationMinutes;
@@ -154,10 +165,12 @@ export default function PublicOrderCreatePage() {
           name='customerData'
           control={control}
           render={({ field }) => (
-            <CustomerSelect
-              value={field.value ?? undefined}
+            <CustomerCreate
+              value={field.value}
               onChange={field.onChange}
               error={errors?.customerData}
+              phone={phone}
+              setPhone={setPhone}
             />
           )}
         />

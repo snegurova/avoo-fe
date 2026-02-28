@@ -4,15 +4,15 @@ import FormTextArea from '@/_components/FormTextArea/FormTextArea';
 import PhoneCodeSelect from '@/_components/PhoneCodeSelect/PhoneCodeSelect';
 import { phoneHooks } from '@avoo/hooks';
 import { isCustomerValues } from '@/_utils/isCustomerValues';
-import { CreatePublicCustomerRequest } from '@avoo/axios/types/apiTypes';
+import { CreatePublicCustomerRequest, CreateCustomerRequest } from '@avoo/axios/types/apiTypes';
 import { FieldErrors } from 'react-hook-form';
 import { CreatePublicOrdersData } from '@avoo/hooks';
 
 type Props = {
   phone: string;
   setPhone: (phone: string) => void;
-  value: CreatePublicCustomerRequest | object;
-  onChange: (customer: CreatePublicCustomerRequest) => void;
+  value: CreateCustomerRequest | CreatePublicCustomerRequest | object;
+  onChange: (customer: CreateCustomerRequest | CreatePublicCustomerRequest) => void;
   error?: FieldErrors<CreatePublicOrdersData>['customerData'] | undefined;
 };
 
@@ -76,7 +76,7 @@ export default function CustomerCreate(props: Props) {
             type='text'
             placeholder='Enter name'
             id='name'
-            value={value.name}
+            value={isCustomerValues(value) ? value.name : ''}
             onChange={handleNameChange}
             error={error?.name?.message}
           />
@@ -89,7 +89,7 @@ export default function CustomerCreate(props: Props) {
             type='email'
             placeholder='Enter email'
             id='email'
-            value={value.email}
+            value={isCustomerValues(value) ? value.email : ''}
             onChange={handleEmailChange}
             error={error?.email?.message}
           />
@@ -124,7 +124,7 @@ export default function CustomerCreate(props: Props) {
           <FormTextArea
             id='notes'
             name='notes'
-            value={value.notes ?? ''}
+            value={isCustomerValues(value) ? value.notes : ''}
             onChange={handleNotesChange}
             label='Notes'
             helperText='Additional information about the client'
