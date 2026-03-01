@@ -2,5 +2,16 @@
   "compilerOptions": {
     "types": ["node"]
   },
-  "extends": "expo/tsconfig.base"
+  "files": [],
+  "references": [
+    { "path": "./apps/web" },
+    { "path": "./apps/mobile" },
+    { "path": "./packages/hooks" },
+    { "path": "./packages/shared" },
+    { "path": "./packages/intl" },
+    { "path": "./packages/axios" },
+    { "path": "./packages/constants" },
+    { "path": "./packages/design-tokens" },
+    { "path": "./packages/store" }
+  ]
 }
