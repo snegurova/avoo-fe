@@ -14,13 +14,16 @@ export default function AppProfileSelect() {
   const { visualProfileInfo } = userHooks.useGetUserProfile();
   const router = useRouter();
   const { logoutMutation } = authHooks.useLogout();
+  const profilePath = localizationHooks.useWithLocale(AppRoutes.Profile);
+
+  const handleNavigateToProfile = useCallback(() => {
+    router.push(profilePath);
+  }, [router, profilePath]);
 
   const options = [
     {
       label: 'Profile',
-      handler: () => {
-        router.push(localizationHooks.useWithLocale(AppRoutes.Profile));
-      },
+      handler: handleNavigateToProfile,
     },
     {
       label: 'Logout',

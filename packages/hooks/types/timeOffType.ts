@@ -1,3 +1,5 @@
+import type { CreateExceptionRequest } from '@avoo/axios/types/apiTypes';
+
 export enum TimeOffType {
   Personal = 'personal',
   Holiday = 'holiday',
@@ -23,5 +25,16 @@ export const timeOffTypeLabels: Record<TimeOffType, string> = {
   [TimeOffType.Sick]: 'Sick Leave',
   [TimeOffType.Other]: 'Other',
 };
+
+export const timeOffTypes: {
+  value: TimeOffType;
+  api: CreateExceptionRequest['type'];
+}[] = [
+  { value: TimeOffType.Personal, api: 'PERSONAL_OFF' },
+  { value: TimeOffType.Holiday, api: 'HOLIDAY_OFF' },
+  { value: TimeOffType.Vacation, api: 'VACATION' },
+  { value: TimeOffType.Sick, api: 'SICK_LEAVE' },
+  { value: TimeOffType.Other, api: 'OTHER_OFF' },
+];
 
 export default TimeOffType;

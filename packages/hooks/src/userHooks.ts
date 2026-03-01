@@ -1,5 +1,6 @@
 import { utils } from './../utils/utils';
 import { userApi } from '@avoo/axios';
+import { MediaType } from '@avoo/hooks/types/mediaType';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import {
   BaseResponse,
@@ -30,13 +31,20 @@ export const userHooks = {
     const profileInfo = userProfileData?.status === ApiStatus.SUCCESS ? userProfileData.data : null;
 
     const visualProfileInfo = {
-      name: profileInfo?.businessInfo?.name ?? 'Salon Name not set',
-      description: profileInfo?.businessInfo?.description ?? 'Some description about the salon',
-      address: profileInfo?.businessInfo?.address ?? 'Salon address not set',
-      email: profileInfo?.email ?? 'Email not set',
-      phone: profileInfo?.businessInfo?.phone ?? 'Phone not set',
-      avatarUrl: profileInfo?.avatarPreviewUrl ?? profileInfo?.avatarUrl,
-      avatarPreviewUrl: profileInfo?.avatarPreviewUrl,
+      name: profileInfo?.businessInfo?.name ?? null,
+      headline: profileInfo?.businessInfo?.headline ?? null,
+      description: profileInfo?.businessInfo?.description ?? null,
+      address: profileInfo?.businessInfo?.address ?? null,
+      email: profileInfo?.email ?? null,
+      phone: profileInfo?.businessInfo?.phone ?? null,
+      policy: profileInfo?.businessInfo?.policy ?? null,
+      avatarUrl:
+        profileInfo?.avatarUrl ??
+        profileInfo?.businessInfo?.avatarUrl ??
+        profileInfo?.avatarPreviewUrl ??
+        null,
+      avatarPreviewUrl: profileInfo?.avatarPreviewUrl ?? null,
+      languages: profileInfo?.businessInfo?.languages ?? null,
       location_lat: profileInfo?.businessInfo?.location_lat ?? null,
       location_lon: profileInfo?.businessInfo?.location_lon ?? null,
     };
@@ -46,12 +54,16 @@ export const userHooks = {
     return {
       visualProfileInfo,
       visualLanguages,
+      userId: profileInfo?.id ?? null,
     };
   },
   useGetUserMedia: () => {
+    const { userId } = userHooks.useGetUserProfile();
+
     const { data: userMediaData, isPending } = useQuery<BaseResponse<UserMediaResponse>, Error>({
       queryKey: queryKeys.user.media(),
-      queryFn: userApi.getUserMedia,
+      queryFn: () => userApi.getUserMedia(MediaType.USER, userId),
+      enabled: !!userId,
     });
 
     utils.useSetPendingApi(isPending);

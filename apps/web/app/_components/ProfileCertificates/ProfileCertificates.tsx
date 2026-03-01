@@ -1,5 +1,6 @@
 'use client';
 
+import { useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { AppRoutes } from '@/_routes/routes';
 import { IconButton } from '@/_components/IconButton/IconButton';
@@ -7,10 +8,15 @@ import { localizationHooks } from '@/_hooks/localizationHooks';
 
 export const ProfileCertificates = () => {
   const router = useRouter();
+  const certificatesPath = localizationHooks.useWithLocale(AppRoutes.Certificates);
 
-  const handleNavigate = () => {
-    router.push(localizationHooks.useWithLocale(AppRoutes.Certificates));
-  };
+  const handleNavigateToCertificates = useCallback(() => {
+    router.push(certificatesPath);
+  }, [router, certificatesPath]);
+
+  const handleNavigate = useCallback(() => {
+    handleNavigateToCertificates();
+  }, [handleNavigateToCertificates]);
 
   return (
     <div className='flex items-center justify-between px-5 py-3'>

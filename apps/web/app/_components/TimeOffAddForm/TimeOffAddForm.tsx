@@ -4,74 +4,33 @@ import type { Dayjs } from 'dayjs';
 import { VALUE_DATE_FORMAT } from '@/_constants/dateFormats';
 import { Button, Switch, FormControlLabel } from '@mui/material';
 import FormTextarea from '../FormTextArea/FormTextArea';
-import dayjs from 'dayjs';
+import { validateEndDateFactory } from '@avoo/shared';
 import { FormSelect } from '../FormSelect/FormSelect';
 import { FormMultiSelect } from '../FormMultiSelect/FormMultiSelect';
 import DateTimePickers from '../DateTimePickers/DateTimePickers';
 import ModeToggle from '../ModeToggle/ModeToggle';
 import { useController, Controller } from 'react-hook-form';
 import { masterHooks, exceptionHooks } from '@avoo/hooks';
-import type { CreateExceptionRequest } from '@avoo/axios/types/apiTypes';
 import { useRouter } from 'next/navigation';
 import { useToast } from '@/_hooks/useToast';
 import { AppRoutes } from '@/_routes/routes';
+import { getSyncedEndDate } from '@/_utils/timeOffDateSync';
 import {
   TimeOffMode,
-  TimeOffType,
+  timeOffTypes,
   timeOffTypeLabels,
   WholeDay,
 } from '@avoo/hooks/types/timeOffType';
 import { localizationHooks } from '@/_hooks/localizationHooks';
 
-type FormValues = {
-  type: TimeOffType;
-  mode: TimeOffMode;
-  staff: string[];
-  wholeDay: WholeDay;
-  startDate: string;
-  startTime: string;
-  endDate: string;
-  endTime: string;
-  note: string;
-};
-
-const timeOffTypes: {
-  value: TimeOffType;
-  api: CreateExceptionRequest['type'];
-}[] = [
-  { value: TimeOffType.Personal, api: 'PERSONAL_OFF' },
-  { value: TimeOffType.Holiday, api: 'HOLIDAY_OFF' },
-  { value: TimeOffType.Vacation, api: 'VACATION' },
-  { value: TimeOffType.Sick, api: 'SICK_LEAVE' },
-  { value: TimeOffType.Other, api: 'OTHER_OFF' },
-];
-
-const validateEndDateFactory =
-  (getValues: <K extends keyof FormValues>(field: K) => FormValues[K]) => (end: string) => {
-    const start = dayjs(getValues('startDate'));
-    const endDate = dayjs(end);
-    if (!start.isValid() || !endDate.isValid()) return 'Invalid date';
-    if (start.isAfter(endDate, 'day')) return 'End date/time must be after start date/time.';
-
-    if (getValues('wholeDay') !== WholeDay.Whole) {
-      const parseMinutes = (t: string) => {
-        const [h, m] = (t || '').split(':').map(Number);
-        if (!Number.isFinite(h) || !Number.isFinite(m)) return 0;
-        return h * 60 + m;
-      };
-      const startMin = parseMinutes(getValues('startTime'));
-      const endMin = parseMinutes(getValues('endTime'));
-      if (start.isSame(endDate, 'day') && startMin >= endMin)
-        return 'End date/time must be after start date/time.';
-    }
-
-    return true;
-  };
-
 export default function TimeOffAddForm() {
   const masters = masterHooks.useGetMastersProfileInfo()?.items;
   const router = useRouter();
   const toast = useToast();
+  const timeOffPath = localizationHooks.useWithLocale(AppRoutes.TimeOff);
+  const handleNavigateToTimeOff = useCallback(() => {
+    router.push(timeOffPath);
+  }, [router, timeOffPath]);
 
   const mastersOptions = [
     { label: 'All Staff', value: 'all' },
@@ -86,7 +45,7 @@ export default function TimeOffAddForm() {
       if (mastersLabel) {
         toast.success(`Time off for ${mastersLabel} added successfully`);
       }
-      router.push(localizationHooks.useWithLocale(AppRoutes.TimeOff));
+      handleNavigateToTimeOff();
     });
 
   const values = watch();
@@ -120,9 +79,14 @@ export default function TimeOffAddForm() {
   );
   const { field: noteField } = useController({ name: 'note', control });
   const handleStartDateChange = useCallback(
-    (newDate: Dayjs | null) =>
-      setValue('startDate', newDate ? newDate.format(VALUE_DATE_FORMAT) : ''),
-    [setValue],
+    (newDate: Dayjs | null) => {
+      const nextStartDate = newDate ? newDate.format(VALUE_DATE_FORMAT) : '';
+      setValue('startDate', nextStartDate);
+
+      const syncedEndDate = getSyncedEndDate(nextStartDate, getValues('endDate'));
+      if (syncedEndDate) setValue('endDate', syncedEndDate);
+    },
+    [setValue, getValues],
   );
 
   const handleEndDateChange = useCallback(
@@ -130,10 +94,9 @@ export default function TimeOffAddForm() {
       setValue('endDate', newDate ? newDate.format(VALUE_DATE_FORMAT) : ''),
     [setValue],
   );
-  const handleCancel = useCallback(
-    () => router.push(localizationHooks.useWithLocale(AppRoutes.TimeOff)),
-    [router],
-  );
+  const handleCancel = useCallback(() => {
+    handleNavigateToTimeOff();
+  }, [handleNavigateToTimeOff]);
 
   return (
     <div className='py-7 px-5 md:px-11 flex-1 min-h-0 overflow-auto hide-scrollbar max-w-4xl xl:max-w-screen-xl xl:mx-auto'>

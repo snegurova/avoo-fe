@@ -1,19 +1,26 @@
 'use client';
 
+import { useCallback } from 'react';
 import { useRouter } from 'next/navigation';
-// import { scheduleHooks } from '@avoo/hooks';
+import { scheduleHooks } from '@avoo/hooks';
 import { AppRoutes } from '@/_routes/routes';
 import { SectionHeader } from '@/_components/SectionHeader/SectionHeader';
 import { localizationHooks } from '@/_hooks/localizationHooks';
 
 export const ProfileSchedule = () => {
-  const schedules = { items: [{ name: 'Default Schedule', pattern: 'Mon-Fri 9:00-18:00' }] }; // scheduleHooks.useGetSchedules();
-  const hasSchedules = schedules?.items && schedules.items.length > 0;
+  const { data: schedulesData } = scheduleHooks.useGetSchedulesInfinite({ limit: 10 });
+  const schedules = schedulesData?.pages[0]?.data;
+  const hasSchedules = Array.isArray(schedules) && schedules.length > 0;
   const router = useRouter();
+  const workingHoursPath = localizationHooks.useWithLocale(AppRoutes.WorkingHours);
 
-  const handleNavigate = () => {
-    router.push(localizationHooks.useWithLocale(AppRoutes.WorkingHours));
-  };
+  const handleNavigateToWorkingHours = useCallback(() => {
+    router.push(workingHoursPath);
+  }, [router, workingHoursPath]);
+
+  const handleNavigate = useCallback(() => {
+    handleNavigateToWorkingHours();
+  }, [handleNavigateToWorkingHours]);
 
   return (
     <div className='px-5 py-4 border-t border-gray-200'>
@@ -30,7 +37,7 @@ export const ProfileSchedule = () => {
 
       {hasSchedules && (
         <div className='space-y-2'>
-          {schedules.items.map((item, index) => (
+          {schedules.map((item, index) => (
             <div key={index} className='flex items-center justify-between'>
               <span className='text-base text-slate-900'>{item.name}</span>
               <span className='text-base text-slate-700'>{item.pattern}</span>
