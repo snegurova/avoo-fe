@@ -9,7 +9,7 @@ export enum ApiStatus {
   ERROR = 'error',
 }
 
-export type ErrorItemDto = components["schemas"]["ErrorItemDto"];
+export type ErrorItemDto = components['schemas']['ErrorItemDto'];
 
 export type SuccessResponse<T> = {
   status: ApiStatus.SUCCESS;
@@ -41,6 +41,9 @@ export type GetPrivateCategoriesResponse =
   components['schemas']['ServicesGroupByCategoriesResponseDto'];
 export type CreateServiceRequest = components['schemas']['CreateServiceDto'];
 export type CreateServiceResponse = components['schemas']['ServiceEntity'];
+
+export type PublicServiceQueryParams =
+  operations['ServicesPublicController_findAll']['parameters']['query'];
 
 /** Auth */
 export type LoginRequest = components['schemas']['LoginRequestDto'];
@@ -86,6 +89,13 @@ export type GetMastersQueryParams = operations['MastersController_findAll']['par
 /** Customer */
 export type CustomerInfoResponse = components['schemas']['CustomerInfoDto'];
 export type CreateCustomerRequest = components['schemas']['CreateCustomerDto'];
+export type CreatePublicCustomerRequest = Omit<
+  components['schemas']['CreateCustomerDto'],
+  'email' | 'name' | 'id' | 'notes'
+> & {
+  name: string;
+  email: string;
+};
 
 export type FindCustomerRequest = {
   id: number;
@@ -94,8 +104,9 @@ export type GetCustomersResponse = {
   items: CustomerInfoResponse[];
   pagination: components['schemas']['PaginationDto'];
 };
-export type GetCustomersQueryParams =
-  NonNullable<operations['CustomersController_findAllByOwner']['parameters']['query']>;
+export type GetCustomersQueryParams = NonNullable<
+  operations['CustomersController_findAllByOwner']['parameters']['query']
+>;
 export type Customer = components['schemas']['CustomerInfoDto'];
 
 /** Schedule */
@@ -126,6 +137,20 @@ export type CalendarItem = Omit<components['schemas']['PrivateCalendarResponseDt
 
 export type GetCalendarResponse = CalendarItem[];
 
+type PublicWorkingDay = Omit<
+  components['schemas']['PrivateWorkingDayDto'],
+  'events' | 'exceptions'
+>;
+
+export type PublicCalendarItem = Omit<
+  components['schemas']['PublicCalendarResponseDto'],
+  'days'
+> & {
+  days: PublicWorkingDay[];
+};
+
+export type GetPublicCalendarResponse = PublicCalendarItem[];
+
 export type PrivateEventWithMaster = Omit<
   components['schemas']['PrivateEventWithMasterDto'],
   'status'
@@ -148,6 +173,15 @@ export type GetCalendarByDatesResponse = Omit<
   days: PrivateWorkingDayByDates[];
 };
 
+type PublicWorkingDayByDates = components['schemas']['PublicWorkingDayByDatesDto'];
+
+export type GetPublicCalendarByDatesResponse = Omit<
+  components['schemas']['PublicCalendarResponseByDatesDto'],
+  'days'
+> & {
+  days: PublicWorkingDayByDates[];
+};
+
 export type OrderStatusValue = components['schemas']['OrderStatus'];
 
 export enum CalendarView {
@@ -160,10 +194,14 @@ export enum CalendarView {
 export type PrivateCalendarByDatesQueryParams =
   components['schemas']['QueryCalendarByDatesPrivateDto'];
 
-export type PrivateCalendarQueryParams = Omit<
-  operations['CalendarController_getCalendar']['parameters']['query'],
-  'view'
-> & { view?: CalendarView };
+export type PrivateCalendarQueryParams =
+  operations['CalendarController_getCalendar']['parameters']['query'];
+
+export type PublicCalendarByDatesQueryParams =
+  operations['CalendarPublicController_getCalendarByDates']['parameters']['query'];
+
+export type PublicCalendarQueryParams =
+  operations['CalendarPublicController_getCalendarView']['parameters']['query'];
 
 /** Exceptions (Time off) */
 export type Exception = components['schemas']['CalendarExceptionEntity'];
@@ -190,12 +228,17 @@ export type PrivateOrderQueryParams =
 export type Order = Omit<components['schemas']['OrderEntity'], 'status'> & {
   status: OrderStatus;
 };
-export type CreatePrivateOrder = Omit<components['schemas']['CreatePrivateOrderDto'], 'type'> & {
+export type CreateOrder = Omit<components['schemas']['CreateOrderDto'], 'type'> & {
   type: OrderType;
 };
 
+export type CreatePublicOrdersRequest = {
+  ordersData: CreateOrder[];
+  customerData: CreatePublicCustomerRequest;
+};
+
 export type CreatePrivateOrdersRequest = {
-  ordersData: CreatePrivateOrder[];
+  ordersData: CreateOrder[];
   customerData: CreateCustomerRequest | FindCustomerRequest;
 };
 
@@ -232,8 +275,9 @@ export type Combination = Omit<
   services: Service[];
   masters: MasterWithRelationsEntity[];
 };
-export type GetCombinationsQueryParams =
-  NonNullable<operations['CombinationsController_findAllByOwner']['parameters']['query']>;
+export type GetCombinationsQueryParams = NonNullable<
+  operations['CombinationsController_findAllByOwner']['parameters']['query']
+>;
 export type GetCombinationsResponse = {
   items: Combination[];
   pagination: components['schemas']['PaginationDto'];

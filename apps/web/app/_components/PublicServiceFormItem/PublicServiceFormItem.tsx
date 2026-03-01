@@ -1,12 +1,14 @@
-import React, { useEffect, useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
+import { useParams } from 'next/navigation';
 import SearchField from '@/_components/SearchField/SearchField';
 import {
   CreateOrder,
   Service,
   MasterWithRelationsEntity,
   GetMastersQueryParams,
+  PublicCalendarQueryParams,
 } from '@avoo/axios/types/apiTypes';
-import { servicesHooks, masterHooks } from '@avoo/hooks';
+import { servicesHooks, masterHooks, calendarHooks } from '@avoo/hooks';
 import ServiceElement from '@/_components/ServiceElement/ServiceElement';
 import MasterElement from '@/_components/MasterElement/MasterElement';
 import { isEmptyObject } from '@avoo/shared';
@@ -14,7 +16,9 @@ import { IconButton } from '@/_components/IconButton/IconButton';
 import DeleteIcon from '@/_icons/DeleteIcon';
 import FormTextArea from '@/_components/FormTextArea/FormTextArea';
 import FormDatePicker from '@/_components/FormDatePicker/FormDatePicker';
-import FormTimePicker from '@/_components/FormTimePicker/FormTimePicker';
+import { timeUtils } from '@avoo/shared';
+import { DATE_TIME_PICKER_FORMAT } from '@/_constants/dateFormats';
+import TimeSlotField from '../TimeSlotField/TimeSlotField';
 
 type Props = {
   order: CreateOrder;
@@ -37,7 +41,7 @@ type Props = {
   ) => void;
 };
 
-export default function ServiceFormItem(props: Props) {
+export default function PublicServiceFormItem(props: Props) {
   const {
     order,
     onChange,
@@ -52,20 +56,46 @@ export default function ServiceFormItem(props: Props) {
     setSelectedMasters,
   } = props;
 
+  const searchParams = useParams();
+  const userId = Number(searchParams.userId);
   const [masterSearch, setMasterSearch] = useState('');
   const [masterParams, setMasterParams] = useState<GetMastersQueryParams>({ limit: 10 });
+  const [calendarParams, setCalendarParams] = useState<PublicCalendarQueryParams>({
+    userId,
+    rangeFromDate: timeUtils.formatDate(
+      timeUtils.toDayBegin(value[index]?.date ? new Date(value[index].date) : new Date()),
+    ),
+    rangeToDate: timeUtils.formatDate(
+      timeUtils.toDayEnd(value[index]?.date ? new Date(value[index].date) : new Date()),
+    ),
+  });
+  const [selectedSlot, setSelectedSlot] = useState<Date | null>(null);
 
-  const { params, queryParams, setSearchQuery, setMasterIds } = servicesHooks.useServicesQuery();
+  const { data: calendar } = calendarHooks.useGetPublicCalendar(calendarParams, {
+    enabled: !!selectedService && !!selectedMasters[index],
+  });
+
+  useEffect(() => {
+    const newValue = timeUtils.convertDateToString(
+      selectedSlot ? selectedSlot : new Date(value[index]?.date || new Date()),
+    );
+
+    const newOrders = [...value];
+    newOrders[index] = {
+      ...newOrders[index],
+      date: newValue,
+    };
+    onChange(newOrders);
+  }, [selectedSlot]);
+
+  const { params, queryParams, setSearchQuery, setMasterIds } =
+    servicesHooks.usePublicServiceQuery(userId);
 
   const {
     data,
     fetchNextPage: fetchNextServicesPage,
     hasNextPage: hasMoreServices,
-  } = servicesHooks.useGetServicesInfinite({
-    ...queryParams,
-    limit: 10,
-    isActive: true,
-  });
+  } = servicesHooks.useGetPublicServicesInfinite({ ...queryParams, limit: 10 });
 
   const services = useMemo(
     () =>
@@ -79,7 +109,7 @@ export default function ServiceFormItem(props: Props) {
     data: mastersData,
     fetchNextPage: fetchNextMastersPage,
     hasNextPage: hasMoreMasters,
-  } = masterHooks.useGetMastersInfinite(masterParams);
+  } = masterHooks.useGetPublicMastersInfinite(masterParams);
 
   const masters = useMemo(
     () =>
@@ -108,6 +138,10 @@ export default function ServiceFormItem(props: Props) {
         return newMasters;
       });
       setMasterIds(master ? [master.id] : []);
+      setCalendarParams((prev) => ({
+        ...prev,
+        masterIds: master ? [master.id] : undefined,
+      }));
     }
   }, [masters]);
 
@@ -140,6 +174,10 @@ export default function ServiceFormItem(props: Props) {
       return newMasters;
     });
     setMasterIds(val.id ? [val.id] : []);
+    setCalendarParams((prev) => ({
+      ...prev,
+      masterIds: val.id ? [val.id] : undefined,
+    }));
   };
 
   const ServiceElementWrapped: React.FC<{
@@ -161,6 +199,11 @@ export default function ServiceFormItem(props: Props) {
       date: newDate,
     };
     onChange(newOrders);
+    setCalendarParams((prev) => ({
+      ...prev,
+      rangeFromDate: timeUtils.formatDate(timeUtils.toDayBegin(new Date(newDate))),
+      rangeToDate: timeUtils.formatDate(timeUtils.toDayEnd(new Date(newDate))),
+    }));
   };
 
   const onNotesChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -183,7 +226,7 @@ export default function ServiceFormItem(props: Props) {
           />
         )}
       </div>
-      <div className='flex flex-col gap-4 p-4'>
+      <div className='grid md:grid-cols-2 gap-4 p-4'>
         <div className=''>
           <SearchField
             label='Service'
@@ -217,21 +260,27 @@ export default function ServiceFormItem(props: Props) {
           />
           {selectedMasters[index] && <MasterElement item={selectedMasters[index]} isCard />}
         </div>
-        <div className='grid grid-cols-3 gap-x-3'>
-          <div className='col-span-2'>
-            <label className='block mb-2 font-medium'>Date</label>
-            <FormDatePicker date={order.date} onChange={onDateChange} />
-          </div>
-          <div className=' '>
-            <label className='block mb-2 font-medium' htmlFor={`time-${index}`}>
-              Time
-            </label>
-            <FormTimePicker date={order.date} onChange={onDateChange} />
-          </div>
+        <div className=''>
+          <label className='block mb-2 font-medium'>Date</label>
+          <FormDatePicker
+            date={order.date}
+            onChange={onDateChange}
+            format={DATE_TIME_PICKER_FORMAT}
+          />
+
           {errors?.date?.message && (
             <div className='mt-1 text-sm text-red-500 col-span-3'>{errors?.date?.message}</div>
           )}
         </div>
+        <TimeSlotField
+          selectedSlot={selectedSlot}
+          setSelectedSlot={setSelectedSlot}
+          selectedService={selectedService}
+          calendar={calendar}
+          calendarParams={calendarParams}
+          userId={userId}
+          isError={!!errors?.date?.message && !selectedSlot}
+        />
         <div className=''>
           <FormTextArea
             id={`notes-${index}`}

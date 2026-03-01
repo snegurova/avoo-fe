@@ -158,7 +158,9 @@ export default function CalendarColumn(props: Props) {
 
     if (onClickDateTime) {
       onClickDateTime(timeUtils.formatDateTimeRounded(date, hours * 60 + mins), master);
-    } else {
+    }
+
+    if (calendarType !== CalendarType.SELECTOR) {
       router.push(
         `${localizationHooks.useWithLocale(AppRoutes.OrderCreate)}?masterId=${master.id}&date=${encodeURIComponent(
           timeUtils.formatDateTimeRounded(date, hours * 60 + mins),

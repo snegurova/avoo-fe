@@ -302,6 +302,7 @@ export default function Calendar(props: Props) {
                 setToDate={setToDate}
                 setType={setType}
                 availableBooking={!selectedOrder}
+                calendarType={calendarType}
               />
             )}
             {filteredMasters.length === 0 && (
