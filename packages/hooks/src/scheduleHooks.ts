@@ -72,7 +72,7 @@ export const scheduleHooks = {
 
     return query;
   },
-  useGetScheduleById: (id: number): ScheduleEntity => {
+  useGetScheduleById: (id: number): ScheduleEntity | null => {
     const { data: scheduleData, isPending } = useQuery<BaseResponse<ScheduleEntity>, Error>({
       queryKey: ['schedule', id],
       queryFn: () => scheduleApi.getScheduleById(id),

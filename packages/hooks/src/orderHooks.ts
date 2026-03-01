@@ -199,7 +199,9 @@ export const orderHooks = {
 
     return {
       control,
-      handleSubmit: handleSubmit(utils.submitAdapter<CreatePublicOrdersRequest>(mutate)),
+      handleSubmit: handleSubmit(
+        utils.submitAdapter<CreatePublicOrdersRequest, CreatePublicOrdersData>(mutate),
+      ),
       getValues,
       errors,
       isPending,

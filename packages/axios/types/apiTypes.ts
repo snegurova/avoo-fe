@@ -77,7 +77,7 @@ export type GetMastersResponse = {
 };
 
 export type CreateMasterRequest = components['schemas']['CreateMasterDto'] & {
-  languages?: components["schemas"]["Language"][];
+  languages?: components['schemas']['Language'][];
 };
 
 export type MasterLanguages = components['schemas']['MasterEntity']['languages'];
@@ -222,8 +222,9 @@ export type { FileInput, UploadFile } from '@avoo/shared';
 
 /** Order */
 export type UpdateOrderStatusRequest = components['schemas']['UpdateOrderStatusDto'];
-export type PrivateOrderQueryParams =
-  operations['OrdersController_findAllOwn']['parameters']['query'];
+export type PrivateOrderQueryParams = NonNullable<
+  operations['OrdersController_findAllOwn']['parameters']['query']
+>;
 export type Order = Omit<components['schemas']['OrderEntity'], 'status'> & {
   status: OrderStatus;
 };
