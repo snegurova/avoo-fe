@@ -1,5 +1,6 @@
 'use client';
 
+import { useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { scheduleHooks } from '@avoo/hooks';
 import { AppRoutes } from '@/_routes/routes';
@@ -11,10 +12,15 @@ export const ProfileSchedule = () => {
   const schedules = schedulesData?.pages[0]?.data;
   const hasSchedules = Array.isArray(schedules) && schedules.length > 0;
   const router = useRouter();
+  const workingHoursPath = localizationHooks.useWithLocale(AppRoutes.WorkingHours);
 
-  const handleNavigate = () => {
-    router.push(localizationHooks.useWithLocale(AppRoutes.WorkingHours));
-  };
+  const handleNavigateToWorkingHours = useCallback(() => {
+    router.push(workingHoursPath);
+  }, [router, workingHoursPath]);
+
+  const handleNavigate = useCallback(() => {
+    handleNavigateToWorkingHours();
+  }, [handleNavigateToWorkingHours]);
 
   return (
     <div className='px-5 py-4 border-t border-gray-200'>

@@ -50,10 +50,11 @@ export default function TimeOffPage() {
   }, [exceptions, filteredMasters, searchQuery]);
 
   const router = useRouter();
+  const addTimeOffPath = localizationHooks.useWithLocale(AppRoutes.AddTimeOff);
 
   const handleAddTimeOff = useCallback(() => {
-    router.push(localizationHooks.useWithLocale(AppRoutes.AddTimeOff));
-  }, [router]);
+    router.push(addTimeOffPath);
+  }, [router, addTimeOffPath]);
 
   const handleEditTimeOff = useCallback((timeOff: Exception) => {
     setSelectedTimeOff(timeOff);
@@ -86,10 +87,7 @@ export default function TimeOffPage() {
               icon={<EditCalendarIcon className='w-20 h-20 lg:w-25 lg:h-25 fill-primary-300' />}
               description={
                 <p>
-                  <Link
-                    href={localizationHooks.useWithLocale(AppRoutes.AddTimeOff)}
-                    className='text-primary-300 font-bold'
-                  >
+                  <Link href={addTimeOffPath} className='text-primary-300 font-bold'>
                     Add time off
                   </Link>
                   , vacations, breaks, or unavailable hours to keep the schedule accurate.

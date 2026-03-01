@@ -10,28 +10,37 @@ import AppWrapper from '@/_components/AppWrapper/AppWrapper';
 import { localizationHooks } from '@/_hooks/localizationHooks';
 import MasterEditModal from '@/_components/MasterEditModal/MasterEditModal';
 import type { MasterWithRelationsEntityResponse } from '@avoo/axios/types/apiTypes';
+import { useDebounce } from '@avoo/hooks/src/useDebounce';
 
 export default function MastersPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const DEFAULT_LIMIT = 10;
+  const debouncedSearch = useDebounce(searchQuery, 400);
   const [editingMaster, setEditingMaster] = useState<MasterWithRelationsEntityResponse | null>(
     null,
   );
 
-  const queryParams = useMemo(() => ({ limit: DEFAULT_LIMIT }), []);
+  const queryParams = useMemo(
+    () => ({ limit: DEFAULT_LIMIT, search: debouncedSearch }),
+    [debouncedSearch],
+  );
   const { data, fetchNextPage, hasNextPage } = masterHooks.useGetMastersInfinite(queryParams);
 
   const masters = useMemo(
     () => data?.pages.flatMap((page) => page.data?.items ?? []) ?? [],
     [data],
   );
-  const filtered = masterHooks.useFilterMasters(masters ?? null, searchQuery);
+  const filtered = masters;
 
   const router = useRouter();
+  const addMasterPath = localizationHooks.useWithLocale(AppRoutes.AddMaster);
+  const handleNavigateToAddMaster = useCallback(() => {
+    router.push(addMasterPath);
+  }, [router, addMasterPath]);
 
   const handleAddMaster = useCallback(() => {
-    router.push(`${localizationHooks.useWithLocale(AppRoutes.AddMaster)}`);
-  }, [router]);
+    handleNavigateToAddMaster();
+  }, [handleNavigateToAddMaster]);
 
   const handleEditMaster = useCallback((master: MasterWithRelationsEntityResponse) => {
     setEditingMaster(master);
@@ -42,32 +51,33 @@ export default function MastersPage() {
   }, []);
 
   return (
-     <AppWrapper>
-      <div className='p-5 flex-1 min-h-0 overflow-auto lg:overflow-hidden hide-scrollbar flex flex-col'>
+    <AppWrapper>
+      <div className='flex-1 min-h-0 overflow-auto lg:overflow-hidden hide-scrollbar flex flex-col'>
+        <Controls
+          title='Masters'
+          onAddItem={handleAddMaster}
+          addLabel='New master'
+          searchValue={searchQuery}
+          onSearchChange={setSearchQuery}
+          placeholder='Search by name, phone or email'
+          className='sticky top-0 z-10 bg-white px-5 md:px-11 lg:px-11 pt-6 lg:pt-14 lg:pb-8'
+        />
 
-          <Controls
-            title='Masters'
-            onAddItem={handleAddMaster}
-            addLabel='New master'
-            searchValue={searchQuery}
-            onSearchChange={setSearchQuery}
-            placeholder='Search by name, phone or email'
+        <div className='px-5 md:px-11 pb-11 lg:flex-1 lg:min-h-0 lg:overflow-hidden'>
+          <MasterList
+            masters={filtered}
+            onEdit={handleEditMaster}
+            selectedId={editingMaster?.id ?? null}
+            incrementPage={fetchNextPage}
+            hasMore={!!hasNextPage}
           />
 
-        <div className='flex-1 min-h-0 overflow-hidden'>
-        <MasterList
-          masters={filtered}
-          onEdit={handleEditMaster}
-          selectedId={editingMaster?.id ?? null}
-          incrementPage={fetchNextPage}
-          hasMore={!!hasNextPage}
-        />
-
-        <MasterEditModal
-          master={editingMaster}
-          open={editingMaster !== null}
-          onClose={handleCloseEdit}
-        />
+          <MasterEditModal
+            master={editingMaster}
+            open={editingMaster !== null}
+            onClose={handleCloseEdit}
+          />
+        </div>
       </div>
     </AppWrapper>
   );

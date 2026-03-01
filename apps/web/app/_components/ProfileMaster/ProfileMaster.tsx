@@ -1,5 +1,6 @@
 'use client';
 
+import { useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { masterHooks } from '@avoo/hooks';
 import { AppRoutes } from '@/_routes/routes';
@@ -11,10 +12,15 @@ import { localizationHooks } from '@/_hooks/localizationHooks';
 export const ProfileMaster = () => {
   const mastersInfo = masterHooks.useGetMastersProfileInfo()?.items;
   const router = useRouter();
+  const mastersPath = localizationHooks.useWithLocale(AppRoutes.Masters);
 
-  const handleNavigate = () => {
-    router.push(localizationHooks.useWithLocale(AppRoutes.Masters));
-  };
+  const handleNavigateToMasters = useCallback(() => {
+    router.push(mastersPath);
+  }, [router, mastersPath]);
+
+  const handleNavigate = useCallback(() => {
+    handleNavigateToMasters();
+  }, [handleNavigateToMasters]);
 
   return (
     <div className='px-5 py-4'>
