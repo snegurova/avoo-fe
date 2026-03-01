@@ -99,7 +99,6 @@ export const publicCustomerSchema = yup.object({
   name: yup.string().required(),
   phone: yup.string().required(),
   email: yup.string().email('Invalid email').required(),
-  notes: yup.string().optional(),
 });
 
 export const customerSchema = yup
@@ -187,6 +186,8 @@ export const createPrivateOrdersSchema = yup.object({
 export const createPublicOrdersSchema = yup.object({
   ordersData: ordersDataSchema,
   customerData: publicCustomerSchema,
+  userId: yup.number().required(),
+  referralCode: yup.string().optional(),
 });
 
 export const updateOrderStatusSchema = yup.object({

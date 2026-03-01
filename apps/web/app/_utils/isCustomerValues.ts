@@ -9,7 +9,6 @@ export const isCustomerValues = (
     !Array.isArray(obj) &&
     Object.prototype.hasOwnProperty.call(obj, 'name') &&
     Object.prototype.hasOwnProperty.call(obj, 'email') &&
-    Object.prototype.hasOwnProperty.call(obj, 'phone') &&
-    Object.prototype.hasOwnProperty.call(obj, 'notes')
+    Object.prototype.hasOwnProperty.call(obj, 'phone')
   );
 };

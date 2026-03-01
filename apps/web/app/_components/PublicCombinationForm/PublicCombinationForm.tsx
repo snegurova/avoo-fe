@@ -4,16 +4,19 @@ import {
   Combination,
   MasterWithRelationsEntity,
   GetMastersQueryParams,
+  PublicCalendarQueryParams,
 } from '@avoo/axios/types/apiTypes';
+import { useParams } from 'next/navigation';
+import { masterHooks, calendarHooks } from '@avoo/hooks';
+import CallSplitIcon from '@/_icons/CallSplitIcon';
+import { IconButton } from '@/_components/IconButton/IconButton';
 import FormTextArea from '@/_components/FormTextArea/FormTextArea';
 import FormDatePicker from '@/_components/FormDatePicker/FormDatePicker';
-import FormTimePicker from '@/_components/FormTimePicker/FormTimePicker';
 import CombinationElement from '@/_components/CombinationElement/CombinationElement';
 import SearchField from '@/_components/SearchField/SearchField';
 import MasterElement from '@/_components/MasterElement/MasterElement';
-import { masterHooks } from '@avoo/hooks';
-import CallSplitIcon from '@/_icons/CallSplitIcon';
-import { IconButton } from '@/_components/IconButton/IconButton';
+import TimeSlotField from '../TimeSlotField/TimeSlotField';
+import { timeUtils } from '@avoo/shared';
 
 type Props = {
   value: CreateOrder[];
@@ -29,7 +32,7 @@ type Props = {
   splitCombination: () => void;
 };
 
-export default function CombinationForm(props: Props) {
+export default function PublicCombinationForm(props: Props) {
   const {
     value,
     onChange,
@@ -39,18 +42,47 @@ export default function CombinationForm(props: Props) {
     setSelectedMasters,
     splitCombination,
   } = props;
+  const searchParams = useParams();
+  const userId = Number(searchParams.userId);
 
   const [masterSearch, setMasterSearch] = useState('');
   const [masterParams, setMasterParams] = useState<GetMastersQueryParams>({
     limit: 10,
     combinationId: selectedCombination.id,
   });
+  const [calendarParams, setCalendarParams] = useState<PublicCalendarQueryParams>({
+    userId,
+    rangeFromDate: timeUtils.formatDate(
+      timeUtils.toDayBegin(value[0]?.date ? new Date(value[0].date) : new Date()),
+    ),
+    rangeToDate: timeUtils.formatDate(
+      timeUtils.toDayEnd(value[0]?.date ? new Date(value[0].date) : new Date()),
+    ),
+  });
+  const [selectedSlot, setSelectedSlot] = useState<Date | null>(null);
+
+  const { data: calendar } = calendarHooks.useGetPublicCalendar(calendarParams, {
+    enabled: !!selectedCombination && !!selectedMasters[0],
+  });
+
+  useEffect(() => {
+    const newValue = timeUtils.convertDateToString(
+      selectedSlot ? selectedSlot : new Date(value[0]?.date || new Date()),
+    );
+
+    const newOrders = [...value];
+    newOrders[0] = {
+      ...newOrders[0],
+      date: newValue,
+    };
+    onChange(newOrders);
+  }, [selectedSlot]);
 
   const {
     data: mastersData,
     fetchNextPage: fetchNextMastersPage,
     hasNextPage: hasMoreMasters,
-  } = masterHooks.useGetMastersInfinite(masterParams);
+  } = masterHooks.useGetPublicMastersInfinite(masterParams);
 
   const masters = useMemo(
     () =>
@@ -79,6 +111,11 @@ export default function CombinationForm(props: Props) {
       const newMaster = masters?.find((master) => master.id === val.id) || null;
       return prev.map(() => newMaster);
     });
+
+    setCalendarParams((prev) => ({
+      ...prev,
+      masterIds: val.id ? [val.id] : undefined,
+    }));
   };
 
   const onDateChange = (newDate: string) => {
@@ -88,6 +125,11 @@ export default function CombinationForm(props: Props) {
       date: newDate,
     };
     onChange(newOrders);
+    setCalendarParams((prev) => ({
+      ...prev,
+      rangeFromDate: timeUtils.formatDate(timeUtils.toDayBegin(new Date(newDate))),
+      rangeToDate: timeUtils.formatDate(timeUtils.toDayEnd(new Date(newDate))),
+    }));
   };
 
   const onNotesChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -98,6 +140,7 @@ export default function CombinationForm(props: Props) {
 
   return (
     <div className='rounded-lg border border-gray-200'>
+      {' '}
       <div className='bg-primary-50 px-4 p-2 h-14 rounded-t-lg flex items-center justify-between'>
         <h3 className='font-medium'>{selectedCombination?.name}</h3>
         <IconButton
@@ -131,21 +174,25 @@ export default function CombinationForm(props: Props) {
           />
           {selectedMasters[0] && <MasterElement item={selectedMasters[0]} isCard />}
         </div>
-        <div className='grid grid-cols-3 gap-x-3'>
-          <div className='col-span-2'>
+        <div className=''>
+          <div className=''>
             <label className='block mb-2 font-medium'>Date</label>
             <FormDatePicker date={value[0].date} onChange={onDateChange} />
-          </div>
-          <div className=' '>
-            <label className='block mb-2 font-medium' htmlFor={`combination-time`}>
-              Time
-            </label>
-            <FormTimePicker date={value[0].date} onChange={onDateChange} />
           </div>
           {errors?.date?.message && (
             <div className='mt-1 text-sm text-red-500 col-span-3'>{errors?.date?.message}</div>
           )}
         </div>
+
+        <TimeSlotField
+          selectedSlot={selectedSlot}
+          setSelectedSlot={setSelectedSlot}
+          selectedService={selectedCombination}
+          calendar={calendar}
+          calendarParams={calendarParams}
+          userId={userId}
+          isError={!!errors?.date?.message && !selectedSlot}
+        />
         <div className=''>
           <FormTextArea
             id={`combination-notes`}

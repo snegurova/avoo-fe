@@ -4,9 +4,9 @@ import {
   CreateServiceResponse,
   GetServiceResponse,
   ServicesQueryParams,
+  PublicServiceQueryParams,
+  BaseResponse,
 } from '@avoo/axios/types/apiTypes';
-
-import { BaseResponse } from '@avoo/axios/types/apiTypes';
 import { InfiniteData, useInfiniteQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useMemo, useState } from 'react';
 import { servicesApi } from '@avoo/axios/src/modules/services';
@@ -151,7 +151,6 @@ export const servicesHooks = {
       deleteServiceMutationAsync: deleteServiceMutation.mutateAsync,
     };
   },
-
   useCreateServiceForm: ({ onSuccess, onError }: UseServiceCreateFormParams) => {
     const {
       register,
@@ -206,5 +205,64 @@ export const servicesHooks = {
       handleSubmit: handleSubmit(utils.submitAdapter<CreateServiceRequest>(createService)),
       errors,
     };
+  },
+  useGetPublicServicesInfinite: (params: PublicServiceQueryParams) => {
+    const query = useInfiniteQuery<BaseResponse<GetServiceResponse>, Error>({
+      queryKey: ['publicServices', 'list', params],
+      queryFn: ({ pageParam = 1 }) =>
+        servicesApi.getPublicServices({ ...params, page: pageParam as number }),
+      initialPageParam: 1,
+      getNextPageParam: (lastPage) => {
+        const { currentPage, total } = lastPage.data?.pagination || { currentPage: 0, total: 0 };
+        return currentPage * (params.limit || DEFAULT_LIMIT) < total ? currentPage + 1 : undefined;
+      },
+    });
+
+    const isPending = query.isFetching;
+
+    utils.useSetPendingApi(isPending);
+
+    return query;
+  },
+  usePublicServiceQuery(userId: number | undefined) {
+    const [params, setParams] = useState({
+      limit: DEFAULT_LIMIT,
+      search: '',
+      masterIds: [],
+      userId,
+    });
+
+    const setSearchQuery = (value: string) => {
+      setParams((prev) => ({
+        ...prev,
+        search: value,
+      }));
+    };
+
+    const setCategory = (categoryId: number | null) => {
+      setParams((prev) => ({
+        ...prev,
+        categoryId,
+      }));
+    };
+
+    const setMasterIds = (masterIds: number[]) => {
+      setParams((prev) => ({
+        ...prev,
+        masterIds,
+      }));
+    };
+
+    const debouncedSearch = useDebounce(params.search, 400);
+
+    const queryParams = useMemo(
+      () => ({
+        ...params,
+        search: debouncedSearch,
+      }),
+      [params, debouncedSearch],
+    );
+
+    return { params, queryParams, setSearchQuery, setCategory, setMasterIds };
   },
 };

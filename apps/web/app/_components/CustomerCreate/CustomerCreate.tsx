@@ -7,6 +7,7 @@ import { isCustomerValues } from '@/_utils/isCustomerValues';
 import { CreatePublicCustomerRequest, CreateCustomerRequest } from '@avoo/axios/types/apiTypes';
 import { FieldErrors } from 'react-hook-form';
 import { CreatePublicOrdersData } from '@avoo/hooks';
+import { tv } from 'tailwind-variants';
 
 type Props = {
   phone: string;
@@ -14,10 +15,21 @@ type Props = {
   value: CreateCustomerRequest | CreatePublicCustomerRequest | object;
   onChange: (customer: CreateCustomerRequest | CreatePublicCustomerRequest) => void;
   error?: FieldErrors<CreatePublicOrdersData>['customerData'] | undefined;
+  isFullWidth?: boolean;
 };
 
+const wrapper = tv({
+  base: 'grid gap-3',
+  variants: {
+    isFullWidth: {
+      true: 'md:grid-cols-2',
+      false: '',
+    },
+  },
+});
+
 export default function CustomerCreate(props: Props) {
-  const { setPhone, value, onChange, error } = props;
+  const { setPhone, value, onChange, error, isFullWidth = false } = props;
 
   const { countryCode, phoneNumber, setCountryCode, setPhoneNumber } = phoneHooks.usePhoneField({
     value: isCustomerValues(value) ? value.phone : '',
@@ -67,7 +79,7 @@ export default function CustomerCreate(props: Props) {
 
   return (
     <>
-      <div className='grid gap-3'>
+      <div className={wrapper({ isFullWidth })}>
         <div className=''>
           <label className='block mb-1 text-sm font-medium' htmlFor='name'>
             Name
@@ -98,7 +110,7 @@ export default function CustomerCreate(props: Props) {
           <label className='block mb-1 text-sm font-medium' htmlFor='phone'>
             Phone
           </label>
-          <div className='flex items-stretch gap-6 md:gap-8 lg:gap-6'>
+          <div className='flex items-stretch gap-2 lg:gap-3'>
             <div className='w-[84px] shrink-0'>
               <PhoneCodeSelect
                 id='phone-code'
@@ -120,22 +132,24 @@ export default function CustomerCreate(props: Props) {
             </div>
           </div>
         </div>
-        <div className=''>
-          <FormTextArea
-            id='notes'
-            name='notes'
-            value={isCustomerValues(value) ? value.notes : ''}
-            onChange={handleNotesChange}
-            label='Notes'
-            helperText='Additional information about the client'
-            maxLength={200}
-            classNames={{
-              label: 'block font-medium',
-              textarea:
-                'block w-full text-sm text-black border border-gray-200 p-3 rounded-lg min-h-[70px] focus:outline-none focus:ring-1 focus:ring-purple-800',
-            }}
-          />
-        </div>
+        {isCustomerValues(value) && Object.prototype.hasOwnProperty.call(value, 'notes') && (
+          <div className=''>
+            <FormTextArea
+              id='notes'
+              name='notes'
+              value={value.notes}
+              onChange={handleNotesChange}
+              label='Notes'
+              helperText='Additional information about the client'
+              maxLength={200}
+              classNames={{
+                label: 'block font-medium',
+                textarea:
+                  'block w-full text-sm text-black border border-gray-200 p-3 rounded-lg min-h-[70px] focus:outline-none focus:ring-1 focus:ring-purple-800',
+              }}
+            />
+          </div>
+        )}
       </div>
     </>
   );

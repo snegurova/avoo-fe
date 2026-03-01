@@ -1,35 +1,39 @@
 'use client';
 import { useParams } from 'next/navigation';
 import { orderHooks, combinationHooks } from '@avoo/hooks';
-
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useApiStatusStore } from '@avoo/store';
 import { useRouter } from 'next/navigation';
 import { Button, ButtonFit, ButtonIntent, ButtonType } from '@/_components/Button/Button';
 import { Controller, useFieldArray } from 'react-hook-form';
 import { OrderType } from '@avoo/hooks/types/orderType';
 import { useToast } from '@/_hooks/useToast';
-import { Service, CreatePublicOrder, MasterWithRelationsEntity } from '@avoo/axios/types/apiTypes';
-import { servicesHooks } from '@avoo/hooks';
+import { CreateOrder, MasterWithRelationsEntity } from '@avoo/axios/types/apiTypes';
 import { timeUtils } from '@avoo/shared';
 import CustomerCreate from '@/_components/CustomerCreate/CustomerCreate';
+import ServiceForm from '@/_components/ServiceForm/ServiceForm';
+import PublicCombinationForm from '@/_components/PublicCombinationForm/PublicCombinationForm';
+import PublicServiceFormItem from '@/_components/PublicServiceFormItem/PublicServiceFormItem';
+import AddCircleIcon from '@/_icons/AddCircleIcon';
+import CombinationProposition from '@/_components/CombinationProposition/CombinationProposition';
 
 const SERVICES_KEY_IN_ORDER_CREATE = 'ordersData';
 
 export default function PublicOrderCreatePage() {
   const params = useParams();
-  const userId = params.userId;
+  const userId = Number(params.userId);
   const isPending = useApiStatusStore((state) => state.isPending);
   const errorMessage = useApiStatusStore((s) => s.errorMessage);
   const isError = useApiStatusStore((s) => s.isError);
   const router = useRouter();
   const toast = useToast();
   const [showCombination, setShowCombination] = useState(true);
-  const [selectedSlot, setSelectedSlot] = useState<string | null>(null);
   const [phone, setPhone] = useState('');
   const [selectedMasters, setSelectedMasters] = useState<(MasterWithRelationsEntity | null)[]>([
     null,
   ]);
+
+  const initialParams = {};
 
   const {
     control,
@@ -45,6 +49,7 @@ export default function PublicOrderCreatePage() {
     onSuccess: () => {
       router.back();
     },
+    userId: userId,
   });
 
   const { fields, append, remove } = useFieldArray({
@@ -52,19 +57,41 @@ export default function PublicOrderCreatePage() {
     name: SERVICES_KEY_IN_ORDER_CREATE,
   });
 
-  const { data: servicesData } = servicesHooks.useGetServicesInfinite({
-    limit: 10,
-    isActive: true,
-  });
-  const services = (servicesData?.pages.flatMap((page) => page?.data?.items) || []).filter(
-    (item): item is Service => item !== undefined,
-  );
+  useEffect(() => {
+    const values = getValues();
+    if (values.customerData) {
+      getValues().customerData.phone = phone;
+    }
+  }, [phone]);
+
+  const addService = () => {
+    const prevOrder = fields[fields.length - 1];
+    const prevService = selectedServices[fields.length - 1];
+
+    const nextDate = new Date(prevOrder.date);
+
+    if (prevService) {
+      const hours = nextDate.getHours();
+      const minutes = nextDate.getMinutes();
+      const totalMinutes = hours * 60 + minutes + prevService.durationMinutes;
+
+      nextDate.setHours(Math.floor(totalMinutes / 60));
+      nextDate.setMinutes(totalMinutes % 60);
+    }
+
+    append({
+      type: OrderType.Service,
+      masterId: 0,
+      date: timeUtils.convertDateToString(nextDate),
+    });
+
+    setSelectedServices((prev) => [...prev, null]);
+  };
 
   const combinations = combinationHooks.useGetPublicCombinations({
     serviceIds: selectedServices
       .filter((service): service is NonNullable<typeof service> => Boolean(service))
       .map((service) => service.id),
-    isActive: true,
     masterIds: undefined,
   });
 
@@ -80,38 +107,11 @@ export default function PublicOrderCreatePage() {
     setShowCombination(true);
   }, [combinations, selectedServices, selectedCombinations]);
 
-  const availableSlots = useMemo(() => {
-    const now = new Date();
-    const slots: string[] = [];
-    for (let h = 9; h <= 17; h++) {
-      slots.push(
-        timeUtils.convertDateToString(
-          new Date(now.getFullYear(), now.getMonth(), now.getDate(), h, 0),
-        ),
-      );
-      slots.push(
-        timeUtils.convertDateToString(
-          new Date(now.getFullYear(), now.getMonth(), now.getDate(), h, 30),
-        ),
-      );
-    }
-    return slots;
-  }, []);
-
   useEffect(() => {
     if (isError && !!errorMessage) {
       toast.error(errorMessage);
     }
   }, [isError, errorMessage]);
-
-  useEffect(() => {
-    if (selectedSlot) {
-      const values = getValues();
-      if (values.ordersData && values.ordersData[0]) {
-        values.ordersData[0].date = selectedSlot;
-      }
-    }
-  }, [selectedSlot]);
 
   const onCancelCombination = () => {
     setShowCombination(false);
@@ -119,31 +119,35 @@ export default function PublicOrderCreatePage() {
 
   const onApplyCombination = () => {
     if (!combinations?.items?.length) return;
+
     const combination = combinations.items[0];
+    const masterId = fields[0]?.masterId;
+    const date = fields[0]?.date;
+    const notes = fields[0]?.notes;
+
     setSelectedCombinations([combination]);
-    const values = getValues();
-    values.ordersData = [
-      {
-        type: OrderType.Combination,
-        masterId: fields[0]?.masterId,
-        date: selectedSlot ?? '',
-        notes: '',
-        combinationId: combination.id,
-      },
-    ];
+
+    remove();
+    append({
+      type: OrderType.Combination,
+      masterId,
+      date,
+      notes,
+      combinationId: combination.id,
+    });
   };
 
   const onSplitCombination = () => {
     let countDuration = 0;
-    const ordersData: CreatePublicOrder[] = [];
+    const ordersData: CreateOrder[] = [];
     selectedServices.forEach((service, index) => {
       ordersData.push({
         type: OrderType.Service,
         serviceId: service?.id,
         masterId: selectedMasters[index]?.id ?? fields[0].masterId,
-        date: selectedSlot
+        date: fields[0].date
           ? timeUtils.convertDateToString(
-              timeUtils.addMinutesToDate(new Date(selectedSlot), countDuration),
+              timeUtils.addMinutesToDate(new Date(fields[0].date), countDuration),
             )
           : '',
         notes: '',
@@ -158,101 +162,78 @@ export default function PublicOrderCreatePage() {
   };
 
   return (
-    <div className='container mx-auto max-w-xl'>
-      <h1 className='text-2xl font-bold mb-6'>Book a Service (userId {userId})</h1>
+    <div className='container mx-auto max-w-480 px-20 py-20'>
+      <h1 className='text-2xl font-bold mb-6'>Booking form</h1>
       <form className='flex flex-col gap-6' onSubmit={handleSubmit}>
         <Controller
           name='customerData'
           control={control}
           render={({ field }) => (
             <CustomerCreate
-              value={field.value}
+              value={field.value ?? {}}
               onChange={field.onChange}
               error={errors?.customerData}
               phone={phone}
               setPhone={setPhone}
+              isFullWidth
             />
           )}
         />
         <Controller
           name='ordersData'
           control={control}
-          render={({ field }) => (
-            <div>
-              <label className='block mb-2 font-medium'>Service</label>
-              <select
-                className='w-full border border-gray-300 rounded-lg p-2 mb-4'
-                value={selectedServices[0]?.id ?? ''}
-                onChange={(e) => {
-                  const service = services.find((s) => s.id === Number(e.target.value)) || null;
-                  setSelectedServices([service]);
-                  field.onChange([
-                    {
-                      type: OrderType.Service,
-                      serviceId: service?.id,
-                      masterId: undefined,
-                      date: selectedSlot ?? '',
-                      notes: '',
-                    },
-                  ]);
-                }}
-              >
-                <option value=''>Select a service</option>
-                {services.map((service) => (
-                  <option key={service.id} value={service.id}>
-                    {service.name}
-                  </option>
-                ))}
-              </select>
-              <label className='block mb-2 font-medium'>Available Slots</label>
-              <div className='flex flex-col gap-2'>
-                {availableSlots.map((slot) => (
-                  <label key={slot} className='flex items-center gap-2'>
-                    <input
-                      type='radio'
-                      name='slot'
-                      value={slot}
-                      checked={selectedSlot === slot}
-                      onChange={() => setSelectedSlot(slot)}
-                      className='accent-primary-500'
-                    />
-                    {timeUtils.convertDateToTimeString(slot)}
-                  </label>
-                ))}
-              </div>
+          render={({ field }) =>
+            fields[0]?.type === OrderType.Service ? (
+              <ServiceForm
+                value={field.value}
+                onChange={field.onChange}
+                selectedServices={selectedServices}
+                setSelectedServices={setSelectedServices}
+                selectedMasters={selectedMasters}
+                setSelectedMasters={setSelectedMasters}
+                remove={remove}
+                errors={Array.isArray(errors.ordersData) ? errors.ordersData : []}
+                Item={PublicServiceFormItem}
+                initialParams={initialParams}
+              />
+            ) : (
+              <PublicCombinationForm
+                value={field.value}
+                onChange={field.onChange}
+                selectedCombination={selectedCombinations[0]}
+                errors={Array.isArray(errors.ordersData) ? errors.ordersData[0] : {}}
+                selectedMasters={selectedMasters}
+                setSelectedMasters={setSelectedMasters}
+                splitCombination={onSplitCombination}
+              />
+            )
+          }
+        />
 
-              {showCombination && combinations && combinations?.items?.length > 0 && (
-                <div className='mt-4 border border-primary-200 rounded-lg p-4 bg-primary-50'>
-                  <div className='mb-2 font-medium'>Combination available:</div>
-                  <div className='mb-2'>{combinations.items[0].name}</div>
-                  <div className='flex gap-4'>
-                    <Button
-                      intent={ButtonIntent.Primary}
-                      onClick={onApplyCombination}
-                      type={ButtonType.Button}
-                    >
-                      Apply Combination
-                    </Button>
-                    <Button
-                      intent={ButtonIntent.Secondary}
-                      onClick={onCancelCombination}
-                      type={ButtonType.Button}
-                    >
-                      Cancel
-                    </Button>
-                    <Button
-                      intent={ButtonIntent.Simple}
-                      onClick={onSplitCombination}
-                      type={ButtonType.Button}
-                    >
-                      Split Combination
-                    </Button>
-                  </div>
+        {showCombination && combinations?.items.length && (
+          <CombinationProposition
+            data={combinations?.items[0]}
+            onCancel={onCancelCombination}
+            onApply={onApplyCombination}
+          />
+        )}
+        {selectedServices.length > 0 &&
+          selectedServices[selectedServices.length - 1] &&
+          fields[0]?.type === OrderType.Service && (
+            <div className=''>
+              <button
+                type='button'
+                onClick={addService}
+                className='flex gap-2 items-center font-medium text-sm group cursor-pointer rounded-lg px-4 py-2.5 hover:bg-primary-100 focus:bg-primary-100 transition-colors'
+              >
+                <div className='shrink-0'>
+                  <AddCircleIcon className='fill-primary-900' />
                 </div>
-              )}
+                <span className='text-primary-900 font-medium underline'>Add more service</span>
+              </button>
             </div>
           )}
-        />
+
         <div className='flex gap-8 mt-6'>
           <Button
             disabled={isPending || formPending}

@@ -22,8 +22,10 @@ import {
   updateOrderStatusSchema,
   updateOrderSchema,
   CreatePrivateOrdersData,
+  CreatePublicOrdersData,
   UpdateOrderStatusData,
   UpdateOrderData,
+  createPublicOrdersSchema,
 } from '../schemas/validationSchemas';
 import { OrderType } from '@avoo/hooks/types/orderType';
 import { OrderStatus } from '../types/orderStatus';
@@ -135,7 +137,7 @@ export const orderHooks = {
       setSelectedCombinations,
     };
   },
-  useCreatePublicOrder: ({ onSuccess }: { onSuccess?: () => void }) => {
+  useCreatePublicOrder: ({ onSuccess, userId }: { onSuccess?: () => void; userId: number }) => {
     const [selectedServices, setSelectedServices] = useState<(Service | null)[]>([null]);
     const [selectedCombinations, setSelectedCombinations] = useState<Combination[]>([]);
     const {
@@ -143,8 +145,8 @@ export const orderHooks = {
       handleSubmit,
       getValues,
       formState: { errors },
-    } = useForm<CreatePrivateOrdersData>({
-      resolver: yupResolver(createPrivateOrdersSchema),
+    } = useForm<CreatePublicOrdersData>({
+      resolver: yupResolver(createPublicOrdersSchema),
       context: {
         services: selectedServices ?? [],
         combinations: selectedCombinations ?? [],
@@ -154,14 +156,15 @@ export const orderHooks = {
         ordersData: [
           {
             type: OrderType.Service,
+            date: timeUtils.convertDateToRoundedString(new Date()),
           },
         ],
         customerData: {
           name: '',
           phone: '',
           email: '',
-          notes: '',
         },
+        userId,
       },
     });
 
@@ -194,7 +197,7 @@ export const orderHooks = {
 
     return {
       control,
-      handleSubmit: handleSubmit(utils.submitAdapter<CreatePrivateOrdersRequest>(mutate)),
+      handleSubmit: handleSubmit(utils.submitAdapter<CreatePublicOrdersRequest>(mutate)),
       getValues,
       errors,
       isPending,

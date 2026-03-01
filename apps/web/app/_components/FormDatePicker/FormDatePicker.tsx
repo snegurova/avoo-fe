@@ -13,10 +13,20 @@ type Props = {
   required?: boolean;
   onChange: (newDate: string) => void;
   error?: string;
+  format?: string;
 };
 
 export default function FormDatePicker(props: Props) {
-  const { label, date, required = false, onChange, error, valueFormat, size = 'small' } = props;
+  const {
+    label,
+    date,
+    required = false,
+    onChange,
+    error,
+    valueFormat,
+    size = 'small',
+    format = DATE_PICKER_FORMAT,
+  } = props;
 
   const onValueChange = (newDate: dayjs.Dayjs | null) => {
     const convertedDate = newDate ? newDate.format(valueFormat || DATE_TIME_FORMAT) : '';
@@ -30,7 +40,7 @@ export default function FormDatePicker(props: Props) {
       <DatePicker
         label={label}
         value={date ? dayjs(date) : null}
-        format={DATE_PICKER_FORMAT}
+        format={format}
         disablePast={true}
         slots={{
           openPickerIcon: () => <CalendarIcon className='fill-black w-6 h-6' />,
