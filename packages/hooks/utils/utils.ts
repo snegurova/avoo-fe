@@ -2,9 +2,9 @@ import { useApiStatusStore } from '@avoo/store';
 import { useCallback, useEffect, useState } from 'react';
 
 export const utils = {
-  submitAdapter: <T>(submitFn: (data: T) => void) => {
-    return (data: T) => {
-      submitFn(data);
+  submitAdapter: <T, Tfields>(submitFn: (data: T) => void) => {
+    return (data: Tfields) => {
+      submitFn(data as unknown as T);
     };
   },
   useSetPendingApi: (isPending: boolean) => {

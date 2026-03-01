@@ -73,10 +73,9 @@ export type GetMastersResponse = {
   pagination: components['schemas']['PaginationDto'];
 };
 
-type MasterBaseForCreate = Omit<components['schemas']['MasterEntity'], 'id'>;
-export type CreateMasterRequest = {
-  email: MasterBaseForCreate['email'];
-} & Partial<Omit<MasterBaseForCreate, 'email'>>;
+export type CreateMasterRequest = components['schemas']['CreateMasterDto'] & {
+  languages?: components["schemas"]["Language"][];
+};
 
 export type MasterLanguages = components['schemas']['MasterEntity']['languages'];
 

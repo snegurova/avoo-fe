@@ -124,7 +124,9 @@ export const orderHooks = {
 
     return {
       control,
-      handleSubmit: handleSubmit(utils.submitAdapter<CreatePrivateOrdersRequest>(mutate)),
+      handleSubmit: handleSubmit(
+        utils.submitAdapter<CreatePrivateOrdersRequest, CreatePrivateOrdersData>(mutate),
+      ),
       getValues,
       errors,
       isPending,
@@ -204,7 +206,9 @@ export const orderHooks = {
 
     return {
       control,
-      handleSubmit: handleSubmit(utils.submitAdapter<UpdateOrderStatusRequest>(mutate)),
+      handleSubmit: handleSubmit(
+        utils.submitAdapter<UpdateOrderStatusRequest, UpdateOrderStatusData>(mutate),
+      ),
       errors,
       isPending,
     };

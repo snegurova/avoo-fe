@@ -203,7 +203,9 @@ export const servicesHooks = {
       control,
       setValue,
       getValues,
-      handleSubmit: handleSubmit(utils.submitAdapter<CreateServiceRequest>(createService)),
+      handleSubmit: handleSubmit(
+        utils.submitAdapter<CreateServiceRequest, CreateServiceFormData>(createService),
+      ),
       errors,
     };
   },

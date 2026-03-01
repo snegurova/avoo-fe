@@ -138,7 +138,9 @@ export const scheduleHooks = {
     return {
       register,
       control,
-      handleSubmit: handleSubmit(utils.submitAdapter<ScheduleCreateFormData>(createSchedule)),
+      handleSubmit: handleSubmit(
+        utils.submitAdapter<ScheduleCreateFormData, ScheduleCreateFormData>(createSchedule),
+      ),
       errors,
       watch,
       setValue,
