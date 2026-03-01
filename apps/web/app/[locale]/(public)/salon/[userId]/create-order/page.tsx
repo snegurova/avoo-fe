@@ -1,84 +1,56 @@
-import React, { useEffect, useMemo, useState } from 'react';
+'use client';
+import { useParams } from 'next/navigation';
 import { orderHooks, combinationHooks } from '@avoo/hooks';
+import React, { useEffect, useState } from 'react';
 import { useApiStatusStore } from '@avoo/store';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { Button, ButtonFit, ButtonIntent, ButtonType } from '@/_components/Button/Button';
-import { CustomerSelect } from '@/_components/CustomerSelect/CustomerSelect';
 import { Controller, useFieldArray } from 'react-hook-form';
-import ServiceForm from '@/_components/ServiceForm/ServiceForm';
-import { AppRoutes } from '@/_routes/routes';
-import AddCircleIcon from '@/_icons/AddCircleIcon';
-import { OrderQueryParams } from '@avoo/hooks/types/orderQueryParams';
 import { OrderType } from '@avoo/hooks/types/orderType';
-import { timeUtils } from '@avoo/shared';
 import { useToast } from '@/_hooks/useToast';
+import { CreateOrder, MasterWithRelationsEntity } from '@avoo/axios/types/apiTypes';
+import { timeUtils } from '@avoo/shared';
+import CustomerCreate from '@/_components/CustomerCreate/CustomerCreate';
+import ServiceForm from '@/_components/ServiceForm/ServiceForm';
+import PublicCombinationForm from '@/_components/PublicCombinationForm/PublicCombinationForm';
+import PublicServiceFormItem from '@/_components/PublicServiceFormItem/PublicServiceFormItem';
+import AddCircleIcon from '@/_icons/AddCircleIcon';
 import CombinationProposition from '@/_components/CombinationProposition/CombinationProposition';
-import CombinationForm from '@/_components/CombinationForm/CombinationForm';
-import { MasterWithRelationsEntity, CreateOrder } from '@avoo/axios/types/apiTypes';
-import Calendar from '@/_components/Calendar/Calendar';
-import { CalendarType } from '@avoo/hooks/types/calendarType';
-import { localizationHooks } from '@/_hooks/localizationHooks';
-import ServiceFormItem from '@/_components/ServiceFormItem/ServiceFormItem';
 
 const SERVICES_KEY_IN_ORDER_CREATE = 'ordersData';
-const WRAPPER_HEADER_HEIGHT = '62px';
 
-export default function OrderCreate() {
+export default function PublicOrderCreatePage() {
+  const params = useParams();
+  const userId = Number(params.userId);
   const isPending = useApiStatusStore((state) => state.isPending);
   const errorMessage = useApiStatusStore((s) => s.errorMessage);
   const isError = useApiStatusStore((s) => s.isError);
   const router = useRouter();
-  const searchParams = useSearchParams();
   const toast = useToast();
   const [showCombination, setShowCombination] = useState(true);
+  const [phone, setPhone] = useState('');
   const [selectedMasters, setSelectedMasters] = useState<(MasterWithRelationsEntity | null)[]>([
     null,
   ]);
-  const [startDate, setStartDate] = useState<string | null>(null);
 
-  const initialParams = useMemo(() => {
-    const parsedQuery = Object.fromEntries(
-      Object.values(OrderQueryParams).map((key) => [key, searchParams.get(key)]),
-    ) as Record<OrderQueryParams, string | null>;
-
-    return {
-      masterId:
-        parsedQuery.masterId && !Number.isNaN(Number(parsedQuery.masterId))
-          ? Number(parsedQuery.masterId)
-          : undefined,
-      date: parsedQuery.date ?? undefined,
-    };
-  }, [searchParams]);
-
-  useEffect(() => {
-    if (searchParams.toString()) {
-      router.replace(localizationHooks.useWithLocale(AppRoutes.OrderCreate));
-    }
-  }, []);
+  const initialParams = {};
 
   const {
     control,
     handleSubmit,
     errors,
+    getValues,
+    isPending: formPending,
     selectedServices,
     setSelectedServices,
     selectedCombinations,
     setSelectedCombinations,
-  } = orderHooks.useCreateOrder({
-    order: {
-      masterId: initialParams.masterId,
-      date: initialParams.date,
-    },
+  } = orderHooks.useCreatePublicOrder({
     onSuccess: () => {
-      router.push(`${localizationHooks.useWithLocale(AppRoutes.Calendar)}?date=${startDate}`);
+      router.back();
     },
+    userId: userId,
   });
-
-  useEffect(() => {
-    if (isError && !!errorMessage) {
-      toast.error(errorMessage);
-    }
-  }, [isError, errorMessage]);
 
   const { fields, append, remove } = useFieldArray({
     control,
@@ -86,10 +58,11 @@ export default function OrderCreate() {
   });
 
   useEffect(() => {
-    if (fields[0]?.date) {
-      setStartDate(fields[0].date);
+    const values = getValues();
+    if (values.customerData) {
+      getValues().customerData.phone = phone;
     }
-  }, [fields]);
+  }, [phone]);
 
   const addService = () => {
     const prevOrder = fields[fields.length - 1];
@@ -115,18 +88,17 @@ export default function OrderCreate() {
     setSelectedServices((prev) => [...prev, null]);
   };
 
-  const combinations = combinationHooks.useGetCombinations({
+  const combinations = combinationHooks.useGetPublicCombinations({
     serviceIds: selectedServices
       .filter((service): service is NonNullable<typeof service> => Boolean(service))
       .map((service) => service.id),
-    isActive: true,
-    masterIds: fields[0]?.masterId ? [fields[0].masterId] : undefined,
+    masterIds: undefined,
   });
 
   useEffect(() => {
     if (
       selectedServices.length < 2 ||
-      combinations?.items.length === 0 ||
+      !combinations?.items?.length ||
       selectedCombinations.length > 0
     ) {
       setShowCombination(false);
@@ -135,12 +107,18 @@ export default function OrderCreate() {
     setShowCombination(true);
   }, [combinations, selectedServices, selectedCombinations]);
 
+  useEffect(() => {
+    if (isError && !!errorMessage) {
+      toast.error(errorMessage);
+    }
+  }, [isError, errorMessage]);
+
   const onCancelCombination = () => {
     setShowCombination(false);
   };
 
   const onApplyCombination = () => {
-    if (!combinations?.items.length) return;
+    if (!combinations?.items?.length) return;
 
     const combination = combinations.items[0];
     const masterId = fields[0]?.masterId;
@@ -162,7 +140,6 @@ export default function OrderCreate() {
   const onSplitCombination = () => {
     let countDuration = 0;
     const ordersData: CreateOrder[] = [];
-
     selectedServices.forEach((service, index) => {
       ordersData.push({
         type: OrderType.Service,
@@ -173,56 +150,32 @@ export default function OrderCreate() {
               timeUtils.addMinutesToDate(new Date(fields[0].date), countDuration),
             )
           : '',
-        notes: index === 0 ? fields[0].notes : '',
+        notes: '',
       });
-
       if (service) {
         countDuration += service.durationMinutes;
       }
     });
-
-    remove();
-    append(ordersData);
     setSelectedCombinations([]);
-  };
-
-  const setDateAndMasterInLastItem = (
-    field: { value: CreateOrder[]; onChange: (value: CreateOrder[]) => void },
-    date: string,
-    master: MasterWithRelationsEntity,
-  ) => {
-    const updatedOrders = [...field.value];
-    const lastIndex = updatedOrders.length - 1;
-
-    setSelectedMasters((prev) => {
-      const newMasters = [...prev];
-      newMasters[lastIndex] = master;
-      return newMasters;
-    });
-
-    updatedOrders[lastIndex] = {
-      ...updatedOrders[lastIndex],
-      date,
-      masterId: master.id,
-    };
-
-    field.onChange(updatedOrders);
+    const values = getValues();
+    values.ordersData = ordersData;
   };
 
   return (
-    <div className={`h-[calc(100%-${WRAPPER_HEADER_HEIGHT})]  flex`}>
-      <form
-        className='px-8 w-full flex flex-col gap-6 overflow-y-auto overflow-x-hidden'
-        onSubmit={handleSubmit}
-      >
+    <div className='container mx-auto max-w-480 px-20 py-20'>
+      <h1 className='text-2xl font-bold mb-6'>Booking form</h1>
+      <form className='flex flex-col gap-6' onSubmit={handleSubmit}>
         <Controller
           name='customerData'
           control={control}
           render={({ field }) => (
-            <CustomerSelect
-              value={field.value ?? undefined}
+            <CustomerCreate
+              value={field.value ?? {}}
               onChange={field.onChange}
-              error={errors.customerData}
+              error={errors?.customerData}
+              phone={phone}
+              setPhone={setPhone}
+              isFullWidth
             />
           )}
         />
@@ -234,17 +187,17 @@ export default function OrderCreate() {
               <ServiceForm
                 value={field.value}
                 onChange={field.onChange}
-                initialParams={initialParams}
                 selectedServices={selectedServices}
                 setSelectedServices={setSelectedServices}
                 selectedMasters={selectedMasters}
                 setSelectedMasters={setSelectedMasters}
                 remove={remove}
                 errors={Array.isArray(errors.ordersData) ? errors.ordersData : []}
-                Item={ServiceFormItem}
+                Item={PublicServiceFormItem}
+                initialParams={initialParams}
               />
             ) : (
-              <CombinationForm
+              <PublicCombinationForm
                 value={field.value}
                 onChange={field.onChange}
                 selectedCombination={selectedCombinations[0]}
@@ -256,6 +209,7 @@ export default function OrderCreate() {
             )
           }
         />
+
         {showCombination && combinations?.items.length && (
           <CombinationProposition
             data={combinations?.items[0]}
@@ -279,10 +233,11 @@ export default function OrderCreate() {
               </button>
             </div>
           )}
-        <div className='flex gap-8 mt-6 pb-15'>
+
+        <div className='flex gap-8 mt-6'>
           <Button
-            disabled={isPending}
-            loading={isPending}
+            disabled={isPending || formPending}
+            loading={isPending || formPending}
             fit={ButtonFit.Inline}
             intent={ButtonIntent.Secondary}
             onClick={() => router.back()}
@@ -291,8 +246,8 @@ export default function OrderCreate() {
           </Button>
           <Button
             type={ButtonType.Submit}
-            disabled={isPending}
-            loading={isPending}
+            disabled={isPending || formPending}
+            loading={isPending || formPending}
             fit={ButtonFit.Inline}
             intent={ButtonIntent.Primary}
           >
@@ -300,19 +255,6 @@ export default function OrderCreate() {
           </Button>
         </div>
       </form>
-      <div className='hidden lg:block lg:w-75 xl:w-100'>
-        <Controller
-          name='ordersData'
-          control={control}
-          render={({ field }) => (
-            <Calendar
-              calendarType={CalendarType.SELECTOR}
-              onClickDateTime={(date, master) => setDateAndMasterInLastItem(field, date, master)}
-              selectedMasterId={fields[field.value.length - 1]?.masterId}
-            />
-          )}
-        />
-      </div>
     </div>
   );
 }
