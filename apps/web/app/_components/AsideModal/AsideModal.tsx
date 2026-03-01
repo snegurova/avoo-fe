@@ -36,7 +36,18 @@ export default function AsideModal(props: Props) {
         if (!(el instanceof HTMLElement)) return false;
 
         const role = el.getAttribute('role');
-        return role === 'menu' || role === 'listbox';
+
+        if (role === 'menu' || role === 'listbox') return true;
+
+        if (
+          role === 'presentation' ||
+          el.classList.contains('MuiBackdrop-root') ||
+          el.classList.contains('MuiPopover-root')
+        ) {
+          return true;
+        }
+
+        return false;
       });
 
       if (clickedInsideMuiMenu) return;

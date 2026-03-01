@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Controller } from 'react-hook-form';
+
 import {
   Button,
   FormControl,
@@ -11,10 +12,12 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import { Service, UploadMediaResponse } from '@avoo/axios/types/apiTypes';
+
 import { MEDIA_TYPE_ENUM } from '@avoo/axios/types/apiEnums';
+import { Service, UploadMediaResponse } from '@avoo/axios/types/apiTypes';
 import { categoriesHooks, masterHooks, mediaHooks, servicesHooks } from '@avoo/hooks';
 import { timeUtils } from '@avoo/shared';
+
 import CategorySelect from '@/_components/CategorySelect/CategorySelect';
 import MasterAutoCompleteSelect from '@/_components/MasterAutoCompleteSelect/MasterAutoCompleteSelect';
 import ServiceGalleryUpload from '@/_components/ServiceGalleryUpload/ServiceGalleryUpload';
@@ -31,10 +34,7 @@ export default function ServiceUpdateForm(props: Props) {
   const toast = useToast();
   const categories = categoriesHooks.useGetPublicCategories();
 
-  const masters =
-    masterHooks
-      .useGetMastersInfinite({ search: '' })
-      .data?.pages.flatMap((page) => page.data?.items ?? []) ?? [];
+  const { masters, searchTerm, setSearchTerm } = masterHooks.useMasterQuery();
 
   const durationOptions = timeUtils.getDurationOptionsRange(15, 300, 15);
 
@@ -227,7 +227,14 @@ export default function ServiceUpdateForm(props: Props) {
               <Controller
                 name='masterIds'
                 control={control}
-                render={({ field }) => <MasterAutoCompleteSelect masters={masters} {...field} />}
+                render={({ field }) => (
+                  <MasterAutoCompleteSelect
+                    masters={masters}
+                    searchTerm={searchTerm}
+                    onSearchChange={setSearchTerm}
+                    {...field}
+                  />
+                )}
               />
               {errors.masterIds?.message && (
                 <FormHelperText>{errors.masterIds?.message}</FormHelperText>

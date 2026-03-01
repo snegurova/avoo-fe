@@ -1,13 +1,16 @@
 import { useEffect, useRef, useState } from 'react';
+
 import { IconButton, Typography } from '@mui/material';
 import useMediaQuery from '@mui/material/useMediaQuery';
-import { useApiStatusStore } from '@avoo/store';
-import { servicesHooks } from '@avoo/hooks';
+
 import { CategoryWithServicesCount, Service } from '@avoo/axios/types/apiTypes';
-import CategoryFilterItem from '@/_components/CategoryFilterItem/CategoryFilterItem';
-import ServiceCard from '@/_components/ServiceCard/ServiceCard';
-import ConfirmationDialog from '@/_components/ConfirmationDialog/ConfirmationDialog';
+import { servicesHooks } from '@avoo/hooks';
+import { useApiStatusStore } from '@avoo/store';
+
 import AsideModal from '@/_components/AsideModal/AsideModal';
+import CategoryFilterItem from '@/_components/CategoryFilterItem/CategoryFilterItem';
+import ConfirmationDialog from '@/_components/ConfirmationDialog/ConfirmationDialog';
+import ServiceCard from '@/_components/ServiceCard/ServiceCard';
 import ServiceUpdateForm from '@/_components/ServiceUpdateForm/ServiceUpdateForm';
 import { useToast } from '@/_hooks/useToast';
 import DeleteIcon from '@/_icons/DeleteIcon';

@@ -1,3 +1,5 @@
+import { useInfiniteQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+
 import { mediaApi } from '@avoo/axios/src/modules/media';
 import {
   BaseResponse,
@@ -8,7 +10,7 @@ import {
   UploadMediaResponse,
 } from '@avoo/axios/types/apiTypes';
 import { utils } from '@avoo/hooks/utils/utils';
-import { useInfiniteQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+
 import { queryKeys } from './queryKeys';
 
 const DEFAULT_LIMIT = 10;

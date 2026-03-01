@@ -1,4 +1,10 @@
-import { utils } from '@avoo/hooks/utils/utils';
+import { useMemo, useState } from 'react';
+import { useForm } from 'react-hook-form';
+
+import { yupResolver } from '@hookform/resolvers/yup';
+import { InfiniteData, useInfiniteQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+
+import { servicesApi } from '@avoo/axios/src/modules/services';
 import {
   ApiStatus,
   CreateServiceRequest,
@@ -9,20 +15,16 @@ import {
   UpdateServiceRequest,
   UpdateServiceResponse,
 } from '@avoo/axios/types/apiTypes';
-
 import { BaseResponse } from '@avoo/axios/types/apiTypes';
-import { InfiniteData, useInfiniteQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { useMemo, useState } from 'react';
-import { servicesApi } from '@avoo/axios/src/modules/services';
-import { useDebounce } from './useDebounce';
-import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
+import { utils } from '@avoo/hooks/utils/utils';
+
 import {
   CreateServiceFormData,
   createServiceSchema,
   UpdateServiceFormData,
 } from '../schemas/validationSchemas';
 import { queryKeys } from './queryKeys';
+import { useDebounce } from './useDebounce';
 
 const DEFAULT_LIMIT = 10;
 

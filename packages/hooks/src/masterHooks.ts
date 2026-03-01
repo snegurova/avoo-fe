@@ -1,22 +1,24 @@
-import { useState, useEffect, useMemo } from 'react';
-import { utils } from '@avoo/hooks/utils/utils';
-import type { ShortMasterInfo } from '@avoo/axios/types/apiTypes';
+import { useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
+
 import { yupResolver } from '@hookform/resolvers/yup';
-import { createMasterSchema, CreateMasterFormData } from '../schemas/validationSchemas';
+import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 import { masterApi } from '@avoo/axios';
-import { useQuery, useInfiniteQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-
+import type { ShortMasterInfo } from '@avoo/axios/types/apiTypes';
 import {
-  BaseResponse,
-  MasterWithRelationsEntityResponse,
-  CreateMasterRequest,
-  GetMastersResponse,
-  GetMastersQueryParams,
   ApiStatus,
+  BaseResponse,
+  CreateMasterRequest,
+  GetMastersQueryParams,
+  GetMastersResponse,
+  MasterWithRelationsEntityResponse,
 } from '@avoo/axios/types/apiTypes';
+import { utils } from '@avoo/hooks/utils/utils';
+
+import { CreateMasterFormData, createMasterSchema } from '../schemas/validationSchemas';
 import { queryKeys } from './queryKeys';
+import { useDebounce } from './useDebounce';
 
 type UseCreateMasterFormParams = {
   onSuccess?: () => void;
@@ -71,6 +73,20 @@ export const masterHooks = {
     utils.useSetPendingApi(isPending);
 
     return query;
+  },
+  useMasterQuery() {
+    const [searchTerm, setSearchTerm] = useState('');
+    const debouncedSearch = useDebounce(searchTerm);
+    const masterQuery = masterHooks.useGetMastersInfinite({ search: debouncedSearch });
+
+    const masters = masterQuery.data?.pages.flatMap((page) => page.data?.items ?? []) ?? [];
+
+    return {
+      masters,
+      searchTerm,
+      setSearchTerm,
+      ...masterQuery,
+    };
   },
   useCreateMasterForm: ({ onSuccess }: UseCreateMasterFormParams = {}) => {
     const {
