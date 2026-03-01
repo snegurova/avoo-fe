@@ -95,6 +95,12 @@ export const createMasterSchema = yup.object({
     .default([]),
 });
 
+export const publicCustomerSchema = yup.object({
+  name: yup.string().required(),
+  phone: yup.string().required(),
+  email: yup.string().email('Invalid email').required(),
+});
+
 export const customerSchema = yup
   .object({
     id: yup.number().nullable().optional(),
@@ -177,6 +183,13 @@ export const createPrivateOrdersSchema = yup.object({
   customerData: customerSchema,
 });
 
+export const createPublicOrdersSchema = yup.object({
+  ordersData: ordersDataSchema,
+  customerData: publicCustomerSchema,
+  userId: yup.number().required(),
+  referralCode: yup.string().optional(),
+});
+
 export const updateOrderStatusSchema = yup.object({
   status: yup
     .string()
@@ -224,3 +237,4 @@ export type UpdateOrderStatusData = yup.InferType<typeof updateOrderStatusSchema
 export type OrdersData = yup.InferType<typeof ordersDataSchema>;
 export type UpdateOrderData = yup.InferType<typeof updateOrderSchema>;
 export type CreateServiceFormData = yup.InferType<typeof createServiceSchema>;
+export type CreatePublicOrdersData = yup.InferType<typeof createPublicOrdersSchema>;

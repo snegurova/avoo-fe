@@ -214,4 +214,18 @@ export const masterHooks = {
       );
     }, [masters, searchQuery]);
   },
+  useGetPublicMastersInfinite: (params: GetMastersQueryParams = {}) => {
+    const query = useInfiniteQuery<BaseResponse<GetMastersResponse>, Error>({
+      queryKey: [queryKeys.masters.public, queryKeys.masters.byParams(params)],
+      queryFn: ({ pageParam = 1 }) =>
+        masterApi.getPublicMasters({ ...params, page: pageParam as number }),
+      initialPageParam: 1,
+      getNextPageParam: (lastPage) => {
+        const { currentPage, total } = lastPage.data?.pagination || { currentPage: 0, total: 0 };
+        return currentPage * (params.limit || 10) < total ? currentPage + 1 : undefined;
+      },
+    });
+
+    return query;
+  },
 };
