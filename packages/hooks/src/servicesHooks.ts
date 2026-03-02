@@ -1,25 +1,35 @@
-import { utils } from '@avoo/hooks/utils/utils';
+import { useMemo, useState } from 'react';
+import { useForm } from 'react-hook-form';
+
+import { yupResolver } from '@hookform/resolvers/yup';
+import { InfiniteData, useInfiniteQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+
+import { servicesApi } from '@avoo/axios/src/modules/services';
 import {
+  ApiStatus,
+  BaseResponse,
   CreateServiceRequest,
   CreateServiceResponse,
   GetServiceResponse,
-  ServicesQueryParams,
   PublicServiceQueryParams,
-  BaseResponse,
-  ApiStatus,
+  Service,
+  ServicesQueryParams,
+  UpdateServiceRequest,
+  UpdateServiceResponse,
 } from '@avoo/axios/types/apiTypes';
-import { InfiniteData, useInfiniteQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { useMemo, useState } from 'react';
-import { servicesApi } from '@avoo/axios/src/modules/services';
-import { useDebounce } from './useDebounce';
-import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { CreateServiceFormData, createServiceSchema } from '../schemas/validationSchemas';
+import { utils } from '@avoo/hooks/utils/utils';
+
+import {
+  CreateServiceFormData,
+  createServiceSchema,
+  UpdateServiceFormData,
+} from '../schemas/validationSchemas';
 import { queryKeys } from './queryKeys';
+import { useDebounce } from './useDebounce';
 
 const DEFAULT_LIMIT = 10;
 
-type UseServiceCreateFormParams = {
+type UseBaseServiceFormParams = {
   onSuccess?: () => void;
   onError?: (error: Error) => void;
 };
@@ -33,11 +43,17 @@ type ServicesQueryStateParams = {
 
 type PublicServiceQueryStateParams = {
   limit: number;
-  categoryId?: number | null;
+  categoryId?: number;
   search: string;
   masterIds: number[];
   userId?: number;
 };
+
+type UseServiceCreateFormParams = UseBaseServiceFormParams;
+
+type UseServiceUpdateFormParams = {
+  service: Service;
+} & UseBaseServiceFormParams;
 
 export const servicesHooks = {
   useGetServicesInfinite: ({
@@ -235,7 +251,7 @@ export const servicesHooks = {
       initialPageParam: 1,
       getNextPageParam: (lastPage) => {
         const { currentPage, total } = lastPage.data?.pagination || { currentPage: 0, total: 0 };
-        return currentPage * (params.limit || DEFAULT_LIMIT) < total ? currentPage + 1 : undefined;
+        return currentPage * (params?.limit || DEFAULT_LIMIT) < total ? currentPage + 1 : undefined;
       },
     });
 
@@ -260,7 +276,7 @@ export const servicesHooks = {
       }));
     };
 
-    const setCategory = (categoryId: number | null) => {
+    const setCategory = (categoryId?: number) => {
       setParams((prev) => ({
         ...prev,
         categoryId,
@@ -285,5 +301,74 @@ export const servicesHooks = {
     );
 
     return { params, queryParams, setSearchQuery, setCategory, setMasterIds };
+  },
+  useUpdateServiceForm: ({ service, onSuccess, onError }: UseServiceUpdateFormParams) => {
+    const {
+      register,
+      control,
+      setValue,
+      getValues,
+      handleSubmit,
+      formState: { errors },
+    } = useForm<UpdateServiceFormData>({
+      resolver: yupResolver(createServiceSchema),
+      mode: 'onSubmit',
+      defaultValues: {
+        name: service.name,
+        description: service.description,
+        price: service.price,
+        categoryId: service.category.id,
+        durationMinutes: service.durationMinutes,
+        masterIds: service.masters.map((m) => m.id),
+        mediaIds: [],
+        isActive: service.isActive,
+      },
+    });
+    const queryClient = useQueryClient();
+
+    const { mutate: updateService, isPending } = useMutation<
+      BaseResponse<UpdateServiceResponse>,
+      Error,
+      UpdateServiceRequest
+    >({
+      mutationFn: (data) => servicesApi.updateService(service.id, data),
+      meta: {
+        successMessage: 'Service updated successfully',
+      },
+      onSuccess: () => {
+        queryClient.invalidateQueries({
+          queryKey: queryKeys.categories.all,
+        });
+        queryClient.invalidateQueries({
+          queryKey: queryKeys.services.all,
+        });
+
+        onSuccess?.();
+      },
+      onError: (error) => {
+        onError?.(error);
+      },
+    });
+
+    utils.useSetPendingApi(isPending);
+
+    return {
+      register,
+      control,
+      setValue,
+      getValues,
+      handleSubmit: handleSubmit(
+        utils.submitAdapter<UpdateServiceRequest, UpdateServiceFormData>(updateService),
+      ),
+      errors,
+    };
+  },
+  useServicesControls() {
+    const [selectedService, setSelectedService] = useState<Service | null>(null);
+
+    return {
+      selectedService,
+      setSelectedService,
+    };
   },
 };

@@ -1,3 +1,4 @@
+import { apiClient } from '@avoo/axios/src/apiClient';
 import {
   BaseResponse,
   CreateServiceRequest,
@@ -5,8 +6,9 @@ import {
   GetServiceResponse,
   PrivateServiceQueryParams,
   PublicServiceQueryParams,
+  UpdateServiceRequest,
+  UpdateServiceResponse,
 } from '@avoo/axios/types/apiTypes';
-import { apiClient } from '@avoo/axios/src/apiClient';
 
 const SERVICES_ENDPOINT = '/services';
 const PUBLIC_SERVICES_ENDPOINT = '/public/services';
@@ -58,6 +60,13 @@ export const servicesApi = {
         return searchParams.toString();
       },
     });
+    return res.data;
+  },
+  async updateService(serviceId: number, data: UpdateServiceRequest) {
+    const res = await apiClient.put<BaseResponse<UpdateServiceResponse>>(
+      `${SERVICES_ENDPOINT}/${serviceId.toString()}`,
+      data,
+    );
     return res.data;
   },
 };

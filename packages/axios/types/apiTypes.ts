@@ -1,8 +1,9 @@
 import { OrderStatus } from '@avoo/hooks/types/orderStatus';
-import { FileInput } from '@avoo/shared';
-import type { components, operations } from './generated';
 import { OrderType } from '@avoo/hooks/types/orderType';
+import { FileInput } from '@avoo/shared';
+
 import { FILE_UPLOAD_TYPE_ENUM, MEDIA_TYPE_ENUM, ObjectValues } from './apiEnums';
+import type { components, operations } from './generated';
 
 export enum ApiStatus {
   SUCCESS = 'success',
@@ -41,6 +42,8 @@ export type GetPrivateCategoriesResponse =
   components['schemas']['ServicesGroupByCategoriesResponseDto'];
 export type CreateServiceRequest = components['schemas']['CreateServiceDto'];
 export type CreateServiceResponse = components['schemas']['ServiceEntity'];
+export type UpdateServiceRequest = components['schemas']['UpdateServiceDto'];
+export type UpdateServiceResponse = components['schemas']['ServiceEntity'];
 
 export type PublicServiceQueryParams =
   operations['ServicesPublicController_findAll']['parameters']['query'];
@@ -111,8 +114,12 @@ export type Customer = components['schemas']['CustomerInfoDto'];
 /** Schedule */
 
 export type ScheduleEntity = components['schemas']['ScheduleEntity'];
-export type ScheduleUpdateResponse = components['schemas']['UpdateScheduleDto'];
-export type ScheduleCreateResponse = components['schemas']['CreateScheduleDto'];
+export type CreateScheduleRequest = components['schemas']['CreateScheduleDto'];
+export type UpdateScheduleRequest = components['schemas']['UpdateScheduleDto'];
+
+export type CreateScheduleResponse = ScheduleEntity;
+export type UpdateScheduleResponse = ScheduleEntity;
+
 export type QuerySchedules = components['schemas']['QueryScheduleDto'];
 export type SchedulesQueryParams = Omit<QuerySchedules, 'page'>;
 export type GetSchedulesResponse = {
@@ -264,7 +271,20 @@ export type UploadMediaRequest = {
   file: FileInput;
   type: MediaUploadType;
 };
-export type UploadMediaResponse = components['schemas']['MediaEntity'];
+export type MediaEntity = components['schemas']['MediaEntity'];
+export type UploadMediaResponse = MediaEntity;
+export type GetMediaParams = NonNullable<
+  operations['MediasController_getAll']['parameters']['query']
+>;
+export type GetMediaResponse = {
+  items: components['schemas']['MediaEntity'][];
+  pagination: components['schemas']['PaginationDto'];
+};
+
+export type MediaQueryParams = Omit<GetMediaParams, 'page'>;
+export type DeleteMediaParams = NonNullable<
+  operations['MediasController_deleteById']['parameters']['query']
+>;
 
 /* Combination */
 

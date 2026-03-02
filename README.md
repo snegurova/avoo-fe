@@ -241,3 +241,21 @@ yarn workspace web start
 - Start from **repo root** for parallel dev (`yarn dev`, `yarn dev:client`).
 - Start from **`apps/mobile`** when you need interactive Expo commands or one-off platform runs.
 - Keep emulators open before running scripts that auto-open Android/iOS.
+- Recommended rules for **VS Code**:
+
+```json
+{
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit"
+  },
+  "javascript.suggest.autoImports": true,
+  "typescript.suggest.autoImports": true,
+  "typescript.preferences.autoImportFileExcludePatterns": [
+    "**/dist/**",
+    "**/.next/**",
+    "**/build/**"
+  ],
+  "typescript.preferences.importModuleSpecifier": "non-relative",
+  "typescript.preferences.importModuleSpecifierEnding": "minimal"
+}
+```

@@ -1,7 +1,9 @@
-import useAutocomplete, { UseAutocompleteProps } from '@mui/material/useAutocomplete';
-import { styled } from '@mui/material/styles';
 import { autocompleteClasses } from '@mui/material/Autocomplete';
+import { styled } from '@mui/material/styles';
+import useAutocomplete, { UseAutocompleteProps } from '@mui/material/useAutocomplete';
+
 import { colors } from '@avoo/design-tokens';
+
 import SelectCardItem from '@/_components/SelectCardItem/SelectCardItem';
 
 type BaseOption = {

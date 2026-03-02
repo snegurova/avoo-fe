@@ -13,11 +13,12 @@ export const scheduleUpdateSchema = yup.object({
     .array()
     .of(
       yup.object({
+        enabled: yup.boolean(),
+        day: yup.number().required(),
         startTimeMinutes: yup.number().required().min(0).max(1440),
-
         endTimeMinutes: yup
           .number()
-          .nullable()
+          .required()
           .min(0)
           .max(1440)
           .moreThan(yup.ref('startTimeMinutes'), 'endTimeMinutes must be > startTimeMinutes'),
@@ -40,7 +41,7 @@ export const scheduleUpdateSchema = yup.object({
                   'breakEndTime must be > breakStartTime',
                 ),
 
-              id: yup.mixed().required(),
+              id: yup.number().nullable(),
             }),
           )
           .required(),
@@ -50,12 +51,10 @@ export const scheduleUpdateSchema = yup.object({
   mastersIds: yup.array().of(yup.number()),
 });
 
-export type ScheduleUpdateFormData = yup.InferType<typeof scheduleUpdateSchema>;
-
 export const scheduleCreateSchema = yup.object({
   name: yup.string().required('Name is required').trim(),
   pattern: yup.number().required().max(40),
-  patternType: yup.string().oneOf(['weekly', '2x2', '3x2', '2x1', 'custom']).required(),
+  patternType: yup.string().oneOf(['weekly', '2x2', '3x2', '2x1', 'custom']),
 
   startAt: yup
     .string()
@@ -119,4 +118,5 @@ export const scheduleCreateSchema = yup.object({
   masterIds: yup.array().of(yup.number()),
 });
 
+export type ScheduleUpdateFormData = yup.InferType<typeof scheduleUpdateSchema>;
 export type ScheduleCreateFormData = yup.InferType<typeof scheduleCreateSchema>;

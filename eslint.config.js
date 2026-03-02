@@ -3,6 +3,7 @@ import globals from 'globals';
 import tseslint from '@typescript-eslint/eslint-plugin';
 import tsparser from '@typescript-eslint/parser';
 import { defineConfig, globalIgnores } from 'eslint/config';
+import simpleImportSort from 'eslint-plugin-simple-import-sort';
 
 export default defineConfig([
   globalIgnores([
@@ -30,6 +31,7 @@ export default defineConfig([
     },
     plugins: {
       '@typescript-eslint': tseslint,
+      'simple-import-sort': simpleImportSort,
     },
     rules: {
       ...tseslint.configs.recommended.rules,
@@ -41,6 +43,39 @@ export default defineConfig([
 
       'no-console': 'error',
       '@typescript-eslint/ban-ts-comment': 'off',
+      'simple-import-sort/imports': [
+        'error',
+        {
+          groups: [
+            ['^react', '^next'],
+            ['^@?\\w'],
+            ['^@avoo/'],
+            ['^@/'],
+            [
+              '^\\.\\.(?!/?$)',
+              '^\\.\\./?$',
+              '^\\./(?=.*/)(?!/?$)',
+              '^\\./?$',
+              '^\\.(?!/?$)',
+              '^\\./?$',
+            ],
+            ['^.+\\.s?css$'],
+          ],
+        },
+      ],
+      'simple-import-sort/exports': 'error',
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            {
+              group: ['**/node_modules/**', '**/dist/**'],
+              message:
+                'Please use the workspace alias instead of importing from node_modules or dist.',
+            },
+          ],
+        },
+      ],
     },
   },
   {

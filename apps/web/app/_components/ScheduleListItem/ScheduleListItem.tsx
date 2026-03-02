@@ -1,11 +1,12 @@
-import IconLink from '../IconLink/IconLink';
+import { IconButton } from '@mui/material';
+import { tv } from 'tailwind-variants';
+
+import { MasterWithRelationsEntityResponse } from '@avoo/axios/types/apiTypes';
+import { useApiStatusStore } from '@avoo/store';
+
+import { AvatarSize, CalendarAvatar } from '@/_components/CalendarAvatar/CalendarAvatar';
 import DeleteIcon from '@/_icons/DeleteIcon';
 import EditSquareIcon from '@/_icons/EditSquareIcon';
-import { IconButton } from '@mui/material';
-import { useApiStatusStore } from '@avoo/store';
-import { AvatarSize, CalendarAvatar } from '../CalendarAvatar/CalendarAvatar';
-import { MasterWithRelationsEntityResponse } from '@avoo/axios/types/apiTypes';
-import { tv } from 'tailwind-variants';
 import GroupIcon from '@/_icons/GroupIcon';
 
 type Props = {
@@ -15,11 +16,13 @@ type Props = {
   endAt: Date | null;
   master: MasterWithRelationsEntityResponse | null;
   isActive: boolean;
+  isSelected: boolean;
   onDelete: (id: number) => void;
+  onEdit: (id: number) => void;
 };
 
 export default function ScheduleListItem(props: Props) {
-  const { id, name, startAt, endAt, master, isActive, onDelete } = props;
+  const { id, name, startAt, endAt, master, isActive, isSelected, onDelete, onEdit } = props;
 
   const isPending = useApiStatusStore((state) => state.isPending);
 
@@ -35,11 +38,15 @@ export default function ScheduleListItem(props: Props) {
         true: '',
         false: 'bg-gray-100',
       },
+      isSelected: {
+        true: 'bg-primary-100',
+        false: '',
+      },
     },
   });
 
   return (
-    <div className={scheduleVariants({ isActive })}>
+    <div className={scheduleVariants({ isActive, isSelected })}>
       <div className='flex flex-col md:flex-row md:justify-between gap-2 lg:contents'>
         <div className='flex flex-col justify-center'>
           <h3 className='font-medium'>{name}</h3>
@@ -72,11 +79,14 @@ export default function ScheduleListItem(props: Props) {
         </div>
       </div>
       <div className='hidden lg:flex items-center me-2'>
-        <IconLink
-          href={'#'}
-          icon={<EditSquareIcon className='transition-colors' />}
-          label='Edit Service'
-        />
+        <IconButton
+          aria-label='edit'
+          onClick={() => onEdit(id)}
+          loading={isPending}
+          disabled={isPending}
+        >
+          <EditSquareIcon className='transition-colors' />
+        </IconButton>
         <IconButton
           aria-label='delete'
           onClick={() => {

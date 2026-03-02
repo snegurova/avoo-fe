@@ -1,9 +1,11 @@
 'use client';
-import { createTheme } from '@mui/material/styles';
 import { Roboto } from 'next/font/google';
-import type {} from '@mui/x-date-pickers/themeAugmentation';
-import { colors, breakpoints, radius, typography } from '@avoo/design-tokens';
+
 import type { Theme } from '@mui/material/styles';
+import { createTheme } from '@mui/material/styles';
+import type {} from '@mui/x-date-pickers/themeAugmentation';
+
+import { breakpoints, colors, radius, typography } from '@avoo/design-tokens';
 
 const roboto = Roboto({
   weight: ['400', '500', '700'],
@@ -317,9 +319,6 @@ const theme = createTheme({
     MuiFormControl: {
       styleOverrides: {
         root: () => ({
-          '& label + .MuiInputBase-root': {
-            marginTop: '4px',
-          },
           '& .MuiOutlinedInput-root': {
             '& .MuiOutlinedInput-notchedOutline': { borderColor: colors.gray[200] },
             '&:hover .MuiOutlinedInput-notchedOutline': { borderColor: colors.gray[200] },
@@ -349,18 +348,7 @@ const theme = createTheme({
         root: () => ({
           '& span': {
             fontSize: typography.fontSize.sm,
-            color: 'var(--color-gray-800)',
-          },
-          '& .MuiButtonBase-root': {
-            position: 'absolute',
-            top: '0',
-            right: '0',
-            bottom: '0',
-            left: '0',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'end',
-            paddingRight: 20,
+            color: colors.gray[800],
           },
           '& .MuiButtonBase-root:hover': {
             backgroundColor: 'transparent',

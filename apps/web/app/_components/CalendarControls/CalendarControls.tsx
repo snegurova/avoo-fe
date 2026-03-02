@@ -1,28 +1,32 @@
 'use client';
 import React, { useCallback, useMemo } from 'react';
+
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { DatePicker } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import dayjs from 'dayjs';
+import { tv } from 'tailwind-variants';
+
+import {
+  MasterWithRelationsEntityResponse,
+  PrivateCalendarQueryParams,
+} from '@avoo/axios/types/apiTypes';
+import { CalendarType } from '@avoo/hooks/types/calendarType';
+import { CalendarViewType } from '@avoo/hooks/types/calendarViewType';
+import { ElementStyleType } from '@avoo/hooks/types/elementStyleType';
+import { OrderStatus } from '@avoo/hooks/types/orderStatus';
+import { timeUtils } from '@avoo/shared';
+
 import SelectButton from '@/_components/SelectButton/SelectButton';
+import { DATE_PICKER_FORMAT } from '@/_constants/dateFormats';
 import ArrowBackIcon from '@/_icons/ArrowBackIcon';
 import ArrowForwardIcon from '@/_icons/ArrowForwardIcon';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { tv } from 'tailwind-variants';
-import { DatePicker } from '@mui/x-date-pickers';
-import dayjs from 'dayjs';
-import { CalendarViewType } from '@avoo/hooks/types/calendarViewType';
-import { timeUtils } from '@avoo/shared';
-import CheckboxesButton from '../CheckboxesButton/CheckboxesButton';
-import { OrderStatus } from '@avoo/hooks/types/orderStatus';
-import {
-  PrivateCalendarQueryParams,
-  MasterWithRelationsEntityResponse,
-} from '@avoo/axios/types/apiTypes';
 import CalendarViewDay from '@/_icons/CalendarViewDay';
-import CalendarViewWeek from '@/_icons/CalendarViewWeek';
 import CalendarViewMonth from '@/_icons/CalendarViewMonth';
-import useMediaQuery from '@mui/material/useMediaQuery';
-import { ElementStyleType } from '@avoo/hooks/types/elementStyleType';
-import { DATE_PICKER_FORMAT } from '@/_constants/dateFormats';
-import { CalendarType } from '@avoo/hooks/types/calendarType';
+import CalendarViewWeek from '@/_icons/CalendarViewWeek';
+
+import CheckboxesButton from '../CheckboxesButton/CheckboxesButton';
 
 const STATUSES_ITEMS = [
   { label: 'Pending', id: OrderStatus.PENDING },
@@ -349,6 +353,19 @@ export default function CalendarControls(props: Props) {
     [orderIsOutOfSchedule],
   );
 
+  const calendarButtonStyles = {
+    opacity: 0,
+    position: 'absolute',
+    top: '0',
+    right: '0',
+    bottom: '0',
+    left: '0',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    paddingRight: 10,
+  };
+
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <div className='bg-primary-50 px-4 py-3 flex gap-3 relative'>
@@ -374,7 +391,9 @@ export default function CalendarControls(props: Props) {
             value={dayjs(date)}
             format={DATE_PICKER_FORMAT}
             onChange={handleChangeDate}
-            sx={{ '& .MuiButtonBase-root': { opacity: 0 } }}
+            sx={{
+              '& .MuiButtonBase-root': calendarButtonStyles,
+            }}
           />
           <button
             type='button'

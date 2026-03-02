@@ -1,21 +1,22 @@
-import { useRouter } from 'next/navigation';
 import React, { useEffect } from 'react';
 import { Controller, useFieldArray } from 'react-hook-form';
+import { useRouter } from 'next/navigation';
+
 import { Button, TextField } from '@mui/material';
 
 import { END_MINUTE, SCHEDULE_OPTIONS, START_MINUTE } from '@avoo/constants/src/calendar';
 import { masterHooks, scheduleHooks } from '@avoo/hooks';
 import { timeUtils } from '@avoo/shared';
 
-import { FormSelect } from '@/_components/FormSelect/FormSelect';
-import { FormMultiSelect } from '@/_components/FormMultiSelect/FormMultiSelect';
 import FormDatePicker from '@/_components/FormDatePicker/FormDatePicker';
-import { WorkingDayRow } from '@/_components/WorkingDayRow/WorkingDayRow';
-import { AppRoutes } from '@/_routes/routes';
-import { getAllErrorMessages } from '@/_utils/formError';
-import { useToast } from '@/_hooks/useToast';
+import { FormMultiSelect } from '@/_components/FormMultiSelect/FormMultiSelect';
+import { FormSelect } from '@/_components/FormSelect/FormSelect';
+import { CreateWorkingDayRow } from '@/_components/ScheduleAddForm/CreateWorkingDayRow';
 import { VALUE_DATE_FORMAT } from '@/_constants/dateFormats';
 import { localizationHooks } from '@/_hooks/localizationHooks';
+import { useToast } from '@/_hooks/useToast';
+import { AppRoutes } from '@/_routes/routes';
+import { getAllErrorMessages } from '@/_utils/formError';
 
 export const ScheduleAddForm = () => {
   const toast = useToast();
@@ -189,14 +190,13 @@ export const ScheduleAddForm = () => {
             <p className='mb-8 font-medium'>Schedule {scheduleType}</p>
             <div className='flex flex-col gap-4'>
               {fields.map((field, index) => (
-                <WorkingDayRow
+                <CreateWorkingDayRow
                   key={field.id}
                   index={index}
                   control={control}
-                  watch={watch}
                   scheduleType={scheduleType}
                   setValue={setValue}
-                  onRemove={() => remove(index)}
+                  onRemoveDay={() => remove(index)}
                   disabledRemove={index === 0 && fields.length === 1}
                 />
               ))}

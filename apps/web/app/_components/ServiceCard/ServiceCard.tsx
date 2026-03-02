@@ -1,11 +1,13 @@
+import { IconButton } from '@mui/material';
+import { tv } from 'tailwind-variants';
+
 import { currencyUtils, timeUtils } from '@avoo/shared';
-import IconLink from '../IconLink/IconLink';
-import ShareIcon from '@/_icons/ShareIcon';
+import { useApiStatusStore } from '@avoo/store';
+
+import IconLink from '@/_components/IconLink/IconLink';
 import DeleteIcon from '@/_icons/DeleteIcon';
 import EditSquareIcon from '@/_icons/EditSquareIcon';
-import { IconButton } from '@mui/material';
-import { useApiStatusStore } from '@avoo/store';
-import { tv } from 'tailwind-variants';
+import ShareIcon from '@/_icons/ShareIcon';
 
 type Props = {
   id: number;
@@ -14,11 +16,14 @@ type Props = {
   price: number;
   currency: string;
   isActive: boolean;
+  isSelected: boolean;
   onDelete: (id: number) => void;
+  onEdit: (id: number) => void;
 };
 
 export default function ServiceCard(props: Props) {
-  const { id, name, durationMinutes, price, currency, isActive, onDelete } = props;
+  const { id, name, durationMinutes, price, currency, isActive, isSelected, onDelete, onEdit } =
+    props;
 
   const isPending = useApiStatusStore((state) => state.isPending);
 
@@ -28,6 +33,10 @@ export default function ServiceCard(props: Props) {
       isActive: {
         true: '',
         false: 'bg-gray-100',
+      },
+      isSelected: {
+        true: 'bg-primary-50',
+        false: '',
       },
     },
   });
@@ -43,7 +52,7 @@ export default function ServiceCard(props: Props) {
   });
 
   return (
-    <div className={wrapper({ isActive })}>
+    <div className={wrapper({ isActive, isSelected })}>
       <span className={statusIndicator({ isActive })} />
       <div className='flex items-center justify-between px-4 py-3'>
         <div>
@@ -60,11 +69,14 @@ export default function ServiceCard(props: Props) {
             {currencyUtils.formatPrice(price, currency)}
           </span>
           <div className='hidden lg:flex items-center gap-0'>
-            <IconLink
-              href={'#'}
-              icon={<EditSquareIcon className='transition-colors' />}
-              label='Edit Service'
-            />
+            <IconButton
+              aria-label='edit'
+              onClick={() => onEdit(id)}
+              loading={isPending}
+              disabled={isPending}
+            >
+              <EditSquareIcon className='transition-colors' />
+            </IconButton>
             <IconLink
               href={'#'}
               icon={<ShareIcon className='transition-colors' />}

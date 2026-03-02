@@ -1,13 +1,15 @@
 'use client';
 
 import { useMemo } from 'react';
-import { scheduleHooks } from '@avoo/hooks';
-import AppWrapper from '@/_components/AppWrapper/AppWrapper';
-import SchedulesControls from '@/_components/SchedulesControls/SchedulesControls';
-import AppPlaceholder from '@/_components/AppPlaceholder/AppPlaceholder';
-import EditCalendarIcon from '@/_icons/EditCalendarIcon';
 import Link from 'next/link';
+
+import { scheduleHooks } from '@avoo/hooks';
+
+import AppPlaceholder from '@/_components/AppPlaceholder/AppPlaceholder';
+import AppWrapper from '@/_components/AppWrapper/AppWrapper';
 import ScheduleList from '@/_components/ScheduleList/ScheduleList';
+import SchedulesControls from '@/_components/SchedulesControls/SchedulesControls';
+import EditCalendarIcon from '@/_icons/EditCalendarIcon';
 
 export default function WorkingHoursPage() {
   const { data, fetchNextPage, hasNextPage } = scheduleHooks.useGetSchedulesInfinite({

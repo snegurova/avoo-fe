@@ -1,6 +1,7 @@
 import { useState } from 'react';
-import SortIcon from '@/_icons/SortIcon';
+
 import ArrowDownIcon from '@/_icons/ArrowDownIcon';
+import SortIcon from '@/_icons/SortIcon';
 
 type Props = {
   onSelect: (value: string) => void;

@@ -1,20 +1,23 @@
 'use client';
-import React, { useState, useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import Link from 'next/link';
-import { AppRoutes } from '@/_routes/routes';
-import AppNavigationItem from '../AppNavigationItem/AppNavigationItem';
-import { tv } from 'tailwind-variants';
-import { routerHooks } from '@/_hooks/routerHooks';
-import HomeIcon from '@/_icons/HomeIcon';
-import CalendarIcon from '@/_icons/CalendarIcon';
-import GroupsIcon from '@/_icons/GroupsIcon';
-import BookIcon from '@/_icons/BookIcon';
-import MosaicIcon from '@/_icons/MosaicIcon';
-import CoPresentIcon from '@/_icons/CoPresentIcon';
+
 import useMediaQuery from '@mui/material/useMediaQuery';
+import { tv } from 'tailwind-variants';
+
+import { localizationHooks } from '@/_hooks/localizationHooks';
+import { routerHooks } from '@/_hooks/routerHooks';
 import ArrowDownIcon from '@/_icons/ArrowDownIcon';
 import ArrowUpIcon from '@/_icons/ArrowUpIcon';
-import { localizationHooks } from '@/_hooks/localizationHooks';
+import BookIcon from '@/_icons/BookIcon';
+import CalendarIcon from '@/_icons/CalendarIcon';
+import CoPresentIcon from '@/_icons/CoPresentIcon';
+import GroupsIcon from '@/_icons/GroupsIcon';
+import HomeIcon from '@/_icons/HomeIcon';
+import MosaicIcon from '@/_icons/MosaicIcon';
+import { AppRoutes } from '@/_routes/routes';
+
+import AppNavigationItem from '../AppNavigationItem/AppNavigationItem';
 
 type Props = {
   menuOpen: boolean;
@@ -152,6 +155,7 @@ export default function AppNavigation({ menuOpen, setMenuOpen }: Props) {
                               <Link
                                 href={localizationHooks.useWithLocale(AppRoutes.WorkingHours)}
                                 className='block w-full text-left pl-20 pr-4 py-2 hover:bg-primary-100 focus:bg-primary-100 transition-colors cursor-pointer'
+                                onClick={handleNavClick}
                               >
                                 Working schedule
                               </Link>

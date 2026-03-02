@@ -1,16 +1,16 @@
+import { apiClient } from '@avoo/axios/src/apiClient';
 import {
   BaseResponse,
+  CreateScheduleResponse,
   GetSchedulesResponse,
-  ScheduleCreateResponse,
   ScheduleEntity,
-  ScheduleUpdateResponse,
+  UpdateScheduleResponse,
 } from '@avoo/axios/types/apiTypes';
-import { apiClient } from '@avoo/axios/src/apiClient';
+import { QuerySchedules } from '@avoo/axios/types/apiTypes';
 import {
   ScheduleCreateFormData,
   ScheduleUpdateFormData,
 } from '@avoo/hooks/schemas/schedulesValidationSchemas';
-import { QuerySchedules } from '@avoo/axios/types/apiTypes';
 
 const SCHEDULES_ENDPOINT = '/schedules';
 
@@ -28,21 +28,21 @@ export const scheduleApi = {
     return response.data;
   },
   async updateSchedule(data: ScheduleUpdateFormData) {
-    const response = await apiClient.put<BaseResponse<ScheduleUpdateResponse>>(
+    const response = await apiClient.put<BaseResponse<UpdateScheduleResponse>>(
       SCHEDULES_ENDPOINT + '/' + data.id.toString(),
       data,
     );
     return response.data;
   },
   async createSchedule(data: ScheduleCreateFormData) {
-    const response = await apiClient.post<BaseResponse<ScheduleCreateResponse>>(
+    const response = await apiClient.post<BaseResponse<CreateScheduleResponse>>(
       SCHEDULES_ENDPOINT,
       data,
     );
     return response.data;
   },
   async deleteSchedule(id: number) {
-    const response = await apiClient.delete<BaseResponse<Record<string, never>>>(
+    const response = await apiClient.delete<BaseResponse<ScheduleEntity>>(
       `${SCHEDULES_ENDPOINT}/${id.toString()}`,
     );
     return response.data;
