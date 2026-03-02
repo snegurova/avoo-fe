@@ -6,6 +6,7 @@ import {
   ServicesQueryParams,
   PublicServiceQueryParams,
   BaseResponse,
+  ApiStatus,
 } from '@avoo/axios/types/apiTypes';
 import { InfiniteData, useInfiniteQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useMemo, useState } from 'react';
@@ -21,6 +22,21 @@ const DEFAULT_LIMIT = 10;
 type UseServiceCreateFormParams = {
   onSuccess?: () => void;
   onError?: (error: Error) => void;
+};
+
+type ServicesQueryStateParams = {
+  limit: number;
+  categoryId: number | null;
+  search: string;
+  masterIds: number[];
+};
+
+type PublicServiceQueryStateParams = {
+  limit: number;
+  categoryId?: number | null;
+  search: string;
+  masterIds: number[];
+  userId?: number;
 };
 
 export const servicesHooks = {
@@ -52,7 +68,7 @@ export const servicesHooks = {
     return query;
   },
   useServicesQuery() {
-    const [params, setParams] = useState({
+    const [params, setParams] = useState<ServicesQueryStateParams>({
       limit: DEFAULT_LIMIT,
       categoryId: null,
       search: '',
@@ -120,6 +136,9 @@ export const servicesHooks = {
             if (!oldData) return oldData;
 
             const newPages = oldData.pages.map((page) => {
+              if (page.status !== ApiStatus.SUCCESS || !page.data) {
+                return page;
+              }
               const newItems = page.data.items.filter((s) => s.id !== deletedId);
 
               return {
@@ -202,7 +221,9 @@ export const servicesHooks = {
       control,
       setValue,
       getValues,
-      handleSubmit: handleSubmit(utils.submitAdapter<CreateServiceRequest>(createService)),
+      handleSubmit: handleSubmit(
+        utils.submitAdapter<CreateServiceRequest, CreateServiceFormData>(createService),
+      ),
       errors,
     };
   },
@@ -225,7 +246,7 @@ export const servicesHooks = {
     return query;
   },
   usePublicServiceQuery(userId: number | undefined) {
-    const [params, setParams] = useState({
+    const [params, setParams] = useState<PublicServiceQueryStateParams>({
       limit: DEFAULT_LIMIT,
       search: '',
       masterIds: [],

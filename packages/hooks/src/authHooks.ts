@@ -97,7 +97,9 @@ export const authHooks = {
     return {
       register,
       control,
-      handleSubmit: handleSubmit(utils.submitAdapter<RegisterCustomRequest>(registerMutation)),
+      handleSubmit: handleSubmit(
+        utils.submitAdapter<RegisterCustomRequest, RegisterFormData>(registerMutation),
+      ),
       errors,
     };
   },
@@ -142,7 +144,7 @@ export const authHooks = {
     return {
       register,
       control,
-      handleSubmit: handleSubmit(utils.submitAdapter<LoginRequest>(login)),
+      handleSubmit: handleSubmit(utils.submitAdapter<LoginRequest, LoginFormData>(login)),
       errors,
     };
   },
@@ -163,7 +165,9 @@ export const authHooks = {
     return {
       register,
       control,
-      handleSubmit: handleSubmit(utils.submitAdapter<ForgotPasswordRequestType>(sendCodeHandler)),
+      handleSubmit: handleSubmit(
+        utils.submitAdapter<ForgotPasswordRequestType, ForgotPasswordFormData>(sendCodeHandler),
+      ),
       errors,
     };
   },
@@ -249,7 +253,9 @@ export const authHooks = {
     return {
       register,
       control,
-      handleSubmit: handleSubmit(utils.submitAdapter<ResetPasswordRequest>(resetPassword)),
+      handleSubmit: handleSubmit(
+        utils.submitAdapter<ResetPasswordRequest, ResetPasswordFormData>(resetPassword),
+      ),
       errors,
     };
   },

@@ -115,7 +115,9 @@ export const masterHooks = {
 
     return {
       control,
-      handleSubmit: handleSubmit(utils.submitAdapter<CreateMasterRequest>(createMasterMutation)),
+      handleSubmit: handleSubmit(
+        utils.submitAdapter<CreateMasterRequest, CreateMasterFormData>(createMasterMutation),
+      ),
       setValue,
       watch,
       errors,
@@ -166,7 +168,9 @@ export const masterHooks = {
 
     return {
       control,
-      handleSubmit: handleSubmit(utils.submitAdapter<CreateMasterRequest>(updateMasterMutation)),
+      handleSubmit: handleSubmit(
+        utils.submitAdapter<CreateMasterRequest, CreateMasterFormData>(updateMasterMutation),
+      ),
       setValue,
       watch,
       errors,

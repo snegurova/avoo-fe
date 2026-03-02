@@ -72,7 +72,7 @@ export const scheduleHooks = {
 
     return query;
   },
-  useGetScheduleById: (id: number): ScheduleEntity => {
+  useGetScheduleById: (id: number): ScheduleEntity | null => {
     const { data: scheduleData, isPending } = useQuery<BaseResponse<ScheduleEntity>, Error>({
       queryKey: ['schedule', id],
       queryFn: () => scheduleApi.getScheduleById(id),
@@ -138,7 +138,9 @@ export const scheduleHooks = {
     return {
       register,
       control,
-      handleSubmit: handleSubmit(utils.submitAdapter<ScheduleCreateFormData>(createSchedule)),
+      handleSubmit: handleSubmit(
+        utils.submitAdapter<ScheduleCreateFormData, ScheduleCreateFormData>(createSchedule),
+      ),
       errors,
       watch,
       setValue,
@@ -199,6 +201,9 @@ export const scheduleHooks = {
             if (!oldData) return oldData;
 
             const newPages = oldData.pages.map((page) => {
+              if (page.status !== ApiStatus.SUCCESS || !page.data) {
+                return page;
+              }
               const newItems = page.data.items.filter((s) => s.id !== deletedId);
 
               return {

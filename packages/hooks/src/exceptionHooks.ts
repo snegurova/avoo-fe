@@ -142,7 +142,7 @@ export const exceptionHooks = {
 
     return {
       control,
-      handleSubmit: handleSubmit(utils.submitAdapter<ExceptionFormData>(submit)),
+      handleSubmit: handleSubmit(submit),
       setValue,
       watch,
       errors,
