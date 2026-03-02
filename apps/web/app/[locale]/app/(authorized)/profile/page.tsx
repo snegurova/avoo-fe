@@ -10,7 +10,7 @@ import { ProfileSchedule } from '@/_components/ProfileSchedule/ProfileSchedule';
 export default function ProfilePage() {
   return (
     <AppWrapper>
-      <div className='py-4 flex flex-col'>
+      <div className='py-4 flex flex-col overflow-auto hide-scrollbar'>
         <div className='px-4'>
           <h1 className='text-3xl font-bold mb-6'>Profile</h1>
         </div>

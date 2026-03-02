@@ -5,10 +5,12 @@ import {
   UpdateOrderStatusRequest,
   CreatePrivateOrdersRequest,
   UpdateOrderRequest,
+  CreatePublicOrdersRequest,
 } from '@avoo/axios/types/apiTypes';
 import { apiClient } from '@avoo/axios/src/apiClient';
 
 const ORDER_ENDPOINT = '/orders';
+const PUBLIC_ORDER_ENDPOINT = '/public/orders';
 
 export const orderApi = {
   async getOrders(params: PrivateOrderQueryParams) {
@@ -29,6 +31,10 @@ export const orderApi = {
   },
   async getOrderById(id: number) {
     const res = await apiClient.get<BaseResponse<Order>>(`${ORDER_ENDPOINT}/${id}`);
+    return res.data;
+  },
+  async createPublicOrder(data: CreatePublicOrdersRequest) {
+    const res = await apiClient.post<BaseResponse<Order[]>>(PUBLIC_ORDER_ENDPOINT, data);
     return res.data;
   },
 };

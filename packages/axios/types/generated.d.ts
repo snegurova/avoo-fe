@@ -587,7 +587,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["OrdersController_getById"];
+        get: operations["OrdersController_findOneByOwner"];
         put?: never;
         post?: never;
         delete?: never;
@@ -1438,7 +1438,7 @@ export interface components {
              */
             masterIds?: number[];
         };
-        CreatePrivateOrderDto: {
+        CreateOrderDto: {
             /** @enum {string} */
             type: "SERVICE" | "COMBINATION";
             /**
@@ -1494,15 +1494,8 @@ export interface components {
             isNotificationEnable?: boolean;
         };
         CreatePrivateOrdersDto: {
-            ordersData: components["schemas"]["CreatePrivateOrderDto"][];
+            ordersData: components["schemas"]["CreateOrderDto"][];
             customerData?: components["schemas"]["CreateCustomerDto"];
-        };
-        UpdateOrderStatusDto: {
-            /**
-             * @description Status of the order
-             * @enum {string}
-             */
-            status?: "PENDING" | "CONFIRMED" | "COMPLETED" | "EXPIRED" | "CANCELED";
         };
         UpdateOrderDto: {
             /**
@@ -1532,30 +1525,12 @@ export interface components {
              */
             notes?: string;
         };
-        CreatePublicOrderDto: {
-            /** @enum {string} */
-            type: "SERVICE" | "COMBINATION";
+        UpdateOrderStatusDto: {
             /**
-             * @description ID of the service for the order (required if type is SERVICE)
-             * @example 2
+             * @description Status of the order
+             * @enum {string}
              */
-            serviceId?: number;
-            /**
-             * @description ID of the combination for the order (required if type is COMBINATION)
-             * @example 3
-             */
-            combinationId?: number;
-            /**
-             * @description ID of the master assigned to the order
-             * @example 1
-             */
-            masterId: number;
-            /**
-             * Format: date-time
-             * @description Date of the service in UTC
-             * @example 2026-03-19T07:00:00Z
-             */
-            date: string;
+            status?: "PENDING" | "CONFIRMED" | "COMPLETED" | "EXPIRED" | "CANCELED";
         };
         CreatePublicCustomerDto: {
             /**
@@ -1575,7 +1550,7 @@ export interface components {
             email: string;
         };
         CreatePublicOrdersDto: {
-            ordersData: components["schemas"]["CreatePublicOrderDto"][];
+            ordersData: components["schemas"]["CreateOrderDto"][];
             customerData: components["schemas"]["CreatePublicCustomerDto"];
             /** @example 59BCEF4C */
             referralCode?: Record<string, never>;
@@ -4175,7 +4150,7 @@ export interface operations {
             };
         };
     };
-    OrdersController_getById: {
+    OrdersController_findOneByOwner: {
         parameters: {
             query?: never;
             header?: never;

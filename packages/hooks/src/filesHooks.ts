@@ -3,6 +3,7 @@ import { filesApi } from '@avoo/axios';
 import { BaseResponse, FileUploadResponse, UploadFileRequest } from '@avoo/axios/types/apiTypes';
 import { utils } from '../utils/utils';
 import { ApiStatus } from '@avoo/axios/types/apiTypes';
+import { formDataUtils } from '@avoo/axios/utils/formDataUtils';
 
 type UseUploadFileParams = {
   onSuccess?: (data: FileUploadResponse) => void;
@@ -16,9 +17,8 @@ export const filesHooks = {
       UploadFileRequest
     >({
       mutationFn: async (payload) => {
-        const body = new FormData();
-        body.append('type', payload.type);
-        body.append('file', payload.file);
+        const body = formDataUtils.getFileFormData(payload);
+
         return filesApi.uploadFile(body);
       },
       onSuccess: (response) => {

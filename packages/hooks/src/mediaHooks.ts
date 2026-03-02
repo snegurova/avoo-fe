@@ -2,12 +2,13 @@ import { useInfiniteQuery, useMutation, useQueryClient } from '@tanstack/react-q
 
 import { mediaApi } from '@avoo/axios/src/modules/media';
 import {
+  ApiStatus,
   BaseResponse,
+  UploadMediaRequest,
+  UploadMediaResponse,
   DeleteMediaParams,
   GetMediaResponse,
   MediaQueryParams,
-  UploadMediaRequest,
-  UploadMediaResponse,
 } from '@avoo/axios/types/apiTypes';
 import { utils } from '@avoo/hooks/utils/utils';
 
@@ -52,7 +53,7 @@ export const mediaHooks = {
         successMessage: 'Media uploaded successfully',
       },
       onSuccess: (data) => {
-        onSuccess?.(data.data);
+        if (data.status === ApiStatus.SUCCESS) onSuccess?.(data.data);
       },
       onError: (error) => {
         onError?.(error);

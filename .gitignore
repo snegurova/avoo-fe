@@ -53,3 +53,4 @@ lerna-debug.log*
 
 *storybook.log
 storybook-static
+apps/web/next-env.d.ts

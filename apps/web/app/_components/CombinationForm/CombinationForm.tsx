@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import {
-  CreatePrivateOrder,
+  CreateOrder,
   Combination,
   MasterWithRelationsEntity,
   GetMastersQueryParams,
@@ -16,8 +16,8 @@ import CallSplitIcon from '@/_icons/CallSplitIcon';
 import { IconButton } from '@/_components/IconButton/IconButton';
 
 type Props = {
-  value: CreatePrivateOrder[];
-  onChange: (orders: CreatePrivateOrder[]) => void;
+  value: CreateOrder[];
+  onChange: (orders: CreateOrder[]) => void;
   selectedCombination: Combination;
   errors?: { [key: string]: { message: string } };
   selectedMasters: (MasterWithRelationsEntity | null)[];

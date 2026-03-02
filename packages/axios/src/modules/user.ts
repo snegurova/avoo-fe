@@ -7,6 +7,7 @@ import {
   UpdateProfile,
 } from '@avoo/axios/types/apiTypes';
 import { apiClient } from '@avoo/axios/src/apiClient';
+import { MediaType } from '@avoo/hooks/types/mediaType';
 
 const UPDATE_AVATAR_ENDPOINT = '/update-avatar';
 const PROFILE_ENDPOINT = '/profile';
@@ -18,8 +19,10 @@ export const userApi = {
     const response = await apiClient.get<BaseResponse<UserProfileResponse>>(PROFILE_ENDPOINT);
     return response.data;
   },
-  async getUserMedia() {
-    const response = await apiClient.get<BaseResponse<UserMediaResponse>>(GET_USER_MEDIA_ENDPOINT);
+  async getUserMedia(type: MediaType, typeEntityId: number) {
+    const response = await apiClient.get<BaseResponse<UserMediaResponse>>(GET_USER_MEDIA_ENDPOINT, {
+      params: { type, typeEntityId },
+    });
     return response.data;
   },
   async updateAvatar(body: FormData) {

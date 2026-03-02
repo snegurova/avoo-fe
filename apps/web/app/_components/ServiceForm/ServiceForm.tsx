@@ -1,10 +1,9 @@
 import React from 'react';
-import { CreatePrivateOrder, MasterWithRelationsEntity, Service } from '@avoo/axios/types/apiTypes';
-import ServiceFormItem from '@/_components/ServiceFormItem/ServiceFormItem';
+import { CreateOrder, MasterWithRelationsEntity, Service } from '@avoo/axios/types/apiTypes';
 
 type Props = {
-  value: CreatePrivateOrder[];
-  onChange: (orders: CreatePrivateOrder[]) => void;
+  value: CreateOrder[];
+  onChange: (orders: CreateOrder[]) => void;
   initialParams: {
     masterId?: number;
     date?: string;
@@ -21,6 +20,26 @@ type Props = {
       | (MasterWithRelationsEntity | null)[]
       | ((prev: (MasterWithRelationsEntity | null)[]) => (MasterWithRelationsEntity | null)[]),
   ) => void;
+  Item: React.ComponentType<{
+    order: CreateOrder;
+    onChange: (orders: CreateOrder[]) => void;
+    value: CreateOrder[];
+    index: number;
+    initialParams: {
+      masterId?: number;
+      date?: string;
+    };
+    selectedService: Service | null;
+    setSelectedService: (service: Service | null) => void;
+    remove: (() => void) | null;
+    selectedMasters: (MasterWithRelationsEntity | null)[];
+    setSelectedMasters: (
+      masters:
+        | (MasterWithRelationsEntity | null)[]
+        | ((prev: (MasterWithRelationsEntity | null)[]) => (MasterWithRelationsEntity | null)[]),
+    ) => void;
+    errors: { [key: string]: { message: string } };
+  }>;
 };
 
 export default function ServiceForm(props: Props) {
@@ -34,6 +53,7 @@ export default function ServiceForm(props: Props) {
     errors,
     selectedMasters,
     setSelectedMasters,
+    Item,
   } = props;
   const currentService = (index: number): Service | null => {
     return selectedServices[index] || null;
@@ -59,7 +79,7 @@ export default function ServiceForm(props: Props) {
   return (
     <div className='flex flex-col gap-6'>
       {value.map((order, index, arr) => (
-        <ServiceFormItem
+        <Item
           key={`service-item-${index}`}
           order={order}
           onChange={onChange}

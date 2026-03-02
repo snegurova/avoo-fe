@@ -12,19 +12,23 @@ import {
   GetServiceResponse,
   Service,
   ServicesQueryParams,
+  PublicServiceQueryParams,
+  BaseResponse,
   UpdateServiceRequest,
   UpdateServiceResponse,
 } from '@avoo/axios/types/apiTypes';
-import { BaseResponse } from '@avoo/axios/types/apiTypes';
-import { utils } from '@avoo/hooks/utils/utils';
 
+import { InfiniteData, useInfiniteQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMemo, useState } from 'react';
+import { servicesApi } from '@avoo/axios/src/modules/services';
+import { useDebounce } from './useDebounce';
 import {
   CreateServiceFormData,
   createServiceSchema,
   UpdateServiceFormData,
 } from '../schemas/validationSchemas';
 import { queryKeys } from './queryKeys';
-import { useDebounce } from './useDebounce';
+import { utils } from '@avoo/hooks/utils/utils';
 
 const DEFAULT_LIMIT = 10;
 
@@ -33,18 +37,26 @@ type UseBaseServiceFormParams = {
   onError?: (error: Error) => void;
 };
 
-type UseServiceCreateFormParams = UseBaseServiceFormParams;
-
-type UseServiceUpdateFormParams = {
-  service: Service;
-} & UseBaseServiceFormParams;
-
-type ServicesState = {
+type ServicesQueryStateParams = {
   limit: number;
   categoryId: number | null;
   search: string;
   masterIds: number[];
 };
+
+type PublicServiceQueryStateParams = {
+  limit: number;
+  categoryId?: number | null;
+  search: string;
+  masterIds: number[];
+  userId?: number;
+};
+
+type UseServiceCreateFormParams = UseBaseServiceFormParams;
+
+type UseServiceUpdateFormParams = {
+  service: Service;
+} & UseBaseServiceFormParams;
 
 export const servicesHooks = {
   useGetServicesInfinite: ({
@@ -75,7 +87,7 @@ export const servicesHooks = {
     return query;
   },
   useServicesQuery() {
-    const [params, setParams] = useState<ServicesState>({
+    const [params, setParams] = useState<ServicesQueryStateParams>({
       limit: DEFAULT_LIMIT,
       categoryId: null,
       search: '',
@@ -143,7 +155,7 @@ export const servicesHooks = {
             if (!oldData) return oldData;
 
             const newPages = oldData.pages.map((page) => {
-              if (page.status !== ApiStatus.SUCCESS) {
+              if (page.status !== ApiStatus.SUCCESS || !page.data) {
                 return page;
               }
               const newItems = page.data.items.filter((s) => s.id !== deletedId);
@@ -177,7 +189,6 @@ export const servicesHooks = {
       deleteServiceMutationAsync: deleteServiceMutation.mutateAsync,
     };
   },
-
   useCreateServiceForm: ({ onSuccess, onError }: UseServiceCreateFormParams) => {
     const {
       register,
@@ -229,9 +240,70 @@ export const servicesHooks = {
       control,
       setValue,
       getValues,
-      handleSubmit: handleSubmit(utils.submitAdapter<CreateServiceRequest>(createService)),
+      handleSubmit: handleSubmit(
+        utils.submitAdapter<CreateServiceRequest, CreateServiceFormData>(createService),
+      ),
       errors,
     };
+  },
+  useGetPublicServicesInfinite: (params: PublicServiceQueryParams) => {
+    const query = useInfiniteQuery<BaseResponse<GetServiceResponse>, Error>({
+      queryKey: ['publicServices', 'list', params],
+      queryFn: ({ pageParam = 1 }) =>
+        servicesApi.getPublicServices({ ...params, page: pageParam as number }),
+      initialPageParam: 1,
+      getNextPageParam: (lastPage) => {
+        const { currentPage, total } = lastPage.data?.pagination || { currentPage: 0, total: 0 };
+        return currentPage * (params.limit || DEFAULT_LIMIT) < total ? currentPage + 1 : undefined;
+      },
+    });
+
+    const isPending = query.isFetching;
+
+    utils.useSetPendingApi(isPending);
+
+    return query;
+  },
+  usePublicServiceQuery(userId: number | undefined) {
+    const [params, setParams] = useState<PublicServiceQueryStateParams>({
+      limit: DEFAULT_LIMIT,
+      search: '',
+      masterIds: [],
+      userId,
+    });
+
+    const setSearchQuery = (value: string) => {
+      setParams((prev) => ({
+        ...prev,
+        search: value,
+      }));
+    };
+
+    const setCategory = (categoryId: number | null) => {
+      setParams((prev) => ({
+        ...prev,
+        categoryId,
+      }));
+    };
+
+    const setMasterIds = (masterIds: number[]) => {
+      setParams((prev) => ({
+        ...prev,
+        masterIds,
+      }));
+    };
+
+    const debouncedSearch = useDebounce(params.search, 400);
+
+    const queryParams = useMemo(
+      () => ({
+        ...params,
+        search: debouncedSearch,
+      }),
+      [params, debouncedSearch],
+    );
+
+    return { params, queryParams, setSearchQuery, setCategory, setMasterIds };
   },
   useUpdateServiceForm: ({ service, onSuccess, onError }: UseServiceUpdateFormParams) => {
     const {

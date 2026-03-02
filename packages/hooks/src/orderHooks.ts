@@ -2,6 +2,7 @@ import { orderApi } from '@avoo/axios';
 import { utils } from '@avoo/hooks/utils/utils';
 import {
   CreatePrivateOrdersRequest,
+  CreatePublicOrdersRequest,
   UpdateOrderStatusRequest,
   PrivateOrderQueryParams,
   UpdateOrderRequest,
@@ -21,8 +22,10 @@ import {
   updateOrderStatusSchema,
   updateOrderSchema,
   CreatePrivateOrdersData,
+  CreatePublicOrdersData,
   UpdateOrderStatusData,
   UpdateOrderData,
+  createPublicOrdersSchema,
 } from '../schemas/validationSchemas';
 import { OrderType } from '@avoo/hooks/types/orderType';
 import { OrderStatus } from '../types/orderStatus';
@@ -124,7 +127,81 @@ export const orderHooks = {
 
     return {
       control,
-      handleSubmit: handleSubmit(utils.submitAdapter<CreatePrivateOrdersRequest>(mutate)),
+      handleSubmit: handleSubmit(
+        utils.submitAdapter<CreatePrivateOrdersRequest, CreatePrivateOrdersData>(mutate),
+      ),
+      getValues,
+      errors,
+      isPending,
+      selectedServices,
+      setSelectedServices,
+      selectedCombinations,
+      setSelectedCombinations,
+    };
+  },
+  useCreatePublicOrder: ({ onSuccess, userId }: { onSuccess?: () => void; userId: number }) => {
+    const [selectedServices, setSelectedServices] = useState<(Service | null)[]>([null]);
+    const [selectedCombinations, setSelectedCombinations] = useState<Combination[]>([]);
+    const {
+      control,
+      handleSubmit,
+      getValues,
+      formState: { errors },
+    } = useForm<CreatePublicOrdersData>({
+      resolver: yupResolver(createPublicOrdersSchema),
+      context: {
+        services: selectedServices ?? [],
+        combinations: selectedCombinations ?? [],
+      },
+      mode: 'onSubmit',
+      defaultValues: {
+        ordersData: [
+          {
+            type: OrderType.Service,
+            date: timeUtils.convertDateToRoundedString(new Date()),
+          },
+        ],
+        customerData: {
+          name: '',
+          phone: '',
+          email: '',
+        },
+        userId,
+      },
+    });
+
+    const queryClient = useQueryClient();
+
+    const { mutate, isPending } = useMutation<
+      BaseResponse<Order[]>,
+      Error,
+      CreatePublicOrdersRequest
+    >({
+      mutationFn: orderApi.createPublicOrder,
+      onSuccess: async () => {
+        await queryClient.invalidateQueries({
+          queryKey: [
+            queryKeys.orders.all,
+            queryKeys.orders.byParams,
+            queryKeys.customers.all,
+            queryKeys.customers.byParams,
+            queryKeys.calendar.all,
+            queryKeys.calendar.byParams,
+            queryKeys.monthCalendar.all,
+            queryKeys.monthCalendar.byParams,
+          ],
+        });
+        onSuccess?.();
+      },
+    });
+
+    utils.useSetPendingApi(isPending);
+
+    return {
+      control,
+      handleSubmit: handleSubmit(
+        utils.submitAdapter<CreatePublicOrdersRequest, CreatePublicOrdersData>(mutate),
+      ),
       getValues,
       errors,
       isPending,
@@ -204,7 +281,9 @@ export const orderHooks = {
 
     return {
       control,
-      handleSubmit: handleSubmit(utils.submitAdapter<UpdateOrderStatusRequest>(mutate)),
+      handleSubmit: handleSubmit(
+        utils.submitAdapter<UpdateOrderStatusRequest, UpdateOrderStatusData>(mutate),
+      ),
       errors,
       isPending,
     };

@@ -3,9 +3,9 @@ import { orderHooks, combinationHooks } from '@avoo/hooks';
 import { useApiStatusStore } from '@avoo/store';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Button, ButtonFit, ButtonIntent, ButtonType } from '@/_components/Button/Button';
-import { CustomerSelect } from '../CustomerSelect/CustomerSelect';
+import { CustomerSelect } from '@/_components/CustomerSelect/CustomerSelect';
 import { Controller, useFieldArray } from 'react-hook-form';
-import ServiceForm from '../ServiceForm/ServiceForm';
+import ServiceForm from '@/_components/ServiceForm/ServiceForm';
 import { AppRoutes } from '@/_routes/routes';
 import AddCircleIcon from '@/_icons/AddCircleIcon';
 import { OrderQueryParams } from '@avoo/hooks/types/orderQueryParams';
@@ -14,10 +14,11 @@ import { timeUtils } from '@avoo/shared';
 import { useToast } from '@/_hooks/useToast';
 import CombinationProposition from '@/_components/CombinationProposition/CombinationProposition';
 import CombinationForm from '@/_components/CombinationForm/CombinationForm';
-import { MasterWithRelationsEntity, CreatePrivateOrder } from '@avoo/axios/types/apiTypes';
+import { MasterWithRelationsEntity, CreateOrder } from '@avoo/axios/types/apiTypes';
 import Calendar from '@/_components/Calendar/Calendar';
 import { CalendarType } from '@avoo/hooks/types/calendarType';
 import { localizationHooks } from '@/_hooks/localizationHooks';
+import ServiceFormItem from '@/_components/ServiceFormItem/ServiceFormItem';
 
 const SERVICES_KEY_IN_ORDER_CREATE = 'ordersData';
 const WRAPPER_HEADER_HEIGHT = '62px';
@@ -160,7 +161,7 @@ export default function OrderCreate() {
 
   const onSplitCombination = () => {
     let countDuration = 0;
-    const ordersData: CreatePrivateOrder[] = [];
+    const ordersData: CreateOrder[] = [];
 
     selectedServices.forEach((service, index) => {
       ordersData.push({
@@ -186,7 +187,7 @@ export default function OrderCreate() {
   };
 
   const setDateAndMasterInLastItem = (
-    field: { value: CreatePrivateOrder[]; onChange: (value: CreatePrivateOrder[]) => void },
+    field: { value: CreateOrder[]; onChange: (value: CreateOrder[]) => void },
     date: string,
     master: MasterWithRelationsEntity,
   ) => {
@@ -240,6 +241,7 @@ export default function OrderCreate() {
                 setSelectedMasters={setSelectedMasters}
                 remove={remove}
                 errors={Array.isArray(errors.ordersData) ? errors.ordersData : []}
+                Item={ServiceFormItem}
               />
             ) : (
               <CombinationForm

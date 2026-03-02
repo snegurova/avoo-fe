@@ -1,28 +1,40 @@
 'use client';
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
 import Avatar, { AvatarSize } from '@/_components/Avatar/Avatar';
 import { Typography } from '@mui/material';
 import { Exception } from '@avoo/axios/types/apiTypes';
 import { colors, typography } from '@avoo/design-tokens';
 import dayjs from 'dayjs';
-import IconLink from '@/_components/IconLink/IconLink';
 import EditSquareIcon from '@/_icons/EditSquareIcon';
 import DeleteIcon from '@/_icons/DeleteIcon';
 import DoNotDisturbIcon from '@/_icons/DoNotDisturbIcon';
 import ScheduleIcon from '@/_icons/ScheduleIcon';
-import { masterHooks } from '@avoo/hooks';
+import { masterHooks, exceptionHooks } from '@avoo/hooks';
+import { useToast } from '@/_hooks/useToast';
+import ConfirmationModal from '../ConfirmationModal/ConfirmationModal';
+import { IconButton } from '@/_components/IconButton/IconButton';
 
 type Props = {
   item: Exception;
-  onEdit?: (id: number) => void;
-  onDelete?: (id: number) => void;
+  onEdit?: (item: Exception) => void;
 };
 
-const TimeOffListItem = ({ item }: Props) => {
+const TimeOffListItem = ({ item, onEdit }: Props) => {
   const masters = masterHooks.useGetMastersProfileInfo()?.items;
+  const toast = useToast();
+  const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
+
   const foundMaster = masters?.find((m) => m.id === item.masterId);
   const masterLabel = foundMaster?.name ?? item.masterId ?? item.userId ?? '—';
+
+  const { mutate: deleteException, isPending: isDeletePending } = exceptionHooks.useDeleteException(
+    () => {
+      toast.info('Time off was deleted!');
+      setIsDeleteConfirmOpen(false);
+    },
+  );
+
   const getModeLabel = (type?: string) => {
     const typeStr = String(type ?? '').toUpperCase();
     if (!typeStr) return 'Time off';
@@ -81,6 +93,18 @@ const TimeOffListItem = ({ item }: Props) => {
     };
   }, [item.note]);
 
+  const handleOpenDetails = useCallback(() => {
+    onEdit?.(item);
+  }, [onEdit, item]);
+
+  const handleDeleteClick = useCallback(() => {
+    setIsDeleteConfirmOpen(true);
+  }, []);
+
+  const handleConfirmDelete = useCallback(() => {
+    deleteException(item.id);
+  }, [deleteException, item.id]);
+
   const renderDateRange = () => {
     if (sameDay) {
       return wholeDay ? (
@@ -110,7 +134,12 @@ const TimeOffListItem = ({ item }: Props) => {
 
   return (
     <div className='bg-white rounded-lg lg:rounded-none p-4 lg:py-6 lg:px-8 border border-gray-200 lg:border-l-0 lg:border-r-0'>
-      <div className='flex flex-col md:flex-row gap-3 items-start md:items-center w-full lg:hidden'>
+      <button
+        type='button'
+        className='flex flex-col md:flex-row gap-3 items-start md:items-center w-full lg:hidden cursor-pointer text-left'
+        onClick={handleOpenDetails}
+        aria-label={`Open ${String(masterLabel)} details`}
+      >
         <div className='w-full md:w-[464px] flex items-start md:items-center gap-4'>
           <div className='flex-shrink-0 self-center'>
             <Avatar
@@ -169,7 +198,7 @@ const TimeOffListItem = ({ item }: Props) => {
             </div>
           </div>
         </div>
-      </div>
+      </button>
 
       <div className='hidden lg:flex items-center gap-3 w-full min-w-0'>
         <div className='flex items-center gap-3 w-1/5'>
@@ -218,10 +247,30 @@ const TimeOffListItem = ({ item }: Props) => {
           </div>
         </div>
         <div className='w-12 flex items-center gap-2'>
-          <IconLink icon={<EditSquareIcon />} href='#' label='Edit' />
-          <IconLink icon={<DeleteIcon />} href='#' label='Delete' />
+          <IconButton
+            icon={<EditSquareIcon />}
+            ariaLabel='Edit time off'
+            onClick={handleOpenDetails}
+            className='flex items-center justify-center p-2.5'
+          />
+          <IconButton
+            icon={<DeleteIcon />}
+            ariaLabel='Delete'
+            onClick={handleDeleteClick}
+            className='flex items-center justify-center p-2.5'
+          />
         </div>
       </div>
+
+      <ConfirmationModal
+        isOpen={isDeleteConfirmOpen}
+        onCancel={() => setIsDeleteConfirmOpen(false)}
+        onConfirm={handleConfirmDelete}
+        title='Delete time off'
+        description='Are you sure you want to permanently delete this schedule exception? This action cannot be undone.'
+        confirmText='Delete time off'
+        submitDisabled={isDeletePending}
+      />
     </div>
   );
 };

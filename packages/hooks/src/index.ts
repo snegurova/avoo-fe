@@ -23,3 +23,4 @@ export * from './useLanguagePicker';
 export * from './mediaHooks';
 export * from './combinationHooks';
 export * from './exceptionHooks';
+export * from './utils/exceptionUtils';

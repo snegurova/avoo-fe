@@ -16,6 +16,7 @@ type Props = {
   disabled?: boolean;
   onChange?: (newDate: string) => void;
   error?: string;
+  format?: string;
 };
 
 export default function FormDatePicker(props: Props) {
@@ -27,6 +28,7 @@ export default function FormDatePicker(props: Props) {
     error,
     valueFormat,
     size = 'small',
+    format = DATE_PICKER_FORMAT,
     disabled = false,
   } = props;
 
@@ -42,7 +44,7 @@ export default function FormDatePicker(props: Props) {
       <DatePicker
         label={label}
         value={date ? dayjs(date) : null}
-        format={DATE_PICKER_FORMAT}
+        format={format}
         disablePast={true}
         disabled={disabled}
         slots={{

@@ -8,6 +8,7 @@ import {
 import { apiClient } from '@avoo/axios/src/apiClient';
 
 const MASTERS_ENDPOINT = '/masters/';
+const PUBLIC_MASTERS_ENDPOINT = '/public/masters/';
 
 export const masterApi = {
   async getMastersInfo(params: GetMastersQueryParams) {
@@ -33,6 +34,15 @@ export const masterApi = {
   async deleteMaster(id: number) {
     const response = await apiClient.delete<BaseResponse<MasterWithRelationsEntityResponse>>(
       `${MASTERS_ENDPOINT}${id}`,
+    );
+    return response.data;
+  },
+  async getPublicMasters(params: GetMastersQueryParams) {
+    const response = await apiClient.get<BaseResponse<GetMastersResponse>>(
+      PUBLIC_MASTERS_ENDPOINT,
+      {
+        params,
+      },
     );
     return response.data;
   },

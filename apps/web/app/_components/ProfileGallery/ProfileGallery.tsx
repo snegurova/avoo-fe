@@ -1,5 +1,6 @@
 'use client';
 
+import { useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { userHooks } from '@avoo/hooks';
 import { AppRoutes } from '@/_routes/routes';
@@ -10,10 +11,15 @@ import { LocalizedLink } from '@/_components/LocalizedLink/LocalizedLink';
 export const ProfileGallery = () => {
   const userMedia = userHooks.useGetUserMedia();
   const router = useRouter();
+  const galleryPath = localizationHooks.useWithLocale(AppRoutes.Gallery);
 
-  const handleNavigate = () => {
-    router.push(localizationHooks.useWithLocale(AppRoutes.Gallery));
-  };
+  const handleNavigateToGallery = useCallback(() => {
+    router.push(galleryPath);
+  }, [router, galleryPath]);
+
+  const handleNavigate = useCallback(() => {
+    handleNavigateToGallery();
+  }, [handleNavigateToGallery]);
 
   const hasItems = userMedia?.items && userMedia.items.length > 0;
 
@@ -32,10 +38,7 @@ export const ProfileGallery = () => {
       {!hasItems && (
         <div className='text-center py-8'>
           <p className='text-sm text-slate-500 mb-2'>Show clients your place and service</p>
-          <LocalizedLink
-            href={AppRoutes.Gallery}
-            className='text-sm text-blue-600 underline'
-          >
+          <LocalizedLink href={AppRoutes.Gallery} className='text-sm text-blue-600 underline'>
             Add gallery
           </LocalizedLink>
         </div>

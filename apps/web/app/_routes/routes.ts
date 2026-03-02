@@ -24,7 +24,7 @@ export enum AppRoutes {
   Notifications = '/app/notifications',
   CreateService = '/app/services/create',
   OrderCreate = '/app/orders/create',
-}
-export enum clientRoutes {
-  Home = '/',
+  Public = '/',
+  PublicSalon = '/salon',
+  PublicOrderCreate = '/create-order',
 }

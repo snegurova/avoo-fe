@@ -1,4 +1,5 @@
 import * as yup from 'yup';
+
 import { VALID_LANGUAGE_CODES } from '@avoo/constants';
 import { OrderStatus } from '@avoo/hooks/types/orderStatus';
 import { OrderType } from '@avoo/hooks/types/orderType';
@@ -95,6 +96,12 @@ export const createMasterSchema = yup.object({
     .default([]),
 });
 
+export const publicCustomerSchema = yup.object({
+  name: yup.string().required(),
+  phone: yup.string().required(),
+  email: yup.string().email('Invalid email').required(),
+});
+
 export const customerSchema = yup
   .object({
     id: yup.number().nullable().optional(),
@@ -177,6 +184,13 @@ export const createPrivateOrdersSchema = yup.object({
   customerData: customerSchema,
 });
 
+export const createPublicOrdersSchema = yup.object({
+  ordersData: ordersDataSchema,
+  customerData: publicCustomerSchema,
+  userId: yup.number().required(),
+  referralCode: yup.string().optional(),
+});
+
 export const updateOrderStatusSchema = yup.object({
   status: yup
     .string()
@@ -213,7 +227,6 @@ export const createServiceSchema = yup.object({
     .min(1, 'At least one master is required'),
 });
 
-
 export const updateServiceSchema = yup.object({
   name: yup.string().min(3).required(),
   description: yup.string().min(5).required(),
@@ -241,4 +254,5 @@ export type UpdateOrderStatusData = yup.InferType<typeof updateOrderStatusSchema
 export type OrdersData = yup.InferType<typeof ordersDataSchema>;
 export type UpdateOrderData = yup.InferType<typeof updateOrderSchema>;
 export type CreateServiceFormData = yup.InferType<typeof createServiceSchema>;
+export type CreatePublicOrdersData = yup.InferType<typeof createPublicOrdersSchema>;
 export type UpdateServiceFormData = yup.InferType<typeof updateServiceSchema>;

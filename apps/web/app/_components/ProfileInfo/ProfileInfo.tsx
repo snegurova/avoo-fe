@@ -1,5 +1,6 @@
 'use client';
 
+import { useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { AppRoutes } from '@/_routes/routes';
 import { userHooks } from '@avoo/hooks';
@@ -16,10 +17,15 @@ export const ProfileInfo = () => {
   const router = useRouter();
   const { visualProfileInfo, visualLanguages } = userHooks.useGetUserProfile();
   const isPending = useApiStatusStore((state) => state.isPending);
+  const editProfilePath = localizationHooks.useWithLocale(AppRoutes.EditProfile);
 
-  const handleNavigate = () => {
-    router.push(localizationHooks.useWithLocale(AppRoutes.EditProfile));
-  };
+  const handleNavigateToEditProfile = useCallback(() => {
+    router.push(editProfilePath);
+  }, [router, editProfilePath]);
+
+  const handleNavigate = useCallback(() => {
+    handleNavigateToEditProfile();
+  }, [handleNavigateToEditProfile]);
 
   return (
     <>

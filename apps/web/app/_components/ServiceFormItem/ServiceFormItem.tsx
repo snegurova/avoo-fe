@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import SearchField from '@/_components/SearchField/SearchField';
 import {
-  CreatePrivateOrder,
+  CreateOrder,
   Service,
   MasterWithRelationsEntity,
   GetMastersQueryParams,
@@ -17,9 +17,9 @@ import FormDatePicker from '@/_components/FormDatePicker/FormDatePicker';
 import FormTimePicker from '@/_components/FormTimePicker/FormTimePicker';
 
 type Props = {
-  order: CreatePrivateOrder;
-  onChange: (orders: CreatePrivateOrder[]) => void;
-  value: CreatePrivateOrder[];
+  order: CreateOrder;
+  onChange: (orders: CreateOrder[]) => void;
+  value: CreateOrder[];
   index: number;
   initialParams: {
     masterId?: number;
