@@ -1,4 +1,5 @@
 import React, { useRef } from 'react';
+
 import { tv } from 'tailwind-variants';
 
 type Props = {
@@ -77,7 +78,9 @@ export default function DragAndDropZone(props: Props) {
         disabled={isUploading}
         className={buttonVariants({ isUploading })}
       >
-        {icon ? <div className={iconVariants({ isUploading, variant, isSmall })}>{icon}</div> : null}
+        {icon ? (
+          <div className={iconVariants({ isUploading, variant, isSmall })}>{icon}</div>
+        ) : null}
 
         <p className='lg:mb-2 text-xs lg:text-sm font-semibold '>
           {isUploading ? 'Uploading...' : title}
