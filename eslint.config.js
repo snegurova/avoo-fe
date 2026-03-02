@@ -44,19 +44,38 @@ export default defineConfig([
       'no-console': 'error',
       '@typescript-eslint/ban-ts-comment': 'off',
       'simple-import-sort/imports': [
-          'error',
-          {
-            groups: [
-              ['^react', '^next'],
-              ['^@?\\w'],
-              ['^@avoo/'],
-              ['^@/'],
-              ['^\\.\\.(?!/?$)', '^\\.\\./?$', '^\\./(?=.*/)(?!/?$)', '^\\./?$', '^\\.(?!/?$)', '^\\./?$'],
-              ['^.+\\.s?css$'],
+        'error',
+        {
+          groups: [
+            ['^react', '^next'],
+            ['^@?\\w'],
+            ['^@avoo/'],
+            ['^@/'],
+            [
+              '^\\.\\.(?!/?$)',
+              '^\\.\\./?$',
+              '^\\./(?=.*/)(?!/?$)',
+              '^\\./?$',
+              '^\\.(?!/?$)',
+              '^\\./?$',
             ],
-          },
-        ],
+            ['^.+\\.s?css$'],
+          ],
+        },
+      ],
       'simple-import-sort/exports': 'error',
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            {
+              group: ['**/node_modules/**', '**/dist/**'],
+              message:
+                'Please use the workspace alias instead of importing from node_modules or dist.',
+            },
+          ],
+        },
+      ],
     },
   },
   {
