@@ -1,19 +1,20 @@
 'use client';
 import React, { useMemo } from 'react';
-import AppWrapper from '@/_components/AppWrapper/AppWrapper';
-import ServiceList from '@/_components/ServiceList/ServiceList';
-import ServiceControls from '@/_components/ServiceControls/ServiceControls';
-import { servicesHooks } from '@avoo/hooks/src/servicesHooks';
-import { categoriesHooks } from '@avoo/hooks';
 import Link from 'next/link';
-import { AppRoutes } from '@/_routes/routes';
-import AutoStoriesIcon from '@/_icons/AutoStoriesIcon';
+
+import { categoriesHooks } from '@avoo/hooks';
+import { servicesHooks } from '@avoo/hooks/src/servicesHooks';
+
 import AppPlaceholder from '@/_components/AppPlaceholder/AppPlaceholder';
+import AppWrapper from '@/_components/AppWrapper/AppWrapper';
+import ServiceControls from '@/_components/ServiceControls/ServiceControls';
+import ServiceList from '@/_components/ServiceList/ServiceList';
+import { CURRENCY } from '@/_constants/currency';
 import { localizationHooks } from '@/_hooks/localizationHooks';
+import AutoStoriesIcon from '@/_icons/AutoStoriesIcon';
+import { AppRoutes } from '@/_routes/routes';
 
 export default function ServicesPage() {
-  const currency = 'EUR';
-
   const { params, queryParams, selectedCategoryName, setSearchQuery, setCategory } =
     servicesHooks.useServicesQuery();
 
@@ -55,7 +56,7 @@ export default function ServicesPage() {
           setSelectedCategory={setCategory}
           incrementPage={fetchNextPage}
           hasMore={hasNextPage}
-          currency={currency}
+          currency={CURRENCY}
         />
       )}
     </AppWrapper>

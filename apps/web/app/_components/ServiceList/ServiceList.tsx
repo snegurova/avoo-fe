@@ -56,6 +56,7 @@ export default function ServiceList(props: Props) {
   };
   const handleCloseDeleteDialog = () => {
     setServiceIdToDelete(null);
+    setSelectedService(null);
   };
   const handleConfirmDelete = async () => {
     handleCloseDeleteDialog();

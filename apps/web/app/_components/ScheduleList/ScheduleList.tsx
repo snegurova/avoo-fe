@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 
-import { IconButton, Typography } from '@mui/material';
+import { IconButton, Typography, useMediaQuery } from '@mui/material';
 
 import { ScheduleEntity } from '@avoo/axios/types/apiTypes';
 import { scheduleHooks } from '@avoo/hooks';
@@ -12,7 +12,6 @@ import ScheduleListItem from '@/_components/ScheduleListItem/ScheduleListItem';
 import ScheduleUpdateForm from '@/_components/ScheduleUpdateForm/ScheduleUpdateForm';
 import { useToast } from '@/_hooks/useToast';
 import DeleteIcon from '@/_icons/DeleteIcon';
-import ShareIcon from '@/_icons/SortIcon';
 
 type Props = {
   hasMore: boolean;
@@ -24,6 +23,7 @@ export default function ScheduleList(props: Props) {
   const { schedules, incrementPage, hasMore } = props;
   const toast = useToast();
   const listRef = useRef<HTMLUListElement>(null);
+  const isMobileOrTablet = useMediaQuery('(max-width: 1023px)');
 
   const isPending = useApiStatusStore((state) => state.isPending);
 
@@ -37,6 +37,7 @@ export default function ScheduleList(props: Props) {
   };
   const handleCloseDeleteDialog = () => {
     setScheduleIdToDelete(null);
+    setSelectedSchedule(null);
   };
   const handleConfirmDelete = async () => {
     handleCloseDeleteDialog();
@@ -57,6 +58,13 @@ export default function ScheduleList(props: Props) {
     }
   }, [schedules?.length, hasMore]);
 
+  const handleScheduleClick = (schedule: ScheduleEntity) => {
+    if (!isMobileOrTablet) {
+      return;
+    }
+    setSelectedSchedule(schedule);
+  };
+
   return (
     <>
       <div className='hidden lg:grid grid-cols-[2fr_1.2fr_1.2fr_1.2fr_72px] gap-3 p-6 mb-8 text-sm text-black font-semibold bg-primary-50'>
@@ -69,7 +77,7 @@ export default function ScheduleList(props: Props) {
       <div className='overflow-y-auto'>
         <ul className='flex flex-col gap-2 lg:block lg:divide-y lg:divide-gray-200' ref={listRef}>
           {schedules?.map((schedule) => (
-            <li key={schedule.id}>
+            <li key={schedule.id} onClick={() => handleScheduleClick(schedule)}>
               <ScheduleListItem
                 id={schedule.id}
                 name={schedule.name}
@@ -105,11 +113,6 @@ export default function ScheduleList(props: Props) {
             <div className='sticky top-[-1] flex items-center justify-between py-2 bg-white z-2'>
               <Typography variant='h1'>Schedule</Typography>
               <div className='flex flex-row gap-4 lg:hidden'>
-                <div className='bg-primary-50 w-10 h-10 rounded-lg flex items-center justify-center'>
-                  <IconButton aria-label='share'>
-                    <ShareIcon className='transition-colors' />
-                  </IconButton>
-                </div>
                 <div className='bg-primary-50 w-10 h-10 rounded-lg flex items-center justify-center'>
                   <IconButton
                     aria-label='delete'
