@@ -1,11 +1,14 @@
 import Link from 'next/link';
+
 import { Button, InputAdornment, TextField, Typography } from '@mui/material';
-import { useApiStatusStore } from '@avoo/store';
+
 import { colors } from '@avoo/design-tokens';
+import { useApiStatusStore } from '@avoo/store';
+
+import SortOptions from '@/_components/SortOptions/SortOptions';
+import { localizationHooks } from '@/_hooks/localizationHooks';
 import SearchIcon from '@/_icons/SearchIcon';
 import { AppRoutes } from '@/_routes/routes';
-import { localizationHooks } from '@/_hooks/localizationHooks';
-import SortOptions from '@/_components/SortOptions/SortOptions';
 
 type Props = {
   setSearchQuery: (value: string) => void;

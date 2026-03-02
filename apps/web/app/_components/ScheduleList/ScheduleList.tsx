@@ -1,10 +1,18 @@
 import { useEffect, useRef, useState } from 'react';
-import { useApiStatusStore } from '@avoo/store';
-import { scheduleHooks } from '@avoo/hooks';
+
+import { IconButton, Typography } from '@mui/material';
+
 import { ScheduleEntity } from '@avoo/axios/types/apiTypes';
-import { useToast } from '@/_hooks/useToast';
+import { scheduleHooks } from '@avoo/hooks';
+import { useApiStatusStore } from '@avoo/store';
+
+import AsideModal from '@/_components/AsideModal/AsideModal';
 import ConfirmationDialog from '@/_components/ConfirmationDialog/ConfirmationDialog';
 import ScheduleListItem from '@/_components/ScheduleListItem/ScheduleListItem';
+import ScheduleUpdateForm from '@/_components/ScheduleUpdateForm/ScheduleUpdateForm';
+import { useToast } from '@/_hooks/useToast';
+import DeleteIcon from '@/_icons/DeleteIcon';
+import ShareIcon from '@/_icons/SortIcon';
 
 type Props = {
   hasMore: boolean;
@@ -20,6 +28,7 @@ export default function ScheduleList(props: Props) {
   const isPending = useApiStatusStore((state) => state.isPending);
 
   const { deleteScheduleMutationAsync } = scheduleHooks.useDeleteSchedule();
+  const { selectedSchedule, setSelectedSchedule } = scheduleHooks.useScheduleControls();
 
   const [scheduleIdToDelete, setScheduleIdToDelete] = useState<number | null>(null);
 
@@ -68,7 +77,11 @@ export default function ScheduleList(props: Props) {
                 endAt={schedule.endAt ? new Date(schedule.endAt) : null}
                 master={schedule.master}
                 isActive={new Date(schedule.startAt) <= new Date()}
+                isSelected={selectedSchedule?.id === schedule.id}
                 onDelete={() => handleOpenDeleteDialog(schedule.id)}
+                onEdit={() => {
+                  setSelectedSchedule(schedule);
+                }}
               />
             </li>
           ))}
@@ -86,6 +99,38 @@ export default function ScheduleList(props: Props) {
         onConfirm={handleConfirmDelete}
         loading={isPending}
       />
+      <AsideModal open={!!selectedSchedule} handleClose={() => setSelectedSchedule(null)}>
+        {selectedSchedule && (
+          <div className='w-full h-full overflow-y-auto'>
+            <div className='sticky top-[-1] flex items-center justify-between py-2 bg-white z-2'>
+              <Typography variant='h1'>Schedule</Typography>
+              <div className='flex flex-row gap-4 lg:hidden'>
+                <div className='bg-primary-50 w-10 h-10 rounded-lg flex items-center justify-center'>
+                  <IconButton aria-label='share'>
+                    <ShareIcon className='transition-colors' />
+                  </IconButton>
+                </div>
+                <div className='bg-primary-50 w-10 h-10 rounded-lg flex items-center justify-center'>
+                  <IconButton
+                    aria-label='delete'
+                    onClick={() => {
+                      handleOpenDeleteDialog(selectedSchedule.id);
+                    }}
+                    loading={isPending}
+                    disabled={isPending}
+                  >
+                    <DeleteIcon className='transition-colors' />
+                  </IconButton>
+                </div>
+              </div>
+            </div>
+            <ScheduleUpdateForm
+              schedule={selectedSchedule}
+              onCancel={() => setSelectedSchedule(null)}
+            />
+          </div>
+        )}
+      </AsideModal>
     </>
   );
 }

@@ -1,8 +1,9 @@
 import { OrderStatus } from '@avoo/hooks/types/orderStatus';
-import { FileInput } from '@avoo/shared';
-import type { components, operations } from './generated';
 import { OrderType } from '@avoo/hooks/types/orderType';
+import { FileInput } from '@avoo/shared';
+
 import { FILE_UPLOAD_TYPE_ENUM, MEDIA_TYPE_ENUM, ObjectValues } from './apiEnums';
+import type { components, operations } from './generated';
 
 export enum ApiStatus {
   SUCCESS = 'success',

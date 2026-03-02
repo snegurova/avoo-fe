@@ -1,4 +1,5 @@
 import React, { useCallback } from 'react';
+
 import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material';
 
 export type Option = { label: string; value: string };
@@ -26,7 +27,7 @@ export const FormTimeSelect = (props: Props) => {
 
   return (
     <FormControl size='small' disabled={disabled} fullWidth>
-      <InputLabel id={`${name}-select-label`}>{label}</InputLabel>
+      {label && <InputLabel id={`${name}-select-label`}>{label}</InputLabel>}
       <Select
         labelId={`${name}-select-label`}
         id={id ?? `${name}-select`}

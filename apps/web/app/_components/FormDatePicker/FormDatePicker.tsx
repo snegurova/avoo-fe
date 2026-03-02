@@ -1,9 +1,11 @@
 import React from 'react';
+
 import { FormControl, FormHelperText } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs from 'dayjs';
-import CalendarIcon from '@/_icons/CalendarIcon';
+
 import { DATE_PICKER_FORMAT, DATE_TIME_FORMAT } from '@/_constants/dateFormats';
+import CalendarIcon from '@/_icons/CalendarIcon';
 
 type Props = {
   label?: string;
@@ -11,16 +13,26 @@ type Props = {
   date?: string | null;
   valueFormat?: string;
   required?: boolean;
-  onChange: (newDate: string) => void;
+  disabled?: boolean;
+  onChange?: (newDate: string) => void;
   error?: string;
 };
 
 export default function FormDatePicker(props: Props) {
-  const { label, date, required = false, onChange, error, valueFormat, size = 'small' } = props;
+  const {
+    label,
+    date,
+    required = false,
+    onChange,
+    error,
+    valueFormat,
+    size = 'small',
+    disabled = false,
+  } = props;
 
   const onValueChange = (newDate: dayjs.Dayjs | null) => {
     const convertedDate = newDate ? newDate.format(valueFormat || DATE_TIME_FORMAT) : '';
-    onChange(convertedDate);
+    onChange?.(convertedDate);
   };
 
   const isError = !!error;
@@ -32,6 +44,7 @@ export default function FormDatePicker(props: Props) {
         value={date ? dayjs(date) : null}
         format={DATE_PICKER_FORMAT}
         disablePast={true}
+        disabled={disabled}
         slots={{
           openPickerIcon: () => <CalendarIcon className='fill-black w-6 h-6' />,
         }}

@@ -18,8 +18,16 @@ export type ScheduleOption = {
   dayOff: number[];
 };
 
+export const DEFAULT_SCHEDULE: ScheduleOption = {
+  value: 'weekly',
+  label: 'Weekly',
+  pattern: 7,
+  daysOn: [1, 2, 3, 4, 5],
+  dayOff: [6, 7],
+};
+
 export const SCHEDULE_OPTIONS: ScheduleOption[] = [
-  { value: 'weekly', label: 'Weekly', pattern: 7, daysOn: [1, 2, 3, 4, 5], dayOff: [6, 7] },
+  DEFAULT_SCHEDULE,
   { value: '2x2', label: '2x2', pattern: 4, daysOn: [1, 2], dayOff: [3, 4] },
   { value: '3x2', label: '3x2', pattern: 5, daysOn: [1, 2, 3], dayOff: [4, 5] },
   { value: 'custom', label: 'Custom', pattern: 1, daysOn: [1], dayOff: [] },

@@ -1,11 +1,13 @@
+import { IconButton } from '@mui/material';
+import { tv } from 'tailwind-variants';
+
 import { currencyUtils, timeUtils } from '@avoo/shared';
-import IconLink from '../IconLink/IconLink';
-import ShareIcon from '@/_icons/ShareIcon';
+import { useApiStatusStore } from '@avoo/store';
+
+import IconLink from '@/_components/IconLink/IconLink';
 import DeleteIcon from '@/_icons/DeleteIcon';
 import EditSquareIcon from '@/_icons/EditSquareIcon';
-import { IconButton } from '@mui/material';
-import { useApiStatusStore } from '@avoo/store';
-import { tv } from 'tailwind-variants';
+import ShareIcon from '@/_icons/ShareIcon';
 
 type Props = {
   id: number;
@@ -20,7 +22,8 @@ type Props = {
 };
 
 export default function ServiceCard(props: Props) {
-  const { id, name, durationMinutes, price, currency, isActive, isSelected, onDelete, onEdit } = props;
+  const { id, name, durationMinutes, price, currency, isActive, isSelected, onDelete, onEdit } =
+    props;
 
   const isPending = useApiStatusStore((state) => state.isPending);
 
@@ -92,6 +95,6 @@ export default function ServiceCard(props: Props) {
           </div>
         </div>
       </div>
-    </div >
+    </div>
   );
 }

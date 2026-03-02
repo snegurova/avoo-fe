@@ -1,3 +1,7 @@
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+
+import { yupResolver } from '@hookform/resolvers/yup';
 import {
   InfiniteData,
   useInfiniteQuery,
@@ -5,27 +9,26 @@ import {
   useQuery,
   useQueryClient,
 } from '@tanstack/react-query';
-import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
 
-import { utils } from '@avoo/hooks/utils/utils';
 import { scheduleApi } from '@avoo/axios';
 import {
+  ApiStatus,
   BaseResponse,
   GetSchedulesResponse,
   ScheduleCreateResponse,
   ScheduleEntity,
   SchedulesQueryParams,
   ScheduleUpdateResponse,
-  ApiStatus,
 } from '@avoo/axios/types/apiTypes';
-import { timeUtils } from '@avoo/shared';
 import { END_MINUTE, START_MINUTE } from '@avoo/constants/src/calendar';
+import { utils } from '@avoo/hooks/utils/utils';
+import { timeUtils } from '@avoo/shared';
+
 import {
-  scheduleUpdateSchema,
-  ScheduleUpdateFormData,
   ScheduleCreateFormData,
   scheduleCreateSchema,
+  ScheduleUpdateFormData,
+  scheduleUpdateSchema,
 } from '../schemas/schedulesValidationSchemas';
 import { queryKeys } from './queryKeys';
 
@@ -36,8 +39,9 @@ type UseCreateScheduleFormParams = {
   onError?: (error: Error) => void;
 };
 type UseUpdateScheduleFormParams = {
-  onSuccess?: () => void;
   defaultValues?: ScheduleUpdateFormData;
+  onSuccess?: () => void;
+  onError?: (error: Error) => void;
 };
 
 export const scheduleHooks = {
@@ -146,7 +150,11 @@ export const scheduleHooks = {
       isPending,
     };
   },
-  useUpdateScheduleForm: ({ onSuccess }: UseUpdateScheduleFormParams = {}) => {
+  useUpdateScheduleForm: ({
+    defaultValues,
+    onSuccess,
+    onError,
+  }: UseUpdateScheduleFormParams = {}) => {
     const {
       register,
       control,
@@ -157,6 +165,19 @@ export const scheduleHooks = {
     } = useForm<ScheduleUpdateFormData>({
       resolver: yupResolver(scheduleUpdateSchema),
       mode: 'onSubmit',
+      defaultValues: {
+        name: defaultValues?.name ?? '',
+        endAt: defaultValues?.endAt ?? null,
+        workingHours:
+          defaultValues?.workingHours?.map((wh) => ({
+            whId: wh.id,
+            day: wh.day,
+            enabled: !(wh.startTimeMinutes === 0 && wh.endTimeMinutes === 0),
+            startTimeMinutes: wh.startTimeMinutes,
+            endTimeMinutes: wh.endTimeMinutes,
+            breaks: wh.breaks,
+          })) ?? [],
+      },
     });
 
     const { mutate: updateSchedule, isPending } = useMutation<
@@ -170,6 +191,9 @@ export const scheduleHooks = {
           onSuccess?.();
         }
       },
+      onError: (error) => {
+        onError?.(error);
+      },
     });
 
     utils.useSetPendingApi(isPending);
@@ -177,7 +201,7 @@ export const scheduleHooks = {
     return {
       register,
       control,
-      handleSubmit,
+      handleSubmit: handleSubmit(utils.submitAdapter<ScheduleUpdateFormData>(updateSchedule)),
       errors,
       watch,
       setValue,
@@ -199,6 +223,9 @@ export const scheduleHooks = {
             if (!oldData) return oldData;
 
             const newPages = oldData.pages.map((page) => {
+              if (page.status !== ApiStatus.SUCCESS) {
+                return page;
+              }
               const newItems = page.data.items.filter((s) => s.id !== deletedId);
 
               return {
@@ -228,6 +255,14 @@ export const scheduleHooks = {
     return {
       deleteScheduleMutation,
       deleteScheduleMutationAsync: deleteScheduleMutation.mutateAsync,
+    };
+  },
+  useScheduleControls() {
+    const [selectedSchedule, setSelectedSchedule] = useState<ScheduleEntity | null>(null);
+
+    return {
+      selectedSchedule,
+      setSelectedSchedule,
     };
   },
 };
