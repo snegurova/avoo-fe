@@ -243,11 +243,19 @@ yarn workspace web start
 - Keep emulators open before running scripts that auto-open Android/iOS.
 - Recommended rules for **VS Code**:
 
-```
+```json
 {
-  "typescript.preferences.importModuleSpecifier": "non-relative",
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "explicit"
-  }
+  },
+  "javascript.suggest.autoImports": true,
+  "typescript.suggest.autoImports": true,
+  "typescript.preferences.autoImportFileExcludePatterns": [
+    "**/dist/**",
+    "**/.next/**",
+    "**/build/**"
+  ],
+  "typescript.preferences.importModuleSpecifier": "non-relative",
+  "typescript.preferences.importModuleSpecifierEnding": "minimal"
 }
 ```
