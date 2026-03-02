@@ -1,23 +1,26 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useParams } from 'next/navigation';
-import SearchField from '@/_components/SearchField/SearchField';
+
 import {
   CreateOrder,
-  Service,
-  MasterWithRelationsEntity,
   GetMastersQueryParams,
+  MasterWithRelationsEntity,
   PublicCalendarQueryParams,
+  Service,
 } from '@avoo/axios/types/apiTypes';
-import { servicesHooks, masterHooks, calendarHooks } from '@avoo/hooks';
-import ServiceElement from '@/_components/ServiceElement/ServiceElement';
-import MasterElement from '@/_components/MasterElement/MasterElement';
+import { calendarHooks, masterHooks, servicesHooks } from '@avoo/hooks';
 import { isEmptyObject } from '@avoo/shared';
-import { IconButton } from '@/_components/IconButton/IconButton';
-import DeleteIcon from '@/_icons/DeleteIcon';
-import FormTextArea from '@/_components/FormTextArea/FormTextArea';
-import FormDatePicker from '@/_components/FormDatePicker/FormDatePicker';
 import { timeUtils } from '@avoo/shared';
+
+import FormDatePicker from '@/_components/FormDatePicker/FormDatePicker';
+import FormTextArea from '@/_components/FormTextArea/FormTextArea';
+import { IconButton } from '@/_components/IconButton/IconButton';
+import MasterElement from '@/_components/MasterElement/MasterElement';
+import SearchField from '@/_components/SearchField/SearchField';
+import ServiceElement from '@/_components/ServiceElement/ServiceElement';
 import { DATE_TIME_PICKER_FORMAT } from '@/_constants/dateFormats';
+import DeleteIcon from '@/_icons/DeleteIcon';
+
 import TimeSlotField from '../TimeSlotField/TimeSlotField';
 
 type Props = {

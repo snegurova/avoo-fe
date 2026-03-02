@@ -14,11 +14,11 @@ import { scheduleApi } from '@avoo/axios';
 import {
   ApiStatus,
   BaseResponse,
+  CreateScheduleResponse,
   GetSchedulesResponse,
-  ScheduleCreateResponse,
   ScheduleEntity,
   SchedulesQueryParams,
-  ScheduleUpdateResponse,
+  UpdateScheduleResponse,
 } from '@avoo/axios/types/apiTypes';
 import { END_MINUTE, START_MINUTE } from '@avoo/constants/src/calendar';
 import { utils } from '@avoo/hooks/utils/utils';
@@ -121,7 +121,7 @@ export const scheduleHooks = {
     const queryClient = useQueryClient();
 
     const { mutate: createSchedule, isPending } = useMutation<
-      BaseResponse<ScheduleCreateResponse>,
+      BaseResponse<CreateScheduleResponse>,
       Error,
       ScheduleCreateFormData
     >({
@@ -183,7 +183,7 @@ export const scheduleHooks = {
     });
 
     const { mutate: updateSchedule, isPending } = useMutation<
-      BaseResponse<ScheduleUpdateResponse>,
+      BaseResponse<UpdateScheduleResponse>,
       Error,
       ScheduleUpdateFormData
     >({
@@ -203,7 +203,9 @@ export const scheduleHooks = {
     return {
       register,
       control,
-      handleSubmit: handleSubmit(utils.submitAdapter<ScheduleUpdateFormData>(updateSchedule)),
+      handleSubmit: handleSubmit(
+        utils.submitAdapter<ScheduleUpdateFormData, ScheduleUpdateFormData>(updateSchedule),
+      ),
       errors,
       watch,
       setValue,

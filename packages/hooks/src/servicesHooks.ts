@@ -7,28 +7,25 @@ import { InfiniteData, useInfiniteQuery, useMutation, useQueryClient } from '@ta
 import { servicesApi } from '@avoo/axios/src/modules/services';
 import {
   ApiStatus,
+  BaseResponse,
   CreateServiceRequest,
   CreateServiceResponse,
   GetServiceResponse,
+  PublicServiceQueryParams,
   Service,
   ServicesQueryParams,
-  PublicServiceQueryParams,
-  BaseResponse,
   UpdateServiceRequest,
   UpdateServiceResponse,
 } from '@avoo/axios/types/apiTypes';
+import { utils } from '@avoo/hooks/utils/utils';
 
-import { InfiniteData, useInfiniteQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { useMemo, useState } from 'react';
-import { servicesApi } from '@avoo/axios/src/modules/services';
-import { useDebounce } from './useDebounce';
 import {
   CreateServiceFormData,
   createServiceSchema,
   UpdateServiceFormData,
 } from '../schemas/validationSchemas';
 import { queryKeys } from './queryKeys';
-import { utils } from '@avoo/hooks/utils/utils';
+import { useDebounce } from './useDebounce';
 
 const DEFAULT_LIMIT = 10;
 
@@ -46,7 +43,7 @@ type ServicesQueryStateParams = {
 
 type PublicServiceQueryStateParams = {
   limit: number;
-  categoryId?: number | null;
+  categoryId?: number;
   search: string;
   masterIds: number[];
   userId?: number;
@@ -254,7 +251,7 @@ export const servicesHooks = {
       initialPageParam: 1,
       getNextPageParam: (lastPage) => {
         const { currentPage, total } = lastPage.data?.pagination || { currentPage: 0, total: 0 };
-        return currentPage * (params.limit || DEFAULT_LIMIT) < total ? currentPage + 1 : undefined;
+        return currentPage * (params?.limit || DEFAULT_LIMIT) < total ? currentPage + 1 : undefined;
       },
     });
 
@@ -279,7 +276,7 @@ export const servicesHooks = {
       }));
     };
 
-    const setCategory = (categoryId: number | null) => {
+    const setCategory = (categoryId?: number) => {
       setParams((prev) => ({
         ...prev,
         categoryId,
@@ -360,7 +357,9 @@ export const servicesHooks = {
       control,
       setValue,
       getValues,
-      handleSubmit: handleSubmit(utils.submitAdapter<UpdateServiceRequest>(updateService)),
+      handleSubmit: handleSubmit(
+        utils.submitAdapter<UpdateServiceRequest, UpdateServiceFormData>(updateService),
+      ),
       errors,
     };
   },

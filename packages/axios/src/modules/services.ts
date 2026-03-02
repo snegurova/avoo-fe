@@ -1,3 +1,4 @@
+import { apiClient } from '@avoo/axios/src/apiClient';
 import {
   BaseResponse,
   CreateServiceRequest,
@@ -8,7 +9,6 @@ import {
   UpdateServiceRequest,
   UpdateServiceResponse,
 } from '@avoo/axios/types/apiTypes';
-import { apiClient } from '@avoo/axios/src/apiClient';
 
 const SERVICES_ENDPOINT = '/services';
 const PUBLIC_SERVICES_ENDPOINT = '/public/services';

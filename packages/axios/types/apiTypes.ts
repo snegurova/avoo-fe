@@ -114,8 +114,12 @@ export type Customer = components['schemas']['CustomerInfoDto'];
 /** Schedule */
 
 export type ScheduleEntity = components['schemas']['ScheduleEntity'];
-export type ScheduleUpdateResponse = components['schemas']['UpdateScheduleDto'];
-export type ScheduleCreateResponse = components['schemas']['CreateScheduleDto'];
+export type CreateScheduleRequest = components['schemas']['CreateScheduleDto'];
+export type UpdateScheduleRequest = components['schemas']['UpdateScheduleDto'];
+
+export type CreateScheduleResponse = ScheduleEntity;
+export type UpdateScheduleResponse = ScheduleEntity;
+
 export type QuerySchedules = components['schemas']['QueryScheduleDto'];
 export type SchedulesQueryParams = Omit<QuerySchedules, 'page'>;
 export type GetSchedulesResponse = {

@@ -4,11 +4,11 @@ import { mediaApi } from '@avoo/axios/src/modules/media';
 import {
   ApiStatus,
   BaseResponse,
-  UploadMediaRequest,
-  UploadMediaResponse,
   DeleteMediaParams,
   GetMediaResponse,
   MediaQueryParams,
+  UploadMediaRequest,
+  UploadMediaResponse,
 } from '@avoo/axios/types/apiTypes';
 import { utils } from '@avoo/hooks/utils/utils';
 
