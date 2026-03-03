@@ -1,9 +1,11 @@
-import { useMutation } from '@tanstack/react-query';
 import { filesApi } from '@avoo/axios';
 import { BaseResponse, FileUploadResponse, UploadFileRequest } from '@avoo/axios/types/apiTypes';
-import { utils } from '../utils/utils';
 import { ApiStatus } from '@avoo/axios/types/apiTypes';
 import { formDataUtils } from '@avoo/axios/utils/formDataUtils';
+
+import { useMutation } from '@tanstack/react-query';
+
+import { utils } from '../utils/utils';
 
 type UseUploadFileParams = {
   onSuccess?: (data: FileUploadResponse) => void;

@@ -1,11 +1,15 @@
-import { View, Text, Pressable } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import { ProfileLanguages } from '../ProfileLanguages/ProfileLanguages';
-import { ProfileCertificates } from '../ProfileCertificates/ProfileCertificates';
+import { Pressable, Text, View } from 'react-native';
+
 import { userHooks } from '@avoo/hooks';
+
 import { MaterialIcons } from '@/shared/icons';
 import { RootNavigationProp, RootScreens } from '@/types/navigation';
+
+import { useNavigation } from '@react-navigation/native';
+
 import AvatarUpload from '../Avatar/AvatarUpload';
+import { ProfileCertificates } from '../ProfileCertificates/ProfileCertificates';
+import { ProfileLanguages } from '../ProfileLanguages/ProfileLanguages';
 
 export function ProfileInfo() {
   const { visualProfileInfo, visualLanguages } = userHooks.useGetUserProfile();
