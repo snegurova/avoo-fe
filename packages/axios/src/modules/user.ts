@@ -1,12 +1,12 @@
+import { apiClient } from '@avoo/axios/src/apiClient';
 import {
   BaseResponse,
+  CertificateResponse,
+  UpdateProfile,
   UserMediaResponse,
   UserProfileResponse,
   UserUpdateAvatarResponse,
-  CertificateResponse,
-  UpdateProfile,
 } from '@avoo/axios/types/apiTypes';
-import { apiClient } from '@avoo/axios/src/apiClient';
 import { MediaType } from '@avoo/hooks/types/mediaType';
 
 const UPDATE_AVATAR_ENDPOINT = '/update-avatar';

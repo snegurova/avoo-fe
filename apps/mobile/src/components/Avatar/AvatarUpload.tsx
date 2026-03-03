@@ -1,9 +1,10 @@
-import { View, Image, ImageSourcePropType, Pressable, ActivityIndicator } from 'react-native';
-import { imagePickerHooks } from '@/hooks/imagePickerHooks';
-import { typeGuardHooks, UploadFile } from '@avoo/shared';
-import { EditIcon, PersonIcon } from '@/icons';
-import { colors } from '@avoo/design-tokens';
+import { ActivityIndicator, Image, ImageSourcePropType, Pressable, View } from 'react-native';
 
+import { colors } from '@avoo/design-tokens';
+import { typeGuardHooks, UploadFile } from '@avoo/shared';
+
+import { imagePickerHooks } from '@/hooks/imagePickerHooks';
+import { EditIcon, PersonIcon } from '@/icons';
 
 type Props = {
   size?: number;
@@ -15,7 +16,14 @@ type Props = {
 };
 
 export const AvatarUpload = (props: Props) => {
-  const { size = 80, imageUri, iconSize = 30, onImageSelected, isUploading, editIconSize = 24 } = props;
+  const {
+    size = 80,
+    imageUri,
+    iconSize = 30,
+    onImageSelected,
+    isUploading,
+    editIconSize = 24,
+  } = props;
 
   const handlePress = () => {
     imagePickerHooks.showImagePicker((file) => {
@@ -46,9 +54,7 @@ export const AvatarUpload = (props: Props) => {
             <PersonIcon size={iconSize} color={colors.primary[200]} />
           )}
         </View>
-        <View
-          className='absolute bottom-0 right-0 items-center justify-center bg-white border border-gray-300 rounded-full w-11 h-11'
-        >
+        <View className='absolute bottom-0 right-0 items-center justify-center bg-white border border-gray-300 rounded-full w-11 h-11'>
           <EditIcon size={editIconSize} color={colors.gray[300]} />
         </View>
       </View>
