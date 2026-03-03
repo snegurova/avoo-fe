@@ -1,35 +1,37 @@
-import { utils } from './../utils/utils';
 import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import {
-  registerSchema,
-  RegisterFormData,
-  loginSchema,
-  LoginFormData,
-  forgotPasswordSchema,
-  ForgotPasswordFormData,
-  verifyCodeSchema,
-  VerifyCodeFormData,
-  ResetPasswordFormData,
-  resetPasswordSchema,
-} from '../schemas/validationSchemas';
-import { authApi } from '@avoo/axios';
-import { useAuthStore } from '@avoo/store';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
 
+import { authApi } from '@avoo/axios';
 import {
+  ForgotPasswordRequest as ForgotPasswordRequestType,
+  RegisterCustomRequest,
+} from '@avoo/axios/src/modules/auth';
+import {
+  ApiStatus,
   AuthResponse,
   BaseResponse,
   LoginRequest,
+  ResetPasswordRequest,
   VerifyCodeRequest,
   VerifyCodeResponse,
-  ResetPasswordRequest,
-  ApiStatus,
 } from '@avoo/axios/types/apiTypes';
+import { useAuthStore } from '@avoo/store';
+
+import { yupResolver } from '@hookform/resolvers/yup';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+
 import {
-  RegisterCustomRequest,
-  ForgotPasswordRequest as ForgotPasswordRequestType,
-} from '@avoo/axios/src/modules/auth';
+  ForgotPasswordFormData,
+  forgotPasswordSchema,
+  LoginFormData,
+  loginSchema,
+  RegisterFormData,
+  registerSchema,
+  ResetPasswordFormData,
+  resetPasswordSchema,
+  VerifyCodeFormData,
+  verifyCodeSchema,
+} from '../schemas/validationSchemas';
+import { utils } from './../utils/utils';
 
 type UseRegisterFormParams = {
   onSuccess?: () => void;
@@ -103,6 +105,7 @@ export const authHooks = {
       errors,
     };
   },
+
   useLoginForm: ({ onSuccess }: UseLoginFormParams = {}) => {
     const {
       register,
