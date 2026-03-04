@@ -17,7 +17,7 @@ export default function SignInPage() {
     >
       <LoginForm />
 
-      <div className='w-full mt-14 flex items-center justify-between'>
+      <div className='w-full mt-8 2xl:mt-14 flex items-center justify-between'>
         <LocalizedLink
           href={AppRoutes.SignUp}
           className='hover:text-primary-600 focus:text-primary-600'

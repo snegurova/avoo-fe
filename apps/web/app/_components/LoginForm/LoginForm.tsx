@@ -39,7 +39,7 @@ export default function LoginForm() {
   return (
     <form onSubmit={handleSubmit} className='w-full flex flex-col gap-6'>
       <label>
-        <span className='text-sm font-medium mb-1'>Email address *</span>
+        <span className='text-sm font-medium mb-1 leading-none block'>Email address *</span>
         <FormInput
           {...register('email')}
           type='email'
@@ -49,7 +49,7 @@ export default function LoginForm() {
       </label>
 
       <label>
-        <span className='text-sm font-medium mb-1'>Password *</span>
+        <span className='text-sm font-medium mb-1 leading-none block'>Password *</span>
         <FormInput
           {...register('password')}
           type={isShowPassword ? 'text' : 'password'}
