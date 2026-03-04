@@ -62,7 +62,7 @@ export const userHooks = {
 
     const { data: userMediaData, isPending } = useQuery<BaseResponse<UserMediaResponse>, Error>({
       queryKey: queryKeys.user.media(),
-      queryFn: () => userApi.getUserMedia(MediaType.USER, userId),
+      queryFn: () => userApi.getUserMedia(MediaType.USER, userId!),
       enabled: !!userId,
     });
 

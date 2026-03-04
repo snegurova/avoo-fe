@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import AppProfileSelect from '@/_components/AppProfileSelect/AppProfileSelect';
 import NotificationsIcon from '@/_icons/NotificationsIcon';
 import ShareIcon from '@/_icons/ShareIcon';
@@ -20,19 +20,26 @@ type Props = {
 export default function AppHeader({ setMenuOpen }: Props) {
   const router = useRouter();
   const tabletUp = useMediaQuery('(min-width:768px)');
+  const orderCreatePath = localizationHooks.useWithLocale(AppRoutes.OrderCreate);
+  const addPostPath = localizationHooks.useWithLocale(AppRoutes.AddPost);
+  const notificationsPath = localizationHooks.useWithLocale(AppRoutes.Notifications);
+
+  const handleNavigateToOrderCreate = useCallback(() => {
+    router.push(orderCreatePath);
+  }, [router, orderCreatePath]);
+
+  const handleNavigateToAddPost = useCallback(() => {
+    router.push(addPostPath);
+  }, [router, addPostPath]);
 
   const options = [
     {
       label: 'New Booking',
-      handler: () => {
-        router.push(localizationHooks.useWithLocale(AppRoutes.OrderCreate));
-      },
+      handler: handleNavigateToOrderCreate,
     },
     {
       label: 'New Post',
-      handler: () => {
-        router.push(localizationHooks.useWithLocale(AppRoutes.AddPost));
-      },
+      handler: handleNavigateToAddPost,
     },
   ];
 
@@ -61,7 +68,7 @@ export default function AppHeader({ setMenuOpen }: Props) {
           <div className='flex items-center gap-2'>
             <ShareIcon className='transition-colors' />
             <IconLink
-              href={localizationHooks.useWithLocale(AppRoutes.Notifications)}
+              href={notificationsPath}
               icon={<NotificationsIcon className='transition-colors' />}
               label='Notifications'
             />

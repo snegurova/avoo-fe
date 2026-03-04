@@ -1,12 +1,12 @@
 'use client';
 import React, { useCallback, useState } from 'react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { tv } from 'tailwind-variants';
 
 import { localizationHooks } from '@/_hooks/localizationHooks';
-import { routerHooks } from '@/_hooks/routerHooks';
 import ArrowDownIcon from '@/_icons/ArrowDownIcon';
 import ArrowUpIcon from '@/_icons/ArrowUpIcon';
 import BookIcon from '@/_icons/BookIcon';
@@ -48,39 +48,53 @@ const sidebarStyles = tv({
 
 export default function AppNavigation({ menuOpen, setMenuOpen }: Props) {
   const desktopAbove = useMediaQuery('(min-width:1024px)');
+  const pathname = usePathname();
+  const locale = localizationHooks.useGetLocale();
   const isOpen = desktopAbove || menuOpen;
 
   const [calendarOpen, setCalendarOpen] = useState(false);
 
+  const withLocale = useCallback((path: AppRoutes) => `/${locale}${path}`, [locale]);
+
+  const homePath = withLocale(AppRoutes.Home);
+  const calendarPath = withLocale(AppRoutes.Calendar);
+  const clientsPath = withLocale(AppRoutes.Clients);
+  const servicesPath = withLocale(AppRoutes.Services);
+  const mastersPath = withLocale(AppRoutes.Masters);
+  const postsPath = withLocale(AppRoutes.Posts);
+  const workingHoursPath = withLocale(AppRoutes.WorkingHours);
+  const timeOffPath = withLocale(AppRoutes.TimeOff);
+  const isCalendarActive = pathname === calendarPath;
+
   const items = [
     {
-      href: localizationHooks.useWithLocale(AppRoutes.Home),
+      href: homePath,
       icon: <HomeIcon />,
       label: 'Home',
     },
     {
-      href: localizationHooks.useWithLocale(AppRoutes.Calendar),
+      href: calendarPath,
       icon: <CalendarIcon />,
       label: 'Calendar',
       hasDropdown: true,
     },
     {
-      href: localizationHooks.useWithLocale(AppRoutes.Clients),
+      href: clientsPath,
       icon: <CoPresentIcon />,
       label: 'Clients',
     },
     {
-      href: localizationHooks.useWithLocale(AppRoutes.Services),
+      href: servicesPath,
       icon: <BookIcon />,
       label: 'Services',
     },
     {
-      href: localizationHooks.useWithLocale(AppRoutes.Masters),
+      href: mastersPath,
       icon: <GroupsIcon />,
       label: 'Masters',
     },
     {
-      href: localizationHooks.useWithLocale(AppRoutes.Posts),
+      href: postsPath,
       icon: <MosaicIcon />,
       label: 'Posts',
     },
@@ -99,7 +113,7 @@ export default function AppNavigation({ menuOpen, setMenuOpen }: Props) {
   const handleCloseMenu = useCallback(() => {
     setMenuOpen(false);
     setCalendarOpen(false);
-  }, []);
+  }, [setMenuOpen]);
 
   const handleNavClick = useCallback(() => {
     if (!desktopAbove) handleCloseMenu();
@@ -111,7 +125,7 @@ export default function AppNavigation({ menuOpen, setMenuOpen }: Props) {
         <nav className='flex h-full flex-col py-7 gap-15'>
           <div className='px-8 shrink-0'>
             <Link
-              href={localizationHooks.useWithLocale(AppRoutes.Home)}
+              href={homePath}
               className='font-inter font-semibold text-4xl text-gray-600'
               onClick={handleCloseMenu}
             >
@@ -123,57 +137,53 @@ export default function AppNavigation({ menuOpen, setMenuOpen }: Props) {
             {items.map((item) => (
               <li key={item.href}>
                 {item.hasDropdown ? (
-                  (() => {
-                    const isActive = routerHooks.useIsActivePage(item.href);
-                    const cls = calendarNav({ active: isActive });
-                    return (
-                      <>
-                        <div className={`${cls} relative flex items-center justify-between`}>
+                  <>
+                    <div
+                      className={`${calendarNav({ active: isCalendarActive })} relative flex items-center justify-between`}
+                    >
+                      <Link
+                        href={item.href}
+                        className='flex items-center grow px-8 py-3 gap-3.5'
+                        onClick={handleCloseMenu}
+                      >
+                        {item.icon}
+                        <span className=''>{item.label}</span>
+                      </Link>
+
+                      <button
+                        type='button'
+                        className='absolute right-0 top-0 bottom-0 pl-3 pr-6 flex items-center hover:bg-muted cursor-pointer'
+                        onClick={handleCalendarToggle}
+                        aria-expanded={calendarOpen}
+                        aria-haspopup='true'
+                      >
+                        {calendarOpen ? <ArrowUpIcon /> : <ArrowDownIcon />}
+                      </button>
+                    </div>
+
+                    {calendarOpen && (
+                      <ul className='flex flex-col font-light text-sm'>
+                        <li className='w-full'>
                           <Link
-                            href={item.href}
-                            className='flex items-center grow px-8 py-3 gap-3.5'
-                            onClick={handleCloseMenu}
+                            href={workingHoursPath}
+                            className='block w-full text-left pl-20 pr-4 py-2 hover:bg-primary-100 focus:bg-primary-100 transition-colors cursor-pointer'
+                            onClick={handleNavClick}
                           >
-                            {item.icon}
-                            <span className=''>{item.label}</span>
+                            Working schedule
                           </Link>
-
-                          <button
-                            type='button'
-                            className='absolute right-0 top-0 bottom-0 pl-3 pr-6 flex items-center hover:bg-muted cursor-pointer'
-                            onClick={handleCalendarToggle}
-                            aria-expanded={calendarOpen}
-                            aria-haspopup='true'
+                        </li>
+                        <li className='w-full'>
+                          <Link
+                            href={timeOffPath}
+                            className='block w-full text-left pl-20 pr-4 py-2 hover:bg-primary-100 focus:bg-primary-100 transition-colors cursor-pointer'
+                            onClick={handleNavClick}
                           >
-                            {calendarOpen ? <ArrowUpIcon /> : <ArrowDownIcon />}
-                          </button>
-                        </div>
-
-                        {calendarOpen && (
-                          <ul className='flex flex-col font-light text-sm'>
-                            <li className='w-full'>
-                              <Link
-                                href={localizationHooks.useWithLocale(AppRoutes.WorkingHours)}
-                                className='block w-full text-left pl-20 pr-4 py-2 hover:bg-primary-100 focus:bg-primary-100 transition-colors cursor-pointer'
-                                onClick={handleNavClick}
-                              >
-                                Working schedule
-                              </Link>
-                            </li>
-                            <li className='w-full'>
-                              <Link
-                                href={localizationHooks.useWithLocale(AppRoutes.TimeOff)}
-                                className='block w-full text-left pl-20 pr-4 py-2 hover:bg-primary-100 focus:bg-primary-100 transition-colors cursor-pointer'
-                                onClick={handleNavClick}
-                              >
-                                Schedule exception
-                              </Link>
-                            </li>
-                          </ul>
-                        )}
-                      </>
-                    );
-                  })()
+                            Schedule exception
+                          </Link>
+                        </li>
+                      </ul>
+                    )}
+                  </>
                 ) : (
                   <AppNavigationItem
                     href={item.href}

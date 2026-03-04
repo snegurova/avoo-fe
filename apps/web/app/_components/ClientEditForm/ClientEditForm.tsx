@@ -7,7 +7,7 @@ import LockIcon from '@/_icons/LockIcon';
 import ModalActions from '../ModalActions/ModalActions';
 import FormTextarea from '../FormTextArea/FormTextArea';
 import { customerHooks } from '@avoo/hooks';
-import HistoryCard from '../HistoryCard/HistoryCard';
+import ClientOrdersHistory from '../ClientOrdersHistory/ClientOrdersHistory';
 
 import { useToast } from '@/_hooks/useToast';
 import NotificationField from '../NotificationField/NotificationField';
@@ -29,50 +29,7 @@ type ClientFormProps = {
   notifyInitial?: boolean;
 };
 
-const mockHistory = [
-  {
-    dateDay: '12',
-    dateMonth: 'Sep',
-    time: '09:15',
-    title: 'Haircut',
-    duration: '1h 30min',
-    master: 'Master Anna',
-    price: '65 Euro',
-    note: 'Note: ipsum dolor sit amet consectetur.',
-  },
-  {
-    dateDay: '01',
-    dateMonth: 'Oct',
-    time: '14:00',
-    title: 'Coloring',
-    duration: '2h',
-    master: 'Anna',
-    price: '120 Euro',
-    note: 'Note: ipsum dolor sit amet consectetur. Turpis lorem lectus egestas quam integer. Ac urna integer massa eu purus volutpat venenatis risus tincidunt.',
-  },
-  {
-    dateDay: '22',
-    dateMonth: 'Nov',
-    time: '11:30',
-    title: 'Styling',
-    duration: '45min',
-    master: 'Master Olga',
-    price: '40 Euro',
-    note: 'Quick styling session.',
-  },
-  {
-    dateDay: '05',
-    dateMonth: 'Dec',
-    time: '16:45',
-    title: 'Consultation',
-    duration: '30min',
-    master: 'Ivan',
-    price: 'Free',
-    note: 'Initial consultation.',
-  },
-];
-
-export default function ClientEditForm({ ...props }: ClientFormProps) {
+export default function ClientEditForm(props: Readonly<ClientFormProps>) {
   const { initial, onClose, onRequestClose, onDirtyChange, id, notifyInitial = true } = props;
 
   const update = customerHooks.useUpdateCustomer();
@@ -131,26 +88,24 @@ export default function ClientEditForm({ ...props }: ClientFormProps) {
           <FormInput id='name' {...register('name')} />
         </div>
 
-        <div className='flex items-stretch gap-3'>
-          <div>
-            <label htmlFor='email' className='text-sm'>
-              Email address *
-            </label>
-            <FormInput
-              id='email'
-              {...register('email')}
-              readOnly
-              className='cursor-default'
-              accessory={<LockIcon className='text-gray-400' />}
-              accessoryPosition={AccessoryPosition.Right}
-            />
-          </div>
-          <div>
-            <label htmlFor='phone' className='text-sm'>
-              Phone
-            </label>
-            <FormInput id='phone' {...register('phone')} />
-          </div>
+        <div>
+          <label htmlFor='email' className='text-sm'>
+            Email address *
+          </label>
+          <FormInput
+            id='email'
+            {...register('email')}
+            readOnly
+            accessory={<LockIcon className='text-gray-400' />}
+            accessoryPosition={AccessoryPosition.Right}
+          />
+        </div>
+
+        <div>
+          <label htmlFor='phone' className='text-sm'>
+            Phone
+          </label>
+          <FormInput id='phone' {...register('phone')} />
         </div>
 
         <Controller
@@ -174,25 +129,7 @@ export default function ClientEditForm({ ...props }: ClientFormProps) {
         />
       </div>
 
-      <div>
-        <h2 className='text-lg font-semibold mb-3'>History</h2>
-        <ul className='max-h-[140px] md:max-h-[270px] overflow-y-auto flex flex-col gap-3 pr-2'>
-          {mockHistory.map((h, idx) => (
-            <li key={idx} className='list-none'>
-              <HistoryCard
-                dateDay={h.dateDay}
-                dateMonth={h.dateMonth}
-                time={h.time}
-                title={h.title}
-                duration={h.duration}
-                master={h.master}
-                price={h.price}
-                note={h.note}
-              />
-            </li>
-          ))}
-        </ul>
-      </div>
+      <ClientOrdersHistory customerId={id} />
 
       <ModalActions
         onCancel={handleCancel}

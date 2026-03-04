@@ -1,6 +1,5 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { PHONE_CODE_OPTIONS } from '@avoo/constants';
-import { useRef } from 'react';
 
 export type PhoneFieldLike = {
   value?: unknown;
@@ -65,18 +64,18 @@ export function usePhoneField(field: PhoneFieldLike) {
 
   const setCode = useCallback(
     (code: string) => {
-      setCountryCode((prev) => {
-        if (prev === code) return prev;
-        const formatted = initialNumber ? formatPhoneNumber(code, initialNumber) : '';
-        const current = (field.value ?? '')?.toString();
-        if (current !== formatted) {
-          lastFormattedRef.current = formatted;
-          field.onChange(formatted);
-        }
-        return code;
-      });
+      if (countryCode === code) return;
+
+      setCountryCode(code);
+
+      const formatted = initialNumber ? formatPhoneNumber(code, initialNumber) : '';
+      const current = (field.value ?? '')?.toString();
+      if (current !== formatted) {
+        lastFormattedRef.current = formatted;
+        field.onChange(formatted);
+      }
     },
-    [field, initialNumber],
+    [countryCode, field, initialNumber],
   );
 
   const setNumber = useCallback(
@@ -85,18 +84,19 @@ export function usePhoneField(field: PhoneFieldLike) {
       const countryDigits = (countryCode.replace('+', '') || '').length;
       const maxAllowed = Math.max(0, Math.min(MAX_NATIONAL, MAX_E164 - countryDigits));
       const truncated = cleaned.slice(0, maxAllowed);
-      setInitialNumber((prev) => {
-        if (prev === truncated) return prev;
-        const formatted = truncated ? formatPhoneNumber(countryCode, truncated) : '';
-        const current = (field.value ?? '')?.toString();
-        if (current !== formatted) {
-          lastFormattedRef.current = formatted;
-          field.onChange(formatted);
-        }
-        return truncated;
-      });
+
+      if (initialNumber === truncated) return;
+
+      setInitialNumber(truncated);
+
+      const formatted = truncated ? formatPhoneNumber(countryCode, truncated) : '';
+      const current = (field.value ?? '')?.toString();
+      if (current !== formatted) {
+        lastFormattedRef.current = formatted;
+        field.onChange(formatted);
+      }
     },
-    [field, countryCode],
+    [field, countryCode, initialNumber],
   );
 
   const result: PhoneFieldReturn = {

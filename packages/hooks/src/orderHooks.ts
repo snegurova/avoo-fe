@@ -304,4 +304,40 @@ export const orderHooks = {
     }
     return { data: null, refetch };
   },
+
+  useGetCustomerOrderHistory: (customerId?: number | null, limit = 10) => {
+    type CustomerHistoryData = Order[] | { items: Order[] };
+
+    const hasItemsArray = (value: unknown): value is { items: Order[] } =>
+      typeof value === 'object' && value !== null && 'items' in value && Array.isArray(value.items);
+
+    const params = useMemo<PrivateOrderQueryParams>(
+      () => ({
+        page: 1,
+        limit,
+        customerId: customerId ?? undefined,
+      }),
+      [customerId, limit],
+    );
+
+    const { data: ordersData, isPending } = useQuery<BaseResponse<CustomerHistoryData>, Error>({
+      queryKey: ['orders', 'customer-history', queryKeys.orders.byParams(params)],
+      queryFn: () => orderApi.getOrders(params),
+      enabled: !!customerId,
+    });
+
+    utils.useSetPendingApi(isPending);
+
+    if (ordersData?.status === ApiStatus.SUCCESS) {
+      if (Array.isArray(ordersData.data)) {
+        return ordersData.data;
+      }
+
+      if (hasItemsArray(ordersData.data)) {
+        return ordersData.data.items;
+      }
+    }
+
+    return [];
+  },
 };

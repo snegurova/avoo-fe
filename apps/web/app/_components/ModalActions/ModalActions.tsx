@@ -18,7 +18,7 @@ export default function ModalActions(props: Readonly<Props>) {
   const {
     onCancel,
     onSubmit,
-    cancelText = 'Cancel',
+    cancelText = 'Close',
     submitText = 'Save',
     loading = false,
     submitType = 'submit',
