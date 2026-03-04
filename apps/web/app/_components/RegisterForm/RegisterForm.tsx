@@ -26,7 +26,7 @@ export default function RegisterForm() {
     utils.useBooleanState(false);
 
   return (
-    <form onSubmit={handleSubmit} className='mt-10 sm:mx-auto sm:w-full sm:max-w-sm space-y-6'>
+    <form onSubmit={handleSubmit} className='w-full flex flex-col gap-6'>
       <FormInput
         {...register('name')}
         type='text'

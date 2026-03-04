@@ -1,9 +1,10 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
 @import 'tailwindcss';
 
 @theme {
   --font-inter: 'Inter', sans-serif;
   --font-roboto: 'Roboto', sans-serif;
+  --font-advent-pro: 'Advent Pro', sans-serif;
+  --font-montserrat: 'Montserrat', sans-serif;
   --color-black: #141a23;
   --color-primary-50: #f8f6fc;
   --color-primary-100: #e8deee;

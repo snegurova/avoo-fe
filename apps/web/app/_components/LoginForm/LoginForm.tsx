@@ -1,7 +1,6 @@
 'use client';
 
 import { useRouter, useSearchParams } from 'next/navigation';
-import Link from 'next/link';
 import { authHooks } from '@avoo/hooks';
 import { Button, ButtonFit, ButtonIntent } from '@/_components/Button/Button';
 import FormInput from '@/_components/FormInput/FormInput';
@@ -10,7 +9,6 @@ import { useApiStatusStore } from '@avoo/store';
 import { utils } from '@avoo/hooks';
 import ShowPasswordToggler from '@/_components/ShowPasswordToggler/ShowPasswordToggler';
 import { useEffect, useState } from 'react';
-import { localizationHooks } from '@/_hooks/localizationHooks';
 import { routerUtils } from '@/_utils/routerUtils';
 
 export default function LoginForm() {
@@ -28,32 +26,38 @@ export default function LoginForm() {
 
   const { register, handleSubmit, errors } = authHooks.useLoginForm({
     onSuccess: () => {
-      const targetUrl = returnUrl && routerUtils.isValidRoute(returnUrl)
-        ? routerUtils.toRoute(returnUrl)
-        : AppRoutes.Home;
+      const targetUrl =
+        returnUrl && routerUtils.isValidRoute(returnUrl)
+          ? routerUtils.toRoute(returnUrl)
+          : AppRoutes.Home;
       router.replace(targetUrl);
-
     },
   });
 
   const { value: isShowPassword, toggleValue: toggleShowPassword } = utils.useBooleanState(false);
 
   return (
-    <form onSubmit={handleSubmit} className='mt-10 sm:mx-auto sm:w-full sm:max-w-sm space-y-6'>
-      <FormInput
-        {...register('email')}
-        type='email'
-        placeholder='Email'
-        error={errors.email?.message}
-      />
+    <form onSubmit={handleSubmit} className='w-full flex flex-col gap-6'>
+      <label>
+        <span className='text-sm font-medium mb-1'>Email address *</span>
+        <FormInput
+          {...register('email')}
+          type='email'
+          placeholder='Email'
+          error={errors.email?.message}
+        />
+      </label>
 
-      <FormInput
-        {...register('password')}
-        type={isShowPassword ? 'text' : 'password'}
-        placeholder='Password'
-        error={errors.password?.message}
-        accessory={<ShowPasswordToggler value={isShowPassword} toggle={toggleShowPassword} />}
-      />
+      <label>
+        <span className='text-sm font-medium mb-1'>Password *</span>
+        <FormInput
+          {...register('password')}
+          type={isShowPassword ? 'text' : 'password'}
+          placeholder='Password'
+          error={errors.password?.message}
+          accessory={<ShowPasswordToggler value={isShowPassword} toggle={toggleShowPassword} />}
+        />
+      </label>
 
       <Button
         onClick={handleSubmit}
@@ -64,14 +68,6 @@ export default function LoginForm() {
       >
         Log in
       </Button>
-      <div className='text-center mt-2'>
-        <Link
-          href={localizationHooks.useWithLocale(AppRoutes.ForgotPassword)}
-          className='text-blue-600 hover:underline text-sm'
-        >
-          Forgot password?
-        </Link>
-      </div>
     </form>
   );
 }
