@@ -1,9 +1,12 @@
 import React from 'react';
-import { MasterWithRelationsEntity } from '@avoo/axios/types/apiTypes';
-import { CalendarAvatar, AvatarSize } from '@/_components/CalendarAvatar/CalendarAvatar';
-import { CalendarViewType } from '@avoo/hooks/types/calendarViewType';
+
 import { tv } from 'tailwind-variants';
+
+import { MasterWithRelationsEntity } from '@avoo/axios/types/apiTypes';
 import { CalendarType } from '@avoo/hooks/types/calendarType';
+import { CalendarViewType } from '@avoo/hooks/types/calendarViewType';
+
+import { AvatarSize, CalendarAvatar } from '@/_components/CalendarAvatar/CalendarAvatar';
 
 type Props = {
   master: MasterWithRelationsEntity;

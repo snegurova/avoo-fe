@@ -1,15 +1,18 @@
 import React from 'react';
-import { timeUtils } from '@avoo/shared';
-import { PrivateEvent } from '@avoo/axios/types/apiTypes';
+
+import useMediaQuery from '@mui/material/useMediaQuery';
 import { tv } from 'tailwind-variants';
-import { OrderStatus } from '@avoo/hooks/types/orderStatus';
-import { PX_IN_MINUTE } from '@/_constants/time';
+
+import { PrivateEvent } from '@avoo/axios/types/apiTypes';
 import { CalendarViewType } from '@avoo/hooks/types/calendarViewType';
+import { OrderStatus } from '@avoo/hooks/types/orderStatus';
+import { timeUtils } from '@avoo/shared';
+
+import { PX_IN_MINUTE } from '@/_constants/time';
 import BookmarkCheck from '@/_icons/BookmarkCheck';
-import SearchActivity from '@/_icons/SearchActivity';
 import CheckCircle from '@/_icons/CheckCircle';
 import ErrorIcon from '@/_icons/ErrorIcon';
-import useMediaQuery from '@mui/material/useMediaQuery';
+import SearchActivity from '@/_icons/SearchActivity';
 
 type Props = {
   event: PrivateEvent;

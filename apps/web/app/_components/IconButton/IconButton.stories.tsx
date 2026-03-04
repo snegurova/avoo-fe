@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
+
 import { IconButton, IconButtonRounded, IconButtonSize, IconButtonVariant } from './IconButton';
 
 const meta: Meta<typeof IconButton> = {
@@ -135,4 +136,3 @@ export const DifferentIcons: Story = {
     </div>
   ),
 };
-

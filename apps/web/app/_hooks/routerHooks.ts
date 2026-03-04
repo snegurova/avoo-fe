@@ -1,10 +1,11 @@
 'use client';
 
-import { useRouter, usePathname } from 'next/navigation';
 import { useCallback } from 'react';
-import { AppRoutes } from '@/_routes/routes';
 import { Route } from 'next';
+import { usePathname, useRouter } from 'next/navigation';
+
 import { localizationHooks } from '@/_hooks/localizationHooks';
+import { AppRoutes } from '@/_routes/routes';
 
 export const routerHooks = {
   useHandleNavigateToHomeClick: () => {

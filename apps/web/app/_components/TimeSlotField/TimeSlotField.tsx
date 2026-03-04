@@ -1,12 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+
 import {
-  Service,
   Combination,
-  PublicCalendarQueryParams,
   GetPublicCalendarResponse,
+  PublicCalendarQueryParams,
+  Service,
 } from '@avoo/axios/types/apiTypes';
-import TimeSlotOption from '../TimeSlotOption/TimeSlotOption';
 import { timeUtils } from '@avoo/shared';
+
+import TimeSlotOption from '../TimeSlotOption/TimeSlotOption';
 
 type Props = {
   selectedSlot: Date | null;

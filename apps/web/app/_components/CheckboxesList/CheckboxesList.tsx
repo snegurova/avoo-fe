@@ -1,7 +1,8 @@
 import React from 'react';
-import { tv } from 'tailwind-variants';
+
 import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
+import { tv } from 'tailwind-variants';
 
 type Props = {
   options: {

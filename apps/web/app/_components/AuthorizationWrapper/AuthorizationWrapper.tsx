@@ -1,11 +1,13 @@
 'use client';
 import React from 'react';
-import bg from '@/_images/auth-bg.jpg';
-import Link from 'next/link';
-import { AppRoutes } from '@/_routes/routes';
-import { LocalizedLink } from '@/_components/LocalizedLink/LocalizedLink';
 import { FormattedMessage } from 'react-intl';
+import Link from 'next/link';
+
 import { messages } from '@avoo/intl/messages/public/authorizationWrapper/index';
+
+import { LocalizedLink } from '@/_components/LocalizedLink/LocalizedLink';
+import bg from '@/_images/auth-bg.jpg';
+import { AppRoutes } from '@/_routes/routes';
 
 type Props = {
   children: React.ReactNode;

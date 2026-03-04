@@ -2,11 +2,13 @@
 
 import { useCallback } from 'react';
 import { useRouter } from 'next/navigation';
+
 import { userHooks } from '@avoo/hooks';
-import { AppRoutes } from '@/_routes/routes';
+
+import { LocalizedLink } from '@/_components/LocalizedLink/LocalizedLink';
 import { SectionHeader } from '@/_components/SectionHeader/SectionHeader';
 import { localizationHooks } from '@/_hooks/localizationHooks';
-import { LocalizedLink } from '@/_components/LocalizedLink/LocalizedLink';
+import { AppRoutes } from '@/_routes/routes';
 
 export const ProfileGallery = () => {
   const userMedia = userHooks.useGetUserMedia();

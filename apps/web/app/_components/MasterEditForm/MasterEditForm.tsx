@@ -2,19 +2,22 @@
 
 import React, { useCallback, useEffect, useState } from 'react';
 import { useController } from 'react-hook-form';
-import { AvatarUpload, AvatarSize } from '@/_components/AvatarUpload/AvatarUpload';
+
+import type { MasterWithRelationsEntityResponse } from '@avoo/axios/types/apiTypes';
+import { masterHooks, phoneHooks } from '@avoo/hooks';
+
+import { AvatarSize, AvatarUpload } from '@/_components/AvatarUpload/AvatarUpload';
 import FormInput from '@/_components/FormInput/FormInput';
 import FormLanguageSearch from '@/_components/FormLanguageSearch/FormLanguageSearch';
-import PhoneCodeSelect from '@/_components/PhoneCodeSelect/PhoneCodeSelect';
 import FormTextarea from '@/_components/FormTextArea/FormTextArea';
-import { masterHooks, phoneHooks } from '@avoo/hooks';
-import type { MasterWithRelationsEntityResponse } from '@avoo/axios/types/apiTypes';
+import PhoneCodeSelect from '@/_components/PhoneCodeSelect/PhoneCodeSelect';
 import { useToast } from '@/_hooks/useToast';
-import ModalActions from '../ModalActions/ModalActions';
-import ShareIcon from '@/_icons/ShareIcon';
 import DeleteIcon from '@/_icons/DeleteIcon';
-import { IconButton } from '../IconButton/IconButton';
+import ShareIcon from '@/_icons/ShareIcon';
+
 import ConfirmationModal from '../ConfirmationModal/ConfirmationModal';
+import { IconButton } from '../IconButton/IconButton';
+import ModalActions from '../ModalActions/ModalActions';
 
 type Props = {
   master: MasterWithRelationsEntityResponse;

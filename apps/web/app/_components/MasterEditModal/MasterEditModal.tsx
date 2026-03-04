@@ -1,10 +1,13 @@
 'use client';
 
 import React from 'react';
-import { Modal, ModalVariant } from '@/_components/Modal/Modal';
+
 import type { MasterWithRelationsEntityResponse } from '@avoo/axios/types/apiTypes';
-import MasterEditForm from '../MasterEditForm/MasterEditForm';
+
+import { Modal, ModalVariant } from '@/_components/Modal/Modal';
+
 import ConfirmationModal from '../ConfirmationModal/ConfirmationModal';
+import MasterEditForm from '../MasterEditForm/MasterEditForm';
 
 type Props = {
   master?: MasterWithRelationsEntityResponse | null;

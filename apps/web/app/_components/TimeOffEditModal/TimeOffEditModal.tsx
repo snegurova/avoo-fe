@@ -1,10 +1,13 @@
 'use client';
 
 import React from 'react';
-import { Modal, ModalVariant } from '@/_components/Modal/Modal';
+
 import type { Exception } from '@avoo/axios/types/apiTypes';
-import TimeOffEditForm from '../TimeOffEditForm/TimeOffEditForm';
+
+import { Modal, ModalVariant } from '@/_components/Modal/Modal';
+
 import ConfirmationModal from '../ConfirmationModal/ConfirmationModal';
+import TimeOffEditForm from '../TimeOffEditForm/TimeOffEditForm';
 
 export type TimeOffItem = Exception;
 

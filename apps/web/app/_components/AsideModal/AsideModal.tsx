@@ -1,5 +1,7 @@
 import React, { useEffect, useRef } from 'react';
+
 import { tv } from 'tailwind-variants';
+
 import { IconButton, IconButtonRounded, IconButtonSize } from '@/_components/IconButton/IconButton';
 import CloseIcon from '@/_icons/CloseIcon';
 

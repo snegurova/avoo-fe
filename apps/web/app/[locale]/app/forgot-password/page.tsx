@@ -1,8 +1,9 @@
 import { Metadata } from 'next/types';
-import ForgotPasswordForm from '@/_components/ForgotPasswordForm/ForgotPasswordForm';
-import { AppRoutes } from '@/_routes/routes';
-import { LocalizedLink } from '@/_components/LocalizedLink/LocalizedLink';
+
 import AuthorizationWrapper from '@/_components/AuthorizationWrapper/AuthorizationWrapper';
+import ForgotPasswordForm from '@/_components/ForgotPasswordForm/ForgotPasswordForm';
+import { LocalizedLink } from '@/_components/LocalizedLink/LocalizedLink';
+import { AppRoutes } from '@/_routes/routes';
 
 export const metadata: Metadata = {
   title: 'Forgot Password - AVOO App',

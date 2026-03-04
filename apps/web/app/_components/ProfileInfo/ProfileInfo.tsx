@@ -2,16 +2,18 @@
 
 import { useCallback } from 'react';
 import { useRouter } from 'next/navigation';
-import { AppRoutes } from '@/_routes/routes';
+
 import { userHooks } from '@avoo/hooks';
-import { ProfileLanguages } from '@/_components/ProfileLanguages/ProfileLanguages';
-import { ProfileCertificates } from '@/_components/ProfileCertificates/ProfileCertificates';
+import { useApiStatusStore } from '@avoo/store';
+
 import Avatar from '@/_components/Avatar/Avatar';
 import AvatarLoader from '@/_components/AvatarLoader/AvatarLoader';
 import { AvatarSize } from '@/_components/AvatarUpload/AvatarUpload';
 import { IconButton } from '@/_components/IconButton/IconButton';
-import { useApiStatusStore } from '@avoo/store';
+import { ProfileCertificates } from '@/_components/ProfileCertificates/ProfileCertificates';
+import { ProfileLanguages } from '@/_components/ProfileLanguages/ProfileLanguages';
 import { localizationHooks } from '@/_hooks/localizationHooks';
+import { AppRoutes } from '@/_routes/routes';
 
 export const ProfileInfo = () => {
   const router = useRouter();

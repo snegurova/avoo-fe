@@ -1,12 +1,15 @@
 'use client';
 
 import React from 'react';
+
 import { Avatar, ButtonBase, IconButton } from '@mui/material';
+
+import { AVATAR_DOWNLOAD_FORMATS } from '@/_constants/files';
+import EditIcon from '@/_icons/EditIcon';
 import PersonIcon from '@/_icons/PersonIcon';
 import { utilsHooks } from '@/_utils/utilsHooks';
-import { AVATAR_DOWNLOAD_FORMATS } from '@/_constants/files';
+
 import AvatarLoader from '../AvatarLoader/AvatarLoader';
-import EditIcon from '@/_icons/EditIcon';
 
 export enum AvatarSize {
   SMALL = 64,

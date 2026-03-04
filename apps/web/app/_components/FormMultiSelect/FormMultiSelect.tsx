@@ -1,10 +1,11 @@
 import React, { useMemo } from 'react';
-import OutlinedInput from '@mui/material/OutlinedInput';
+
+import { Checkbox, FormHelperText, ListItemText } from '@mui/material';
+import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
+import OutlinedInput from '@mui/material/OutlinedInput';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
-import { Checkbox, FormHelperText, ListItemText } from '@mui/material';
 
 export type Option = { label: string; value: string };
 

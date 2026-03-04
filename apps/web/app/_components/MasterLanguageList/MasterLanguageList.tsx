@@ -1,8 +1,9 @@
 'use client';
 
 import React from 'react';
-import { colors, typography } from '@avoo/design-tokens';
+
 import { LANGUAGE_NAMES } from '@avoo/constants';
+import { colors, typography } from '@avoo/design-tokens';
 
 type Props = {
   languages: string[];

@@ -1,5 +1,7 @@
 import React from 'react';
+
 import { Modal, ModalVariant } from '@/_components/Modal/Modal';
+
 import ModalActions from '../ModalActions/ModalActions';
 
 type Props = {

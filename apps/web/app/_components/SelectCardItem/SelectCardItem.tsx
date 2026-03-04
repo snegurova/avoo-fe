@@ -1,5 +1,7 @@
 import { IconButton } from '@mui/material';
+
 import { colors } from '@avoo/design-tokens';
+
 import Avatar, { AvatarSize } from '@/_components/Avatar/Avatar';
 import CloseIcon from '@/_icons/CloseIcon';
 

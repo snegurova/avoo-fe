@@ -1,19 +1,21 @@
-import React, { useEffect, useState, useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
+
 import {
-  CreateOrder,
   Combination,
-  MasterWithRelationsEntity,
+  CreateOrder,
   GetMastersQueryParams,
+  MasterWithRelationsEntity,
 } from '@avoo/axios/types/apiTypes';
-import FormTextArea from '@/_components/FormTextArea/FormTextArea';
-import FormDatePicker from '@/_components/FormDatePicker/FormDatePicker';
-import FormTimePicker from '@/_components/FormTimePicker/FormTimePicker';
-import CombinationElement from '@/_components/CombinationElement/CombinationElement';
-import SearchField from '@/_components/SearchField/SearchField';
-import MasterElement from '@/_components/MasterElement/MasterElement';
 import { masterHooks } from '@avoo/hooks';
-import CallSplitIcon from '@/_icons/CallSplitIcon';
+
+import CombinationElement from '@/_components/CombinationElement/CombinationElement';
+import FormDatePicker from '@/_components/FormDatePicker/FormDatePicker';
+import FormTextArea from '@/_components/FormTextArea/FormTextArea';
+import FormTimePicker from '@/_components/FormTimePicker/FormTimePicker';
 import { IconButton } from '@/_components/IconButton/IconButton';
+import MasterElement from '@/_components/MasterElement/MasterElement';
+import SearchField from '@/_components/SearchField/SearchField';
+import CallSplitIcon from '@/_icons/CallSplitIcon';
 
 type Props = {
   value: CreateOrder[];

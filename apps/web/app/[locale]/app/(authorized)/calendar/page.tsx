@@ -1,7 +1,9 @@
 'use client';
 import React from 'react';
-import AppWrapper from '@/_components/AppWrapper/AppWrapper';
+
 import { Typography } from '@mui/material';
+
+import AppWrapper from '@/_components/AppWrapper/AppWrapper';
 import Calendar from '@/_components/Calendar/Calendar';
 
 export default function CalendarPage() {

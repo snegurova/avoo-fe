@@ -1,5 +1,7 @@
-import { Combination } from '@avoo/axios/types/apiTypes';
 import React from 'react';
+
+import { Combination } from '@avoo/axios/types/apiTypes';
+
 import {
   Button,
   ButtonFit,

@@ -1,16 +1,19 @@
-import React, { useState, useRef, useCallback, useEffect } from 'react';
-import { CalendarItem, PrivateEvent, MasterWithRelationsEntity } from '@avoo/axios/types/apiTypes';
-import { tv } from 'tailwind-variants';
-import { CalendarViewType } from '@avoo/hooks/types/calendarViewType';
-import CalendarEvent from '@/_components/CalendarEvent/CalendarEvent';
-import { timeUtils } from '@avoo/shared';
-import { PX_IN_MINUTE } from '@/_constants/time';
-import CalendarCurrentTime from '@/_components/CalendarCurrentTime/CalendarCurrentTime';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { AppRoutes } from '@/_routes/routes';
-import { useToast } from '@/_hooks/useToast';
+
+import { tv } from 'tailwind-variants';
+
+import { CalendarItem, MasterWithRelationsEntity, PrivateEvent } from '@avoo/axios/types/apiTypes';
 import { CalendarType } from '@avoo/hooks/types/calendarType';
+import { CalendarViewType } from '@avoo/hooks/types/calendarViewType';
+import { timeUtils } from '@avoo/shared';
+
+import CalendarCurrentTime from '@/_components/CalendarCurrentTime/CalendarCurrentTime';
+import CalendarEvent from '@/_components/CalendarEvent/CalendarEvent';
+import { PX_IN_MINUTE } from '@/_constants/time';
 import { localizationHooks } from '@/_hooks/localizationHooks';
+import { useToast } from '@/_hooks/useToast';
+import { AppRoutes } from '@/_routes/routes';
 
 const DAY_CELLS = Array.from({ length: 96 });
 const WEEK_CELLS = Array.from({ length: 7 });

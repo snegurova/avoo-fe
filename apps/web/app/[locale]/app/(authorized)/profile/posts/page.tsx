@@ -1,7 +1,7 @@
 'use client';
 
-import { SectionHeader } from '@/_components/SectionHeader/SectionHeader';
 import { IconButton } from '@/_components/IconButton/IconButton';
+import { SectionHeader } from '@/_components/SectionHeader/SectionHeader';
 import { routerHooks } from '@/_hooks/routerHooks';
 
 export default function PostsPage() {

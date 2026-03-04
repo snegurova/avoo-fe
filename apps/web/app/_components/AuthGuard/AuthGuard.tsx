@@ -1,10 +1,12 @@
 'use client';
 
-import { useRouter, usePathname } from 'next/navigation';
+import { ReactNode, useEffect } from 'react';
+import { usePathname, useRouter } from 'next/navigation';
+
 import { useAuthStore, useHydrationStore } from '@avoo/store';
-import { useEffect, ReactNode } from 'react';
-import { AppRoutes } from '@/_routes/routes';
+
 import { localizationHooks } from '@/_hooks/localizationHooks';
+import { AppRoutes } from '@/_routes/routes';
 
 type Props = {
   children: ReactNode;
@@ -18,7 +20,7 @@ export const AuthGuard = (props: Props) => {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
   const hasHydrated = useHydrationStore((state) => state.hasHydrated);
 
-  const siginInWithLocaleRedirect = localizationHooks.useWithLocale(AppRoutes.SignIn)
+  const siginInWithLocaleRedirect = localizationHooks.useWithLocale(AppRoutes.SignIn);
 
   useEffect(() => {
     if (!hasHydrated) {

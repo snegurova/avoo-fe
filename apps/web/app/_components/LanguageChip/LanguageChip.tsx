@@ -1,14 +1,16 @@
 'use client';
 
 import React from 'react';
-import CloseIcon from '@/_icons/CloseIcon';
+
+import { LANGUAGE_NAMES, type LanguageCode } from '@avoo/constants';
+
 import {
   IconButton,
-  IconButtonSize,
   IconButtonRounded,
+  IconButtonSize,
   IconButtonVariant,
 } from '@/_components/IconButton/IconButton';
-import { LANGUAGE_NAMES, type LanguageCode } from '@avoo/constants';
+import CloseIcon from '@/_icons/CloseIcon';
 
 type Props = {
   code: LanguageCode;
@@ -21,7 +23,7 @@ export default function LanguageChip({ code, onRemove }: Readonly<Props>) {
       key={code}
       className='flex items-center gap-3 bg-primary-100 text-sm text-gray-800 px-4 py-2 rounded-full'
     >
-      <span className="text-xs">
+      <span className='text-xs'>
         {LANGUAGE_NAMES[code]} ({code.toUpperCase()})
       </span>
       <IconButton

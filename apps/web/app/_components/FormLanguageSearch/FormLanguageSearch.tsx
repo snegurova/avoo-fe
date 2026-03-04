@@ -2,10 +2,12 @@
 
 import React from 'react';
 import { Control, FieldValues, Path } from 'react-hook-form';
+
 import { type LanguageCode } from '@avoo/constants';
+import { languageHooks } from '@avoo/hooks';
+
 import SearchInput from '@/_components/SearchInput/SearchInput';
 
-import { languageHooks } from '@avoo/hooks';
 import LanguageChip from '../LanguageChip/LanguageChip';
 import LanguageDropdownItem from '../LanguageDropdownItem/LanguageDropdownItem';
 

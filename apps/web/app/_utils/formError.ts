@@ -1,4 +1,4 @@
-import { FieldErrors, FieldError, FieldValues } from 'react-hook-form';
+import { FieldError, FieldErrors, FieldValues } from 'react-hook-form';
 
 function hasMessage(x: unknown): x is FieldError {
   return typeof x === 'object' && x !== null && 'message' in x;

@@ -1,17 +1,19 @@
 'use client';
 
+import { useEffect, useState } from 'react';
+import { FormattedMessage } from 'react-intl';
 import { useRouter, useSearchParams } from 'next/navigation';
+
 import { authHooks } from '@avoo/hooks';
+import { utils } from '@avoo/hooks';
+import { messages } from '@avoo/intl/messages/public/login/form';
+import { useApiStatusStore } from '@avoo/store';
+
 import { Button, ButtonFit, ButtonIntent } from '@/_components/Button/Button';
 import FormInput from '@/_components/FormInput/FormInput';
-import { AppRoutes } from '@/_routes/routes';
-import { useApiStatusStore } from '@avoo/store';
-import { utils } from '@avoo/hooks';
 import ShowPasswordToggler from '@/_components/ShowPasswordToggler/ShowPasswordToggler';
-import { useEffect, useState } from 'react';
+import { AppRoutes } from '@/_routes/routes';
 import { routerUtils } from '@/_utils/routerUtils';
-import { FormattedMessage } from 'react-intl';
-import { messages } from '@avoo/intl/messages/public/login/form';
 
 export default function LoginForm() {
   const isPending = useApiStatusStore((state) => state.isPending);

@@ -1,8 +1,11 @@
 import React from 'react';
-import { PX_IN_MINUTE } from '@/_constants/time';
-import { timeUtils } from '@avoo/shared';
+
 import { tv } from 'tailwind-variants';
+
 import { useIntervalAction } from '@avoo/hooks';
+import { timeUtils } from '@avoo/shared';
+
+import { PX_IN_MINUTE } from '@/_constants/time';
 
 type Props = {
   isSingleWeek?: boolean;

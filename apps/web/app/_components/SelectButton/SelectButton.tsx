@@ -1,8 +1,11 @@
-import ArrowDownIcon from '@/_icons/ArrowDownIcon';
-import React, { useState, useCallback, useRef } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
+
 import { tv } from 'tailwind-variants';
-import DropdownList from '@/_components/DropdownList/DropdownList';
+
 import { ElementStyleType } from '@avoo/hooks/types/elementStyleType';
+
+import DropdownList from '@/_components/DropdownList/DropdownList';
+import ArrowDownIcon from '@/_icons/ArrowDownIcon';
 
 type Props = {
   label: string;

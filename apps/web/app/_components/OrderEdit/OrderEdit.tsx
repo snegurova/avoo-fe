@@ -1,23 +1,26 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import {
-  Order,
-  MasterWithRelationsEntity,
-  GetMastersQueryParams,
-} from '@avoo/axios/types/apiTypes';
-import { Button, ButtonFit, ButtonIntent, ButtonType } from '@/_components/Button/Button';
-import { useApiStatusStore } from '@avoo/store';
-import ServiceElement from '@/_components/ServiceElement/ServiceElement';
-import CustomerElement from '@/_components/CustomerElement/CustomerElement';
-import { orderHooks, masterHooks } from '@avoo/hooks';
-import FormTextArea from '@/_components/FormTextArea/FormTextArea';
 import { Controller } from 'react-hook-form';
-import SearchField from '@/_components/SearchField/SearchField';
-import MasterElement from '../MasterElement/MasterElement';
-import FormCounter from '@/_components/FormCounter/FormCounter';
-import ErrorIcon from '@/_icons/ErrorIcon';
-import FormDatePicker from '@/_components/FormDatePicker/FormDatePicker';
-import FormTimePicker from '@/_components/FormTimePicker/FormTimePicker';
+
+import {
+  GetMastersQueryParams,
+  MasterWithRelationsEntity,
+  Order,
+} from '@avoo/axios/types/apiTypes';
+import { masterHooks, orderHooks } from '@avoo/hooks';
+import { useApiStatusStore } from '@avoo/store';
+
+import { Button, ButtonFit, ButtonIntent, ButtonType } from '@/_components/Button/Button';
 import CombinationElement from '@/_components/CombinationElement/CombinationElement';
+import CustomerElement from '@/_components/CustomerElement/CustomerElement';
+import FormCounter from '@/_components/FormCounter/FormCounter';
+import FormDatePicker from '@/_components/FormDatePicker/FormDatePicker';
+import FormTextArea from '@/_components/FormTextArea/FormTextArea';
+import FormTimePicker from '@/_components/FormTimePicker/FormTimePicker';
+import SearchField from '@/_components/SearchField/SearchField';
+import ServiceElement from '@/_components/ServiceElement/ServiceElement';
+import ErrorIcon from '@/_icons/ErrorIcon';
+
+import MasterElement from '../MasterElement/MasterElement';
 
 type Props = {
   order: Order;

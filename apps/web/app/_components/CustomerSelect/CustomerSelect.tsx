@@ -1,17 +1,19 @@
 'use client';
-import React, { useState, useEffect } from 'react';
-import { CreatePrivateOrdersData, customerHooks } from '@avoo/hooks';
+import React, { useEffect, useState } from 'react';
+import { FieldErrors } from 'react-hook-form';
+
 import {
   CreateCustomerRequest,
+  Customer,
   FindCustomerRequest,
   GetCustomersQueryParams,
-  Customer,
 } from '@avoo/axios/types/apiTypes';
-import SearchField from '@/_components/SearchField/SearchField';
-import CustomerElement from '@/_components/CustomerElement/CustomerElement';
+import { CreatePrivateOrdersData, customerHooks } from '@avoo/hooks';
 import { isEmptyObject } from '@avoo/shared';
-import { FieldErrors } from 'react-hook-form';
+
 import CustomerCreate from '@/_components/CustomerCreate/CustomerCreate';
+import CustomerElement from '@/_components/CustomerElement/CustomerElement';
+import SearchField from '@/_components/SearchField/SearchField';
 import { isCustomerValues } from '@/_utils/isCustomerValues';
 
 type Props = {

@@ -1,18 +1,22 @@
 'use client';
 
 import React from 'react';
-import Avatar, { AvatarSize } from '@/_components/Avatar/Avatar';
+
 import { Typography } from '@mui/material';
+
 import { MasterWithRelationsEntityResponse } from '@avoo/axios/types/apiTypes';
 import { colors, typography } from '@avoo/design-tokens';
+import { masterHooks } from '@avoo/hooks';
+
+import Avatar, { AvatarSize } from '@/_components/Avatar/Avatar';
+import { IconButton } from '@/_components/IconButton/IconButton';
 import MasterLanguageList from '@/_components/MasterLanguageList/MasterLanguageList';
-import ShareIcon from '@/_icons/ShareIcon';
+import { useToast } from '@/_hooks/useToast';
 import DeleteIcon from '@/_icons/DeleteIcon';
 import EditSquareIcon from '@/_icons/EditSquareIcon';
-import { IconButton } from '@/_components/IconButton/IconButton';
+import ShareIcon from '@/_icons/ShareIcon';
+
 import ConfirmationModal from '../ConfirmationModal/ConfirmationModal';
-import { masterHooks } from '@avoo/hooks';
-import { useToast } from '@/_hooks/useToast';
 
 type Props = {
   master: MasterWithRelationsEntityResponse;

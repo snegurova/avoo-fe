@@ -1,11 +1,14 @@
 'use client';
 
 import React from 'react';
-import Avatar, { AvatarSize } from '@/_components/Avatar/Avatar';
+
 import { Typography } from '@mui/material';
+
 import type { CustomerInfoResponse } from '@avoo/axios/types/apiTypes';
 import { colors, typography } from '@avoo/design-tokens';
 import { timeUtils } from '@avoo/shared';
+
+import Avatar, { AvatarSize } from '@/_components/Avatar/Avatar';
 
 type Props = {
   client: CustomerInfoResponse;

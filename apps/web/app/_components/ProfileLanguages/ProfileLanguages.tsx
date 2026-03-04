@@ -2,9 +2,10 @@
 
 import { useCallback } from 'react';
 import { useRouter } from 'next/navigation';
-import { AppRoutes } from '@/_routes/routes';
+
 import { IconButton } from '@/_components/IconButton/IconButton';
 import { localizationHooks } from '@/_hooks/localizationHooks';
+import { AppRoutes } from '@/_routes/routes';
 
 type Props = {
   languages: string[] | null;

@@ -1,13 +1,15 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
+
+import type { CustomerInfoResponse, GetCustomersResponse } from '@avoo/axios/types/apiTypes';
+import { customerHooks } from '@avoo/hooks';
+import { sortByName, SortDirection } from '@avoo/shared';
+
+import ClientListItem from '@/_components/ClientListItem/ClientListItem';
 import { IconButton } from '@/_components/IconButton/IconButton';
 import ArrowDownIcon from '@/_icons/ArrowDownIcon';
 import ArrowUpIcon from '@/_icons/ArrowUpIcon';
-import { customerHooks } from '@avoo/hooks';
-import type { CustomerInfoResponse, GetCustomersResponse } from '@avoo/axios/types/apiTypes';
-import { sortByName, SortDirection } from '@avoo/shared';
-import ClientListItem from '@/_components/ClientListItem/ClientListItem';
 
 type Props = {
   onEdit: (client: CustomerInfoResponse) => void;
