@@ -48,9 +48,9 @@ export default defineConfig([
         {
           groups: [
             ['^react', '^next'],
+            ['^@?\\w'],
             ['^@avoo/'],
             ['^@/'],
-            ['^@?\\w'],
             [
               '^\\.\\.(?!/?$)',
               '^\\.\\./?$',
