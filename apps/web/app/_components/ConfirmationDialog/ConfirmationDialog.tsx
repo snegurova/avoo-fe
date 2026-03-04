@@ -1,13 +1,14 @@
-import CloseIcon from '@/_icons/CloseIcon';
 import {
+  Button,
   Dialog,
   DialogActions,
   DialogContent,
   DialogContentText,
   DialogTitle,
-  Button,
   IconButton,
 } from '@mui/material';
+
+import CloseIcon from '@/_icons/CloseIcon';
 
 type Props = {
   open: boolean;

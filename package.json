@@ -43,6 +43,7 @@
     "typecheck": "turbo run typecheck",
     "test": "turbo run test",
     "prepare": "husky install",
+    "postinstall": "husky install",
     "types": "yarn workspace @avoo/axios types",
     "next-type": "yarn workspace web next-type",
     "intl:extract": "yarn workspace @avoo/intl intl:extract"

@@ -1,9 +1,11 @@
 import React, { ReactNode } from 'react';
-import MuiModal from '@mui/material/Modal';
-import Box from '@mui/material/Box';
-import Slide from '@mui/material/Slide';
-import CloseIcon from '@/_icons/CloseIcon';
+
 import { IconButton } from '@mui/material';
+import Box from '@mui/material/Box';
+import MuiModal from '@mui/material/Modal';
+import Slide from '@mui/material/Slide';
+
+import CloseIcon from '@/_icons/CloseIcon';
 
 export enum ModalVariant {
   CENTER = 'center',

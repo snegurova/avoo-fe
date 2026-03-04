@@ -1,12 +1,14 @@
 'use client';
 
 import React from 'react';
-import Controls from '@/_components/Controls/Controls';
-import { customerHooks } from '@avoo/hooks';
-import { ClientsList } from '@/_components/ClientsList/ClientsList';
+
 import type { CustomerInfoResponse } from '@avoo/axios/types/apiTypes';
-import { ClientEditModal } from '@/_components/ClientEditModal/ClientEditModal';
+import { customerHooks } from '@avoo/hooks';
+
 import AppWrapper from '@/_components/AppWrapper/AppWrapper';
+import { ClientEditModal } from '@/_components/ClientEditModal/ClientEditModal';
+import { ClientsList } from '@/_components/ClientsList/ClientsList';
+import Controls from '@/_components/Controls/Controls';
 
 export default function ClientsPage() {
   const [searchQuery, setSearchQuery] = React.useState('');

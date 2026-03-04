@@ -1,7 +1,9 @@
 'use client';
 
 import React from 'react';
+
 import { Button, Typography } from '@mui/material';
+
 import SearchInput from '@/_components/SearchInput/SearchInput';
 import SearchIcon from '@/_icons/SearchIcon';
 

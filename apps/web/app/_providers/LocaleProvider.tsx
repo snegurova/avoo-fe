@@ -1,6 +1,7 @@
 'use client';
 import React from 'react';
 import { IntlProvider } from 'react-intl';
+
 import { DEFAULT_LOCALE, Locale, MESSAGES } from '@avoo/intl';
 
 type Props = {

@@ -1,15 +1,19 @@
 'use client';
 import React, { useCallback } from 'react';
 import { useForm } from 'react-hook-form';
+
 import { Button } from '@mui/material';
-import { AvatarUpload, AvatarSize } from '@/_components/AvatarUpload/AvatarUpload';
-import { useAddressSearch, userHooks, useServerFormErrors } from '@avoo/hooks';
-import FormInput from '@/_components/FormInput/FormInput';
+
 import type { UpdateProfile } from '@avoo/axios/types/apiTypes';
+import { useAddressSearch, userHooks, useServerFormErrors } from '@avoo/hooks';
+import { buildUpdateProfilePayload, createProfileDefaults } from '@avoo/hooks';
 import type { NominatimPlace, VisualProfileInfo } from '@avoo/shared';
 import { buildShortAddress, getCondensedAddress } from '@avoo/shared';
+
+import { AvatarSize, AvatarUpload } from '@/_components/AvatarUpload/AvatarUpload';
+import FormInput from '@/_components/FormInput/FormInput';
+
 import AddressResults from './AddressResults';
-import { createProfileDefaults, buildUpdateProfilePayload } from '@avoo/hooks';
 import useAvatarUpload from './useAvatarUpload';
 
 type Props = {

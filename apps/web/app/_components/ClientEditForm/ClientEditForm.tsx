@@ -1,15 +1,16 @@
 'use client';
 
 import React from 'react';
-import { useForm, Controller } from 'react-hook-form';
-import FormInput, { AccessoryPosition } from '../FormInput/FormInput';
-import LockIcon from '@/_icons/LockIcon';
-import ModalActions from '../ModalActions/ModalActions';
-import FormTextarea from '../FormTextArea/FormTextArea';
+import { Controller, useForm } from 'react-hook-form';
+
 import { customerHooks } from '@avoo/hooks';
-import ClientOrdersHistory from '../ClientOrdersHistory/ClientOrdersHistory';
 
 import { useToast } from '@/_hooks/useToast';
+import LockIcon from '@/_icons/LockIcon';
+
+import FormInput, { AccessoryPosition } from '../FormInput/FormInput';
+import FormTextarea from '../FormTextArea/FormTextArea';
+import ClientOrdersHistory from '../ClientOrdersHistory/ClientOrdersHistory';
 import NotificationField from '../NotificationField/NotificationField';
 
 export type FormValues = {

@@ -1,10 +1,13 @@
 import React from 'react';
-import { CalendarViewType } from '@avoo/hooks/types/calendarViewType';
-import { timeUtils } from '@avoo/shared';
-import CalendarCurrentTime from '../CalendarCurrentTime/CalendarCurrentTime';
-import { tv } from 'tailwind-variants';
+
 import useMediaQuery from '@mui/material/useMediaQuery';
+import { tv } from 'tailwind-variants';
+
+import { CalendarViewType } from '@avoo/hooks/types/calendarViewType';
 import { DateStatus } from '@avoo/hooks/types/dateStatus';
+import { timeUtils } from '@avoo/shared';
+
+import CalendarCurrentTime from '../CalendarCurrentTime/CalendarCurrentTime';
 
 const WEEK_CELLS = Array.from({ length: 7 });
 const DAY_CELLS = Array.from({ length: 24 });

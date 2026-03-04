@@ -1,17 +1,20 @@
 'use client';
 
 import React, { useCallback, useMemo } from 'react';
+import { useRouter } from 'next/navigation';
+
+import useMediaQuery from '@mui/material/useMediaQuery';
+
 import AppProfileSelect from '@/_components/AppProfileSelect/AppProfileSelect';
+import IconLink from '@/_components/IconLink/IconLink';
+import { localizationHooks } from '@/_hooks/localizationHooks';
+import MenuIcon from '@/_icons/MenuIcon';
 import NotificationsIcon from '@/_icons/NotificationsIcon';
 import ShareIcon from '@/_icons/ShareIcon';
-import IconLink from '@/_components/IconLink/IconLink';
 import { AppRoutes } from '@/_routes/routes';
-import SelectButton from '../SelectButton/SelectButton';
-import { useRouter } from 'next/navigation';
+
 import { IconButton } from '../IconButton/IconButton';
-import MenuIcon from '@/_icons/MenuIcon';
-import useMediaQuery from '@mui/material/useMediaQuery';
-import { localizationHooks } from '@/_hooks/localizationHooks';
+import SelectButton from '../SelectButton/SelectButton';
 
 type Props = {
   setMenuOpen: (open: boolean) => void;

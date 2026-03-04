@@ -1,24 +1,26 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { orderHooks, combinationHooks } from '@avoo/hooks';
-import { useApiStatusStore } from '@avoo/store';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { Button, ButtonFit, ButtonIntent, ButtonType } from '@/_components/Button/Button';
-import { CustomerSelect } from '@/_components/CustomerSelect/CustomerSelect';
 import { Controller, useFieldArray } from 'react-hook-form';
-import ServiceForm from '@/_components/ServiceForm/ServiceForm';
-import { AppRoutes } from '@/_routes/routes';
-import AddCircleIcon from '@/_icons/AddCircleIcon';
+import { useRouter, useSearchParams } from 'next/navigation';
+
+import { CreateOrder, MasterWithRelationsEntity } from '@avoo/axios/types/apiTypes';
+import { combinationHooks, orderHooks } from '@avoo/hooks';
+import { CalendarType } from '@avoo/hooks/types/calendarType';
 import { OrderQueryParams } from '@avoo/hooks/types/orderQueryParams';
 import { OrderType } from '@avoo/hooks/types/orderType';
 import { timeUtils } from '@avoo/shared';
-import { useToast } from '@/_hooks/useToast';
-import CombinationProposition from '@/_components/CombinationProposition/CombinationProposition';
-import CombinationForm from '@/_components/CombinationForm/CombinationForm';
-import { MasterWithRelationsEntity, CreateOrder } from '@avoo/axios/types/apiTypes';
+import { useApiStatusStore } from '@avoo/store';
+
+import { Button, ButtonFit, ButtonIntent, ButtonType } from '@/_components/Button/Button';
 import Calendar from '@/_components/Calendar/Calendar';
-import { CalendarType } from '@avoo/hooks/types/calendarType';
-import { localizationHooks } from '@/_hooks/localizationHooks';
+import CombinationForm from '@/_components/CombinationForm/CombinationForm';
+import CombinationProposition from '@/_components/CombinationProposition/CombinationProposition';
+import { CustomerSelect } from '@/_components/CustomerSelect/CustomerSelect';
+import ServiceForm from '@/_components/ServiceForm/ServiceForm';
 import ServiceFormItem from '@/_components/ServiceFormItem/ServiceFormItem';
+import { localizationHooks } from '@/_hooks/localizationHooks';
+import { useToast } from '@/_hooks/useToast';
+import AddCircleIcon from '@/_icons/AddCircleIcon';
+import { AppRoutes } from '@/_routes/routes';
 
 const SERVICES_KEY_IN_ORDER_CREATE = 'ordersData';
 const WRAPPER_HEADER_HEIGHT = '62px';

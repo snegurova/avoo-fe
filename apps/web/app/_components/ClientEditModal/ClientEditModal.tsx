@@ -1,9 +1,12 @@
 'use client';
 
 import React from 'react';
-import { Modal, ModalVariant } from '@/_components/Modal/Modal';
-import { customerHooks } from '@avoo/hooks';
+
 import type { CustomerInfoResponse } from '@avoo/axios/types/apiTypes';
+import { customerHooks } from '@avoo/hooks';
+
+import { Modal, ModalVariant } from '@/_components/Modal/Modal';
+
 import ClientEditForm from '../ClientEditForm/ClientEditForm';
 import ConfirmationModal from '../ConfirmationModal/ConfirmationModal';
 

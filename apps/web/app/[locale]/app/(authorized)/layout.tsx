@@ -1,8 +1,9 @@
 'use client';
 import React, { ReactNode, useState } from 'react';
-import { AuthGuard } from '@/_components/AuthGuard/AuthGuard';
-import AppNavigation from '@/_components/AppNavigation/AppNavigation';
+
 import AppHeader from '@/_components/AppHeader/AppHeader';
+import AppNavigation from '@/_components/AppNavigation/AppNavigation';
+import { AuthGuard } from '@/_components/AuthGuard/AuthGuard';
 
 export default function AppLayout({ children }: { children: ReactNode }) {
   const [menuOpen, setMenuOpen] = useState(false);

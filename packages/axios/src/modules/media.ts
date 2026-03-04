@@ -1,3 +1,4 @@
+import { apiClient } from '@avoo/axios/src/apiClient';
 import {
   BaseResponse,
   DeleteMediaParams,
@@ -6,7 +7,7 @@ import {
   UploadMediaRequest,
   UploadMediaResponse,
 } from '@avoo/axios/types/apiTypes';
-import { apiClient } from '@avoo/axios/src/apiClient';
+
 import { formDataUtils } from '../../utils/formDataUtils';
 
 const MEDIA_ENDPOINT = '/media';

@@ -1,14 +1,20 @@
 'use client';
 
+import { FormattedMessage } from 'react-intl';
 import { useRouter } from 'next/navigation';
+
+import Checkbox from '@mui/material/Checkbox';
+
 import { authHooks } from '@avoo/hooks';
+import { utils } from '@avoo/hooks';
+import { messages } from '@avoo/intl/messages/public/signUp/form';
+import { useApiStatusStore } from '@avoo/store';
+
 import { Button, ButtonFit, ButtonIntent } from '@/_components/Button/Button';
 import FormInput from '@/_components/FormInput/FormInput';
-import { AppRoutes } from '@/_routes/routes';
-import { useApiStatusStore } from '@avoo/store';
-import { utils } from '@avoo/hooks';
 import ShowPasswordToggler from '@/_components/ShowPasswordToggler/ShowPasswordToggler';
 import { localizationHooks } from '@/_hooks/localizationHooks';
+import { AppRoutes } from '@/_routes/routes';
 
 export default function RegisterForm() {
   const isPending = useApiStatusStore((state) => state.isPending);
@@ -26,57 +32,80 @@ export default function RegisterForm() {
     utils.useBooleanState(false);
 
   return (
-    <form onSubmit={handleSubmit} className='mt-10 sm:mx-auto sm:w-full sm:max-w-sm space-y-6'>
-      <FormInput
-        {...register('name')}
-        type='text'
-        placeholder='Full Name'
-        error={errors.name?.message}
-      />
+    <form onSubmit={handleSubmit} className='w-full flex flex-col gap-6'>
+      <label>
+        <span className='text-sm font-medium mb-1 leading-none block'>
+          <FormattedMessage {...messages.nameLabel} />
+        </span>
+        <FormInput
+          {...register('name')}
+          type='text'
+          placeholder={messages.namePlaceholder.defaultMessage}
+          error={errors.name?.message}
+        />
+      </label>
+      <label>
+        <span className='text-sm font-medium mb-1 leading-none block'>
+          <FormattedMessage {...messages.emailLabel} />
+        </span>
+        <FormInput
+          {...register('email')}
+          type='email'
+          placeholder={messages.emailPlaceholder.defaultMessage}
+          error={errors.email?.message}
+        />
+      </label>
 
-      <FormInput
-        {...register('email')}
-        type='email'
-        placeholder='Email'
-        error={errors.email?.message}
-      />
-
-      <FormInput
-        {...register('password')}
-        type={isShowPassword ? 'text' : 'password'}
-        placeholder='Password'
-        error={errors.password?.message}
-        accessory={<ShowPasswordToggler value={isShowPassword} toggle={toggleShowPassword} />}
-      />
-
-      <FormInput
-        {...register('confirmPassword')}
-        type={isShowConfirmPassword ? 'text' : 'password'}
-        placeholder='Confirm Password'
-        error={errors.confirmPassword?.message}
-        accessory={
-          <ShowPasswordToggler value={isShowConfirmPassword} toggle={toggleConfirmPassword} />
-        }
-      />
-
+      <label>
+        <span className='text-sm font-medium mb-1 leading-none block'>
+          <FormattedMessage {...messages.passwordLabel} />
+        </span>
+        <FormInput
+          {...register('password')}
+          type={isShowPassword ? 'text' : 'password'}
+          placeholder={messages.passwordPlaceholder.defaultMessage}
+          error={errors.password?.message}
+          accessory={<ShowPasswordToggler value={isShowPassword} toggle={toggleShowPassword} />}
+        />
+      </label>
+      <label>
+        <span className='text-sm font-medium mb-1 leading-none block'>
+          <FormattedMessage {...messages.confirmPasswordLabel} />
+        </span>
+        <FormInput
+          {...register('confirmPassword')}
+          type={isShowConfirmPassword ? 'text' : 'password'}
+          placeholder={messages.confirmPasswordPlaceholder.defaultMessage}
+          error={errors.confirmPassword?.message}
+          accessory={
+            <ShowPasswordToggler value={isShowConfirmPassword} toggle={toggleConfirmPassword} />
+          }
+        />
+      </label>
       <div>
-        <div className='flex items-start'>
-          <div className='flex items-center h-5'>
-            <input
-              {...register('agreeToTerms')}
-              type='checkbox'
-              className='w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300'
-            />
-          </div>
-          <label className='ml-2 text-sm text-gray-600'>
-            I agree to the Privacy Policy, Terms of Service and Terms of Business.
-          </label>
-        </div>
+        <label className='flex items-center cursor-pointer'>
+          <Checkbox
+            {...register('agreeToTerms')}
+            onChange={() => {}}
+            size='medium'
+            sx={{
+              p: 0,
+              height: 20,
+              width: 20,
+              color: 'var(--color-gray-700)',
+              '&.Mui-checked': {
+                color: 'var(--color-gray-700)',
+              },
+            }}
+          />
+          <span className='ml-4 text-xs text-gray-500'>
+            <FormattedMessage {...messages.agreeToTerms} />
+          </span>
+        </label>
         {errors.agreeToTerms && (
           <p className='mt-1 text-sm text-red-500'>{errors.agreeToTerms.message}</p>
         )}
       </div>
-
       <Button
         onClick={handleSubmit}
         disabled={isPending}
@@ -84,7 +113,7 @@ export default function RegisterForm() {
         fit={ButtonFit.Fill}
         intent={ButtonIntent.Primary}
       >
-        Create Account
+        <FormattedMessage {...messages.button} />
       </Button>
     </form>
   );

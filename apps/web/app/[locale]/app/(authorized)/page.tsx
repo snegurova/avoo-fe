@@ -1,8 +1,10 @@
 'use client';
-import AppWrapper from '@/_components/AppWrapper/AppWrapper';
 import { Typography } from '@mui/material';
-import Calendar from '@/_components/Calendar/Calendar';
+
 import { CalendarType } from '@avoo/hooks/types/calendarType';
+
+import AppWrapper from '@/_components/AppWrapper/AppWrapper';
+import Calendar from '@/_components/Calendar/Calendar';
 
 export default function DashboardPage() {
   return (

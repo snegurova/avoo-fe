@@ -1,4 +1,5 @@
 import React from 'react';
+
 import type { NominatimPlace } from '@avoo/shared';
 import { buildShortAddress } from '@avoo/shared';
 

@@ -1,13 +1,16 @@
 import React, { useCallback } from 'react';
+import { FieldErrors } from 'react-hook-form';
+
+import { tv } from 'tailwind-variants';
+
+import { CreateCustomerRequest, CreatePublicCustomerRequest } from '@avoo/axios/types/apiTypes';
+import { phoneHooks } from '@avoo/hooks';
+import { CreatePublicOrdersData } from '@avoo/hooks';
+
 import FormInput from '@/_components/FormInput/FormInput';
 import FormTextArea from '@/_components/FormTextArea/FormTextArea';
 import PhoneCodeSelect from '@/_components/PhoneCodeSelect/PhoneCodeSelect';
-import { phoneHooks } from '@avoo/hooks';
 import { isCustomerValues } from '@/_utils/isCustomerValues';
-import { CreatePublicCustomerRequest, CreateCustomerRequest } from '@avoo/axios/types/apiTypes';
-import { FieldErrors } from 'react-hook-form';
-import { CreatePublicOrdersData } from '@avoo/hooks';
-import { tv } from 'tailwind-variants';
 
 type Props = {
   phone: string;

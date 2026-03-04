@@ -2,10 +2,12 @@
 
 import { useCallback } from 'react';
 import { useRouter } from 'next/navigation';
+
 import { scheduleHooks } from '@avoo/hooks';
-import { AppRoutes } from '@/_routes/routes';
+
 import { SectionHeader } from '@/_components/SectionHeader/SectionHeader';
 import { localizationHooks } from '@/_hooks/localizationHooks';
+import { AppRoutes } from '@/_routes/routes';
 
 export const ProfileSchedule = () => {
   const { data: schedulesData } = scheduleHooks.useGetSchedulesInfinite({ limit: 10 });

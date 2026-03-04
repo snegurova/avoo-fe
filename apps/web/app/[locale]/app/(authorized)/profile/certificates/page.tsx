@@ -1,12 +1,12 @@
 'use client';
 
-import { SectionHeader } from '@/_components/SectionHeader/SectionHeader';
+import { CertificateAdd } from '@/_components/CertificateAdd/CertificateAdd';
+import { CertificatesList } from '@/_components/CertificatesList/CertificatesList';
 import { IconButton } from '@/_components/IconButton/IconButton';
+import { SectionHeader } from '@/_components/SectionHeader/SectionHeader';
+import { localizationHooks } from '@/_hooks/localizationHooks';
 import { routerHooks } from '@/_hooks/routerHooks';
 import { AppRoutes } from '@/_routes/routes';
-import { CertificatesList } from '@/_components/CertificatesList/CertificatesList';
-import { CertificateAdd } from '@/_components/CertificateAdd/CertificateAdd';
-import { localizationHooks } from '@/_hooks/localizationHooks';
 
 export default function CertificatesPage() {
   const handleBackClick = routerHooks.useBackWithFallback(

@@ -1,18 +1,22 @@
 'use client';
 
-import React, { useState, useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useController } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
+
 import { Button, Typography } from '@mui/material';
-import { AvatarUpload, AvatarSize } from '@/_components/AvatarUpload/AvatarUpload';
+
+import { masterHooks, phoneHooks } from '@avoo/hooks';
+
+import { AvatarSize, AvatarUpload } from '@/_components/AvatarUpload/AvatarUpload';
 import FormInput from '@/_components/FormInput/FormInput';
 import FormLanguageSearch from '@/_components/FormLanguageSearch/FormLanguageSearch';
 import PhoneCodeSelect from '@/_components/PhoneCodeSelect/PhoneCodeSelect';
-import { masterHooks, phoneHooks } from '@avoo/hooks';
-import { AppRoutes } from '@/_routes/routes';
-import { useToast } from '@/_hooks/useToast';
-import FormTextarea from '../FormTextArea/FormTextArea';
 import { localizationHooks } from '@/_hooks/localizationHooks';
+import { useToast } from '@/_hooks/useToast';
+import { AppRoutes } from '@/_routes/routes';
+
+import FormTextarea from '../FormTextArea/FormTextArea';
 
 export default function MasterAddForm() {
   const router = useRouter();

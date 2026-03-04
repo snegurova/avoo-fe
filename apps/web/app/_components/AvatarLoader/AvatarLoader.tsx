@@ -1,4 +1,5 @@
 import { CircularProgress } from '@mui/material';
+
 import { AvatarSize } from '@/_components/AvatarUpload/AvatarUpload';
 
 type Props = {

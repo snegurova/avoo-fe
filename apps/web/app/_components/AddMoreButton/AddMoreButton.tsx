@@ -1,7 +1,10 @@
-import AddIcon from '@/_icons/AddIcon';
-import { colors } from '@avoo/design-tokens';
 import { useRef } from 'react';
+
 import { tv } from 'tailwind-variants';
+
+import { colors } from '@avoo/design-tokens';
+
+import AddIcon from '@/_icons/AddIcon';
 
 type Props = {
   accept: string;

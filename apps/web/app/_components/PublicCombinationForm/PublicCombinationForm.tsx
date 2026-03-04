@@ -1,22 +1,25 @@
-import React, { useEffect, useState, useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
+import { useParams } from 'next/navigation';
+
 import {
-  CreateOrder,
   Combination,
-  MasterWithRelationsEntity,
+  CreateOrder,
   GetMastersQueryParams,
+  MasterWithRelationsEntity,
   PublicCalendarQueryParams,
 } from '@avoo/axios/types/apiTypes';
-import { useParams } from 'next/navigation';
-import { masterHooks, calendarHooks } from '@avoo/hooks';
-import CallSplitIcon from '@/_icons/CallSplitIcon';
-import { IconButton } from '@/_components/IconButton/IconButton';
-import FormTextArea from '@/_components/FormTextArea/FormTextArea';
-import FormDatePicker from '@/_components/FormDatePicker/FormDatePicker';
-import CombinationElement from '@/_components/CombinationElement/CombinationElement';
-import SearchField from '@/_components/SearchField/SearchField';
-import MasterElement from '@/_components/MasterElement/MasterElement';
-import TimeSlotField from '../TimeSlotField/TimeSlotField';
+import { calendarHooks, masterHooks } from '@avoo/hooks';
 import { timeUtils } from '@avoo/shared';
+
+import CombinationElement from '@/_components/CombinationElement/CombinationElement';
+import FormDatePicker from '@/_components/FormDatePicker/FormDatePicker';
+import FormTextArea from '@/_components/FormTextArea/FormTextArea';
+import { IconButton } from '@/_components/IconButton/IconButton';
+import MasterElement from '@/_components/MasterElement/MasterElement';
+import SearchField from '@/_components/SearchField/SearchField';
+import CallSplitIcon from '@/_icons/CallSplitIcon';
+
+import TimeSlotField from '../TimeSlotField/TimeSlotField';
 
 type Props = {
   value: CreateOrder[];

@@ -1,13 +1,16 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { orderHooks } from '@avoo/hooks';
+
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import { OrderStatus } from '@avoo/hooks/types/orderStatus';
-import OrderView from '@/_components/OrderView/OrderView';
-import OrderEdit from '@/_components/OrderEdit/OrderEdit';
-import OrderConfirmation from '@/_components/OrderConfirmation/OrderConfirmation';
+
+import { orderHooks } from '@avoo/hooks';
 import { useIntervalAction } from '@avoo/hooks';
+import { OrderStatus } from '@avoo/hooks/types/orderStatus';
 import { timeUtils } from '@avoo/shared';
+
+import OrderConfirmation from '@/_components/OrderConfirmation/OrderConfirmation';
+import OrderEdit from '@/_components/OrderEdit/OrderEdit';
+import OrderView from '@/_components/OrderView/OrderView';
 
 dayjs.extend(relativeTime);
 

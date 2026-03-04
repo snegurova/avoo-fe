@@ -1,8 +1,9 @@
 import { Metadata } from 'next/types';
-import RegisterForm from '@/_components/RegisterForm/RegisterForm';
-import Link from 'next/link';
-import { AppRoutes } from '@/_routes/routes';
+
+import AuthorizationWrapper from '@/_components/AuthorizationWrapper/AuthorizationWrapper';
 import { LocalizedLink } from '@/_components/LocalizedLink/LocalizedLink';
+import RegisterForm from '@/_components/RegisterForm/RegisterForm';
+import { AppRoutes } from '@/_routes/routes';
 
 export const metadata: Metadata = {
   title: 'Sign Up - AVOO App',
@@ -11,37 +12,23 @@ export const metadata: Metadata = {
 
 export default function SignUpPage() {
   return (
-    <div className='flex min-h-screen flex-col justify-center px-6 py-12 lg:px-8 bg-white'>
-      <div className='sm:mx-auto sm:w-full sm:max-w-sm'>
-        <h1 className='text-center text-3xl font-bold leading-9 tracking-tight text-gray-900'>
-          AVOO App
-        </h1>
-        <h2 className='mt-2 text-center text-lg text-gray-600'>Create a professional account</h2>
-        <p className='text-center text-lg text-gray-600'>
-          Create an account or login in your business
-        </p>
-      </div>
-
+    <AuthorizationWrapper
+      title='Create a professional account'
+      description='Set up your profile to start managing your services and bookings.'
+    >
       <RegisterForm />
 
-      <div className='sm:mx-auto sm:w-full sm:max-w-sm mt-4'>
-        <p className='text-center text-gray-600'>
+      <div className='w-full mt-14'>
+        <p className='text-center'>
           Having account?{' '}
           <LocalizedLink
             href={AppRoutes.SignIn}
-            className='text-blue-600 hover:underline'
+            className='text-primary-800 hover:text-primary-600 focus:text-primary-600 underline font-bold'
           >
             Log in
           </LocalizedLink>
         </p>
-
-        <div className='flex justify-between items-center mt-8 text-sm text-gray-600'>
-          <span>© 2025 Avoo</span>
-          <Link href='#' className='text-blue-600 hover:underline'>
-            Privacy Policy
-          </Link>
-        </div>
       </div>
-    </div>
+    </AuthorizationWrapper>
   );
 }

@@ -1,4 +1,5 @@
 import React from 'react';
+
 import { Button } from '@mui/material';
 
 type Props = {
@@ -29,11 +30,7 @@ export default function ModalActions(props: Readonly<Props>) {
 
   return (
     <div className={`flex justify-center gap-${gap} ${className}`}>
-      <Button
-        onClick={onCancel}
-        color='secondary'
-        variant='outlined'
-      >
+      <Button onClick={onCancel} color='secondary' variant='outlined'>
         {cancelText}
       </Button>
 

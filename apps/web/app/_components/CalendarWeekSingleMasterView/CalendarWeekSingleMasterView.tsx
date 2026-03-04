@@ -1,10 +1,12 @@
 import React from 'react';
-import CalendarColumn from '@/_components/CalendarColumn/CalendarColumn';
-import CalendarTimeScale from '@/_components/CalendarTimeScale/CalendarTimeScale';
-import { CalendarViewType } from '@avoo/hooks/types/calendarViewType';
+
 import { CalendarItem } from '@avoo/axios/types/apiTypes';
 import { MasterWithRelationsEntity } from '@avoo/axios/types/apiTypes';
 import { CalendarType } from '@avoo/hooks/types/calendarType';
+import { CalendarViewType } from '@avoo/hooks/types/calendarViewType';
+
+import CalendarColumn from '@/_components/CalendarColumn/CalendarColumn';
+import CalendarTimeScale from '@/_components/CalendarTimeScale/CalendarTimeScale';
 
 type Props = {
   date: Date;
