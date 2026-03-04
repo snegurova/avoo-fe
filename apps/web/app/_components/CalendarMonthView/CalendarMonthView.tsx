@@ -1,11 +1,14 @@
-import { timeUtils } from '@avoo/shared';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
+
 import { tv } from 'tailwind-variants';
+
 import { PrivateCalendarByDatesQueryParams } from '@avoo/axios/types/apiTypes';
 import { calendarHooks } from '@avoo/hooks';
 import { CalendarViewType } from '@avoo/hooks/types/calendarViewType';
-import CalendarEvent from '../CalendarEvent/CalendarEvent';
 import { DateStatus } from '@avoo/hooks/types/dateStatus';
+import { timeUtils } from '@avoo/shared';
+
+import CalendarEvent from '../CalendarEvent/CalendarEvent';
 
 type Props = {
   params: PrivateCalendarByDatesQueryParams;

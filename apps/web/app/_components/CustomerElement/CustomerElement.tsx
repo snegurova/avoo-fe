@@ -1,8 +1,11 @@
 import React from 'react';
-import { Customer } from '@avoo/axios/types/apiTypes';
-import Avatar, { AvatarSize } from '@/_components/Avatar/Avatar';
-import { colors } from '@avoo/design-tokens';
+
 import { tv } from 'tailwind-variants';
+
+import { Customer } from '@avoo/axios/types/apiTypes';
+import { colors } from '@avoo/design-tokens';
+
+import Avatar, { AvatarSize } from '@/_components/Avatar/Avatar';
 
 type Props = {
   item: Customer;

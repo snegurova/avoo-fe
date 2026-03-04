@@ -1,9 +1,11 @@
 'use client';
-import Link from 'next/link';
 import { FormattedMessage } from 'react-intl';
+import Link from 'next/link';
+
 import { messages } from '@avoo/intl/messages/public/home/topSection';
-import { AppRoutes } from '@/_routes/routes';
+
 import { localizationHooks } from '@/_hooks/localizationHooks';
+import { AppRoutes } from '@/_routes/routes';
 
 export default function HomePage() {
   return (

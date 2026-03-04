@@ -1,6 +1,9 @@
-import { timeUtils } from '@avoo/shared';
 import React from 'react';
+
 import { tv } from 'tailwind-variants';
+
+import { timeUtils } from '@avoo/shared';
+
 import AddIcon from '@/_icons/AddIcon';
 import RemoveIcon from '@/_icons/RemoveIcon';
 

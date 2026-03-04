@@ -1,6 +1,7 @@
 'use client';
 
 import { Typography } from '@mui/material';
+
 import AppWrapper from '@/_components/AppWrapper/AppWrapper';
 import { ScheduleAddForm } from '@/_components/ScheduleAddForm/ScheduleAddForm';
 

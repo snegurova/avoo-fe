@@ -1,10 +1,12 @@
 'use client';
 import { FormattedMessage } from 'react-intl';
-import { messages } from '@avoo/intl/messages/public/salon/page';
-import { AppRoutes } from '@/_routes/routes';
-import { localizationHooks } from '@/_hooks/localizationHooks';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
+
+import { messages } from '@avoo/intl/messages/public/salon/page';
+
+import { localizationHooks } from '@/_hooks/localizationHooks';
+import { AppRoutes } from '@/_routes/routes';
 
 export default function SalonPublicPage() {
   const params = useParams();

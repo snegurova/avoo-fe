@@ -1,5 +1,7 @@
-import { PHONE_CODE_OPTIONS } from '@avoo/constants';
 import React, { useCallback, useMemo, useState } from 'react';
+
+import { PHONE_CODE_OPTIONS } from '@avoo/constants';
+
 import ArrowDownIcon from '@/_icons/ArrowDownIcon';
 import ArrowUpIcon from '@/_icons/ArrowUpIcon';
 

@@ -1,5 +1,6 @@
 import type { Config } from 'tailwindcss';
-import { colors, breakpoints, spacing, radius, typography } from '@avoo/design-tokens';
+
+import { breakpoints, colors, radius, spacing, typography } from '@avoo/design-tokens';
 
 const config: Config = {
   content: [

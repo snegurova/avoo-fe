@@ -1,8 +1,10 @@
 'use client';
 
 import React from 'react';
-import Avatar, { AvatarSize } from '@/_components/Avatar/Avatar';
+
 import { MasterWithRelationsEntityResponse } from '@avoo/axios/types/apiTypes';
+
+import Avatar, { AvatarSize } from '@/_components/Avatar/Avatar';
 
 type Props = {
   master: MasterWithRelationsEntityResponse;

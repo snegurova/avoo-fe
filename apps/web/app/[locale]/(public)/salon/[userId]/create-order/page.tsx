@@ -1,21 +1,23 @@
 'use client';
-import { useParams } from 'next/navigation';
-import { orderHooks, combinationHooks } from '@avoo/hooks';
 import React, { useEffect, useState } from 'react';
-import { useApiStatusStore } from '@avoo/store';
-import { useRouter } from 'next/navigation';
-import { Button, ButtonFit, ButtonIntent, ButtonType } from '@/_components/Button/Button';
 import { Controller, useFieldArray } from 'react-hook-form';
-import { OrderType } from '@avoo/hooks/types/orderType';
-import { useToast } from '@/_hooks/useToast';
+import { useParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
+
 import { CreateOrder, MasterWithRelationsEntity } from '@avoo/axios/types/apiTypes';
+import { combinationHooks, orderHooks } from '@avoo/hooks';
+import { OrderType } from '@avoo/hooks/types/orderType';
 import { timeUtils } from '@avoo/shared';
+import { useApiStatusStore } from '@avoo/store';
+
+import { Button, ButtonFit, ButtonIntent, ButtonType } from '@/_components/Button/Button';
+import CombinationProposition from '@/_components/CombinationProposition/CombinationProposition';
 import CustomerCreate from '@/_components/CustomerCreate/CustomerCreate';
-import ServiceForm from '@/_components/ServiceForm/ServiceForm';
 import PublicCombinationForm from '@/_components/PublicCombinationForm/PublicCombinationForm';
 import PublicServiceFormItem from '@/_components/PublicServiceFormItem/PublicServiceFormItem';
+import ServiceForm from '@/_components/ServiceForm/ServiceForm';
+import { useToast } from '@/_hooks/useToast';
 import AddCircleIcon from '@/_icons/AddCircleIcon';
-import CombinationProposition from '@/_components/CombinationProposition/CombinationProposition';
 
 const SERVICES_KEY_IN_ORDER_CREATE = 'ordersData';
 

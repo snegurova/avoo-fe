@@ -1,11 +1,14 @@
-import React, { useState, useRef } from 'react';
-import { IconButton } from '@/_components/IconButton/IconButton';
-import SearchIcon from '@/_icons/SearchIcon';
-import { SearchInput } from '@/_components/SearchInput/SearchInput';
+import React, { useRef, useState } from 'react';
+
 import { ClickAwayListener } from '@mui/material';
-import AddIcon from '@/_icons/AddIcon';
+
 import { useApiStatusStore } from '@avoo/store';
+
+import { IconButton } from '@/_components/IconButton/IconButton';
+import { SearchInput } from '@/_components/SearchInput/SearchInput';
+import AddIcon from '@/_icons/AddIcon';
 import CancelIcon from '@/_icons/CancelIcon';
+import SearchIcon from '@/_icons/SearchIcon';
 
 type Props<R, T extends { id: number }> = {
   label: string;

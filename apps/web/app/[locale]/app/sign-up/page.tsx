@@ -1,9 +1,9 @@
 import { Metadata } from 'next/types';
-import RegisterForm from '@/_components/RegisterForm/RegisterForm';
-import Link from 'next/link';
-import { AppRoutes } from '@/_routes/routes';
-import { LocalizedLink } from '@/_components/LocalizedLink/LocalizedLink';
+
 import AuthorizationWrapper from '@/_components/AuthorizationWrapper/AuthorizationWrapper';
+import { LocalizedLink } from '@/_components/LocalizedLink/LocalizedLink';
+import RegisterForm from '@/_components/RegisterForm/RegisterForm';
+import { AppRoutes } from '@/_routes/routes';
 
 export const metadata: Metadata = {
   title: 'Sign Up - AVOO App',

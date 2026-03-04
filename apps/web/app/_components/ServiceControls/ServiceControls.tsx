@@ -1,9 +1,12 @@
-import { Button, InputAdornment, TextField, Typography } from '@mui/material';
-import SearchIcon from '@/_icons/SearchIcon';
-import { useApiStatusStore } from '@avoo/store';
-import { AppRoutes } from '@/_routes/routes';
 import Link from 'next/link';
+
+import { Button, InputAdornment, TextField, Typography } from '@mui/material';
+
+import { useApiStatusStore } from '@avoo/store';
+
 import { localizationHooks } from '@/_hooks/localizationHooks';
+import SearchIcon from '@/_icons/SearchIcon';
+import { AppRoutes } from '@/_routes/routes';
 
 type Props = {
   setSearchQuery: (value: string) => void;

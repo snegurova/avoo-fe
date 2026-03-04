@@ -1,6 +1,9 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+
 import { tv } from 'tailwind-variants';
+
 import ArrowDownIcon from '@/_icons/ArrowDownIcon';
+
 import CheckboxesList from '../CheckboxesList/CheckboxesList';
 
 type Props = {

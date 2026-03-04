@@ -1,7 +1,5 @@
 import type { StorybookConfig } from '@storybook/nextjs-vite';
-
 import { dirname } from 'path';
-
 import { fileURLToPath } from 'url';
 
 /**

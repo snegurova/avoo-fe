@@ -1,14 +1,16 @@
 'use client';
 
+import { FormattedMessage } from 'react-intl';
 import { useRouter } from 'next/navigation';
+
 import { authHooks } from '@avoo/hooks';
+import { messages } from '@avoo/intl/messages/public/forgotPassword/page';
+import { useApiStatusStore } from '@avoo/store';
+
 import { Button, ButtonFit, ButtonIntent } from '@/_components/Button/Button';
 import FormInput from '@/_components/FormInput/FormInput';
-import { AppRoutes } from '@/_routes/routes';
-import { useApiStatusStore } from '@avoo/store';
 import { localizationHooks } from '@/_hooks/localizationHooks';
-import { FormattedMessage } from 'react-intl';
-import { messages } from '@avoo/intl/messages/public/forgotPassword/page';
+import { AppRoutes } from '@/_routes/routes';
 
 export default function ForgotPasswordForm() {
   const isPending = useApiStatusStore((state) => state.isPending);

@@ -1,16 +1,18 @@
 'use client';
 
-import React, { useState, useCallback, useMemo } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { AppRoutes } from '@/_routes/routes';
-import Controls from '@/_components/Controls/Controls';
-import { masterHooks } from '@avoo/hooks';
-import MasterList from '@/_components/MasterList/MasterList';
-import AppWrapper from '@/_components/AppWrapper/AppWrapper';
-import { localizationHooks } from '@/_hooks/localizationHooks';
-import MasterEditModal from '@/_components/MasterEditModal/MasterEditModal';
+
 import type { MasterWithRelationsEntityResponse } from '@avoo/axios/types/apiTypes';
+import { masterHooks } from '@avoo/hooks';
 import { useDebounce } from '@avoo/hooks/src/useDebounce';
+
+import AppWrapper from '@/_components/AppWrapper/AppWrapper';
+import Controls from '@/_components/Controls/Controls';
+import MasterEditModal from '@/_components/MasterEditModal/MasterEditModal';
+import MasterList from '@/_components/MasterList/MasterList';
+import { localizationHooks } from '@/_hooks/localizationHooks';
+import { AppRoutes } from '@/_routes/routes';
 
 export default function MastersPage() {
   const [searchQuery, setSearchQuery] = useState('');

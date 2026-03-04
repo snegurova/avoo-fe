@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+
 import { DEFAULT_LOCALE, SUPPORTED_LOCALES } from '@avoo/intl';
 
 export function middleware(req: NextRequest) {

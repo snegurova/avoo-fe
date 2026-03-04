@@ -1,7 +1,9 @@
 import { memo } from 'react';
+
+import { tv } from 'tailwind-variants';
+
 import VisibilityIcon from '@/_icons/VisibilityIcon';
 import VisibilityOffIcon from '@/_icons/VisibilityOffIcon';
-import { tv } from 'tailwind-variants';
 
 type Props = {
   value: boolean;

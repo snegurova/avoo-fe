@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+
 import { LANGUAGE_NAMES, type LanguageCode } from '@avoo/constants';
 
 type Props = {

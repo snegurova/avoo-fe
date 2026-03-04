@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
+
 import Avatar, { AvatarSize } from './Avatar';
 
 const meta: Meta<typeof Avatar> = {
@@ -89,16 +90,8 @@ export const ColorVariants: Story = {
 export const WithAndWithoutImage: Story = {
   render: () => (
     <div className='flex gap-4 items-center'>
-      <Avatar 
-        size={AvatarSize.Large} 
-        name='With Image' 
-        src='https://i.pravatar.cc/150?img=2'
-      />
-      <Avatar 
-        size={AvatarSize.Large} 
-        name='Without Image' 
-        bgColor='hsl(210, 50%, 65%)'
-      />
+      <Avatar size={AvatarSize.Large} name='With Image' src='https://i.pravatar.cc/150?img=2' />
+      <Avatar size={AvatarSize.Large} name='Without Image' bgColor='hsl(210, 50%, 65%)' />
     </div>
   ),
 };

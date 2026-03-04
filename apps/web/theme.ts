@@ -1,5 +1,5 @@
 'use client';
-import { Roboto, Advent_Pro, Inter, Montserrat } from 'next/font/google';
+import { Advent_Pro, Inter, Montserrat, Roboto } from 'next/font/google';
 
 import type { Theme } from '@mui/material/styles';
 import { createTheme } from '@mui/material/styles';
@@ -13,19 +13,19 @@ const roboto = Roboto({
   display: 'swap',
 });
 
-const adventPro = Advent_Pro({
+export const adventPro = Advent_Pro({
   weight: ['300', '400', '500', '700'],
   subsets: ['latin'],
   display: 'swap',
 });
 
-const inter = Inter({
+export const inter = Inter({
   weight: ['300', '400', '500', '700'],
   subsets: ['latin'],
   display: 'swap',
 });
 
-const montserrat = Montserrat({
+export const montserrat = Montserrat({
   weight: ['300', '400', '500', '700'],
   subsets: ['latin'],
   display: 'swap',

@@ -1,5 +1,7 @@
 import React from 'react';
+
 import { tv } from 'tailwind-variants';
+
 import { ElementStyleType } from '@avoo/hooks/types/elementStyleType';
 
 type Props = {

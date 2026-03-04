@@ -1,30 +1,33 @@
-import React, { useEffect, useState, useRef, useMemo } from 'react';
-import CalendarColumn from '@/_components/CalendarColumn/CalendarColumn';
-import CalendarColumnHead from '@/_components/CalendarColumnHead/CalendarColumnHead';
-import CalendarTimeScale from '@/_components/CalendarTimeScale/CalendarTimeScale';
-import { calendarHooks, masterHooks } from '@avoo/hooks';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+
+import { tv } from 'tailwind-variants';
+
 import {
   MasterWithRelationsEntity,
   PrivateCalendarQueryParams,
   PrivateEvent,
 } from '@avoo/axios/types/apiTypes';
-import CalendarControls from '@/_components/CalendarControls/CalendarControls';
-import { CalendarViewType } from '@avoo/hooks/types/calendarViewType';
-import { timeUtils } from '@avoo/shared';
-import { tv } from 'tailwind-variants';
-import CalendarMonthView from '@/_components/CalendarMonthView/CalendarMonthView';
-import { PX_IN_MINUTE } from '@/_constants/time';
-import { OrderStatus } from '@avoo/hooks/types/orderStatus';
-import AppPlaceholder from '@/_components/AppPlaceholder/AppPlaceholder';
-import CalendarWeekSingleMasterView from '@/_components/CalendarWeekSingleMasterView/CalendarWeekSingleMasterView';
-import AsideModal from '@/_components/AsideModal/AsideModal';
-import OrderData from '@/_components/OrderData/OrderData';
-import CalendarClockIcon from '@/_icons/CalendarClockIcon';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { AppRoutes } from '@/_routes/routes';
-import { OrderQueryParams } from '@avoo/hooks/types/orderQueryParams';
+import { calendarHooks, masterHooks } from '@avoo/hooks';
 import { CalendarType } from '@avoo/hooks/types/calendarType';
+import { CalendarViewType } from '@avoo/hooks/types/calendarViewType';
+import { OrderQueryParams } from '@avoo/hooks/types/orderQueryParams';
+import { OrderStatus } from '@avoo/hooks/types/orderStatus';
+import { timeUtils } from '@avoo/shared';
+
+import AppPlaceholder from '@/_components/AppPlaceholder/AppPlaceholder';
+import AsideModal from '@/_components/AsideModal/AsideModal';
+import CalendarColumn from '@/_components/CalendarColumn/CalendarColumn';
+import CalendarColumnHead from '@/_components/CalendarColumnHead/CalendarColumnHead';
+import CalendarControls from '@/_components/CalendarControls/CalendarControls';
+import CalendarMonthView from '@/_components/CalendarMonthView/CalendarMonthView';
+import CalendarTimeScale from '@/_components/CalendarTimeScale/CalendarTimeScale';
+import CalendarWeekSingleMasterView from '@/_components/CalendarWeekSingleMasterView/CalendarWeekSingleMasterView';
+import OrderData from '@/_components/OrderData/OrderData';
+import { PX_IN_MINUTE } from '@/_constants/time';
 import { localizationHooks } from '@/_hooks/localizationHooks';
+import CalendarClockIcon from '@/_icons/CalendarClockIcon';
+import { AppRoutes } from '@/_routes/routes';
 
 const calendarWrapper = tv({
   base: 'flex w-full',

@@ -1,20 +1,22 @@
-import React, { useEffect, useState, useMemo } from 'react';
-import SearchField from '@/_components/SearchField/SearchField';
+import React, { useEffect, useMemo, useState } from 'react';
+
 import {
   CreateOrder,
-  Service,
-  MasterWithRelationsEntity,
   GetMastersQueryParams,
+  MasterWithRelationsEntity,
+  Service,
 } from '@avoo/axios/types/apiTypes';
-import { servicesHooks, masterHooks } from '@avoo/hooks';
-import ServiceElement from '@/_components/ServiceElement/ServiceElement';
-import MasterElement from '@/_components/MasterElement/MasterElement';
+import { masterHooks, servicesHooks } from '@avoo/hooks';
 import { isEmptyObject } from '@avoo/shared';
-import { IconButton } from '@/_components/IconButton/IconButton';
-import DeleteIcon from '@/_icons/DeleteIcon';
-import FormTextArea from '@/_components/FormTextArea/FormTextArea';
+
 import FormDatePicker from '@/_components/FormDatePicker/FormDatePicker';
+import FormTextArea from '@/_components/FormTextArea/FormTextArea';
 import FormTimePicker from '@/_components/FormTimePicker/FormTimePicker';
+import { IconButton } from '@/_components/IconButton/IconButton';
+import MasterElement from '@/_components/MasterElement/MasterElement';
+import SearchField from '@/_components/SearchField/SearchField';
+import ServiceElement from '@/_components/ServiceElement/ServiceElement';
+import DeleteIcon from '@/_icons/DeleteIcon';
 
 type Props = {
   order: CreateOrder;

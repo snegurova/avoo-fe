@@ -3,9 +3,10 @@
 import { useCallback } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { AppRoutes } from '@/_routes/routes';
+
 import { SectionHeader } from '@/_components/SectionHeader/SectionHeader';
 import { localizationHooks } from '@/_hooks/localizationHooks';
+import { AppRoutes } from '@/_routes/routes';
 
 export const ProfilePosts = () => {
   const router = useRouter();

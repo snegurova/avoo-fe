@@ -1,6 +1,8 @@
 import { useContext } from 'react';
-import { SnackbarContext } from '../_providers/SnackbarContextProvider';
+
 import { AnchorOrigin } from '@avoo/hooks/types/snackbar';
+
+import { SnackbarContext } from '../_providers/SnackbarContextProvider';
 
 export const useToast = () => {
   const context = useContext(SnackbarContext);

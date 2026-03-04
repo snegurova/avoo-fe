@@ -1,10 +1,10 @@
 'use client';
 
 import AppWrapper from '@/_components/AppWrapper/AppWrapper';
+import { ProfileGallery } from '@/_components/ProfileGallery/ProfileGallery';
 import { ProfileInfo } from '@/_components/ProfileInfo/ProfileInfo';
 import { ProfileMaster } from '@/_components/ProfileMaster/ProfileMaster';
 import { ProfilePosts } from '@/_components/ProfilePosts/ProfilePosts';
-import { ProfileGallery } from '@/_components/ProfileGallery/ProfileGallery';
 import { ProfileSchedule } from '@/_components/ProfileSchedule/ProfileSchedule';
 
 export default function ProfilePage() {

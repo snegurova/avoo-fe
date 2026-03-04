@@ -1,12 +1,14 @@
 import React, { useMemo } from 'react';
-import { OrderStatus } from '@avoo/hooks/types/orderStatus';
+
 import { Order, Service } from '@avoo/axios/types/apiTypes';
-import ServiceElement from '@/_components/ServiceElement/ServiceElement';
-import CustomerElement from '@/_components/CustomerElement/CustomerElement';
-import { Button, ButtonFit, ButtonIntent } from '@/_components/Button/Button';
+import { OrderStatus } from '@avoo/hooks/types/orderStatus';
 import { timeUtils } from '@avoo/shared';
 import { useApiStatusStore } from '@avoo/store';
+
+import { Button, ButtonFit, ButtonIntent } from '@/_components/Button/Button';
 import CombinationElement from '@/_components/CombinationElement/CombinationElement';
+import CustomerElement from '@/_components/CustomerElement/CustomerElement';
+import ServiceElement from '@/_components/ServiceElement/ServiceElement';
 
 type Props = {
   order: Order;

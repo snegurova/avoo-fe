@@ -1,14 +1,17 @@
 import React from 'react';
 import { redirect } from 'next/navigation';
-import '../../styles/globals.css';
-
-import { QueryProvider } from '@/_providers/QueryProvider';
 import { Metadata } from 'next/types';
-import { MUIThemeProvider } from '@/_providers/ThemeProvider';
+
+import { DEFAULT_LOCALE, Locale, SUPPORTED_LOCALES } from '@avoo/intl';
+
 import DateLocalizationProvider from '@/_providers/DateLocalizationProvider';
-import { SnackbarProvider } from '../_providers/SnackbarContextProvider';
-import { Locale, SUPPORTED_LOCALES, DEFAULT_LOCALE } from '@avoo/intl';
 import { LocaleProvider } from '@/_providers/LocaleProvider';
+import { QueryProvider } from '@/_providers/QueryProvider';
+import { MUIThemeProvider } from '@/_providers/ThemeProvider';
+
+import { SnackbarProvider } from '../_providers/SnackbarContextProvider';
+
+import '../../styles/globals.css';
 
 export const metadata: Metadata = {
   title: 'AVOO App',

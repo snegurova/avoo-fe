@@ -1,17 +1,19 @@
 import React, { useEffect, useMemo } from 'react';
+import { Controller } from 'react-hook-form';
+
 import { Order, Service } from '@avoo/axios/types/apiTypes';
-import { Button, ButtonFit, ButtonIntent, ButtonType } from '@/_components/Button/Button';
+import { orderHooks } from '@avoo/hooks';
+import { OrderStatus } from '@avoo/hooks/types/orderStatus';
 import { timeUtils } from '@avoo/shared';
 import { useApiStatusStore } from '@avoo/store';
-import ServiceElement from '@/_components/ServiceElement/ServiceElement';
-import CustomerElement from '@/_components/CustomerElement/CustomerElement';
-import { orderHooks } from '@avoo/hooks';
-import { Controller } from 'react-hook-form';
-import FormCounter from '@/_components/FormCounter/FormCounter';
-import { OrderStatus } from '@avoo/hooks/types/orderStatus';
-import ErrorIcon from '@/_icons/ErrorIcon';
-import FormTextArea from '@/_components/FormTextArea/FormTextArea';
+
+import { Button, ButtonFit, ButtonIntent, ButtonType } from '@/_components/Button/Button';
 import CombinationElement from '@/_components/CombinationElement/CombinationElement';
+import CustomerElement from '@/_components/CustomerElement/CustomerElement';
+import FormCounter from '@/_components/FormCounter/FormCounter';
+import FormTextArea from '@/_components/FormTextArea/FormTextArea';
+import ServiceElement from '@/_components/ServiceElement/ServiceElement';
+import ErrorIcon from '@/_icons/ErrorIcon';
 
 type Props = {
   order: Order;

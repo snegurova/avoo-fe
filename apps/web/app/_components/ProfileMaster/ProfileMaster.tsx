@@ -2,12 +2,14 @@
 
 import { useCallback } from 'react';
 import { useRouter } from 'next/navigation';
-import { masterHooks } from '@avoo/hooks';
-import { AppRoutes } from '@/_routes/routes';
-import { SectionHeader } from '@/_components/SectionHeader/SectionHeader';
-import Avatar, { AvatarSize } from '@/_components/Avatar/Avatar';
+
 import { colors } from '@avoo/design-tokens';
+import { masterHooks } from '@avoo/hooks';
+
+import Avatar, { AvatarSize } from '@/_components/Avatar/Avatar';
+import { SectionHeader } from '@/_components/SectionHeader/SectionHeader';
 import { localizationHooks } from '@/_hooks/localizationHooks';
+import { AppRoutes } from '@/_routes/routes';
 
 export const ProfileMaster = () => {
   const mastersInfo = masterHooks.useGetMastersProfileInfo()?.items;

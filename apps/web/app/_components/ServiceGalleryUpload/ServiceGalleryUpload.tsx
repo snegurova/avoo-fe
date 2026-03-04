@@ -1,11 +1,13 @@
 import { tv } from 'tailwind-variants';
-import { colors } from '@avoo/design-tokens';
+
 import { UploadMediaResponse } from '@avoo/axios/types/apiTypes';
-import DragAndDropZone from '@/_components/DragAndDropZone/DragAndDropZone';
+import { colors } from '@avoo/design-tokens';
+
 import AddMoreButton from '@/_components/AddMoreButton/AddMoreButton';
+import DragAndDropZone from '@/_components/DragAndDropZone/DragAndDropZone';
+import AddIcon from '@/_icons/AddIcon';
 import BackupIcon from '@/_icons/BackupIcon';
 import CloseIcon from '@/_icons/CloseIcon';
-import AddIcon from '@/_icons/AddIcon';
 
 type Props = {
   id: string;

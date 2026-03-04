@@ -1,31 +1,35 @@
 'use client';
 
 import React, { useCallback, useEffect } from 'react';
+import { Controller, useController, useForm } from 'react-hook-form';
+
+import { FormControlLabel, Switch } from '@mui/material';
 import type { Dayjs } from 'dayjs';
 import dayjs from 'dayjs';
-import { VALUE_DATE_FORMAT } from '@/_constants/dateFormats';
-import { Switch, FormControlLabel } from '@mui/material';
-import FormTextarea from '../FormTextArea/FormTextArea';
-import { timeUtils, validateEndDateFactory } from '@avoo/shared';
-import { FormSelect } from '../FormSelect/FormSelect';
-import { FormMultiSelect } from '../FormMultiSelect/FormMultiSelect';
-import DateTimePickers, { DateTimePickersVariant } from '../DateTimePickers/DateTimePickers';
-import ModeToggle from '../ModeToggle/ModeToggle';
-import { useController, Controller, useForm } from 'react-hook-form';
-import { masterHooks, exceptionHooks, timeToMinutes } from '@avoo/hooks';
-import { useToast } from '@/_hooks/useToast';
-import { getSyncedEndDate } from '@/_utils/timeOffDateSync';
-import DeleteIcon from '@/_icons/DeleteIcon';
-import { IconButton } from '@/_components/IconButton/IconButton';
-import ModalActions from '../ModalActions/ModalActions';
-import ConfirmationModal from '../ConfirmationModal/ConfirmationModal';
+
+import { exceptionHooks, masterHooks, timeToMinutes } from '@avoo/hooks';
 import {
   TimeOffMode,
   TimeOffType,
-  timeOffTypes,
   timeOffTypeLabels,
+  timeOffTypes,
   WholeDay,
 } from '@avoo/hooks/types/timeOffType';
+import { timeUtils, validateEndDateFactory } from '@avoo/shared';
+
+import { IconButton } from '@/_components/IconButton/IconButton';
+import { VALUE_DATE_FORMAT } from '@/_constants/dateFormats';
+import { useToast } from '@/_hooks/useToast';
+import DeleteIcon from '@/_icons/DeleteIcon';
+import { getSyncedEndDate } from '@/_utils/timeOffDateSync';
+
+import ConfirmationModal from '../ConfirmationModal/ConfirmationModal';
+import DateTimePickers, { DateTimePickersVariant } from '../DateTimePickers/DateTimePickers';
+import { FormMultiSelect } from '../FormMultiSelect/FormMultiSelect';
+import { FormSelect } from '../FormSelect/FormSelect';
+import FormTextarea from '../FormTextArea/FormTextArea';
+import ModalActions from '../ModalActions/ModalActions';
+import ModeToggle from '../ModeToggle/ModeToggle';
 import type { TimeOffItem } from '../TimeOffEditModal/TimeOffEditModal';
 
 type FormValues = {

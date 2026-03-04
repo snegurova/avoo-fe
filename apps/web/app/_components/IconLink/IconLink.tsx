@@ -1,10 +1,12 @@
 'use client';
 
 import React from 'react';
-import Link from 'next/link';
-import { routerHooks } from '@/_hooks/routerHooks';
-import { tv } from 'tailwind-variants';
 import { Route } from 'next';
+import Link from 'next/link';
+
+import { tv } from 'tailwind-variants';
+
+import { routerHooks } from '@/_hooks/routerHooks';
 
 type Props = {
   href: Route;

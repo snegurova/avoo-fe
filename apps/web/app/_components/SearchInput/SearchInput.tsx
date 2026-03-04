@@ -1,10 +1,13 @@
 'use client';
 
 import React from 'react';
-import SearchIcon from '@/_icons/SearchIcon';
-import { colors, typography } from '@avoo/design-tokens';
-import { useTheme, Theme } from '@mui/material/styles';
+
+import { Theme, useTheme } from '@mui/material/styles';
 import { tv } from 'tailwind-variants';
+
+import { colors, typography } from '@avoo/design-tokens';
+
+import SearchIcon from '@/_icons/SearchIcon';
 
 type Props = {
   value: string;

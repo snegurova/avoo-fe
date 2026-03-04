@@ -1,13 +1,15 @@
 'use client';
 
-import React, { useState, useCallback } from 'react';
-import { userHooks } from '@avoo/hooks';
-import DropdownList from '@/_components/DropdownList/DropdownList';
+import React, { useCallback, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { AppRoutes } from '@/_routes/routes';
+
+import { userHooks } from '@avoo/hooks';
 import { authHooks } from '@avoo/hooks';
-import { CalendarAvatar, AvatarSize } from '@/_components/CalendarAvatar/CalendarAvatar';
+
+import { AvatarSize, CalendarAvatar } from '@/_components/CalendarAvatar/CalendarAvatar';
+import DropdownList from '@/_components/DropdownList/DropdownList';
 import { localizationHooks } from '@/_hooks/localizationHooks';
+import { AppRoutes } from '@/_routes/routes';
 
 export default function AppProfileSelect() {
   const [isOpen, setIsOpen] = useState(false);

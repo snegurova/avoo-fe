@@ -1,14 +1,15 @@
 'use client';
 import React from 'react';
-import { AppRoutes } from '@/_routes/routes';
-import { routerHooks } from '@/_hooks/routerHooks';
-import { SectionHeader } from '@/_components/SectionHeader/SectionHeader';
-import { IconButton } from '@/_components/IconButton/IconButton';
 
-import { userHooks } from '@avoo/hooks';
-import EditProfileForm from '@/_components/ProfileEdit/EditProfileForm';
 import type { UpdateProfile } from '@avoo/axios/types/apiTypes';
+import { userHooks } from '@avoo/hooks';
+
+import { IconButton } from '@/_components/IconButton/IconButton';
+import EditProfileForm from '@/_components/ProfileEdit/EditProfileForm';
+import { SectionHeader } from '@/_components/SectionHeader/SectionHeader';
 import { localizationHooks } from '@/_hooks/localizationHooks';
+import { routerHooks } from '@/_hooks/routerHooks';
+import { AppRoutes } from '@/_routes/routes';
 
 export default function EditProfilePage() {
   const handleBackClick = routerHooks.useBackWithFallback(

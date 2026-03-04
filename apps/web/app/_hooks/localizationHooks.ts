@@ -1,8 +1,9 @@
 'use client';
 
-import { AppRoutes } from '@/_routes/routes';
 import { Route } from 'next';
 import { useParams } from 'next/navigation';
+
+import { AppRoutes } from '@/_routes/routes';
 export const localizationHooks = {
   useGetLocale() {
     const { locale } = useParams<{ locale: string }>();

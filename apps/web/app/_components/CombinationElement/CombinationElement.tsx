@@ -1,10 +1,13 @@
 import React, { useMemo } from 'react';
+
 import { tv } from 'tailwind-variants';
+
 import { Combination, MasterWithRelationsEntity } from '@avoo/axios/types/apiTypes';
-import { currencyUtils, timeUtils } from '@avoo/shared';
-import { CURRENCY } from '@/_constants/currency';
-import Avatar, { AvatarSize } from '@/_components/Avatar/Avatar';
 import { colors } from '@avoo/design-tokens';
+import { currencyUtils, timeUtils } from '@avoo/shared';
+
+import Avatar, { AvatarSize } from '@/_components/Avatar/Avatar';
+import { CURRENCY } from '@/_constants/currency';
 
 type Props = {
   item: Combination;
