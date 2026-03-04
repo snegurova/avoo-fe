@@ -12,6 +12,7 @@ import FormInput, { AccessoryPosition } from '../FormInput/FormInput';
 import FormTextarea from '../FormTextArea/FormTextArea';
 import ClientOrdersHistory from '../ClientOrdersHistory/ClientOrdersHistory';
 import NotificationField from '../NotificationField/NotificationField';
+import ModalActions from '../ModalActions/ModalActions';
 
 export type FormValues = {
   name: string;
