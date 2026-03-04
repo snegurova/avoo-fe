@@ -25,10 +25,10 @@ export default function SignInPage() {
           Create an account
         </LocalizedLink>
         <LocalizedLink
-          href={AppRoutes.ResetPassword}
+          href={AppRoutes.ForgotPassword}
           className='hover:text-primary-600 focus:text-primary-600 text-sm'
         >
-          Reset Password
+          Forgot Password
         </LocalizedLink>
       </div>
     </AuthorizationWrapper>

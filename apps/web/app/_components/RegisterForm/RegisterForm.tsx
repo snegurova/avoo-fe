@@ -10,6 +10,8 @@ import { utils } from '@avoo/hooks';
 import ShowPasswordToggler from '@/_components/ShowPasswordToggler/ShowPasswordToggler';
 import { localizationHooks } from '@/_hooks/localizationHooks';
 import Checkbox from '@mui/material/Checkbox';
+import { FormattedMessage } from 'react-intl';
+import { messages } from '@avoo/intl/messages/public/signUp/form';
 
 export default function RegisterForm() {
   const isPending = useApiStatusStore((state) => state.isPending);
@@ -29,40 +31,48 @@ export default function RegisterForm() {
   return (
     <form onSubmit={handleSubmit} className='w-full flex flex-col gap-6'>
       <label>
-        <span className='text-sm font-medium mb-1 leading-none block'>Full Name *</span>
+        <span className='text-sm font-medium mb-1 leading-none block'>
+          <FormattedMessage {...messages.nameLabel} />
+        </span>
         <FormInput
           {...register('name')}
           type='text'
-          placeholder='Full Name'
+          placeholder={messages.namePlaceholder.defaultMessage}
           error={errors.name?.message}
         />
       </label>
       <label>
-        <span className='text-sm font-medium mb-1 leading-none block'>Email address *</span>
+        <span className='text-sm font-medium mb-1 leading-none block'>
+          <FormattedMessage {...messages.emailLabel} />
+        </span>
         <FormInput
           {...register('email')}
           type='email'
-          placeholder='Email'
+          placeholder={messages.emailPlaceholder.defaultMessage}
           error={errors.email?.message}
         />
       </label>
 
       <label>
-        <span className='text-sm font-medium mb-1 leading-none block'>Password *</span>
+        <span className='text-sm font-medium mb-1 leading-none block'>
+          <FormattedMessage {...messages.passwordLabel} />
+        </span>
         <FormInput
           {...register('password')}
           type={isShowPassword ? 'text' : 'password'}
-          placeholder='Password'
+          placeholder={messages.passwordPlaceholder.defaultMessage}
           error={errors.password?.message}
           accessory={<ShowPasswordToggler value={isShowPassword} toggle={toggleShowPassword} />}
         />
       </label>
       <label>
-        <span className='text-sm font-medium mb-1 leading-none block'>Confirm Password *</span>
+        <span className='text-sm font-medium mb-1 leading-none block'>
+          <FormattedMessage {...messages.confirmPasswordLabel} />
+        </span>
         <FormInput
           {...register('confirmPassword')}
           type={isShowConfirmPassword ? 'text' : 'password'}
-          placeholder='Confirm Password'
+          placeholder={messages.confirmPasswordPlaceholder.defaultMessage}
           error={errors.confirmPassword?.message}
           accessory={
             <ShowPasswordToggler value={isShowConfirmPassword} toggle={toggleConfirmPassword} />
@@ -86,7 +96,7 @@ export default function RegisterForm() {
             }}
           />
           <span className='ml-4 text-xs text-gray-500'>
-            I agree to the Privacy Policy, Terms of Service and Terms of Business.
+            <FormattedMessage {...messages.agreeToTerms} />
           </span>
         </label>
         {errors.agreeToTerms && (
@@ -100,7 +110,7 @@ export default function RegisterForm() {
         fit={ButtonFit.Fill}
         intent={ButtonIntent.Primary}
       >
-        Create Account
+        <FormattedMessage {...messages.button} />
       </Button>
     </form>
   );

@@ -10,6 +10,8 @@ import { utils } from '@avoo/hooks';
 import ShowPasswordToggler from '@/_components/ShowPasswordToggler/ShowPasswordToggler';
 import { useEffect, useState } from 'react';
 import { routerUtils } from '@/_utils/routerUtils';
+import { FormattedMessage } from 'react-intl';
+import { messages } from '@avoo/intl/messages/public/login/form';
 
 export default function LoginForm() {
   const isPending = useApiStatusStore((state) => state.isPending);
@@ -39,21 +41,25 @@ export default function LoginForm() {
   return (
     <form onSubmit={handleSubmit} className='w-full flex flex-col gap-6'>
       <label>
-        <span className='text-sm font-medium mb-1 leading-none block'>Email address *</span>
+        <span className='text-sm font-medium mb-1 leading-none block'>
+          <FormattedMessage {...messages.emailLabel} />
+        </span>
         <FormInput
           {...register('email')}
           type='email'
-          placeholder='Email'
+          placeholder={messages.emailPlaceholder.defaultMessage}
           error={errors.email?.message}
         />
       </label>
 
       <label>
-        <span className='text-sm font-medium mb-1 leading-none block'>Password *</span>
+        <span className='text-sm font-medium mb-1 leading-none block'>
+          <FormattedMessage {...messages.passwordLabel} />
+        </span>
         <FormInput
           {...register('password')}
           type={isShowPassword ? 'text' : 'password'}
-          placeholder='Password'
+          placeholder={messages.passwordPlaceholder.defaultMessage}
           error={errors.password?.message}
           accessory={<ShowPasswordToggler value={isShowPassword} toggle={toggleShowPassword} />}
         />
@@ -66,7 +72,7 @@ export default function LoginForm() {
         fit={ButtonFit.Fill}
         intent={ButtonIntent.Primary}
       >
-        Log in
+        <FormattedMessage {...messages.button} />
       </Button>
     </form>
   );

@@ -4,11 +4,13 @@ import bg from '@/_images/auth-bg.jpg';
 import Link from 'next/link';
 import { AppRoutes } from '@/_routes/routes';
 import { LocalizedLink } from '@/_components/LocalizedLink/LocalizedLink';
+import { FormattedMessage } from 'react-intl';
+import { messages } from '@avoo/intl/messages/public/authorizationWrapper/index';
 
 type Props = {
   children: React.ReactNode;
-  title: string;
-  description: string;
+  title: string | React.ReactNode;
+  description: string | React.ReactNode;
 };
 
 export default function AuthorizationWrapper(props: Props) {
@@ -41,9 +43,11 @@ export default function AuthorizationWrapper(props: Props) {
               href='#'
               className='font-medium text-sm hover:text-primary-600 focus:text-primary-600'
             >
-              Privacy Policy
+              <FormattedMessage {...messages.privacyPolicy} />
             </Link>
-            <span>Project 123</span>
+            <span>
+              <FormattedMessage {...messages.project} />
+            </span>
           </div>
         </div>
       </div>
@@ -58,7 +62,7 @@ export default function AuthorizationWrapper(props: Props) {
             AVOO
           </p>
           <p className='font-montserrat text-2xl text-gray-600 capitalize text-center'>
-            More clients. One calendar. Zero chaos.
+            <FormattedMessage {...messages.slogan} />
           </p>
         </div>
       </div>
