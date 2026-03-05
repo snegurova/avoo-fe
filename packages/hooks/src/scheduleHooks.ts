@@ -200,6 +200,9 @@ export const scheduleHooks = {
           queryClient.invalidateQueries({
             queryKey: queryKeys.schedules.all,
           });
+          queryClient.invalidateQueries({
+            queryKey: queryKeys.calendar.all,
+          });
           onSuccess?.();
         }
       },
