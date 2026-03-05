@@ -39,7 +39,7 @@ type UseCreateScheduleFormParams = {
   onError?: (error: Error) => void;
 };
 type UseUpdateScheduleFormParams = {
-  defaultValues?: ScheduleUpdateFormData;
+  defaultValues: ScheduleUpdateFormData;
   onSuccess?: () => void;
   onError?: (error: Error) => void;
 };
@@ -152,11 +152,9 @@ export const scheduleHooks = {
       isPending,
     };
   },
-  useUpdateScheduleForm: ({
-    defaultValues,
-    onSuccess,
-    onError,
-  }: UseUpdateScheduleFormParams = {}) => {
+  useUpdateScheduleForm: ({ defaultValues, onSuccess, onError }: UseUpdateScheduleFormParams) => {
+    const queryClient = useQueryClient();
+
     const {
       register,
       control,
@@ -168,16 +166,21 @@ export const scheduleHooks = {
       resolver: yupResolver(scheduleUpdateSchema),
       mode: 'onSubmit',
       defaultValues: {
-        name: defaultValues?.name ?? '',
-        endAt: defaultValues?.endAt ?? null,
+        id: defaultValues.id,
+        name: defaultValues.name ?? '',
+        endAt: defaultValues.endAt ? timeUtils.toLocalDateISO(new Date(defaultValues.endAt)) : null,
         workingHours:
-          defaultValues?.workingHours?.map((wh) => ({
-            whId: wh.id,
+          defaultValues.workingHours.map((wh) => ({
+            id: wh.id,
             day: wh.day,
             enabled: !(wh.startTimeMinutes === 0 && wh.endTimeMinutes === 0),
             startTimeMinutes: wh.startTimeMinutes,
             endTimeMinutes: wh.endTimeMinutes,
-            breaks: wh.breaks,
+            breaks: wh.breaks.map((b) => ({
+              id: b.id,
+              breakStartTimeMinutes: b.breakStartTimeMinutes,
+              breakEndTimeMinutes: b.breakEndTimeMinutes,
+            })),
           })) ?? [],
       },
     });
@@ -190,6 +193,13 @@ export const scheduleHooks = {
       mutationFn: scheduleApi.updateSchedule,
       onSuccess: (response) => {
         if (response.status === ApiStatus.SUCCESS) {
+          queryClient.invalidateQueries({
+            queryKey: queryKeys.schedules.detail(defaultValues.id),
+            exact: true,
+          });
+          queryClient.invalidateQueries({
+            queryKey: queryKeys.schedules.all,
+          });
           onSuccess?.();
         }
       },

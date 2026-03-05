@@ -17,7 +17,11 @@ type Props = {
   enabled: boolean;
   startTimeMinutes: number;
   endTimeMinutes: number;
-  breaks: { id?: string; breakStartTimeMinutes: number; breakEndTimeMinutes: number }[];
+  breaks: {
+    id?: string | number | null;
+    breakStartTimeMinutes: number;
+    breakEndTimeMinutes: number;
+  }[];
   scheduleType?: string;
   disabledRemove?: boolean;
   onEnabledChange: (enabled: boolean) => void;
@@ -60,6 +64,7 @@ export const WorkingDayRow = (props: Props) => {
       },
     },
   });
+  const options = scheduleHooks.useWorkingHoursOptions();
 
   return (
     <div className='border border-gray-200 rounded-lg'>
@@ -91,14 +96,14 @@ export const WorkingDayRow = (props: Props) => {
           <FormTimeSelect
             name={`startTime-${index}`}
             value={String(startTimeMinutes)}
-            options={scheduleHooks.useWorkingHoursOptions()}
+            options={options}
             onChange={(val) => onTimeChange('start', Number(val))}
           />
           <span className='px-2 text-center'>to</span>
           <FormTimeSelect
             name={`endTime-${index}`}
             value={String(endTimeMinutes)}
-            options={scheduleHooks.useWorkingHoursOptions()}
+            options={options}
             onChange={(val) => onTimeChange('end', Number(val))}
           />
         </div>
@@ -117,7 +122,7 @@ export const WorkingDayRow = (props: Props) => {
               <FormTimeSelect
                 name={`breakStart-${index}-${brIndex}`}
                 value={String(br.breakStartTimeMinutes)}
-                options={scheduleHooks.useWorkingHoursOptions()}
+                options={options}
                 onChange={(val) => onBreakTimeChange(brIndex, 'start', Number(val))}
               />
             </div>
@@ -126,7 +131,7 @@ export const WorkingDayRow = (props: Props) => {
               <FormTimeSelect
                 name={`breakEnd-${index}-${brIndex}`}
                 value={String(br.breakEndTimeMinutes)}
-                options={scheduleHooks.useWorkingHoursOptions()}
+                options={options}
                 onChange={(val) => onBreakTimeChange(brIndex, 'end', Number(val))}
               />
 

@@ -32,6 +32,7 @@ export const UpdateWorkingDayRow = (props: Props) => {
   } = useFieldArray({
     control,
     name: `workingHours.${index}.breaks`,
+    keyName: 'rhfId',
   });
 
   if (!dayData) return null;
