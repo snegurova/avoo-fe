@@ -73,8 +73,17 @@ const col = tv({
   ],
 });
 
+const timeCell = tv({
+  base: 'absolute left-1 top-1/2 -translate-y-1/2 leading-none text-primary-800 available-time text-sm opacity-0',
+  variants: {
+    hovered: {
+      true: 'opacity-100',
+    },
+  },
+});
+
 const cell = tv({
-  base: 'box-border relative z-5 transition-colors overflow-hidden',
+  base: 'box-border relative z-5 overflow-hidden outline outline-1 outline-offset-[-1px] outline-transparent',
   variants: {
     main: {
       true: 'border-t-gray-300',
@@ -82,18 +91,23 @@ const cell = tv({
     },
     type: {
       [CalendarViewType.DAY]:
-        'h-6 border-t last:border-b last:border-b-gray-300 pointer-events-none',
+        'h-6 border-t last:border-b last:border-b-gray-300 pointer-events-none relative',
       [CalendarViewType.WEEK]:
-        'h-full not-last:border-r border-gray-300 min-w-26 md:min-w-40 flex-1 p-1 flex flex-col justify-between gap-1',
-      [CalendarViewType.MONTH]: '',
+        'h-full not-last:border-r border-gray-300 min-w-26 md:min-w-40 flex-1 p-1 flex flex-col justify-between gap-1 hover:bg-primary-200  hover:outline-primary-800',
+      [CalendarViewType.MONTH]: 'hover:bg-primary-200  hover:outline-primary-800',
     },
     isAccessible: {
       true: 'bg-white',
+    },
+    hovered: {
+      true: 'bg-primary-200  outline-primary-800',
     },
   },
 });
 
 export default function CalendarColumn(props: Props) {
+  // Track hovered cell index for DAY view
+  const [hoveredCellIdx, setHoveredCellIdx] = useState<number | null>(null);
   const {
     data,
     master,
@@ -115,6 +129,21 @@ export default function CalendarColumn(props: Props) {
   const toast = useToast();
 
   const [showEvents, setShowEvents] = useState<number>(1);
+
+  const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+    if (!ref.current) return;
+    const rect = ref.current.getBoundingClientRect();
+    const y = e.clientY - rect.top;
+    const cellHeight = PX_IN_MINUTE * 15;
+    let idx = Math.floor(y / cellHeight);
+    if (idx < 0) idx = 0;
+    if (idx >= DAY_CELLS.length) idx = DAY_CELLS.length - 1;
+    setHoveredCellIdx(idx);
+  }, []);
+
+  const handleMouseLeave = useCallback(() => {
+    setHoveredCellIdx(null);
+  }, []);
 
   const calculateShowEvents = useCallback(() => {
     if (!ref.current) return;
@@ -151,9 +180,7 @@ export default function CalendarColumn(props: Props) {
 
     const selectedDateTime = new Date(date);
     selectedDateTime.setHours(hours, mins, 0, 0);
-    const cuurentDateTime = new Date();
-
-    if (selectedDateTime < cuurentDateTime) return;
+    const currentDateTime = new Date();
 
     if (!isAvailable) {
       toast.info('Selected time is out of available working hours');
@@ -164,6 +191,9 @@ export default function CalendarColumn(props: Props) {
     }
 
     if (calendarType !== CalendarType.SELECTOR) {
+      if (selectedDateTime < currentDateTime) {
+      }
+
       router.push(
         `${localizationHooks.useWithLocale(AppRoutes.OrderCreate)}?masterId=${master.id}&date=${encodeURIComponent(
           timeUtils.formatDateTimeRounded(date, hours * 60 + mins),
@@ -189,10 +219,23 @@ export default function CalendarColumn(props: Props) {
     [selectOrder],
   );
 
+  const calculateTimeInCell = (idx: number) => {
+    const totalMinutes = idx * 15;
+    const hours = Math.floor(totalMinutes / 60);
+    const minutes = totalMinutes % 60;
+    return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+  };
+
   return (
     <>
       {type === CalendarViewType.DAY && (
-        <div className={col({ type, isSingleWeek, calendarType })} onClick={onAvailabelTimeClick}>
+        <div
+          className={col({ type, isSingleWeek, calendarType })}
+          onClick={onAvailabelTimeClick}
+          ref={ref}
+          onMouseMove={handleMouseMove}
+          onMouseLeave={handleMouseLeave}
+        >
           {data &&
             data.days[0].availability?.map((avail, idx) => (
               <div
@@ -207,8 +250,16 @@ export default function CalendarColumn(props: Props) {
           {DAY_CELLS.map((_, idx) => (
             <div
               key={'15mins' + idx}
-              className={cell({ main: idx % HOUR_SEPARATE === 0, type })}
-            ></div>
+              className={cell({
+                main: idx % HOUR_SEPARATE === 0,
+                type,
+                hovered: hoveredCellIdx === idx,
+              })}
+            >
+              <span className={timeCell({ hovered: hoveredCellIdx === idx })}>
+                {calculateTimeInCell(idx)}
+              </span>
+            </div>
           ))}
           {data &&
             data.days[0].events.map((event) => (

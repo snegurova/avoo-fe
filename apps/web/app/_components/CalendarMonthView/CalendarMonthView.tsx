@@ -18,7 +18,7 @@ type Props = {
 };
 
 const dayCell = tv({
-  base: 'border-b border-r nth-[7n]:border-r-0 border-gray-300 box-border p-1 min-h-20 overflow-hidden flex flex-col gap-1',
+  base: 'border-b border-r nth-[7n]:border-r-0 border-gray-300 box-border p-1 min-h-20 overflow-hidden flex flex-col gap-1 outline outline-1 outline-offset-[-1px] outline-transparent hover:bg-primary-200 hover:outline-primary-800',
   variants: {
     isAccessible: {
       true: 'bg-white',
