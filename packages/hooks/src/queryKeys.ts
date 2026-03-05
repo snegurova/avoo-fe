@@ -1,13 +1,13 @@
 import {
-  PrivateCalendarQueryParams,
-  PrivateServiceQueryParams,
-  PrivateOrderQueryParams,
-  GetCustomersQueryParams,
-  GetMastersQueryParams,
   GetCombinationsQueryParams,
+  GetCustomersQueryParams,
   GetExceptionsQueryParams,
-  PublicCalendarQueryParams,
+  GetMastersQueryParams,
+  PrivateCalendarQueryParams,
+  PrivateOrderQueryParams,
+  PrivateServiceQueryParams,
   PublicCalendarByDatesQueryParams,
+  PublicCalendarQueryParams,
 } from '@avoo/axios/types/apiTypes';
 
 export const queryKeys = {
@@ -27,10 +27,13 @@ export const queryKeys = {
   },
   categories: {
     all: ['categories'] as const,
+    public: ['publicCategories'] as const,
     byParams: (params: string) => [...queryKeys.categories.all, params] as const,
   },
   medias: {
     all: ['medias'] as const,
+    byParams: (type?: string, typeEntityId?: number) =>
+      [...queryKeys.medias.all, type, typeEntityId] as const,
   },
   customers: {
     all: ['customers'] as const,

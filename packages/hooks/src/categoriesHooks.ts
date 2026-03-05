@@ -1,9 +1,14 @@
-import { utils } from '@avoo/hooks/utils/utils';
-import { GetCategoriesResponse, GetPrivateCategoriesResponse, ApiStatus } from '@avoo/axios/types/apiTypes';
-
-import { BaseResponse } from '@avoo/axios/types/apiTypes';
 import { useQuery } from '@tanstack/react-query';
+
 import { categoriesApi } from '@avoo/axios';
+import {
+  ApiStatus,
+  GetCategoriesResponse,
+  GetPrivateCategoriesResponse,
+} from '@avoo/axios/types/apiTypes';
+import { BaseResponse } from '@avoo/axios/types/apiTypes';
+import { utils } from '@avoo/hooks/utils/utils';
+
 import { queryKeys } from './queryKeys';
 
 export const categoriesHooks = {
@@ -12,7 +17,7 @@ export const categoriesHooks = {
       BaseResponse<GetCategoriesResponse>,
       Error
     >({
-      queryKey: queryKeys.categories.all,
+      queryKey: queryKeys.categories.public,
       queryFn: categoriesApi.getPublicAll,
     });
 

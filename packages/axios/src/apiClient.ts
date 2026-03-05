@@ -1,6 +1,7 @@
-import { useAuthStore } from '@avoo/store';
-import { queryClient } from '@avoo/hooks';
 import axios from 'axios';
+
+import { queryClient } from '@avoo/hooks';
+import { useAuthStore } from '@avoo/store';
 
 export const apiClient = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000',

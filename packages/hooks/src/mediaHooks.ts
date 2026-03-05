@@ -25,7 +25,7 @@ export const mediaHooks = {
   useGetMediaInfinite: ({ limit = DEFAULT_LIMIT, type, typeEntityId }: MediaQueryParams) => {
     const filterParams = { limit, type, typeEntityId };
     const query = useInfiniteQuery<BaseResponse<GetMediaResponse>, Error>({
-      queryKey: ['media', 'list', filterParams],
+      queryKey: queryKeys.medias.byParams(type.toLocaleLowerCase(), typeEntityId),
       queryFn: ({ pageParam = 1 }) =>
         mediaApi.getMedia({ ...filterParams, page: pageParam as number }),
       initialPageParam: 1,

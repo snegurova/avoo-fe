@@ -24,6 +24,7 @@ export const mediaApi = {
 
     const res = await apiClient.post<BaseResponse<UploadMediaResponse>>(MEDIA_ENDPOINT, formData, {
       headers: { 'Content-Type': 'multipart/form-data' },
+      timeout: 60 * 1000,
     });
     return res.data;
   },
