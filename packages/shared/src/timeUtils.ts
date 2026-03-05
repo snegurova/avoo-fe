@@ -244,4 +244,10 @@ export const timeUtils = {
     const minutes = d.getMinutes().toString().padStart(2, '0');
     return `${hours}:${minutes}`;
   },
+  convertLocalToUTC(dateStr: string | undefined): string | undefined {
+    if (!dateStr) return dateStr;
+    const date = new Date(dateStr).toUTCString();
+
+    return new Date(date).toISOString().slice(0, 16) + ':00Z';
+  },
 };
