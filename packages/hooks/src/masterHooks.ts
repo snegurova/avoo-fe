@@ -44,7 +44,7 @@ export const masterHooks = {
   },
   useGetMastersProfileInfo: (params: GetMastersQueryParams = {}) => {
     const { data: profileInfoData, isPending } = useQuery<BaseResponse<GetMastersResponse>, Error>({
-      queryKey: [queryKeys.masters.all, queryKeys.masters.byParams(params)],
+      queryKey: [...queryKeys.masters.all, params],
       queryFn: () => masterApi.getMastersInfo(params),
     });
 
@@ -58,7 +58,7 @@ export const masterHooks = {
   },
   useGetMastersInfinite: (params: GetMastersQueryParams = {}) => {
     const query = useInfiniteQuery<BaseResponse<GetMastersResponse>, Error>({
-      queryKey: [queryKeys.masters.infinite, queryKeys.masters.byParams(params)],
+      queryKey: [...queryKeys.masters.all, 'infinite', params],
       queryFn: ({ pageParam = 1 }) =>
         masterApi.getMastersInfo({ ...params, page: pageParam as number }),
       initialPageParam: 1,
@@ -236,7 +236,7 @@ export const masterHooks = {
   },
   useGetPublicMastersInfinite: (params: GetMastersQueryParams = {}) => {
     const query = useInfiniteQuery<BaseResponse<GetMastersResponse>, Error>({
-      queryKey: [queryKeys.masters.public, queryKeys.masters.byParams(params)],
+      queryKey: [...queryKeys.masters.all, 'public', params],
       queryFn: ({ pageParam = 1 }) =>
         masterApi.getPublicMasters({ ...params, page: pageParam as number }),
       initialPageParam: 1,

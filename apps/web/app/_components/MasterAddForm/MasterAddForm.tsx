@@ -21,18 +21,23 @@ import FormTextarea from '../FormTextArea/FormTextArea';
 export default function MasterAddForm() {
   const router = useRouter();
   const [localAvatar, setLocalAvatar] = useState<string | null>(null);
+  const mastersPath = localizationHooks.useWithLocale(AppRoutes.Masters);
+
+  const handleNavigateToMasters = useCallback(() => {
+    router.push(mastersPath);
+  }, [router, mastersPath]);
 
   const toast = useToast();
   const { control, handleSubmit, isPending } = masterHooks.useCreateMasterForm({
     onSuccess: () => {
       toast.success('New master added successfully');
-      router.push(localizationHooks.useWithLocale(AppRoutes.Masters));
+      handleNavigateToMasters();
     },
   });
 
   const onCancel = useCallback(() => {
-    router.push(localizationHooks.useWithLocale(AppRoutes.Masters));
-  }, [router]);
+    handleNavigateToMasters();
+  }, [handleNavigateToMasters]);
 
   const onImageSelected = useCallback((file: File) => {
     const url = URL.createObjectURL(file);

@@ -21,15 +21,18 @@ export const customerHooks = {
       [params],
     );
 
-    const { data: customersData, isPending, isSuccess } = useQuery<BaseResponse<GetCustomersResponse>, Error>({
+    const {
+      data: customersData,
+      isPending,
+      isSuccess,
+    } = useQuery<BaseResponse<GetCustomersResponse>, Error>({
       queryKey: ['customers', queryKeys.customers.byParams(memoParams)],
       queryFn: () => customerApi.getCustomers(memoParams),
     });
 
     utils.useSetPendingApi(isPending);
 
-    if (isSuccess &&
-      customersData.status === ApiStatus.SUCCESS) {
+    if (isSuccess && customersData.status === ApiStatus.SUCCESS) {
       return customersData.data;
     }
 
@@ -62,22 +65,22 @@ export const customerHooks = {
   },
 
   useGetCustomerById: (id?: number | null) => {
-    if (!id) return null;
-
     const queryClient = useQueryClient();
 
-    const { data: customerData, isPending, isSuccess } = useQuery<
-      BaseResponse<CustomerInfoResponse> | null,
-      Error
-    >({
-      queryKey: ['customer', id],
+    const {
+      data: customerData,
+      isPending,
+      isSuccess,
+    } = useQuery<BaseResponse<CustomerInfoResponse> | null, Error>({
+      queryKey: ['customer', id ?? null],
       queryFn: async () => {
+        if (!id) return null;
 
-        const cached = queryClient.getQueryData<BaseResponse<CustomerInfoResponse[]>>(
+        const cached = queryClient.getQueryData<BaseResponse<GetCustomersResponse>>(
           queryKeys.customers.all,
         );
-        const maybeList = cached?.data;
-        if (maybeList && Array.isArray(maybeList)) {
+        const maybeList = cached?.data?.items;
+        if (Array.isArray(maybeList)) {
           const found = maybeList.find((c) => c.id === id);
           if (found) {
             const result: BaseResponse<CustomerInfoResponse> = {
@@ -89,8 +92,9 @@ export const customerHooks = {
         }
 
         const listResp = await customerApi.getCustomers({}).catch(() => null);
-        if (listResp && Array.isArray(listResp.data)) {
-          const found = listResp.data.find((customer: { id: number }) => customer.id === id);
+        const fallbackItems = listResp?.data?.items;
+        if (Array.isArray(fallbackItems)) {
+          const found = fallbackItems.find((customer) => customer.id === id);
           if (found) {
             const result: BaseResponse<CustomerInfoResponse> = {
               status: ApiStatus.SUCCESS,
@@ -107,8 +111,7 @@ export const customerHooks = {
 
     utils.useSetPendingApi(isPending);
 
-    if (isSuccess && !!customerData &&
-      customerData.status === ApiStatus.SUCCESS) {
+    if (isSuccess && !!customerData && customerData.status === ApiStatus.SUCCESS) {
       return customerData.data;
     }
 
