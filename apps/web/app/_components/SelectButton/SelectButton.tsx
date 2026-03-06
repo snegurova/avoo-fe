@@ -8,8 +8,8 @@ import DropdownList from '@/_components/DropdownList/DropdownList';
 import ArrowDownIcon from '@/_icons/ArrowDownIcon';
 
 type Props = {
-  label: string;
-  options: { label: string; handler: () => void }[];
+  label: string | React.ReactNode;
+  options: { label: string | React.ReactNode; handler: () => void }[];
   type?: ElementStyleType;
 };
 

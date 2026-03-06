@@ -27,11 +27,15 @@ import CalendarViewMonth from '@/_icons/CalendarViewMonth';
 import CalendarViewWeek from '@/_icons/CalendarViewWeek';
 
 import CheckboxesButton from '../CheckboxesButton/CheckboxesButton';
+import { FormattedMessage } from 'react-intl';
+import { messages } from '@avoo/intl/messages/private/calendar/calendar';
+import { messages as orderMessages } from '@avoo/intl/messages/private/orders/order';
+import { localizationHooks } from '@/_hooks/localizationHooks';
 
 const STATUSES_ITEMS = [
-  { label: 'Pending', id: OrderStatus.PENDING },
-  { label: 'Confirmed', id: OrderStatus.CONFIRMED },
-  { label: 'Completed', id: OrderStatus.COMPLETED },
+  { label: <FormattedMessage {...orderMessages.pending} />, id: OrderStatus.PENDING },
+  { label: <FormattedMessage {...orderMessages.confirmed} />, id: OrderStatus.CONFIRMED },
+  { label: <FormattedMessage {...orderMessages.completed} />, id: OrderStatus.COMPLETED },
 ];
 
 type Props = {
@@ -111,6 +115,8 @@ export default function CalendarControls(props: Props) {
     setOrderIsOutOfSchedule,
     calendarType,
   } = props;
+
+  const locale = localizationHooks.useGetLocale();
 
   const tabletUp = useMediaQuery('(min-width:768px)');
   const desktopLargeUp = useMediaQuery('(min-width:1280px)');
@@ -237,7 +243,7 @@ export default function CalendarControls(props: Props) {
   const viewOptions = useMemo(
     () => [
       {
-        label: 'Day',
+        label: <FormattedMessage {...messages.day} />,
         icon: <CalendarViewDay className={icon()} />,
         handler: () => {
           setType(CalendarViewType.DAY);
@@ -245,7 +251,7 @@ export default function CalendarControls(props: Props) {
         },
       },
       {
-        label: 'Week',
+        label: <FormattedMessage {...messages.week} />,
         icon: <CalendarViewWeek className={icon()} />,
         handler: () => {
           setType(CalendarViewType.WEEK);
@@ -253,7 +259,7 @@ export default function CalendarControls(props: Props) {
         },
       },
       {
-        label: 'Month',
+        label: <FormattedMessage {...messages.month} />,
         icon: <CalendarViewMonth className={icon()} />,
         handler: () => {
           setType(CalendarViewType.MONTH);
@@ -266,7 +272,7 @@ export default function CalendarControls(props: Props) {
 
   const statusesOptions = useMemo(
     () => ({
-      label: 'All statuses',
+      label: <FormattedMessage {...messages.allStatusesLabel} />,
       handler: () => {
         setStatuses((prev) => {
           if (!prev || prev.length === 3) {
@@ -302,7 +308,7 @@ export default function CalendarControls(props: Props) {
 
   const mastersOptions = useMemo(
     () => ({
-      label: 'All masters',
+      label: <FormattedMessage {...messages.allMastersLabel} />,
       handler: () => {
         setMasterIds((prev) => {
           if (!prev || prev.length === masters.length) {
@@ -339,7 +345,7 @@ export default function CalendarControls(props: Props) {
 
   const outOfCheduleOptions = useMemo(
     () => ({
-      label: 'Only out of schedule',
+      label: <FormattedMessage {...messages.outOfScheduleLabel} />,
       handler: () => {
         setOrderIsOutOfSchedule((prev) => {
           if (prev === undefined) {
@@ -365,9 +371,9 @@ export default function CalendarControls(props: Props) {
     justifyContent: 'flex-end',
     paddingRight: 10,
   };
-
+  console.log('locale', locale);
   return (
-    <LocalizationProvider dateAdapter={AdapterDayjs}>
+    <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={locale}>
       <div className='bg-primary-50 px-4 py-3 flex gap-3 relative'>
         <button
           type='button'
@@ -377,7 +383,7 @@ export default function CalendarControls(props: Props) {
             scrollToCurrentTime();
           }}
         >
-          Today
+          <FormattedMessage {...messages.todayButton} />
         </button>
         <div className='flex'>
           <button
@@ -410,18 +416,22 @@ export default function CalendarControls(props: Props) {
             <ArrowForwardIcon className='fill-gray-800 w-3.5 h-3.5' />
           </button>
         </div>
-        <SelectButton label={type} options={viewOptions} type={ElementStyleType.OUTLINE} />
+        <SelectButton
+          label={<FormattedMessage {...messages[type]} />}
+          options={viewOptions}
+          type={ElementStyleType.OUTLINE}
+        />
         {showOptions ? (
           <>
             <CheckboxesButton
               addCount
-              label='Masters'
+              label={<FormattedMessage {...messages.mastersLabel} />}
               options={[mastersOptions]}
               values={[masterIds]}
             />
             <CheckboxesButton
               addCount
-              label='Statuses'
+              label={<FormattedMessage {...messages.statusesLabel} />}
               options={[statusesOptions, outOfCheduleOptions]}
               values={[statuses, orderIsOutOfSchedule]}
             />
@@ -429,7 +439,7 @@ export default function CalendarControls(props: Props) {
         ) : (
           <div className={showOptionsWrapper({ calendarType })}>
             <CheckboxesButton
-              label='Options'
+              label={<FormattedMessage {...messages.optionsLabel} />}
               options={[mastersOptions, statusesOptions, outOfCheduleOptions]}
               values={[masterIds, statuses, orderIsOutOfSchedule]}
             />

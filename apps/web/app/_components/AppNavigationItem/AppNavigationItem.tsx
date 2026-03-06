@@ -10,7 +10,7 @@ import { routerHooks } from '@/_hooks/routerHooks';
 type Props = {
   href: Route;
   icon: React.ReactNode;
-  label: string;
+  label: string | React.ReactNode;
   onClick?: () => void;
 };
 

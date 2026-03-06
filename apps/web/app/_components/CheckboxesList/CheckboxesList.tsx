@@ -6,7 +6,7 @@ import { tv } from 'tailwind-variants';
 
 type Props = {
   options: {
-    label: string;
+    label: string | React.ReactNode;
     handler: () => void;
     items?: { label: string | null; id: number | string; handler: () => void }[];
   }[];

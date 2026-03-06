@@ -18,6 +18,8 @@ import MosaicIcon from '@/_icons/MosaicIcon';
 import { AppRoutes } from '@/_routes/routes';
 
 import AppNavigationItem from '../AppNavigationItem/AppNavigationItem';
+import { FormattedMessage } from 'react-intl';
+import { messages } from '@avoo/intl/messages/private/navigation/navigation';
 
 type Props = {
   menuOpen: boolean;
@@ -56,33 +58,33 @@ export default function AppNavigation({ menuOpen, setMenuOpen }: Props) {
     {
       href: localizationHooks.useWithLocale(AppRoutes.Home),
       icon: <HomeIcon />,
-      label: 'Home',
+      label: <FormattedMessage {...messages.home} />,
     },
     {
       href: localizationHooks.useWithLocale(AppRoutes.Calendar),
       icon: <CalendarIcon />,
-      label: 'Calendar',
+      label: <FormattedMessage {...messages.calendar} />,
       hasDropdown: true,
     },
     {
       href: localizationHooks.useWithLocale(AppRoutes.Clients),
       icon: <CoPresentIcon />,
-      label: 'Clients',
+      label: <FormattedMessage {...messages.clients} />,
     },
     {
       href: localizationHooks.useWithLocale(AppRoutes.Services),
       icon: <BookIcon />,
-      label: 'Services',
+      label: <FormattedMessage {...messages.services} />,
     },
     {
       href: localizationHooks.useWithLocale(AppRoutes.Masters),
       icon: <GroupsIcon />,
-      label: 'Masters',
+      label: <FormattedMessage {...messages.masters} />,
     },
     {
       href: localizationHooks.useWithLocale(AppRoutes.Posts),
       icon: <MosaicIcon />,
-      label: 'Posts',
+      label: <FormattedMessage {...messages.posts} />,
     },
   ];
   const calendarNav = tv({
@@ -157,7 +159,7 @@ export default function AppNavigation({ menuOpen, setMenuOpen }: Props) {
                                 className='block w-full text-left pl-20 pr-4 py-2 hover:bg-primary-100 focus:bg-primary-100 transition-colors cursor-pointer'
                                 onClick={handleNavClick}
                               >
-                                Working schedule
+                                <FormattedMessage {...messages.workingSchedule} />
                               </Link>
                             </li>
                             <li className='w-full'>
@@ -166,7 +168,7 @@ export default function AppNavigation({ menuOpen, setMenuOpen }: Props) {
                                 className='block w-full text-left pl-20 pr-4 py-2 hover:bg-primary-100 focus:bg-primary-100 transition-colors cursor-pointer'
                                 onClick={handleNavClick}
                               >
-                                Schedule exception
+                                <FormattedMessage {...messages.scheduleException} />
                               </Link>
                             </li>
                           </ul>

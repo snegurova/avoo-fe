@@ -5,7 +5,7 @@ import { tv } from 'tailwind-variants';
 import { ElementStyleType } from '@avoo/hooks/types/elementStyleType';
 
 type Props = {
-  options: { icon?: React.ReactNode; label: string; handler: () => void }[];
+  options: { icon?: React.ReactNode; label: string | React.ReactNode; handler: () => void }[];
   closeDropdown: () => void;
   type?: ElementStyleType;
 };

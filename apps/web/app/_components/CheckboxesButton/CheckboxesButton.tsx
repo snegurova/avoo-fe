@@ -8,9 +8,9 @@ import CheckboxesList from '../CheckboxesList/CheckboxesList';
 
 type Props = {
   addCount?: boolean;
-  label: string;
+  label: string | React.ReactNode;
   options: {
-    label: string;
+    label: string | React.ReactNode;
     handler: () => void;
     items?: { label: string | null; id: number | string; handler: () => void }[];
   }[];
