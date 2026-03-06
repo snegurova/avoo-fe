@@ -24,7 +24,7 @@ const container = tv({
   base: 'z-6',
   variants: {
     type: {
-      [CalendarViewType.DAY]: 'absolute left-0 right-0 p-0.5',
+      [CalendarViewType.DAY]: 'absolute left-0 right-0 p-0.5 pointer order-wrapper',
       [CalendarViewType.WEEK]: 'relative',
       [CalendarViewType.MONTH]: '',
     },
@@ -32,15 +32,18 @@ const container = tv({
 });
 
 const eventItem = tv({
-  base: 'border rounded-[3px] overflow-hidden h-full relative w-full flex no-wrap cursor-pointer',
+  base: 'border rounded-[3px] overflow-hidden h-full relative w-full flex no-wrap cursor-pointer transition-colors',
   variants: {
     status: {
-      [OrderStatus.PENDING]: 'border-orange-500 bg-orange-50 text-orange-700',
-      [OrderStatus.CONFIRMED]: 'border-blue-800 bg-blue-50 text-blue-800',
-      [OrderStatus.COMPLETED]: 'border-purple-800 bg-purple-50 text-purple-800',
+      [OrderStatus.PENDING]:
+        'border-orange-500 bg-orange-50 text-orange-700 hover:bg-orange-200 focus:bg-orange-200',
+      [OrderStatus.CONFIRMED]:
+        'border-blue-800 bg-blue-50 text-blue-800 hover:bg-blue-200 focus:bg-blue-200',
+      [OrderStatus.COMPLETED]:
+        'border-purple-800 bg-purple-50 text-purple-800 hover:bg-purple-200 focus:bg-purple-200',
     },
     type: {
-      [CalendarViewType.DAY]: 'flex-col items-start gap-0.5 p-1 font-medium',
+      [CalendarViewType.DAY]: 'flex-col items-start gap-0.5 p-1 font-medium order-item',
       [CalendarViewType.WEEK]: 'items-center gap-1 py-0.5 px-1 font-normal',
       [CalendarViewType.MONTH]: 'items-center gap-1 py-0.5 px-1 font-normal',
     },

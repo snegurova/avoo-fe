@@ -19,7 +19,7 @@ const selectButton = tv({
     type: {
       solid: 'text-white bg-black gap-6 px-6 py-2.5',
       outline:
-        'text-gray-800 border border-gray-200 bg-transparent gap-2 px-3 py-2.5 text-sm leading-none hover:bg-gray-100 focus:bg-gray-100',
+        'text-gray-800 border border-gray-200 bg-transparent gap-2 px-3 py-2.5 text-sm leading-none hover:bg-primary-200 focus:bg-primary-200',
     },
   },
 });

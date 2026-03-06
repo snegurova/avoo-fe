@@ -132,6 +132,13 @@ export default function CalendarColumn(props: Props) {
 
   const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
     if (!ref.current) return;
+
+    const target = e.target as HTMLElement;
+
+    if (target.classList.contains('order-wrapper') || target.classList.contains('order-item')) {
+      setHoveredCellIdx(null);
+      return;
+    }
     const rect = ref.current.getBoundingClientRect();
     const y = e.clientY - rect.top;
     const cellHeight = PX_IN_MINUTE * 15;
@@ -177,6 +184,8 @@ export default function CalendarColumn(props: Props) {
     const mins = minutes % 60;
     const target = e.target as HTMLElement;
     const isAvailable = target.classList.contains('available-time');
+
+    if (target.classList.contains('order-wrapper')) return;
 
     const selectedDateTime = new Date(date);
     selectedDateTime.setHours(hours, mins, 0, 0);

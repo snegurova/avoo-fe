@@ -68,7 +68,7 @@ type Props = {
 };
 
 const controlsButton = tv({
-  base: 'cursor-pointer text-gray-800 border border-gray-200 bg-transparent px-3 py-2.5 text-sm leading-none transition-colors hover:bg-gray-100 focus:bg-gray-100',
+  base: 'cursor-pointer text-gray-800 border border-gray-200 bg-transparent px-3 py-2.5 text-sm leading-none transition-colors hover:bg-primary-200 focus:bg-primary-200',
   variants: {
     variant: {
       full: 'rounded-2xl',
@@ -393,6 +393,13 @@ export default function CalendarControls(props: Props) {
             onChange={handleChangeDate}
             sx={{
               '& .MuiButtonBase-root': calendarButtonStyles,
+              transition: 'background-color 0.15s',
+              '&:hover': {
+                backgroundColor: 'var(--color-primary-200)',
+              },
+              '&:focus': {
+                backgroundColor: 'var(--color-primary-200)',
+              },
             }}
           />
           <button
