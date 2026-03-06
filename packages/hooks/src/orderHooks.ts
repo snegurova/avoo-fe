@@ -1,5 +1,6 @@
 import { orderApi } from '@avoo/axios';
 import { utils } from '@avoo/hooks/utils/utils';
+
 import {
   CreatePrivateOrdersRequest,
   CreatePublicOrdersRequest,
@@ -30,6 +31,19 @@ import {
 import { OrderType } from '@avoo/hooks/types/orderType';
 import { OrderStatus } from '../types/orderStatus';
 import { timeUtils } from '@avoo/shared';
+
+function convertOrdersDataDatesToUTC<T extends { ordersData?: { date?: string }[] }>(data: T): T {
+  if (Array.isArray(data.ordersData)) {
+    return {
+      ...data,
+      ordersData: data.ordersData.map((item) => ({
+        ...item,
+        date: timeUtils.convertLocalToUTC(item.date),
+      })),
+    };
+  }
+  return data;
+}
 
 type UseCreateOrderFormParams = {
   order: {
@@ -127,9 +141,12 @@ export const orderHooks = {
 
     return {
       control,
-      handleSubmit: handleSubmit(
-        utils.submitAdapter<CreatePrivateOrdersRequest, CreatePrivateOrdersData>(mutate),
-      ),
+      handleSubmit: handleSubmit((formData) => {
+        const dataWithUTC = convertOrdersDataDatesToUTC(formData);
+        utils.submitAdapter<CreatePrivateOrdersRequest, CreatePrivateOrdersData>(mutate)(
+          dataWithUTC,
+        );
+      }),
       getValues,
       errors,
       isPending,
@@ -199,9 +216,10 @@ export const orderHooks = {
 
     return {
       control,
-      handleSubmit: handleSubmit(
-        utils.submitAdapter<CreatePublicOrdersRequest, CreatePublicOrdersData>(mutate),
-      ),
+      handleSubmit: handleSubmit((formData) => {
+        const dataWithUTC = convertOrdersDataDatesToUTC(formData);
+        utils.submitAdapter<CreatePublicOrdersRequest, CreatePublicOrdersData>(mutate)(dataWithUTC);
+      }),
       getValues,
       errors,
       isPending,
