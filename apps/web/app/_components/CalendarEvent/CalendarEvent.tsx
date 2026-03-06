@@ -4,6 +4,7 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import { tv } from 'tailwind-variants';
 
 import { PrivateEvent } from '@avoo/axios/types/apiTypes';
+import { CalendarType } from '@avoo/hooks/types/calendarType';
 import { CalendarViewType } from '@avoo/hooks/types/calendarViewType';
 import { OrderStatus } from '@avoo/hooks/types/orderStatus';
 import { timeUtils } from '@avoo/shared';
@@ -18,6 +19,7 @@ type Props = {
   event: PrivateEvent;
   type: CalendarViewType;
   onEventSelect?: (event: PrivateEvent) => void;
+  calendarType?: CalendarType;
 };
 
 const container = tv({
@@ -51,13 +53,30 @@ const eventItem = tv({
 });
 
 const textWrapper = tv({
-  base: 'flex gap-1 shrink-0',
+  base: 'flex gap-1 shrink-0  pointer-events-none',
   variants: {
     type: {
-      [CalendarViewType.DAY]: 'flex-col lg:flex-row lg:items-center',
+      [CalendarViewType.DAY]: 'flex-col',
       [CalendarViewType.WEEK]: 'items-center',
       [CalendarViewType.MONTH]: 'items-center',
     },
+    calendarType: {
+      [CalendarType.WIDGET]: '',
+      [CalendarType.REGULAR]: '',
+      [CalendarType.SELECTOR]: '',
+    },
+    compoundVariants: [
+      {
+        calendarType: CalendarType.WIDGET,
+        type: CalendarViewType.DAY,
+        className: 'xl:flex-row xl:items-center',
+      },
+      {
+        calendarType: [CalendarType.REGULAR, CalendarType.SELECTOR],
+        type: CalendarViewType.DAY,
+        className: ' lg:flex-row lg:items-center',
+      },
+    ],
   },
 });
 
@@ -94,7 +113,7 @@ const iconError = tv({
 });
 
 export default function CalendarEvent(props: Props) {
-  const { event, type, onEventSelect } = props;
+  const { event, type, onEventSelect, calendarType = CalendarType.REGULAR } = props;
 
   const onEventClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
@@ -126,7 +145,7 @@ export default function CalendarEvent(props: Props) {
             className={eventItem({ status: event.status, type })}
             onClick={onEventClick}
           >
-            <div className='hidden lg:flex absolute top-0.5 right-0.5 items-center gap-1'>
+            <div className='hidden lg:flex absolute top-0.5 right-0.5 items-center gap-1 pointer-events-none'>
               {type === CalendarViewType.DAY && event.isOutOfSchedule && (
                 <ErrorIcon className={iconError({ type })} />
               )}
@@ -137,7 +156,7 @@ export default function CalendarEvent(props: Props) {
               )}
             </div>
             {(type !== CalendarViewType.DAY || !desktop) && (
-              <div className='flex gap-0.5'>
+              <div className='flex gap-0.5  pointer-events-none'>
                 {event.status === OrderStatus.PENDING && (
                   <SearchActivity className={icon({ status: event.status })} />
                 )}
@@ -157,7 +176,7 @@ export default function CalendarEvent(props: Props) {
                 )}
               </div>
             )}
-            <div className={textWrapper({ type })}>
+            <div className={textWrapper({ type, calendarType })}>
               {(type !== CalendarViewType.DAY || desktop) && (
                 <span className='text-xs font-medium text-inherit text-start leading-[1.15]'>
                   {timeUtils.getTime(event.start)}
@@ -170,7 +189,7 @@ export default function CalendarEvent(props: Props) {
               )}
             </div>
             {type === CalendarViewType.DAY && (
-              <h3 className='text-xs font-inherit text-inherit leading-[1.15] text-start'>
+              <h3 className='text-xs font-inherit text-inherit leading-[1.15] text-start  pointer-events-none'>
                 {event.title}
               </h3>
             )}

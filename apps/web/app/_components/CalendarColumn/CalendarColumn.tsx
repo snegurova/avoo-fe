@@ -191,6 +191,12 @@ export default function CalendarColumn(props: Props) {
     selectedDateTime.setHours(hours, mins, 0, 0);
     const currentDateTime = new Date();
 
+    const oneYearFromNow = new Date();
+    oneYearFromNow.setFullYear(oneYearFromNow.getFullYear() + 1);
+    if (selectedDateTime > oneYearFromNow) {
+      toast.error('You can only book up to 1 year in advance');
+      return;
+    }
     if (!isAvailable) {
       toast.info('Selected time is out of available working hours');
     }
@@ -277,6 +283,7 @@ export default function CalendarColumn(props: Props) {
                 event={event}
                 type={type}
                 onEventSelect={handleOrderSelect}
+                calendarType={calendarType}
               />
             ))}
           {timeUtils.isSameDay(date, new Date()) && (

@@ -25,7 +25,7 @@ const button = tv({
   variants: {
     type: {
       outline:
-        'text-gray-700 font-medium p-2 text-sm leading-[1.15] hover:bg-primary-50 focus:bg-primary-50',
+        'text-gray-700 font-medium p-2 text-sm leading-[1.15] hover:bg-primary-100 focus:bg-primary-100',
       solid: 'text-black p-2.5 leading-none hover:bg-primary-100 focus:bg-primary-100',
     },
   },

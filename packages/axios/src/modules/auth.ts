@@ -29,7 +29,6 @@ export const authApi = {
   },
   async register(data: RegisterCustomRequest) {
     const response = await apiClient.post<BaseResponse<AuthResponse>>(REGISTER_ENDPOINT, data);
-    console.log('Register response:', response.data);
     return response.data;
   },
   async forgotPassword(data: ForgotPasswordRequest) {
