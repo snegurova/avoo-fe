@@ -1,5 +1,7 @@
 import * as yup from 'yup';
 
+import { timeUtils } from '@avoo/shared/src';
+
 export const scheduleUpdateSchema = yup.object({
   id: yup.number().required(),
   name: yup.string().required('Name is required').trim(),
@@ -7,12 +9,19 @@ export const scheduleUpdateSchema = yup.object({
   endAt: yup
     .string()
     .nullable()
-    .matches(/^\d{4}-\d{2}-\d{2}$/, 'endAt must be a valid ISO date'),
+    .matches(/^\d{4}-\d{2}-\d{2}$/, 'endAt must be a valid ISO date')
+    .test('end-after-now', 'End date must be after start date', function (value) {
+      if (!value) return true;
+      const start = timeUtils.toLocalDateISO(new Date());
+
+      return value > start;
+    }),
 
   workingHours: yup
     .array()
     .of(
       yup.object({
+        id: yup.number().nullable(),
         enabled: yup.boolean(),
         day: yup.number().required(),
         startTimeMinutes: yup.number().required().min(0).max(1440),
@@ -21,16 +30,18 @@ export const scheduleUpdateSchema = yup.object({
           .required()
           .min(0)
           .max(1440)
-          .moreThan(yup.ref('startTimeMinutes'), 'endTimeMinutes must be > startTimeMinutes'),
-
-        id: yup.number().required(),
+          .test('end-after-start', 'endTimeMinutes must be > startTimeMinutes', function (value) {
+            const start = this.parent.startTimeMinutes;
+            if (start === 0 && value === 0) return true;
+            return value > start;
+          }),
 
         breaks: yup
           .array()
           .of(
             yup.object({
+              id: yup.number().nullable(),
               breakStartTimeMinutes: yup.number().required().min(0).max(1440),
-
               breakEndTimeMinutes: yup
                 .number()
                 .required()
@@ -38,10 +49,8 @@ export const scheduleUpdateSchema = yup.object({
                 .max(1440)
                 .moreThan(
                   yup.ref('breakStartTimeMinutes'),
-                  'breakEndTime must be > breakStartTime',
+                  'breakEndTimeMinutes must be > breakStartTimeMinutes',
                 ),
-
-              id: yup.number().nullable(),
             }),
           )
           .required(),

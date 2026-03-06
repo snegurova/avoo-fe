@@ -1,13 +1,13 @@
 import {
-  PrivateCalendarQueryParams,
-  PrivateServiceQueryParams,
-  PrivateOrderQueryParams,
-  GetCustomersQueryParams,
-  GetMastersQueryParams,
   GetCombinationsQueryParams,
+  GetCustomersQueryParams,
   GetExceptionsQueryParams,
-  PublicCalendarQueryParams,
+  GetMastersQueryParams,
+  PrivateCalendarQueryParams,
+  PrivateOrderQueryParams,
+  PrivateServiceQueryParams,
   PublicCalendarByDatesQueryParams,
+  PublicCalendarQueryParams,
 } from '@avoo/axios/types/apiTypes';
 
 export const queryKeys = {
@@ -19,6 +19,7 @@ export const queryKeys = {
   },
   schedules: {
     all: ['schedules'] as const,
+    detail: (id: number) => [...queryKeys.schedules.all, id] as const,
   },
   services: {
     all: ['services'] as const,

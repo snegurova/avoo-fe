@@ -13,6 +13,9 @@ export const utils = {
 
     useEffect(() => {
       setIsPending(isPending);
+      return () => {
+        setIsPending(false);
+      };
     }, [isPending, setIsPending]);
   },
   useBooleanState: (
