@@ -1,6 +1,9 @@
 import { useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
+import { yupResolver } from '@hookform/resolvers/yup';
+import { InfiniteData, useInfiniteQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+
 import { servicesApi } from '@avoo/axios/src/modules/services';
 import {
   ApiStatus,
@@ -15,9 +18,6 @@ import {
   UpdateServiceResponse,
 } from '@avoo/axios/types/apiTypes';
 import { utils } from '@avoo/hooks/utils/utils';
-
-import { yupResolver } from '@hookform/resolvers/yup';
-import { InfiniteData, useInfiniteQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 
 import {
   CreateServiceFormData,
@@ -341,6 +341,9 @@ export const servicesHooks = {
         });
         queryClient.invalidateQueries({
           queryKey: queryKeys.services.all,
+        });
+        queryClient.invalidateQueries({
+          queryKey: queryKeys.medias.byParams('service', service.id),
         });
 
         onSuccess?.();
