@@ -103,6 +103,11 @@ export default function AppNavigation({ menuOpen, setMenuOpen }: Props) {
     setCalendarOpen(false);
   }, []);
 
+  const handleCloseMenuOnNested = useCallback(() => {
+    setMenuOpen(false);
+    setCalendarOpen(true);
+  }, []);
+
   const handleNavClick = useCallback(() => {
     if (!desktopAbove) handleCloseMenu();
   }, [desktopAbove, handleCloseMenu]);
@@ -134,7 +139,7 @@ export default function AppNavigation({ menuOpen, setMenuOpen }: Props) {
                           <Link
                             href={item.href}
                             className='flex items-center grow px-8 py-3 gap-3.5'
-                            onClick={handleCloseMenu}
+                            onClick={handleCloseMenuOnNested}
                           >
                             {item.icon}
                             <span className=''>{item.label}</span>
