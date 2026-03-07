@@ -1,5 +1,6 @@
 'use client';
 import React, { useCallback, useMemo } from 'react';
+import { FormattedMessage } from 'react-intl';
 
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { DatePicker } from '@mui/x-date-pickers';
@@ -16,10 +17,13 @@ import { CalendarType } from '@avoo/hooks/types/calendarType';
 import { CalendarViewType } from '@avoo/hooks/types/calendarViewType';
 import { ElementStyleType } from '@avoo/hooks/types/elementStyleType';
 import { OrderStatus } from '@avoo/hooks/types/orderStatus';
+import { messages } from '@avoo/intl/messages/private/calendar/calendar';
+import { messages as orderMessages } from '@avoo/intl/messages/private/orders/order';
 import { timeUtils } from '@avoo/shared';
 
 import SelectButton from '@/_components/SelectButton/SelectButton';
 import { DATE_PICKER_FORMAT } from '@/_constants/dateFormats';
+import { localizationHooks } from '@/_hooks/localizationHooks';
 import ArrowBackIcon from '@/_icons/ArrowBackIcon';
 import ArrowForwardIcon from '@/_icons/ArrowForwardIcon';
 import CalendarViewDay from '@/_icons/CalendarViewDay';
@@ -27,10 +31,6 @@ import CalendarViewMonth from '@/_icons/CalendarViewMonth';
 import CalendarViewWeek from '@/_icons/CalendarViewWeek';
 
 import CheckboxesButton from '../CheckboxesButton/CheckboxesButton';
-import { FormattedMessage } from 'react-intl';
-import { messages } from '@avoo/intl/messages/private/calendar/calendar';
-import { messages as orderMessages } from '@avoo/intl/messages/private/orders/order';
-import { localizationHooks } from '@/_hooks/localizationHooks';
 
 const STATUSES_ITEMS = [
   { label: <FormattedMessage {...orderMessages.pending} />, id: OrderStatus.PENDING },
@@ -371,7 +371,7 @@ export default function CalendarControls(props: Props) {
     justifyContent: 'flex-end',
     paddingRight: 10,
   };
-  console.log('locale', locale);
+
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={locale}>
       <div className='bg-primary-50 px-4 py-3 flex gap-3 relative'>

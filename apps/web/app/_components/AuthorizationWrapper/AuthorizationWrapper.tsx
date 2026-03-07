@@ -47,9 +47,6 @@ export default function AuthorizationWrapper(props: Props) {
             >
               <FormattedMessage {...messages.privacyPolicy} />
             </Link>
-            <span>
-              <FormattedMessage {...messages.project} />
-            </span>
           </div>
         </div>
       </div>

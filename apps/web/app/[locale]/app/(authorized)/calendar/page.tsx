@@ -1,12 +1,13 @@
 'use client';
 import React from 'react';
+import { FormattedMessage } from 'react-intl';
 
 import { Typography } from '@mui/material';
 
+import { messages } from '@avoo/intl/messages/private/calendar/calendar';
+
 import AppWrapper from '@/_components/AppWrapper/AppWrapper';
 import Calendar from '@/_components/Calendar/Calendar';
-import { FormattedMessage } from 'react-intl';
-import { messages } from '@avoo/intl/messages/private/calendar/calendar';
 
 export default function CalendarPage() {
   return (

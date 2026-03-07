@@ -1,12 +1,15 @@
 import React from 'react';
-import { authHooks, userHooks } from '@avoo/hooks';
-import { localizationHooks } from '@/_hooks/localizationHooks';
-import { AppRoutes } from '@/_routes/routes';
 import { FormattedMessage } from 'react-intl';
-import { messages } from '@avoo/intl/messages/private/navigation/navigation';
+
 import { tv } from 'tailwind-variants';
+
+import { authHooks, userHooks } from '@avoo/hooks';
+import { messages } from '@avoo/intl/messages/private/navigation/navigation';
+
 import { AvatarSize, CalendarAvatar } from '@/_components/CalendarAvatar/CalendarAvatar';
 import LanguageSwitcher from '@/_components/LanguageSwitcher/LanguageSwitcher';
+import { localizationHooks } from '@/_hooks/localizationHooks';
+import { AppRoutes } from '@/_routes/routes';
 
 type Props = {
   closeDropdown: () => void;

@@ -1,9 +1,12 @@
 'use client';
 import React, { useCallback, useState } from 'react';
+import { FormattedMessage } from 'react-intl';
 import Link from 'next/link';
 
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { tv } from 'tailwind-variants';
+
+import { messages } from '@avoo/intl/messages/private/navigation/navigation';
 
 import { localizationHooks } from '@/_hooks/localizationHooks';
 import { routerHooks } from '@/_hooks/routerHooks';
@@ -18,8 +21,6 @@ import MosaicIcon from '@/_icons/MosaicIcon';
 import { AppRoutes } from '@/_routes/routes';
 
 import AppNavigationItem from '../AppNavigationItem/AppNavigationItem';
-import { FormattedMessage } from 'react-intl';
-import { messages } from '@avoo/intl/messages/private/navigation/navigation';
 
 type Props = {
   menuOpen: boolean;

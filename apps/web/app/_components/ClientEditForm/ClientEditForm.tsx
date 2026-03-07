@@ -8,11 +8,11 @@ import { customerHooks } from '@avoo/hooks';
 import { useToast } from '@/_hooks/useToast';
 import LockIcon from '@/_icons/LockIcon';
 
+import ClientOrdersHistory from '../ClientOrdersHistory/ClientOrdersHistory';
 import FormInput, { AccessoryPosition } from '../FormInput/FormInput';
 import FormTextarea from '../FormTextArea/FormTextArea';
-import ClientOrdersHistory from '../ClientOrdersHistory/ClientOrdersHistory';
-import NotificationField from '../NotificationField/NotificationField';
 import ModalActions from '../ModalActions/ModalActions';
+import NotificationField from '../NotificationField/NotificationField';
 
 export type FormValues = {
   name: string;

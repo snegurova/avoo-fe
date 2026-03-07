@@ -1,11 +1,11 @@
-import React, { useMemo, useRef, useState } from 'react';
+import React, { useMemo, useState } from 'react';
+import { FormattedMessage } from 'react-intl';
+
+import { SUPPORTED_LOCALES } from '@avoo/intl';
+import { messages } from '@avoo/intl/messages/private/navigation/navigation';
 
 import { localizationHooks } from '@/_hooks/localizationHooks';
-
 import LanguageIcon from '@/_icons/LanguageIcon';
-import { SUPPORTED_LOCALES, Locale } from '@avoo/intl';
-import { FormattedMessage } from 'react-intl';
-import { messages } from '@avoo/intl/messages/private/navigation/navigation';
 
 export default function LanguageSwitcher() {
   const [isOpen, setIsOpen] = useState(false);

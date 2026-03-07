@@ -4,12 +4,12 @@ import React from 'react';
 import type { UpdateProfile } from '@avoo/axios/types/apiTypes';
 import { userHooks } from '@avoo/hooks';
 
+import AppWrapper from '@/_components/AppWrapper/AppWrapper';
 import EditProfileForm from '@/_components/ProfileEdit/EditProfileForm';
 import { SectionHeader } from '@/_components/SectionHeader/SectionHeader';
 import { localizationHooks } from '@/_hooks/localizationHooks';
 import { routerHooks } from '@/_hooks/routerHooks';
 import { AppRoutes } from '@/_routes/routes';
-import AppWrapper from '@/_components/AppWrapper/AppWrapper';
 
 export default function EditProfilePage() {
   const handleBackClick = routerHooks.useBackWithFallback(

@@ -1,13 +1,14 @@
 'use client';
+import { FormattedMessage } from 'react-intl';
+
 import { Typography } from '@mui/material';
 
 import { CalendarType } from '@avoo/hooks/types/calendarType';
+import { messages } from '@avoo/intl/messages/private/calendar/calendar';
+import { messages as navMessages } from '@avoo/intl/messages/private/navigation/navigation';
 
 import AppWrapper from '@/_components/AppWrapper/AppWrapper';
 import Calendar from '@/_components/Calendar/Calendar';
-import { FormattedMessage } from 'react-intl';
-import { messages } from '@avoo/intl/messages/private/calendar/calendar';
-import { messages as navMessages } from '@avoo/intl/messages/private/navigation/navigation';
 
 export default function DashboardPage() {
   return (

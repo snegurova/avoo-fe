@@ -1,9 +1,12 @@
 'use client';
 
 import React, { useMemo } from 'react';
+import { FormattedMessage } from 'react-intl';
 import { useRouter } from 'next/navigation';
 
 import useMediaQuery from '@mui/material/useMediaQuery';
+
+import { messages } from '@avoo/intl/messages/private/navigation/navigation';
 
 import AppProfileSelect from '@/_components/AppProfileSelect/AppProfileSelect';
 import IconLink from '@/_components/IconLink/IconLink';
@@ -15,8 +18,6 @@ import { AppRoutes } from '@/_routes/routes';
 
 import { IconButton } from '../IconButton/IconButton';
 import SelectButton from '../SelectButton/SelectButton';
-import { FormattedMessage } from 'react-intl';
-import { messages } from '@avoo/intl/messages/private/navigation/navigation';
 
 type Props = {
   setMenuOpen: (open: boolean) => void;

@@ -207,6 +207,7 @@ export default function CalendarColumn(props: Props) {
 
     if (calendarType !== CalendarType.SELECTOR) {
       if (selectedDateTime < currentDateTime) {
+        toast.error('There will be next possible time selected');
       }
 
       router.push(

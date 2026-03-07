@@ -4,8 +4,8 @@ import React, { useCallback, useState } from 'react';
 
 import { userHooks } from '@avoo/hooks';
 
-import { AvatarSize, CalendarAvatar } from '@/_components/CalendarAvatar/CalendarAvatar';
 import AppProfileDropdown from '@/_components/AppProfileDropdown/AppProfileDropdown';
+import { AvatarSize, CalendarAvatar } from '@/_components/CalendarAvatar/CalendarAvatar';
 
 export default function AppProfileSelect() {
   const [isOpen, setIsOpen] = useState(false);

@@ -1,11 +1,12 @@
 'use client';
 
+import { FormattedMessage } from 'react-intl';
+
 import { Typography } from '@mui/material';
 
-import AppWrapper from '@/_components/AppWrapper/AppWrapper';
-
-import { FormattedMessage } from 'react-intl';
 import { messages } from '@avoo/intl/messages/private/profile/profile';
+
+import AppWrapper from '@/_components/AppWrapper/AppWrapper';
 
 export default function AccountSettingsPage() {
   return (
