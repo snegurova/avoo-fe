@@ -1,10 +1,12 @@
 'use client';
 
 import React from 'react';
-import { orderHooks } from '@avoo/hooks';
+
 import { Order } from '@avoo/axios/types/apiTypes';
-import { timeUtils } from '@avoo/shared';
+import { orderHooks } from '@avoo/hooks';
 import { OrderStatus } from '@avoo/hooks/types/orderStatus';
+import { timeUtils } from '@avoo/shared';
+
 import HistoryCard from '../HistoryCard/HistoryCard';
 
 type Props = {

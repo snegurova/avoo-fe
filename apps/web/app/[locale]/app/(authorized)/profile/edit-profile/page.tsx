@@ -4,7 +4,7 @@ import React from 'react';
 import type { UpdateProfile } from '@avoo/axios/types/apiTypes';
 import { userHooks } from '@avoo/hooks';
 
-import { IconButton } from '@/_components/IconButton/IconButton';
+import AppWrapper from '@/_components/AppWrapper/AppWrapper';
 import EditProfileForm from '@/_components/ProfileEdit/EditProfileForm';
 import { SectionHeader } from '@/_components/SectionHeader/SectionHeader';
 import { localizationHooks } from '@/_hooks/localizationHooks';
@@ -30,8 +30,7 @@ export default function EditProfilePage() {
   };
 
   return (
-    <div className='container mx-auto p-4 max-w-4xl'>
-      <IconButton icon='⬅' onClick={handleBackClick} ariaLabel='Back' />
+    <AppWrapper>
       <SectionHeader title='Edit Profile' />
 
       <EditProfileForm
@@ -50,6 +49,6 @@ export default function EditProfilePage() {
         isPending={isPending}
         showPreview
       />
-    </div>
+    </AppWrapper>
   );
 }
