@@ -15,6 +15,8 @@ import { AppRoutes } from '@/_routes/routes';
 
 import { IconButton } from '../IconButton/IconButton';
 import SelectButton from '../SelectButton/SelectButton';
+import { FormattedMessage } from 'react-intl';
+import { messages } from '@avoo/intl/messages/private/navigation/navigation';
 
 type Props = {
   setMenuOpen: (open: boolean) => void;
@@ -26,13 +28,13 @@ export default function AppHeader({ setMenuOpen }: Props) {
 
   const options = [
     {
-      label: 'New Booking',
+      label: <FormattedMessage {...messages.newBooking} />,
       handler: () => {
         router.push(localizationHooks.useWithLocale(AppRoutes.OrderCreate));
       },
     },
     {
-      label: 'New Post',
+      label: <FormattedMessage {...messages.newPost} />,
       handler: () => {
         router.push(localizationHooks.useWithLocale(AppRoutes.AddPost));
       },
@@ -59,7 +61,7 @@ export default function AppHeader({ setMenuOpen }: Props) {
         )}
         <div className='flex items-center lg:gap-6 xl:gap-10 2xl:gap-25 shrink-0'>
           <div className='hidden lg:block'>
-            <SelectButton label='Add' options={options} />
+            <SelectButton label={<FormattedMessage {...messages.add} />} options={options} />
           </div>
           <div className='flex items-center gap-2'>
             <ShareIcon className='transition-colors' />
