@@ -144,7 +144,7 @@ export const timeUtils = {
     const year = date.getFullYear();
     const month = (date.getMonth() + 1).toString().padStart(2, '0');
     const day = date.getDate().toString().padStart(2, '0');
-    const roundedStartTimeMinutes = Math.ceil(startTimeMinutes / 15) * 15;
+    const roundedStartTimeMinutes = Math.floor(startTimeMinutes / 15) * 15;
     const hours = Math.floor(roundedStartTimeMinutes / 60)
       .toString()
       .padStart(2, '0');

@@ -6,7 +6,7 @@ import { tv } from 'tailwind-variants';
 
 type Props = {
   options: {
-    label: string;
+    label: string | React.ReactNode;
     handler: () => void;
     items?: { label: string | null; id: number | string; handler: () => void }[];
   }[];
@@ -42,6 +42,9 @@ export default function CheckboxesList(props: Props) {
                   />
                 }
                 label={option.label}
+                classes={{
+                  label: 'transition-colors hover:text-primary-500',
+                }}
               />
               {option.items &&
                 option.items.map((item, idx) => (
@@ -58,6 +61,9 @@ export default function CheckboxesList(props: Props) {
                         />
                       }
                       label={item.label}
+                      classes={{
+                        label: 'transition-colors hover:text-primary-500',
+                      }}
                     />
                   </div>
                 ))}
@@ -69,6 +75,9 @@ export default function CheckboxesList(props: Props) {
                 <Checkbox checked={!!values[index]} onChange={option.handler} size='small' />
               }
               label={option.label}
+              classes={{
+                label: 'transition-colors hover:text-primary-500',
+              }}
             />
           )}
         </div>

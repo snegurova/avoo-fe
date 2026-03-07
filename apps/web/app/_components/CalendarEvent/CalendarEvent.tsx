@@ -4,6 +4,7 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import { tv } from 'tailwind-variants';
 
 import { PrivateEvent } from '@avoo/axios/types/apiTypes';
+import { CalendarType } from '@avoo/hooks/types/calendarType';
 import { CalendarViewType } from '@avoo/hooks/types/calendarViewType';
 import { OrderStatus } from '@avoo/hooks/types/orderStatus';
 import { timeUtils } from '@avoo/shared';
@@ -18,13 +19,14 @@ type Props = {
   event: PrivateEvent;
   type: CalendarViewType;
   onEventSelect?: (event: PrivateEvent) => void;
+  calendarType?: CalendarType;
 };
 
 const container = tv({
   base: 'z-6',
   variants: {
     type: {
-      [CalendarViewType.DAY]: 'absolute left-0 right-0 p-0.5',
+      [CalendarViewType.DAY]: 'absolute left-0 right-0 p-0.5 pointer order-wrapper',
       [CalendarViewType.WEEK]: 'relative',
       [CalendarViewType.MONTH]: '',
     },
@@ -32,15 +34,18 @@ const container = tv({
 });
 
 const eventItem = tv({
-  base: 'border rounded-[3px] overflow-hidden h-full relative w-full flex no-wrap cursor-pointer',
+  base: 'border rounded-[3px] overflow-hidden h-full relative w-full flex no-wrap cursor-pointer transition-colors',
   variants: {
     status: {
-      [OrderStatus.PENDING]: 'border-orange-500 bg-orange-50 text-orange-700',
-      [OrderStatus.CONFIRMED]: 'border-blue-800 bg-blue-50 text-blue-800',
-      [OrderStatus.COMPLETED]: 'border-purple-800 bg-purple-50 text-purple-800',
+      [OrderStatus.PENDING]:
+        'border-orange-500 bg-orange-50 text-orange-700 hover:bg-orange-200 focus:bg-orange-200',
+      [OrderStatus.CONFIRMED]:
+        'border-blue-800 bg-blue-50 text-blue-800 hover:bg-blue-200 focus:bg-blue-200',
+      [OrderStatus.COMPLETED]:
+        'border-purple-800 bg-purple-50 text-purple-800 hover:bg-purple-200 focus:bg-purple-200',
     },
     type: {
-      [CalendarViewType.DAY]: 'flex-col items-start gap-0.5 p-1 font-medium',
+      [CalendarViewType.DAY]: 'flex-col items-start gap-0.5 p-1 font-medium order-item',
       [CalendarViewType.WEEK]: 'items-center gap-1 py-0.5 px-1 font-normal',
       [CalendarViewType.MONTH]: 'items-center gap-1 py-0.5 px-1 font-normal',
     },
@@ -48,13 +53,30 @@ const eventItem = tv({
 });
 
 const textWrapper = tv({
-  base: 'flex gap-1 shrink-0',
+  base: 'flex gap-1 shrink-0  pointer-events-none',
   variants: {
     type: {
-      [CalendarViewType.DAY]: 'flex-col lg:flex-row lg:items-center',
+      [CalendarViewType.DAY]: 'flex-col',
       [CalendarViewType.WEEK]: 'items-center',
       [CalendarViewType.MONTH]: 'items-center',
     },
+    calendarType: {
+      [CalendarType.WIDGET]: '',
+      [CalendarType.REGULAR]: '',
+      [CalendarType.SELECTOR]: '',
+    },
+    compoundVariants: [
+      {
+        calendarType: CalendarType.WIDGET,
+        type: CalendarViewType.DAY,
+        className: 'xl:flex-row xl:items-center',
+      },
+      {
+        calendarType: [CalendarType.REGULAR, CalendarType.SELECTOR],
+        type: CalendarViewType.DAY,
+        className: ' lg:flex-row lg:items-center',
+      },
+    ],
   },
 });
 
@@ -91,7 +113,7 @@ const iconError = tv({
 });
 
 export default function CalendarEvent(props: Props) {
-  const { event, type, onEventSelect } = props;
+  const { event, type, onEventSelect, calendarType = CalendarType.REGULAR } = props;
 
   const onEventClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
@@ -123,7 +145,7 @@ export default function CalendarEvent(props: Props) {
             className={eventItem({ status: event.status, type })}
             onClick={onEventClick}
           >
-            <div className='hidden lg:flex absolute top-0.5 right-0.5 items-center gap-1'>
+            <div className='hidden lg:flex absolute top-0.5 right-0.5 items-center gap-1 pointer-events-none'>
               {type === CalendarViewType.DAY && event.isOutOfSchedule && (
                 <ErrorIcon className={iconError({ type })} />
               )}
@@ -134,7 +156,7 @@ export default function CalendarEvent(props: Props) {
               )}
             </div>
             {(type !== CalendarViewType.DAY || !desktop) && (
-              <div className='flex gap-0.5'>
+              <div className='flex gap-0.5  pointer-events-none'>
                 {event.status === OrderStatus.PENDING && (
                   <SearchActivity className={icon({ status: event.status })} />
                 )}
@@ -154,7 +176,7 @@ export default function CalendarEvent(props: Props) {
                 )}
               </div>
             )}
-            <div className={textWrapper({ type })}>
+            <div className={textWrapper({ type, calendarType })}>
               {(type !== CalendarViewType.DAY || desktop) && (
                 <span className='text-xs font-medium text-inherit text-start leading-[1.15]'>
                   {timeUtils.getTime(event.start)}
@@ -167,7 +189,7 @@ export default function CalendarEvent(props: Props) {
               )}
             </div>
             {type === CalendarViewType.DAY && (
-              <h3 className='text-xs font-inherit text-inherit leading-[1.15] text-start'>
+              <h3 className='text-xs font-inherit text-inherit leading-[1.15] text-start  pointer-events-none'>
                 {event.title}
               </h3>
             )}

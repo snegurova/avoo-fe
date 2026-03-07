@@ -8,6 +8,8 @@ import { DateStatus } from '@avoo/hooks/types/dateStatus';
 import { timeUtils } from '@avoo/shared';
 
 import CalendarCurrentTime from '../CalendarCurrentTime/CalendarCurrentTime';
+import { FormattedMessage } from 'react-intl';
+import { messages } from '@avoo/intl/messages/private/calendar/calendar';
 
 const WEEK_CELLS = Array.from({ length: 7 });
 const DAY_CELLS = Array.from({ length: 24 });
@@ -121,7 +123,15 @@ export default function CalendarTimeScale(props: Props) {
                   {getWeekDate(idx).getDate()}
                 </span>
               )}
-              {belowDesktop ? timeUtils.getWeekDay(idx).slice(0, 3) : timeUtils.getWeekDay(idx)}
+              {belowDesktop ? (
+                <FormattedMessage
+                  {...messages[timeUtils.getWeekDay(idx).slice(0, 3) as keyof typeof messages]}
+                />
+              ) : (
+                <FormattedMessage
+                  {...messages[timeUtils.getWeekDay(idx) as keyof typeof messages]}
+                />
+              )}
             </div>
           );
         })}
