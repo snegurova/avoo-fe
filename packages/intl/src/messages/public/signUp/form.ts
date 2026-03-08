@@ -3,7 +3,7 @@ import { defineMessages } from 'react-intl';
 export const messages = defineMessages({
   nameLabel: {
     id: 'public.signUp.form.nameLabel',
-    defaultMessage: 'Full Name *',
+    defaultMessage: 'Full Name',
   },
   namePlaceholder: {
     id: 'public.signUp.form.namePlaceholder',

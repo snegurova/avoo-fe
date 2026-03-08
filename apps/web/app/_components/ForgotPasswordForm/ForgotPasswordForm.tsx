@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useRouter } from 'next/navigation';
 
@@ -10,12 +11,16 @@ import { useApiStatusStore } from '@avoo/store';
 import { Button, ButtonFit, ButtonIntent } from '@/_components/Button/Button';
 import FormInput from '@/_components/FormInput/FormInput';
 import { localizationHooks } from '@/_hooks/localizationHooks';
+import { useToast } from '@/_hooks/useToast';
 import { AppRoutes } from '@/_routes/routes';
 
 export default function ForgotPasswordForm() {
   const isPending = useApiStatusStore((state) => state.isPending);
 
   const router = useRouter();
+  const toast = useToast();
+  const errorMessage = useApiStatusStore((s) => s.errorMessage);
+  const isError = useApiStatusStore((s) => s.isError);
 
   const { sendCodeHandler } = authHooks.useSendCode({
     onSuccess: (email: string) => {
@@ -28,6 +33,12 @@ export default function ForgotPasswordForm() {
   const { register, handleSubmit, errors } = authHooks.useForgotPasswordForm({
     sendCodeHandler,
   });
+
+  useEffect(() => {
+    if (isError && !!errorMessage) {
+      toast.error(errorMessage);
+    }
+  }, [isError, errorMessage]);
 
   return (
     <form onSubmit={handleSubmit} className='w-full flex flex-col gap-6'>

@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useRouter } from 'next/navigation';
 
@@ -14,10 +15,14 @@ import { Button, ButtonFit, ButtonIntent } from '@/_components/Button/Button';
 import FormInput from '@/_components/FormInput/FormInput';
 import ShowPasswordToggler from '@/_components/ShowPasswordToggler/ShowPasswordToggler';
 import { localizationHooks } from '@/_hooks/localizationHooks';
+import { useToast } from '@/_hooks/useToast';
 import { AppRoutes } from '@/_routes/routes';
 
 export default function RegisterForm() {
   const isPending = useApiStatusStore((state) => state.isPending);
+  const toast = useToast();
+  const errorMessage = useApiStatusStore((s) => s.errorMessage);
+  const isError = useApiStatusStore((s) => s.isError);
 
   const router = useRouter();
 
@@ -30,6 +35,12 @@ export default function RegisterForm() {
   const { value: isShowPassword, toggleValue: toggleShowPassword } = utils.useBooleanState(false);
   const { value: isShowConfirmPassword, toggleValue: toggleConfirmPassword } =
     utils.useBooleanState(false);
+
+  useEffect(() => {
+    if (isError && !!errorMessage) {
+      toast.error(errorMessage);
+    }
+  }, [isError, errorMessage]);
 
   return (
     <form onSubmit={handleSubmit} className='w-full flex flex-col gap-6'>

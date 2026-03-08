@@ -1,15 +1,15 @@
 import React from 'react';
+import { FormattedMessage } from 'react-intl';
 
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { tv } from 'tailwind-variants';
 
 import { CalendarViewType } from '@avoo/hooks/types/calendarViewType';
 import { DateStatus } from '@avoo/hooks/types/dateStatus';
+import { messages } from '@avoo/intl/messages/private/calendar/calendar';
 import { timeUtils } from '@avoo/shared';
 
 import CalendarCurrentTime from '../CalendarCurrentTime/CalendarCurrentTime';
-import { FormattedMessage } from 'react-intl';
-import { messages } from '@avoo/intl/messages/private/calendar/calendar';
 
 const WEEK_CELLS = Array.from({ length: 7 });
 const DAY_CELLS = Array.from({ length: 24 });

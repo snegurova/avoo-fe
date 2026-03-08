@@ -1,7 +1,11 @@
 'use client';
+import { FormattedMessage } from 'react-intl';
+
 import { Typography } from '@mui/material';
 
 import { CalendarType } from '@avoo/hooks/types/calendarType';
+import { messages } from '@avoo/intl/messages/private/calendar/calendar';
+import { messages as navMessages } from '@avoo/intl/messages/private/navigation/navigation';
 
 import AppWrapper from '@/_components/AppWrapper/AppWrapper';
 import Calendar from '@/_components/Calendar/Calendar';
@@ -12,7 +16,7 @@ export default function DashboardPage() {
       <AppWrapper className='lg:col-span-2 order-2 lg:order-1'>
         <div className='p-4 flex justify-between items-center'>
           <Typography component='h1' variant='h1'>
-            Calendar
+            <FormattedMessage {...messages.title} />
           </Typography>
         </div>
         <Calendar calendarType={CalendarType.WIDGET} />
@@ -22,7 +26,7 @@ export default function DashboardPage() {
           <AppWrapper isWidget>
             <div className='p-4 flex justify-between items-center'>
               <Typography component='h1' variant='h1'>
-                New notifications
+                <FormattedMessage {...navMessages.newNotifications} />
               </Typography>
             </div>
           </AppWrapper>
@@ -31,7 +35,7 @@ export default function DashboardPage() {
           <AppWrapper isWidget>
             <div className='p-4 flex justify-between items-center'>
               <Typography component='h1' variant='h1'>
-                Next appointments
+                <FormattedMessage {...navMessages.nextAppointments} />
               </Typography>
             </div>
           </AppWrapper>

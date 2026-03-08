@@ -1,6 +1,8 @@
 import React from 'react';
-import Avatar, { AvatarSize } from '../Avatar/Avatar';
+
 import { colors } from '@avoo/design-tokens';
+
+import Avatar, { AvatarSize } from '../Avatar/Avatar';
 
 type Props = {
   dateDay: string;

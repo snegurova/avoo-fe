@@ -12,6 +12,7 @@ import { useApiStatusStore } from '@avoo/store';
 import { Button, ButtonFit, ButtonIntent } from '@/_components/Button/Button';
 import FormInput from '@/_components/FormInput/FormInput';
 import ShowPasswordToggler from '@/_components/ShowPasswordToggler/ShowPasswordToggler';
+import { useToast } from '@/_hooks/useToast';
 import { AppRoutes } from '@/_routes/routes';
 import { routerUtils } from '@/_utils/routerUtils';
 
@@ -20,6 +21,9 @@ export default function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [returnUrl, setReturnUrl] = useState<string | null>(null);
+  const toast = useToast();
+  const errorMessage = useApiStatusStore((s) => s.errorMessage);
+  const isError = useApiStatusStore((s) => s.isError);
 
   useEffect(() => {
     const url = searchParams.get('returnUrl');
@@ -27,6 +31,12 @@ export default function LoginForm() {
       setReturnUrl(decodeURIComponent(url));
     }
   }, [searchParams, router]);
+
+  useEffect(() => {
+    if (isError && !!errorMessage) {
+      toast.error(errorMessage);
+    }
+  }, [isError, errorMessage]);
 
   const { register, handleSubmit, errors } = authHooks.useLoginForm({
     onSuccess: () => {

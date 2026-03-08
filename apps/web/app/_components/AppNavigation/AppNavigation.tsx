@@ -1,9 +1,12 @@
 'use client';
 import React, { useCallback, useState } from 'react';
+import { FormattedMessage } from 'react-intl';
 import Link from 'next/link';
 
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { tv } from 'tailwind-variants';
+
+import { messages } from '@avoo/intl/messages/private/navigation/navigation';
 
 import { localizationHooks } from '@/_hooks/localizationHooks';
 import { routerHooks } from '@/_hooks/routerHooks';
@@ -18,8 +21,6 @@ import MosaicIcon from '@/_icons/MosaicIcon';
 import { AppRoutes } from '@/_routes/routes';
 
 import AppNavigationItem from '../AppNavigationItem/AppNavigationItem';
-import { FormattedMessage } from 'react-intl';
-import { messages } from '@avoo/intl/messages/private/navigation/navigation';
 
 type Props = {
   menuOpen: boolean;
@@ -103,6 +104,11 @@ export default function AppNavigation({ menuOpen, setMenuOpen }: Props) {
     setCalendarOpen(false);
   }, []);
 
+  const handleCloseMenuOnNested = useCallback(() => {
+    setMenuOpen(false);
+    setCalendarOpen(true);
+  }, []);
+
   const handleNavClick = useCallback(() => {
     if (!desktopAbove) handleCloseMenu();
   }, [desktopAbove, handleCloseMenu]);
@@ -134,7 +140,7 @@ export default function AppNavigation({ menuOpen, setMenuOpen }: Props) {
                           <Link
                             href={item.href}
                             className='flex items-center grow px-8 py-3 gap-3.5'
-                            onClick={handleCloseMenu}
+                            onClick={handleCloseMenuOnNested}
                           >
                             {item.icon}
                             <span className=''>{item.label}</span>

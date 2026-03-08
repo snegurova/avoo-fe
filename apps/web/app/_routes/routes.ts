@@ -27,4 +27,6 @@ export enum AppRoutes {
   Public = '/',
   PublicSalon = '/salon',
   PublicOrderCreate = '/create-order',
+  SecuritySettings = '/app/profile/security-settings',
+  AccountSettings = '/app/profile/account-settings',
 }
