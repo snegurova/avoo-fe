@@ -1,4 +1,10 @@
 {
+  "private.profile.changePassword.oldPasswordLabel": "Aktualne hasło *",
+  "private.profile.changePassword.newPasswordLabel": "Nowe hasło *",
+  "private.profile.changePassword.confirmPasswordLabel": "Potwierdź nowe hasło *",
+  "private.profile.changePassword.notation": "Użyj co najmniej 8 znaków, w tym cyfry i symbolu.",
+  "private.profile.changePassword.saveButton": "Zapisz zmiany",
+  "private.profile.changePassword.changePassword": "Zmień hasło",
   "private.profile.profile.accountSettings": "Ustawienia konta",
   "private.profile.profile.securitySettings": "Ustawienia bezpieczeństwa",
   "private.navigation.navigation.en": "Angielski",

@@ -21,4 +21,8 @@ export const messages = defineMessages({
     id: 'private.profile.changePassword.saveButton',
     defaultMessage: 'Save changes',
   },
+  changePassword: {
+    id: 'private.profile.changePassword.changePassword',
+    defaultMessage: 'Change password',
+  },
 });
