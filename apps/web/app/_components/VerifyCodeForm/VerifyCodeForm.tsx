@@ -1,17 +1,17 @@
 'use client';
 
+import React, { useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 
 import { authHooks } from '@avoo/hooks';
 import { formatHooks } from '@avoo/hooks';
 import { useApiStatusStore } from '@avoo/store';
 
-import React, { useEffect } from 'react';
 import { Button, ButtonFit, ButtonIntent, ButtonType } from '@/_components/Button/Button';
 import CodeInput from '@/_components/CodeInput/CodeInput';
 import { localizationHooks } from '@/_hooks/localizationHooks';
-import { AppRoutes } from '@/_routes/routes';
 import { useToast } from '@/_hooks/useToast';
+import { AppRoutes } from '@/_routes/routes';
 
 export default function VerifyCodeForm() {
   const isPending = useApiStatusStore((state) => state.isPending);
@@ -19,10 +19,10 @@ export default function VerifyCodeForm() {
   const searchParams = useSearchParams();
   const email = searchParams.get('email') || '';
   const resetPasswordPath = localizationHooks.useWithLocale(AppRoutes.ResetPassword);
-  const forgotPasswordPath = localizationHooks.useWithLocale(AppRoutes.ForgotPassword);
   const toast = useToast();
   const errorMessage = useApiStatusStore((s) => s.errorMessage);
   const isError = useApiStatusStore((s) => s.isError);
+  const { logoutMutation } = authHooks.useLogout();
 
   const maskedEmail = formatHooks.useMaskEmail(email);
 
@@ -42,13 +42,25 @@ export default function VerifyCodeForm() {
       router.push(resetPasswordPath);
     },
     onError: () => {
-      router.push(forgotPasswordPath);
+      toast.error('Invalid verification code. Please try again.');
+      logoutMutation();
     },
   });
 
   useEffect(() => {
-    setValue && setValue('code', code);
+    if (setValue) {
+      setValue('code', code);
+    }
   }, [code, setValue]);
+
+  const resendCode = async () => {
+    try {
+      sendCodeHandler({ email });
+      toast.success('Verification code resent successfully');
+    } catch {
+      toast.error('Failed to resend verification code');
+    }
+  };
 
   return (
     <div className='w-full flex flex-col gap-6'>
@@ -79,9 +91,7 @@ export default function VerifyCodeForm() {
       <div className='flex justify-center pt-8'>
         <button
           type='button'
-          onClick={() => {
-            sendCodeHandler({ email });
-          }}
+          onClick={resendCode}
           className='hover:text-primary-600 focus:text-primary-600 cursor-pointer'
         >
           Resend code

@@ -1,8 +1,8 @@
 import { Metadata } from 'next/types';
 
+import { AuthGuard } from '@/_components/AuthGuard/AuthGuard';
 import AuthorizationWrapper from '@/_components/AuthorizationWrapper/AuthorizationWrapper';
 import ResetPasswordForm from '@/_components/ResetPasswordForm/ResetPasswordForm';
-import { AuthGuard } from '@/_components/AuthGuard/AuthGuard';
 
 export const metadata: Metadata = {
   title: 'Reset Password - AVOO App',

@@ -4,8 +4,8 @@ import { FormattedMessage } from 'react-intl';
 import { useRouter } from 'next/navigation';
 
 import { authHooks } from '@avoo/hooks';
-import { messages } from '@avoo/intl/messages/public/resetPassword/page';
 import { utils } from '@avoo/hooks';
+import { messages } from '@avoo/intl/messages/public/resetPassword/page';
 import { useApiStatusStore } from '@avoo/store';
 
 import { Button, ButtonFit, ButtonIntent } from '@/_components/Button/Button';
@@ -18,10 +18,11 @@ export default function ResetPasswordForm() {
   const isPending = useApiStatusStore((state) => state.isPending);
 
   const router = useRouter();
+  const homePath = localizationHooks.useWithLocale(AppRoutes.Home);
 
   const { register, handleSubmit, errors } = authHooks.useResetPasswordForm({
     onSuccess: () => {
-      router.push(localizationHooks.useWithLocale(AppRoutes.SignIn));
+      router.push(homePath);
     },
   });
 
