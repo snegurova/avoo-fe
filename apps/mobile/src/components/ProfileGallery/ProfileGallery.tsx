@@ -1,9 +1,11 @@
-import { View, Text, FlatList, Pressable } from 'react-native';
+import { FlatList, Pressable, Text, View } from 'react-native';
+
 import { useNavigation } from '@react-navigation/native';
+
 import { userHooks } from '@avoo/hooks';
+
 import { SectionHeader } from '@/shared/SectionHeader/SectionHeader';
 import { RootNavigationProp, RootScreens } from '@/types/navigation';
-
 
 export const ProfileGallery = () => {
   const userMedia = userHooks.useGetUserMedia();
@@ -29,7 +31,7 @@ export const ProfileGallery = () => {
               Show clients your place and service
             </Text>
             <Pressable onPress={handleNavigate}>
-              <Text className='text-sm text-blue-600 underline' >Add gallery</Text>
+              <Text className='text-sm text-blue-600 underline'>Add gallery</Text>
             </Pressable>
           </View>
         }

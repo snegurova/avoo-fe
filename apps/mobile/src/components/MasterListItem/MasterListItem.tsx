@@ -1,9 +1,11 @@
-import { View, Pressable, StyleSheet } from 'react-native';
-import { Avatar } from '@/shared/Avatar/Avatar';
-import { colors } from '@avoo/design-tokens';
-import { MasterWithRelationsEntityResponse } from '@avoo/axios/types/apiTypes';
-import { MasterLanguageList } from '@/components/MasterLanguageList/MasterLanguageList';
+import { Pressable, StyleSheet, View } from 'react-native';
 import { Text } from 'react-native-paper';
+
+import { MasterWithRelationsEntityResponse } from '@avoo/axios/types/apiTypes';
+import { colors } from '@avoo/design-tokens';
+
+import { MasterLanguageList } from '@/components/MasterLanguageList/MasterLanguageList';
+import { Avatar } from '@/shared/Avatar/Avatar';
 
 type Props = {
   master: MasterWithRelationsEntityResponse;

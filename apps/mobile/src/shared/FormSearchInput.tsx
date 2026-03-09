@@ -1,20 +1,22 @@
 import React, { useState } from 'react';
+import { Control, FieldValues, Path, useController } from 'react-hook-form';
 import {
-  View,
-  TextInput,
+  Pressable,
+  StyleProp,
   StyleSheet,
-  ViewStyle,
+  Text,
+  TextInput,
   TextInputProps,
   TextStyle,
-  StyleProp,
-  Text,
-  Pressable,
+  View,
+  ViewStyle,
 } from 'react-native';
 import { Chip } from 'react-native-paper';
-import { Control, FieldValues, Path, useController } from 'react-hook-form';
-import { VALID_LANGUAGE_CODES, LANGUAGE_NAMES, type LanguageCode } from '@avoo/constants';
-import { MaterialIcons } from './icons';
+
+import { LANGUAGE_NAMES, type LanguageCode, VALID_LANGUAGE_CODES } from '@avoo/constants';
 import { colors } from '@avoo/design-tokens';
+
+import { MaterialIcons } from './icons';
 
 type Props<T extends FieldValues> = TextInputProps & {
   containerStyle?: ViewStyle;

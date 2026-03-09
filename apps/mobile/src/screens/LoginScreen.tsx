@@ -1,6 +1,7 @@
-import { Text, View, TouchableWithoutFeedback, Keyboard, Pressable } from 'react-native';
+import { Keyboard, Pressable, Text, TouchableWithoutFeedback, View } from 'react-native';
+
 import LoginForm from '@/components/LoginForm/LoginForm';
-import  Layout from '@/shared/Layout/Layout';
+import Layout from '@/shared/Layout/Layout';
 import { RootScreens, RootStackScreenProps } from '@/types/navigation';
 
 type Props = RootStackScreenProps<RootScreens.LoginScreen>;

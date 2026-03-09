@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import type { FieldValues, UseFormSetError, Path } from 'react-hook-form';
+import type { FieldValues, Path, UseFormSetError } from 'react-hook-form';
 
 type ServerError = {
   errors?: Array<{ field?: string; message?: string }>;

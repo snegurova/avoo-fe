@@ -1,11 +1,11 @@
+import { apiClient } from '@avoo/axios/src/apiClient';
 import {
   BaseResponse,
-  MasterWithRelationsEntityResponse,
   CreateMasterRequest,
-  GetMastersResponse,
   GetMastersQueryParams,
+  GetMastersResponse,
+  MasterWithRelationsEntityResponse,
 } from '@avoo/axios/types/apiTypes';
-import { apiClient } from '@avoo/axios/src/apiClient';
 
 const MASTERS_ENDPOINT = '/masters/';
 const PUBLIC_MASTERS_ENDPOINT = '/public/masters/';

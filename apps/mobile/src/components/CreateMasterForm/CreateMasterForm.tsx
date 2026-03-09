@@ -1,13 +1,16 @@
-import { View, Text } from 'react-native';
+import { Text, View } from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
+
+import { FILE_UPLOAD_TYPE_ENUM } from '@avoo/axios/types/apiEnums';
+import { filesHooks, masterHooks } from '@avoo/hooks';
+import { UploadFile } from '@avoo/shared';
+
+import { BottomSheetHeader } from '@/shared/BottomSheetHeader/BottomSheetHeader';
+import { FormPhoneField } from '@/shared/FormPhoneField/FormPhoneField';
 import FormTextInput from '@/shared/FormTextInput';
 import LanguageSelector from '@/shared/LanguageSelector/LanguageSelector';
-import { masterHooks, filesHooks } from '@avoo/hooks';
-import { BottomSheetHeader } from '@/shared/BottomSheetHeader/BottomSheetHeader';
+
 import AvatarUpload from '../Avatar/AvatarUpload';
-import { ScrollView } from 'react-native-gesture-handler';
-import { FILE_UPLOAD_TYPE_ENUM } from '@avoo/axios/types/apiEnums';
-import { UploadFile } from '@avoo/shared';
-import { FormPhoneField } from '@/shared/FormPhoneField/FormPhoneField';
 
 type Props = {
   onClose: () => void;

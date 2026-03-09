@@ -1,10 +1,13 @@
-import { Avatar } from '@/shared/Avatar/Avatar';
-import { StatusChip } from '@/shared/StatusChip/StatusChip';
-import { colors } from '@avoo/design-tokens';
 import { View } from 'react-native';
 import { Text } from 'react-native-paper';
-import { Appointment } from '../AppointmentsSection/AppointmentsSection';
+
 import { OrderStatusEnum } from '@avoo/axios/types/apiEnums';
+import { colors } from '@avoo/design-tokens';
+
+import { Avatar } from '@/shared/Avatar/Avatar';
+import { StatusChip } from '@/shared/StatusChip/StatusChip';
+
+import { Appointment } from '../AppointmentsSection/AppointmentsSection';
 
 type AppointmentCardProps = {
   appointment: Appointment;
@@ -12,13 +15,13 @@ type AppointmentCardProps = {
 
 const getStatusColor = (status?: string) => {
   if (!status) return colors.gray[500];
-  
+
   if (status === OrderStatusEnum.CANCELED) return colors.red[800];
   if (status === OrderStatusEnum.PENDING) return colors.orange[500];
   if (status === OrderStatusEnum.CONFIRMED) return colors.blue[700];
   if (status === OrderStatusEnum.COMPLETED) return colors.green[800];
   if (status === OrderStatusEnum.EXPIRED) return colors.gray[500];
-  
+
   return colors.gray[500];
 };
 
@@ -63,12 +66,8 @@ export const AppointmentCard = ({ appointment }: AppointmentCardProps) => {
         </View>
 
         <View className='mt-3'>
-          <Text variant='titleMedium'>
-            {appointment.clientName}
-          </Text>
-          <Text variant='bodySmall'>
-            {appointment.clientPhone}
-          </Text>
+          <Text variant='titleMedium'>{appointment.clientName}</Text>
+          <Text variant='bodySmall'>{appointment.clientPhone}</Text>
           <Text
             variant='bodySmall'
             numberOfLines={2}

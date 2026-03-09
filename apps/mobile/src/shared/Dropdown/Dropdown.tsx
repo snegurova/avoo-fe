@@ -1,17 +1,18 @@
-import React, { useState, cloneElement, useEffect, useMemo, useCallback, useRef } from 'react';
+import React, { cloneElement, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
-  StyleSheet,
-  View,
-  Text,
-  Modal,
-  Pressable,
-  StyleProp,
-  ViewStyle,
-  PressableProps,
   Dimensions,
   LayoutChangeEvent,
+  Modal,
+  Pressable,
+  PressableProps,
+  StyleProp,
+  StyleSheet,
+  Text,
+  View,
+  ViewStyle,
 } from 'react-native';
-import { colors, spacing, radius, typography } from '@avoo/design-tokens';
+
+import { colors, radius, spacing, typography } from '@avoo/design-tokens';
 
 export enum DropdownAlign {
   LEFT = 'left',
@@ -51,16 +52,13 @@ function computeMenuPosition(
   const rightPosition = screenWidth - (triggerLayout.x + triggerLayout.width);
 
   const fitsOnLeft = leftPosition >= 0 && leftPosition + menuWidth <= screenWidth;
-  const fitsOnRight =
-    rightPosition >= 0 && triggerLayout.x + triggerLayout.width - menuWidth >= 0;
+  const fitsOnRight = rightPosition >= 0 && triggerLayout.x + triggerLayout.width - menuWidth >= 0;
 
   let finalPosition: ViewStyle;
   if (align === DropdownAlign.RIGHT) {
-    finalPosition =
-      !fitsOnRight && fitsOnLeft ? { left: leftPosition } : { right: rightPosition };
+    finalPosition = !fitsOnRight && fitsOnLeft ? { left: leftPosition } : { right: rightPosition };
   } else {
-    finalPosition =
-      !fitsOnLeft && fitsOnRight ? { right: rightPosition } : { left: leftPosition };
+    finalPosition = !fitsOnLeft && fitsOnRight ? { right: rightPosition } : { left: leftPosition };
   }
 
   return {
@@ -74,7 +72,7 @@ function useDropdownPosition(
   isVisible: boolean,
   align: DropdownAlign,
   gap: number = spacing.xs,
-  estimatedMenuWidth?: number
+  estimatedMenuWidth?: number,
 ) {
   const [triggerLayout, setTriggerLayout] = useState<Layout>({ x: 0, y: 0, width: 0, height: 0 });
   const [menuWidth, setMenuWidth] = useState(estimatedMenuWidth || 0);
@@ -114,20 +112,17 @@ function useDropdownPosition(
     }
   }, [isVisible, measureTrigger]);
 
-  const currentPosition = useMemo(
-    (): ViewStyle => {
-      if (!isPositionReady || triggerLayout.width === 0) {
-        return {
-          position: 'absolute',
-          top: 0,
-          left: 0,
-        };
-      }
+  const currentPosition = useMemo((): ViewStyle => {
+    if (!isPositionReady || triggerLayout.width === 0) {
+      return {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+      };
+    }
 
-      return computeMenuPosition(triggerLayout, menuWidth, align, gap);
-    },
-    [isPositionReady, triggerLayout, menuWidth, align, gap],
-  );
+    return computeMenuPosition(triggerLayout, menuWidth, align, gap);
+  }, [isPositionReady, triggerLayout, menuWidth, align, gap]);
 
   useEffect(() => {
     if (isPositionReady && triggerLayout.width > 0 && isVisible) {
@@ -186,12 +181,7 @@ export default function Dropdown(props: Props) {
   const menuWidth = estimatedMenuWidth ?? defaultMenuWidth;
 
   const { triggerRef, menuPosition, handleMenuLayout, measureTrigger, isPositionReady } =
-    hooks.useDropdownPosition(
-      visible,
-      align,
-      spacing.xs,
-      menuWidth,
-    );
+    hooks.useDropdownPosition(visible, align, spacing.xs, menuWidth);
 
   if (!items || items.length === 0) {
     const triggerElement = typeof trigger === 'function' ? trigger(false) : trigger;

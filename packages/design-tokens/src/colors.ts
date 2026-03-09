@@ -1,5 +1,3 @@
-import { Secondary } from '../../../apps/web/app/_components/IconButton/IconButton.stories';
-
 export const colors = {
   black: '#0C1015',
   white: '#ffffff',

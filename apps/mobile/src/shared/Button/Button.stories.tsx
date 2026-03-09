@@ -1,7 +1,9 @@
-import type { Meta, StoryObj } from '@storybook/react-native-web-vite';
 import { View } from 'react-native';
-import Button from '@/shared/Button/Button';
+
+import type { Meta, StoryObj } from '@storybook/react-native-web-vite';
 import { fn } from 'storybook/test';
+
+import Button from '@/shared/Button/Button';
 
 const meta = {
   component: Button,

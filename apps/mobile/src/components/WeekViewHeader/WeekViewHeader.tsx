@@ -1,4 +1,5 @@
 import { View } from 'react-native';
+
 import { WeekViewHeaderCell } from '../WeekViewHeaderCell/WeekViewHeaderCell';
 
 type Props = {

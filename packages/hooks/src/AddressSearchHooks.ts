@@ -1,8 +1,10 @@
 import { useCallback, useState } from 'react';
+
 import { useQuery, useQueryClient } from '@tanstack/react-query';
+
 import { apiClient } from '@avoo/axios/src/apiClient';
-import { useApiStatusStore } from '@avoo/store';
 import { NominatimPlace } from '@avoo/shared';
+import { useApiStatusStore } from '@avoo/store';
 
 const NOMINATIM_BASE = 'https://nominatim.openstreetmap.org';
 const SEARCH_PATH = '/search';

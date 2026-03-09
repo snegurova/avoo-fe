@@ -1,9 +1,12 @@
 import { Pressable } from 'react-native';
 import { Text } from 'react-native-paper';
+
 import { tv } from 'tailwind-variants';
-import { MaterialIcons } from '@/shared/icons';
-import { colors } from '@avoo/design-tokens';
+
 import { ObjectValues } from '@avoo/axios/types/apiEnums';
+import { colors } from '@avoo/design-tokens';
+
+import { MaterialIcons } from '@/shared/icons';
 
 export const ACTION_PILL_SIZE = { SM: 'sm', MD: 'md' } as const;
 export type ActionPillSizeType = ObjectValues<typeof ACTION_PILL_SIZE>;

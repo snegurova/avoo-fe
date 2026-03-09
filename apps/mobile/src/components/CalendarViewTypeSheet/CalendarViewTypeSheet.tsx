@@ -1,11 +1,13 @@
 import { Pressable } from 'react-native';
 import { Text } from 'react-native-paper';
-import { timeUtils } from '@avoo/shared';
-import { colors } from '@avoo/design-tokens';
+
 import { CalendarView } from '@avoo/axios/types/apiTypes';
-import { CustomBottomSheet } from '@/shared/CustomBottomSheet/CustomBottomSheet';
-import { CalendarMonthIcon, ViewDayIcon, ViewWeekIcon } from '@/icons';
+import { colors } from '@avoo/design-tokens';
 import { CalendarViewType } from '@avoo/hooks/types/calendarViewType';
+import { timeUtils } from '@avoo/shared';
+
+import { CalendarMonthIcon, ViewDayIcon, ViewWeekIcon } from '@/icons';
+import { CustomBottomSheet } from '@/shared/CustomBottomSheet/CustomBottomSheet';
 
 type Props = {
   visible: boolean;

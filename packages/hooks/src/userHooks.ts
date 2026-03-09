@@ -1,20 +1,22 @@
-import { utils } from './../utils/utils';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+
 import { userApi } from '@avoo/axios';
-import { MediaType } from '@avoo/hooks/types/mediaType';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import {
+  ApiStatus,
   BaseResponse,
   CertificateResponse,
+  UpdateProfile,
   UserMediaResponse,
   UserProfileResponse,
   UserUpdateAvatarResponse,
-  UpdateProfile,
-  ApiStatus,
 } from '@avoo/axios/types/apiTypes';
-import { FileInput } from '@avoo/shared';
-import { queryKeys } from './queryKeys';
-import { appendFileToForm, buildCertificateForm } from './utils/formDataHelpers';
 import { CreateCertificatePayload } from '@avoo/axios/types/certificate';
+import { MediaType } from '@avoo/hooks/types/mediaType';
+import { FileInput } from '@avoo/shared';
+
+import { utils } from './../utils/utils';
+import { appendFileToForm, buildCertificateForm } from './utils/formDataHelpers';
+import { queryKeys } from './queryKeys';
 
 export const userHooks = {
   useGetUserProfile: () => {
@@ -62,11 +64,10 @@ export const userHooks = {
 
     const { data: userMediaData, isPending } = useQuery<BaseResponse<UserMediaResponse>, Error>({
       queryKey: queryKeys.user.media(),
-      queryFn:
-        () => {
-          if (!userId) throw new Error('userId is required');
-          return userApi.getUserMedia(MediaType.USER, userId);
-        },
+      queryFn: () => {
+        if (!userId) throw new Error('userId is required');
+        return userApi.getUserMedia(MediaType.USER, userId);
+      },
       enabled: !!userId,
     });
 

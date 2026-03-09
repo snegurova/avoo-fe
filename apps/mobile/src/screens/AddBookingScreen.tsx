@@ -1,6 +1,7 @@
-import Layout from '@/shared/Layout/Layout';
-import { RootStackScreenProps, RootScreens } from '@/types/navigation';
 import { Text } from 'react-native';
+
+import Layout from '@/shared/Layout/Layout';
+import { RootScreens, RootStackScreenProps } from '@/types/navigation';
 
 type Props = RootStackScreenProps<RootScreens.AddBookingScreen>;
 

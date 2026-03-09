@@ -1,9 +1,12 @@
 import { View } from 'react-native';
-import { Appointment } from '@/hooks/calendarHooks';
-import { WEEK_DAYS } from '@avoo/constants';
+
 import type { ShortMasterInfo } from '@avoo/axios/types/apiTypes';
-import { WeekViewSoloMaster } from './WeekViewSoloMaster';
+import { WEEK_DAYS } from '@avoo/constants';
+
+import { Appointment } from '@/hooks/calendarHooks';
+
 import { WeekViewMultiMaster } from './WeekViewMultiMaster';
+import { WeekViewSoloMaster } from './WeekViewSoloMaster';
 
 type Props = {
   masters: ShortMasterInfo[];

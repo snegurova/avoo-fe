@@ -1,15 +1,21 @@
 import { useState } from 'react';
-import { View, ScrollView, Pressable, StyleSheet } from 'react-native';
+import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import { Text } from 'react-native-paper';
-import { MaterialIcons } from '@/shared/icons';
-import { colors } from '@avoo/design-tokens';
-import { OrderStatus } from '@avoo/hooks/types/orderStatus';
-import { timeUtils, isFullSelection } from '@avoo/shared';
+
 import { type ShortMasterInfo } from '@avoo/axios/types/apiTypes';
-import { CalendarViewTypeSheet } from '../CalendarViewTypeSheet/CalendarViewTypeSheet';
-import { CalendarMastersSheet } from '../CalendarMastersSheet/CalendarMastersSheet';
-import { CalendarStatusesSheet, CALENDAR_STATUSES } from '../CalendarStatusesSheet/CalendarStatusesSheet';
+import { colors } from '@avoo/design-tokens';
 import { CalendarViewType } from '@avoo/hooks/types/calendarViewType';
+import { OrderStatus } from '@avoo/hooks/types/orderStatus';
+import { isFullSelection, timeUtils } from '@avoo/shared';
+
+import { MaterialIcons } from '@/shared/icons';
+
+import { CalendarMastersSheet } from '../CalendarMastersSheet/CalendarMastersSheet';
+import {
+  CALENDAR_STATUSES,
+  CalendarStatusesSheet,
+} from '../CalendarStatusesSheet/CalendarStatusesSheet';
+import { CalendarViewTypeSheet } from '../CalendarViewTypeSheet/CalendarViewTypeSheet';
 
 type Props = {
   dateString: string;
@@ -46,10 +52,7 @@ export const CalendarHeader = (props: Props) => {
   const [isStatusesSheetVisible, setIsStatusesSheetVisible] = useState(false);
 
   const isAllTeamSelected = isFullSelection(selectedMasterIds.size, masters.length);
-  const isAllStatusesSelected = isFullSelection(
-    selectedStatuses.size,
-    CALENDAR_STATUSES.length,
-  );
+  const isAllStatusesSelected = isFullSelection(selectedStatuses.size, CALENDAR_STATUSES.length);
 
   const getSelectedMastersText = () => {
     if (isAllTeamSelected) return 'All masters';

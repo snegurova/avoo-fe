@@ -1,16 +1,19 @@
-import { utils } from '@avoo/hooks/utils/utils';
+import { useMemo } from 'react';
+
+import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+
 import { customerApi } from '@avoo/axios';
 import {
+  ApiStatus,
   BaseResponse,
-  CustomerInfoResponse,
   CreateCustomerRequest,
+  CustomerInfoResponse,
   GetCustomersQueryParams,
   GetCustomersResponse,
-  ApiStatus,
 } from '@avoo/axios/types/apiTypes';
+import { utils } from '@avoo/hooks/utils/utils';
+
 import { queryKeys } from './queryKeys';
-import { useMutation, useQuery, useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
-import { useMemo } from 'react';
 
 export const customerHooks = {
   useGetCustomers: (params?: GetCustomersQueryParams) => {

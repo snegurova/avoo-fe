@@ -1,10 +1,10 @@
 import { memo } from 'react';
+import { StyleProp, ViewStyle } from 'react-native';
 import {
   Button as PaperButton,
-  useTheme,
   type ButtonProps as PaperButtonProps,
+  useTheme,
 } from 'react-native-paper';
-import { StyleProp, ViewStyle } from 'react-native';
 
 export enum Variant {
   PRIMARY = 'primary',

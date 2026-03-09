@@ -1,21 +1,36 @@
 import { View } from 'react-native';
-import FormTextInput from '@/shared/FormTextInput';
-import FormCheckBox from '@/shared/FormCheckBox';
-import Button from '@/shared/Button/Button';
-import { utils, authHooks } from '@avoo/hooks';
+
+import { authHooks, utils } from '@avoo/hooks';
 import { useApiStatusStore } from '@avoo/store';
+
+import Button from '@/shared/Button/Button';
+import FormCheckBox from '@/shared/FormCheckBox';
+import FormTextInput from '@/shared/FormTextInput';
 import { MaterialIcons } from '@/shared/icons';
 
 export default function RegistrationForm() {
   const { value: isShowPassword, toggleValue: toggleShowPassword } = utils.useBooleanState(false);
-  const { value: isShowConfirmPassword, toggleValue: toggleConfirmPassword } = utils.useBooleanState(false);
+  const { value: isShowConfirmPassword, toggleValue: toggleConfirmPassword } =
+    utils.useBooleanState(false);
 
   const { control, handleSubmit, errors } = authHooks.useRegisterForm();
 
   const isPending = useApiStatusStore((state) => state.isPending);
 
-  const icon = <MaterialIcons name={isShowPassword ? 'visibility' : 'visibility-off'} size={24} color='black' />;
-  const iconConfirmPassword = <MaterialIcons name={isShowConfirmPassword ? 'visibility' : 'visibility-off'} size={24} color='black' />;
+  const icon = (
+    <MaterialIcons
+      name={isShowPassword ? 'visibility' : 'visibility-off'}
+      size={24}
+      color='black'
+    />
+  );
+  const iconConfirmPassword = (
+    <MaterialIcons
+      name={isShowConfirmPassword ? 'visibility' : 'visibility-off'}
+      size={24}
+      color='black'
+    />
+  );
 
   return (
     <View className='w-full gap-4'>

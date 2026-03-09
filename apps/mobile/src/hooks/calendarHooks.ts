@@ -1,11 +1,12 @@
 import { useMemo } from 'react';
-import { timeUtils } from '@avoo/shared';
+
 import type {
   CalendarItem,
   GetCalendarResponse,
   OrderStatusValue,
   ShortMasterInfo,
 } from '@avoo/axios/types/apiTypes';
+import { timeUtils } from '@avoo/shared';
 
 export type Appointment = {
   id: string;
@@ -19,9 +20,7 @@ export type Appointment = {
 };
 
 export const calendarMobileHooks = {
-  useCalendarMasters(
-    calendarData: GetCalendarResponse | null | undefined,
-  ): ShortMasterInfo[] {
+  useCalendarMasters(calendarData: GetCalendarResponse | null | undefined): ShortMasterInfo[] {
     return useMemo(() => {
       if (!calendarData?.length) return [];
       const byId = new Map<number, ShortMasterInfo>();
@@ -35,9 +34,7 @@ export const calendarMobileHooks = {
     }, [calendarData]);
   },
 
-  useCalendarAppointments(
-    calendarData: GetCalendarResponse | null | undefined,
-  ): Appointment[] {
+  useCalendarAppointments(calendarData: GetCalendarResponse | null | undefined): Appointment[] {
     return useMemo(() => {
       const list: CalendarItem[] = Array.isArray(calendarData) ? calendarData : [];
       const result: Appointment[] = [];

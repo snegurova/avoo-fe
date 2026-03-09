@@ -1,9 +1,9 @@
+import { apiClient } from '@avoo/axios/src/apiClient';
 import {
-  GetCategoriesResponse,
   BaseResponse,
+  GetCategoriesResponse,
   GetPrivateCategoriesResponse,
 } from '@avoo/axios/types/apiTypes';
-import { apiClient } from '@avoo/axios/src/apiClient';
 
 const CATEGORIES_ENDPOINT = '/public/categories';
 const PRIVATE_CATEGORIES_ENDPOINT = '/services/group-by-categories';

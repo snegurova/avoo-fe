@@ -1,13 +1,17 @@
 import { useMemo } from 'react';
 import { ScrollView, View } from 'react-native';
 import { Text } from 'react-native-paper';
-import { colors } from '@avoo/design-tokens';
+
 import { tv } from 'tailwind-variants';
+
+import { WEEK_DAYS } from '@avoo/constants';
+import { colors } from '@avoo/design-tokens';
+
 import type { Appointment } from '@/hooks/calendarHooks';
+import { calendarUtils } from '@/utils/calendarUtils';
+
 import CalendarOrder, { CALENDAR_ORDER_VARIANT } from '../CalendarOrder/CalendarOrder';
 import { CalendarOverflowLabel } from '../CalendarOverflowLabel/CalendarOverflowLabel';
-import { calendarUtils } from '@/utils/calendarUtils';
-import { WEEK_DAYS } from '@avoo/constants';
 import { calendarConfig } from '../CalendarSection/calendarConfig';
 
 type Props = {
@@ -61,10 +65,7 @@ export const CalendarMonthView = (props: Props) => {
   }, [appointments]);
 
   return (
-    <ScrollView 
-    showsVerticalScrollIndicator={false}
-    stickyHeaderIndices={[0]}
-    className='flex-1'>
+    <ScrollView showsVerticalScrollIndicator={false} stickyHeaderIndices={[0]} className='flex-1'>
       <View className='flex-row border-b border-gray-200 bg-white'>
         {WEEK_DAYS.map((day) => (
           <View key={day} className='flex-1 py-2 items-center'>

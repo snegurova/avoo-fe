@@ -1,36 +1,38 @@
-import { orderApi } from '@avoo/axios';
-import { utils } from '@avoo/hooks/utils/utils';
+import { useMemo, useState } from 'react';
+import { useForm } from 'react-hook-form';
 
+import { yupResolver } from '@hookform/resolvers/yup';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+
+import { orderApi } from '@avoo/axios';
 import {
+  ApiStatus,
+  BaseResponse,
+  Combination,
   CreatePrivateOrdersRequest,
   CreatePublicOrdersRequest,
-  UpdateOrderStatusRequest,
-  PrivateOrderQueryParams,
-  UpdateOrderRequest,
   Order,
-  BaseResponse,
+  PrivateOrderQueryParams,
   Service,
-  Combination,
-  ApiStatus,
+  UpdateOrderRequest,
+  UpdateOrderStatusRequest,
 } from '@avoo/axios/types/apiTypes';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { useMemo, useState } from 'react';
-import { queryKeys } from './queryKeys';
-import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import {
-  createPrivateOrdersSchema,
-  updateOrderStatusSchema,
-  updateOrderSchema,
-  CreatePrivateOrdersData,
-  CreatePublicOrdersData,
-  UpdateOrderStatusData,
-  UpdateOrderData,
-  createPublicOrdersSchema,
-} from '../schemas/validationSchemas';
 import { OrderType } from '@avoo/hooks/types/orderType';
-import { OrderStatus } from '../types/orderStatus';
+import { utils } from '@avoo/hooks/utils/utils';
 import { timeUtils } from '@avoo/shared';
+
+import {
+  CreatePrivateOrdersData,
+  createPrivateOrdersSchema,
+  CreatePublicOrdersData,
+  createPublicOrdersSchema,
+  UpdateOrderData,
+  updateOrderSchema,
+  UpdateOrderStatusData,
+  updateOrderStatusSchema,
+} from '../schemas/validationSchemas';
+import { OrderStatus } from '../types/orderStatus';
+import { queryKeys } from './queryKeys';
 
 function convertOrdersDataDatesToUTC<T extends { ordersData?: { date?: string }[] }>(data: T): T {
   if (Array.isArray(data.ordersData)) {

@@ -1,15 +1,19 @@
 import { useCallback } from 'react';
-import { View, StyleSheet, Pressable } from 'react-native';
+import { Pressable, StyleSheet, View } from 'react-native';
+import { Text } from 'react-native-paper';
+
 import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import { useNavigation } from '@react-navigation/native';
-import { BottomBarItem } from './BottomBarItem';
+
 import { colors } from '@avoo/design-tokens';
-import { MaterialIcons } from '@/shared/icons';
-import { RootScreens, RootNavigationProp } from '@/types/navigation';
-import { Text } from 'react-native-paper';
+import { utils } from '@avoo/hooks';
+
 import { CONSTANTS } from '@/constants/constants';
 import { CustomBottomSheet } from '@/shared/CustomBottomSheet/CustomBottomSheet';
-import { utils } from '@avoo/hooks';
+import { MaterialIcons } from '@/shared/icons';
+import { RootNavigationProp, RootScreens } from '@/types/navigation';
+
+import { BottomBarItem } from './BottomBarItem';
 
 export function BottomBar(props: BottomTabBarProps) {
   const { state, descriptors, navigation } = props;
@@ -53,11 +57,7 @@ export function BottomBar(props: BottomTabBarProps) {
               />
             ))}
           </View>
-          <Pressable
-            className='absolute top-[-56px] right-0'
-            hitSlop={20}
-            onPress={enable}
-          >
+          <Pressable className='absolute top-[-56px] right-0' hitSlop={20} onPress={enable}>
             <View className='w-11 h-11 rounded-full bg-primary-400 items-center justify-center'>
               <MaterialIcons name='add' size={24} color={colors.white} />
             </View>
@@ -75,4 +75,3 @@ export function BottomBar(props: BottomTabBarProps) {
     </>
   );
 }
-

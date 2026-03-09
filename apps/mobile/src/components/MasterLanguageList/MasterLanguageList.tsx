@@ -1,6 +1,7 @@
 import { Text } from 'react-native-paper';
-import { colors, typography } from '@avoo/design-tokens';
+
 import { LANGUAGE_NAMES, LanguageCode } from '@avoo/constants';
+import { colors, typography } from '@avoo/design-tokens';
 
 type Props = {
   languages: LanguageCode[];

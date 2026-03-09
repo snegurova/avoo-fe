@@ -1,14 +1,18 @@
 import { useMemo } from 'react';
 import { View } from 'react-native';
 import { Text } from 'react-native-paper';
+
 import { tv } from 'tailwind-variants';
-import { PillText } from '@/shared/PillText/PillText';
+
 import { colors } from '@avoo/design-tokens';
 import { calendarHooks } from '@avoo/hooks';
 import { timeUtils } from '@avoo/shared';
-import { calendarMobileHooks } from '@/hooks/calendarHooks';
-import { CalendarOrder, CALENDAR_ORDER_VARIANT } from '@/components/CalendarOrder/CalendarOrder';
+
 import CalendarMaster, { CALENDAR_MASTER_LAYOUT } from '@/components/CalendarMaster/CalendarMaster';
+import { CALENDAR_ORDER_VARIANT, CalendarOrder } from '@/components/CalendarOrder/CalendarOrder';
+import { calendarMobileHooks } from '@/hooks/calendarHooks';
+import { PillText } from '@/shared/PillText/PillText';
+
 import { CalendarOverflowLabel } from '../CalendarOverflowLabel/CalendarOverflowLabel';
 
 const MAX_ITEMS = 6;

@@ -1,5 +1,6 @@
-import { useCallback, memo } from 'react';
+import { memo, useCallback } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
+
 import { MaterialIcons } from '@/shared/icons';
 
 type Props = {
@@ -7,7 +8,7 @@ type Props = {
   isChecked: boolean;
   errors: boolean;
   onValueChange: (value: boolean) => void;
-}
+};
 
 function CheckBox(props: Props) {
   const { label, isChecked, errors, onValueChange } = props;
@@ -37,7 +38,6 @@ function CheckBox(props: Props) {
 
 export default memo(CheckBox);
 
-
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
@@ -58,4 +58,3 @@ const styles = StyleSheet.create({
     flex: 1,
   },
 });
-

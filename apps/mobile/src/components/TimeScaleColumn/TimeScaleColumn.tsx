@@ -1,6 +1,8 @@
 import { View } from 'react-native';
 import { Text } from 'react-native-paper';
+
 import { colors } from '@avoo/design-tokens';
+
 import { calendarConfig } from '../CalendarSection/calendarConfig';
 
 export const TimeScaleColumn = () => {

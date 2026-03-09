@@ -1,8 +1,9 @@
-import { CONSTANTS } from '@/constants/constants';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 // import { useKeyboardVisible } from './useKeyboardVisible';
 import { useEffect, useState } from 'react';
 import { Keyboard } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+
+import { CONSTANTS } from '@/constants/constants';
 
 export const layoutHooks = {
   useBottomBarHeight() {
@@ -15,7 +16,7 @@ export const layoutHooks = {
   },
   useKeyboardVisible() {
     const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
-  
+
     useEffect(() => {
       const showSubscription = Keyboard.addListener('keyboardDidShow', () => {
         setIsKeyboardVisible(true);
@@ -23,13 +24,13 @@ export const layoutHooks = {
       const hideSubscription = Keyboard.addListener('keyboardDidHide', () => {
         setIsKeyboardVisible(false);
       });
-  
+
       return () => {
         showSubscription.remove();
         hideSubscription.remove();
       };
     }, []);
-  
+
     return isKeyboardVisible;
   },
 };

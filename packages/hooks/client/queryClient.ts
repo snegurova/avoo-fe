@@ -1,7 +1,8 @@
-import { typeGuardHooks } from '@avoo/shared';
-import { useApiStatusStore } from '@avoo/store';
 import { MutationCache, QueryClient } from '@tanstack/react-query';
 import axios from 'axios';
+
+import { typeGuardHooks } from '@avoo/shared';
+import { useApiStatusStore } from '@avoo/store';
 
 const mutationCache = new MutationCache({
   onError: (error) => {
@@ -28,6 +29,6 @@ export const queryClient = new QueryClient({
     },
     mutations: {
       retry: 0,
-    },  
+    },
   },
 });

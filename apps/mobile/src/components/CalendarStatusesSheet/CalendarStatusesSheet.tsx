@@ -1,11 +1,14 @@
-import { View, Pressable } from 'react-native';
+import { Pressable, View } from 'react-native';
 import { Text } from 'react-native-paper';
-import { MaterialIcons } from '@/shared/icons';
-import { colors } from '@avoo/design-tokens';
+
 import { tv } from 'tailwind-variants';
+
+import { colors } from '@avoo/design-tokens';
 import { OrderStatus } from '@avoo/hooks/types/orderStatus';
 import { isFullSelection } from '@avoo/shared';
+
 import { CustomBottomSheet } from '@/shared/CustomBottomSheet/CustomBottomSheet';
+import { MaterialIcons } from '@/shared/icons';
 
 export const CALENDAR_STATUSES = [
   { id: OrderStatus.PENDING, label: 'Pending' },
@@ -24,10 +27,7 @@ type Props = {
 
 export const CalendarStatusesSheet = (props: Props) => {
   const { visible, onClose, selectedStatuses, setSelectedStatuses } = props;
-  const isAllStatusesSelected = isFullSelection(
-    selectedStatuses.size,
-    CALENDAR_STATUSES.length,
-  );
+  const isAllStatusesSelected = isFullSelection(selectedStatuses.size, CALENDAR_STATUSES.length);
 
   const handleAllStatusesToggle = () => {
     if (isAllStatusesSelected) {
@@ -59,7 +59,6 @@ export const CalendarStatusesSheet = (props: Props) => {
     },
   });
 
-
   return (
     <CustomBottomSheet visible={visible} onClose={onClose} snapToContent>
       <View className='border border-dashed border-primary-500 rounded-xl m-4'>
@@ -87,9 +86,7 @@ export const CalendarStatusesSheet = (props: Props) => {
             >
               <View className='flex-row items-center'>
                 <View className={checkbox({ selected: isSelected })}>
-                  {isSelected && (
-                    <MaterialIcons name='check' size={16} color={colors.white} />
-                  )}
+                  {isSelected && <MaterialIcons name='check' size={16} color={colors.white} />}
                 </View>
                 <Text variant='bodyMedium'>{status.label}</Text>
               </View>

@@ -1,32 +1,29 @@
-import type { StateStorage, StorageValue, PersistStorage } from "zustand/middleware";
+import type { PersistStorage, StateStorage, StorageValue } from 'zustand/middleware';
 
 export const getPlatformStorage = (): StateStorage => {
-  
-  if (typeof navigator !== "undefined" && navigator.product === "ReactNative") {
-    const AsyncStorage = require("@react-native-async-storage/async-storage").default;
-
+  if (typeof navigator !== 'undefined' && navigator.product === 'ReactNative') {
     return {
       getItem: async (name) => {
+        const { default: AsyncStorage } = await import('@react-native-async-storage/async-storage');
         const value = await AsyncStorage.getItem(name);
         return value ?? null;
       },
       setItem: async (name, value) => {
+        const { default: AsyncStorage } = await import('@react-native-async-storage/async-storage');
         await AsyncStorage.setItem(name, value);
       },
       removeItem: async (name) => {
+        const { default: AsyncStorage } = await import('@react-native-async-storage/async-storage');
         await AsyncStorage.removeItem(name);
       },
     };
   }
 
-  if (typeof window !== "undefined" && window.localStorage) {
+  if (typeof window !== 'undefined' && window.localStorage) {
     return {
-      getItem: (name) =>
-        Promise.resolve(window.localStorage.getItem(name)),
-      setItem: (name, value) =>
-        Promise.resolve(window.localStorage.setItem(name, value)),
-      removeItem: (name) =>
-        Promise.resolve(window.localStorage.removeItem(name)),
+      getItem: (name) => Promise.resolve(window.localStorage.getItem(name)),
+      setItem: (name, value) => Promise.resolve(window.localStorage.setItem(name, value)),
+      removeItem: (name) => Promise.resolve(window.localStorage.removeItem(name)),
     };
   }
 
@@ -60,4 +57,3 @@ export function createZustandStorage<T>(storage: StateStorage): PersistStorage<T
     },
   };
 }
-

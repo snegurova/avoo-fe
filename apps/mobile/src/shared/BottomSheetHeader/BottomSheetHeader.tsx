@@ -1,5 +1,7 @@
-import { colors, radius } from '@avoo/design-tokens';
 import { Pressable, StyleSheet, View } from 'react-native';
+
+import { colors, radius } from '@avoo/design-tokens';
+
 import { MaterialIcons } from '../icons';
 
 type Props = {

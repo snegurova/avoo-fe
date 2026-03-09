@@ -21,12 +21,12 @@ export default function ForgotPasswordForm() {
   const toast = useToast();
   const errorMessage = useApiStatusStore((s) => s.errorMessage);
   const isError = useApiStatusStore((s) => s.isError);
+  const verifyCodePath = localizationHooks.useWithLocale(AppRoutes.VerifyCode);
 
   const { sendCodeHandler } = authHooks.useSendCode({
     onSuccess: (email: string) => {
-      router.push(
-        `${localizationHooks.useWithLocale(AppRoutes.VerifyCode)}?email=${encodeURIComponent(email)}`,
-      );
+      toast.success('Verification code sent to your email');
+      router.push(`${verifyCodePath}?email=${encodeURIComponent(email)}`);
     },
   });
 

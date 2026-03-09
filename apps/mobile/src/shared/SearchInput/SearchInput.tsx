@@ -1,6 +1,8 @@
-import { View, TextInput, StyleSheet, ViewStyle, TextInputProps } from 'react-native';
-import { MaterialIcons } from '@/shared/icons';
+import { StyleSheet, TextInput, TextInputProps, View, ViewStyle } from 'react-native';
+
 import { colors, radius, typography } from '@avoo/design-tokens';
+
+import { MaterialIcons } from '@/shared/icons';
 
 type Props = TextInputProps & {
   containerStyle?: ViewStyle;
@@ -44,4 +46,3 @@ const styles = StyleSheet.create({
     color: colors.black,
   },
 });
-

@@ -1,9 +1,11 @@
 import { Pressable } from 'react-native';
+import { Text } from 'react-native-paper';
+
 import { BottomTabBarProps, BottomTabNavigationEventMap } from '@react-navigation/bottom-tabs';
 import type { NavigationHelpers, ParamListBase, Route } from '@react-navigation/native';
+
 import { colors } from '@avoo/design-tokens';
 import { typeGuardHooks } from '@avoo/shared';
-import { Text } from 'react-native-paper';
 
 type Props = {
   route: Route<string, object | undefined>;

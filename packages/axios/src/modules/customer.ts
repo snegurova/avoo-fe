@@ -1,9 +1,9 @@
+import { apiClient } from '@avoo/axios/src/apiClient';
 import {
   BaseResponse,
-  GetCustomersResponse,
   GetCustomersQueryParams,
+  GetCustomersResponse,
 } from '@avoo/axios/types/apiTypes';
-import { apiClient } from '@avoo/axios/src/apiClient';
 import type { components } from '@avoo/axios/types/generated';
 
 type CustomerInfoDto = components['schemas']['CustomerInfoDto'];

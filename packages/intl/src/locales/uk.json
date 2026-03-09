@@ -88,5 +88,11 @@
   "private.orders.order.completed": "Завершено",
   "private.orders.order.cancelled": "Скасовано",
   "private.orders.order.confirmed": "Підтверджено",
-  "private.orders.order.expired": "Прострочено"
+  "private.orders.order.expired": "Прострочено",
+  "public.resetPassword.page.title": "Створіть новий пароль",
+  "public.resetPassword.page.description": "Виберіть надійний пароль, щоб захистити свій акаунт.",
+  "public.resetPassword.page.newPasswordLabel": "Новий пароль *",
+  "public.resetPassword.page.confirmPasswordLabel": "Підтвердіть пароль *",
+  "public.resetPassword.page.saveButton": "Зберегти новий пароль",
+  "public.resetPassword.page.notation": "Використовуйте щонайменше 8 символів, включаючи цифру та символ."
 }

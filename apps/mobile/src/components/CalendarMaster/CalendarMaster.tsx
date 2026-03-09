@@ -1,9 +1,11 @@
 import { View } from 'react-native';
-import { Avatar } from '@/shared/Avatar/Avatar';
 import { Text } from 'react-native-paper';
-import { colors } from '@avoo/design-tokens';
-import type { ShortMasterInfo } from '@avoo/axios/types/apiTypes';
+
 import { ObjectValues } from '@avoo/axios/types/apiEnums';
+import type { ShortMasterInfo } from '@avoo/axios/types/apiTypes';
+import { colors } from '@avoo/design-tokens';
+
+import { Avatar } from '@/shared/Avatar/Avatar';
 
 export const CALENDAR_MASTER_LAYOUT = {
   VERTICAL: 'vertical',
@@ -29,7 +31,14 @@ type Props = {
 };
 
 export default function CalendarMaster(props: Props) {
-  const { master: rawMaster, headerHeight = 20, borderBottom = true, layout = CALENDAR_MASTER_LAYOUT.VERTICAL, serviceName, colorIndex } = props;
+  const {
+    master: rawMaster,
+    headerHeight = 20,
+    borderBottom = true,
+    layout = CALENDAR_MASTER_LAYOUT.VERTICAL,
+    serviceName,
+    colorIndex,
+  } = props;
   const isInline = layout === CALENDAR_MASTER_LAYOUT.INLINE;
   const avatarBg =
     colorIndex !== undefined ? AVATAR_BG_BY_INDEX[colorIndex % 4] : colors.primary[400];

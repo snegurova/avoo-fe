@@ -1,17 +1,20 @@
-import { View, Pressable, ScrollView } from 'react-native';
 import { useEffect } from 'react';
+import { Pressable, ScrollView, View } from 'react-native';
 import { Text } from 'react-native-paper';
-import FormTextInput from '@/shared/FormTextInput';
-import { FormPhoneField } from '@/shared/FormPhoneField/FormPhoneField';
-import LanguageSelector from '@/shared/LanguageSelector/LanguageSelector';
-import { masterHooks, filesHooks, utils } from '@avoo/hooks';
-import { colors } from '@avoo/design-tokens';
+
+import { FILE_UPLOAD_TYPE_ENUM } from '@avoo/axios/types/apiEnums';
 import { MasterWithRelationsEntityResponse } from '@avoo/axios/types/apiTypes';
+import { colors } from '@avoo/design-tokens';
+import { filesHooks, masterHooks, utils } from '@avoo/hooks';
+import { UploadFile } from '@avoo/shared';
+
 import { BottomSheetHeader } from '@/shared/BottomSheetHeader/BottomSheetHeader';
 import { ConfirmModal } from '@/shared/ConfirmModal/ConfirmModal';
+import { FormPhoneField } from '@/shared/FormPhoneField/FormPhoneField';
+import FormTextInput from '@/shared/FormTextInput';
+import LanguageSelector from '@/shared/LanguageSelector/LanguageSelector';
+
 import AvatarUpload from '../Avatar/AvatarUpload';
-import { FILE_UPLOAD_TYPE_ENUM } from '@avoo/axios/types/apiEnums';
-import { UploadFile } from '@avoo/shared';
 
 type Props = {
   master: MasterWithRelationsEntityResponse;
@@ -19,12 +22,18 @@ type Props = {
 };
 
 const EditMasterForm = ({ master, onClose }: Props) => {
-  const { value: isDeleteConfirmVisible, enable: openDeleteConfirm, disable: closeDeleteConfirm } = utils.useBooleanState(false);
+  const {
+    value: isDeleteConfirmVisible,
+    enable: openDeleteConfirm,
+    disable: closeDeleteConfirm,
+  } = utils.useBooleanState(false);
 
-  const { control, handleSubmit, errors, reset, setValue, watch } = masterHooks.useUpdateMasterForm({
-    master,
-    onSuccess: onClose,
-  });
+  const { control, handleSubmit, errors, reset, setValue, watch } = masterHooks.useUpdateMasterForm(
+    {
+      master,
+      onSuccess: onClose,
+    },
+  );
 
   const { uploadFile, isPending: isUploadingAvatar } = filesHooks.useUploadFile({
     onSuccess: (data) => {
@@ -132,11 +141,7 @@ const EditMasterForm = ({ master, onClose }: Props) => {
         />
 
         <View style={{ marginBottom: 16 }}>
-          <LanguageSelector
-            name='languages'
-            control={control}
-            error={errors.languages?.message}
-          />
+          <LanguageSelector name='languages' control={control} error={errors.languages?.message} />
         </View>
 
         <Pressable

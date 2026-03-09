@@ -1,13 +1,16 @@
 import { View } from 'react-native';
+
+import type { ShortMasterInfo } from '@avoo/axios/types/apiTypes';
+
 import { Appointment } from '@/hooks/calendarHooks';
+import { calendarUtils } from '@/utils/calendarUtils';
+
 import CalendarOrder, { CALENDAR_ORDER_VARIANT } from '../CalendarOrder/CalendarOrder';
 import { CalendarOverflowLabel } from '../CalendarOverflowLabel/CalendarOverflowLabel';
-import { TimelineGridLayout } from '../TimelineGridLayout/TimelineGridLayout';
-import { WeekViewLeftColumn } from './WeekViewLeftColumn';
-import { calendarUtils } from '@/utils/calendarUtils';
 import { calendarConfig } from '../CalendarSection/calendarConfig';
-import type { ShortMasterInfo } from '@avoo/axios/types/apiTypes';
+import { TimelineGridLayout } from '../TimelineGridLayout/TimelineGridLayout';
 import { WeekViewHeader } from '../WeekViewHeader/WeekViewHeader';
+import { WeekViewLeftColumn } from './WeekViewLeftColumn';
 
 type Props = {
   masters: ShortMasterInfo[];
@@ -23,11 +26,7 @@ export const WeekViewMultiMaster = ({ masters, appointments, weekDays }: Props) 
     <TimelineGridLayout
       headerHeight={headerHeight}
       stickyHeader={
-        <WeekViewHeader
-          weekDays={weekDays}
-          dayWidth={dayWidth}
-          headerHeight={headerHeight}
-        />
+        <WeekViewHeader weekDays={weekDays} dayWidth={dayWidth} headerHeight={headerHeight} />
       }
       hideTimeScale
       leftColumn={<WeekViewLeftColumn masters={masters} masterRowHeight={masterRowHeight} />}
@@ -38,9 +37,7 @@ export const WeekViewMultiMaster = ({ masters, appointments, weekDays }: Props) 
           <View
             key={master.id}
             className={
-              masterIndex === masters.length - 1
-                ? 'flex-row'
-                : 'flex-row border-b border-gray-200'
+              masterIndex === masters.length - 1 ? 'flex-row' : 'flex-row border-b border-gray-200'
             }
             style={{ height: masterRowHeight }}
           >

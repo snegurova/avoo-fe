@@ -1,5 +1,6 @@
 import type { Config } from 'tailwindcss';
-import { colors, spacing, radius, typography } from '@avoo/design-tokens';
+
+import { colors, radius, spacing, typography } from '@avoo/design-tokens';
 
 const nativewindPreset = require('nativewind/preset');
 
@@ -23,4 +24,3 @@ const config: Config = {
 };
 
 export default config;
-

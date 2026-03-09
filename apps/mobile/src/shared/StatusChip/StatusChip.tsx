@@ -1,17 +1,17 @@
 import { View } from 'react-native';
 import { Text } from 'react-native-paper';
-import { colors } from '@avoo/design-tokens';
+
 import { OrderStatusEnum, OrderStatusType } from '@avoo/axios/types/apiEnums';
+import { colors } from '@avoo/design-tokens';
 
 type StatusChipProps = {
   status?: OrderStatusType;
   color?: string;
 };
 
-
 const getStatusText = (status?: OrderStatusType) => {
   if (!status) return 'Unknown';
-  
+
   if (status === OrderStatusEnum.CANCELED) return 'Canceled';
   if (status === OrderStatusEnum.PENDING) return 'Pending';
   if (status === OrderStatusEnum.CONFIRMED) return 'Confirmed';
@@ -29,4 +29,3 @@ export const StatusChip = ({ status, color }: StatusChipProps) => {
     </View>
   );
 };
-

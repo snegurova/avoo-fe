@@ -1,5 +1,8 @@
 import { useForm } from 'react-hook-form';
 
+import { yupResolver } from '@hookform/resolvers/yup';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+
 import { authApi } from '@avoo/axios';
 import {
   ForgotPasswordRequest as ForgotPasswordRequestType,
@@ -9,6 +12,8 @@ import {
   ApiStatus,
   AuthResponse,
   BaseResponse,
+  ChangePasswordRequest,
+  ChangePasswordResponse,
   LoginRequest,
   ResetPasswordRequest,
   VerifyCodeRequest,
@@ -16,10 +21,9 @@ import {
 } from '@avoo/axios/types/apiTypes';
 import { useAuthStore } from '@avoo/store';
 
-import { yupResolver } from '@hookform/resolvers/yup';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-
 import {
+  ChangePasswordFormData,
+  changePasswordSchema,
   ForgotPasswordFormData,
   forgotPasswordSchema,
   LoginFormData,
@@ -48,10 +52,15 @@ type UseForgotPasswordFormParams = {
 type UseVerifyCodeFormParams = {
   email?: string;
   onSuccess?: () => void;
+  onError?: () => void;
 };
 
 type UseResetPasswordFormParams = {
   token?: string;
+  onSuccess?: () => void;
+};
+
+type UseChangePasswordFormParams = {
   onSuccess?: () => void;
 };
 
@@ -174,12 +183,13 @@ export const authHooks = {
       errors,
     };
   },
-  useVerifyCodeForm: ({ email, onSuccess }: UseVerifyCodeFormParams = {}) => {
+  useVerifyCodeForm: ({ email, onSuccess, onError }: UseVerifyCodeFormParams = {}) => {
     const {
       register,
       control,
       handleSubmit,
       formState: { errors },
+      setValue,
     } = useForm<VerifyCodeFormData>({
       resolver: yupResolver(verifyCodeSchema),
       mode: 'onSubmit',
@@ -188,6 +198,7 @@ export const authHooks = {
       },
     });
 
+    const setIsAuthenticated = useAuthStore((state) => state.setIsAuthenticated);
     const setAccessToken = useAuthStore((state) => state.setAccessToken);
 
     const { mutate: verifyCode, isPending } = useMutation<
@@ -198,9 +209,13 @@ export const authHooks = {
       mutationFn: authApi.verifyCode,
       onSuccess: (response) => {
         if (response.status === ApiStatus.SUCCESS) {
+          setIsAuthenticated(true);
           setAccessToken(response.data?.token);
           onSuccess?.();
         }
+      },
+      onError: () => {
+        onError?.();
       },
     });
 
@@ -221,6 +236,7 @@ export const authHooks = {
       control,
       handleSubmit: onSubmit,
       errors,
+      setValue,
     };
   },
   useResetPasswordForm: ({ onSuccess }: UseResetPasswordFormParams = {}) => {
@@ -300,6 +316,46 @@ export const authHooks = {
 
     return {
       logoutMutation,
+    };
+  },
+  useChangePasswordForm: ({ onSuccess }: UseChangePasswordFormParams = {}) => {
+    const {
+      register,
+      control,
+      handleSubmit,
+      formState: { errors },
+    } = useForm<ChangePasswordFormData>({
+      resolver: yupResolver(changePasswordSchema),
+      mode: 'onSubmit',
+      defaultValues: {
+        oldPassword: '',
+        password: '',
+        confirmPassword: '',
+      },
+    });
+
+    const { mutate: changePassword, isPending } = useMutation<
+      BaseResponse<ChangePasswordResponse>,
+      Error,
+      ChangePasswordRequest
+    >({
+      mutationFn: authApi.changePassword,
+      onSuccess: (response) => {
+        if (response.status === ApiStatus.SUCCESS) {
+          onSuccess?.();
+        }
+      },
+    });
+
+    utils.useSetPendingApi(isPending);
+
+    return {
+      register,
+      control,
+      handleSubmit: handleSubmit(
+        utils.submitAdapter<ChangePasswordRequest, ChangePasswordFormData>(changePassword),
+      ),
+      errors,
     };
   },
 };

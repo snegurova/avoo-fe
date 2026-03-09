@@ -1,15 +1,15 @@
+import { apiClient } from '@avoo/axios/src/apiClient';
 import {
   BaseResponse,
-  GetCalendarResponse,
-  GetPublicCalendarResponse,
   GetCalendarByDatesResponse,
+  GetCalendarResponse,
   GetPublicCalendarByDatesResponse,
-  PrivateCalendarQueryParams,
+  GetPublicCalendarResponse,
   PrivateCalendarByDatesQueryParams,
-  PublicCalendarQueryParams,
+  PrivateCalendarQueryParams,
   PublicCalendarByDatesQueryParams,
+  PublicCalendarQueryParams,
 } from '@avoo/axios/types/apiTypes';
-import { apiClient } from '@avoo/axios/src/apiClient';
 
 const GET_CALENDAR_ENDPOINT = '/calendar';
 const GET_PUBLIC_CALENDAR_ENDPOINT = '/public/calendar';

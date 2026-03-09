@@ -1,9 +1,10 @@
-import { View, Text, Pressable } from 'react-native';
+import { Pressable, Text, View } from 'react-native';
+
 import { useNavigation } from '@react-navigation/native';
+
+import { PostImage } from '@/components/PostImage/PostImage';
 import { SectionHeader } from '@/shared/SectionHeader/SectionHeader';
 import { RootNavigationProp, RootScreens } from '@/types/navigation';
-import { PostImage } from '@/components/PostImage/PostImage';
-
 
 export const ProfilePosts = () => {
   const navigation = useNavigation<RootNavigationProp>();

@@ -1,5 +1,7 @@
 import { View } from 'react-native';
+
 import { masterHooks } from '@avoo/hooks';
+
 import { MasterCard } from '@/components/MasterCard/MasterCard';
 import { SectionHeader } from '@/shared/SectionHeader/SectionHeader';
 
