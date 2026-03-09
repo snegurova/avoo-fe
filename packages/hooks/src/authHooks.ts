@@ -48,6 +48,7 @@ type UseForgotPasswordFormParams = {
 type UseVerifyCodeFormParams = {
   email?: string;
   onSuccess?: () => void;
+  onError?: () => void;
 };
 
 type UseResetPasswordFormParams = {
@@ -174,12 +175,13 @@ export const authHooks = {
       errors,
     };
   },
-  useVerifyCodeForm: ({ email, onSuccess }: UseVerifyCodeFormParams = {}) => {
+  useVerifyCodeForm: ({ email, onSuccess, onError }: UseVerifyCodeFormParams = {}) => {
     const {
       register,
       control,
       handleSubmit,
       formState: { errors },
+      setValue,
     } = useForm<VerifyCodeFormData>({
       resolver: yupResolver(verifyCodeSchema),
       mode: 'onSubmit',
@@ -188,6 +190,7 @@ export const authHooks = {
       },
     });
 
+    const setIsAuthenticated = useAuthStore((state) => state.setIsAuthenticated);
     const setAccessToken = useAuthStore((state) => state.setAccessToken);
 
     const { mutate: verifyCode, isPending } = useMutation<
@@ -198,9 +201,13 @@ export const authHooks = {
       mutationFn: authApi.verifyCode,
       onSuccess: (response) => {
         if (response.status === ApiStatus.SUCCESS) {
+          setIsAuthenticated(true);
           setAccessToken(response.data?.token);
           onSuccess?.();
         }
+      },
+      onError: () => {
+        onError?.();
       },
     });
 
@@ -221,6 +228,7 @@ export const authHooks = {
       control,
       handleSubmit: onSubmit,
       errors,
+      setValue,
     };
   },
   useResetPasswordForm: ({ onSuccess }: UseResetPasswordFormParams = {}) => {

@@ -88,5 +88,11 @@
   "private.orders.order.completed": "Zakończone",
   "private.orders.order.cancelled": "Anulowane",
   "private.orders.order.confirmed": "Potwierdzone",
-  "private.orders.order.expired": "Wygasłe"
+  "private.orders.order.expired": "Wygasłe",
+  "public.resetPassword.page.title": "Utwórz nowe hasło",
+  "public.resetPassword.page.description": "Wybierz silne hasło, aby chronić swoje konto.",
+  "public.resetPassword.page.newPasswordLabel": "Nowe hasło *",
+  "public.resetPassword.page.confirmPasswordLabel": "Potwierdź hasło *",
+  "public.resetPassword.page.saveButton": "Zapisz nowe hasło",
+  "public.resetPassword.page.notation": "Użyj co najmniej 8 znaków, w tym cyfry i symbolu."
 }

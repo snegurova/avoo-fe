@@ -12,7 +12,7 @@ import { AppRoutes } from '@/_routes/routes';
 type Props = {
   children: React.ReactNode;
   title: string | React.ReactNode;
-  description: string | React.ReactNode;
+  description?: string | React.ReactNode;
 };
 
 export default function AuthorizationWrapper(props: Props) {
@@ -31,11 +31,13 @@ export default function AuthorizationWrapper(props: Props) {
             </LocalizedLink>
           </div>
           <div className='flex flex-col justify-center xl:px-5 2xl:px-15 w-full'>
-            <div className='w-full mb-8 2xl:mb-14'>
-              <h1 className='text-center text-xl xl:text-3xl font-medium tracking-tight mb-6'>
+            <div className={`w-full ${description ? 'mb-8 2xl:mb-14' : 'mb-6'}`}>
+              <h1 className='text-center text-xl xl:text-3xl font-medium tracking-tight '>
                 {title}
               </h1>
-              <p className='text-center text-sm xl:text-base'>{description}</p>
+              {description && (
+                <p className='text-center text-sm xl:text-base mt-6'>{description}</p>
+              )}
             </div>
             {children}
           </div>

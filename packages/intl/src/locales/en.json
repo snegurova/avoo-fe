@@ -88,5 +88,11 @@
   "private.orders.order.completed": "Completed",
   "private.orders.order.cancelled": "Cancelled",
   "private.orders.order.confirmed": "Confirmed",
-  "private.orders.order.expired": "Expired"
+  "private.orders.order.expired": "Expired",
+  "public.resetPassword.page.title": "Create a new password",
+  "public.resetPassword.page.description": "Choose a strong password to keep your account secure.",
+  "public.resetPassword.page.newPasswordLabel": "New password *",
+  "public.resetPassword.page.confirmPasswordLabel": "Confirm password *",
+  "public.resetPassword.page.saveButton": "Save new password",
+  "public.resetPassword.page.notation": "Use at least 8 characters, including a number and a symbol."
 }
