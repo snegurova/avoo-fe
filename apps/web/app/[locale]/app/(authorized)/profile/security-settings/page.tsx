@@ -7,7 +7,7 @@ import { Typography } from '@mui/material';
 import { messages } from '@avoo/intl/messages/private/profile/profile';
 
 import AppWrapper from '@/_components/AppWrapper/AppWrapper';
-import ResetPasswordForm from '@/_components/ResetPasswordForm/ResetPasswordForm';
+import ChangePasswordForm from '@/_components/ChangePasswordForm/ChangePasswordForm';
 
 export default function SecuritySettingsPage() {
   return (
@@ -17,7 +17,7 @@ export default function SecuritySettingsPage() {
           <FormattedMessage {...messages.securitySettings} />
         </Typography>
       </div>
-      <ResetPasswordForm />
+      <ChangePasswordForm />
     </AppWrapper>
   );
 }
