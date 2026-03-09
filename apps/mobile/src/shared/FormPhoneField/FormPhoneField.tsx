@@ -1,8 +1,10 @@
-import { View, Text, Pressable, TextInput } from 'react-native';
 import { Control, FieldValues, Path, useController } from 'react-hook-form';
-import { phoneHooks, utils } from '@avoo/hooks';
-import { MaterialIcons } from '@/shared/icons';
+import { Pressable, Text, TextInput, View } from 'react-native';
+
 import { colors } from '@avoo/design-tokens';
+import { phoneHooks, utils } from '@avoo/hooks';
+
+import { MaterialIcons } from '@/shared/icons';
 import { PhoneBottomSheet } from '@/shared/PhoneBottomSheet/PhoneBottomSheet';
 
 type Props<T extends FieldValues> = {

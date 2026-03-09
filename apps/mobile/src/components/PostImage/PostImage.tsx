@@ -1,4 +1,4 @@
-import { View, useWindowDimensions } from 'react-native';
+import { useWindowDimensions, View } from 'react-native';
 
 type Props = {
   padding?: number;
@@ -13,12 +13,8 @@ export const PostImage = (props: Props) => {
   const itemWidth = (containerWidth - gap * (columns - 1)) / columns;
 
   return (
-    <View
-      className='bg-gray-200 rounded-lg'
-      style={{ width: itemWidth, height: itemWidth }}
-    />
+    <View className='bg-gray-200 rounded-lg' style={{ width: itemWidth, height: itemWidth }} />
   );
 };
 
 export default PostImage;
-

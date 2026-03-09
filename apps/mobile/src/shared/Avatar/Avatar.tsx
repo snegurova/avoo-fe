@@ -1,6 +1,7 @@
-import { Avatar as PaperAvatar } from 'react-native-paper';
-import { colors, typography } from '@avoo/design-tokens';
 import { TextStyle } from 'react-native';
+import { Avatar as PaperAvatar } from 'react-native-paper';
+
+import { colors, typography } from '@avoo/design-tokens';
 
 type Props = {
   uri?: string | null;

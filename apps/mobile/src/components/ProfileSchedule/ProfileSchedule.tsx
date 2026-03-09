@@ -1,9 +1,11 @@
-import { View, Text } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import { SectionHeader } from '@/shared/SectionHeader/SectionHeader';
-import { scheduleHooks } from '@avoo/hooks';
-import { RootNavigationProp, RootScreens } from '@/types/navigation';
+import { Text, View } from 'react-native';
 
+import { useNavigation } from '@react-navigation/native';
+
+import { scheduleHooks } from '@avoo/hooks';
+
+import { SectionHeader } from '@/shared/SectionHeader/SectionHeader';
+import { RootNavigationProp, RootScreens } from '@/types/navigation';
 
 export const ProfileSchedule = () => {
   const schedules = scheduleHooks.useGetSchedules();

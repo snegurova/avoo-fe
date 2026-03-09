@@ -1,12 +1,12 @@
+import { apiClient } from '@avoo/axios/src/apiClient';
 import {
   BaseResponse,
-  GetExceptionsResponse,
   CreateExceptionRequest,
   CreateExceptionResponse,
-  GetExceptionsQueryParams,
   Exception,
+  GetExceptionsQueryParams,
+  GetExceptionsResponse,
 } from '@avoo/axios/types/apiTypes';
-import { apiClient } from '@avoo/axios/src/apiClient';
 
 const EXCEPTIONS_ENDPOINT = '/calendar-exceptions';
 

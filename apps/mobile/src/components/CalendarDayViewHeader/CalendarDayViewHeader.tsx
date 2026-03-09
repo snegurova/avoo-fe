@@ -1,9 +1,9 @@
 import { View } from 'react-native';
 
+import type { ShortMasterInfo } from '@avoo/axios/types/apiTypes';
+
 import CalendarMaster from '../CalendarMaster/CalendarMaster';
 import { calendarConfig } from '../CalendarSection/calendarConfig';
-
-import type { ShortMasterInfo } from '@avoo/axios/types/apiTypes';
 
 type Props = {
   masters: ShortMasterInfo[];

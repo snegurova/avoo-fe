@@ -1,11 +1,14 @@
 import React from 'react';
-import { View, Pressable, StyleSheet } from 'react-native';
 import { Control, FieldValues, Path, PathValue, useController } from 'react-hook-form';
+import { Pressable, StyleSheet, View } from 'react-native';
 import { Chip, Text } from 'react-native-paper';
-import { LanguageSelectionModal } from '@/components/LanguageSelectionModal/LanguageSelectionModal';
+
 import { LANGUAGE_NAMES, type LanguageCode } from '@avoo/constants';
 import { colors } from '@avoo/design-tokens';
 import { utils } from '@avoo/hooks';
+
+import { LanguageSelectionModal } from '@/components/LanguageSelectionModal/LanguageSelectionModal';
+
 import { MaterialIcons } from '../icons';
 
 type Props<T extends FieldValues> = {
@@ -27,8 +30,11 @@ export default function LanguageSelector<T extends FieldValues>({
 
   const selectedLanguages: LanguageCode[] = Array.isArray(field.value) ? field.value : [];
 
-  const { value: isModalOpen, enable: handleOpenModal, disable: handleCloseModal } =
-    utils.useBooleanState(false);
+  const {
+    value: isModalOpen,
+    enable: handleOpenModal,
+    disable: handleCloseModal,
+  } = utils.useBooleanState(false);
 
   const handleConfirm = (languages: LanguageCode[]) => {
     field.onChange(languages);
@@ -43,7 +49,9 @@ export default function LanguageSelector<T extends FieldValues>({
     <View className='w-full'>
       <View className='flex-row justify-between items-center mb-3'>
         <View className='flex-shrink pr-4'>
-          <Text variant='titleMedium' className='mb-1'>Languages</Text>
+          <Text variant='titleMedium' className='mb-1'>
+            Languages
+          </Text>
           <Text variant='bodySmall' style={styles.description}>
             Add languages in which the service is offered
           </Text>

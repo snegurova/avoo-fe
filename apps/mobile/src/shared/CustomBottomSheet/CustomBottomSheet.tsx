@@ -1,14 +1,15 @@
 import React, { useEffect } from 'react';
 import {
-  View,
-  Pressable,
+  Animated,
   KeyboardAvoidingView,
   Platform,
+  Pressable,
   StyleSheet,
-  Animated,
+  View,
 } from 'react-native';
 import { Portal } from 'react-native-paper';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+
 import { animationHooks } from '@/hooks/animationHooks';
 
 type SnapPoint = number | `${number}%`;

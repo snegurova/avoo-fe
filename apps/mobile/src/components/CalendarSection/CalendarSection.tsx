@@ -1,18 +1,21 @@
-import { useState, useMemo, useEffect } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { View } from 'react-native';
 import { Text } from 'react-native-paper';
-import { layoutHooks } from '@/hooks/layoutHooks';
-import { CALENDAR_STATUSES } from '../CalendarStatusesSheet/CalendarStatusesSheet';
-import { CalendarHeader } from '../CalendarHeader/CalendarHeader';
-import { calendarHooks, masterHooks } from '@avoo/hooks';
-import { timeUtils, isFullSelection } from '@avoo/shared';
-import { OrderStatus } from '@avoo/hooks/types/orderStatus';
+
 import type { PrivateCalendarQueryParams } from '@avoo/axios/types/apiTypes';
+import { calendarHooks, masterHooks } from '@avoo/hooks';
 import { CalendarViewType } from '@avoo/hooks/types/calendarViewType';
+import { OrderStatus } from '@avoo/hooks/types/orderStatus';
+import { isFullSelection, timeUtils } from '@avoo/shared';
+
 import { calendarMobileHooks } from '@/hooks/calendarHooks';
+import { layoutHooks } from '@/hooks/layoutHooks';
+
 import { CalendarDayView } from '../CalendarDayView/CalendarDayView';
-import { CalendarWeekView } from '../CalendarWeekView/CalendarWeekView';
+import { CalendarHeader } from '../CalendarHeader/CalendarHeader';
 import { CalendarMonthView } from '../CalendarMonthView/CalendarMonthView';
+import { CALENDAR_STATUSES } from '../CalendarStatusesSheet/CalendarStatusesSheet';
+import { CalendarWeekView } from '../CalendarWeekView/CalendarWeekView';
 
 export const CalendarSection = () => {
   const bottomBarHeight = layoutHooks.useBottomBarHeight();
@@ -32,7 +35,6 @@ export const CalendarSection = () => {
   const { data: calendarData } = calendarHooks.useGetCalendar(params);
   const mastersFromResponse = calendarMobileHooks.useCalendarMasters(calendarData ?? null);
   const masters = masterHooks.useStableMasters(mastersFromResponse);
-
 
   const filteredMasters = useMemo(() => {
     if (isFullSelection(selectedMasterIds.size, masters.length)) {
@@ -72,9 +74,11 @@ export const CalendarSection = () => {
     return new Date(mid.getFullYear(), mid.getMonth(), 1, 12, 0, 0, 0);
   }, [date, toDate]);
 
-
   return (
-    <View className='flex-1 bg-white rounded-xl border border-gray-200 overflow-hidden' style={{ marginBottom: bottomBarHeight }}>
+    <View
+      className='flex-1 bg-white rounded-xl border border-gray-200 overflow-hidden'
+      style={{ marginBottom: bottomBarHeight }}
+    >
       <Text variant='titleLarge' className='px-4 pt-3'>
         Calendar
       </Text>

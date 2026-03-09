@@ -1,14 +1,17 @@
+import { useMemo } from 'react';
+
+import { useQuery } from '@tanstack/react-query';
+
 import { combinationApi } from '@avoo/axios';
-import { utils } from '@avoo/hooks/utils/utils';
 import {
+  ApiStatus,
   BaseResponse,
   GetCombinationsQueryParams,
   GetCombinationsResponse,
-  ApiStatus,
 } from '@avoo/axios/types/apiTypes';
-import { useQuery } from '@tanstack/react-query';
+import { utils } from '@avoo/hooks/utils/utils';
+
 import { queryKeys } from './queryKeys';
-import { useMemo } from 'react';
 
 export const combinationHooks = {
   useGetCombinations: (params: GetCombinationsQueryParams) => {

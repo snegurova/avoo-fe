@@ -1,9 +1,12 @@
 import React from 'react';
 import { View } from 'react-native';
+
 import { tv } from 'tailwind-variants';
+
+import { calendarUtils } from '@/utils/calendarUtils';
+
 import { calendarConfig } from '../CalendarSection/calendarConfig';
 import { TimeGridLines } from '../TimeGridLines/TimeGridLines';
-import { calendarUtils } from '@/utils/calendarUtils';
 
 type Props = {
   columnKey: string;
@@ -14,7 +17,6 @@ type Props = {
 
 const { hours, slotHeight } = calendarConfig.timeline;
 const contentHeight = hours.length * slotHeight;
-
 
 const column = tv({
   base: 'relative',

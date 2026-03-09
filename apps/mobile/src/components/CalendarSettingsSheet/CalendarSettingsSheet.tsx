@@ -1,5 +1,6 @@
 import { Pressable } from 'react-native';
 import { Text } from 'react-native-paper';
+
 import { CustomBottomSheet } from '@/shared/CustomBottomSheet/CustomBottomSheet';
 
 type Props = {

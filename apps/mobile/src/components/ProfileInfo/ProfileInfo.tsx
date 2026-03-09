@@ -1,11 +1,11 @@
 import { Pressable, Text, View } from 'react-native';
 
+import { useNavigation } from '@react-navigation/native';
+
 import { userHooks } from '@avoo/hooks';
 
 import { MaterialIcons } from '@/shared/icons';
 import { RootNavigationProp, RootScreens } from '@/types/navigation';
-
-import { useNavigation } from '@react-navigation/native';
 
 import AvatarUpload from '../Avatar/AvatarUpload';
 import { ProfileCertificates } from '../ProfileCertificates/ProfileCertificates';

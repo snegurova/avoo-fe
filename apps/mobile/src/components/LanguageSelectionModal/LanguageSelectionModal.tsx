@@ -1,12 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, Pressable, ScrollView } from 'react-native';
-import { CustomBottomSheet } from '@/shared/CustomBottomSheet/CustomBottomSheet';
-import { SearchInput } from '@/shared/SearchInput/SearchInput';
+import React, { useEffect, useState } from 'react';
+import { Pressable, ScrollView, Text, View } from 'react-native';
+
 import { LANGUAGE_NAMES, type LanguageCode } from '@avoo/constants';
-import { languageHooks } from '@avoo/hooks';
 import { colors } from '@avoo/design-tokens';
-import { MaterialIcons } from '@/shared/icons';
+import { languageHooks } from '@avoo/hooks';
+
 import { BottomSheetHeader } from '@/shared/BottomSheetHeader/BottomSheetHeader';
+import { CustomBottomSheet } from '@/shared/CustomBottomSheet/CustomBottomSheet';
+import { MaterialIcons } from '@/shared/icons';
+import { SearchInput } from '@/shared/SearchInput/SearchInput';
 
 type Props = {
   visible: boolean;
@@ -17,7 +19,7 @@ type Props = {
 
 export const LanguageSelectionModal = (props: Props) => {
   const { visible, onClose, selectedLanguages, onConfirm } = props;
-  
+
   const [searchQuery, setSearchQuery] = useState('');
   const [tempSelected, setTempSelected] = useState<LanguageCode[]>(selectedLanguages);
 
@@ -91,4 +93,3 @@ export const LanguageSelectionModal = (props: Props) => {
     </CustomBottomSheet>
   );
 };
-

@@ -1,14 +1,14 @@
 import React from 'react';
 import { Control, FieldValues, Path, useController } from 'react-hook-form';
 import {
-  View,
-  TextInput,
-  TouchableOpacity,
-  ViewStyle,
-  TextInputProps,
-  TextStyle,
   StyleProp,
   Text,
+  TextInput,
+  TextInputProps,
+  TextStyle,
+  TouchableOpacity,
+  View,
+  ViewStyle,
 } from 'react-native';
 
 type Props<T extends FieldValues> = TextInputProps & {

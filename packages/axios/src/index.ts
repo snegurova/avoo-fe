@@ -1,11 +1,11 @@
 export { apiClient } from './apiClient';
-export { categoriesApi } from './modules/categories';
 export { authApi } from './modules/auth';
-export { userApi } from './modules/user';
-export { masterApi } from './modules/master';
-export { scheduleApi } from './modules/schedule';
 export { calendarApi } from './modules/calendar';
-export { orderApi } from './modules/order';
+export { categoriesApi } from './modules/categories';
+export { combinationApi } from './modules/combination';
 export { customerApi } from './modules/customer';
 export { filesApi } from './modules/files';
-export { combinationApi } from './modules/combination';
+export { masterApi } from './modules/master';
+export { orderApi } from './modules/order';
+export { scheduleApi } from './modules/schedule';
+export { userApi } from './modules/user';

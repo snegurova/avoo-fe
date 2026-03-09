@@ -1,8 +1,9 @@
 import React from 'react';
 import { ScrollView, View } from 'react-native';
-import { TimeScaleColumn } from '../TimeScaleColumn/TimeScaleColumn';
-import { calendarConfig } from '../CalendarSection/calendarConfig';
+
 import { animationHooks } from '../../hooks/animationHooks';
+import { calendarConfig } from '../CalendarSection/calendarConfig';
+import { TimeScaleColumn } from '../TimeScaleColumn/TimeScaleColumn';
 
 type Props = {
   headerHeight: number;

@@ -1,9 +1,11 @@
+import { useEffect, useState } from 'react';
+import { StyleSheet } from 'react-native';
 import { Snackbar as PaperSnackbar, Text } from 'react-native-paper';
-import { MaterialIcons } from '@/shared/icons';
+
 import { colors } from '@avoo/design-tokens';
 import { useApiStatusStore } from '@avoo/store';
-import { StyleSheet } from 'react-native';
-import { useEffect, useState } from 'react';
+
+import { MaterialIcons } from '@/shared/icons';
 
 enum NotificationPopUpVariant {
   ERROR = 'error',
@@ -21,11 +23,8 @@ export function NotificationPopUp() {
   const visible = hasError || hasSuccess;
 
   const [variant, setVariant] = useState<NotificationPopUpVariant | null>(null);
-  
-  const message =
-    variant === NotificationPopUpVariant.ERROR
-      ? errorMessage
-      : successMessage;
+
+  const message = variant === NotificationPopUpVariant.ERROR ? errorMessage : successMessage;
 
   useEffect(() => {
     if (hasError) {
@@ -55,9 +54,7 @@ export function NotificationPopUp() {
       onDismiss={handleDismiss}
       duration={4000}
       style={{ backgroundColor }}
-      icon={({ size, color }) => (
-        <MaterialIcons name={iconName} size={size} color={color} />
-      )}
+      icon={({ size, color }) => <MaterialIcons name={iconName} size={size} color={color} />}
       onIconPress={handleDismiss}
     >
       <Text variant='titleMedium' style={styles.notificationText}>

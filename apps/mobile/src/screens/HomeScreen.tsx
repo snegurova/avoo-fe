@@ -1,9 +1,9 @@
-import Layout from '@/shared/Layout/Layout';
 import { View } from 'react-native';
 
-import { NotificationsSection } from '@/components/NotificationsSection/NotificationSection';
 import { AppointmentsSection } from '@/components/AppointmentsSection/AppointmentsSection';
 import { CalendarWidget } from '@/components/CalendarWidget/CalendarWidget';
+import { NotificationsSection } from '@/components/NotificationsSection/NotificationSection';
+import Layout from '@/shared/Layout/Layout';
 
 export const HomeScreen = () => {
   return (

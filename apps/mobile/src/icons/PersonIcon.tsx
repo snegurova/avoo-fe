@@ -1,5 +1,6 @@
-import { colors } from '@avoo/design-tokens';
 import Svg, { Path } from 'react-native-svg';
+
+import { colors } from '@avoo/design-tokens';
 
 type Props = {
   size?: number;

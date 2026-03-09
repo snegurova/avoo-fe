@@ -1,7 +1,8 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { createZustandStorage, getPlatformStorage } from './storage';
+
 import { useHydrationStore } from './hydration.store';
+import { createZustandStorage, getPlatformStorage } from './storage';
 
 export type AuthStore = {
   isAuthenticated: boolean;
@@ -21,11 +22,11 @@ export const useAuthStore = create<AuthStore>()(
       logoutStore: () => set({ isAuthenticated: false, accessToken: null }),
     }),
     {
-      name: "auth-storage",
+      name: 'auth-storage',
       storage: createZustandStorage<AuthStore>(getPlatformStorage()),
       onRehydrateStorage: () => () => {
         useHydrationStore.getState().setHasHydrated(true);
       },
-    }
+    },
   ),
 );

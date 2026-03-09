@@ -1,9 +1,11 @@
 import React from 'react';
-import { View, StyleProp, ViewStyle } from 'react-native';
+import { StyleProp, View, ViewStyle } from 'react-native';
 import { Text } from 'react-native-paper';
-import DefaultRightContent from './DefaultRightContent';
-import DefaultLeftContent from './DefaultLeftContent';
+
 import { typeGuardHooks } from '@avoo/shared';
+
+import DefaultLeftContent from './DefaultLeftContent';
+import DefaultRightContent from './DefaultRightContent';
 
 type Props = {
   title?: React.ReactNode;

@@ -1,9 +1,9 @@
+import { apiClient } from '@avoo/axios/src/apiClient';
 import {
   BaseResponse,
   GetCombinationsQueryParams,
   GetCombinationsResponse,
 } from '@avoo/axios/types/apiTypes';
-import { apiClient } from '@avoo/axios/src/apiClient';
 
 const COMBINATION_ENDPOINT = '/combinations';
 const PUBLIC_COMBINATION_ENDPOINT = '/public/combinations';

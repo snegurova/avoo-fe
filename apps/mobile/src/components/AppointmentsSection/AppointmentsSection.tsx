@@ -1,9 +1,12 @@
 import { View } from 'react-native';
 import { Text } from 'react-native-paper';
-import { PillText } from '@/shared/PillText/PillText';
-import { AppointmentCard } from '../AppointmentCard/AppointmentCard';
-import { Carousel } from '@/shared/Carousel/Carousel';
+
 import { OrderStatusEnum, OrderStatusType } from '@avoo/axios/types/apiEnums';
+
+import { Carousel } from '@/shared/Carousel/Carousel';
+import { PillText } from '@/shared/PillText/PillText';
+
+import { AppointmentCard } from '../AppointmentCard/AppointmentCard';
 
 export type Appointment = {
   id: string;

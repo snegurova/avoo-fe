@@ -1,20 +1,22 @@
-import { utils } from '@avoo/hooks/utils/utils';
-import { calendarApi } from '@avoo/axios';
+import { useMemo } from 'react';
 
+import { useQuery } from '@tanstack/react-query';
+
+import { calendarApi } from '@avoo/axios';
 import {
+  ApiStatus,
   BaseResponse,
-  GetCalendarResponse,
   GetCalendarByDatesResponse,
+  GetCalendarResponse,
+  GetPublicCalendarByDatesResponse,
+  GetPublicCalendarResponse,
   PrivateCalendarByDatesQueryParams,
   PrivateCalendarQueryParams,
-  ApiStatus,
-  GetPublicCalendarResponse,
-  GetPublicCalendarByDatesResponse,
-  PublicCalendarQueryParams,
   PublicCalendarByDatesQueryParams,
+  PublicCalendarQueryParams,
 } from '@avoo/axios/types/apiTypes';
-import { useQuery } from '@tanstack/react-query';
-import { useMemo } from 'react';
+import { utils } from '@avoo/hooks/utils/utils';
+
 import { queryKeys } from './queryKeys';
 
 export const calendarHooks = {

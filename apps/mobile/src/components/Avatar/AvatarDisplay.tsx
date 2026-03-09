@@ -1,4 +1,5 @@
-import { View, Image, ImageSourcePropType } from 'react-native';
+import { Image, ImageSourcePropType, View } from 'react-native';
+
 import { MaterialIcons } from '@/shared/icons';
 
 type Props = {
@@ -8,11 +9,7 @@ type Props = {
 };
 
 export const AvatarDisplay = (props: Props) => {
-  const {
-    size = 80,
-    imageUri,
-    iconSize = 30,
-  } = props;
+  const { size = 80, imageUri, iconSize = 30 } = props;
   const displayUri = typeof imageUri === 'string' ? imageUri : null;
 
   return (

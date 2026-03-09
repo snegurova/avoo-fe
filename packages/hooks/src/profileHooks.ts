@@ -1,5 +1,5 @@
-import type { VisualProfileInfo } from '@avoo/shared';
 import type { UpdateProfile } from '@avoo/axios/types/apiTypes';
+import type { VisualProfileInfo } from '@avoo/shared';
 
 export function createProfileDefaults(initial?: VisualProfileInfo | null) {
   return {

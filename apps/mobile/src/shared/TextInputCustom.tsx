@@ -1,13 +1,13 @@
 import React, { memo } from 'react';
 import {
-  View,
-  TextInput,
+  StyleProp,
   StyleSheet,
-  TouchableOpacity,
-  ViewStyle,
+  TextInput,
   TextInputProps,
   TextStyle,
-  StyleProp,
+  TouchableOpacity,
+  View,
+  ViewStyle,
 } from 'react-native';
 
 type Props = TextInputProps & {
@@ -16,7 +16,7 @@ type Props = TextInputProps & {
   containerStyle?: ViewStyle;
   error?: string;
   style?: StyleProp<TextStyle>;
-}
+};
 
 const TextInputCustomComponent = React.forwardRef<TextInput | null, Props>((props: Props, ref) => {
   const { rightIcon, onRightIconPress, containerStyle, style, error, ...rest } = props;

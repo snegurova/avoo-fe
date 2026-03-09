@@ -1,16 +1,19 @@
 import { View } from 'react-native';
-import FormTextInput from '@/shared/FormTextInput';
-import Button from '@/shared/Button/Button';
-import { utils, authHooks } from '@avoo/hooks';
-import { useNavigation } from '@react-navigation/native';
-import { RootScreens } from '@/types/navigation';
-import { useApiStatusStore } from '@avoo/store';
-import { MaterialIcons } from '@/shared/icons';
 
+import { useNavigation } from '@react-navigation/native';
+
+import { authHooks, utils } from '@avoo/hooks';
+import { useApiStatusStore } from '@avoo/store';
+
+import Button from '@/shared/Button/Button';
+import FormTextInput from '@/shared/FormTextInput';
+import { MaterialIcons } from '@/shared/icons';
+import { RootScreens } from '@/types/navigation';
 
 export default function ResetPasswordForm() {
   const { value: isShowPassword, toggleValue: toggleShowPassword } = utils.useBooleanState(false);
-  const { value: isShowConfirmPassword, toggleValue: toggleConfirmPassword } = utils.useBooleanState(false);
+  const { value: isShowConfirmPassword, toggleValue: toggleConfirmPassword } =
+    utils.useBooleanState(false);
 
   const isPending = useApiStatusStore((state) => state.isPending);
 
@@ -25,8 +28,20 @@ export default function ResetPasswordForm() {
     },
   });
 
-  const icon = <MaterialIcons name={isShowPassword ? 'visibility' : 'visibility-off'} size={24} color='black' />;
-  const iconConfirmPassword = <MaterialIcons name={isShowConfirmPassword ? 'visibility' : 'visibility-off'} size={24} color='black' />;
+  const icon = (
+    <MaterialIcons
+      name={isShowPassword ? 'visibility' : 'visibility-off'}
+      size={24}
+      color='black'
+    />
+  );
+  const iconConfirmPassword = (
+    <MaterialIcons
+      name={isShowConfirmPassword ? 'visibility' : 'visibility-off'}
+      size={24}
+      color='black'
+    />
+  );
 
   return (
     <View className='w-full gap-4'>

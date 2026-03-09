@@ -1,11 +1,14 @@
-import { View, Pressable } from 'react-native';
+import { Pressable, View } from 'react-native';
 import { Text } from 'react-native-paper';
-import { MaterialIcons } from '@/shared/icons';
-import { colors } from '@avoo/design-tokens';
+
 import { tv } from 'tailwind-variants';
-import { isFullSelection } from '@avoo/shared';
-import { CustomBottomSheet } from '@/shared/CustomBottomSheet/CustomBottomSheet';
+
 import type { ShortMasterInfo } from '@avoo/axios/types/apiTypes';
+import { colors } from '@avoo/design-tokens';
+import { isFullSelection } from '@avoo/shared';
+
+import { CustomBottomSheet } from '@/shared/CustomBottomSheet/CustomBottomSheet';
+import { MaterialIcons } from '@/shared/icons';
 
 type Props = {
   visible: boolean;
@@ -27,7 +30,7 @@ const checkbox = tv({
 
 export const CalendarMastersSheet = (props: Props) => {
   const { visible, onClose, masters, selectedMasterIds, setSelectedMasterIds } = props;
-  
+
   const isAllTeamSelected = isFullSelection(selectedMasterIds.size, masters.length);
 
   const handleAllTeamToggle = () => {
@@ -57,9 +60,7 @@ export const CalendarMastersSheet = (props: Props) => {
         >
           <View className='flex-row items-center'>
             <View className={checkbox({ selected: isAllTeamSelected })}>
-              {isAllTeamSelected && (
-                <MaterialIcons name='check' size={16} color={colors.white} />
-              )}
+              {isAllTeamSelected && <MaterialIcons name='check' size={16} color={colors.white} />}
             </View>
             <Text variant='bodyMedium'>All Team</Text>
           </View>
@@ -75,9 +76,7 @@ export const CalendarMastersSheet = (props: Props) => {
             >
               <View className='flex-row items-center'>
                 <View className={checkbox({ selected: isSelected })}>
-                  {isSelected && (
-                    <MaterialIcons name='check' size={16} color={colors.white} />
-                  )}
+                  {isSelected && <MaterialIcons name='check' size={16} color={colors.white} />}
                 </View>
                 <Text variant='bodyMedium'>{master.name}</Text>
               </View>

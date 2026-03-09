@@ -1,5 +1,6 @@
 import { Control, FieldValues, Path, useController } from 'react-hook-form';
-import { View, Text, StyleSheet, Pressable } from 'react-native';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
+
 import { MaterialIcons } from '@/shared/icons';
 
 type Props<T extends FieldValues> = {
@@ -7,7 +8,7 @@ type Props<T extends FieldValues> = {
   control: Control<T>;
   label: string;
   error?: string;
-}
+};
 
 export default function FormCheckBox<T extends FieldValues>(props: Props<T>) {
   const { name, control, label, error } = props;
@@ -15,8 +16,6 @@ export default function FormCheckBox<T extends FieldValues>(props: Props<T>) {
     name,
     control,
   });
-
-
 
   return (
     <View>
@@ -41,8 +40,6 @@ export default function FormCheckBox<T extends FieldValues>(props: Props<T>) {
 }
 
 FormCheckBox.displayName = 'FormCheckBox';
-
-
 
 const styles = StyleSheet.create({
   errorText: {

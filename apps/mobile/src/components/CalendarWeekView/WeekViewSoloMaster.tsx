@@ -1,11 +1,14 @@
 import { View } from 'react-native';
+
+import type { ShortMasterInfo } from '@avoo/axios/types/apiTypes';
+
 import { Appointment } from '@/hooks/calendarHooks';
+import { calendarUtils } from '@/utils/calendarUtils';
+
 import CalendarOrder, { CALENDAR_ORDER_VARIANT } from '../CalendarOrder/CalendarOrder';
+import { calendarConfig } from '../CalendarSection/calendarConfig';
 import { TimelineColumn } from '../TimelineColumn/TimelineColumn';
 import { TimelineGridLayout } from '../TimelineGridLayout/TimelineGridLayout';
-import { calendarUtils } from '@/utils/calendarUtils';
-import { calendarConfig } from '../CalendarSection/calendarConfig';
-import type { ShortMasterInfo } from '@avoo/axios/types/apiTypes';
 import { WeekViewHeader } from '../WeekViewHeader/WeekViewHeader';
 
 type Props = {

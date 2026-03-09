@@ -1,5 +1,6 @@
 import { MD3LightTheme, type MD3Theme } from 'react-native-paper';
-import { colors, typography, radius } from '@avoo/design-tokens';
+
+import { colors, radius, typography } from '@avoo/design-tokens';
 
 const fontFamilyMapper: Record<string, string> = {
   '200': 'Roboto-ExtraLight',
@@ -17,7 +18,7 @@ const getFontFamily = (fontWeight: string): string => {
 
 const paperTheme: MD3Theme = {
   ...MD3LightTheme,
-  roundness: radius.md, 
+  roundness: radius.md,
   colors: {
     ...MD3LightTheme.colors,
     primary: colors.primary[500],

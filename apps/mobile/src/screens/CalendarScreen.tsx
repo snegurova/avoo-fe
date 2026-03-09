@@ -1,10 +1,12 @@
 import { Pressable } from 'react-native';
-import Layout from '@/shared/Layout/Layout';
+
+import { colors } from '@avoo/design-tokens';
+import { utils } from '@avoo/hooks';
+
 import { CalendarSection } from '@/components/CalendarSection/CalendarSection';
 import { CalendarSettingsSheet } from '@/components/CalendarSettingsSheet/CalendarSettingsSheet';
 import { SettingsIcon } from '@/icons';
-import { colors } from '@avoo/design-tokens';
-import { utils } from '@avoo/hooks';
+import Layout from '@/shared/Layout/Layout';
 
 export const CalendarScreen = () => {
   const { value: settingsSheetVisible, enable, disable } = utils.useBooleanState(false);

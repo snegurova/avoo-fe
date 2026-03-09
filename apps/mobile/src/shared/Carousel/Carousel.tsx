@@ -1,9 +1,11 @@
 import React, { useRef, useState } from 'react';
-import { View, Pressable, FlatList, NativeScrollEvent, NativeSyntheticEvent } from 'react-native';
+import { FlatList, NativeScrollEvent, NativeSyntheticEvent, Pressable, View } from 'react-native';
 import { Text } from 'react-native-paper';
-import { MaterialIcons } from '@/shared/icons';
+
 import { colors } from '@avoo/design-tokens';
+
 import { ACTION_PILL_SIZE, ActionPillButton } from '@/shared/ActionPillButton/ActionPillButton';
+import { MaterialIcons } from '@/shared/icons';
 
 type Keyable = { id: string };
 

@@ -1,14 +1,16 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Pressable, FlatList } from 'react-native';
-import Layout from '@/shared/Layout/Layout';
-import { masterHooks, utils } from '@avoo/hooks';
-import { MasterListItem } from '@/components/MasterListItem/MasterListItem';
-import { SearchInput } from '@/shared/SearchInput/SearchInput';
-import { layoutHooks } from '@/hooks/layoutHooks';
+import { FlatList, Pressable, StyleSheet, Text, View } from 'react-native';
+
 import { MasterWithRelationsEntityResponse } from '@avoo/axios/types/apiTypes';
-import EditMasterForm from '@/components/EditMasterForm/EditMasterForm';
-import { CustomBottomSheet } from '@/shared/CustomBottomSheet/CustomBottomSheet';
+import { masterHooks, utils } from '@avoo/hooks';
+
 import CreateMasterForm from '@/components/CreateMasterForm/CreateMasterForm';
+import EditMasterForm from '@/components/EditMasterForm/EditMasterForm';
+import { MasterListItem } from '@/components/MasterListItem/MasterListItem';
+import { layoutHooks } from '@/hooks/layoutHooks';
+import { CustomBottomSheet } from '@/shared/CustomBottomSheet/CustomBottomSheet';
+import Layout from '@/shared/Layout/Layout';
+import { SearchInput } from '@/shared/SearchInput/SearchInput';
 
 export default function MastersScreen() {
   const [searchQuery, setSearchQuery] = useState('');

@@ -1,7 +1,9 @@
 import { View } from 'react-native';
 import { Text } from 'react-native-paper';
-import { NotificationItem } from '../NotificationItem/NotificationItem';
+
 import { ActionPillButton } from '@/shared/ActionPillButton/ActionPillButton';
+
+import { NotificationItem } from '../NotificationItem/NotificationItem';
 
 const notifications = [
   {

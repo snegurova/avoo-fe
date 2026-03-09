@@ -1,7 +1,10 @@
 import { Pressable } from 'react-native';
+
 import { useNavigation } from '@react-navigation/native';
-import { MaterialIcons } from '@/shared/icons';
+
 import { colors } from '@avoo/design-tokens';
+
+import { MaterialIcons } from '@/shared/icons';
 
 type Props = {
   showBack?: boolean;

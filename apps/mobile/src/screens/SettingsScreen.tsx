@@ -1,8 +1,9 @@
-import { View, Text } from 'react-native';
-import  Layout from '@/shared/Layout/Layout';
-import Button from '@/shared/Button/Button';
+import { Text, View } from 'react-native';
+
 import { authHooks } from '@avoo/hooks';
 
+import Button from '@/shared/Button/Button';
+import Layout from '@/shared/Layout/Layout';
 
 export const SettingsScreen = () => {
   const { logoutMutation } = authHooks.useLogout();

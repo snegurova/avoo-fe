@@ -1,15 +1,20 @@
-import { View, Pressable } from 'react-native';
-import { MaterialIcons, MaterialCommunityIcons } from '@/shared/icons';
-import { Avatar } from '@/shared/Avatar/Avatar';
+import { Pressable, View } from 'react-native';
+
 import { colors } from '@avoo/design-tokens';
 import { userHooks, utils } from '@avoo/hooks';
+
+import { Avatar } from '@/shared/Avatar/Avatar';
 import { CustomBottomSheet } from '@/shared/CustomBottomSheet/CustomBottomSheet';
+import { MaterialCommunityIcons, MaterialIcons } from '@/shared/icons';
 import { ProfileMenu } from '@/shared/ProfileMenu/ProfileMenu';
 
 export default function DefaultRightContent() {
   const { visualProfileInfo } = userHooks.useGetUserProfile();
-  const { value: isProfileMenuVisible, enable: handleOpenProfile, disable: handleCloseProfile } =
-    utils.useBooleanState(false);
+  const {
+    value: isProfileMenuVisible,
+    enable: handleOpenProfile,
+    disable: handleCloseProfile,
+  } = utils.useBooleanState(false);
 
   return (
     <View className='flex-row items-center gap-lg'>

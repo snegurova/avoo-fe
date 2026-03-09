@@ -2,17 +2,17 @@
 import { useMemo, useState } from 'react';
 import { View } from 'react-native';
 
-import { CALENDAR_ORDER_VARIANT, CalendarOrder } from '../CalendarOrder/CalendarOrder';
-import { CalendarDayViewHeader } from '../CalendarDayViewHeader/CalendarDayViewHeader';
-import { TimelineGridLayout } from '../TimelineGridLayout/TimelineGridLayout';
-import { TimelineColumn } from '../TimelineColumn/TimelineColumn';
-import { CurrentTimeLine } from '../CurrentTimeLine/CurrentTimeLine';
-
-import { calendarConfig } from '../CalendarSection/calendarConfig';
-import { calendarUtils } from '@/utils/calendarUtils';
+import type { ShortMasterInfo } from '@avoo/axios/types/apiTypes';
 
 import type { Appointment } from '@/hooks/calendarHooks';
-import type { ShortMasterInfo } from '@avoo/axios/types/apiTypes';
+import { calendarUtils } from '@/utils/calendarUtils';
+
+import { CalendarDayViewHeader } from '../CalendarDayViewHeader/CalendarDayViewHeader';
+import { CALENDAR_ORDER_VARIANT, CalendarOrder } from '../CalendarOrder/CalendarOrder';
+import { calendarConfig } from '../CalendarSection/calendarConfig';
+import { CurrentTimeLine } from '../CurrentTimeLine/CurrentTimeLine';
+import { TimelineColumn } from '../TimelineColumn/TimelineColumn';
+import { TimelineGridLayout } from '../TimelineGridLayout/TimelineGridLayout';
 
 type Props = {
   masters: ShortMasterInfo[];
@@ -52,7 +52,11 @@ export const CalendarDayView = ({ masters, appointments }: Props) => {
       <TimelineGridLayout
         headerHeight={calendarConfig.dayView.headerHeight}
         stickyHeader={
-          <CalendarDayViewHeader masters={masters} contentWidth={contentWidth} colWidth={colWidth} />
+          <CalendarDayViewHeader
+            masters={masters}
+            contentWidth={contentWidth}
+            colWidth={colWidth}
+          />
         }
       >
         <View className='flex-row' style={{ width: contentWidth }}>

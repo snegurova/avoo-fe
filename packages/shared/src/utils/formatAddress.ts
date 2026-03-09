@@ -1,4 +1,4 @@
-import type { NominatimPlace, NominatimAddress } from '../types/geocode';
+import type { NominatimAddress, NominatimPlace } from '../types/geocode';
 
 function getAddress(place?: NominatimPlace): NominatimAddress {
   if (!place) return {};

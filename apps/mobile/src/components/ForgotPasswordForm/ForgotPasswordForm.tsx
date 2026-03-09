@@ -1,18 +1,18 @@
 import { View } from 'react-native';
+
 import { useNavigation } from '@react-navigation/native';
-import { RootScreens } from '@/types/navigation';
 
 import { authHooks } from '@avoo/hooks';
 import { useApiStatusStore } from '@avoo/store';
 
-import FormTextInput from '@/shared/FormTextInput';
 import Button from '@/shared/Button/Button';
+import FormTextInput from '@/shared/FormTextInput';
+import { RootScreens } from '@/types/navigation';
 
 export default function ForgotPasswordForm() {
   const isPending = useApiStatusStore((state) => state.isPending);
 
   const navigation = useNavigation();
-
 
   const { sendCodeHandler } = authHooks.useSendCode({
     onSuccess: (email: string) => {

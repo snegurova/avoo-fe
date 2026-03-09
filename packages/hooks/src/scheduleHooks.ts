@@ -57,8 +57,8 @@ export const scheduleHooks = {
               .padStart(2, '0')}:30`,
       value: String(i * 30),
     })),
-  useGetSchedulesInfinite: ({ limit = DEFAULT_LIMIT, masterIds }: SchedulesQueryParams) => {
-    const filterParams = { limit, masterIds };
+  useGetSchedulesInfinite: ({ limit = DEFAULT_LIMIT }: SchedulesQueryParams) => {
+    const filterParams = { limit };
     const query = useInfiniteQuery<BaseResponse<GetSchedulesResponse>, Error>({
       queryKey: ['schedules', 'list', filterParams],
       queryFn: ({ pageParam = 1 }) =>

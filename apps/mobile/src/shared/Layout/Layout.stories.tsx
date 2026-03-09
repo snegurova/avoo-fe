@@ -1,9 +1,13 @@
+import { Pressable, Text, View } from 'react-native';
+
 import type { Meta, StoryObj } from '@storybook/react-native-web-vite';
-import { View, Text, Pressable } from 'react-native';
-import Layout from './Layout';
-import { MaterialIcons } from '@/shared/icons';
-import { colors } from '@avoo/design-tokens';
 import { fn } from 'storybook/test';
+
+import { colors } from '@avoo/design-tokens';
+
+import { MaterialIcons } from '@/shared/icons';
+
+import Layout from './Layout';
 
 const meta = {
   component: Layout,
@@ -47,9 +51,7 @@ const CustomRightContent = () => (
   </View>
 );
 
-const CustomTitle = () => (
-  <Text style={{ fontSize: 18, fontWeight: '600' }}>Custom Title</Text>
-);
+const CustomTitle = () => <Text style={{ fontSize: 18, fontWeight: '600' }}>Custom Title</Text>;
 
 export const Default: Story = {
   args: {
@@ -128,4 +130,3 @@ export const CenteredContent: Story = {
     centerContent: true,
   },
 };
-

@@ -1,11 +1,14 @@
+import { useMemo } from 'react';
 import { Pressable, type PressableProps } from 'react-native';
 import { Text } from 'react-native-paper';
-import { colors } from '@avoo/design-tokens';
+
 import { tv } from 'tailwind-variants';
-import type { Appointment } from '@/hooks/calendarHooks';
+
+import { colors } from '@avoo/design-tokens';
 import { OrderStatus } from '@avoo/hooks/types/orderStatus';
+
+import type { Appointment } from '@/hooks/calendarHooks';
 import { BookmarkCheckIcon, CheckCircleIcon, InfoIcon, SearchActivityIcon } from '@/icons';
-import { useMemo } from 'react';
 
 export const CALENDAR_ORDER_VARIANT = {
   WEEK: 'week',
@@ -80,7 +83,8 @@ const VARIANT_LAYOUT_CLASS: Record<Props['variant'], string> = {
   [CALENDAR_ORDER_VARIANT.MONTH]:
     'mb-1 rounded-md px-0.5 overflow-hidden flex-row items-center gap-0.5',
   [CALENDAR_ORDER_VARIANT.DAY]: 'absolute mx-1 rounded-lg p-2 overflow-hidden min-h-[40px]',
-  [CALENDAR_ORDER_VARIANT.WIDGET]: 'rounded-md px-0.5 overflow-hidden flex-row items-center gap-0.5'
+  [CALENDAR_ORDER_VARIANT.WIDGET]:
+    'rounded-md px-0.5 overflow-hidden flex-row items-center gap-0.5',
 };
 
 export function CalendarOrder(props: Props) {

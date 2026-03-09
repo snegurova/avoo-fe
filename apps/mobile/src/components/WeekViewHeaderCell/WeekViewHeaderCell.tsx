@@ -1,8 +1,10 @@
 import { View } from 'react-native';
 import { Text } from 'react-native-paper';
-import { colors } from '@avoo/design-tokens';
-import { calendarUtils } from '@/utils/calendarUtils';
+
 import { WEEK_DAYS } from '@avoo/constants';
+import { colors } from '@avoo/design-tokens';
+
+import { calendarUtils } from '@/utils/calendarUtils';
 
 export type Props = {
   day: Date;

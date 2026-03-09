@@ -1,23 +1,24 @@
 // BottomBarNavigator.tsx
 import { View } from 'react-native';
+
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
-import { BottomBarScreens, BottomBarStackParamList } from '@/types/navigation';
-
-import { HomeScreen } from '@/screens/HomeScreen';
-import { CalendarScreen } from '@/screens/CalendarScreen';
-import { ClientsScreen } from '@/screens/ClientsScreen';
-import { ServicesScreen } from '@/screens/ServicesScreen';
-import MastersScreen from '@/screens/MastersScreen';
-import { PostsScreen } from '@/screens/PostsScreen';
 import {
-  HomeIcon,
+  AutoAwesomeMosaicIcon,
+  BookIcon,
   CalendarIcon,
   CoPresentIcon,
-  BookIcon,
   GroupsIcon,
-  AutoAwesomeMosaicIcon,
+  HomeIcon,
 } from '@/icons';
+import { CalendarScreen } from '@/screens/CalendarScreen';
+import { ClientsScreen } from '@/screens/ClientsScreen';
+import { HomeScreen } from '@/screens/HomeScreen';
+import MastersScreen from '@/screens/MastersScreen';
+import { PostsScreen } from '@/screens/PostsScreen';
+import { ServicesScreen } from '@/screens/ServicesScreen';
+import { BottomBarScreens, BottomBarStackParamList } from '@/types/navigation';
+
 import { BottomBar } from '../components/BottomBar/BottomBar';
 
 const BottomTab = createBottomTabNavigator<BottomBarStackParamList>();

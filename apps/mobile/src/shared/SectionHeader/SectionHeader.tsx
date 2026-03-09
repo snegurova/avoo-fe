@@ -1,4 +1,5 @@
-import { View, Text, Pressable } from 'react-native';
+import { Pressable, Text, View } from 'react-native';
+
 import { MaterialIcons } from '@/shared/icons';
 
 type Props = {
@@ -12,9 +13,11 @@ export const SectionHeader = (props: Props) => {
   return (
     <View className='flex-row items-center justify-between mb-4'>
       <Text className='text-xl font-bold text-slate-900'>{title}</Text>
-      {onEdit && <Pressable className='p-1' onPress={onEdit}>
-        <MaterialIcons name='edit' size={14} color='#64748b' />
-      </Pressable>}
+      {onEdit && (
+        <Pressable className='p-1' onPress={onEdit}>
+          <MaterialIcons name='edit' size={14} color='#64748b' />
+        </Pressable>
+      )}
     </View>
-  );    
+  );
 };

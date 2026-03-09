@@ -1,5 +1,8 @@
 import { useForm } from 'react-hook-form';
 
+import { yupResolver } from '@hookform/resolvers/yup';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+
 import { authApi } from '@avoo/axios';
 import {
   ForgotPasswordRequest as ForgotPasswordRequestType,
@@ -9,6 +12,8 @@ import {
   ApiStatus,
   AuthResponse,
   BaseResponse,
+  ChangePasswordRequest,
+  ChangePasswordResponse,
   LoginRequest,
   ResetPasswordRequest,
   VerifyCodeRequest,
@@ -16,10 +21,9 @@ import {
 } from '@avoo/axios/types/apiTypes';
 import { useAuthStore } from '@avoo/store';
 
-import { yupResolver } from '@hookform/resolvers/yup';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-
 import {
+  ChangePasswordFormData,
+  changePasswordSchema,
   ForgotPasswordFormData,
   forgotPasswordSchema,
   LoginFormData,
@@ -53,6 +57,10 @@ type UseVerifyCodeFormParams = {
 
 type UseResetPasswordFormParams = {
   token?: string;
+  onSuccess?: () => void;
+};
+
+type UseChangePasswordFormParams = {
   onSuccess?: () => void;
 };
 
@@ -308,6 +316,46 @@ export const authHooks = {
 
     return {
       logoutMutation,
+    };
+  },
+  useChangePasswordForm: ({ onSuccess }: UseChangePasswordFormParams = {}) => {
+    const {
+      register,
+      control,
+      handleSubmit,
+      formState: { errors },
+    } = useForm<ChangePasswordFormData>({
+      resolver: yupResolver(changePasswordSchema),
+      mode: 'onSubmit',
+      defaultValues: {
+        oldPassword: '',
+        password: '',
+        confirmPassword: '',
+      },
+    });
+
+    const { mutate: changePassword, isPending } = useMutation<
+      BaseResponse<ChangePasswordResponse>,
+      Error,
+      ChangePasswordRequest
+    >({
+      mutationFn: authApi.changePassword,
+      onSuccess: (response) => {
+        if (response.status === ApiStatus.SUCCESS) {
+          onSuccess?.();
+        }
+      },
+    });
+
+    utils.useSetPendingApi(isPending);
+
+    return {
+      register,
+      control,
+      handleSubmit: handleSubmit(
+        utils.submitAdapter<ChangePasswordRequest, ChangePasswordFormData>(changePassword),
+      ),
+      errors,
     };
   },
 };

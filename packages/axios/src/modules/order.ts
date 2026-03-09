@@ -1,13 +1,13 @@
+import { apiClient } from '@avoo/axios/src/apiClient';
 import {
   BaseResponse,
+  CreatePrivateOrdersRequest,
+  CreatePublicOrdersRequest,
   Order,
   PrivateOrderQueryParams,
-  UpdateOrderStatusRequest,
-  CreatePrivateOrdersRequest,
   UpdateOrderRequest,
-  CreatePublicOrdersRequest,
+  UpdateOrderStatusRequest,
 } from '@avoo/axios/types/apiTypes';
-import { apiClient } from '@avoo/axios/src/apiClient';
 
 const ORDER_ENDPOINT = '/orders';
 const PUBLIC_ORDER_ENDPOINT = '/public/orders';

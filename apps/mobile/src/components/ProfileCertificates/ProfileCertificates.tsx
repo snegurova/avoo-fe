@@ -1,8 +1,9 @@
-import { View, Text, Pressable } from 'react-native';
-import { MaterialIcons } from '@/shared/icons';
-import { useNavigation } from '@react-navigation/native';
-import { RootNavigationProp, RootScreens } from '@/types/navigation';
+import { Pressable, Text, View } from 'react-native';
 
+import { useNavigation } from '@react-navigation/native';
+
+import { MaterialIcons } from '@/shared/icons';
+import { RootNavigationProp, RootScreens } from '@/types/navigation';
 
 export const ProfileCertificates = () => {
   const navigation = useNavigation<RootNavigationProp>();

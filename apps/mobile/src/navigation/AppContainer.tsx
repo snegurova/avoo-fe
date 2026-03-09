@@ -1,22 +1,25 @@
-import { RootScreens, RootStackParamList } from '@/types/navigation';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import LoginScreen from '@/screens/LoginScreen';
-import BottomBarNavigator from './BottomBarNavigator';
+
 import { useAuthStore } from '@avoo/store';
-import RegisterScreen from '@/screens/RegisterScreen';
-import StorybookScreen from '@/screens/Storybook';
-import ForgotPasswordScreen from '@/screens/ForgotPasswordScreen';
-import ConfirmCodeScreen from '@/screens/ConfirmCodeScreen';
-import ResetPasswordScreen from '@/screens/ResetPasswordScreen';
+
+import AddBookingScreen from '@/screens/AddBookingScreen';
+import AddPostScreen from '@/screens/AddPostScreen';
 import CertificatesScreen from '@/screens/CertificatesScreen';
-import WorkingHoursScreen from '@/screens/WorkingHoursScreen';
-import PostsScreen from '@/screens/PostsScreen';
-import GalleryScreen from '@/screens/GalleryScreen';
+import ConfirmCodeScreen from '@/screens/ConfirmCodeScreen';
 import EditLanguagesScreen from '@/screens/EditLanguagesScreen';
 import EditProfileScreen from '@/screens/EditProfileScreen';
-import AddPostScreen from '@/screens/AddPostScreen';
-import AddBookingScreen from '@/screens/AddBookingScreen';
+import ForgotPasswordScreen from '@/screens/ForgotPasswordScreen';
+import GalleryScreen from '@/screens/GalleryScreen';
+import LoginScreen from '@/screens/LoginScreen';
+import PostsScreen from '@/screens/PostsScreen';
 import ProfileScreen from '@/screens/ProfileScreen';
+import RegisterScreen from '@/screens/RegisterScreen';
+import ResetPasswordScreen from '@/screens/ResetPasswordScreen';
+import StorybookScreen from '@/screens/Storybook';
+import WorkingHoursScreen from '@/screens/WorkingHoursScreen';
+import { RootScreens, RootStackParamList } from '@/types/navigation';
+
+import BottomBarNavigator from './BottomBarNavigator';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 

@@ -1,5 +1,5 @@
-import { components } from './generated';
 import { FileUpload, MediaUpload } from './apiTypes';
+import { components } from './generated';
 
 export type ObjectValues<T> = T[keyof T];
 

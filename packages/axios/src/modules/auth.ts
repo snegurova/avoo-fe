@@ -1,13 +1,15 @@
+import { apiClient } from '@avoo/axios/src/apiClient';
 import {
   AuthResponse,
   BaseResponse,
+  ChangePasswordRequest,
+  ChangePasswordResponse,
   LoginRequest,
   RegisterRequest,
   ResetPasswordRequest,
   VerifyCodeRequest,
   VerifyCodeResponse,
 } from '@avoo/axios/types/apiTypes';
-import { apiClient } from '@avoo/axios/src/apiClient';
 
 const LOGIN_ENDPOINT = '/sign-in';
 const REGISTER_ENDPOINT = '/sign-up';
@@ -15,6 +17,7 @@ const LOGOUT_ENDPOINT = '/logout';
 const FORGOT_PASSWORD_ENDPOINT = '/forgot-password';
 const VERIFY_CODE_ENDPOINT = '/reset-password/code';
 const RESET_PASSWORD_ENDPOINT = '/reset-password';
+const CHANGE_PASSWORD_ENDPOINT = '/change-password';
 
 export type RegisterCustomRequest = Omit<RegisterRequest, 'name'> & {
   name?: string | null;
@@ -54,6 +57,13 @@ export const authApi = {
   },
   async logout() {
     const response = await apiClient.post<BaseResponse<Record<string, never>>>(LOGOUT_ENDPOINT);
+    return response.data;
+  },
+  async changePassword(data: ChangePasswordRequest) {
+    const response = await apiClient.post<BaseResponse<ChangePasswordResponse>>(
+      CHANGE_PASSWORD_ENDPOINT,
+      data,
+    );
     return response.data;
   },
 };

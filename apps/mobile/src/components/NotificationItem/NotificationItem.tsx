@@ -1,7 +1,9 @@
-import { View, Pressable } from 'react-native';
-import { Avatar } from '@/shared/Avatar/Avatar';
+import { Pressable, View } from 'react-native';
 import { Text } from 'react-native-paper';
+
 import { colors } from '@avoo/design-tokens';
+
+import { Avatar } from '@/shared/Avatar/Avatar';
 
 type Notification = {
   id: string;

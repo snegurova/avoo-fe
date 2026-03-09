@@ -1,14 +1,15 @@
 import { View } from 'react-native';
+
 import { calendarConfig } from '../CalendarSection/calendarConfig';
 
 type Props = {
-  columnKey: string; 
+  columnKey: string;
 };
 
 export const TimeGridLines = (props: Props) => {
   const { columnKey } = props;
   const { hours, slotHeight, quarterHeight } = calendarConfig.timeline;
-  
+
   const hourBorderTops = hours.slice(1).map((_, i) => (i + 1) * slotHeight);
   const quarterBorderTops = hours.flatMap((_, hourIndex) =>
     [1, 2, 3].map((q) => hourIndex * slotHeight + q * quarterHeight),

@@ -1,10 +1,13 @@
-import { View, Pressable } from 'react-native';
-import { Avatar } from '@/shared/Avatar/Avatar';
+import { Pressable, View } from 'react-native';
+import { Text } from 'react-native-paper';
+
+import { useNavigation } from '@react-navigation/native';
+
 import { colors } from '@avoo/design-tokens';
 import { authHooks, userHooks } from '@avoo/hooks';
-import { Text } from 'react-native-paper';
+
+import { Avatar } from '@/shared/Avatar/Avatar';
 import { RootNavigationProp, RootScreens } from '@/types/navigation';
-import { useNavigation } from '@react-navigation/native';
 
 type Props = {
   onClose: () => void;

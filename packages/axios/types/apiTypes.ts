@@ -57,6 +57,8 @@ export type VerifyCodeRequest = components['schemas']['AuthWithCodeRequestDto'];
 export type VerifyCodeResponse = components['schemas']['UserResponseDto'];
 export type ResetPasswordRequest = components['schemas']['ResetPasswordRequestDto'];
 export type ResetPasswordResponse = components['schemas']['UserResponseDto'];
+export type ChangePasswordRequest = components['schemas']['ChangePasswordRequestDto'];
+export type ChangePasswordResponse = components['schemas']['EmptyObject'];
 
 /** User */
 export type UserProfileResponse = components['schemas']['UserProfileEntity'];

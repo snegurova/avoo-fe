@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
-import { View, Text, Pressable, ScrollView } from 'react-native';
+import { Pressable, ScrollView, Text, View } from 'react-native';
+
 import { tv } from 'tailwind-variants';
-import { phoneHooks } from '@avoo/hooks';
+
 import { colors } from '@avoo/design-tokens';
-import { MaterialIcons } from '@/shared/icons';
-import { CustomBottomSheet } from '@/shared/CustomBottomSheet/CustomBottomSheet';
-import { SearchInput } from '@/shared/SearchInput/SearchInput';
+import { phoneHooks } from '@avoo/hooks';
+
 import { BottomSheetHeader } from '@/shared/BottomSheetHeader/BottomSheetHeader';
+import { CustomBottomSheet } from '@/shared/CustomBottomSheet/CustomBottomSheet';
+import { MaterialIcons } from '@/shared/icons';
+import { SearchInput } from '@/shared/SearchInput/SearchInput';
 
 const radioCircle = tv({
   base: 'w-6 h-6 rounded-full border-2 items-center justify-center',
