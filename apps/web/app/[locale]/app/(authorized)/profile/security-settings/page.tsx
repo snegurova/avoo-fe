@@ -2,8 +2,6 @@
 
 import { FormattedMessage } from 'react-intl';
 
-import { Typography } from '@mui/material';
-
 import { messages } from '@avoo/intl/messages/private/profile/profile';
 
 import AppWrapper from '@/_components/AppWrapper/AppWrapper';
@@ -11,11 +9,11 @@ import ChangePasswordForm from '@/_components/ChangePasswordForm/ChangePasswordF
 
 export default function SecuritySettingsPage() {
   return (
-    <AppWrapper>
-      <div className='p-4 flex justify-between items-center'>
-        <Typography component='h1' variant='h1'>
+    <AppWrapper withPadding>
+      <div className='md:px-4 pb-4 mb-6'>
+        <h1 className='text-xl md:text-2xl font-medium tracking-wider'>
           <FormattedMessage {...messages.securitySettings} />
-        </Typography>
+        </h1>
       </div>
       <ChangePasswordForm />
     </AppWrapper>

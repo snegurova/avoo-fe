@@ -10,7 +10,7 @@ import AppWrapper from '@/_components/AppWrapper/AppWrapper';
 
 export default function AccountSettingsPage() {
   return (
-    <AppWrapper>
+    <AppWrapper withPadding>
       <div className='p-4 flex justify-between items-center'>
         <Typography component='h1' variant='h1'>
           <FormattedMessage {...messages.accountSettings} />

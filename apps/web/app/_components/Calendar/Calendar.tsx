@@ -121,6 +121,8 @@ export default function Calendar(props: Props) {
     }));
   }, [date, toDate, masterIds, statuses, orderIsOutOfSchedule]);
 
+  const calendarPath = localizationHooks.useWithLocale(AppRoutes.Calendar);
+
   const scrollToCurrentTime = () => {
     if (
       type === CalendarViewType.MONTH ||
@@ -179,7 +181,7 @@ export default function Calendar(props: Props) {
       setToDate(timeUtils.toDayEnd(parsedDate));
 
       if (searchParams.toString()) {
-        router.replace(localizationHooks.useWithLocale(AppRoutes.Calendar));
+        router.replace(calendarPath);
       }
 
       if (!scrollRef.current) return;
