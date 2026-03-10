@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -31,6 +31,8 @@ import {
   scheduleUpdateSchema,
 } from '../schemas/schedulesValidationSchemas';
 import { queryKeys } from './queryKeys';
+import { useDebounce } from './useDebounce';
+import { useSort } from './useSort';
 
 const DEFAULT_LIMIT = 10;
 
@@ -42,6 +44,13 @@ type UseUpdateScheduleFormParams = {
   defaultValues: ScheduleUpdateFormData;
   onSuccess?: () => void;
   onError?: (error: Error) => void;
+};
+
+type SortField = 'name' | 'startAt' | 'endAt';
+
+type ScheduleQueryStateParams = {
+  limit: number;
+  search: string;
 };
 
 export const scheduleHooks = {
@@ -57,8 +66,8 @@ export const scheduleHooks = {
               .padStart(2, '0')}:30`,
       value: String(i * 30),
     })),
-  useGetSchedulesInfinite: ({ limit = DEFAULT_LIMIT }: SchedulesQueryParams) => {
-    const filterParams = { limit };
+  useGetSchedulesInfinite: ({ limit = DEFAULT_LIMIT, search }: SchedulesQueryParams) => {
+    const filterParams = { limit, search };
     const query = useInfiniteQuery<BaseResponse<GetSchedulesResponse>, Error>({
       queryKey: ['schedules', 'list', filterParams],
       queryFn: ({ pageParam = 1 }) =>
@@ -75,6 +84,40 @@ export const scheduleHooks = {
     utils.useSetPendingApi(isPending);
 
     return query;
+  },
+  useScheduleQuery() {
+    const [params, setParams] = useState<ScheduleQueryStateParams>({
+      limit: DEFAULT_LIMIT,
+      search: '',
+    });
+
+    const setSearchQuery = (value: string) => {
+      setParams((prev) => ({
+        ...prev,
+        search: value,
+      }));
+    };
+
+    const { field, direction, sortQuery, onSortClick } = useSort<SortField>('startAt', 'asc');
+    const debouncedSearch = useDebounce(params.search, 400);
+
+    const queryParams = useMemo(
+      () => ({
+        limit: params.limit,
+        search: debouncedSearch,
+        sort: sortQuery,
+      }),
+      [params.limit, debouncedSearch, sortQuery],
+    );
+
+    return {
+      params,
+      setSearchQuery,
+      queryParams,
+      activeSortField: field,
+      activeSortDirection: direction,
+      onSortClick,
+    };
   },
   useGetScheduleById: (id: number): ScheduleEntity | null => {
     const { data: scheduleData, isPending } = useQuery<BaseResponse<ScheduleEntity>, Error>({
@@ -129,6 +172,12 @@ export const scheduleHooks = {
       onSuccess: () => {
         queryClient.invalidateQueries({
           queryKey: queryKeys.schedules.all,
+        });
+        queryClient.invalidateQueries({
+          queryKey: queryKeys.calendar.all,
+        });
+        queryClient.invalidateQueries({
+          queryKey: queryKeys.monthCalendar.all,
         });
         onSuccess?.();
       },
@@ -203,6 +252,9 @@ export const scheduleHooks = {
           queryClient.invalidateQueries({
             queryKey: queryKeys.calendar.all,
           });
+          queryClient.invalidateQueries({
+            queryKey: queryKeys.monthCalendar.all,
+          });
           onSuccess?.();
         }
       },
@@ -263,6 +315,12 @@ export const scheduleHooks = {
         );
         queryClient.invalidateQueries({
           queryKey: queryKeys.schedules.all,
+        });
+        queryClient.invalidateQueries({
+          queryKey: queryKeys.calendar.all,
+        });
+        queryClient.invalidateQueries({
+          queryKey: queryKeys.monthCalendar.all,
         });
       },
     });
