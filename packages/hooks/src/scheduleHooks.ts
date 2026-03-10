@@ -130,6 +130,12 @@ export const scheduleHooks = {
         queryClient.invalidateQueries({
           queryKey: queryKeys.schedules.all,
         });
+        queryClient.invalidateQueries({
+          queryKey: queryKeys.calendar.all,
+        });
+        queryClient.invalidateQueries({
+          queryKey: queryKeys.monthCalendar.all,
+        });
         onSuccess?.();
       },
       onError: (error) => {
@@ -263,6 +269,12 @@ export const scheduleHooks = {
         );
         queryClient.invalidateQueries({
           queryKey: queryKeys.schedules.all,
+        });
+        queryClient.invalidateQueries({
+          queryKey: queryKeys.calendar.all,
+        });
+        queryClient.invalidateQueries({
+          queryKey: queryKeys.monthCalendar.all,
         });
       },
     });
