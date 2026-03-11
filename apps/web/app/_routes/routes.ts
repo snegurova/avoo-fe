@@ -6,7 +6,6 @@ export enum AppRoutes {
   VerifyCode = '/app/verify-code',
   ResetPassword = '/app/reset-password',
   EditProfile = '/app/profile/edit-profile',
-  EditLanguages = '/app/profile/edit-languages',
   Masters = '/app/masters',
   AddMaster = '/app/masters/add-master',
   Certificates = '/app/profile/certificates',
