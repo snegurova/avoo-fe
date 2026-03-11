@@ -6,13 +6,13 @@ import dayjs from 'dayjs';
 
 import { ScheduleEntity } from '@avoo/axios/types/apiTypes';
 import { DEFAULT_SCHEDULE, SCHEDULE_OPTIONS } from '@avoo/constants';
+import { DATE_PICKER_FORMAT, VALUE_DATE_FORMAT } from '@avoo/constants';
 import { scheduleHooks } from '@avoo/hooks';
 import { timeUtils } from '@avoo/shared';
 
 import DisabledFormField from '@/_components/DisabledFormField/DisabledFormField';
 import FormDatePicker from '@/_components/FormDatePicker/FormDatePicker';
 import { UpdateWorkingDayRow } from '@/_components/ScheduleUpdateForm/UpdateWorkingDayRow';
-import { DATE_PICKER_FORMAT, VALUE_DATE_FORMAT } from '@/_constants/dateFormats';
 import { localizationHooks } from '@/_hooks/localizationHooks';
 import { useToast } from '@/_hooks/useToast';
 import { getAllErrorMessages } from '@/_utils/formError';

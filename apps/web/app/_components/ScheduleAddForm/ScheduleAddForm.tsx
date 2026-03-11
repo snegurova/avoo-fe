@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { Button, TextField } from '@mui/material';
 
 import { END_MINUTE, SCHEDULE_OPTIONS, START_MINUTE } from '@avoo/constants';
+import { VALUE_DATE_FORMAT } from '@avoo/constants';
 import { masterHooks, scheduleHooks } from '@avoo/hooks';
 import { timeUtils } from '@avoo/shared';
 
@@ -12,7 +13,6 @@ import FormDatePicker from '@/_components/FormDatePicker/FormDatePicker';
 import { FormMultiSelect } from '@/_components/FormMultiSelect/FormMultiSelect';
 import { FormSelect } from '@/_components/FormSelect/FormSelect';
 import { CreateWorkingDayRow } from '@/_components/ScheduleAddForm/CreateWorkingDayRow';
-import { VALUE_DATE_FORMAT } from '@/_constants/dateFormats';
 import { localizationHooks } from '@/_hooks/localizationHooks';
 import { useToast } from '@/_hooks/useToast';
 import { AppRoutes } from '@/_routes/routes';

@@ -13,10 +13,10 @@ import {
   GetExceptionsQueryParams,
   GetExceptionsResponse,
 } from '@avoo/axios/types/apiTypes';
+import { VALUE_DATE_FORMAT } from '@avoo/constants';
 import { TimeOffMode, TimeOffType, WholeDay } from '@avoo/hooks/types/timeOffType';
 import { utils } from '@avoo/hooks/utils/utils';
 
-import { VALUE_DATE_FORMAT } from '../../../apps/web/app/_constants/dateFormats';
 import {
   buildMastersLabel,
   ExceptionFormData,
