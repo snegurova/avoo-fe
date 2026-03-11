@@ -4,7 +4,8 @@ import { FormControl, FormHelperText } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs from 'dayjs';
 
-import { DATE_PICKER_FORMAT, DATE_TIME_FORMAT } from '@/_constants/dateFormats';
+import { DATE_PICKER_FORMAT, DATE_TIME_FORMAT } from '@avoo/constants';
+
 import CalendarIcon from '@/_icons/CalendarIcon';
 
 type Props = {

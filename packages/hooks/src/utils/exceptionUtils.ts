@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
-import { VALUE_DATE_FORMAT } from 'packages/constants/src';
 
 import { CreateExceptionRequest } from '@avoo/axios/types/apiTypes';
+import { VALUE_DATE_FORMAT } from '@avoo/constants';
 import { TimeOffMode, WholeDay } from '@avoo/hooks/types/timeOffType';
 
 export type MasterInfo = { id: number; name?: string };

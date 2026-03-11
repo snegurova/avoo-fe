@@ -11,6 +11,7 @@ import {
   MasterWithRelationsEntityResponse,
   PrivateCalendarQueryParams,
 } from '@avoo/axios/types/apiTypes';
+import { DATE_PICKER_FORMAT } from '@avoo/constants';
 import { CalendarType } from '@avoo/hooks/types/calendarType';
 import { CalendarViewType } from '@avoo/hooks/types/calendarViewType';
 import { ElementStyleType } from '@avoo/hooks/types/elementStyleType';
@@ -20,7 +21,6 @@ import { messages as orderMessages } from '@avoo/intl/messages/private/orders/or
 import { timeUtils } from '@avoo/shared';
 
 import SelectButton from '@/_components/SelectButton/SelectButton';
-import { DATE_PICKER_FORMAT } from '@/_constants/dateFormats';
 import ArrowBackIcon from '@/_icons/ArrowBackIcon';
 import ArrowForwardIcon from '@/_icons/ArrowForwardIcon';
 import CalendarViewDay from '@/_icons/CalendarViewDay';
