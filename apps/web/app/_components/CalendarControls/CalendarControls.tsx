@@ -4,8 +4,6 @@ import { FormattedMessage } from 'react-intl';
 
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { DatePicker } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import dayjs from 'dayjs';
 import { tv } from 'tailwind-variants';
 
@@ -23,7 +21,6 @@ import { timeUtils } from '@avoo/shared';
 
 import SelectButton from '@/_components/SelectButton/SelectButton';
 import { DATE_PICKER_FORMAT } from '@/_constants/dateFormats';
-import { localizationHooks } from '@/_hooks/localizationHooks';
 import ArrowBackIcon from '@/_icons/ArrowBackIcon';
 import ArrowForwardIcon from '@/_icons/ArrowForwardIcon';
 import CalendarViewDay from '@/_icons/CalendarViewDay';
@@ -115,8 +112,6 @@ export default function CalendarControls(props: Props) {
     setOrderIsOutOfSchedule,
     calendarType,
   } = props;
-
-  const locale = localizationHooks.useGetLocale();
 
   const tabletUp = useMediaQuery('(min-width:768px)');
   const desktopLargeUp = useMediaQuery('(min-width:1280px)');
@@ -373,79 +368,77 @@ export default function CalendarControls(props: Props) {
   };
 
   return (
-    <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={locale}>
-      <div className='bg-primary-50 px-4 py-3 flex gap-3 relative'>
+    <div className='bg-primary-50 px-4 py-3 flex gap-3 relative'>
+      <button
+        type='button'
+        className={controlsButton({ variant: 'full' })}
+        onClick={() => {
+          setCurrentDate(type);
+          scrollToCurrentTime();
+        }}
+      >
+        <FormattedMessage {...messages.todayButton} />
+      </button>
+      <div className='flex'>
         <button
           type='button'
-          className={controlsButton({ variant: 'full' })}
-          onClick={() => {
-            setCurrentDate(type);
-            scrollToCurrentTime();
-          }}
+          className={controlsButton({ variant: 'left' })}
+          onClick={setPreviousDate}
         >
-          <FormattedMessage {...messages.todayButton} />
+          <ArrowBackIcon className='fill-gray-800 w-3.5 h-3.5' />
         </button>
-        <div className='flex'>
-          <button
-            type='button'
-            className={controlsButton({ variant: 'left' })}
-            onClick={setPreviousDate}
-          >
-            <ArrowBackIcon className='fill-gray-800 w-3.5 h-3.5' />
-          </button>
-          <DatePicker
-            value={dayjs(date)}
-            format={DATE_PICKER_FORMAT}
-            onChange={handleChangeDate}
-            sx={{
-              '& .MuiButtonBase-root': calendarButtonStyles,
-              transition: 'background-color 0.15s',
-              '&:hover': {
-                backgroundColor: 'var(--color-primary-200)',
-              },
-              '&:focus': {
-                backgroundColor: 'var(--color-primary-200)',
-              },
-            }}
-          />
-          <button
-            type='button'
-            className={controlsButton({ variant: 'right' })}
-            onClick={setNextDate}
-          >
-            <ArrowForwardIcon className='fill-gray-800 w-3.5 h-3.5' />
-          </button>
-        </div>
-        <SelectButton
-          label={<FormattedMessage {...messages[type]} />}
-          options={viewOptions}
-          type={ElementStyleType.OUTLINE}
+        <DatePicker
+          value={dayjs(date)}
+          format={DATE_PICKER_FORMAT}
+          onChange={handleChangeDate}
+          sx={{
+            '& .MuiButtonBase-root': calendarButtonStyles,
+            transition: 'background-color 0.15s',
+            '&:hover': {
+              backgroundColor: 'var(--color-primary-200)',
+            },
+            '&:focus': {
+              backgroundColor: 'var(--color-primary-200)',
+            },
+          }}
         />
-        {showOptions ? (
-          <>
-            <CheckboxesButton
-              addCount
-              label={<FormattedMessage {...messages.mastersLabel} />}
-              options={[mastersOptions]}
-              values={[masterIds]}
-            />
-            <CheckboxesButton
-              addCount
-              label={<FormattedMessage {...messages.statusesLabel} />}
-              options={[statusesOptions, outOfCheduleOptions]}
-              values={[statuses, orderIsOutOfSchedule]}
-            />
-          </>
-        ) : (
-          <div className={showOptionsWrapper({ calendarType })}>
-            <CheckboxesButton
-              label={<FormattedMessage {...messages.optionsLabel} />}
-              options={[mastersOptions, statusesOptions, outOfCheduleOptions]}
-              values={[masterIds, statuses, orderIsOutOfSchedule]}
-            />
-          </div>
-        )}
+        <button
+          type='button'
+          className={controlsButton({ variant: 'right' })}
+          onClick={setNextDate}
+        >
+          <ArrowForwardIcon className='fill-gray-800 w-3.5 h-3.5' />
+        </button>
       </div>
-    </LocalizationProvider>
+      <SelectButton
+        label={<FormattedMessage {...messages[type]} />}
+        options={viewOptions}
+        type={ElementStyleType.OUTLINE}
+      />
+      {showOptions ? (
+        <>
+          <CheckboxesButton
+            addCount
+            label={<FormattedMessage {...messages.mastersLabel} />}
+            options={[mastersOptions]}
+            values={[masterIds]}
+          />
+          <CheckboxesButton
+            addCount
+            label={<FormattedMessage {...messages.statusesLabel} />}
+            options={[statusesOptions, outOfCheduleOptions]}
+            values={[statuses, orderIsOutOfSchedule]}
+          />
+        </>
+      ) : (
+        <div className={showOptionsWrapper({ calendarType })}>
+          <CheckboxesButton
+            label={<FormattedMessage {...messages.optionsLabel} />}
+            options={[mastersOptions, statusesOptions, outOfCheduleOptions]}
+            values={[masterIds, statuses, orderIsOutOfSchedule]}
+          />
+        </div>
+      )}
+    </div>
   );
 }
