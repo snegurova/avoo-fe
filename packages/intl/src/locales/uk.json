@@ -1,4 +1,10 @@
 {
+  "private.profile.changePassword.oldPasswordLabel": "Поточний пароль *",
+  "private.profile.changePassword.newPasswordLabel": "Новий пароль *",
+  "private.profile.changePassword.confirmPasswordLabel": "Підтвердіть новий пароль *",
+  "private.profile.changePassword.notation": "Використовуйте щонайменше 8 символів, включаючи цифру та символ.",
+  "private.profile.changePassword.saveButton": "Зберегти зміни",
+  "private.profile.changePassword.changePassword": "Змінити пароль",
   "private.profile.profile.accountSettings": "Налаштування акаунта",
   "private.profile.profile.securitySettings": "Налаштування безпеки",
   "private.navigation.navigation.en": "Англійська",

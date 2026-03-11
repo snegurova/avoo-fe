@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useEffect, useMemo, useState } from 'react';
 import { Controller, useFieldArray } from 'react-hook-form';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -38,6 +40,9 @@ export default function OrderCreate() {
   ]);
   const [startDate, setStartDate] = useState<string | null>(null);
 
+  const orderCreatePath = localizationHooks.useWithLocale(AppRoutes.OrderCreate);
+  const calendarPath = localizationHooks.useWithLocale(AppRoutes.Calendar);
+
   const initialParams = useMemo(() => {
     const parsedQuery = Object.fromEntries(
       Object.values(OrderQueryParams).map((key) => [key, searchParams.get(key)]),
@@ -54,7 +59,7 @@ export default function OrderCreate() {
 
   useEffect(() => {
     if (searchParams.toString()) {
-      router.replace(localizationHooks.useWithLocale(AppRoutes.OrderCreate));
+      router.replace(orderCreatePath);
     }
   }, []);
 
@@ -72,7 +77,7 @@ export default function OrderCreate() {
       date: initialParams.date,
     },
     onSuccess: () => {
-      router.push(`${localizationHooks.useWithLocale(AppRoutes.Calendar)}?date=${startDate}`);
+      router.push(`${calendarPath}?date=${startDate}`);
     },
   });
 

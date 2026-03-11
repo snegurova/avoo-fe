@@ -173,6 +173,8 @@ export default function CalendarColumn(props: Props) {
     };
   }, [ref.current]);
 
+  const orderCreatePath = localizationHooks.useWithLocale(AppRoutes.OrderCreate);
+
   const onAvailabelTimeClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!availableBooking) return;
     const parent = e.currentTarget.parentElement;
@@ -211,7 +213,7 @@ export default function CalendarColumn(props: Props) {
       }
 
       router.push(
-        `${localizationHooks.useWithLocale(AppRoutes.OrderCreate)}?masterId=${master.id}&date=${encodeURIComponent(
+        `${orderCreatePath}?masterId=${master.id}&date=${encodeURIComponent(
           timeUtils.formatDateTimeRounded(date, hours * 60 + mins),
         )}`,
       );
