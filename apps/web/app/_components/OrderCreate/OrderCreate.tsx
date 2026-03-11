@@ -13,6 +13,7 @@ import { OrderType } from '@avoo/hooks/types/orderType';
 import { messages } from '@avoo/intl/messages/private/orders/create';
 import { timeUtils } from '@avoo/shared';
 import { useApiStatusStore } from '@avoo/store';
+import { useCalendarStore } from '@avoo/store';
 
 import { Button, ButtonFit, ButtonIntent, ButtonType } from '@/_components/Button/Button';
 import Calendar from '@/_components/Calendar/Calendar';
@@ -41,6 +42,7 @@ export default function OrderCreate() {
     null,
   ]);
   const [startDate, setStartDate] = useState<string | null>(null);
+  const setMasterIds = useCalendarStore((state) => state.setMasterIds);
 
   const orderCreatePath = localizationHooks.useWithLocale(AppRoutes.OrderCreate);
   const calendarPath = localizationHooks.useWithLocale(AppRoutes.Calendar);
@@ -122,6 +124,8 @@ export default function OrderCreate() {
     });
 
     setSelectedServices((prev) => [...prev, null]);
+
+    setMasterIds(undefined);
   };
 
   const combinations = combinationHooks.useGetCombinations({
@@ -203,6 +207,14 @@ export default function OrderCreate() {
     const updatedOrders = [...field.value];
     const lastIndex = updatedOrders.length - 1;
 
+    const isMasterProvidesService = selectedServices[lastIndex]?.masters.some(
+      (m) => m.id === master.id,
+    );
+
+    if (selectedServices[lastIndex] && !isMasterProvidesService) {
+      toast.error('Selected master does not provide selected service');
+      return;
+    }
     setSelectedMasters((prev) => {
       const newMasters = [...prev];
       newMasters[lastIndex] = master;
@@ -216,12 +228,14 @@ export default function OrderCreate() {
     };
 
     field.onChange(updatedOrders);
+
+    setMasterIds([master.id]);
   };
 
   return (
-    <div className={`h-[calc(100%-${WRAPPER_HEADER_HEIGHT})]  flex`}>
+    <div className={`h-[calc(100%-${WRAPPER_HEADER_HEIGHT})] flex`}>
       <form
-        className='px-8 w-full flex flex-col gap-6 overflow-y-auto overflow-x-hidden'
+        className='px-8 lg:pl-8 lg:pr-4 w-full flex flex-col gap-6 overflow-y-auto overflow-x-hidden flex-1'
         onSubmit={handleSubmit}
       >
         <Controller
@@ -290,7 +304,7 @@ export default function OrderCreate() {
               </button>
             </div>
           )}
-        <div className='flex gap-8 mt-6 pb-15'>
+        <div className='flex gap-4 lg:gap-6 xl:gap-8 mt-6 pb-15'>
           <Button
             disabled={isPending}
             loading={isPending}
@@ -311,7 +325,7 @@ export default function OrderCreate() {
           </Button>
         </div>
       </form>
-      <div className='hidden lg:block lg:w-75 xl:w-100'>
+      <div className='hidden lg:block lg:min-w-100 flex-1'>
         <Controller
           name='ordersData'
           control={control}
@@ -319,7 +333,6 @@ export default function OrderCreate() {
             <Calendar
               calendarType={CalendarType.SELECTOR}
               onClickDateTime={(date, master) => setDateAndMasterInLastItem(field, date, master)}
-              selectedMasterId={fields[field.value.length - 1]?.masterId}
             />
           )}
         />

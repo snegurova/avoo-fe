@@ -10,6 +10,7 @@ import {
 import { masterHooks, servicesHooks } from '@avoo/hooks';
 import { messages } from '@avoo/intl/messages/private/orders/create';
 import { isEmptyObject } from '@avoo/shared';
+import { useCalendarStore } from '@avoo/store';
 
 import FormDatePicker from '@/_components/FormDatePicker/FormDatePicker';
 import FormTextArea from '@/_components/FormTextArea/FormTextArea';
@@ -60,6 +61,9 @@ export default function ServiceFormItem(props: Props) {
   const [masterParams, setMasterParams] = useState<GetMastersQueryParams>({ limit: 10 });
 
   const { params, queryParams, setSearchQuery, setMasterIds } = servicesHooks.useServicesQuery();
+
+  const isLastItem = useMemo(() => index === value.length - 1, [index, value.length]);
+  const setMasterIdsInStore = useCalendarStore((state) => state.setMasterIds);
 
   const {
     data,
@@ -128,6 +132,11 @@ export default function ServiceFormItem(props: Props) {
       ...prev,
       serviceId: newService?.id || undefined,
     }));
+
+    if (isLastItem) {
+      const masterIdsProvideService = newService?.masters.map((master) => master.id) || undefined;
+      setMasterIdsInStore(masterIdsProvideService);
+    }
   };
 
   const selectMaster = (val: { id: number } | null) => {
@@ -144,6 +153,10 @@ export default function ServiceFormItem(props: Props) {
       return newMasters;
     });
     setMasterIds(val.id ? [val.id] : []);
+
+    if (isLastItem) {
+      setMasterIdsInStore(val.id ? [val.id] : undefined);
+    }
   };
 
   const ServiceElementWrapped: React.FC<{
@@ -223,21 +236,23 @@ export default function ServiceFormItem(props: Props) {
           />
           {selectedMasters[index] && <MasterElement item={selectedMasters[index]} isCard />}
         </div>
-        <div className='grid grid-cols-3 gap-x-3'>
-          <div className='col-span-2'>
+        <div className='grid grid-cols-3 lg:grid-cols-12 xl:grid-cols-3 gap-x-3'>
+          <div className='col-span-2 lg:col-span-7 xl:col-span-2'>
             <label className='block mb-2 font-medium'>
               <FormattedMessage {...messages.date} />
             </label>
             <FormDatePicker date={order.date} onChange={onDateChange} />
           </div>
-          <div className=' '>
+          <div className=' lg:col-span-5 xl:col-span-1'>
             <label className='block mb-2 font-medium' htmlFor={`time-${index}`}>
               <FormattedMessage {...messages.time} />
             </label>
             <FormTimePicker date={order.date} onChange={onDateChange} />
           </div>
           {errors?.date?.message && (
-            <div className='mt-1 text-sm text-red-500 col-span-3'>{errors?.date?.message}</div>
+            <div className='mt-1 text-sm text-red-500 col-span-3 lg:col-span-12 xl:col-span-3'>
+              {errors?.date?.message}
+            </div>
           )}
         </div>
         <div className=''>

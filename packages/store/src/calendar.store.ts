@@ -21,27 +21,45 @@ export type CalendarStore = {
   setToDate: (toDate: Date) => void;
   setOrderIsOutOfSchedule: (orderIsOutOfSchedule: boolean | undefined) => void;
   setType: (type: CalendarViewType) => void;
+  resetStorage: () => void;
+};
+
+const initialState = {
+  masterIds: undefined,
+  statuses: undefined,
+  date: timeUtils.toDayBegin(new Date()),
+  toDate: timeUtils.toDayEnd(new Date()),
+  orderIsOutOfSchedule: undefined,
+  type: CalendarViewType.DAY,
 };
 
 export const useCalendarStore = create<CalendarStore>()(
   persist(
     (set) => ({
-      masterIds: undefined,
-      statuses: undefined,
-      date: timeUtils.toDayBegin(new Date()),
-      toDate: timeUtils.toDayEnd(new Date()),
-      orderIsOutOfSchedule: undefined,
-      type: CalendarViewType.DAY,
+      ...initialState,
       setMasterIds: (masterIds) => set({ masterIds }),
       setStatuses: (statuses) => set({ statuses }),
       setDate: (date) => set({ date }),
       setToDate: (toDate) => set({ toDate }),
       setOrderIsOutOfSchedule: (orderIsOutOfSchedule) => set({ orderIsOutOfSchedule }),
       setType: (type) => set({ type }),
+      resetStorage: () =>
+        set({
+          ...initialState,
+        }),
     }),
     {
       name: 'calendar-storage',
       storage: createZustandStorage<CalendarStore>(getPlatformStorage()),
+      merge: (persistedState, currentState) => {
+        const state = persistedState as CalendarStore;
+        return {
+          ...currentState,
+          ...state,
+          date: state.date ? new Date(state.date) : currentState.date,
+          toDate: state.toDate ? new Date(state.toDate) : currentState.toDate,
+        };
+      },
       onRehydrateStorage: () => () => {
         useHydrationStore.getState().setHasHydrated(true);
       },
