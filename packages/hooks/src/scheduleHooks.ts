@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { FieldArrayWithId, useForm } from 'react-hook-form';
 
 import { yupResolver } from '@hookform/resolvers/yup';
 import {
@@ -20,7 +20,7 @@ import {
   SchedulesQueryParams,
   UpdateScheduleResponse,
 } from '@avoo/axios/types/apiTypes';
-import { END_MINUTE, START_MINUTE } from '@avoo/constants/src/calendar';
+import { END_MINUTE, START_MINUTE } from '@avoo/constants';
 import { utils } from '@avoo/hooks/utils/utils';
 import { timeUtils } from '@avoo/shared';
 
@@ -42,6 +42,7 @@ type UseCreateScheduleFormParams = {
 };
 type UseUpdateScheduleFormParams = {
   defaultValues: ScheduleUpdateFormData;
+  startAt: string;
   onSuccess?: () => void;
   onError?: (error: Error) => void;
 };
@@ -138,6 +139,7 @@ export const scheduleHooks = {
       register,
       control,
       handleSubmit,
+      getValues,
       setValue,
       watch,
       formState: { errors },
@@ -147,6 +149,7 @@ export const scheduleHooks = {
       defaultValues: {
         name: 'Working schedule',
         pattern: 7,
+        patternShift: 0,
         patternType: 'weekly',
         masterIds: [],
         startAt: timeUtils.getNextMonday(new Date()),
@@ -186,11 +189,33 @@ export const scheduleHooks = {
       },
     });
 
+    const handleStartDateChange = (value: string) => {
+      const patternType = getValues('patternType');
+
+      if (patternType === 'weekly') {
+        const currentShift = watch('patternShift');
+        const patternShift = timeUtils.getPatternShift(value);
+        const currentWorkingHours = getValues('workingHours');
+        const shift = patternShift - currentShift;
+        setValue('patternShift', patternShift);
+
+        const shiftedWorkingHours = Array.from({ length: 7 }).map((_, i) => {
+          const shiftedIndex = (((i + shift) % 7) + 7) % 7;
+          return {
+            ...currentWorkingHours[shiftedIndex],
+            day: i + 1,
+          };
+        });
+        setValue('workingHours', shiftedWorkingHours, { shouldDirty: true });
+      }
+    };
+
     utils.useSetPendingApi(isPending);
 
     return {
       register,
       control,
+      handleStartDateChange,
       handleSubmit: handleSubmit(
         utils.submitAdapter<ScheduleCreateFormData, ScheduleCreateFormData>(createSchedule),
       ),
@@ -201,7 +226,12 @@ export const scheduleHooks = {
       isPending,
     };
   },
-  useUpdateScheduleForm: ({ defaultValues, onSuccess, onError }: UseUpdateScheduleFormParams) => {
+  useUpdateScheduleForm: ({
+    defaultValues,
+    startAt,
+    onSuccess,
+    onError,
+  }: UseUpdateScheduleFormParams) => {
     const queryClient = useQueryClient();
 
     const {
@@ -214,6 +244,9 @@ export const scheduleHooks = {
     } = useForm<ScheduleUpdateFormData>({
       resolver: yupResolver(scheduleUpdateSchema),
       mode: 'onSubmit',
+      context: {
+        startAt,
+      },
       defaultValues: {
         id: defaultValues.id,
         name: defaultValues.name ?? '',
@@ -263,11 +296,30 @@ export const scheduleHooks = {
       },
     });
 
+    const handleScheduleShift = (
+      fields: FieldArrayWithId<ScheduleUpdateFormData, 'workingHours'>[],
+      patternShift: number,
+    ) => {
+      const visuallyOrderedFields = fields
+        .map((field, index) => {
+          const weekDayIndex = (((index + patternShift) % 7) + 7) % 7;
+          return {
+            field,
+            originalIndex: index,
+            weekDayIndex,
+          };
+        })
+        .sort((a, b) => a.weekDayIndex - b.weekDayIndex);
+
+      return visuallyOrderedFields;
+    };
+
     utils.useSetPendingApi(isPending);
 
     return {
       register,
       control,
+      handleScheduleShift,
       handleSubmit: handleSubmit(
         utils.submitAdapter<ScheduleUpdateFormData, ScheduleUpdateFormData>(updateSchedule),
       ),
