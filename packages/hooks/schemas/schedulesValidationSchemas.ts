@@ -15,6 +15,13 @@ export const scheduleUpdateSchema = yup.object({
       const start = timeUtils.toLocalDateISO(new Date());
 
       return value > start;
+    })
+    .test('end-after-start', 'End date must be after start date', function (value) {
+      if (!value) return true;
+      const startAt = this.options.context?.startAt;
+      if (!startAt) return true;
+      const formattedStartAt = timeUtils.toLocalDateISO(new Date(startAt));
+      return value > formattedStartAt;
     }),
 
   workingHours: yup
@@ -64,6 +71,7 @@ export const scheduleCreateSchema = yup.object({
   name: yup.string().required('Name is required').trim(),
   pattern: yup.number().required().max(40),
   patternType: yup.string().oneOf(['weekly', '2x2', '3x2', '2x1', 'custom']),
+  patternShift: yup.number().required().max(6),
 
   startAt: yup
     .string()
