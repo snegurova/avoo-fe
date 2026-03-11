@@ -8,6 +8,7 @@ import {
   Service,
 } from '@avoo/axios/types/apiTypes';
 import { masterHooks, servicesHooks } from '@avoo/hooks';
+import { messages } from '@avoo/intl/messages/private/orders/create';
 import { isEmptyObject } from '@avoo/shared';
 
 import FormDatePicker from '@/_components/FormDatePicker/FormDatePicker';
@@ -18,7 +19,6 @@ import MasterElement from '@/_components/MasterElement/MasterElement';
 import SearchField from '@/_components/SearchField/SearchField';
 import ServiceElement from '@/_components/ServiceElement/ServiceElement';
 import DeleteIcon from '@/_icons/DeleteIcon';
-import { messages } from '@avoo/intl/messages/private/orders/create';
 
 type Props = {
   order: CreateOrder;

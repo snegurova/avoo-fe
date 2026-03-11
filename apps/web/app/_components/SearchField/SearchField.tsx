@@ -3,8 +3,8 @@ import { FormattedMessage } from 'react-intl';
 
 import { ClickAwayListener } from '@mui/material';
 
-import { useApiStatusStore } from '@avoo/store';
 import { messages } from '@avoo/intl/messages/private/orders/create';
+import { useApiStatusStore } from '@avoo/store';
 
 import { IconButton } from '@/_components/IconButton/IconButton';
 import { SearchInput } from '@/_components/SearchInput/SearchInput';

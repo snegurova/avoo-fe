@@ -93,6 +93,9 @@ export default function Calendar(props: Props) {
   const { calendarType = CalendarType.REGULAR, onClickDateTime, selectedMasterId } = props;
 
   const scrollRef = useRef<HTMLDivElement | null>(null);
+
+  // const date = useCalendarStore((state) => state.date);
+  // const setDate = useCalendarStore((state) => state.setDate);
   const [date, setDate] = useState<Date>(timeUtils.toDayBegin(new Date()));
   const [toDate, setToDate] = useState<Date>(timeUtils.toDayEnd(new Date()));
   const [masterIds, setMasterIds] = useState<number[] | undefined>(
@@ -107,7 +110,6 @@ export default function Calendar(props: Props) {
   });
   const [time, setTime] = useState(timeUtils.getMinutesInDay(new Date().toString()));
   const [selectedOrder, setSelectedOrder] = useState<PrivateEvent | null>(null);
-
   const router = useRouter();
   const searchParams = useSearchParams();
   useEffect(() => {

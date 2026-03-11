@@ -4,9 +4,10 @@ import { FormattedMessage } from 'react-intl';
 
 import { Typography } from '@mui/material';
 
+import { messages } from '@avoo/intl/messages/private/orders/create';
+
 import AppWrapper from '@/_components/AppWrapper/AppWrapper';
 import OrderCreate from '@/_components/OrderCreate/OrderCreate';
-import { messages } from '@avoo/intl/messages/private/orders/create';
 
 export default function CreateOrderPage() {
   return (
