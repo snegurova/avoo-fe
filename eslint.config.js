@@ -73,6 +73,10 @@ export default defineConfig([
               message:
                 'Please use the workspace alias instead of importing from node_modules or dist.',
             },
+            {
+              group: ['**/src/**'],
+              message: 'Please use index import instead of importing from src.',
+            },
           ],
         },
       ],
