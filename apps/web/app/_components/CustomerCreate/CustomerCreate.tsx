@@ -1,11 +1,13 @@
 import React, { useCallback } from 'react';
 import { FieldErrors } from 'react-hook-form';
+import { FormattedMessage } from 'react-intl';
 
 import { tv } from 'tailwind-variants';
 
 import { CreateCustomerRequest, CreatePublicCustomerRequest } from '@avoo/axios/types/apiTypes';
 import { phoneHooks } from '@avoo/hooks';
 import { CreatePublicOrdersData } from '@avoo/hooks';
+import { messages } from '@avoo/intl/messages/private/orders/create';
 
 import FormInput from '@/_components/FormInput/FormInput';
 import FormTextArea from '@/_components/FormTextArea/FormTextArea';
@@ -85,7 +87,7 @@ export default function CustomerCreate(props: Props) {
       <div className={wrapper({ isFullWidth })}>
         <div className=''>
           <label className='block mb-1 text-sm font-medium' htmlFor='name'>
-            Name
+            <FormattedMessage {...messages.name} />
           </label>
           <FormInput
             type='text'
@@ -98,7 +100,7 @@ export default function CustomerCreate(props: Props) {
         </div>
         <div className=''>
           <label className='block mb-1 text-sm font-medium' htmlFor='email'>
-            Email
+            <FormattedMessage {...messages.email} />
           </label>
           <FormInput
             type='email'
@@ -111,7 +113,7 @@ export default function CustomerCreate(props: Props) {
         </div>
         <div className=''>
           <label className='block mb-1 text-sm font-medium' htmlFor='phone'>
-            Phone
+            <FormattedMessage {...messages.phone} />
           </label>
           <div className='flex items-stretch gap-2 lg:gap-3'>
             <div className='w-[84px] shrink-0'>
@@ -142,8 +144,8 @@ export default function CustomerCreate(props: Props) {
               name='notes'
               value={value.notes}
               onChange={handleNotesChange}
-              label='Notes'
-              helperText='Additional information about the client'
+              label={<FormattedMessage {...messages.notes} />}
+              helperText={<FormattedMessage {...messages.helperText} />}
               maxLength={200}
               classNames={{
                 label: 'block font-medium',

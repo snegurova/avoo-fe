@@ -24,8 +24,8 @@ const helperClass = tv({ base: 'mt-1 text-xs text-gray-500' });
 const errorText = tv({ base: 'mt-1 text-sm text-red-500' });
 
 type Props = Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, 'className'> & {
-  label?: string;
-  helperText?: string;
+  label?: string | React.ReactNode;
+  helperText?: string | React.ReactNode;
   maxLength?: number;
   showCounter?: boolean;
   error?: string;

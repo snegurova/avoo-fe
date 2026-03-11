@@ -2,11 +2,13 @@
 
 import React, { useEffect, useMemo, useState } from 'react';
 import { Controller, useFieldArray } from 'react-hook-form';
+import { FormattedMessage } from 'react-intl';
 import { useRouter, useSearchParams } from 'next/navigation';
 
 import { CreateOrder, MasterWithRelationsEntity } from '@avoo/axios/types/apiTypes';
 import { combinationHooks, orderHooks } from '@avoo/hooks';
 import { CalendarType } from '@avoo/hooks/types/calendarType';
+import { messages } from '@avoo/intl/messages/private/orders/create';
 import { OrderQueryParams } from '@avoo/hooks/types/orderQueryParams';
 import { OrderType } from '@avoo/hooks/types/orderType';
 import { timeUtils } from '@avoo/shared';
@@ -282,7 +284,9 @@ export default function OrderCreate() {
                 <div className='shrink-0'>
                   <AddCircleIcon className='fill-primary-900' />
                 </div>
-                <span className='text-primary-900 font-medium underline'>Add more service</span>
+                <span className='text-primary-900 font-medium underline'>
+                  <FormattedMessage {...messages.addService} />
+                </span>
               </button>
             </div>
           )}
@@ -294,7 +298,7 @@ export default function OrderCreate() {
             intent={ButtonIntent.Secondary}
             onClick={() => router.back()}
           >
-            Cancel
+            <FormattedMessage {...messages.cancel} />
           </Button>
           <Button
             type={ButtonType.Submit}
@@ -303,7 +307,7 @@ export default function OrderCreate() {
             fit={ButtonFit.Inline}
             intent={ButtonIntent.Primary}
           >
-            Book
+            <FormattedMessage {...messages.create} />
           </Button>
         </div>
       </form>

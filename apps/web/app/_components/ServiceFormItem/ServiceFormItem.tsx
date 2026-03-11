@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
+import { FormattedMessage } from 'react-intl';
 
 import {
   CreateOrder,
@@ -17,6 +18,7 @@ import MasterElement from '@/_components/MasterElement/MasterElement';
 import SearchField from '@/_components/SearchField/SearchField';
 import ServiceElement from '@/_components/ServiceElement/ServiceElement';
 import DeleteIcon from '@/_icons/DeleteIcon';
+import { messages } from '@avoo/intl/messages/private/orders/create';
 
 type Props = {
   order: CreateOrder;
@@ -174,7 +176,9 @@ export default function ServiceFormItem(props: Props) {
   return (
     <div className='rounded-lg border border-gray-200'>
       <div className='bg-primary-50 px-4 p-2 h-14 rounded-t-lg flex items-center justify-between'>
-        <h3 className='font-medium'>{selectedService?.name ?? 'Select a service'}</h3>
+        <h3 className='font-medium'>
+          {selectedService?.name ?? <FormattedMessage {...messages.selectServiceLabel} />}
+        </h3>
         {remove && (
           <IconButton
             className='group'
@@ -221,12 +225,14 @@ export default function ServiceFormItem(props: Props) {
         </div>
         <div className='grid grid-cols-3 gap-x-3'>
           <div className='col-span-2'>
-            <label className='block mb-2 font-medium'>Date</label>
+            <label className='block mb-2 font-medium'>
+              <FormattedMessage {...messages.date} />
+            </label>
             <FormDatePicker date={order.date} onChange={onDateChange} />
           </div>
           <div className=' '>
             <label className='block mb-2 font-medium' htmlFor={`time-${index}`}>
-              Time
+              <FormattedMessage {...messages.time} />
             </label>
             <FormTimePicker date={order.date} onChange={onDateChange} />
           </div>

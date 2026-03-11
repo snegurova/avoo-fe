@@ -1,8 +1,10 @@
 import React, { useRef, useState } from 'react';
+import { FormattedMessage } from 'react-intl';
 
 import { ClickAwayListener } from '@mui/material';
 
 import { useApiStatusStore } from '@avoo/store';
+import { messages } from '@avoo/intl/messages/private/orders/create';
 
 import { IconButton } from '@/_components/IconButton/IconButton';
 import { SearchInput } from '@/_components/SearchInput/SearchInput';
@@ -25,6 +27,22 @@ type Props<R, T extends { id: number }> = {
   error?: string;
   hasMore?: boolean;
   fetchNextPage?: () => void;
+};
+
+const getAddLabelMessageKey = (label: string): keyof typeof messages => {
+  switch (label.toLowerCase()) {
+    case 'client':
+      return 'addClientLabel';
+    case 'master':
+      return 'addMasterLabel';
+    case 'service':
+      return 'addServiceLabel';
+    default:
+      return ('add' +
+        label.charAt(0).toUpperCase() +
+        label.slice(1) +
+        'Label') as keyof typeof messages;
+  }
 };
 
 export default function SearchField<R, T extends { id: number }>(props: Props<R, T>) {
@@ -90,7 +108,9 @@ export default function SearchField<R, T extends { id: number }>(props: Props<R,
     <ClickAwayListener onClickAway={onClickAway}>
       <div className={`${!searchMode ? 'mb-3' : ''} ${className}`}>
         <div className='flex items-center justify-between gap-2 mb-2'>
-          <h3 className='font-medium'>{label}</h3>
+          <h3 className='font-medium'>
+            <FormattedMessage {...messages[label as keyof typeof messages]} />
+          </h3>
           <div className=''>
             {!isActive && !searchMode && <IconButton icon={<CancelIcon />} onClick={onClear} />}
             {!isActive && !searchMode && (
@@ -121,7 +141,11 @@ export default function SearchField<R, T extends { id: number }>(props: Props<R,
                     <div className='shrink-0 rounded-full w-10 h-10 bg-primary-100 group-hover:bg-primary-200 group-focus:bg-primary-200 flex items-center justify-center transition-colors'>
                       <AddIcon />
                     </div>
-                    <span>Add new {label.toLowerCase()}</span>
+                    <span>
+                      <FormattedMessage
+                        {...messages[getAddLabelMessageKey(label) as keyof typeof messages]}
+                      />
+                    </span>
                   </button>
                 </div>
               )}
@@ -137,7 +161,18 @@ export default function SearchField<R, T extends { id: number }>(props: Props<R,
                     </li>
                   ))}
                 {items.length === 0 && (
-                  <li className='text-gray-500'>No {label.toLowerCase()}s found</li>
+                  <li className='text-gray-500'>
+                    <FormattedMessage
+                      {...messages.noResults}
+                      values={{
+                        label: (
+                          <FormattedMessage
+                            {...messages[(label.toLowerCase() + 's') as keyof typeof messages]}
+                          />
+                        ),
+                      }}
+                    />
+                  </li>
                 )}
               </ul>
             </div>
