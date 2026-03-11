@@ -4,8 +4,7 @@ import React, { useCallback, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 import type { MasterWithRelationsEntityResponse } from '@avoo/axios/types/apiTypes';
-import { masterHooks } from '@avoo/hooks';
-import { useDebounce } from '@avoo/hooks/src/useDebounce';
+import { masterHooks, useDebounce } from '@avoo/hooks';
 
 import AppWrapper from '@/_components/AppWrapper/AppWrapper';
 import Controls from '@/_components/Controls/Controls';

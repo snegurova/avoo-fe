@@ -1,4 +1,4 @@
-export { WEEK_DAYS } from './calendar';
+export * from './calendar';
 export type { LanguageCode } from './languages';
 export { LANGUAGE_NAMES, VALID_LANGUAGE_CODES } from './languages';
 export type { PhoneCodeOption } from './phoneCodes';

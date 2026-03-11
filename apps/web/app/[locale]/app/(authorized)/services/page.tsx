@@ -2,8 +2,7 @@
 import React, { useMemo } from 'react';
 import Link from 'next/link';
 
-import { categoriesHooks } from '@avoo/hooks';
-import { servicesHooks } from '@avoo/hooks/src/servicesHooks';
+import { categoriesHooks, servicesHooks } from '@avoo/hooks';
 import { useApiStatusStore } from '@avoo/store';
 
 import AppPlaceholder from '@/_components/AppPlaceholder/AppPlaceholder';
