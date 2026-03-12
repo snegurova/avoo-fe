@@ -1,4 +1,4 @@
-import { apiClient } from '@avoo/axios/src/apiClient';
+import { apiClient } from '@avoo/axios';
 import {
   BaseResponse,
   CertificateResponse,
@@ -47,6 +47,15 @@ export const userApi = {
         },
       },
     );
+
+    return response.data;
+  },
+
+  async getCertificates() {
+    const response =
+      await apiClient.get<
+        BaseResponse<{ items: CertificateResponse[]; pagination?: { total?: number } }>
+      >(CERTIFICATES_ENDPOINT);
 
     return response.data;
   },

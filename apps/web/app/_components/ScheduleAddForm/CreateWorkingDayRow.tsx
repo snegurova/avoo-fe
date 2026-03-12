@@ -1,11 +1,6 @@
 import { Control, useFieldArray, UseFormSetValue, useWatch } from 'react-hook-form';
 
-import {
-  BREAK_END_MINUTES,
-  BREAK_START_MINUTES,
-  END_MINUTE,
-  START_MINUTE,
-} from '@avoo/constants/src/calendar';
+import { BREAK_END_MINUTES, BREAK_START_MINUTES, END_MINUTE, START_MINUTE } from '@avoo/constants';
 import { ScheduleCreateFormData } from '@avoo/hooks/schemas/schedulesValidationSchemas';
 
 import { WorkingDayRow } from '@/_components/WorkingDayRow/WorkingDayRow';
@@ -55,13 +50,17 @@ export const CreateWorkingDayRow = (props: Props) => {
       ]);
     }
   };
+  const patternShift = useWatch({
+    control,
+    name: 'patternShift',
+  });
 
   return (
     <WorkingDayRow
       index={index}
+      patternShift={patternShift}
       scheduleType={scheduleType}
       disabledRemove={disabledRemove}
-      dayValue={dayData.day}
       enabled={!!dayData.enabled}
       startTimeMinutes={dayData.startTimeMinutes}
       endTimeMinutes={dayData.endTimeMinutes}

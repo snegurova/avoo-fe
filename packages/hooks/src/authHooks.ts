@@ -7,7 +7,7 @@ import { authApi } from '@avoo/axios';
 import {
   ForgotPasswordRequest as ForgotPasswordRequestType,
   RegisterCustomRequest,
-} from '@avoo/axios/src/modules/auth';
+} from '@avoo/axios';
 import {
   ApiStatus,
   AuthResponse,

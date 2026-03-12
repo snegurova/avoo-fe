@@ -1,4 +1,5 @@
-export { WEEK_DAYS } from './calendar';
+export * from './calendar';
+export * from './dateFormats';
 export {
   DATE_DISPLAY_FORMAT,
   DATE_PICKER_FORMAT,

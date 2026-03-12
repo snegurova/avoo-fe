@@ -5,13 +5,15 @@ import { Button, FormControl, FormHelperText, TextField } from '@mui/material';
 import dayjs from 'dayjs';
 
 import { ScheduleEntity } from '@avoo/axios/types/apiTypes';
-import { DEFAULT_SCHEDULE, SCHEDULE_OPTIONS } from '@avoo/constants/src/calendar';
+import { DEFAULT_SCHEDULE, SCHEDULE_OPTIONS } from '@avoo/constants';
+import { DATE_PICKER_FORMAT, VALUE_DATE_FORMAT } from '@avoo/constants';
 import { scheduleHooks } from '@avoo/hooks';
+import { timeUtils } from '@avoo/shared';
 
 import DisabledFormField from '@/_components/DisabledFormField/DisabledFormField';
 import FormDatePicker from '@/_components/FormDatePicker/FormDatePicker';
 import { UpdateWorkingDayRow } from '@/_components/ScheduleUpdateForm/UpdateWorkingDayRow';
-import { DATE_PICKER_FORMAT, VALUE_DATE_FORMAT } from '@/_constants/dateFormats';
+import { localizationHooks } from '@/_hooks/localizationHooks';
 import { useToast } from '@/_hooks/useToast';
 import { getAllErrorMessages } from '@/_utils/formError';
 
@@ -24,16 +26,19 @@ export default function ScheduleUpdateForm(props: Props) {
   const { schedule, onCancel } = props;
   const toast = useToast();
 
-  const { control, setValue, handleSubmit, errors } = scheduleHooks.useUpdateScheduleForm({
-    defaultValues: schedule,
-    onSuccess: () => {
-      toast.success('Schedule has been updated!');
-      onCancel();
-    },
-    onError: (error) => {
-      toast.error('Failed to update schedule  : ' + error.message);
-    },
-  });
+  const locale = localizationHooks.useGetLocale();
+  const { control, setValue, handleSubmit, errors, handleScheduleShift } =
+    scheduleHooks.useUpdateScheduleForm({
+      defaultValues: schedule,
+      startAt: schedule.startAt,
+      onSuccess: () => {
+        toast.success('Schedule has been updated!');
+        onCancel();
+      },
+      onError: (error) => {
+        toast.error('Failed to update schedule  : ' + error.message);
+      },
+    });
 
   const { fields } = useFieldArray({
     control,
@@ -44,6 +49,8 @@ export default function ScheduleUpdateForm(props: Props) {
     SCHEDULE_OPTIONS.find((option) => option.pattern === schedule.pattern) ?? DEFAULT_SCHEDULE;
 
   const errorsList = getAllErrorMessages(errors);
+  const patternShift = timeUtils.getPatternShift(schedule.startAt);
+  const visuallyOrderedFields = handleScheduleShift(fields, patternShift);
 
   return (
     <>
@@ -82,7 +89,7 @@ export default function ScheduleUpdateForm(props: Props) {
           fullWidth
         />
         <DisabledFormField
-          value={dayjs(schedule.startAt).format(DATE_PICKER_FORMAT)}
+          value={dayjs(schedule.startAt).locale(locale).format(DATE_PICKER_FORMAT)}
           label='Start date'
           required
           fullWidth
@@ -100,13 +107,14 @@ export default function ScheduleUpdateForm(props: Props) {
             />
           )}
         />
-        {fields.map((wh, index) => (
+        {visuallyOrderedFields.map(({ field: wh, originalIndex: index }) => (
           <UpdateWorkingDayRow
             key={wh.id}
             index={index}
             control={control}
             scheduleType={scheduleType.value}
             setValue={setValue}
+            patternShift={patternShift}
           />
         ))}
       </form>

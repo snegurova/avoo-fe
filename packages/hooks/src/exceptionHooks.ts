@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import dayjs from 'dayjs';
 
-import { exceptionApi } from '@avoo/axios/src/modules/exception';
+import { exceptionApi } from '@avoo/axios/';
 import {
   ApiStatus,
   BaseResponse,

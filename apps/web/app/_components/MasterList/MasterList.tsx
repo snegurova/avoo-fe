@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 
-import { masterApi } from '@avoo/axios/src/modules/master';
+import { masterApi } from '@avoo/axios';
 import { MasterWithRelationsEntityResponse } from '@avoo/axios/types/apiTypes';
 import { fetchAllAndSort, SortDirection } from '@avoo/shared';
 
