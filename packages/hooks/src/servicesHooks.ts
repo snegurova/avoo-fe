@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { InfiniteData, useInfiniteQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 
-import { servicesApi } from '@avoo/axios/src/modules/services';
+import { servicesApi } from '@avoo/axios';
 import {
   ApiStatus,
   BaseResponse,

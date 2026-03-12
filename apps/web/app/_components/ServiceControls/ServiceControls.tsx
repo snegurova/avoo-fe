@@ -2,8 +2,6 @@ import Link from 'next/link';
 
 import { Button, InputAdornment, TextField, Typography } from '@mui/material';
 
-import { useApiStatusStore } from '@avoo/store';
-
 import { localizationHooks } from '@/_hooks/localizationHooks';
 import SearchIcon from '@/_icons/SearchIcon';
 import { AppRoutes } from '@/_routes/routes';
@@ -14,7 +12,6 @@ type Props = {
 
 export default function ServiceControls(props: Props) {
   const { setSearchQuery } = props;
-  const isPending = useApiStatusStore((state) => state.isPending);
 
   return (
     <div className='pb-4 flex flex-wrap items-center gap-y-3'>
@@ -25,13 +22,7 @@ export default function ServiceControls(props: Props) {
 
         <div className='order-2 md:order-3 ml-auto md:ml-0'>
           <Link href={localizationHooks.useWithLocale(AppRoutes.CreateService)}>
-            <Button
-              fullWidth
-              color='primary'
-              variant='outlined'
-              loading={isPending}
-              disabled={isPending}
-            >
+            <Button fullWidth color='primary' variant='outlined'>
               Add service
             </Button>
           </Link>

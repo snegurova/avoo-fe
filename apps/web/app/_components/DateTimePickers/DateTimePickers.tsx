@@ -6,7 +6,7 @@ import { DatePicker, TimePicker } from '@mui/x-date-pickers';
 import type { Dayjs } from 'dayjs';
 import dayjs from 'dayjs';
 
-import { DATE_DISPLAY_FORMAT, TIME_FORMAT } from '@/_constants/dateFormats';
+import { DATE_DISPLAY_FORMAT, TIME_FORMAT } from '@avoo/constants';
 
 export enum DateTimePickersVariant {
   Default = 'default',

@@ -76,23 +76,33 @@ export default function ScheduleList(props: Props) {
       </div>
       <div className='overflow-y-auto'>
         <ul className='flex flex-col gap-2 lg:block lg:divide-y lg:divide-gray-200' ref={listRef}>
-          {schedules?.map((schedule) => (
-            <li key={schedule.id} onClick={() => handleScheduleClick(schedule)}>
-              <ScheduleListItem
-                id={schedule.id}
-                name={schedule.name}
-                startAt={new Date(schedule.startAt)}
-                endAt={schedule.endAt ? new Date(schedule.endAt) : null}
-                master={schedule.master}
-                isActive={new Date(schedule.startAt) <= new Date()}
-                isSelected={selectedSchedule?.id === schedule.id}
-                onDelete={() => handleOpenDeleteDialog(schedule.id)}
-                onEdit={() => {
-                  setSelectedSchedule(schedule);
-                }}
-              />
-            </li>
-          ))}
+          {schedules && schedules.length !== 0 ? (
+            schedules.map((schedule) => (
+              <li key={schedule.id} onClick={() => handleScheduleClick(schedule)}>
+                <ScheduleListItem
+                  id={schedule.id}
+                  name={schedule.name}
+                  startAt={new Date(schedule.startAt)}
+                  endAt={schedule.endAt ? new Date(schedule.endAt) : null}
+                  master={schedule.master}
+                  isActive={new Date(schedule.startAt) <= new Date()}
+                  isSelected={selectedSchedule?.id === schedule.id}
+                  onDelete={() => handleOpenDeleteDialog(schedule.id)}
+                  onEdit={() => {
+                    setSelectedSchedule(schedule);
+                  }}
+                />
+              </li>
+            ))
+          ) : isPending ? (
+            <Typography variant='h1' className='text-center'>
+              Loading...
+            </Typography>
+          ) : (
+            <Typography variant='h1' className='text-center'>
+              No schedules found
+            </Typography>
+          )}
         </ul>
       </div>
 

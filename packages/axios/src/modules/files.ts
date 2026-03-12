@@ -1,4 +1,4 @@
-import { apiClient } from '@avoo/axios/src/apiClient';
+import { apiClient } from '@avoo/axios';
 import { BaseResponse, FileUploadResponse } from '@avoo/axios/types/apiTypes';
 
 const UPLOAD_FILE_ENDPOINT = '/files';

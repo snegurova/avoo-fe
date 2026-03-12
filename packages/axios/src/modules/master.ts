@@ -1,4 +1,4 @@
-import { apiClient } from '@avoo/axios/src/apiClient';
+import { apiClient } from '@avoo/axios';
 import {
   BaseResponse,
   CreateMasterRequest,

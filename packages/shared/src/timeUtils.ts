@@ -1,3 +1,4 @@
+import { DAYS_NAME } from '@avoo/constants';
 import { DateStatus } from '@avoo/hooks/types/dateStatus';
 
 export const timeUtils = {
@@ -78,8 +79,7 @@ export const timeUtils = {
     };
   },
   getWeekDay(day: number): string {
-    const weekDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-    return weekDays[day];
+    return DAYS_NAME[day];
   },
   getDateStatus(date: Date): DateStatus {
     const today = this.toDayBegin(new Date());
@@ -92,6 +92,12 @@ export const timeUtils = {
     } else {
       return DateStatus.FUTURE;
     }
+  },
+  getPatternShift(date: string): number {
+    const dateValue = new Date(date);
+    const monday = this.getNextMonday(dateValue);
+    const shift = dateValue.getDay() - new Date(monday).getDay();
+    return shift;
   },
   convertDuration(duration: number): string {
     const hours = Math.floor(duration / 60);
@@ -223,14 +229,14 @@ export const timeUtils = {
   },
   getNextMonday(date: Date): string {
     const result = new Date(date);
-    const day = result.getDay(); // 0 = Sun, 1 = Mon, ..., 6 = Sat
+    const day = result.getDay();
     const daysToAdd = (8 - day) % 7 || 7;
     result.setDate(result.getDate() + daysToAdd);
     return this.toLocalDateISO(result);
   },
   toLocalDateISO(date: Date): string {
     const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0'); // 0-based
+    const month = String(date.getMonth() + 1).padStart(2, '0');
     const day = String(date.getDate()).padStart(2, '0');
 
     return `${year}-${month}-${day}`;

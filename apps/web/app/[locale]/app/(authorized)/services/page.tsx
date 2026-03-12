@@ -2,8 +2,8 @@
 import React, { useMemo } from 'react';
 import Link from 'next/link';
 
-import { categoriesHooks } from '@avoo/hooks';
-import { servicesHooks } from '@avoo/hooks/src/servicesHooks';
+import { categoriesHooks, servicesHooks } from '@avoo/hooks';
+import { useApiStatusStore } from '@avoo/store';
 
 import AppPlaceholder from '@/_components/AppPlaceholder/AppPlaceholder';
 import AppWrapper from '@/_components/AppWrapper/AppWrapper';
@@ -15,6 +15,7 @@ import AutoStoriesIcon from '@/_icons/AutoStoriesIcon';
 import { AppRoutes } from '@/_routes/routes';
 
 export default function ServicesPage() {
+  const isPending = useApiStatusStore((state) => state.isPending);
   const { params, queryParams, selectedCategoryName, setSearchQuery, setCategory } =
     servicesHooks.useServicesQuery();
 
@@ -29,21 +30,23 @@ export default function ServicesPage() {
   return (
     <AppWrapper withPadding>
       <ServiceControls setSearchQuery={setSearchQuery} />
-      {params.search === '' && !categories ? (
+      {params.search === '' && total === 0 ? (
         <AppPlaceholder
-          title='No services added'
+          title={isPending ? 'Loading...' : 'No services added'}
           icon={<AutoStoriesIcon className='w-20 h-20 lg:w-25 lg:h-25 fill-primary-300' />}
           description={
-            <p>
-              Start by creating your first{' '}
-              <Link
-                href={localizationHooks.useWithLocale(AppRoutes.CreateService)}
-                className='text-primary-300'
-              >
-                service
-              </Link>{' '}
-              to make it available for booking
-            </p>
+            isPending ? null : (
+              <p>
+                Start by creating your first{' '}
+                <Link
+                  href={localizationHooks.useWithLocale(AppRoutes.CreateService)}
+                  className='text-primary-300'
+                >
+                  service
+                </Link>{' '}
+                to make it available for booking
+              </p>
+            )
           }
         />
       ) : (
