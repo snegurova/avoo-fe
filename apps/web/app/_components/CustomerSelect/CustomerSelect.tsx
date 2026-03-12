@@ -27,6 +27,7 @@ export function CustomerSelect({ value, onChange, error }: Props) {
   const [params, setParams] = useState<GetCustomersQueryParams>({ limit: 4 });
   const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(null);
   const [phone, setPhone] = useState('');
+  const [isActiveClientSearch, setIsActiveClientSearch] = useState(false);
 
   useEffect(() => {
     setParams((prev) => ({
@@ -60,6 +61,10 @@ export function CustomerSelect({ value, onChange, error }: Props) {
     }
   }, [phone]);
 
+  const onCustomerElementClick = () => {
+    setIsActiveClientSearch(true);
+  };
+
   return (
     <div className='w-full'>
       <SearchField
@@ -75,17 +80,22 @@ export function CustomerSelect({ value, onChange, error }: Props) {
         error={error?.message}
         hasMore={hasNextPage}
         fetchNextPage={fetchNextPage}
-      />
-      {isCustomerValues(value) && (
-        <CustomerCreate
-          phone={phone}
-          setPhone={setPhone}
-          value={value}
-          onChange={onChange}
-          error={error}
-        />
-      )}
-      {selectedCustomer && <CustomerElement item={selectedCustomer} isCard />}
+        isActive={isActiveClientSearch}
+        setIsActive={setIsActiveClientSearch}
+      >
+        {isCustomerValues(value) && (
+          <CustomerCreate
+            phone={phone}
+            setPhone={setPhone}
+            value={value}
+            onChange={onChange}
+            error={error}
+          />
+        )}
+        {selectedCustomer && (
+          <CustomerElement item={selectedCustomer} isCard onClick={onCustomerElementClick} />
+        )}
+      </SearchField>
     </div>
   );
 }

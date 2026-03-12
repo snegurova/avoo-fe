@@ -17,8 +17,12 @@ const WrapperStyles = tv({
   base: 'flex gap-3 items-center justify-between rounded-lg w-full border border-gray-200',
   variants: {
     isCard: {
-      true: 'p-4 ',
-      false: 'cursor-pointer p-2 hover:bg-primary-100 focus:bg-primary-100 transition-colors group',
+      true: 'p-4',
+      false: 'p-2',
+    },
+    isButton: {
+      true: 'cursor-pointer hover:bg-primary-100 focus:bg-primary-100 transition-colors group',
+      false: '',
     },
   },
 });
@@ -26,12 +30,14 @@ const WrapperStyles = tv({
 export default function MasterElement(props: Props) {
   const { item, onClick, isCard } = props;
 
-  const Wrapper = isCard ? 'div' : 'button';
+  const isButton = Boolean(onClick);
+
+  const Wrapper = isButton ? 'button' : 'div';
 
   return (
     <Wrapper
-      className={WrapperStyles({ isCard })}
-      {...(!isCard && {
+      className={WrapperStyles({ isCard, isButton })}
+      {...(isButton && {
         type: 'button',
         onClick,
       })}

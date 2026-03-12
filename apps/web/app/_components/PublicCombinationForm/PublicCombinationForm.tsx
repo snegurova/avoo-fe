@@ -48,6 +48,7 @@ export default function PublicCombinationForm(props: Props) {
   const searchParams = useParams();
   const userId = Number(searchParams.userId);
 
+  const [isActiveMasterSearch, setIsActiveMasterSearch] = useState(false);
   const [masterSearch, setMasterSearch] = useState('');
   const [masterParams, setMasterParams] = useState<GetMastersQueryParams>({
     limit: 10,
@@ -141,6 +142,10 @@ export default function PublicCombinationForm(props: Props) {
     onChange(newOrders);
   };
 
+  const onMasterElementClick = () => {
+    setIsActiveMasterSearch(true);
+  };
+
   return (
     <div className='rounded-lg border border-gray-200'>
       {' '}
@@ -174,8 +179,13 @@ export default function PublicCombinationForm(props: Props) {
             error={errors?.masterId?.message}
             hasMore={hasMoreMasters}
             fetchNextPage={fetchNextMastersPage}
-          />
-          {selectedMasters[0] && <MasterElement item={selectedMasters[0]} isCard />}
+            isActive={isActiveMasterSearch}
+            setIsActive={setIsActiveMasterSearch}
+          >
+            {selectedMasters[0] && (
+              <MasterElement item={selectedMasters[0]} isCard onClick={onMasterElementClick} />
+            )}
+          </SearchField>
         </div>
         <div className=''>
           <div className=''>

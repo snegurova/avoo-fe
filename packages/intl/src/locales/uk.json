@@ -129,5 +129,10 @@
   "private.orders.create.helperText": "Додаткова інформація про клієнта",
   "private.orders.create.selectServiceLabel": "Виберіть послугу",
   "private.orders.create.time": "Час",
-  "private.orders.create.date": "Дата"
+  "private.orders.create.date": "Дата",
+  "private.orders.create.canBeCombined": "можна поєднати з",
+  "private.orders.create.totalDurationMessage": "Загальна тривалість запису складе",
+  "private.orders.create.minutes": "хвилин",
+  "private.orders.create.bookSeparately": "Забронювати окремо",
+  "private.orders.create.applyCombination": "Застосувати комбінацію"
 }

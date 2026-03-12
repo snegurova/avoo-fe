@@ -59,6 +59,8 @@ export default function ServiceFormItem(props: Props) {
 
   const [masterSearch, setMasterSearch] = useState('');
   const [masterParams, setMasterParams] = useState<GetMastersQueryParams>({ limit: 10 });
+  const [isActiveMasterSearch, setIsActiveMasterSearch] = useState(false);
+  const [isActiveServiceSearch, setIsActiveServiceSearch] = useState(false);
 
   const { params, queryParams, setSearchQuery, setMasterIds } = servicesHooks.useServicesQuery();
 
@@ -186,6 +188,14 @@ export default function ServiceFormItem(props: Props) {
     onChange(newOrders);
   };
 
+  const onServiceElementClick = () => {
+    setIsActiveServiceSearch(true);
+  };
+
+  const onMasterElementClick = () => {
+    setIsActiveMasterSearch(true);
+  };
+
   return (
     <div className='rounded-lg border border-gray-200'>
       <div className='bg-primary-50 px-4 p-2 h-14 rounded-t-lg flex items-center justify-between'>
@@ -217,8 +227,13 @@ export default function ServiceFormItem(props: Props) {
             error={errors?.serviceId?.message}
             hasMore={hasMoreServices}
             fetchNextPage={fetchNextServicesPage}
-          />
-          {selectedService && <ServiceElement item={selectedService} isCard />}
+            isActive={isActiveServiceSearch}
+            setIsActive={setIsActiveServiceSearch}
+          >
+            {selectedService && (
+              <ServiceElement item={selectedService} isCard onClick={onServiceElementClick} />
+            )}
+          </SearchField>
         </div>
         <div className=''>
           <SearchField
@@ -233,8 +248,13 @@ export default function ServiceFormItem(props: Props) {
             error={errors?.masterId?.message}
             hasMore={hasMoreMasters}
             fetchNextPage={fetchNextMastersPage}
-          />
-          {selectedMasters[index] && <MasterElement item={selectedMasters[index]} isCard />}
+            isActive={isActiveMasterSearch}
+            setIsActive={setIsActiveMasterSearch}
+          >
+            {selectedMasters[index] && (
+              <MasterElement item={selectedMasters[index]} isCard onClick={onMasterElementClick} />
+            )}
+          </SearchField>
         </div>
         <div className='grid grid-cols-3 lg:grid-cols-12 xl:grid-cols-3 gap-x-3'>
           <div className='col-span-2 lg:col-span-7 xl:col-span-2'>

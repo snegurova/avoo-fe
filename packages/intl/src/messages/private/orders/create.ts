@@ -117,4 +117,24 @@ export const messages = defineMessages({
     id: 'private.orders.create.date',
     defaultMessage: 'Date',
   },
+  canBeCombined: {
+    id: 'private.orders.create.canBeCombined',
+    defaultMessage: 'can be combined with',
+  },
+  totalDurationMessage: {
+    id: 'private.orders.create.totalDurationMessage',
+    defaultMessage: 'The total appointment duration will be',
+  },
+  minutes: {
+    id: 'private.orders.create.minutes',
+    defaultMessage: 'minutes',
+  },
+  bookSeparetly: {
+    id: 'private.orders.create.bookSeparately',
+    defaultMessage: 'Book separately',
+  },
+  applyCombination: {
+    id: 'private.orders.create.applyCombination',
+    defaultMessage: 'Apply combination',
+  },
 });

@@ -1,4 +1,3 @@
-
 {
   "private.profile.changePassword.oldPasswordLabel": "Current password *",
   "private.profile.changePassword.newPasswordLabel": "New password *",
@@ -130,5 +129,10 @@
   "private.orders.create.helperText": "Additional information about the client",
   "private.orders.create.selectServiceLabel": "Select service",
   "private.orders.create.time": "Time",
-  "private.orders.create.date": "Date"
+  "private.orders.create.date": "Date",
+  "private.orders.create.canBeCombined": "can be combined with",
+  "private.orders.create.totalDurationMessage": "The total appointment duration will be",
+  "private.orders.create.minutes": "minutes",
+  "private.orders.create.bookSeparately": "Book separately",
+  "private.orders.create.applyCombination": "Apply combination"
 }

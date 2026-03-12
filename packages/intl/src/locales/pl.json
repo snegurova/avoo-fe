@@ -129,5 +129,10 @@
   "private.orders.create.helperText": "Dodatkowe informacje o kliencie",
   "private.orders.create.selectServiceLabel": "Wybierz usługę",
   "private.orders.create.time": "Godzina",
-  "private.orders.create.date": "Data"
+  "private.orders.create.date": "Data",
+  "private.orders.create.canBeCombined": "można połączyć z",
+  "private.orders.create.totalDurationMessage": "Całkowity czas wizyty będzie wynosił",
+  "private.orders.create.minutes": "minut",
+  "private.orders.create.bookSeparately": "Rezerwuj osobno",
+  "private.orders.create.applyCombination": "Zastosuj kombinację"
 }

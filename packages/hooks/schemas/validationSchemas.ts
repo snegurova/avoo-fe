@@ -182,9 +182,20 @@ export const ordersDataSchema = yup
           if (!value) return false;
           const inputDate = new Date(value);
           const now = new Date();
-
           return inputDate >= now;
-        }),
+        })
+        .test(
+          'is-less-than-one-year',
+          'Date and time must be less than 1 year from now',
+          function (value) {
+            if (!value) return false;
+            const inputDate = new Date(value);
+            const now = new Date();
+            const oneYearLater = new Date(now);
+            oneYearLater.setFullYear(now.getFullYear() + 1);
+            return inputDate < oneYearLater;
+          },
+        ),
       notes: yup.string().optional(),
     }),
   )

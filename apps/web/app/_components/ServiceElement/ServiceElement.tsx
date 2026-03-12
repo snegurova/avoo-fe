@@ -20,9 +20,9 @@ type Props = {
 const wrapperStyles = tv({
   base: 'relative border border-gray-200 rounded-lg overflow-hidden w-full flex items-center justify-between gap-4 py-4 pr-4 pl-6 relative before:content-[""] before:absolute before:left-0 before:top-0 before:bottom-0 before:w-2 before:bg-primary-200',
   variants: {
-    isCard: {
-      true: '',
-      false: 'cursor-pointer hover:bg-primary-100 focus:bg-primary-100 transition-colors',
+    isButton: {
+      true: 'cursor-pointer hover:bg-primary-100 focus:bg-primary-100 transition-colors',
+      false: '',
     },
   },
 });
@@ -30,12 +30,14 @@ const wrapperStyles = tv({
 export default function ServiceElement(props: Props) {
   const { item, onClick, isCard, hideMasters = false, master } = props;
 
-  const Wrapper = isCard ? 'div' : 'button';
+  const isButton = Boolean(onClick);
+
+  const Wrapper = isButton ? 'button' : 'div';
 
   return (
     <Wrapper
-      className={wrapperStyles({ isCard })}
-      {...(!isCard && {
+      className={wrapperStyles({ isButton })}
+      {...(isButton && {
         type: 'button',
         onClick,
       })}
