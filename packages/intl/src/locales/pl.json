@@ -90,6 +90,8 @@
   "private.calendar.calendar.Fri": "Pią",
   "private.calendar.calendar.Sat": "Sob",
   "private.calendar.calendar.Sun": "Nie",
+  "private.calendar.calendar.noSchedules": "Brak grafików",
+  "private.calendar.calendar.noSchedulesDescription": "Aktualnie nie ma grafików do wyświetlenia. Wybierz pracowników, aby zobaczyć ich grafiki tutaj.",
   "private.orders.order.pending": "Oczekujące",
   "private.orders.order.completed": "Zakończone",
   "private.orders.order.cancelled": "Anulowane",

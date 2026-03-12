@@ -8,6 +8,9 @@ import {
   PrivateServiceQueryParams,
   PublicCalendarByDatesQueryParams,
   PublicCalendarQueryParams,
+  PrivateGetAvailabilityQueryParams,
+  PublicGetAvailabilityQueryParams,
+  GetAvailabilityResponse,
 } from '@avoo/axios/types/apiTypes';
 
 export const queryKeys = {
@@ -54,6 +57,16 @@ export const queryKeys = {
     all: ['publicCalendar'] as const,
     byParams: (params: PublicCalendarQueryParams) =>
       [...queryKeys.publicCalendar.all, params] as const,
+  },
+  availability: {
+    all: ['availability'] as const,
+    byParams: (params: PrivateGetAvailabilityQueryParams) =>
+      [...queryKeys.availability.all, params] as const,
+  },
+  publicAvailability: {
+    all: ['publicAvailability'] as const,
+    byParams: (params: PublicGetAvailabilityQueryParams) =>
+      [...queryKeys.publicAvailability.all, params] as const,
   },
   monthCalendar: {
     all: ['monthCalendar'] as const,

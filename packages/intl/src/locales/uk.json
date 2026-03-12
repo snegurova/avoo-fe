@@ -90,6 +90,8 @@
   "private.calendar.calendar.Fri": "Пт",
   "private.calendar.calendar.Sat": "Сб",
   "private.calendar.calendar.Sun": "Нд",
+  "private.calendar.calendar.noSchedules": "Немає розкладів",
+  "private.calendar.calendar.noSchedulesDescription": "Наразі немає розкладів для відображення. Виберіть майстрів, щоб побачити їх розклади тут.",
   "private.orders.order.pending": "В очікуванні",
   "private.orders.order.completed": "Завершено",
   "private.orders.order.cancelled": "Скасовано",

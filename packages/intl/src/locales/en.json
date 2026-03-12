@@ -90,6 +90,8 @@
   "private.calendar.calendar.Fri": "Fri",
   "private.calendar.calendar.Sat": "Sat",
   "private.calendar.calendar.Sun": "Sun",
+  "private.calendar.calendar.noSchedules": "No schedules",
+  "private.calendar.calendar.noSchedulesDescription": "There are currently no schedules to display. Choose masters to see their schedules here.",
   "private.orders.order.pending": "Pending",
   "private.orders.order.completed": "Completed",
   "private.orders.order.cancelled": "Cancelled",

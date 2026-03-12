@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { FormattedMessage } from 'react-intl';
 
 import { tv } from 'tailwind-variants';
 
@@ -14,6 +15,7 @@ import { CalendarViewType } from '@avoo/hooks/types/calendarViewType';
 import { OrderQueryParams } from '@avoo/hooks/types/orderQueryParams';
 import { timeUtils } from '@avoo/shared';
 import { useCalendarStore } from '@avoo/store';
+import { messages } from '@avoo/intl/messages/private/calendar/calendar';
 
 import AppPlaceholder from '@/_components/AppPlaceholder/AppPlaceholder';
 import AsideModal from '@/_components/AsideModal/AsideModal';
@@ -283,9 +285,9 @@ export default function Calendar(props: Props) {
             )}
             {filteredMasters.length === 0 && (
               <AppPlaceholder
-                title='No schedules'
+                title={<FormattedMessage {...messages.noSchedules} />}
                 icon={<CalendarClockIcon className='w-20 h-20 lg:w-25 lg:h-25 fill-primary-300' />}
-                description='There are currently no schedules to display. Choose masters to see their schedules here.'
+                description={<FormattedMessage {...messages.noSchedulesDescription} />}
               />
             )}
           </div>

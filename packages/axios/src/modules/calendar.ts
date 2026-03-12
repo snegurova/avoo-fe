@@ -9,6 +9,9 @@ import {
   PrivateCalendarQueryParams,
   PublicCalendarByDatesQueryParams,
   PublicCalendarQueryParams,
+  PrivateGetAvailabilityQueryParams,
+  PublicGetAvailabilityQueryParams,
+  GetAvailabilityResponse,
 } from '@avoo/axios/types/apiTypes';
 
 const GET_CALENDAR_ENDPOINT = '/calendar';
@@ -81,6 +84,50 @@ export const calendarApi = {
   async getPublicCalendarByDates(params: PublicCalendarByDatesQueryParams) {
     const res = await apiClient.get<BaseResponse<GetPublicCalendarByDatesResponse>>(
       `${GET_PUBLIC_CALENDAR_ENDPOINT}/by-dates`,
+      {
+        params,
+        paramsSerializer: (params) => {
+          const searchParams = new URLSearchParams();
+          Object.entries(params).forEach(([key, value]) => {
+            if (Array.isArray(value)) {
+              value.forEach((val) => {
+                searchParams.append(key, String(val));
+              });
+            } else if (value !== undefined) {
+              searchParams.append(key, String(value));
+            }
+          });
+          return searchParams.toString();
+        },
+      },
+    );
+    return res.data;
+  },
+  async getPrivateAvailability(params: PrivateGetAvailabilityQueryParams) {
+    const res = await apiClient.get<BaseResponse<GetAvailabilityResponse>>(
+      `${GET_CALENDAR_ENDPOINT}/availability`,
+      {
+        params,
+        paramsSerializer: (params) => {
+          const searchParams = new URLSearchParams();
+          Object.entries(params).forEach(([key, value]) => {
+            if (Array.isArray(value)) {
+              value.forEach((val) => {
+                searchParams.append(key, String(val));
+              });
+            } else if (value !== undefined) {
+              searchParams.append(key, String(value));
+            }
+          });
+          return searchParams.toString();
+        },
+      },
+    );
+    return res.data;
+  },
+  async getPublicAvailability(params: PublicGetAvailabilityQueryParams) {
+    const res = await apiClient.get<BaseResponse<GetAvailabilityResponse>>(
+      `${GET_PUBLIC_CALENDAR_ENDPOINT}/availability`,
       {
         params,
         paramsSerializer: (params) => {
