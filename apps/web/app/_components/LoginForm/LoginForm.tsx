@@ -12,6 +12,7 @@ import { useApiStatusStore } from '@avoo/store';
 import { Button, ButtonFit, ButtonIntent } from '@/_components/Button/Button';
 import FormInput from '@/_components/FormInput/FormInput';
 import ShowPasswordToggler from '@/_components/ShowPasswordToggler/ShowPasswordToggler';
+import { localizationHooks } from '@/_hooks/localizationHooks';
 import { useToast } from '@/_hooks/useToast';
 import { AppRoutes } from '@/_routes/routes';
 import { routerUtils } from '@/_utils/routerUtils';
@@ -38,12 +39,14 @@ export default function LoginForm() {
     }
   }, [isError, errorMessage]);
 
+  const homeRedirect = localizationHooks.useWithLocale(AppRoutes.Home);
+
   const { register, handleSubmit, errors } = authHooks.useLoginForm({
     onSuccess: () => {
       const targetUrl =
         returnUrl && routerUtils.isValidRoute(returnUrl)
           ? routerUtils.toRoute(returnUrl)
-          : AppRoutes.Home;
+          : homeRedirect;
       router.replace(targetUrl);
     },
   });

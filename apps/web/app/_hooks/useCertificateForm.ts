@@ -71,13 +71,13 @@ export function useCertificateForm() {
     }
 
     payload.file = file;
-
+    const sertificatesRedirect = localizationHooks.useWithLocale(AppRoutes.Certificates);
     handleAddCertificate(payload, {
       onSuccess: () => {
         reset();
         setFile(null);
         setFileError(null);
-        router.push(localizationHooks.useWithLocale(AppRoutes.Certificates));
+        router.push(sertificatesRedirect);
       },
     });
   };

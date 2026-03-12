@@ -10,8 +10,9 @@ import { AppRoutes } from '@/_routes/routes';
 export const routerHooks = {
   useHandleNavigateToHomeClick: () => {
     const router = useRouter();
+    const homeRedirect = localizationHooks.useWithLocale(AppRoutes.Home);
     return useCallback(() => {
-      router.push(localizationHooks.useWithLocale(AppRoutes.Home));
+      router.push(homeRedirect);
     }, [router]);
   },
   useBackWithFallback: (fallback: Route, backTo?: Route) => {
