@@ -28,6 +28,7 @@ export default function AppHeader({ setMenuOpen }: Props) {
   const router = useRouter();
   const tabletUp = useMediaQuery('(min-width:768px)');
   const orderCreatePath = localizationHooks.useWithLocale(AppRoutes.OrderCreate);
+  const orderAddPostPath = localizationHooks.useWithLocale(AppRoutes.AddPost);
 
   const options = [
     {
@@ -39,7 +40,7 @@ export default function AppHeader({ setMenuOpen }: Props) {
     {
       label: <FormattedMessage {...messages.newPost} />,
       handler: () => {
-        router.push(localizationHooks.useWithLocale(AppRoutes.AddPost));
+        router.push(orderAddPostPath);
       },
     },
   ];

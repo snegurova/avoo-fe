@@ -25,10 +25,11 @@ export default function RegisterForm() {
   const isError = useApiStatusStore((s) => s.isError);
 
   const router = useRouter();
+  const homeRedirect = localizationHooks.useWithLocale(AppRoutes.Home);
 
   const { register, handleSubmit, errors } = authHooks.useRegisterForm({
     onSuccess: () => {
-      router.push(localizationHooks.useWithLocale(AppRoutes.Home));
+      router.push(homeRedirect);
     },
   });
 
