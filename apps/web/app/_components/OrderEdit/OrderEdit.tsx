@@ -41,6 +41,7 @@ export default function OrderEdit(props: Props) {
   const isPending = useApiStatusStore((state) => state.isPending);
   const errorMessage = useApiStatusStore((s) => s.errorMessage);
   const isError = useApiStatusStore((s) => s.isError);
+  const [isActiveMasterSearch, setIsActiveMasterSearch] = useState(false);
 
   const { control, handleSubmit, errors, setValue } = orderHooks.useUpdateOrder({
     order: {
@@ -114,6 +115,10 @@ export default function OrderEdit(props: Props) {
     setValue('masterId', masterId);
     const master = masters?.find((m) => m.id === masterId) || undefined;
     setSelectedMaster(master);
+  };
+
+  const onMasterElementClick = () => {
+    setIsActiveMasterSearch(true);
   };
 
   return (
@@ -198,10 +203,15 @@ export default function OrderEdit(props: Props) {
                     error={errors?.masterId?.message}
                     hasMore={hasMoreMasters}
                     fetchNextPage={fetchNextMastersPage}
-                  />
+                    isActive={isActiveMasterSearch}
+                    setIsActive={setIsActiveMasterSearch}
+                  >
+                    {selectedMaster && (
+                      <MasterElement item={selectedMaster} isCard onClick={onMasterElementClick} />
+                    )}
+                  </SearchField>
                 )}
               />
-              {selectedMaster && <MasterElement item={selectedMaster} isCard />}
             </div>
             <Controller
               name='date'

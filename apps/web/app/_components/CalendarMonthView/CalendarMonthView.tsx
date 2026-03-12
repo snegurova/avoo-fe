@@ -7,14 +7,11 @@ import { calendarHooks } from '@avoo/hooks';
 import { CalendarViewType } from '@avoo/hooks/types/calendarViewType';
 import { DateStatus } from '@avoo/hooks/types/dateStatus';
 import { timeUtils } from '@avoo/shared';
+import { useCalendarStore } from '@avoo/store';
 
 import CalendarEvent from '../CalendarEvent/CalendarEvent';
-
 type Props = {
   params: PrivateCalendarByDatesQueryParams;
-  setDate: React.Dispatch<React.SetStateAction<Date>>;
-  setToDate: React.Dispatch<React.SetStateAction<Date>>;
-  setType: React.Dispatch<React.SetStateAction<CalendarViewType>>;
 };
 
 const dayCell = tv({
@@ -50,7 +47,10 @@ const grid = tv({
 });
 
 export default function CalendarMonthView(props: Props) {
-  const { params, setDate, setToDate, setType } = props;
+  const { params } = props;
+  const setDate = useCalendarStore((state) => state.setDate);
+  const setToDate = useCalendarStore((state) => state.setToDate);
+  const setType = useCalendarStore((state) => state.setType);
   const ref = useRef<HTMLDivElement | null>(null);
   const [showEvents, setShowEvents] = useState<number>(1);
 

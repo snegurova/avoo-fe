@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
+import { FormattedMessage } from 'react-intl';
 
 import {
   Combination,
@@ -7,6 +8,7 @@ import {
   MasterWithRelationsEntity,
 } from '@avoo/axios/types/apiTypes';
 import { masterHooks } from '@avoo/hooks';
+import { messages } from '@avoo/intl/messages/private/orders/create';
 
 import CombinationElement from '@/_components/CombinationElement/CombinationElement';
 import FormDatePicker from '@/_components/FormDatePicker/FormDatePicker';
@@ -42,6 +44,7 @@ export default function CombinationForm(props: Props) {
     splitCombination,
   } = props;
 
+  const [isActiveMasterSearch, setIsActiveMasterSearch] = useState(false);
   const [masterSearch, setMasterSearch] = useState('');
   const [masterParams, setMasterParams] = useState<GetMastersQueryParams>({
     limit: 10,
@@ -98,6 +101,10 @@ export default function CombinationForm(props: Props) {
     onChange(newOrders);
   };
 
+  const onMasterElementClick = () => {
+    setIsActiveMasterSearch(true);
+  };
+
   return (
     <div className='rounded-lg border border-gray-200'>
       <div className='bg-primary-50 px-4 p-2 h-14 rounded-t-lg flex items-center justify-between'>
@@ -130,17 +137,24 @@ export default function CombinationForm(props: Props) {
             error={errors?.masterId?.message}
             hasMore={hasMoreMasters}
             fetchNextPage={fetchNextMastersPage}
-          />
-          {selectedMasters[0] && <MasterElement item={selectedMasters[0]} isCard />}
+            isActive={isActiveMasterSearch}
+            setIsActive={setIsActiveMasterSearch}
+          >
+            {selectedMasters[0] && (
+              <MasterElement item={selectedMasters[0]} isCard onClick={onMasterElementClick} />
+            )}
+          </SearchField>
         </div>
         <div className='grid grid-cols-3 gap-x-3'>
           <div className='col-span-2'>
-            <label className='block mb-2 font-medium'>Date</label>
+            <label className='block mb-2 font-medium'>
+              <FormattedMessage {...messages.date} />
+            </label>
             <FormDatePicker date={value[0].date} onChange={onDateChange} />
           </div>
           <div className=' '>
             <label className='block mb-2 font-medium' htmlFor={`combination-time`}>
-              Time
+              <FormattedMessage {...messages.time} />
             </label>
             <FormTimePicker date={value[0].date} onChange={onDateChange} />
           </div>
@@ -154,8 +168,8 @@ export default function CombinationForm(props: Props) {
             name={`combination-notes`}
             value={value[0].notes || ''}
             onChange={onNotesChange}
-            label='Notes'
-            helperText='Additional information for the master'
+            label={<FormattedMessage {...messages.notes} />}
+            helperText={<FormattedMessage {...messages.helperText} />}
             maxLength={200}
             error={errors?.notes?.message}
             classNames={{

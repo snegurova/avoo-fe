@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { CreateOrder, MasterWithRelationsEntity, Service } from '@avoo/axios/types/apiTypes';
+import { useCalendarStore } from '@avoo/store';
 
 type Props = {
   value: CreateOrder[];
@@ -56,6 +57,8 @@ export default function ServiceForm(props: Props) {
     setSelectedMasters,
     Item,
   } = props;
+  const setMasterIds = useCalendarStore((state) => state.setMasterIds);
+
   const currentService = (index: number): Service | null => {
     return selectedServices[index] || null;
   };
@@ -75,6 +78,8 @@ export default function ServiceForm(props: Props) {
       newServices.splice(index, 1);
       return newServices;
     });
+
+    setMasterIds(undefined);
   };
 
   return (

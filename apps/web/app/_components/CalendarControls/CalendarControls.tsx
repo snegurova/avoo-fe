@@ -36,12 +36,6 @@ const STATUSES_ITEMS = [
 ];
 
 type Props = {
-  date: Date;
-  setDate: (date: Date) => void;
-  type: CalendarViewType;
-  setType: (type: CalendarViewType) => void;
-  toDate: Date;
-  setToDate: (date: Date) => void;
   scrollToCurrentTime: () => void;
   params: PrivateCalendarQueryParams;
   setParams: (
@@ -50,21 +44,6 @@ type Props = {
       | ((prev: PrivateCalendarQueryParams) => PrivateCalendarQueryParams),
   ) => void;
   masters: MasterWithRelationsEntityResponse[];
-  masterIds?: number[] | undefined;
-  setMasterIds: (
-    ids: number[] | undefined | ((prev: number[] | undefined) => number[] | undefined),
-  ) => void;
-  statuses?: OrderStatus[] | undefined;
-  setStatuses: (
-    statuses:
-      | OrderStatus[]
-      | undefined
-      | ((prev: OrderStatus[] | undefined) => OrderStatus[] | undefined),
-  ) => void;
-  orderIsOutOfSchedule: boolean | undefined;
-  setOrderIsOutOfSchedule: (
-    value: boolean | undefined | ((prev: boolean | undefined) => boolean | undefined),
-  ) => void;
   calendarType: CalendarType;
 };
 
@@ -95,23 +74,21 @@ const showOptionsWrapper = tv({
   },
 });
 
+import { useCalendarStore } from '@avoo/store';
+
 export default function CalendarControls(props: Props) {
-  const {
-    date,
-    setDate,
-    setToDate,
-    type,
-    setType,
-    scrollToCurrentTime,
-    masters,
-    masterIds,
-    setMasterIds,
-    statuses,
-    setStatuses,
-    orderIsOutOfSchedule,
-    setOrderIsOutOfSchedule,
-    calendarType,
-  } = props;
+  const { scrollToCurrentTime, masters, calendarType } = props;
+  const date = useCalendarStore((state) => state.date);
+  const setDate = useCalendarStore((state) => state.setDate);
+  const setToDate = useCalendarStore((state) => state.setToDate);
+  const type = useCalendarStore((state) => state.type);
+  const setType = useCalendarStore((state) => state.setType);
+  const masterIds = useCalendarStore((state) => state.masterIds);
+  const setMasterIds = useCalendarStore((state) => state.setMasterIds);
+  const statuses = useCalendarStore((state) => state.statuses);
+  const setStatuses = useCalendarStore((state) => state.setStatuses);
+  const orderIsOutOfSchedule = useCalendarStore((state) => state.orderIsOutOfSchedule);
+  const setOrderIsOutOfSchedule = useCalendarStore((state) => state.setOrderIsOutOfSchedule);
 
   const tabletUp = useMediaQuery('(min-width:768px)');
   const desktopLargeUp = useMediaQuery('(min-width:1280px)');
@@ -232,7 +209,7 @@ export default function CalendarControls(props: Props) {
           break;
       }
     },
-    [type, date],
+    [type, setDate, setToDate],
   );
 
   const viewOptions = useMemo(
@@ -269,32 +246,30 @@ export default function CalendarControls(props: Props) {
     () => ({
       label: <FormattedMessage {...messages.allStatusesLabel} />,
       handler: () => {
-        setStatuses((prev) => {
-          if (!prev || prev.length === 3) {
-            return [];
-          } else {
-            return undefined;
-          }
-        });
+        if (!statuses || statuses.length === 3) {
+          setStatuses([]);
+        } else {
+          setStatuses(undefined);
+        }
       },
       items: STATUSES_ITEMS.map((status) => ({
         label: status.label,
         id: status.id,
         handler: () => {
-          setStatuses((prev) => {
-            if (!prev) {
-              return STATUSES_ITEMS.reduce<OrderStatus[]>((acc, s) => {
+          if (!statuses) {
+            setStatuses(
+              STATUSES_ITEMS.reduce<OrderStatus[]>((acc, s) => {
                 if (s.id && s.id !== status.id) {
                   acc.push(s.id);
                 }
                 return acc;
-              }, []);
-            } else if (prev?.includes(status.id)) {
-              return prev.filter((id) => id !== status.id);
-            } else {
-              return [...(prev || []), status.id];
-            }
-          });
+              }, []),
+            );
+          } else if (statuses?.includes(status.id)) {
+            setStatuses(statuses.filter((id: OrderStatus) => id !== status.id));
+          } else {
+            setStatuses([...(statuses || []), status.id]);
+          }
         },
       })),
     }),
@@ -305,50 +280,46 @@ export default function CalendarControls(props: Props) {
     () => ({
       label: <FormattedMessage {...messages.allMastersLabel} />,
       handler: () => {
-        setMasterIds((prev) => {
-          if (!prev || prev.length === masters.length) {
-            return [];
-          } else {
-            return undefined;
-          }
-        });
+        if (!masterIds || masterIds.length === masters.length) {
+          setMasterIds([]);
+        } else {
+          setMasterIds(undefined);
+        }
       },
       items:
         masters?.map((master) => ({
           label: master.name,
           id: master.id,
           handler: () => {
-            setMasterIds((prev) => {
-              if (!prev) {
-                return masters.reduce<number[]>((acc, m) => {
+            if (!masterIds) {
+              setMasterIds(
+                masters.reduce<number[]>((acc, m) => {
                   if (m.id && m.id !== master.id) {
                     acc.push(m.id);
                   }
                   return acc;
-                }, []);
-              } else if (prev?.includes(master.id)) {
-                return prev.filter((id) => id !== master.id);
-              } else {
-                return [...(prev || []), master.id];
-              }
-            });
+                }, []),
+              );
+            } else if (masterIds?.includes(master.id)) {
+              setMasterIds(masterIds.filter((id: number) => id !== master.id));
+            } else {
+              setMasterIds([...(masterIds || []), master.id]);
+            }
           },
         })) ?? [],
     }),
-    [masters],
+    [masters, masterIds],
   );
 
   const outOfCheduleOptions = useMemo(
     () => ({
       label: <FormattedMessage {...messages.outOfScheduleLabel} />,
       handler: () => {
-        setOrderIsOutOfSchedule((prev) => {
-          if (prev === undefined) {
-            return true;
-          } else {
-            return undefined;
-          }
-        });
+        if (orderIsOutOfSchedule === undefined) {
+          setOrderIsOutOfSchedule(true);
+        } else {
+          setOrderIsOutOfSchedule(undefined);
+        }
       },
     }),
     [orderIsOutOfSchedule],

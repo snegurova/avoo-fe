@@ -101,4 +101,13 @@ export const messages = defineMessages({
     id: 'private.calendar.calendar.Sun',
     defaultMessage: 'Sun',
   },
+  noSchedules: {
+    id: 'private.calendar.calendar.noSchedules',
+    defaultMessage: 'No schedules',
+  },
+  noSchedulesDescription: {
+    id: 'private.calendar.calendar.noSchedulesDescription',
+    defaultMessage:
+      'There are currently no schedules to display. Choose masters to see their schedules here.',
+  },
 });

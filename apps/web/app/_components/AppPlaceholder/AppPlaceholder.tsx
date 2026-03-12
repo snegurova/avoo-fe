@@ -1,7 +1,7 @@
 import React from 'react';
 
 type Props = {
-  title: string;
+  title: string | React.ReactNode;
   icon: React.ReactNode;
   description: React.ReactNode;
 };
