@@ -6,17 +6,17 @@ import { calendarApi } from '@avoo/axios';
 import {
   ApiStatus,
   BaseResponse,
+  GetAvailabilityResponse,
   GetCalendarByDatesResponse,
   GetCalendarResponse,
   GetPublicCalendarByDatesResponse,
   GetPublicCalendarResponse,
   PrivateCalendarByDatesQueryParams,
   PrivateCalendarQueryParams,
+  PrivateGetAvailabilityQueryParams,
   PublicCalendarByDatesQueryParams,
   PublicCalendarQueryParams,
-  PrivateGetAvailabilityQueryParams,
   PublicGetAvailabilityQueryParams,
-  GetAvailabilityResponse,
 } from '@avoo/axios/types/apiTypes';
 import { utils } from '@avoo/hooks/utils/utils';
 

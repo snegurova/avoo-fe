@@ -4,13 +4,12 @@ import {
   GetExceptionsQueryParams,
   GetMastersQueryParams,
   PrivateCalendarQueryParams,
+  PrivateGetAvailabilityQueryParams,
   PrivateOrderQueryParams,
   PrivateServiceQueryParams,
   PublicCalendarByDatesQueryParams,
   PublicCalendarQueryParams,
-  PrivateGetAvailabilityQueryParams,
   PublicGetAvailabilityQueryParams,
-  GetAvailabilityResponse,
 } from '@avoo/axios/types/apiTypes';
 
 export const queryKeys = {

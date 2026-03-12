@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
 import { FormattedMessage } from 'react-intl';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 import { tv } from 'tailwind-variants';
 
@@ -13,9 +13,9 @@ import { calendarHooks, masterHooks } from '@avoo/hooks';
 import { CalendarType } from '@avoo/hooks/types/calendarType';
 import { CalendarViewType } from '@avoo/hooks/types/calendarViewType';
 import { OrderQueryParams } from '@avoo/hooks/types/orderQueryParams';
+import { messages } from '@avoo/intl/messages/private/calendar/calendar';
 import { timeUtils } from '@avoo/shared';
 import { useCalendarStore } from '@avoo/store';
-import { messages } from '@avoo/intl/messages/private/calendar/calendar';
 
 import AppPlaceholder from '@/_components/AppPlaceholder/AppPlaceholder';
 import AsideModal from '@/_components/AsideModal/AsideModal';

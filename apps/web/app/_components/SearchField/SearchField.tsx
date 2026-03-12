@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef } from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import { ClickAwayListener } from '@mui/material';
@@ -115,10 +115,10 @@ export default function SearchField<R, T extends { id: number }>(props: Props<R,
       <div>
         <div className={`${!searchMode ? 'mb-3' : ''} ${className}`}>
           <div className='flex items-center justify-between gap-2 mb-2'>
-            <h3 className='font-medium'>
+            <h3 className='font-medium leading-loose'>
               <FormattedMessage {...messages[label as keyof typeof messages]} />
             </h3>
-            <div className=''>
+            <div className='flex gap-0.5'>
               {!isActive && !searchMode && <IconButton icon={<CancelIcon />} onClick={onClear} />}
               {!isActive && !searchMode && (
                 <IconButton icon={<SearchIcon />} onClick={onSearchBtnClick} />

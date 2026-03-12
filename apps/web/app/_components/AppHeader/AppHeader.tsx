@@ -9,17 +9,16 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import { messages } from '@avoo/intl/messages/private/navigation/navigation';
 
 import AppProfileSelect from '@/_components/AppProfileSelect/AppProfileSelect';
+import { IconButton } from '@/_components/IconButton/IconButton';
 import IconLink from '@/_components/IconLink/IconLink';
+import { LocalizedLink } from '@/_components/LocalizedLink/LocalizedLink';
+import SelectButton from '@/_components/SelectButton/SelectButton';
 import { localizationHooks } from '@/_hooks/localizationHooks';
+import AddIcon from '@/_icons/AddIcon';
 import MenuIcon from '@/_icons/MenuIcon';
 import NotificationsIcon from '@/_icons/NotificationsIcon';
 import ShareIcon from '@/_icons/ShareIcon';
 import { AppRoutes } from '@/_routes/routes';
-import AddIcon from '@/_icons/AddIcon';
-import { LocalizedLink } from '@/_components/LocalizedLink/LocalizedLink';
-
-import { IconButton } from '@/_components/IconButton/IconButton';
-import SelectButton from '@/_components/SelectButton/SelectButton';
 
 type Props = {
   setMenuOpen: (open: boolean) => void;
