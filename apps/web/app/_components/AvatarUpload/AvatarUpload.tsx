@@ -15,6 +15,7 @@ export enum AvatarSize {
   SMALL = 64,
   MEDIUM = 80,
   LARGE = 96,
+  PROFILE = 104,
   XLARGE = 150,
 }
 
@@ -24,7 +25,10 @@ type Props = {
   isLoading: boolean;
   size?: AvatarSize;
   iconSize?: number;
+  framed?: boolean;
   showEditIcon?: boolean;
+  editIcon?: React.ReactNode;
+  placeholderIcon?: React.ReactNode;
 };
 
 export const AvatarUpload = (props: Props) => {
@@ -34,7 +38,10 @@ export const AvatarUpload = (props: Props) => {
     isLoading,
     size = AvatarSize.LARGE,
     iconSize = 125,
+    framed = false,
     showEditIcon = false,
+    editIcon = <EditIcon />,
+    placeholderIcon,
   } = props;
 
   const handleChoosePhoto = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -56,7 +63,11 @@ export const AvatarUpload = (props: Props) => {
   };
 
   return (
-    <div className='relative inline-block'>
+    <div
+      className={`relative inline-block rounded-full ${
+        framed ? 'bg-white p-[6px] shadow-[0_6px_20px_rgba(15,23,42,0.10)]' : ''
+      }`}
+    >
       <ButtonBase
         component='label'
         tabIndex={-1}
@@ -77,7 +88,7 @@ export const AvatarUpload = (props: Props) => {
               color: 'var(--color-primary-200)',
             }}
           >
-            <PersonIcon width={iconSize} height={iconSize} />
+            {placeholderIcon ?? <PersonIcon width={iconSize} height={iconSize} />}
           </Avatar>
         )}
         {isLoading && <AvatarLoader size={size} />}
@@ -100,7 +111,7 @@ export const AvatarUpload = (props: Props) => {
             onKeyDown={handleEditKey}
             disabled={isLoading}
           >
-            <EditIcon />
+            {editIcon}
           </IconButton>
         </div>
       )}

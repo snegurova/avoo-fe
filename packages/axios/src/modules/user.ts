@@ -51,6 +51,15 @@ export const userApi = {
     return response.data;
   },
 
+  async getCertificates() {
+    const response =
+      await apiClient.get<
+        BaseResponse<{ items: CertificateResponse[]; pagination?: { total?: number } }>
+      >(CERTIFICATES_ENDPOINT);
+
+    return response.data;
+  },
+
   async updateProfile(body: UpdateProfile) {
     const response = await apiClient.put<BaseResponse<UserProfileResponse>>(PROFILE_ENDPOINT, body);
     return response.data;

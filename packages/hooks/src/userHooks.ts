@@ -79,6 +79,23 @@ export const userHooks = {
 
     return null;
   },
+  useGetUserCertificates: () => {
+    const { data: certificatesData, isPending } = useQuery<
+      BaseResponse<{ items: CertificateResponse[] }>,
+      Error
+    >({
+      queryKey: queryKeys.user.certificates(),
+      queryFn: userApi.getCertificates,
+    });
+
+    utils.useSetPendingApi(isPending);
+
+    if (certificatesData?.status === ApiStatus.SUCCESS) {
+      return certificatesData.data;
+    }
+
+    return null;
+  },
   usePatchUserProfileAvatar: () => {
     const queryClient = useQueryClient();
 

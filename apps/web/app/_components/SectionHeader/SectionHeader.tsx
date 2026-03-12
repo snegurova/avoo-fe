@@ -1,19 +1,28 @@
 'use client';
 
-import { IconButton } from '@/_components/IconButton/IconButton';
+import { IconButton, IconButtonVariant } from '@/_components/IconButton/IconButton';
+import EditSquareIcon from '@/_icons/EditSquareIcon';
 
 type Props = {
   title: string;
   onEdit?: () => void;
+  headingSize?: string;
 };
 
 export const SectionHeader = (props: Props) => {
-  const { title, onEdit } = props;
+  const { title, onEdit, headingSize = 'text-xl' } = props;
 
   return (
     <div className='flex items-center justify-between mb-4'>
-      <h2 className='text-xl font-bold text-slate-900'>{title}</h2>
-      {onEdit && <IconButton icon='✏️' onClick={onEdit} ariaLabel={`Edit ${title}`} />}
+      <h2 className={`${headingSize} font-bold text-slate-900`}>{title}</h2>
+      {onEdit && (
+        <IconButton
+          icon={<EditSquareIcon fill='currentColor' />}
+          variant={IconButtonVariant.Secondary}
+          onClick={onEdit}
+          ariaLabel={`Edit ${title}`}
+        />
+      )}
     </div>
   );
 };

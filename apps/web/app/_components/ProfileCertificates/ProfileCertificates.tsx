@@ -3,11 +3,15 @@
 import { useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 
-import { IconButton } from '@/_components/IconButton/IconButton';
+import { userHooks } from '@avoo/hooks';
+
+import { LocalizedLink } from '@/_components/LocalizedLink/LocalizedLink';
+import { SectionHeader } from '@/_components/SectionHeader/SectionHeader';
 import { localizationHooks } from '@/_hooks/localizationHooks';
 import { AppRoutes } from '@/_routes/routes';
 
 export const ProfileCertificates = () => {
+  const certificates = userHooks.useGetUserCertificates();
   const router = useRouter();
   const certificatesPath = localizationHooks.useWithLocale(AppRoutes.Certificates);
 
@@ -19,12 +23,23 @@ export const ProfileCertificates = () => {
     handleNavigateToCertificates();
   }, [handleNavigateToCertificates]);
 
+  const hasItems = (certificates?.items?.length ?? 0) > 0;
+
   return (
-    <div className='flex items-center justify-between px-5 py-3'>
-      <div className='flex items-center gap-2'>
-        <span className='text-base text-slate-900'>Certificates</span>
-      </div>
-      <IconButton icon='✏️' onClick={handleNavigate} ariaLabel='Edit Certificates' />
+    <div className=''>
+      <SectionHeader title='Certificates' onEdit={handleNavigate} />
+
+      {!hasItems && (
+        <div className='text-center py-8'>
+          <p className='text-md font-semibold text-slate-900 mb-4'>No certificates added</p>
+          <p className='text-sm text-slate-400 max-w-[340px] mx-auto leading-6'>
+            <LocalizedLink href={AppRoutes.Certificates} className='text-primary-300'>
+              Add certificates
+            </LocalizedLink>{' '}
+            to highlight your professional qualifications.
+          </p>
+        </div>
+      )}
     </div>
   );
 };
