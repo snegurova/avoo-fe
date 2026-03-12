@@ -26,18 +26,20 @@ type Props = {
 export default function AppHeader({ setMenuOpen }: Props) {
   const router = useRouter();
   const tabletUp = useMediaQuery('(min-width:768px)');
+  const orderCreatePath = localizationHooks.useWithLocale(AppRoutes.OrderCreate);
+  const orderAddPostPath = localizationHooks.useWithLocale(AppRoutes.AddPost);
 
   const options = [
     {
       label: <FormattedMessage {...messages.newBooking} />,
       handler: () => {
-        router.push(localizationHooks.useWithLocale(AppRoutes.OrderCreate));
+        router.push(orderCreatePath);
       },
     },
     {
       label: <FormattedMessage {...messages.newPost} />,
       handler: () => {
-        router.push(localizationHooks.useWithLocale(AppRoutes.AddPost));
+        router.push(orderAddPostPath);
       },
     },
   ];

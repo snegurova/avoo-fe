@@ -88,6 +88,18 @@ export default function AppNavigation({ menuOpen, setMenuOpen }: Props) {
       label: <FormattedMessage {...messages.posts} />,
     },
   ];
+
+  const calendarSubMenuItems = [
+    {
+      href: localizationHooks.useWithLocale(AppRoutes.WorkingHours),
+      label: <FormattedMessage {...messages.workingSchedule} />,
+    },
+    {
+      href: localizationHooks.useWithLocale(AppRoutes.TimeOff),
+      label: <FormattedMessage {...messages.scheduleException} />,
+    },
+  ];
+
   const calendarNav = tv({
     base: 'flex items-center gap-3.5 hover:bg-primary-100 focus:bg-primary-100 transition-colors',
     variants: { active: { true: 'bg-primary-50' } },
@@ -159,24 +171,17 @@ export default function AppNavigation({ menuOpen, setMenuOpen }: Props) {
 
                         {calendarOpen && (
                           <ul className='flex flex-col font-light text-sm'>
-                            <li className='w-full'>
-                              <Link
-                                href={localizationHooks.useWithLocale(AppRoutes.WorkingHours)}
-                                className='block w-full text-left pl-20 pr-4 py-2 hover:bg-primary-100 focus:bg-primary-100 transition-colors cursor-pointer'
-                                onClick={handleNavClick}
-                              >
-                                <FormattedMessage {...messages.workingSchedule} />
-                              </Link>
-                            </li>
-                            <li className='w-full'>
-                              <Link
-                                href={localizationHooks.useWithLocale(AppRoutes.TimeOff)}
-                                className='block w-full text-left pl-20 pr-4 py-2 hover:bg-primary-100 focus:bg-primary-100 transition-colors cursor-pointer'
-                                onClick={handleNavClick}
-                              >
-                                <FormattedMessage {...messages.scheduleException} />
-                              </Link>
-                            </li>
+                            {calendarSubMenuItems.map((item) => (
+                              <li className='w-full' key={`${item.href}-sub`}>
+                                <Link
+                                  href={item.href}
+                                  className='block w-full text-left pl-20 pr-4 py-2 hover:bg-primary-100 focus:bg-primary-100 transition-colors cursor-pointer'
+                                  onClick={handleNavClick}
+                                >
+                                  {item.label}
+                                </Link>
+                              </li>
+                            ))}
                           </ul>
                         )}
                       </>
