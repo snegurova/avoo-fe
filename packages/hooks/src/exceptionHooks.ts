@@ -13,10 +13,10 @@ import {
   GetExceptionsQueryParams,
   GetExceptionsResponse,
 } from '@avoo/axios/types/apiTypes';
+import { VALUE_DATE_FORMAT } from '@avoo/constants';
 import { TimeOffMode, TimeOffType, WholeDay } from '@avoo/hooks/types/timeOffType';
 import { utils } from '@avoo/hooks/utils/utils';
 
-import { VALUE_DATE_FORMAT } from '../../../apps/web/app/_constants/dateFormats';
 import {
   buildMastersLabel,
   ExceptionFormData,
@@ -78,6 +78,8 @@ export const exceptionHooks = {
       mutationFn: (data: CreateExceptionRequest) => exceptionApi.createException(data),
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: queryKeys.exceptions.all });
+        queryClient.invalidateQueries({ queryKey: queryKeys.calendar.all });
+        queryClient.invalidateQueries({ queryKey: queryKeys.monthCalendar.all });
         onSuccess?.();
       },
     });
@@ -98,6 +100,8 @@ export const exceptionHooks = {
       mutationFn: (data: CreateExceptionRequest) => exceptionApi.createException(data),
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: queryKeys.exceptions.all });
+        queryClient.invalidateQueries({ queryKey: queryKeys.calendar.all });
+        queryClient.invalidateQueries({ queryKey: queryKeys.monthCalendar.all });
       },
     });
 
@@ -161,6 +165,8 @@ export const exceptionHooks = {
       mutationFn: (id: number) => exceptionApi.deleteException(id),
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: queryKeys.exceptions.all });
+        queryClient.invalidateQueries({ queryKey: queryKeys.calendar.all });
+        queryClient.invalidateQueries({ queryKey: queryKeys.monthCalendar.all });
         onSuccess?.();
       },
     });
@@ -182,6 +188,8 @@ export const exceptionHooks = {
       mutationFn: ({ id, data }) => exceptionApi.updateException(id, data),
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: queryKeys.exceptions.all });
+        queryClient.invalidateQueries({ queryKey: queryKeys.calendar.all });
+        queryClient.invalidateQueries({ queryKey: queryKeys.monthCalendar.all });
         onSuccess?.();
       },
     });
