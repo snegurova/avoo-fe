@@ -1,6 +1,6 @@
 import { useInfiniteQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 
-import { mediaApi } from '@avoo/axios/src/modules/media';
+import { mediaApi } from '@avoo/axios';
 import {
   ApiStatus,
   BaseResponse,

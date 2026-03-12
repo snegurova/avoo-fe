@@ -4,7 +4,8 @@ import { useRouter } from 'next/navigation';
 
 import { Button, TextField } from '@mui/material';
 
-import { END_MINUTE, SCHEDULE_OPTIONS, START_MINUTE } from '@avoo/constants/src/calendar';
+import { END_MINUTE, SCHEDULE_OPTIONS, START_MINUTE } from '@avoo/constants';
+import { VALUE_DATE_FORMAT } from '@avoo/constants';
 import { masterHooks, scheduleHooks } from '@avoo/hooks';
 import { timeUtils } from '@avoo/shared';
 
@@ -12,7 +13,6 @@ import FormDatePicker from '@/_components/FormDatePicker/FormDatePicker';
 import { FormMultiSelect } from '@/_components/FormMultiSelect/FormMultiSelect';
 import { FormSelect } from '@/_components/FormSelect/FormSelect';
 import { CreateWorkingDayRow } from '@/_components/ScheduleAddForm/CreateWorkingDayRow';
-import { VALUE_DATE_FORMAT } from '@/_constants/dateFormats';
 import { localizationHooks } from '@/_hooks/localizationHooks';
 import { useToast } from '@/_hooks/useToast';
 import { AppRoutes } from '@/_routes/routes';
@@ -24,15 +24,16 @@ export const ScheduleAddForm = () => {
   const router = useRouter();
   const workingHoursPath = localizationHooks.useWithLocale(AppRoutes.WorkingHours);
 
-  const { control, handleSubmit, setValue, watch, errors } = scheduleHooks.useCreateScheduleForm({
-    onSuccess: () => {
-      toast.success('Schedule added successfully');
-      router.replace(workingHoursPath);
-    },
-    onError: (error) => {
-      toast.error(`Schedule add failed: ${error.message}`);
-    },
-  });
+  const { control, handleSubmit, handleStartDateChange, setValue, watch, errors } =
+    scheduleHooks.useCreateScheduleForm({
+      onSuccess: () => {
+        toast.success('Schedule added successfully');
+        router.replace(workingHoursPath);
+      },
+      onError: (error) => {
+        toast.error(`Schedule add failed: ${error.message}`);
+      },
+    });
 
   const { fields, replace, append, remove } = useFieldArray({
     control,
@@ -159,7 +160,10 @@ export const ScheduleAddForm = () => {
                     valueFormat={VALUE_DATE_FORMAT}
                     required
                     date={field.value}
-                    onChange={(value) => field.onChange(value)}
+                    onChange={(value) => {
+                      field.onChange(value);
+                      handleStartDateChange(value);
+                    }}
                   />
                 )}
               />
@@ -211,7 +215,7 @@ export const ScheduleAddForm = () => {
       </form>
       <section id='create-new-schedule-controls'>
         <div className='w-full flex gap-8 justify-end p-8'>
-          <Button color='secondary' variant='outlined'>
+          <Button color='secondary' variant='outlined' onClick={() => router.back()}>
             Cancel
           </Button>
           <Button form='create-new-schedule' type='submit' color='secondary' variant='contained'>

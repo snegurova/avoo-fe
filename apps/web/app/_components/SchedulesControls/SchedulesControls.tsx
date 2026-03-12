@@ -3,7 +3,6 @@ import Link from 'next/link';
 import { Button, InputAdornment, TextField, Typography } from '@mui/material';
 
 import { colors } from '@avoo/design-tokens';
-import { useApiStatusStore } from '@avoo/store';
 
 import SortOptions from '@/_components/SortOptions/SortOptions';
 import { localizationHooks } from '@/_hooks/localizationHooks';
@@ -16,7 +15,6 @@ type Props = {
 
 export default function SchedulesControls(props: Props) {
   const { setSearchQuery } = props;
-  const isPending = useApiStatusStore((state) => state.isPending);
   const options = [
     { label: 'Sort by name', value: 'name' },
     { label: 'Sort by start date', value: 'startAt' },
@@ -31,13 +29,7 @@ export default function SchedulesControls(props: Props) {
           </Typography>
           <div className='order-2 lg:order-3 w-full md:w-auto'>
             <Link href={localizationHooks.useWithLocale(AppRoutes.WorkingHoursCreate)}>
-              <Button
-                fullWidth
-                color='primary'
-                variant='outlined'
-                loading={isPending}
-                disabled={isPending}
-              >
+              <Button fullWidth color='primary' variant='outlined'>
                 Setup new schedule
               </Button>
             </Link>

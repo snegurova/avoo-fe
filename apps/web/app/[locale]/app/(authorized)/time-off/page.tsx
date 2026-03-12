@@ -4,8 +4,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
 import { Exception } from '@avoo/axios/types/apiTypes';
-import { exceptionHooks, masterHooks } from '@avoo/hooks';
-import { useDebounce } from '@avoo/hooks/src/useDebounce';
+import { exceptionHooks, masterHooks, useDebounce } from '@avoo/hooks';
 
 import AppPlaceholder from '@/_components/AppPlaceholder/AppPlaceholder';
 import AppWrapper from '@/_components/AppWrapper/AppWrapper';

@@ -4,6 +4,7 @@ import { useMemo } from 'react';
 import Link from 'next/link';
 
 import { scheduleHooks } from '@avoo/hooks';
+import { useApiStatusStore } from '@avoo/store';
 
 import AppPlaceholder from '@/_components/AppPlaceholder/AppPlaceholder';
 import AppWrapper from '@/_components/AppWrapper/AppWrapper';
@@ -12,8 +13,10 @@ import SchedulesControls from '@/_components/SchedulesControls/SchedulesControls
 import EditCalendarIcon from '@/_icons/EditCalendarIcon';
 
 export default function WorkingHoursPage() {
+  const isPending = useApiStatusStore((state) => state.isPending);
+  const { setSearchQuery, queryParams } = scheduleHooks.useScheduleQuery();
   const { data, fetchNextPage, hasNextPage } = scheduleHooks.useGetSchedulesInfinite({
-    limit: 10,
+    ...queryParams,
   });
 
   const schedules = useMemo(
@@ -23,18 +26,20 @@ export default function WorkingHoursPage() {
 
   return (
     <AppWrapper withPadding>
-      <SchedulesControls setSearchQuery={() => {}} />
-      {schedules.length === 0 ? (
+      <SchedulesControls setSearchQuery={setSearchQuery} />
+      {schedules.length === 0 && !queryParams.search ? (
         <AppPlaceholder
-          title='Setup you first working schedule'
+          title={isPending ? 'Loading...' : 'Setup you first working schedule'}
           icon={<EditCalendarIcon className='w-20 h-20 lg:w-25 lg:h-25 fill-primary-300' />}
           description={
-            <p>
-              <Link href='#' className='text-primary-300'>
-                Create a working schedule
-              </Link>{' '}
-              to define when your masters are available for bookings.
-            </p>
+            isPending ? null : (
+              <p>
+                <Link href='#' className='text-primary-300'>
+                  Create a working schedule
+                </Link>{' '}
+                to define when your masters are available for bookings.
+              </p>
+            )
           }
         />
       ) : (

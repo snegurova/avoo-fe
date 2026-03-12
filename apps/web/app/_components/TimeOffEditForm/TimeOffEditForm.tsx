@@ -7,6 +7,7 @@ import { FormControlLabel, Switch } from '@mui/material';
 import type { Dayjs } from 'dayjs';
 import dayjs from 'dayjs';
 
+import { VALUE_DATE_FORMAT } from '@avoo/constants';
 import { exceptionHooks, masterHooks, timeToMinutes } from '@avoo/hooks';
 import {
   TimeOffMode,
@@ -18,7 +19,6 @@ import {
 import { timeUtils, validateEndDateFactory } from '@avoo/shared';
 
 import { IconButton } from '@/_components/IconButton/IconButton';
-import { VALUE_DATE_FORMAT } from '@/_constants/dateFormats';
 import { useToast } from '@/_hooks/useToast';
 import DeleteIcon from '@/_icons/DeleteIcon';
 import { getSyncedEndDate } from '@/_utils/timeOffDateSync';

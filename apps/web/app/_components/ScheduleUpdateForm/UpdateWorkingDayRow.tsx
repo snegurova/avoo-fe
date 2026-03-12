@@ -1,24 +1,20 @@
 import { Control, useFieldArray, UseFormSetValue, useWatch } from 'react-hook-form';
 
-import {
-  BREAK_END_MINUTES,
-  BREAK_START_MINUTES,
-  END_MINUTE,
-  START_MINUTE,
-} from '@avoo/constants/src/calendar';
+import { BREAK_END_MINUTES, BREAK_START_MINUTES, END_MINUTE, START_MINUTE } from '@avoo/constants';
 import { ScheduleUpdateFormData } from '@avoo/hooks/schemas/schedulesValidationSchemas';
 
 import { WorkingDayRow } from '@/_components/WorkingDayRow/WorkingDayRow';
 
 type Props = {
   index: number;
+  patternShift: number;
   control: Control<ScheduleUpdateFormData>;
   setValue: UseFormSetValue<ScheduleUpdateFormData>;
   scheduleType?: string;
 };
 
 export const UpdateWorkingDayRow = (props: Props) => {
-  const { index, control, setValue, scheduleType } = props;
+  const { index, control, setValue, scheduleType, patternShift } = props;
   const dayData = useWatch({
     control,
     name: `workingHours.${index}`,
@@ -59,9 +55,9 @@ export const UpdateWorkingDayRow = (props: Props) => {
   return (
     <WorkingDayRow
       index={index}
+      patternShift={patternShift}
       scheduleType={scheduleType}
       disabledRemove={true}
-      dayValue={dayData.day}
       enabled={!!dayData.enabled}
       startTimeMinutes={dayData.startTimeMinutes}
       endTimeMinutes={dayData.endTimeMinutes}

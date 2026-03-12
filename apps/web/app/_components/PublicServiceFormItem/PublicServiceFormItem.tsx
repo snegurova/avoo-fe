@@ -8,6 +8,7 @@ import {
   PublicCalendarQueryParams,
   Service,
 } from '@avoo/axios/types/apiTypes';
+import { DATE_TIME_PICKER_FORMAT } from '@avoo/constants';
 import { calendarHooks, masterHooks, servicesHooks } from '@avoo/hooks';
 import { isEmptyObject } from '@avoo/shared';
 import { timeUtils } from '@avoo/shared';
@@ -18,7 +19,6 @@ import { IconButton } from '@/_components/IconButton/IconButton';
 import MasterElement from '@/_components/MasterElement/MasterElement';
 import SearchField from '@/_components/SearchField/SearchField';
 import ServiceElement from '@/_components/ServiceElement/ServiceElement';
-import { DATE_TIME_PICKER_FORMAT } from '@/_constants/dateFormats';
 import DeleteIcon from '@/_icons/DeleteIcon';
 
 import TimeSlotField from '../TimeSlotField/TimeSlotField';

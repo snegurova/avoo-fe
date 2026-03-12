@@ -1,11 +1,14 @@
 export { apiClient } from './apiClient';
-export { authApi } from './modules/auth';
+export { authApi, type ForgotPasswordRequest, type RegisterCustomRequest } from './modules/auth';
 export { calendarApi } from './modules/calendar';
 export { categoriesApi } from './modules/categories';
 export { combinationApi } from './modules/combination';
 export { customerApi } from './modules/customer';
+export { exceptionApi } from './modules/exception';
 export { filesApi } from './modules/files';
 export { masterApi } from './modules/master';
+export { mediaApi } from './modules/media';
 export { orderApi } from './modules/order';
 export { scheduleApi } from './modules/schedule';
+export { servicesApi } from './modules/services';
 export { userApi } from './modules/user';

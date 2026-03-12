@@ -1,11 +1,14 @@
 import React from 'react';
+import { FormattedMessage } from 'react-intl';
 
 import { Button, IconButton, Switch, Typography } from '@mui/material';
 import { tv } from 'tailwind-variants';
 
-import { BREAK_END_MINUTES, BREAK_START_MINUTES, DAYS_NAME } from '@avoo/constants/src/calendar';
+import { BREAK_END_MINUTES, BREAK_START_MINUTES } from '@avoo/constants';
 import { colors } from '@avoo/design-tokens';
 import { scheduleHooks } from '@avoo/hooks';
+import { messages } from '@avoo/intl/messages/private/calendar/calendar';
+import { timeUtils } from '@avoo/shared';
 
 import { FormTimeSelect } from '@/_components/FormTimeSelect/FormTimeSelect';
 import AddOutlinedIcon from '@/_icons/AddOutlinedIcon';
@@ -13,7 +16,7 @@ import CloseIcon from '@/_icons/CloseIcon';
 
 type Props = {
   index: number;
-  dayValue: number;
+  patternShift: number;
   enabled: boolean;
   startTimeMinutes: number;
   endTimeMinutes: number;
@@ -35,7 +38,7 @@ type Props = {
 export const WorkingDayRow = (props: Props) => {
   const {
     index,
-    dayValue,
+    patternShift,
     enabled,
     startTimeMinutes,
     endTimeMinutes,
@@ -66,12 +69,20 @@ export const WorkingDayRow = (props: Props) => {
   });
   const options = scheduleHooks.useWorkingHoursOptions();
 
+  const shiftedIndex = (index + patternShift) % 7;
+
   return (
     <div className='border border-gray-200 rounded-lg'>
       <div className={cardDayVariant({ enabled })}>
         <div className='flex justify-start items-center gap-2'>
           <Typography variant='h4'>
-            {scheduleType === 'weekly' ? DAYS_NAME[dayValue - 1] : `Day ${index + 1}`}
+            {scheduleType === 'weekly' ? (
+              <FormattedMessage
+                {...messages[timeUtils.getWeekDay(shiftedIndex) as keyof typeof messages]}
+              />
+            ) : (
+              `Day ${index + 1}`
+            )}
           </Typography>
           {scheduleType === 'custom' && (
             <Button

@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 
-import { exceptionApi } from '@avoo/axios/src/modules/exception';
+import { exceptionApi } from '@avoo/axios';
 import { Exception } from '@avoo/axios/types/apiTypes';
 import { fetchAllAndSort, SortDirection } from '@avoo/shared';
 
