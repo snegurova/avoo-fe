@@ -211,6 +211,14 @@ export type PublicCalendarByDatesQueryParams =
 export type PublicCalendarQueryParams =
   operations['CalendarPublicController_getCalendarView']['parameters']['query'];
 
+export type PrivateGetAvailabilityQueryParams =
+  operations['CalendarController_getCalendarAvailability']['parameters']['query'];
+
+export type PublicGetAvailabilityQueryParams =
+  operations['CalendarPublicController_getCalendarAvailability']['parameters']['query'];
+
+export type GetAvailabilityResponse = components['schemas']['AvailabilityResponseDto'];
+
 /** Exceptions (Time off) */
 export type Exception = components['schemas']['CalendarExceptionEntity'];
 

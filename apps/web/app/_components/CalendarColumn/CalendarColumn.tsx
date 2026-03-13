@@ -19,15 +19,11 @@ const DAY_CELLS = Array.from({ length: 96 });
 const WEEK_CELLS = Array.from({ length: 7 });
 const HOUR_SEPARATE = 4;
 
+import { useCalendarStore } from '@avoo/store';
 type Props = {
   data: CalendarItem | undefined;
   master: MasterWithRelationsEntity;
-  type: CalendarViewType;
-  date: Date;
   time: number;
-  setDate: React.Dispatch<React.SetStateAction<Date>>;
-  setToDate: React.Dispatch<React.SetStateAction<Date>>;
-  setType: React.Dispatch<React.SetStateAction<CalendarViewType>>;
   setTime: React.Dispatch<React.SetStateAction<number>>;
   isSingleWeek?: boolean;
   selectOrder?: (event: PrivateEvent | null) => void;
@@ -106,17 +102,11 @@ const cell = tv({
 });
 
 export default function CalendarColumn(props: Props) {
-  // Track hovered cell index for DAY view
   const [hoveredCellIdx, setHoveredCellIdx] = useState<number | null>(null);
   const {
     data,
     master,
-    type,
-    date,
     time,
-    setDate,
-    setToDate,
-    setType,
     setTime,
     isSingleWeek = false,
     selectOrder,
@@ -124,6 +114,12 @@ export default function CalendarColumn(props: Props) {
     calendarType,
     onClickDateTime,
   } = props;
+  const date = useCalendarStore((state) => state.date);
+  const setDate = useCalendarStore((state) => state.setDate);
+  const setToDate = useCalendarStore((state) => state.setToDate);
+  const type = useCalendarStore((state) => state.type);
+  const setType = useCalendarStore((state) => state.setType);
+  const setMasterIds = useCalendarStore((state) => state.setMasterIds);
   const ref = useRef<HTMLDivElement | null>(null);
   const router = useRouter();
   const toast = useToast();
@@ -211,6 +207,9 @@ export default function CalendarColumn(props: Props) {
       if (selectedDateTime < currentDateTime) {
         toast.error('There will be next possible time selected');
       }
+
+      setMasterIds([master.id]);
+      setType(CalendarViewType.DAY);
 
       router.push(
         `${orderCreatePath}?masterId=${master.id}&date=${encodeURIComponent(

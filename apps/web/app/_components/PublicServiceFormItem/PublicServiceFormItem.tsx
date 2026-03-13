@@ -73,6 +73,8 @@ export default function PublicServiceFormItem(props: Props) {
     ),
   });
   const [selectedSlot, setSelectedSlot] = useState<Date | null>(null);
+  const [isActiveMasterSearch, setIsActiveMasterSearch] = useState(false);
+  const [isActiveServiceSearch, setIsActiveServiceSearch] = useState(false);
 
   const { data: calendar } = calendarHooks.useGetPublicCalendar(calendarParams, {
     enabled: !!selectedService && !!selectedMasters[index],
@@ -215,6 +217,14 @@ export default function PublicServiceFormItem(props: Props) {
     onChange(newOrders);
   };
 
+  const onMasterElementClick = () => {
+    setIsActiveMasterSearch(true);
+  };
+
+  const onServiceElementClick = () => {
+    setIsActiveServiceSearch(true);
+  };
+
   return (
     <div className='rounded-lg border border-gray-200'>
       <div className='bg-primary-50 px-4 p-2 h-14 rounded-t-lg flex items-center justify-between'>
@@ -244,8 +254,13 @@ export default function PublicServiceFormItem(props: Props) {
             error={errors?.serviceId?.message}
             hasMore={hasMoreServices}
             fetchNextPage={fetchNextServicesPage}
-          />
-          {selectedService && <ServiceElement item={selectedService} isCard />}
+            isActive={isActiveServiceSearch}
+            setIsActive={setIsActiveServiceSearch}
+          >
+            {selectedService && (
+              <ServiceElement item={selectedService} isCard onClick={onServiceElementClick} />
+            )}
+          </SearchField>
         </div>
         <div className=''>
           <SearchField
@@ -260,8 +275,13 @@ export default function PublicServiceFormItem(props: Props) {
             error={errors?.masterId?.message}
             hasMore={hasMoreMasters}
             fetchNextPage={fetchNextMastersPage}
-          />
-          {selectedMasters[index] && <MasterElement item={selectedMasters[index]} isCard />}
+            isActive={isActiveMasterSearch}
+            setIsActive={setIsActiveMasterSearch}
+          >
+            {selectedMasters[index] && (
+              <MasterElement item={selectedMasters[index]} isCard onClick={onMasterElementClick} />
+            )}
+          </SearchField>
         </div>
         <div className=''>
           <label className='block mb-2 font-medium'>Date</label>

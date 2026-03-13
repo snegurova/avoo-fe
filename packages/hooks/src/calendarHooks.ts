@@ -6,14 +6,17 @@ import { calendarApi } from '@avoo/axios';
 import {
   ApiStatus,
   BaseResponse,
+  GetAvailabilityResponse,
   GetCalendarByDatesResponse,
   GetCalendarResponse,
   GetPublicCalendarByDatesResponse,
   GetPublicCalendarResponse,
   PrivateCalendarByDatesQueryParams,
   PrivateCalendarQueryParams,
+  PrivateGetAvailabilityQueryParams,
   PublicCalendarByDatesQueryParams,
   PublicCalendarQueryParams,
+  PublicGetAvailabilityQueryParams,
 } from '@avoo/axios/types/apiTypes';
 import { utils } from '@avoo/hooks/utils/utils';
 
@@ -98,6 +101,46 @@ export const calendarHooks = {
 
     if (calendarData?.status === ApiStatus.SUCCESS && calendarData.data) {
       return { data: calendarData.data, refetch };
+    }
+
+    return { data: null, refetch };
+  },
+  useGetPrivateAvailability: (params: PrivateGetAvailabilityQueryParams) => {
+    const memoParams = useMemo<PrivateGetAvailabilityQueryParams>(() => params, [params]);
+
+    const {
+      data: availabilityData,
+      isPending,
+      refetch,
+    } = useQuery<BaseResponse<GetAvailabilityResponse>, Error>({
+      queryKey: ['availability', queryKeys.availability.byParams(memoParams)],
+      queryFn: () => calendarApi.getPrivateAvailability(memoParams),
+    });
+
+    utils.useSetPendingApi(isPending);
+
+    if (availabilityData?.status === ApiStatus.SUCCESS && availabilityData.data) {
+      return { data: availabilityData.data, refetch };
+    }
+
+    return { data: null, refetch };
+  },
+  useGetPublicAvailability: (params: PublicGetAvailabilityQueryParams) => {
+    const memoParams = useMemo<PublicGetAvailabilityQueryParams>(() => params, [params]);
+
+    const {
+      data: availabilityData,
+      isPending,
+      refetch,
+    } = useQuery<BaseResponse<GetAvailabilityResponse>, Error>({
+      queryKey: ['publicAvailability', queryKeys.publicAvailability.byParams(memoParams)],
+      queryFn: () => calendarApi.getPublicAvailability(memoParams),
+    });
+
+    utils.useSetPendingApi(isPending);
+
+    if (availabilityData?.status === ApiStatus.SUCCESS && availabilityData.data) {
+      return { data: availabilityData.data, refetch };
     }
 
     return { data: null, refetch };

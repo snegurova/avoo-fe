@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
+import { FormattedMessage } from 'react-intl';
 
 import {
   CreateOrder,
@@ -7,7 +8,9 @@ import {
   Service,
 } from '@avoo/axios/types/apiTypes';
 import { masterHooks, servicesHooks } from '@avoo/hooks';
+import { messages } from '@avoo/intl/messages/private/orders/create';
 import { isEmptyObject } from '@avoo/shared';
+import { useCalendarStore } from '@avoo/store';
 
 import FormDatePicker from '@/_components/FormDatePicker/FormDatePicker';
 import FormTextArea from '@/_components/FormTextArea/FormTextArea';
@@ -56,8 +59,13 @@ export default function ServiceFormItem(props: Props) {
 
   const [masterSearch, setMasterSearch] = useState('');
   const [masterParams, setMasterParams] = useState<GetMastersQueryParams>({ limit: 10 });
+  const [isActiveMasterSearch, setIsActiveMasterSearch] = useState(false);
+  const [isActiveServiceSearch, setIsActiveServiceSearch] = useState(false);
 
   const { params, queryParams, setSearchQuery, setMasterIds } = servicesHooks.useServicesQuery();
+
+  const isLastItem = useMemo(() => index === value.length - 1, [index, value.length]);
+  const setMasterIdsInStore = useCalendarStore((state) => state.setMasterIds);
 
   const {
     data,
@@ -126,6 +134,11 @@ export default function ServiceFormItem(props: Props) {
       ...prev,
       serviceId: newService?.id || undefined,
     }));
+
+    if (isLastItem) {
+      const masterIdsProvideService = newService?.masters.map((master) => master.id) || undefined;
+      setMasterIdsInStore(masterIdsProvideService);
+    }
   };
 
   const selectMaster = (val: { id: number } | null) => {
@@ -142,6 +155,10 @@ export default function ServiceFormItem(props: Props) {
       return newMasters;
     });
     setMasterIds(val.id ? [val.id] : []);
+
+    if (isLastItem) {
+      setMasterIdsInStore(val.id ? [val.id] : undefined);
+    }
   };
 
   const ServiceElementWrapped: React.FC<{
@@ -171,10 +188,20 @@ export default function ServiceFormItem(props: Props) {
     onChange(newOrders);
   };
 
+  const onServiceElementClick = () => {
+    setIsActiveServiceSearch(true);
+  };
+
+  const onMasterElementClick = () => {
+    setIsActiveMasterSearch(true);
+  };
+
   return (
     <div className='rounded-lg border border-gray-200'>
       <div className='bg-primary-50 px-4 p-2 h-14 rounded-t-lg flex items-center justify-between'>
-        <h3 className='font-medium'>{selectedService?.name ?? 'Select a service'}</h3>
+        <h3 className='font-medium'>
+          {selectedService?.name ?? <FormattedMessage {...messages.selectServiceLabel} />}
+        </h3>
         {remove && (
           <IconButton
             className='group'
@@ -200,8 +227,13 @@ export default function ServiceFormItem(props: Props) {
             error={errors?.serviceId?.message}
             hasMore={hasMoreServices}
             fetchNextPage={fetchNextServicesPage}
-          />
-          {selectedService && <ServiceElement item={selectedService} isCard />}
+            isActive={isActiveServiceSearch}
+            setIsActive={setIsActiveServiceSearch}
+          >
+            {selectedService && (
+              <ServiceElement item={selectedService} isCard onClick={onServiceElementClick} />
+            )}
+          </SearchField>
         </div>
         <div className=''>
           <SearchField
@@ -216,22 +248,31 @@ export default function ServiceFormItem(props: Props) {
             error={errors?.masterId?.message}
             hasMore={hasMoreMasters}
             fetchNextPage={fetchNextMastersPage}
-          />
-          {selectedMasters[index] && <MasterElement item={selectedMasters[index]} isCard />}
+            isActive={isActiveMasterSearch}
+            setIsActive={setIsActiveMasterSearch}
+          >
+            {selectedMasters[index] && (
+              <MasterElement item={selectedMasters[index]} isCard onClick={onMasterElementClick} />
+            )}
+          </SearchField>
         </div>
-        <div className='grid grid-cols-3 gap-x-3'>
-          <div className='col-span-2'>
-            <label className='block mb-2 font-medium'>Date</label>
+        <div className='grid grid-cols-3 lg:grid-cols-12 xl:grid-cols-3 gap-x-3'>
+          <div className='col-span-2 lg:col-span-7 xl:col-span-2'>
+            <label className='block mb-2 font-medium'>
+              <FormattedMessage {...messages.date} />
+            </label>
             <FormDatePicker date={order.date} onChange={onDateChange} />
           </div>
-          <div className=' '>
+          <div className=' lg:col-span-5 xl:col-span-1'>
             <label className='block mb-2 font-medium' htmlFor={`time-${index}`}>
-              Time
+              <FormattedMessage {...messages.time} />
             </label>
             <FormTimePicker date={order.date} onChange={onDateChange} />
           </div>
           {errors?.date?.message && (
-            <div className='mt-1 text-sm text-red-500 col-span-3'>{errors?.date?.message}</div>
+            <div className='mt-1 text-sm text-red-500 col-span-3 lg:col-span-12 xl:col-span-3'>
+              {errors?.date?.message}
+            </div>
           )}
         </div>
         <div className=''>

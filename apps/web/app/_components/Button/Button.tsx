@@ -54,7 +54,7 @@ const hooks = {
 };
 
 const button = tv({
-  base: 'inline-flex items-center justify-center min-w-40  font-medium hover:shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 cursor-pointer disabled:cursor-not-allowed  leading-none transition-colors',
+  base: 'inline-flex items-center justify-center min-w-30 xl:min-w-40  font-medium hover:shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 cursor-pointer disabled:cursor-not-allowed  leading-none transition-colors',
   variants: {
     intent: {
       primary:

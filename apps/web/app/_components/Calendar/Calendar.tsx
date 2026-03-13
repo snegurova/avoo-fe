@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { FormattedMessage } from 'react-intl';
 import { useRouter, useSearchParams } from 'next/navigation';
 
 import { tv } from 'tailwind-variants';
@@ -12,8 +13,9 @@ import { calendarHooks, masterHooks } from '@avoo/hooks';
 import { CalendarType } from '@avoo/hooks/types/calendarType';
 import { CalendarViewType } from '@avoo/hooks/types/calendarViewType';
 import { OrderQueryParams } from '@avoo/hooks/types/orderQueryParams';
-import { OrderStatus } from '@avoo/hooks/types/orderStatus';
+import { messages } from '@avoo/intl/messages/private/calendar/calendar';
 import { timeUtils } from '@avoo/shared';
+import { useCalendarStore } from '@avoo/store';
 
 import AppPlaceholder from '@/_components/AppPlaceholder/AppPlaceholder';
 import AsideModal from '@/_components/AsideModal/AsideModal';
@@ -86,30 +88,28 @@ type ScrollOptions = {
 type Props = {
   calendarType?: CalendarType;
   onClickDateTime?: (date: string, master: MasterWithRelationsEntity) => void;
-  selectedMasterId?: number;
 };
 
 export default function Calendar(props: Props) {
-  const { calendarType = CalendarType.REGULAR, onClickDateTime, selectedMasterId } = props;
-
+  const { calendarType = CalendarType.REGULAR, onClickDateTime } = props;
   const scrollRef = useRef<HTMLDivElement | null>(null);
-  const [date, setDate] = useState<Date>(timeUtils.toDayBegin(new Date()));
-  const [toDate, setToDate] = useState<Date>(timeUtils.toDayEnd(new Date()));
-  const [masterIds, setMasterIds] = useState<number[] | undefined>(
-    selectedMasterId ? [selectedMasterId] : undefined,
-  );
-  const [statuses, setStatuses] = useState<OrderStatus[] | undefined>(undefined);
-  const [orderIsOutOfSchedule, setOrderIsOutOfSchedule] = useState<boolean | undefined>(undefined);
-  const [type, setType] = useState<CalendarViewType>(CalendarViewType.DAY);
+  const date = useCalendarStore((state) => state.date);
+  const setDate = useCalendarStore((state) => state.setDate);
+  const toDate = useCalendarStore((state) => state.toDate);
+  const setToDate = useCalendarStore((state) => state.setToDate);
+  const masterIds = useCalendarStore((state) => state.masterIds);
+  const statuses = useCalendarStore((state) => state.statuses);
+  const orderIsOutOfSchedule = useCalendarStore((state) => state.orderIsOutOfSchedule);
+  const type = useCalendarStore((state) => state.type);
   const [params, setParams] = useState<PrivateCalendarQueryParams>({
     rangeFromDate: timeUtils.formatDate(date),
     rangeToDate: timeUtils.formatDate(toDate),
   });
   const [time, setTime] = useState(timeUtils.getMinutesInDay(new Date().toString()));
   const [selectedOrder, setSelectedOrder] = useState<PrivateEvent | null>(null);
-
   const router = useRouter();
   const searchParams = useSearchParams();
+
   useEffect(() => {
     setParams((prev) => ({
       ...prev,
@@ -212,7 +212,6 @@ export default function Calendar(props: Props) {
 
   const selectMasterIdByClick = (date: string, master: MasterWithRelationsEntity) => {
     if (!onClickDateTime) return;
-    setMasterIds([master.id]);
 
     onClickDateTime(date, master);
   };
@@ -222,22 +221,10 @@ export default function Calendar(props: Props) {
       <div className={calendarWrapper({ calendarType })}>
         <div className='w-full flex flex-col'>
           <CalendarControls
-            date={date}
-            setDate={setDate}
-            toDate={toDate}
-            setToDate={setToDate}
-            type={type}
-            setType={setType}
             scrollToCurrentTime={scrollToCurrentTime}
             params={params}
             setParams={setParams}
             masters={masters ?? []}
-            masterIds={masterIds}
-            setMasterIds={setMasterIds}
-            statuses={statuses}
-            setStatuses={setStatuses}
-            orderIsOutOfSchedule={orderIsOutOfSchedule}
-            setOrderIsOutOfSchedule={setOrderIsOutOfSchedule}
             calendarType={calendarType}
           />
           <div className={mainContainer({ type, isWeekSingleMasterView })} ref={scrollRef}>
@@ -266,11 +253,6 @@ export default function Calendar(props: Props) {
                           key={`${master.id}-col`}
                           data={columnData}
                           master={master}
-                          type={type}
-                          date={date}
-                          setDate={setDate}
-                          setToDate={setToDate}
-                          setType={setType}
                           time={time}
                           setTime={setTime}
                           selectOrder={setSelectedOrder}
@@ -283,37 +265,28 @@ export default function Calendar(props: Props) {
                   {type === CalendarViewType.MONTH &&
                     new Date(params.rangeFromDate).getTime() + 28 * 24 * 60 * 60 * 1000 <=
                       new Date(params.rangeToDate).getTime() && (
-                      <CalendarMonthView
-                        params={params}
-                        setDate={setDate}
-                        setToDate={setToDate}
-                        setType={setType}
-                      />
+                      <CalendarMonthView params={params} />
                     )}
                 </div>
               </>
             )}
             {isWeekSingleMasterView && (
               <CalendarWeekSingleMasterView
-                date={date}
                 time={time}
                 setTime={setTime}
                 data={calendar?.find(
                   (schedule) => String(schedule.master?.id) === String(filteredMasters[0].id),
                 )}
                 master={filteredMasters[0]}
-                setDate={setDate}
-                setToDate={setToDate}
-                setType={setType}
                 availableBooking={!selectedOrder}
                 calendarType={calendarType}
               />
             )}
             {filteredMasters.length === 0 && (
               <AppPlaceholder
-                title='No schedules'
+                title={<FormattedMessage {...messages.noSchedules} />}
                 icon={<CalendarClockIcon className='w-20 h-20 lg:w-25 lg:h-25 fill-primary-300' />}
-                description='There are currently no schedules to display. Choose masters to see their schedules here.'
+                description={<FormattedMessage {...messages.noSchedulesDescription} />}
               />
             )}
           </div>

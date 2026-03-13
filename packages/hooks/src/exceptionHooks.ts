@@ -1,7 +1,13 @@
 import { useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 
-import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import {
+  QueryClient,
+  useInfiniteQuery,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from '@tanstack/react-query';
 import dayjs from 'dayjs';
 
 import { exceptionApi } from '@avoo/axios/';
@@ -27,6 +33,13 @@ import { masterHooks } from './masterHooks';
 import { queryKeys } from './queryKeys';
 
 export const exceptionHooks = {
+  invalidateOnSuccess: (queryClient: QueryClient, callback?: () => void) => {
+    queryClient.invalidateQueries({ queryKey: queryKeys.exceptions.all });
+    queryClient.invalidateQueries({ queryKey: queryKeys.calendar.all });
+    queryClient.invalidateQueries({ queryKey: queryKeys.monthCalendar.all });
+    callback?.();
+  },
+
   useGetExceptions: (params?: GetExceptionsQueryParams) => {
     const memoParams = useMemo(() => params ?? {}, [params]);
 
@@ -77,8 +90,7 @@ export const exceptionHooks = {
     >({
       mutationFn: (data: CreateExceptionRequest) => exceptionApi.createException(data),
       onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: queryKeys.exceptions.all });
-        onSuccess?.();
+        exceptionHooks.invalidateOnSuccess(queryClient, onSuccess);
       },
     });
 
@@ -97,7 +109,7 @@ export const exceptionHooks = {
     >({
       mutationFn: (data: CreateExceptionRequest) => exceptionApi.createException(data),
       onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: queryKeys.exceptions.all });
+        exceptionHooks.invalidateOnSuccess(queryClient);
       },
     });
 
@@ -160,8 +172,7 @@ export const exceptionHooks = {
     const { mutate, isPending } = useMutation<BaseResponse<Exception>, Error, number>({
       mutationFn: (id: number) => exceptionApi.deleteException(id),
       onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: queryKeys.exceptions.all });
-        onSuccess?.();
+        exceptionHooks.invalidateOnSuccess(queryClient, onSuccess);
       },
     });
 
@@ -181,8 +192,7 @@ export const exceptionHooks = {
     >({
       mutationFn: ({ id, data }) => exceptionApi.updateException(id, data),
       onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: queryKeys.exceptions.all });
-        onSuccess?.();
+        exceptionHooks.invalidateOnSuccess(queryClient, onSuccess);
       },
     });
 
