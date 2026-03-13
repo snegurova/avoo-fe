@@ -5,6 +5,7 @@ import { useAuthStore } from '@avoo/store';
 import AddBookingScreen from '@/screens/AddBookingScreen';
 import AddPostScreen from '@/screens/AddPostScreen';
 import CertificatesScreen from '@/screens/CertificatesScreen';
+import ComboServiceTimeScreen from '@/screens/ComboServiceTimeScreen';
 import ConfirmCodeScreen from '@/screens/ConfirmCodeScreen';
 import EditLanguagesScreen from '@/screens/EditLanguagesScreen';
 import EditProfileScreen from '@/screens/EditProfileScreen';
@@ -15,8 +16,10 @@ import PostsScreen from '@/screens/PostsScreen';
 import ProfileScreen from '@/screens/ProfileScreen';
 import RegisterScreen from '@/screens/RegisterScreen';
 import ResetPasswordScreen from '@/screens/ResetPasswordScreen';
+import ScheduleExceptionScreen from '@/screens/ScheduleExceptionScreen';
 import StorybookScreen from '@/screens/Storybook';
 import WorkingHoursScreen from '@/screens/WorkingHoursScreen';
+import WorkingScheduleScreen from '@/screens/WorkingScheduleScreen';
 import { RootScreens, RootStackParamList } from '@/types/navigation';
 
 import BottomBarNavigator from './BottomBarNavigator';
@@ -53,6 +56,18 @@ const AppContainer = () => {
           <Stack.Screen name={RootScreens.ProfileScreen} component={ProfileScreen} />
           <Stack.Screen name={RootScreens.AddPostScreen} component={AddPostScreen} />
           <Stack.Screen name={RootScreens.AddBookingScreen} component={AddBookingScreen} />
+          <Stack.Screen
+            name={RootScreens.WorkingScheduleScreen}
+            component={WorkingScheduleScreen}
+          />
+          <Stack.Screen
+            name={RootScreens.ScheduleExceptionScreen}
+            component={ScheduleExceptionScreen}
+          />
+          <Stack.Screen
+            name={RootScreens.ComboServiceTimeScreen}
+            component={ComboServiceTimeScreen}
+          />
         </>
       )}
 

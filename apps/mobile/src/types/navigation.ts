@@ -19,6 +19,9 @@ export enum RootScreens {
   AddPostScreen = 'AddPostScreen',
   AddBookingScreen = 'AddBookingScreen',
   ProfileScreen = 'ProfileScreen',
+  WorkingScheduleScreen = 'WorkingScheduleScreen',
+  ScheduleExceptionScreen = 'ScheduleExceptionScreen',
+  ComboServiceTimeScreen = 'ComboServiceTimeScreen',
 }
 
 export enum BottomBarScreens {
@@ -61,6 +64,9 @@ export type RootStackParamList = {
   [RootScreens.AddPostScreen]: undefined;
   [RootScreens.AddBookingScreen]: undefined;
   [RootScreens.ProfileScreen]: undefined;
+  [RootScreens.WorkingScheduleScreen]: undefined;
+  [RootScreens.ScheduleExceptionScreen]: undefined;
+  [RootScreens.ComboServiceTimeScreen]: undefined;
 };
 
 export type RootStackScreenProps<T extends keyof RootStackParamList> = NativeStackScreenProps<
