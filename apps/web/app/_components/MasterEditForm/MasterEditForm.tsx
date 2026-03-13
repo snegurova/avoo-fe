@@ -146,7 +146,7 @@ export default function MasterEditForm({
         <h3 className='text-base md:text-xl mb-0'>Personal info</h3>
         <div className='flex items-center gap-4 py-6 mb-0'>
           <AvatarUpload
-            imageUri={avatarPreviewUrlField.value || avatarUrlField.value || null}
+            imageUri={avatarUrlField.value}
             onAvatarSave={onAvatarSave}
             isLoading={false}
             size={AvatarSize.XLARGE}

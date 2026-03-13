@@ -43,7 +43,7 @@ export const ProfileInfo = () => {
     <div className='flex flex-col md:flex-row md:items-start md:gap-16'>
       <div className='mt-6 md:mt-0 mb-8 md:mb-0 flex flex-col items-center gap-4 relative  md:shrink-0'>
         <AvatarUpload
-          imageUri={visualProfileInfo.avatarPreviewUrl}
+          imageUri={visualProfileInfo.avatarUrl}
           isLoading={isPending}
           onAvatarSave={handleUpdateProfileAvatar}
           size={AvatarSize.PROFILE}

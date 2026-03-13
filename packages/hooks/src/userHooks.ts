@@ -182,8 +182,8 @@ export const userHooks = {
     >({
       mutationFn: (payload) => {
         const updateProfilePayload: UpdateProfile = {
-          avatarUrl: payload.url as unknown as Record<string, never>,
-          avatarPreviewUrl: payload.previewUrl as unknown as Record<string, never>,
+          avatarUrl: payload.url,
+          avatarPreviewUrl: payload.previewUrl,
         };
         return userApi.updateProfile(updateProfilePayload);
       },

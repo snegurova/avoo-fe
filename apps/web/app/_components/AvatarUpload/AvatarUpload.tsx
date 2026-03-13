@@ -26,8 +26,8 @@ export enum AvatarSize {
 }
 
 type Props = {
-  imageUri: string | null;
   isLoading: boolean;
+  imageUri?: string | null;
   onAvatarSave?: (avatar: FileEntity) => void;
   size?: AvatarSize;
   iconSize?: number;

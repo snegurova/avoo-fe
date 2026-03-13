@@ -110,7 +110,7 @@ export default function EditProfileForm({
       {showPreview && (
         <div className='flex justify-center'>
           <AvatarUpload
-            imageUri={watch('avatarPreviewUrl') || null}
+            imageUri={watch('avatarUrl')}
             onAvatarSave={onAvatarSave}
             isLoading={false}
             size={AvatarSize.XLARGE}

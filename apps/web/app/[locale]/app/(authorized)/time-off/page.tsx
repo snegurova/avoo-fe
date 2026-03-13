@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
 import { Exception } from '@avoo/axios/types/apiTypes';
-import { exceptionHooks, masterHooks, useDebounce } from '@avoo/hooks';
+import { exceptionHooks, useDebounce } from '@avoo/hooks';
 
 import AppPlaceholder from '@/_components/AppPlaceholder/AppPlaceholder';
 import AppWrapper from '@/_components/AppWrapper/AppWrapper';
@@ -31,24 +31,6 @@ export default function TimeOffPage() {
     () => data?.pages.flatMap((page) => page.data?.items ?? []) ?? [],
     [data],
   );
-  const mastersResponse = masterHooks.useGetMastersProfileInfo({ limit: 500 });
-  const masters = mastersResponse?.items ?? [];
-
-  const filteredMasters = useMemo(() => {
-    if (!masters) return [];
-    const query = (searchQuery ?? '').trim().toLowerCase();
-    if (!query) return masters;
-    return masters.filter((master) => (master.name ?? '').toLowerCase().includes(query));
-  }, [masters, searchQuery]);
-
-  const filteredExceptions = useMemo(() => {
-    const queryNormalized = (searchQuery ?? '').trim();
-    if (!queryNormalized) return exceptions;
-    const masterIds = new Set(filteredMasters.map((master) => master.id));
-    return exceptions.filter(
-      (exception) => exception.masterId != null && masterIds.has(exception.masterId),
-    );
-  }, [exceptions, filteredMasters, searchQuery]);
 
   const router = useRouter();
   const addTimeOffPath = localizationHooks.useWithLocale(AppRoutes.AddTimeOff);
@@ -82,7 +64,7 @@ export default function TimeOffPage() {
         />
 
         <div className='px-5 md:px-11 pb-11 lg:flex-1 lg:min-h-0 lg:overflow-hidden'>
-          {filteredExceptions.length === 0 ? (
+          {exceptions.length === 0 ? (
             <AppPlaceholder
               title='No time off added yet'
               icon={<EditCalendarIcon className='w-20 h-20 lg:w-25 lg:h-25 fill-primary-300' />}
@@ -97,7 +79,7 @@ export default function TimeOffPage() {
             />
           ) : (
             <TimeOffList
-              items={filteredExceptions}
+              items={exceptions}
               incrementPage={fetchNextPage}
               hasMore={!!hasNextPage}
               onEdit={handleEditTimeOff}

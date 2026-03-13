@@ -37,8 +37,8 @@ export function buildUpdateProfilePayload(values: Record<string, unknown>): Upda
       typeof parsedValues.location_lon === 'number' && !Number.isNaN(parsedValues.location_lon)
         ? parsedValues.location_lon
         : undefined,
-    avatarUrl: parsedValues.avatarUrl as unknown as Record<string, never> | undefined,
-    avatarPreviewUrl: parsedValues.avatarPreviewUrl as unknown as Record<string, never> | undefined,
+    avatarUrl: parsedValues.avatarUrl,
+    avatarPreviewUrl: parsedValues.avatarPreviewUrl,
     mediaIds: [],
   };
 }
