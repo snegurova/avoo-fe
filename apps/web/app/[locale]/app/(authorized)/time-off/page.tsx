@@ -85,7 +85,7 @@ export default function TimeOffPage() {
           {filteredExceptions.length === 0 ? (
             <AppPlaceholder
               title='No time off added yet'
-              icon={<EditCalendarIcon className='w-20 h-20 lg:w-25 lg:h-25 fill-primary-300' />}
+              icon={<EditCalendarIcon className='w-20 h-20 xl:w-25 xl:h-25 fill-primary-300' />}
               description={
                 <p>
                   <Link href={addTimeOffPath} className='text-primary-300 font-bold'>

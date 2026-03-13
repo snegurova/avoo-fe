@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
@@ -11,6 +11,7 @@ type Props = {
     items?: { label: string | null; id: number | string; handler: () => void }[];
   }[];
   values: ((string | number)[] | boolean | undefined)[];
+  Item?: React.ReactNode;
 };
 
 const dropdown = tv({
@@ -18,10 +19,37 @@ const dropdown = tv({
 });
 
 export default function CheckboxesList(props: Props) {
-  const { options, values } = props;
+  const { options, values, Item } = props;
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  const [maxHeight, setMaxHeight] = useState<string | undefined>(undefined);
+
+  useEffect(() => {
+    const updateDropdownPosition = () => {
+      const dropdownEl = dropdownRef.current;
+      if (!dropdownEl) return;
+      const rect = dropdownEl.getBoundingClientRect();
+      const viewportHeight = window.innerHeight;
+      const bottomSpace = viewportHeight - rect.top;
+      const minBottomMargin = 16;
+      if (rect.height + minBottomMargin > bottomSpace) {
+        setMaxHeight(`${bottomSpace - minBottomMargin}px`);
+      } else {
+        setMaxHeight(undefined);
+      }
+    };
+    updateDropdownPosition();
+    window.addEventListener('resize', updateDropdownPosition);
+    return () => {
+      window.removeEventListener('resize', updateDropdownPosition);
+    };
+  }, []);
 
   return (
-    <div className={dropdown()}>
+    <div
+      ref={dropdownRef}
+      className={dropdown()}
+      style={maxHeight ? { maxHeight, overflowY: 'auto' } : undefined}
+    >
       {options.map((option, index) => (
         <div
           key={index}
@@ -82,6 +110,7 @@ export default function CheckboxesList(props: Props) {
           )}
         </div>
       ))}
+      {Item && <>{Item}</>}
     </div>
   );
 }

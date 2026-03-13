@@ -26,8 +26,9 @@ import ArrowForwardIcon from '@/_icons/ArrowForwardIcon';
 import CalendarViewDay from '@/_icons/CalendarViewDay';
 import CalendarViewMonth from '@/_icons/CalendarViewMonth';
 import CalendarViewWeek from '@/_icons/CalendarViewWeek';
+import ResetSettingsIcon from '@/_icons/ResetSettingsIcon';
 
-import CheckboxesButton from '../CheckboxesButton/CheckboxesButton';
+import CheckboxesButton from '@/_components/CheckboxesButton/CheckboxesButton';
 
 const STATUSES_ITEMS = [
   { label: <FormattedMessage {...orderMessages.pending} />, id: OrderStatus.PENDING },
@@ -75,6 +76,8 @@ const showOptionsWrapper = tv({
 });
 
 import { useCalendarStore } from '@avoo/store';
+import { IconButton } from '@/_components/IconButton/IconButton';
+import CheckboxesListButton from '../CheckboxesListButton/CheckboxesListButton';
 
 export default function CalendarControls(props: Props) {
   const { scrollToCurrentTime, masters, calendarType } = props;
@@ -89,8 +92,11 @@ export default function CalendarControls(props: Props) {
   const setStatuses = useCalendarStore((state) => state.setStatuses);
   const orderIsOutOfSchedule = useCalendarStore((state) => state.orderIsOutOfSchedule);
   const setOrderIsOutOfSchedule = useCalendarStore((state) => state.setOrderIsOutOfSchedule);
+  const resetStorage = useCalendarStore((state) => state.resetStorage);
 
+  const mobileLargeUp = useMediaQuery('(min-width:600px)');
   const tabletUp = useMediaQuery('(min-width:768px)');
+  const desktopUp = useMediaQuery('(min-width:1024px)');
   const desktopLargeUp = useMediaQuery('(min-width:1280px)');
   const showOptions = useMemo(() => {
     if (calendarType === CalendarType.REGULAR) {
@@ -221,6 +227,7 @@ export default function CalendarControls(props: Props) {
           setType(CalendarViewType.DAY);
           setCurrentDate(CalendarViewType.DAY);
         },
+        value: CalendarViewType.DAY,
       },
       {
         label: <FormattedMessage {...messages.week} />,
@@ -229,6 +236,7 @@ export default function CalendarControls(props: Props) {
           setType(CalendarViewType.WEEK);
           setCurrentDate(CalendarViewType.WEEK);
         },
+        value: CalendarViewType.WEEK,
       },
       {
         label: <FormattedMessage {...messages.month} />,
@@ -237,6 +245,7 @@ export default function CalendarControls(props: Props) {
           setType(CalendarViewType.MONTH);
           setCurrentDate(CalendarViewType.MONTH);
         },
+        value: CalendarViewType.MONTH,
       },
     ],
     [],
@@ -335,7 +344,7 @@ export default function CalendarControls(props: Props) {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'flex-end',
-    paddingRight: 10,
+    marginRight: 0,
   };
 
   return (
@@ -381,11 +390,13 @@ export default function CalendarControls(props: Props) {
           <ArrowForwardIcon className='fill-gray-800 w-3.5 h-3.5' />
         </button>
       </div>
-      <SelectButton
-        label={<FormattedMessage {...messages[type]} />}
-        options={viewOptions}
-        type={ElementStyleType.OUTLINE}
-      />
+      {mobileLargeUp && (
+        <SelectButton
+          label={<FormattedMessage {...messages[type]} />}
+          options={viewOptions}
+          type={ElementStyleType.OUTLINE}
+        />
+      )}
       {showOptions ? (
         <>
           <CheckboxesButton
@@ -407,8 +418,37 @@ export default function CalendarControls(props: Props) {
             label={<FormattedMessage {...messages.optionsLabel} />}
             options={[mastersOptions, statusesOptions, outOfCheduleOptions]}
             values={[masterIds, statuses, orderIsOutOfSchedule]}
+            Item={
+              !mobileLargeUp && (
+                <div className=''>
+                  {viewOptions.map((option) => (
+                    <CheckboxesListButton
+                      key={option.label.toString()}
+                      option={option}
+                      isActive={type === option.value}
+                    />
+                  ))}
+                </div>
+              )
+            }
           />
         </div>
+      )}
+      {!desktopUp && (
+        <IconButton
+          icon={<ResetSettingsIcon className='fill-gray-800' />}
+          onClick={resetStorage}
+          className='rounded-2xl cursor-pointer flex items-center justify-center border border-gray-200 bg-transparent hover:bg-primary-200 focus:bg-primary-200 transition-colors h-9 w-9'
+        />
+      )}
+      {desktopUp && (
+        <button
+          type='button'
+          onClick={resetStorage}
+          className={controlsButton({ variant: 'full' })}
+        >
+          Reset
+        </button>
       )}
     </div>
   );

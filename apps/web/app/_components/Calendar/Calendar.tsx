@@ -286,7 +286,7 @@ export default function Calendar(props: Props) {
             {filteredMasters.length === 0 && (
               <AppPlaceholder
                 title={<FormattedMessage {...messages.noSchedules} />}
-                icon={<CalendarClockIcon className='w-20 h-20 lg:w-25 lg:h-25 fill-primary-300' />}
+                icon={<CalendarClockIcon className='w-20 h-20 xl:w-25 xl:h-25 fill-primary-300' />}
                 description={<FormattedMessage {...messages.noSchedulesDescription} />}
               />
             )}

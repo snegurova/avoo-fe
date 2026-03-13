@@ -8,8 +8,8 @@ type Props = {
 
 export default function AppPlaceholder({ title, icon, description }: Props) {
   return (
-    <div className='flex justify-center items-center flex-col grow h-full gap-8'>
-      <div className='rounded-full w-30 h-30 lg:w-37.5 lg:h-37.5 bg-primary-50 flex items-center justify-center'>
+    <div className='flex justify-center items-center flex-col grow h-full gap-8 lg:gap-4 xl:gap-8 py-10 lg:py-4'>
+      <div className='rounded-full w-30 h-30 xl:w-37.5 xl:h-37.5 bg-primary-50 flex items-center justify-center'>
         {icon}
       </div>
       <div className='max-w-62 md:max-w-90 flex flex-col gap-3 items-center'>
