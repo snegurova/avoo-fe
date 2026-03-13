@@ -26,6 +26,7 @@ import { localizationHooks } from '@/_hooks/localizationHooks';
 import { useToast } from '@/_hooks/useToast';
 import AddCircleIcon from '@/_icons/AddCircleIcon';
 import { AppRoutes } from '@/_routes/routes';
+import { CalendarViewType } from '@avoo/hooks/types/calendarViewType';
 
 const SERVICES_KEY_IN_ORDER_CREATE = 'ordersData';
 const WRAPPER_HEADER_HEIGHT = '62px';
@@ -42,7 +43,12 @@ export default function OrderCreate() {
     null,
   ]);
   const [startDate, setStartDate] = useState<string | null>(null);
+  const [activeOrder, setActiveOrder] = useState<number>(0);
   const setMasterIds = useCalendarStore((state) => state.setMasterIds);
+  const setDate = useCalendarStore((state) => state.setDate);
+  const setType = useCalendarStore((state) => state.setType);
+  const setStatuses = useCalendarStore((state) => state.setStatuses);
+  const setOrderIsOutOfSchedule = useCalendarStore((state) => state.setOrderIsOutOfSchedule);
 
   const orderCreatePath = localizationHooks.useWithLocale(AppRoutes.OrderCreate);
   const calendarPath = localizationHooks.useWithLocale(AppRoutes.Calendar);
@@ -97,6 +103,30 @@ export default function OrderCreate() {
   });
 
   useEffect(() => {
+    console.log('Active Order: ', activeOrder);
+    if (fields[activeOrder]) {
+      const activeOrderData = fields[activeOrder];
+      setDate(new Date(activeOrderData.date));
+      setType(CalendarViewType.DAY);
+      setStatuses(undefined);
+      setOrderIsOutOfSchedule(undefined);
+
+      if (activeOrderData.masterId) {
+        setMasterIds([activeOrderData.masterId]);
+      } else if (activeOrderData.serviceId) {
+        const activeOrderService = selectedServices[activeOrder]?.id
+          ? selectedServices[activeOrder]
+          : null;
+        const masterIdsProvideService =
+          activeOrderService?.masters.map((master) => master.id) ?? undefined;
+        setMasterIds(masterIdsProvideService);
+      } else {
+        setMasterIds(undefined);
+      }
+    }
+  }, [activeOrder]);
+
+  useEffect(() => {
     if (fields[0]?.date) {
       setStartDate(fields[0].date);
     }
@@ -126,6 +156,8 @@ export default function OrderCreate() {
     setSelectedServices((prev) => [...prev, null]);
 
     setMasterIds(undefined);
+
+    setActiveOrder(fields.length);
   };
 
   const combinations = combinationHooks.useGetCombinations({
@@ -170,6 +202,7 @@ export default function OrderCreate() {
       notes,
       combinationId: combination.id,
     });
+    setActiveOrder(0);
   };
 
   const onSplitCombination = () => {
@@ -199,30 +232,29 @@ export default function OrderCreate() {
     setSelectedCombinations([]);
   };
 
-  const setDateAndMasterInLastItem = (
+  const setDateAndMasterInSelectedItem = (
     field: { value: CreateOrder[]; onChange: (value: CreateOrder[]) => void },
     date: string,
     master: MasterWithRelationsEntity,
   ) => {
     const updatedOrders = [...field.value];
-    const lastIndex = updatedOrders.length - 1;
 
-    const isMasterProvidesService = selectedServices[lastIndex]?.masters.some(
+    const isMasterProvidesService = selectedServices[activeOrder]?.masters.some(
       (m) => m.id === master.id,
     );
 
-    if (selectedServices[lastIndex] && !isMasterProvidesService) {
+    if (selectedServices[activeOrder] && !isMasterProvidesService) {
       toast.error('Selected master does not provide selected service');
       return;
     }
     setSelectedMasters((prev) => {
       const newMasters = [...prev];
-      newMasters[lastIndex] = master;
+      newMasters[activeOrder] = master;
       return newMasters;
     });
 
-    updatedOrders[lastIndex] = {
-      ...updatedOrders[lastIndex],
+    updatedOrders[activeOrder] = {
+      ...updatedOrders[activeOrder],
       date,
       masterId: master.id,
     };
@@ -265,6 +297,8 @@ export default function OrderCreate() {
                 remove={remove}
                 errors={Array.isArray(errors.ordersData) ? errors.ordersData : []}
                 Item={ServiceFormItem}
+                setActiveOrder={setActiveOrder}
+                activeOrder={activeOrder}
               />
             ) : (
               <CombinationForm
@@ -332,7 +366,9 @@ export default function OrderCreate() {
           render={({ field }) => (
             <Calendar
               calendarType={CalendarType.SELECTOR}
-              onClickDateTime={(date, master) => setDateAndMasterInLastItem(field, date, master)}
+              onClickDateTime={(date, master) =>
+                setDateAndMasterInSelectedItem(field, date, master)
+              }
             />
           )}
         />

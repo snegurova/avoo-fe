@@ -22,6 +22,9 @@ type Props = {
       | (MasterWithRelationsEntity | null)[]
       | ((prev: (MasterWithRelationsEntity | null)[]) => (MasterWithRelationsEntity | null)[]),
   ) => void;
+
+  setActiveOrder?: (index: number | ((prev: number) => number)) => void;
+  activeOrder?: number;
   Item: React.ComponentType<{
     order: CreateOrder;
     onChange: (orders: CreateOrder[]) => void;
@@ -41,6 +44,8 @@ type Props = {
         | ((prev: (MasterWithRelationsEntity | null)[]) => (MasterWithRelationsEntity | null)[]),
     ) => void;
     errors: { [key: string]: { message: string } };
+    setActiveOrder?: (index: number) => void;
+    activeOrder?: number;
   }>;
 };
 
@@ -56,6 +61,8 @@ export default function ServiceForm(props: Props) {
     selectedMasters,
     setSelectedMasters,
     Item,
+    setActiveOrder,
+    activeOrder,
   } = props;
   const setMasterIds = useCalendarStore((state) => state.setMasterIds);
 
@@ -78,8 +85,17 @@ export default function ServiceForm(props: Props) {
       newServices.splice(index, 1);
       return newServices;
     });
+    setSelectedMasters((prev) => {
+      const newMasters = [...prev];
+      newMasters.splice(index, 1);
+      return newMasters;
+    });
 
-    setMasterIds(undefined);
+    if (activeOrder && setActiveOrder && activeOrder === index) {
+      setActiveOrder((prev) => prev - 1);
+    } else {
+      setMasterIds(undefined);
+    }
   };
 
   return (
@@ -102,6 +118,8 @@ export default function ServiceForm(props: Props) {
               ? (errors[index] as { [key: string]: { message: string } }) || {}
               : {}
           }
+          setActiveOrder={setActiveOrder}
+          activeOrder={activeOrder}
         />
       ))}
     </div>

@@ -15,12 +15,14 @@ export type CalendarStore = {
   toDate: Date;
   orderIsOutOfSchedule: boolean | undefined;
   type: CalendarViewType;
+  slots: { date: string; duration: number }[] | null;
   setMasterIds: (masterIds: number[] | undefined) => void;
   setStatuses: (statuses: OrderStatus[] | undefined) => void;
   setDate: (date: Date) => void;
   setToDate: (toDate: Date) => void;
   setOrderIsOutOfSchedule: (orderIsOutOfSchedule: boolean | undefined) => void;
   setType: (type: CalendarViewType) => void;
+  setSlots: (slots: { date: string; duration: number }[] | null) => void;
   resetStorage: () => void;
 };
 
@@ -31,6 +33,7 @@ const initialState = {
   toDate: timeUtils.toDayEnd(new Date()),
   orderIsOutOfSchedule: undefined,
   type: CalendarViewType.DAY,
+  slots: null,
 };
 
 export const useCalendarStore = create<CalendarStore>()(
@@ -43,6 +46,7 @@ export const useCalendarStore = create<CalendarStore>()(
       setToDate: (toDate) => set({ toDate }),
       setOrderIsOutOfSchedule: (orderIsOutOfSchedule) => set({ orderIsOutOfSchedule }),
       setType: (type) => set({ type }),
+      setSlots: (slots) => set({ slots }),
       resetStorage: () =>
         set({
           ...initialState,

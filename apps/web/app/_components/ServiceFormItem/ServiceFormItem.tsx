@@ -20,6 +20,7 @@ import MasterElement from '@/_components/MasterElement/MasterElement';
 import SearchField from '@/_components/SearchField/SearchField';
 import ServiceElement from '@/_components/ServiceElement/ServiceElement';
 import DeleteIcon from '@/_icons/DeleteIcon';
+import { tv } from 'tailwind-variants';
 
 type Props = {
   order: CreateOrder;
@@ -40,7 +41,29 @@ type Props = {
       | (MasterWithRelationsEntity | null)[]
       | ((prev: (MasterWithRelationsEntity | null)[]) => (MasterWithRelationsEntity | null)[]),
   ) => void;
+  setActiveOrder?: (index: number) => void;
+  activeOrder?: number;
 };
+
+const root = tv({
+  base: 'rounded-lg border transition-colors',
+  variants: {
+    isActive: {
+      true: 'border-primary-200',
+      false: 'border-transparent',
+    },
+  },
+});
+
+const top = tv({
+  base: 'px-4 py-2 h-10 rounded-t-lg flex items-center justify-between transition-colors border-b ',
+  variants: {
+    isActive: {
+      true: 'bg-primary-200 border-primary-200',
+      false: 'border-primary-100',
+    },
+  },
+});
 
 export default function ServiceFormItem(props: Props) {
   const {
@@ -55,6 +78,8 @@ export default function ServiceFormItem(props: Props) {
     errors,
     selectedMasters,
     setSelectedMasters,
+    setActiveOrder,
+    activeOrder,
   } = props;
 
   const [masterSearch, setMasterSearch] = useState('');
@@ -64,7 +89,7 @@ export default function ServiceFormItem(props: Props) {
 
   const { params, queryParams, setSearchQuery, setMasterIds } = servicesHooks.useServicesQuery();
 
-  const isLastItem = useMemo(() => index === value.length - 1, [index, value.length]);
+  const isActive = useMemo(() => activeOrder === index, [activeOrder, index]);
   const setMasterIdsInStore = useCalendarStore((state) => state.setMasterIds);
 
   const {
@@ -135,7 +160,7 @@ export default function ServiceFormItem(props: Props) {
       serviceId: newService?.id || undefined,
     }));
 
-    if (isLastItem) {
+    if (isActive) {
       const masterIdsProvideService = newService?.masters.map((master) => master.id) || undefined;
       setMasterIdsInStore(masterIdsProvideService);
     }
@@ -156,7 +181,7 @@ export default function ServiceFormItem(props: Props) {
     });
     setMasterIds(val.id ? [val.id] : []);
 
-    if (isLastItem) {
+    if (isActive) {
       setMasterIdsInStore(val.id ? [val.id] : undefined);
     }
   };
@@ -196,9 +221,18 @@ export default function ServiceFormItem(props: Props) {
     setIsActiveMasterSearch(true);
   };
 
+  const handleRootClick = () => {
+    if (setActiveOrder) setActiveOrder(index);
+  };
+
+  const handleRemove = (e: React.MouseEvent<HTMLButtonElement>) => {
+    remove?.();
+    e.stopPropagation();
+  };
+
   return (
-    <div className='rounded-lg border border-gray-200'>
-      <div className='bg-primary-50 px-4 p-2 h-14 rounded-t-lg flex items-center justify-between'>
+    <div className={root({ isActive })} onClick={handleRootClick}>
+      <div className={top({ isActive })}>
         <h3 className='font-medium'>
           {selectedService?.name ?? <FormattedMessage {...messages.selectServiceLabel} />}
         </h3>
@@ -208,7 +242,7 @@ export default function ServiceFormItem(props: Props) {
             icon={
               <DeleteIcon className='w-5 h-5 transition-colors group-hover:fill-primary-500 group-focus:fill-primary-500' />
             }
-            onClick={remove}
+            onClick={handleRemove}
           />
         )}
       </div>
