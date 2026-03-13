@@ -98,15 +98,17 @@ export default function CalendarControls(props: Props) {
   const tabletUp = useMediaQuery('(min-width:768px)');
   const desktopUp = useMediaQuery('(min-width:1024px)');
   const desktopLargeUp = useMediaQuery('(min-width:1280px)');
+  const desktopExtraLargeUp = useMediaQuery('(min-width:1440px)');
+
   const showOptions = useMemo(() => {
     if (calendarType === CalendarType.REGULAR) {
       return desktopLargeUp;
     } else if (calendarType === CalendarType.WIDGET) {
-      return tabletUp;
+      return desktopExtraLargeUp;
     } else {
       return false;
     }
-  }, [tabletUp, desktopLargeUp, calendarType]);
+  }, [desktopLargeUp, desktopExtraLargeUp, calendarType]);
 
   const setCurrentDate = (type: CalendarViewType) => {
     const today = new Date();
@@ -390,13 +392,14 @@ export default function CalendarControls(props: Props) {
           <ArrowForwardIcon className='fill-gray-800 w-3.5 h-3.5' />
         </button>
       </div>
-      {mobileLargeUp && (
+      {(mobileLargeUp && calendarType !== CalendarType.SELECTOR) ||
+      (desktopExtraLargeUp && calendarType === CalendarType.SELECTOR) ? (
         <SelectButton
           label={<FormattedMessage {...messages[type]} />}
           options={viewOptions}
           type={ElementStyleType.OUTLINE}
         />
-      )}
+      ) : null}
       {showOptions ? (
         <>
           <CheckboxesButton
@@ -419,7 +422,8 @@ export default function CalendarControls(props: Props) {
             options={[mastersOptions, statusesOptions, outOfCheduleOptions]}
             values={[masterIds, statuses, orderIsOutOfSchedule]}
             Item={
-              !mobileLargeUp && (
+              (!mobileLargeUp ||
+                (!desktopExtraLargeUp && calendarType === CalendarType.SELECTOR)) && (
                 <div className=''>
                   {viewOptions.map((option) => (
                     <CheckboxesListButton
@@ -434,14 +438,14 @@ export default function CalendarControls(props: Props) {
           />
         </div>
       )}
-      {!desktopUp && (
+      {(!desktopUp || calendarType !== CalendarType.REGULAR) && (
         <IconButton
           icon={<ResetSettingsIcon className='fill-gray-800' />}
           onClick={resetStorage}
           className='rounded-2xl cursor-pointer flex items-center justify-center border border-gray-200 bg-transparent hover:bg-primary-200 focus:bg-primary-200 transition-colors h-9 w-9'
         />
       )}
-      {desktopUp && (
+      {desktopUp && calendarType === CalendarType.REGULAR && (
         <button
           type='button'
           onClick={resetStorage}
