@@ -52,8 +52,8 @@ export const mediaHooks = {
       meta: {
         successMessage: 'Media uploaded successfully',
       },
-      onSuccess: (data) => {
-        if (data.status === ApiStatus.SUCCESS) onSuccess?.(data.data);
+      onSuccess: (response) => {
+        if (response.status === ApiStatus.SUCCESS) onSuccess?.(response.data);
       },
       onError: (error) => {
         onError?.(error);

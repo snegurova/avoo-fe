@@ -29,7 +29,7 @@ export default function SelectCardItem(props: Props) {
   const { id, name, description, avatarUrl, onDelete } = props;
   return (
     <div className='bg-primary-50 p-2 rounded-lg flex items-center gap-4 justify-between border border-gray-100 relative max-w-[300px]'>
-      <Avatar name={name} src={avatarUrl} size={AvatarSize.Large} bgColor={colors.primary[200]} />
+      <Avatar name={name} src={avatarUrl} size={AvatarSize.Large} />
       <div>
         <p className='font-semibold'>{name}</p>
         <p className='text-sm text-gray-500'>{description}</p>

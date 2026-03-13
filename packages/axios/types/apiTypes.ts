@@ -262,7 +262,9 @@ export type UploadFileRequest = {
   type: FileUploadType;
   file: FileInput;
 };
-export type FileUploadResponse = components['schemas']['FileResponseDto'];
+
+export type FileEntity = components['schemas']['FileResponseDto'];
+export type FileUploadResponse = FileEntity;
 
 /* Media */
 

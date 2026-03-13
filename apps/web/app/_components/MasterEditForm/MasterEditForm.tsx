@@ -3,7 +3,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useController } from 'react-hook-form';
 
-import type { MasterWithRelationsEntityResponse } from '@avoo/axios/types/apiTypes';
+import type { FileEntity, MasterWithRelationsEntityResponse } from '@avoo/axios/types/apiTypes';
 import { masterHooks, phoneHooks } from '@avoo/hooks';
 
 import { AvatarSize, AvatarUpload } from '@/_components/AvatarUpload/AvatarUpload';
@@ -33,7 +33,6 @@ export default function MasterEditForm({
   onDirtyChange,
 }: Readonly<Props>) {
   const toast = useToast();
-  const [localAvatar, setLocalAvatar] = useState<string | null>(null);
   const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
 
   const {
@@ -80,11 +79,6 @@ export default function MasterEditForm({
     });
   }, [master, reset]);
 
-  const onImageSelected = useCallback((file: File) => {
-    const url = URL.createObjectURL(file);
-    setLocalAvatar(url);
-  }, []);
-
   const { field: nameField } = useController({ name: 'name', control });
   const { field: headlineField } = useController({ name: 'headline', control });
   const { field: bioField } = useController({ name: 'bio', control });
@@ -92,6 +86,14 @@ export default function MasterEditForm({
   const { field: phoneField } = useController({ name: 'phone', control });
   const { field: avatarUrlField } = useController({ name: 'avatarUrl', control });
   const { field: avatarPreviewUrlField } = useController({ name: 'avatarPreviewUrl', control });
+
+  const onAvatarSave = useCallback(
+    (file: FileEntity) => {
+      avatarUrlField.onChange(file.url);
+      avatarPreviewUrlField.onChange(file.previewUrl);
+    },
+    [avatarUrlField, avatarPreviewUrlField],
+  );
 
   const { countryCode, phoneNumber, setCountryCode, setPhoneNumber } =
     phoneHooks.usePhoneField(phoneField);
@@ -144,8 +146,8 @@ export default function MasterEditForm({
         <h3 className='text-base md:text-xl mb-0'>Personal info</h3>
         <div className='flex items-center gap-4 py-6 mb-0'>
           <AvatarUpload
-            imageUri={localAvatar || avatarPreviewUrlField.value || avatarUrlField.value || null}
-            onImageSelected={onImageSelected}
+            imageUri={avatarPreviewUrlField.value || avatarUrlField.value || null}
+            onAvatarSave={onAvatarSave}
             isLoading={false}
             size={AvatarSize.XLARGE}
             showEditIcon

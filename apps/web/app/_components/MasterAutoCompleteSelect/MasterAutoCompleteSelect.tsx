@@ -27,7 +27,7 @@ export default function MasterAutoCompleteSelect(props: Props) {
     id: m.id,
     name: m.name,
     description: m.headline ?? '',
-    avatarUrl: m.avatarUrl ?? '',
+    avatarUrl: m.avatarPreviewUrl ?? '',
   }));
 
   useEffect(() => {

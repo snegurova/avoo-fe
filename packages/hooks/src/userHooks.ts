@@ -5,6 +5,7 @@ import {
   ApiStatus,
   BaseResponse,
   CertificateResponse,
+  FileEntity,
   UpdateProfile,
   UserMediaResponse,
   UserProfileResponse,
@@ -168,6 +169,34 @@ export const userHooks = {
     return {
       handleUpdateProfile: mutate,
       handleUpdateProfileAsync: mutateAsync,
+      isPending,
+    };
+  },
+  useUpdateProfileAvatar: () => {
+    const queryClient = useQueryClient();
+
+    const { mutate, mutateAsync, isPending } = useMutation<
+      BaseResponse<UserProfileResponse>,
+      Error,
+      FileEntity
+    >({
+      mutationFn: (payload) => {
+        const updateProfilePayload: UpdateProfile = {
+          avatarUrl: payload.url as unknown as Record<string, never>,
+          avatarPreviewUrl: payload.previewUrl as unknown as Record<string, never>,
+        };
+        return userApi.updateProfile(updateProfilePayload);
+      },
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: queryKeys.user.profile() });
+      },
+    });
+
+    utils.useSetPendingApi(isPending);
+
+    return {
+      handleUpdateProfileAvatar: mutate,
+      handleUpdateProfileAvatarAsync: mutateAsync,
       isPending,
     };
   },

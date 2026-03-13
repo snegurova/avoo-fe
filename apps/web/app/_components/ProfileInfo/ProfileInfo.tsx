@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useState } from 'react';
+import { useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 
 import { userHooks } from '@avoo/hooks';
@@ -18,7 +18,6 @@ import { AppRoutes } from '@/_routes/routes';
 
 export const ProfileInfo = () => {
   const router = useRouter();
-  const [localAvatar, setLocalAvatar] = useState<string | null>(null);
   const { visualProfileInfo, userId } = userHooks.useGetUserProfile();
   const isPending = useApiStatusStore((state) => state.isPending);
   const editProfilePath = localizationHooks.useWithLocale(AppRoutes.EditProfile);
@@ -38,22 +37,20 @@ export const ProfileInfo = () => {
     router.push(`${publicSalonPath}/${userId}`);
   }, [publicSalonPath, router, userId]);
 
-  const onImageSelected = useCallback((file: File) => {
-    const url = URL.createObjectURL(file);
-    setLocalAvatar(url);
-  }, []);
+  const { handleUpdateProfileAvatar } = userHooks.useUpdateProfileAvatar();
 
   return (
     <div className='flex flex-col md:flex-row md:items-start md:gap-16'>
       <div className='mt-6 md:mt-0 mb-8 md:mb-0 flex flex-col items-center gap-4 relative  md:shrink-0'>
         <AvatarUpload
-          imageUri={localAvatar ?? visualProfileInfo.avatarUrl ?? null}
-          onImageSelected={onImageSelected}
+          imageUri={visualProfileInfo.avatarPreviewUrl}
           isLoading={isPending}
+          onAvatarSave={handleUpdateProfileAvatar}
           size={AvatarSize.PROFILE}
           framed
           showEditIcon
           placeholderIcon={<AddPhotoIcon width={56} height={56} />}
+          confirmSave
         />
 
         <Button

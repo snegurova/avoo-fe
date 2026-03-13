@@ -4,7 +4,7 @@ import { tv } from 'tailwind-variants';
 import { MasterWithRelationsEntityResponse } from '@avoo/axios/types/apiTypes';
 import { useApiStatusStore } from '@avoo/store';
 
-import { AvatarSize, CalendarAvatar } from '@/_components/CalendarAvatar/CalendarAvatar';
+import Avatar, { AvatarSize } from '@/_components/Avatar/Avatar';
 import DeleteIcon from '@/_icons/DeleteIcon';
 import EditSquareIcon from '@/_icons/EditSquareIcon';
 import GroupIcon from '@/_icons/GroupIcon';
@@ -54,7 +54,7 @@ export default function ScheduleListItem(props: Props) {
         <div className='flex flex-col justify-center'>
           {master ? (
             <div className='flex items-center gap-2 flex-row'>
-              <CalendarAvatar name={master.name} size={AvatarSize.Small} idx={master.id} />
+              <Avatar src={master.avatarPreviewUrl} name={master.name} size={AvatarSize.Small} />
               <span>{master.name}</span>
             </div>
           ) : (

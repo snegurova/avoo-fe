@@ -75,7 +75,7 @@ export default function CombinationElement(props: Props) {
                 <Avatar
                   name={master.name ?? ''}
                   size={AvatarSize.Small}
-                  src={master.avatarUrl ?? undefined}
+                  src={master.avatarPreviewUrl}
                   bgColor={colors.primary[200]}
                 />
                 <span className='text-gray-700 text-xs'>{master.name}</span>
@@ -88,7 +88,7 @@ export default function CombinationElement(props: Props) {
             <Avatar
               name={master.name ?? ''}
               size={AvatarSize.Small}
-              src={master.avatarUrl ?? undefined}
+              src={master.avatarPreviewUrl}
               bgColor={colors.primary[200]}
             />
             <span className='text-gray-700 text-xs'>{master.name}</span>

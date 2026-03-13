@@ -30,6 +30,7 @@ const TimeOffListItem = ({ item, onEdit }: Props) => {
   const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
 
   const foundMaster = masters?.find((m) => m.id === item.masterId);
+
   const masterLabel = foundMaster?.name ?? item.masterId ?? item.userId ?? '—';
 
   const { mutate: deleteException, isPending: isDeletePending } = exceptionHooks.useDeleteException(
@@ -147,9 +148,9 @@ const TimeOffListItem = ({ item, onEdit }: Props) => {
         <div className='w-full md:w-[464px] flex items-start md:items-center gap-4'>
           <div className='flex-shrink-0 self-center'>
             <Avatar
-              name={String(masterLabel)}
+              name={foundMaster?.name}
               size={AvatarSize.Large}
-              bgColor={colors.primary[200]}
+              src={foundMaster?.avatarPreviewUrl}
             />
           </div>
 
@@ -207,9 +208,9 @@ const TimeOffListItem = ({ item, onEdit }: Props) => {
       <div className='hidden lg:flex items-center gap-3 w-full min-w-0'>
         <div className='flex items-center gap-3 w-1/5'>
           <Avatar
-            name={String(masterLabel)}
+            name={foundMaster?.name}
             size={AvatarSize.Large}
-            bgColor={colors.primary[200]}
+            src={foundMaster?.avatarPreviewUrl}
           />
           <div>
             <Typography

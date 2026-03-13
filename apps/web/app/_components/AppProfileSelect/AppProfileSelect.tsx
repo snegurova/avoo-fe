@@ -5,7 +5,7 @@ import React, { useCallback, useState } from 'react';
 import { userHooks } from '@avoo/hooks';
 
 import AppProfileDropdown from '@/_components/AppProfileDropdown/AppProfileDropdown';
-import { AvatarSize, CalendarAvatar } from '@/_components/CalendarAvatar/CalendarAvatar';
+import Avatar, { AvatarSize } from '@/_components/Avatar/Avatar';
 
 export default function AppProfileSelect() {
   const [isOpen, setIsOpen] = useState(false);
@@ -34,7 +34,11 @@ export default function AppProfileSelect() {
   return (
     <div className='relative select-profile-container'>
       <button className='rounded-full cursor-pointer' onClick={toggleOpen}>
-        <CalendarAvatar name={visualProfileInfo?.name} size={AvatarSize.Large} />
+        <Avatar
+          name={visualProfileInfo.name}
+          size={AvatarSize.Large}
+          src={visualProfileInfo.avatarUrl}
+        />
       </button>
       {isOpen && <AppProfileDropdown closeDropdown={closeDropdown} />}
     </div>

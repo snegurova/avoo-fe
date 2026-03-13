@@ -3,7 +3,6 @@ import React from 'react';
 import { tv } from 'tailwind-variants';
 
 import { MasterWithRelationsEntity, Service } from '@avoo/axios/types/apiTypes';
-import { colors } from '@avoo/design-tokens';
 import { currencyUtils, timeUtils } from '@avoo/shared';
 
 import Avatar, { AvatarSize } from '@/_components/Avatar/Avatar';
@@ -47,12 +46,7 @@ export default function ServiceElement(props: Props) {
           <ul className='flex flex-wrap gap-y-0.5 gap-x-1'>
             {item.masters.map((master) => (
               <li key={`service-master-${master.id}`} className='flex items-center gap-1'>
-                <Avatar
-                  name={master.name ?? ''}
-                  size={AvatarSize.Small}
-                  src={master.avatarUrl ?? undefined}
-                  bgColor={colors.primary[200]}
-                />
+                <Avatar name={master.name} size={AvatarSize.Small} src={master.avatarPreviewUrl} />
                 <span className='text-gray-700 text-xs'>{master.name}</span>
               </li>
             ))}
@@ -60,12 +54,7 @@ export default function ServiceElement(props: Props) {
         )}
         {isCard && master && !hideMasters && (
           <div className='flex items-center gap-1'>
-            <Avatar
-              name={master.name ?? ''}
-              size={AvatarSize.Small}
-              src={master.avatarUrl ?? undefined}
-              bgColor={colors.primary[200]}
-            />
+            <Avatar name={master.name} size={AvatarSize.Small} src={master.avatarPreviewUrl} />
             <span className='text-gray-700 text-xs'>{master.name}</span>
           </div>
         )}

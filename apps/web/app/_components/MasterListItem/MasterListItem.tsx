@@ -50,7 +50,6 @@ export const MasterListItem = ({ master, onEdit, isSelected }: Props) => {
   const handleConfirmDelete = React.useCallback(() => {
     deleteMaster(master.id);
   }, [deleteMaster, master.id]);
-
   return (
     <div
       className={`rounded-lg lg:rounded-none p-4 lg:py-6 lg:px-8 border lg:border-l-0 lg:border-r-0 transition-colors duration-300 ease-in-out ${
@@ -65,12 +64,7 @@ export const MasterListItem = ({ master, onEdit, isSelected }: Props) => {
         aria-label={`Open ${displayName} details`}
       >
         <div className='flex-shrink-0'>
-          <Avatar
-            name={displayName}
-            src={master.avatarPreviewUrl ?? master.avatarUrl}
-            size={AvatarSize.Large}
-            bgColor={colors.primary[200]}
-          />
+          <Avatar name={displayName} src={master.avatarPreviewUrl} size={AvatarSize.Large} />
         </div>
 
         <div className='flex-1'>
@@ -104,12 +98,7 @@ export const MasterListItem = ({ master, onEdit, isSelected }: Props) => {
 
       <div className='hidden lg:flex items-center gap-3 w-full min-w-0'>
         <div className='flex items-center gap-3 w-1/5'>
-          <Avatar
-            name={displayName}
-            src={master.avatarPreviewUrl ?? master.avatarUrl}
-            size={AvatarSize.Large}
-            bgColor={colors.primary[200]}
-          />
+          <Avatar name={displayName} src={master.avatarPreviewUrl} size={AvatarSize.Large} />
           <div>
             <Typography
               component='div'

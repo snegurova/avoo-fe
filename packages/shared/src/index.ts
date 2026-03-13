@@ -6,6 +6,7 @@ export * from './timeUtils';
 export * from './types/geocode';
 export * from './types/profile';
 export * from './utils/address';
+export * from './utils/avatar';
 export * from './utils/fetchAllAndSort';
 export * from './utils/formatAddress';
 export * from './utils/sort';

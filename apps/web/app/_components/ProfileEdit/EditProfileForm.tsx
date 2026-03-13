@@ -4,8 +4,8 @@ import { useForm } from 'react-hook-form';
 
 import { Button } from '@mui/material';
 
-import type { UpdateProfile } from '@avoo/axios/types/apiTypes';
-import { useAddressSearch, userHooks, useServerFormErrors } from '@avoo/hooks';
+import type { FileEntity, UpdateProfile } from '@avoo/axios/types/apiTypes';
+import { useAddressSearch, useServerFormErrors } from '@avoo/hooks';
 import { buildUpdateProfilePayload, createProfileDefaults } from '@avoo/hooks';
 import type { NominatimPlace, VisualProfileInfo } from '@avoo/shared';
 import { buildShortAddress, getCondensedAddress } from '@avoo/shared';
@@ -14,7 +14,6 @@ import { AvatarSize, AvatarUpload } from '@/_components/AvatarUpload/AvatarUploa
 import FormInput from '@/_components/FormInput/FormInput';
 
 import AddressResults from './AddressResults';
-import useAvatarUpload from './useAvatarUpload';
 
 type Props = {
   initial?: VisualProfileInfo | null;
@@ -31,16 +30,7 @@ export default function EditProfileForm({
   isPending,
   showPreview = false,
 }: Readonly<Props>) {
-  const { handleUpdateAvatar, handleUpdateAvatarAsync } = userHooks.usePatchUserProfileAvatar();
-
   const { search, searchResults, isSearching, clear, getMyLocation } = useAddressSearch();
-  const { localPreview, handleImageSelected } = useAvatarUpload({
-    initialPreview: initial?.avatarPreviewUrl ?? initial?.avatarUrl ?? null,
-    upload: (file: File) => {
-      if (handleUpdateAvatarAsync) return handleUpdateAvatarAsync(file);
-      return Promise.resolve(handleUpdateAvatar(file));
-    },
-  });
 
   type FormValues = {
     name: string;
@@ -49,6 +39,8 @@ export default function EditProfileForm({
     location_lat?: number;
     location_lon?: number;
     description: string;
+    avatarUrl?: string;
+    avatarPreviewUrl?: string;
   };
 
   const form = useForm<FormValues>({
@@ -91,13 +83,6 @@ export default function EditProfileForm({
     [setValue, clear],
   );
 
-  const onImageSelected = useCallback(
-    (file: File) => {
-      handleImageSelected(file);
-    },
-    [handleImageSelected],
-  );
-
   const onSubmitInternal = async (values: FormValues) => {
     const payload = buildUpdateProfilePayload(values);
 
@@ -108,6 +93,15 @@ export default function EditProfileForm({
     }
   };
 
+  const onAvatarSave = useCallback(
+    (file: FileEntity) => {
+      setValue('avatarUrl', file.url);
+      setValue('avatarPreviewUrl', file.previewUrl);
+    },
+
+    [setValue],
+  );
+
   return (
     <form
       className='bg-white border border-gray-200 rounded-lg p-6 space-y-4'
@@ -116,10 +110,11 @@ export default function EditProfileForm({
       {showPreview && (
         <div className='flex justify-center'>
           <AvatarUpload
-            imageUri={localPreview}
-            onImageSelected={onImageSelected}
-            isLoading={Boolean(isPending)}
-            size={AvatarSize.LARGE}
+            imageUri={watch('avatarPreviewUrl') || null}
+            onAvatarSave={onAvatarSave}
+            isLoading={false}
+            size={AvatarSize.XLARGE}
+            showEditIcon
           />
         </div>
       )}
