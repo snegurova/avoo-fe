@@ -15,14 +15,32 @@ export type CalendarStore = {
   toDate: Date;
   orderIsOutOfSchedule: boolean | undefined;
   type: CalendarViewType;
-  slots: { date: string; duration: number }[] | null;
+  slots:
+    | {
+        index: number;
+        title: string | null;
+        masterId: number | null;
+        date: string;
+        duration: number;
+      }[]
+    | null;
   setMasterIds: (masterIds: number[] | undefined) => void;
   setStatuses: (statuses: OrderStatus[] | undefined) => void;
   setDate: (date: Date) => void;
   setToDate: (toDate: Date) => void;
   setOrderIsOutOfSchedule: (orderIsOutOfSchedule: boolean | undefined) => void;
   setType: (type: CalendarViewType) => void;
-  setSlots: (slots: { date: string; duration: number }[] | null) => void;
+  setSlots: (
+    slots:
+      | {
+          index: number;
+          title: string | null;
+          masterId: number | null;
+          date: string;
+          duration: number;
+        }[]
+      | null,
+  ) => void;
   resetStorage: () => void;
 };
 

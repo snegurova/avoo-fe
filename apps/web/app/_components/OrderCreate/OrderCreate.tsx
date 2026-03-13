@@ -49,6 +49,8 @@ export default function OrderCreate() {
   const setType = useCalendarStore((state) => state.setType);
   const setStatuses = useCalendarStore((state) => state.setStatuses);
   const setOrderIsOutOfSchedule = useCalendarStore((state) => state.setOrderIsOutOfSchedule);
+  const slots = useCalendarStore((state) => state.slots);
+  const setSlots = useCalendarStore((state) => state.setSlots);
 
   const orderCreatePath = localizationHooks.useWithLocale(AppRoutes.OrderCreate);
   const calendarPath = localizationHooks.useWithLocale(AppRoutes.Calendar);
@@ -107,6 +109,17 @@ export default function OrderCreate() {
     control,
     name: SERVICES_KEY_IN_ORDER_CREATE,
   });
+
+  useEffect(() => {
+    const initSlot = {
+      index: 0,
+      title: selectedServices?.[0]?.name || null,
+      masterId: initialParams.masterId || selectedMasters[0]?.id || null,
+      date: initialParams.date || fields[0]?.date || timeUtils.convertDateToString(new Date()),
+      duration: selectedServices?.[0]?.durationMinutes || 15,
+    };
+    setSlots([initSlot]);
+  }, [initialParams]);
 
   useEffect(() => {
     if (fields[activeOrder]) {

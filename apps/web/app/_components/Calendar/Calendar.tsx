@@ -184,7 +184,7 @@ export default function Calendar(props: Props) {
       if (searchParams.toString()) {
         router.replace(calendarPath);
       }
-      console.log('Scrolling to date from URL:', parsedDate);
+
       if (!scrollRef.current) return;
 
       let scrollOptions: ScrollOptions = {

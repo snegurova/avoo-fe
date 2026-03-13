@@ -14,12 +14,13 @@ import { PX_IN_MINUTE } from '@/_constants/time';
 import { localizationHooks } from '@/_hooks/localizationHooks';
 import { useToast } from '@/_hooks/useToast';
 import { AppRoutes } from '@/_routes/routes';
+import { useCalendarStore } from '@avoo/store';
+import CalendarSlots from '../CalendarSlots/CalendarSlots';
 
 const DAY_CELLS = Array.from({ length: 96 });
 const WEEK_CELLS = Array.from({ length: 7 });
 const HOUR_SEPARATE = 4;
 
-import { useCalendarStore } from '@avoo/store';
 type Props = {
   data: CalendarItem | undefined;
   master: MasterWithRelationsEntity;
@@ -288,6 +289,7 @@ export default function CalendarColumn(props: Props) {
                 calendarType={calendarType}
               />
             ))}
+          {calendarType === CalendarType.SELECTOR && <CalendarSlots masterId={master.id} />}
           {timeUtils.isSameDay(date, new Date()) && (
             <CalendarCurrentTime time={time} setTime={setTime} isSingleWeek={isSingleWeek} />
           )}

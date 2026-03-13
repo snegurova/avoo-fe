@@ -93,6 +93,8 @@ export default function ServiceFormItem(props: Props) {
 
   const isActive = useMemo(() => activeOrder === index, [activeOrder, index]);
   const setMasterIdsInStore = useCalendarStore((state) => state.setMasterIds);
+  const slots = useCalendarStore((state) => state.slots);
+  const setSlots = useCalendarStore((state) => state.setSlots);
 
   const {
     data,
@@ -166,6 +168,16 @@ export default function ServiceFormItem(props: Props) {
       const masterIdsProvideService = newService?.masters.map((master) => master.id) || undefined;
       setMasterIdsInStore(masterIdsProvideService);
     }
+    if (slots) {
+      const newSlot = {
+        ...slots[index],
+        title: newService?.name || null,
+        duration: newService?.durationMinutes || 15,
+      };
+      const newSlots = [...slots];
+      newSlots[index] = newSlot;
+      setSlots(newSlots);
+    }
   };
 
   const selectMaster = (val: { id: number } | null) => {
@@ -185,6 +197,16 @@ export default function ServiceFormItem(props: Props) {
 
     if (isActive) {
       setMasterIdsInStore(val.id ? [val.id] : undefined);
+    }
+
+    if (slots) {
+      const newSlot = {
+        ...slots[index],
+        masterId: val.id,
+      };
+      const newSlots = [...slots];
+      newSlots[index] = newSlot;
+      setSlots(newSlots);
     }
   };
 
@@ -210,6 +232,16 @@ export default function ServiceFormItem(props: Props) {
 
     if (index === 0 && setStartDate) {
       setStartDate(newDate);
+    }
+
+    if (slots) {
+      const newSlot = {
+        ...slots[index],
+        date: newDate,
+      };
+      const newSlots = [...slots];
+      newSlots[index] = newSlot;
+      setSlots(newSlots);
     }
   };
 
