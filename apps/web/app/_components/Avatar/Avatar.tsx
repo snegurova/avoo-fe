@@ -1,5 +1,9 @@
 'use client';
 import { Avatar as MuiAvatar, AvatarProps as MuiAvatarProps } from '@mui/material';
+import { tv } from 'tailwind-variants';
+
+import { colors } from '@avoo/design-tokens';
+import { getAvatarColor } from '@avoo/shared';
 
 import { utilsHooks } from '@/_utils/utilsHooks';
 
@@ -28,9 +32,10 @@ const sizeConfig = {
 };
 
 type Props = {
-  name: string;
+  name?: string | null;
   src?: string | null;
   size?: AvatarSize | number;
+  addName?: boolean;
   bgColor?: string;
   textColor?: string;
 } & Omit<MuiAvatarProps, 'src' | 'sx'>;
@@ -39,9 +44,10 @@ export default function Avatar(props: Props) {
   const {
     name,
     src,
+    addName,
     size = AvatarSize.Large,
-    bgColor = '#9E9E9E',
-    textColor = '#000000',
+    textColor = colors.black,
+    bgColor = colors.primary[200],
     ...rest
   } = props;
 
@@ -50,26 +56,47 @@ export default function Avatar(props: Props) {
       ? { width: size, height: size, fontSize: Math.max(10, Math.floor(size / 2)) }
       : sizeConfig[size];
 
+  const avatar = tv({
+    base: 'rounded-full mx-auto flex items-center justify-center text-xl font-medium',
+    variants: {
+      size: {
+        [AvatarSize.Small]: 'w-4 h-4 text-xs',
+        [AvatarSize.Medium]: 'w-8 h-8 text-sm',
+        [AvatarSize.Large]: 'w-8 h-8 md:w-10 md:h-10 text-base',
+      },
+      addName: {
+        true: 'mb-1 md:mb-2',
+      },
+    },
+  });
+
   return (
-    <MuiAvatar
-      src={src ?? undefined}
-      alt={name}
-      sx={{
-        width: config.width,
-        height: config.height,
-        bgcolor: !src ? bgColor : undefined,
-        fontSize: config.fontSize,
-        fontWeight: 500,
-        fontFamily: 'Roboto',
-        lineHeight: '100%',
-        color: textColor,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-      }}
-      {...rest}
-    >
-      {!src && utilsHooks.getInitials(name)}
-    </MuiAvatar>
+    <div className='text-center'>
+      <div className={avatar({ size, addName })}>
+        <MuiAvatar
+          src={src ?? undefined}
+          alt={name || ''}
+          sx={{
+            width: config.width,
+            height: config.height,
+            bgcolor: !src ? getAvatarColor(name) : bgColor,
+            fontSize: config.fontSize,
+            fontWeight: 500,
+            fontFamily: 'Roboto',
+            lineHeight: '100%',
+            color: textColor,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+          {...rest}
+        >
+          {!src && utilsHooks.getInitials(name || 'A')}
+        </MuiAvatar>
+      </div>
+      {addName && name && (
+        <p className='leading-[1.1] md:leading-none text-xs font-semibold text-black'>{name}</p>
+      )}
+    </div>
   );
 }

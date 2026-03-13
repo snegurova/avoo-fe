@@ -1,19 +1,35 @@
 import { apiClient } from '@avoo/axios';
-import { BaseResponse, FileUploadResponse } from '@avoo/axios/types/apiTypes';
+import { BaseResponse, FileUploadResponse, UploadFileRequest } from '@avoo/axios/types/apiTypes';
+
+import { formDataUtils } from '../../utils/formDataUtils';
 
 const UPLOAD_FILE_ENDPOINT = '/files';
 
 export const filesApi = {
-  async uploadFile(body: FormData) {
-    const response = await apiClient.post<BaseResponse<FileUploadResponse>>(
+  // async uploadFile(data: FormData) {
+  //   const response = await apiClient.post<BaseResponse<FileUploadResponse>>(
+  //     UPLOAD_FILE_ENDPOINT,
+  //     body,
+  //     {
+  //       headers: {
+  //         'Content-Type': 'multipart/form-data',
+  //       },
+  //     },
+  //   );
+  //   return response.data;
+  // },
+
+  async uploadFile(data: UploadFileRequest) {
+    const formData = formDataUtils.getFileFormData(data);
+
+    const res = await apiClient.post<BaseResponse<FileUploadResponse>>(
       UPLOAD_FILE_ENDPOINT,
-      body,
+      formData,
       {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
+        headers: { 'Content-Type': 'multipart/form-data' },
+        timeout: 60 * 1000,
       },
     );
-    return response.data;
+    return res.data;
   },
 };

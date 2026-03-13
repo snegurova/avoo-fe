@@ -51,7 +51,7 @@ const mapTimeOffToFormValues = (timeOff: TimeOffItem): FormValues => {
   const typeMapping =
     timeOffTypes.find((t) => t.api === timeOff.type)?.value || TimeOffType.Personal;
   const isWholeDay = timeOff.startTimeMinutes === 0 && timeOff.endTimeMinutes === MINUTES_IN_DAY;
-  const selectedStaff = timeOff.masterId ? [String(timeOff.masterId)] : ['all'];
+  const selectedStaff = timeOff.master.id ? [String(timeOff.master.id)] : ['all'];
 
   return {
     type: typeMapping,

@@ -3,30 +3,27 @@ import { useMutation } from '@tanstack/react-query';
 import { filesApi } from '@avoo/axios';
 import { BaseResponse, FileUploadResponse, UploadFileRequest } from '@avoo/axios/types/apiTypes';
 import { ApiStatus } from '@avoo/axios/types/apiTypes';
-import { formDataUtils } from '@avoo/axios/utils/formDataUtils';
 
 import { utils } from '../utils/utils';
 
 type UseUploadFileParams = {
   onSuccess?: (data: FileUploadResponse) => void;
+  onError?: (error: Error) => void;
 };
 
 export const filesHooks = {
-  useUploadFile: ({ onSuccess }: UseUploadFileParams = {}) => {
+  useUploadFile: ({ onSuccess, onError }: UseUploadFileParams = {}) => {
     const { mutate, isPending } = useMutation<
       BaseResponse<FileUploadResponse>,
       Error,
       UploadFileRequest
     >({
-      mutationFn: async (payload) => {
-        const body = formDataUtils.getFileFormData(payload);
-
-        return filesApi.uploadFile(body);
-      },
+      mutationFn: filesApi.uploadFile,
       onSuccess: (response) => {
-        if (response?.status === ApiStatus.SUCCESS && response?.data) {
-          onSuccess?.(response.data);
-        }
+        if (response.status === ApiStatus.SUCCESS) onSuccess?.(response.data);
+      },
+      onError: (error) => {
+        onError?.(error);
       },
     });
 

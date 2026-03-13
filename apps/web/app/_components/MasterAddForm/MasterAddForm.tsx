@@ -1,11 +1,12 @@
 'use client';
 
-import React, { useCallback, useState } from 'react';
+import React, { useCallback } from 'react';
 import { useController } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
 
 import { Button, Typography } from '@mui/material';
 
+import { FileEntity } from '@avoo/axios/types/apiTypes';
 import { masterHooks, phoneHooks } from '@avoo/hooks';
 
 import { AvatarSize, AvatarUpload } from '@/_components/AvatarUpload/AvatarUpload';
@@ -20,7 +21,6 @@ import FormTextarea from '../FormTextArea/FormTextArea';
 
 export default function MasterAddForm() {
   const router = useRouter();
-  const [localAvatar, setLocalAvatar] = useState<string | null>(null);
   const mastersPath = localizationHooks.useWithLocale(AppRoutes.Masters);
 
   const handleNavigateToMasters = useCallback(() => {
@@ -38,11 +38,6 @@ export default function MasterAddForm() {
   const onCancel = useCallback(() => {
     handleNavigateToMasters();
   }, [handleNavigateToMasters]);
-
-  const onImageSelected = useCallback((file: File) => {
-    const url = URL.createObjectURL(file);
-    setLocalAvatar(url);
-  }, []);
 
   const { field: nameField } = useController({ name: 'name', control });
   const { field: headlineField } = useController({ name: 'headline', control });
@@ -68,6 +63,17 @@ export default function MasterAddForm() {
     control,
   });
 
+  const { field: avatarUrlField } = useController({ name: 'avatarUrl', control });
+  const { field: avatarPreviewUrlField } = useController({ name: 'avatarPreviewUrl', control });
+
+  const onAvatarSave = useCallback(
+    (file: FileEntity) => {
+      avatarUrlField.onChange(file.url);
+      avatarPreviewUrlField.onChange(file.previewUrl);
+    },
+    [avatarUrlField, avatarPreviewUrlField],
+  );
+
   return (
     <form
       onSubmit={handleSubmit}
@@ -77,10 +83,10 @@ export default function MasterAddForm() {
         <Typography sx={{ fontSize: 16, fontWeight: 500 }}>Personal info</Typography>
         <div className='flex items-center gap-4 py-8 md:py-6'>
           <AvatarUpload
-            imageUri={localAvatar}
-            onImageSelected={onImageSelected}
+            imageUri={null}
             isLoading={false}
             size={AvatarSize.XLARGE}
+            onAvatarSave={onAvatarSave}
             showEditIcon
           />
         </div>

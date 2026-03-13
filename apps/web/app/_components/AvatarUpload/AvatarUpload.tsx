@@ -1,10 +1,16 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 
 import { Avatar, ButtonBase, IconButton } from '@mui/material';
 
+import { FILE_UPLOAD_TYPE_ENUM } from '@avoo/axios/types/apiEnums';
+import { FileEntity } from '@avoo/axios/types/apiTypes';
+import { filesHooks } from '@avoo/hooks';
+
 import { AVATAR_DOWNLOAD_FORMATS } from '@/_constants/files';
+import { useToast } from '@/_hooks/useToast';
+import CheckCircle from '@/_icons/CheckCircle';
 import EditIcon from '@/_icons/EditIcon';
 import PersonIcon from '@/_icons/PersonIcon';
 import { utilsHooks } from '@/_utils/utilsHooks';
@@ -20,12 +26,13 @@ export enum AvatarSize {
 }
 
 type Props = {
-  imageUri: string | null;
-  onImageSelected: (file: File) => void;
   isLoading: boolean;
+  imageUri?: string | null;
+  onAvatarSave?: (avatar: FileEntity) => void;
   size?: AvatarSize;
   iconSize?: number;
   framed?: boolean;
+  confirmSave?: boolean;
   showEditIcon?: boolean;
   editIcon?: React.ReactNode;
   placeholderIcon?: React.ReactNode;
@@ -34,18 +41,53 @@ type Props = {
 export const AvatarUpload = (props: Props) => {
   const {
     imageUri,
-    onImageSelected,
     isLoading,
     size = AvatarSize.LARGE,
     iconSize = 125,
     framed = false,
     showEditIcon = false,
+    confirmSave = false,
     editIcon = <EditIcon />,
     placeholderIcon,
+    onAvatarSave,
   } = props;
 
+  const toast = useToast();
+
+  const [newAvatar, setNewAvatar] = useState<FileEntity | null>(null);
+
+  const { uploadFile, isPending } = filesHooks.useUploadFile({
+    onSuccess: (data) => {
+      setNewAvatar(data);
+      if (!confirmSave) {
+        onAvatarSave?.(data);
+      }
+      toast.success('Avatar uploaded! Click Save to apply changes.');
+    },
+    onError: (error) => {
+      toast.error('Failed to upload avatar: ' + error.message);
+    },
+  });
+
+  const handleAvatarUpload = (file: File) => {
+    uploadFile({
+      file,
+      type: FILE_UPLOAD_TYPE_ENUM.AVATAR,
+    });
+  };
+
+  const handleSaveAvatarClick = () => {
+    if (newAvatar) {
+      onAvatarSave?.(newAvatar);
+      toast.success('Avatar saved!');
+      setNewAvatar(null);
+      return;
+    }
+    toast.error('No new avatar to save');
+  };
+
   const handleChoosePhoto = (event: React.ChangeEvent<HTMLInputElement>) => {
-    utilsHooks.handleFileChange(event, onImageSelected);
+    utilsHooks.handleFileChange(event, handleAvatarUpload);
   };
 
   const inputRef = React.useRef<HTMLInputElement | null>(null);
@@ -62,6 +104,9 @@ export const AvatarUpload = (props: Props) => {
     }
   };
 
+  const displayUri = newAvatar?.url || imageUri;
+  const isBusy = isLoading || isPending;
+
   return (
     <div
       className={`relative inline-block rounded-full ${
@@ -74,10 +119,10 @@ export const AvatarUpload = (props: Props) => {
         aria-label='Avatar image'
         className='rounded-full overflow-hidden focus-visible:ring-2 focus-visible:ring-primary-500 block'
         sx={{ borderRadius: '50%', overflow: 'hidden' }}
-        disabled={isLoading}
+        disabled={isBusy}
       >
-        {imageUri ? (
-          <Avatar alt='Upload new avatar' sx={{ width: size, height: size }} src={imageUri} />
+        {displayUri ? (
+          <Avatar alt='Upload new avatar' sx={{ width: size, height: size }} src={displayUri} />
         ) : (
           <Avatar
             alt='Upload new avatar'
@@ -91,7 +136,7 @@ export const AvatarUpload = (props: Props) => {
             {placeholderIcon ?? <PersonIcon width={iconSize} height={iconSize} />}
           </Avatar>
         )}
-        {isLoading && <AvatarLoader size={size} />}
+        {isBusy && <AvatarLoader size={size} />}
         <input
           ref={inputRef}
           type='file'
@@ -103,16 +148,28 @@ export const AvatarUpload = (props: Props) => {
 
       {showEditIcon && (
         <div className='absolute -bottom-1 -right-1'>
-          <IconButton
-            className='avatar-edit'
-            aria-label='Edit avatar'
-            size='small'
-            onClick={handleEditClick}
-            onKeyDown={handleEditKey}
-            disabled={isLoading}
-          >
-            {editIcon}
-          </IconButton>
+          {newAvatar && confirmSave ? (
+            <IconButton
+              className='avatar-edit'
+              aria-label='Save avatar'
+              size='small'
+              onClick={handleSaveAvatarClick}
+              disabled={isBusy}
+            >
+              <CheckCircle />
+            </IconButton>
+          ) : (
+            <IconButton
+              className='avatar-edit'
+              aria-label='Edit avatar'
+              size='small'
+              onClick={handleEditClick}
+              onKeyDown={handleEditKey}
+              disabled={isBusy}
+            >
+              {editIcon}
+            </IconButton>
+          )}
         </div>
       )}
     </div>
