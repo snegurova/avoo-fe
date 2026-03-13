@@ -43,6 +43,7 @@ type Props = {
   ) => void;
   setActiveOrder?: (index: number) => void;
   activeOrder?: number;
+  setStartDate?: (date: string | null) => void;
 };
 
 const root = tv({
@@ -80,6 +81,7 @@ export default function ServiceFormItem(props: Props) {
     setSelectedMasters,
     setActiveOrder,
     activeOrder,
+    setStartDate,
   } = props;
 
   const [masterSearch, setMasterSearch] = useState('');
@@ -205,6 +207,10 @@ export default function ServiceFormItem(props: Props) {
       date: newDate,
     };
     onChange(newOrders);
+
+    if (index === 0 && setStartDate) {
+      setStartDate(newDate);
+    }
   };
 
   const onNotesChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {

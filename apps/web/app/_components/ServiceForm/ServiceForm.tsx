@@ -25,6 +25,7 @@ type Props = {
 
   setActiveOrder?: (index: number | ((prev: number) => number)) => void;
   activeOrder?: number;
+  setStartDate?: (date: string | null) => void;
   Item: React.ComponentType<{
     order: CreateOrder;
     onChange: (orders: CreateOrder[]) => void;
@@ -46,6 +47,7 @@ type Props = {
     errors: { [key: string]: { message: string } };
     setActiveOrder?: (index: number) => void;
     activeOrder?: number;
+    setStartDate?: (date: string | null) => void;
   }>;
 };
 
@@ -63,6 +65,7 @@ export default function ServiceForm(props: Props) {
     Item,
     setActiveOrder,
     activeOrder,
+    setStartDate,
   } = props;
   const setMasterIds = useCalendarStore((state) => state.setMasterIds);
 
@@ -120,6 +123,7 @@ export default function ServiceForm(props: Props) {
           }
           setActiveOrder={setActiveOrder}
           activeOrder={activeOrder}
+          setStartDate={setStartDate}
         />
       ))}
     </div>

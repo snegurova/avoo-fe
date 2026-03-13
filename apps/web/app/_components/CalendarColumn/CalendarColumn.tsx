@@ -171,7 +171,7 @@ export default function CalendarColumn(props: Props) {
 
   const orderCreatePath = localizationHooks.useWithLocale(AppRoutes.OrderCreate);
 
-  const onAvailabelTimeClick = (e: React.MouseEvent<HTMLDivElement>) => {
+  const onAvailableTimeClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!availableBooking) return;
     const parent = e.currentTarget.parentElement;
     if (!parent) return;
@@ -248,7 +248,7 @@ export default function CalendarColumn(props: Props) {
       {type === CalendarViewType.DAY && (
         <div
           className={col({ type, isSingleWeek, calendarType })}
-          onClick={onAvailabelTimeClick}
+          onClick={onAvailableTimeClick}
           ref={ref}
           onMouseMove={handleMouseMove}
           onMouseLeave={handleMouseLeave}

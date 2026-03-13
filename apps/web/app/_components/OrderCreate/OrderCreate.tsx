@@ -68,6 +68,12 @@ export default function OrderCreate() {
   }, [searchParams]);
 
   useEffect(() => {
+    if (initialParams.date) {
+      setStartDate(initialParams.date);
+    }
+  }, [initialParams.date]);
+
+  useEffect(() => {
     if (searchParams.toString()) {
       router.replace(orderCreatePath);
     }
@@ -103,7 +109,6 @@ export default function OrderCreate() {
   });
 
   useEffect(() => {
-    console.log('Active Order: ', activeOrder);
     if (fields[activeOrder]) {
       const activeOrderData = fields[activeOrder];
       setDate(new Date(activeOrderData.date));
@@ -125,12 +130,6 @@ export default function OrderCreate() {
       }
     }
   }, [activeOrder]);
-
-  useEffect(() => {
-    if (fields[0]?.date) {
-      setStartDate(fields[0].date);
-    }
-  }, [fields]);
 
   const addService = () => {
     const prevOrder = fields[fields.length - 1];
@@ -236,6 +235,7 @@ export default function OrderCreate() {
     field: { value: CreateOrder[]; onChange: (value: CreateOrder[]) => void },
     date: string,
     master: MasterWithRelationsEntity,
+    index: number,
   ) => {
     const updatedOrders = [...field.value];
 
@@ -258,6 +258,10 @@ export default function OrderCreate() {
       date,
       masterId: master.id,
     };
+
+    if (index === 0) {
+      setStartDate(date);
+    }
 
     field.onChange(updatedOrders);
 
@@ -299,6 +303,7 @@ export default function OrderCreate() {
                 Item={ServiceFormItem}
                 setActiveOrder={setActiveOrder}
                 activeOrder={activeOrder}
+                setStartDate={setStartDate}
               />
             ) : (
               <CombinationForm
@@ -309,6 +314,7 @@ export default function OrderCreate() {
                 selectedMasters={selectedMasters}
                 setSelectedMasters={setSelectedMasters}
                 splitCombination={onSplitCombination}
+                setStartDate={setStartDate}
               />
             )
           }
@@ -367,7 +373,7 @@ export default function OrderCreate() {
             <Calendar
               calendarType={CalendarType.SELECTOR}
               onClickDateTime={(date, master) =>
-                setDateAndMasterInSelectedItem(field, date, master)
+                setDateAndMasterInSelectedItem(field, date, master, activeOrder)
               }
             />
           )}

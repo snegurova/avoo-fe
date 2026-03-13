@@ -31,6 +31,7 @@ type Props = {
       | ((prev: (MasterWithRelationsEntity | null)[]) => (MasterWithRelationsEntity | null)[]),
   ) => void;
   splitCombination: () => void;
+  setStartDate?: (date: string | null) => void;
 };
 
 export default function CombinationForm(props: Props) {
@@ -42,6 +43,7 @@ export default function CombinationForm(props: Props) {
     selectedMasters,
     setSelectedMasters,
     splitCombination,
+    setStartDate,
   } = props;
 
   const [isActiveMasterSearch, setIsActiveMasterSearch] = useState(false);
@@ -93,6 +95,10 @@ export default function CombinationForm(props: Props) {
       date: newDate,
     };
     onChange(newOrders);
+
+    if (setStartDate) {
+      setStartDate(newDate);
+    }
   };
 
   const onNotesChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {

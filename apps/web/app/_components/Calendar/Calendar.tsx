@@ -169,6 +169,7 @@ export default function Calendar(props: Props) {
 
   useEffect(() => {
     if (
+      calendarType !== CalendarType.REGULAR ||
       type === CalendarViewType.MONTH ||
       (type === CalendarViewType.WEEK && filteredMasters.length !== 1)
     )
@@ -183,7 +184,7 @@ export default function Calendar(props: Props) {
       if (searchParams.toString()) {
         router.replace(calendarPath);
       }
-
+      console.log('Scrolling to date from URL:', parsedDate);
       if (!scrollRef.current) return;
 
       let scrollOptions: ScrollOptions = {
@@ -197,7 +198,7 @@ export default function Calendar(props: Props) {
     } else {
       scrollToCurrentTime();
     }
-  }, [type, filteredMasters]);
+  }, [type, filteredMasters, calendarType]);
 
   const isWeekSingleMasterView = useMemo(() => {
     return type === CalendarViewType.WEEK && filteredMasters.length === 1;
