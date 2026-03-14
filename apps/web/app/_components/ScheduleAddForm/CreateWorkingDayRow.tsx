@@ -50,15 +50,11 @@ export const CreateWorkingDayRow = (props: Props) => {
       ]);
     }
   };
-  const patternShift = useWatch({
-    control,
-    name: 'patternShift',
-  });
 
   return (
     <WorkingDayRow
       index={index}
-      patternShift={patternShift}
+      patternShift={0}
       scheduleType={scheduleType}
       disabledRemove={disabledRemove}
       enabled={!!dayData.enabled}

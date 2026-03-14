@@ -9,6 +9,8 @@ export function createProfileDefaults(initial?: VisualProfileInfo | null) {
     location_lat: initial?.location_lat ?? undefined,
     location_lon: initial?.location_lon ?? undefined,
     description: initial?.description ?? '',
+    avatarUrl: initial?.avatarUrl ?? undefined,
+    avatarPreviewUrl: initial?.avatarPreviewUrl ?? undefined,
   } as const;
 }
 

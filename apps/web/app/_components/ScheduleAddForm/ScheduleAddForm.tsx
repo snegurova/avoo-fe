@@ -10,7 +10,7 @@ import { masterHooks, scheduleHooks } from '@avoo/hooks';
 import { timeUtils } from '@avoo/shared';
 
 import FormDatePicker from '@/_components/FormDatePicker/FormDatePicker';
-import { FormMultiSelect } from '@/_components/FormMultiSelect/FormMultiSelect';
+import { FormSearchAutocomplete } from '@/_components/FormSearchAutocomplete/FormSearchAutoComplete';
 import { FormSelect } from '@/_components/FormSelect/FormSelect';
 import { CreateWorkingDayRow } from '@/_components/ScheduleAddForm/CreateWorkingDayRow';
 import { localizationHooks } from '@/_hooks/localizationHooks';
@@ -24,31 +24,25 @@ export const ScheduleAddForm = () => {
   const router = useRouter();
   const workingHoursPath = localizationHooks.useWithLocale(AppRoutes.WorkingHours);
 
-  const { control, handleSubmit, handleStartDateChange, setValue, watch, errors } =
-    scheduleHooks.useCreateScheduleForm({
-      onSuccess: () => {
-        toast.success('Schedule added successfully');
-        router.replace(workingHoursPath);
-      },
-      onError: (error) => {
-        toast.error(`Schedule add failed: ${error.message}`);
-      },
-    });
+  const { control, handleSubmit, setValue, watch, errors } = scheduleHooks.useCreateScheduleForm({
+    onSuccess: () => {
+      toast.success('Schedule added successfully');
+      router.replace(workingHoursPath);
+    },
+    onError: (error) => {
+      toast.error(`Schedule add failed: ${error.message}`);
+    },
+  });
 
   const { fields, replace, append, remove } = useFieldArray({
     control,
     name: 'workingHours',
   });
 
-  const masters = masterHooks.useGetMastersProfileInfo();
+  const { mastersOptions, optionsPool, setSearchTerm, isLoading } =
+    masterHooks.useMasterQueryWithOptions();
 
   const scheduleType = watch('patternType');
-
-  const mastersOptions =
-    masters?.items?.map((m) => ({
-      label: m.name ?? `Master #${m.id}`,
-      value: m.id.toString(),
-    })) ?? [];
 
   useEffect(() => {
     if (!scheduleType) return;
@@ -137,18 +131,20 @@ export const ScheduleAddForm = () => {
                 name='masterIds'
                 control={control}
                 render={({ field }) => (
-                  <FormMultiSelect
-                    error={!!errors.masterIds}
-                    required
-                    name='masterIds'
+                  <FormSearchAutocomplete
                     label='Apply to'
+                    placeholder='Search masters...'
+                    emptyDefaultLabel='Apply to all'
+                    error={errors.masterIds?.message}
+                    value={field.value ?? undefined}
+                    onChange={field.onChange}
                     options={mastersOptions}
-                    selected={((field.value ?? []) as number[]).map((v) => v.toString())}
-                    onChange={(values) => field.onChange(values.map((v) => Number(v)))}
+                    optionsPool={optionsPool}
+                    onSearchChange={setSearchTerm}
+                    loading={isLoading}
                   />
                 )}
               />
-
               <Controller
                 name='startAt'
                 control={control}
@@ -160,10 +156,7 @@ export const ScheduleAddForm = () => {
                     valueFormat={VALUE_DATE_FORMAT}
                     required
                     date={field.value}
-                    onChange={(value) => {
-                      field.onChange(value);
-                      handleStartDateChange(value);
-                    }}
+                    onChange={(value) => field.onChange(value)}
                   />
                 )}
               />

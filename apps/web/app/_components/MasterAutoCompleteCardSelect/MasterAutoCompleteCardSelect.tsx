@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 
 import { MasterWithRelationsEntityResponse } from '@avoo/axios/types/apiTypes';
 
-import { AutoComplete } from '@/_components/AutoComplete/AutoComplete';
+import { CardAutocomplete } from '@/_components/AutoComplete/CardAutocomplete';
 
 type MasterOption = {
   id: number;
@@ -19,7 +19,7 @@ type Props = {
   searchTerm?: string;
 };
 
-export default function MasterAutoCompleteSelect(props: Props) {
+export default function MasterAutocompleteCardSelect(props: Props) {
   const { masters, value = [], onChange, onSearchChange, searchTerm } = props;
   const [cachedSelected, setCachedSelected] = useState<MasterOption[]>([]);
 
@@ -44,7 +44,7 @@ export default function MasterAutoCompleteSelect(props: Props) {
     new Map([...currentApiOptions, ...cachedSelected].map((item) => [item.id, item])).values(),
   );
   return (
-    <AutoComplete<MasterOption>
+    <CardAutocomplete<MasterOption>
       id='master-auto-complete-select'
       options={allOptions}
       value={cachedSelected}

@@ -71,7 +71,6 @@ export const scheduleCreateSchema = yup.object({
   name: yup.string().required('Name is required').trim(),
   pattern: yup.number().required().max(40),
   patternType: yup.string().oneOf(['weekly', '2x2', '3x2', '2x1', 'custom']),
-  patternShift: yup.number().required().max(6),
 
   startAt: yup
     .string()

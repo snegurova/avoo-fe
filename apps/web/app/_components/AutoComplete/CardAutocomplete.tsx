@@ -98,7 +98,7 @@ const Listbox = styled('ul')(() => ({
   },
 }));
 
-export function AutoComplete<Value extends BaseOption>(props: AutoCompleteProps<Value>) {
+export function CardAutocomplete<Value extends BaseOption>(props: AutoCompleteProps<Value>) {
   const {
     labelName,
     value: controlledValue,
