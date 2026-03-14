@@ -19,7 +19,7 @@ import { categoriesHooks, masterHooks, mediaHooks, servicesHooks } from '@avoo/h
 import { timeUtils } from '@avoo/shared';
 
 import CategorySelect from '@/_components/CategorySelect/CategorySelect';
-import MasterAutoCompleteSelect from '@/_components/MasterAutoCompleteSelect/MasterAutoCompleteSelect';
+import MasterAutocompleteCardSelect from '@/_components/MasterAutoCompleteCardSelect/MasterAutoCompleteCardSelect';
 import ServiceGalleryUpload from '@/_components/ServiceGalleryUpload/ServiceGalleryUpload';
 import { useToast } from '@/_hooks/useToast';
 import { getAllErrorMessages } from '@/_utils/formError';
@@ -228,7 +228,7 @@ export default function ServiceUpdateForm(props: Props) {
                 name='masterIds'
                 control={control}
                 render={({ field }) => (
-                  <MasterAutoCompleteSelect
+                  <MasterAutocompleteCardSelect
                     masters={masters}
                     searchTerm={searchTerm}
                     onSearchChange={setSearchTerm}

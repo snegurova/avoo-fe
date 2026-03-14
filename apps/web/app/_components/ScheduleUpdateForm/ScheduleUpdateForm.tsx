@@ -50,7 +50,7 @@ export default function ScheduleUpdateForm(props: Props) {
 
   const errorsList = getAllErrorMessages(errors);
   const patternShift = timeUtils.getPatternShift(schedule.startAt);
-  const visuallyOrderedFields = handleScheduleShift(fields, patternShift);
+  const visuallyOrderedFields = handleScheduleShift(fields, patternShift, scheduleType);
 
   return (
     <>

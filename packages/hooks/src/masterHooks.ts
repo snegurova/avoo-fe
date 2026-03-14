@@ -15,6 +15,7 @@ import {
   MasterWithRelationsEntityResponse,
 } from '@avoo/axios/types/apiTypes';
 import { utils } from '@avoo/hooks/utils/utils';
+import { Option } from '@avoo/shared';
 
 import { CreateMasterFormData, createMasterSchema } from '../schemas/validationSchemas';
 import { queryKeys } from './queryKeys';
@@ -85,6 +86,38 @@ export const masterHooks = {
       masters,
       searchTerm,
       setSearchTerm,
+      ...masterQuery,
+    };
+  },
+  useMasterQueryWithOptions() {
+    const [isInputFocused, setIsInputFocused] = useState(false);
+    const [optionsPool, setOptionsPool] = useState<Option[]>([]);
+
+    const masterQuery = masterHooks.useMasterQuery();
+
+    const mastersOptions = useMemo(() => {
+      return (masterQuery.masters || []).map((m) => ({
+        label: m.name ?? `Master #${m.id}`,
+        value: m.id.toString(),
+      }));
+    }, [masterQuery.masters]);
+
+    useEffect(() => {
+      setOptionsPool((prevPool) => {
+        const newOptions = mastersOptions.filter(
+          (newOpt) => !prevPool.some((p) => p.value === newOpt.value),
+        );
+        if (newOptions.length === 0) return prevPool;
+
+        return [...prevPool, ...newOptions];
+      });
+    }, [mastersOptions]);
+
+    return {
+      mastersOptions,
+      optionsPool,
+      isInputFocused,
+      setIsInputFocused,
       ...masterQuery,
     };
   },

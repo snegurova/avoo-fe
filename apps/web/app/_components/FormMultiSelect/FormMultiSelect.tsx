@@ -7,7 +7,7 @@ import MenuItem from '@mui/material/MenuItem';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 
-export type Option = { label: string; value: string };
+import { Option } from '@avoo/shared';
 
 export type Props = {
   id?: string;
