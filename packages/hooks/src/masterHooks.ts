@@ -2,7 +2,13 @@ import { useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import {
+  QueryClient,
+  useInfiniteQuery,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from '@tanstack/react-query';
 
 import { masterApi } from '@avoo/axios';
 import type { ShortMasterInfo } from '@avoo/axios/types/apiTypes';
@@ -31,6 +37,16 @@ type UseUpdateMasterFormParams = {
 };
 
 export const masterHooks = {
+  invalidateOnSuccess: (queryClient: QueryClient, callback?: () => void) => {
+    queryClient.invalidateQueries({ queryKey: queryKeys.exceptions.all });
+    queryClient.invalidateQueries({ queryKey: queryKeys.calendar.all });
+    queryClient.invalidateQueries({ queryKey: queryKeys.monthCalendar.all });
+    queryClient.invalidateQueries({ queryKey: queryKeys.masters.all });
+    queryClient.invalidateQueries({ queryKey: queryKeys.services.all });
+    queryClient.invalidateQueries({ queryKey: queryKeys.schedules.all });
+    callback?.();
+  },
+
   useStableMasters(mastersFromResponse: ShortMasterInfo[]): ShortMasterInfo[] {
     const [stableMasters, setStableMasters] = useState<ShortMasterInfo[]>([]);
     useEffect(() => {
@@ -208,8 +224,7 @@ export const masterHooks = {
         successMessage: 'Master updated successfully',
       },
       onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: queryKeys.masters.all });
-        onSuccess?.();
+        masterHooks.invalidateOnSuccess(queryClient, onSuccess);
       },
     });
 
