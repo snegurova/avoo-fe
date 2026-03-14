@@ -6,11 +6,10 @@ import { MasterWithRelationsEntity } from '@avoo/axios/types/apiTypes';
 import { CalendarType } from '@avoo/hooks/types/calendarType';
 import { CalendarViewType } from '@avoo/hooks/types/calendarViewType';
 
-import { AvatarSize, CalendarAvatar } from '@/_components/CalendarAvatar/CalendarAvatar';
+import Avatar, { AvatarSize } from '@/_components/Avatar/Avatar';
 
 type Props = {
   master: MasterWithRelationsEntity;
-  idx?: number;
   type: CalendarViewType;
   calendarType: CalendarType;
 };
@@ -50,15 +49,10 @@ const container = tv({
 });
 
 export default function CalendarColumnHead(props: Props) {
-  const { master, idx, type, calendarType } = props;
+  const { master, type, calendarType } = props;
   return (
     <div className={container({ type, calendarType })}>
-      <CalendarAvatar
-        name={master ? master.name : undefined}
-        size={AvatarSize.Large}
-        idx={idx}
-        addName
-      />
+      <Avatar src={master.avatarPreviewUrl} name={master.name} size={AvatarSize.Large} addName />
     </div>
   );
 }

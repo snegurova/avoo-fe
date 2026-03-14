@@ -20,6 +20,8 @@ export function buildUpdateProfilePayload(values: Record<string, unknown>): Upda
     address?: string;
     location_lat?: number;
     location_lon?: number;
+    avatarUrl?: string;
+    avatarPreviewUrl?: string;
   };
 
   return {
@@ -35,6 +37,8 @@ export function buildUpdateProfilePayload(values: Record<string, unknown>): Upda
       typeof parsedValues.location_lon === 'number' && !Number.isNaN(parsedValues.location_lon)
         ? parsedValues.location_lon
         : undefined,
+    avatarUrl: parsedValues.avatarUrl,
+    avatarPreviewUrl: parsedValues.avatarPreviewUrl,
     mediaIds: [],
   };
 }

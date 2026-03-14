@@ -7,7 +7,7 @@ import dayjs from 'dayjs';
 
 import { Exception } from '@avoo/axios/types/apiTypes';
 import { colors, typography } from '@avoo/design-tokens';
-import { exceptionHooks, masterHooks } from '@avoo/hooks';
+import { exceptionHooks } from '@avoo/hooks';
 
 import Avatar, { AvatarSize } from '@/_components/Avatar/Avatar';
 import { IconButton } from '@/_components/IconButton/IconButton';
@@ -25,12 +25,8 @@ type Props = {
 };
 
 const TimeOffListItem = ({ item, onEdit }: Props) => {
-  const masters = masterHooks.useGetMastersProfileInfo()?.items;
   const toast = useToast();
   const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
-
-  const foundMaster = masters?.find((m) => m.id === item.masterId);
-  const masterLabel = foundMaster?.name ?? item.masterId ?? item.userId ?? '—';
 
   const { mutate: deleteException, isPending: isDeletePending } = exceptionHooks.useDeleteException(
     () => {
@@ -142,14 +138,14 @@ const TimeOffListItem = ({ item, onEdit }: Props) => {
         type='button'
         className='flex flex-col md:flex-row gap-3 items-start md:items-center w-full lg:hidden cursor-pointer text-left'
         onClick={handleOpenDetails}
-        aria-label={`Open ${String(masterLabel)} details`}
+        aria-label={`Open ${String(item.master.name)} details`}
       >
         <div className='w-full md:w-[464px] flex items-start md:items-center gap-4'>
           <div className='flex-shrink-0 self-center'>
             <Avatar
-              name={String(masterLabel)}
+              name={item.master.name}
               size={AvatarSize.Large}
-              bgColor={colors.primary[200]}
+              src={item.master.avatarPreviewUrl}
             />
           </div>
 
@@ -164,7 +160,7 @@ const TimeOffListItem = ({ item, onEdit }: Props) => {
                 color: colors.gray[900],
               }}
             >
-              {masterLabel}
+              {item.master.name}
             </Typography>
 
             <div className='text-sm text-gray-700 mt-1'>{renderDateRange()}</div>
@@ -207,9 +203,9 @@ const TimeOffListItem = ({ item, onEdit }: Props) => {
       <div className='hidden lg:flex items-center gap-3 w-full min-w-0'>
         <div className='flex items-center gap-3 w-1/5'>
           <Avatar
-            name={String(masterLabel)}
+            name={item.master.name}
             size={AvatarSize.Large}
-            bgColor={colors.primary[200]}
+            src={item.master.avatarPreviewUrl}
           />
           <div>
             <Typography
@@ -222,7 +218,7 @@ const TimeOffListItem = ({ item, onEdit }: Props) => {
                 color: colors.gray[700],
               }}
             >
-              {masterLabel}
+              {item.master.name}
             </Typography>
           </div>
         </div>

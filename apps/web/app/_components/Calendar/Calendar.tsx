@@ -231,11 +231,10 @@ export default function Calendar(props: Props) {
             {filteredMasters.length > 0 && !isWeekSingleMasterView && (
               <>
                 <div className={columnHeadContainer({ type })}>
-                  {filteredMasters.map((master, idx) => (
+                  {filteredMasters.map((master) => (
                     <CalendarColumnHead
                       key={`${master.id}-head`}
                       master={master}
-                      idx={idx}
                       type={type}
                       calendarType={calendarType}
                     />

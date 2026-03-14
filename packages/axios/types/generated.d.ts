@@ -930,8 +930,8 @@ export interface components {
       email: string;
       timezone: string;
       isEmailVerify: boolean;
-      avatarUrl?: string;
-      avatarPreviewUrl?: string;
+      avatarUrl?: string | null;
+      avatarPreviewUrl?: string | null;
       referralCode?: string;
     };
     UserResponseDto: {
@@ -1045,8 +1045,8 @@ export interface components {
       userId: number;
       headline?: string;
       phone?: string;
-      avatarUrl?: string;
-      avatarPreviewUrl?: string;
+      avatarUrl?: string | null;
+      avatarPreviewUrl?: string | null;
       languages?: components['schemas']['Language'][];
       bio?: string;
     };
@@ -1128,8 +1128,8 @@ export interface components {
       email: string;
       timezone: string;
       isEmailVerify: boolean;
-      avatarUrl?: string;
-      avatarPreviewUrl?: string;
+      avatarUrl?: string | null;
+      avatarPreviewUrl?: string | null;
       referralCode?: string;
       masters: components['schemas']['MasterEntity'][];
       services: components['schemas']['ServiceEntity'][];
@@ -1151,8 +1151,8 @@ export interface components {
       email: string;
       timezone: string;
       isEmailVerify: boolean;
-      avatarUrl?: string;
-      avatarPreviewUrl?: string;
+      avatarUrl?: string | null;
+      avatarPreviewUrl?: string | null;
       referralCode?: string;
       businessInfo: components['schemas']['BusinessInfoEntity'] | null;
     };
@@ -1186,12 +1186,12 @@ export interface components {
        * @description url to image
        * @example https://example.com/uploads/avatar/me.webp
        */
-      avatarUrl?: Record<string, never>;
+      avatarUrl?: string | null;
       /**
        * @description previewUrl to image
        * @example https://example.com/uploads/avatar/me.peview.webp
        */
-      avatarPreviewUrl?: Record<string, never>;
+      avatarPreviewUrl?: string | null;
       /**
        * @description Business address
        * @example 123 Main St, City, Country
@@ -1218,7 +1218,7 @@ export interface components {
     ShortMasterInfoDto: {
       id: number;
       name: string;
-      avatarPreviewUrl?: string;
+      avatarPreviewUrl?: string | null;
     };
     GetProfileLanguagesDto: {
       /** @enum {string} */
@@ -1307,12 +1307,12 @@ export interface components {
        * @description url to image
        * @example https://example.com/uploads/avatar/me.webp
        */
-      avatarUrl?: Record<string, never>;
+      avatarUrl?: string | null;
       /**
        * @description previewUrl to image
        * @example https://example.com/uploads/avatar/me.peview.webp
        */
-      avatarPreviewUrl?: Record<string, never>;
+      avatarPreviewUrl?: string | null;
       /**
        * @description Languages spoken by the master
        * @example [
@@ -1352,12 +1352,12 @@ export interface components {
        * @description url to image
        * @example https://example.com/uploads/avatar/me.webp
        */
-      avatarUrl?: Record<string, never>;
+      avatarUrl?: string | null;
       /**
        * @description previewUrl to image
        * @example https://example.com/uploads/avatar/me.peview.webp
        */
-      avatarPreviewUrl?: Record<string, never>;
+      avatarPreviewUrl?: string | null;
       /**
        * @description Languages spoken by the master
        * @example [
@@ -2309,7 +2309,7 @@ export interface components {
     CalendarExceptionEntity: {
       id: number;
       userId: number;
-      masterId: number | null;
+      master: components['schemas']['ShortMasterInfoDto'];
       /** Format: date-time */
       dateFrom: string;
       /** Format: date-time */
