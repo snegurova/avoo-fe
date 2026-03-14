@@ -256,8 +256,7 @@ export const masterHooks = {
         successMessage: 'Master deleted successfully',
       },
       onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: queryKeys.masters.all });
-        onSuccess?.();
+        masterHooks.invalidateOnSuccess(queryClient, onSuccess);
       },
     });
 
