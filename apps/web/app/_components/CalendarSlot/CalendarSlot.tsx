@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { forwardRef } from 'react';
 
 import { timeUtils } from '@avoo/shared';
 
@@ -12,11 +12,12 @@ type Props = {
   duration: number;
 };
 
-export default function CalendarSlot(props: Props) {
+const CalendarSlot = forwardRef<HTMLDivElement, Props>(function CalendarSlot(props, ref) {
   const { index, title, date, duration } = props;
 
   return (
     <div
+      ref={ref}
       className='z-6 absolute left-0 right-0 p-0.5 pointer order-wrapper'
       style={{
         top: `${timeUtils.getMinutesInDay(date) * PX_IN_MINUTE}px`,
@@ -37,4 +38,6 @@ export default function CalendarSlot(props: Props) {
       </div>
     </div>
   );
-}
+});
+
+export default CalendarSlot;
