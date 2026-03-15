@@ -68,6 +68,8 @@ export default function ServiceForm(props: Props) {
     setStartDate,
   } = props;
   const setMasterIds = useCalendarStore((state) => state.setMasterIds);
+  const slots = useCalendarStore((state) => state.slots);
+  const setSlots = useCalendarStore((state) => state.setSlots);
 
   const currentService = (index: number): Service | null => {
     return selectedServices[index] || null;
@@ -99,6 +101,8 @@ export default function ServiceForm(props: Props) {
     } else {
       setMasterIds(undefined);
     }
+
+    setSlots([...(slots ? [...slots] : []).splice(index, 1)]);
   };
 
   return (

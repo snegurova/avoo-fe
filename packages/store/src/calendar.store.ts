@@ -3,7 +3,7 @@ import { persist } from 'zustand/middleware';
 
 import { CalendarViewType } from '@avoo/hooks/types/calendarViewType';
 import { OrderStatus } from '@avoo/hooks/types/orderStatus';
-import { timeUtils } from '@avoo/shared';
+import { CalendarSlot, timeUtils } from '@avoo/shared';
 
 import { useHydrationStore } from './hydration.store';
 import { createZustandStorage, getPlatformStorage } from './storage';
@@ -15,32 +15,14 @@ export type CalendarStore = {
   toDate: Date;
   orderIsOutOfSchedule: boolean | undefined;
   type: CalendarViewType;
-  slots:
-    | {
-        index: number;
-        title: string | null;
-        masterId: number | null;
-        date: string;
-        duration: number;
-      }[]
-    | null;
+  slots: CalendarSlot[] | null;
   setMasterIds: (masterIds: number[] | undefined) => void;
   setStatuses: (statuses: OrderStatus[] | undefined) => void;
   setDate: (date: Date) => void;
   setToDate: (toDate: Date) => void;
   setOrderIsOutOfSchedule: (orderIsOutOfSchedule: boolean | undefined) => void;
   setType: (type: CalendarViewType) => void;
-  setSlots: (
-    slots:
-      | {
-          index: number;
-          title: string | null;
-          masterId: number | null;
-          date: string;
-          duration: number;
-        }[]
-      | null,
-  ) => void;
+  setSlots: (slots: CalendarSlot[] | null) => void;
   resetStorage: () => void;
 };
 
@@ -51,13 +33,13 @@ const initialState = {
   toDate: timeUtils.toDayEnd(new Date()),
   orderIsOutOfSchedule: undefined,
   type: CalendarViewType.DAY,
-  slots: null,
 };
 
 export const useCalendarStore = create<CalendarStore>()(
   persist(
     (set) => ({
       ...initialState,
+      slots: null,
       setMasterIds: (masterIds) => set({ masterIds }),
       setStatuses: (statuses) => set({ statuses }),
       setDate: (date) => set({ date }),

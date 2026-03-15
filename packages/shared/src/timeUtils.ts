@@ -250,7 +250,7 @@ export const timeUtils = {
     const minutes = d.getMinutes().toString().padStart(2, '0');
     return `${hours}:${minutes}`;
   },
-  convertLocalToUTC(dateStr: string | undefined): string | undefined {
+  convertLocalToUTC(dateStr: string): string {
     if (!dateStr) return dateStr;
     const date = new Date(dateStr).toUTCString();
 

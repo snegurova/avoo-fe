@@ -1,14 +1,17 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 
+import { tv } from 'tailwind-variants';
+
 import {
   CreateOrder,
   GetMastersQueryParams,
   MasterWithRelationsEntity,
   Service,
 } from '@avoo/axios/types/apiTypes';
-import { masterHooks, servicesHooks } from '@avoo/hooks';
+import { calendarHooks, masterHooks, servicesHooks } from '@avoo/hooks';
 import { messages } from '@avoo/intl/messages/private/orders/create';
+import { timeUtils } from '@avoo/shared';
 import { isEmptyObject } from '@avoo/shared';
 import { useCalendarStore } from '@avoo/store';
 
@@ -19,8 +22,8 @@ import { IconButton } from '@/_components/IconButton/IconButton';
 import MasterElement from '@/_components/MasterElement/MasterElement';
 import SearchField from '@/_components/SearchField/SearchField';
 import ServiceElement from '@/_components/ServiceElement/ServiceElement';
+import { useToast } from '@/_hooks/useToast';
 import DeleteIcon from '@/_icons/DeleteIcon';
-import { tv } from 'tailwind-variants';
 
 type Props = {
   order: CreateOrder;
@@ -57,7 +60,7 @@ const root = tv({
 });
 
 const top = tv({
-  base: 'px-4 py-2 h-10 rounded-t-lg flex items-center justify-between transition-colors border-b ',
+  base: 'px-4 py-2 h-10 rounded-t-lg flex items-center justify-between transition-colors border-b',
   variants: {
     isActive: {
       true: 'bg-primary-200 border-primary-200',
@@ -88,8 +91,28 @@ export default function ServiceFormItem(props: Props) {
   const [masterParams, setMasterParams] = useState<GetMastersQueryParams>({ limit: 10 });
   const [isActiveMasterSearch, setIsActiveMasterSearch] = useState(false);
   const [isActiveServiceSearch, setIsActiveServiceSearch] = useState(false);
+  const toast = useToast();
 
   const { params, queryParams, setSearchQuery, setMasterIds } = servicesHooks.useServicesQuery();
+
+  const { getAvailableDate } = calendarHooks.useGetPrivateAvailability();
+  const setDate = useCalendarStore((state) => state.setDate);
+
+  useEffect(() => {
+    if (order.masterId) {
+      setMasterParams((prev) => ({
+        ...prev,
+        serviceId: order.serviceId,
+      }));
+      setMasterIds(order.masterId ? [order.masterId] : []);
+    }
+    if (order.serviceId) {
+      setMasterParams((prev) => ({
+        ...prev,
+        serviceId: order.serviceId,
+      }));
+    }
+  }, [order.masterId, order.serviceId]);
 
   const isActive = useMemo(() => activeOrder === index, [activeOrder, index]);
   const setMasterIdsInStore = useCalendarStore((state) => state.setMasterIds);
@@ -150,10 +173,40 @@ export default function ServiceFormItem(props: Props) {
     }
   }, [masters]);
 
-  const selectService = (val: { id: number } | null) => {
+  const selectService = async (val: { id: number } | null) => {
     if (!val) return;
+
     const newOrders = [...value];
-    newOrders[index] = { ...newOrders[index], serviceId: val.id };
+
+    const availabilityParams: {
+      rangeFromTime: string;
+      masterIds?: number[];
+      serviceId?: number;
+      combinationId?: number;
+      index: number;
+    } = {
+      index,
+      rangeFromTime: newOrders[index].date,
+    };
+
+    if (selectedMasters[index]) {
+      availabilityParams.masterIds = [selectedMasters[index]?.id];
+    }
+
+    if (val.id) {
+      availabilityParams.serviceId = val.id;
+    }
+
+    const availableDate = await getAvailableDate(availabilityParams);
+
+    if (!availableDate) {
+      toast.error('No available date and time');
+      return;
+    }
+
+    setDate(timeUtils.toDayBegin(new Date(availableDate)));
+
+    newOrders[index] = { ...newOrders[index], serviceId: val.id, date: availableDate };
     onChange(newOrders);
 
     const newService = services?.find((service) => service?.id === val.id) || null;
@@ -168,11 +221,12 @@ export default function ServiceFormItem(props: Props) {
       const masterIdsProvideService = newService?.masters.map((master) => master.id) || undefined;
       setMasterIdsInStore(masterIdsProvideService);
     }
-    if (slots) {
+    if (slots && slots[index]) {
       const newSlot = {
         ...slots[index],
         title: newService?.name || null,
         duration: newService?.durationMinutes || 15,
+        date: availableDate,
       };
       const newSlots = [...slots];
       newSlots[index] = newSlot;
@@ -180,12 +234,41 @@ export default function ServiceFormItem(props: Props) {
     }
   };
 
-  const selectMaster = (val: { id: number } | null) => {
+  const selectMaster = async (val: { id: number } | null) => {
     if (!val) {
       return;
     }
     const newOrders = [...value];
-    newOrders[index] = { ...newOrders[index], masterId: val.id };
+
+    const availabilityParams: {
+      rangeFromTime: string;
+      masterIds?: number[];
+      serviceId?: number;
+      combinationId?: number;
+      index: number;
+    } = {
+      index,
+      rangeFromTime: newOrders[index].date,
+    };
+
+    if (val.id) {
+      availabilityParams.masterIds = [val.id];
+    }
+
+    if (selectedService) {
+      availabilityParams.serviceId = selectedService.id;
+    }
+
+    const availableDate = await getAvailableDate(availabilityParams);
+
+    if (!availableDate) {
+      toast.error('No available date and time');
+      return;
+    }
+
+    setDate(timeUtils.toDayBegin(new Date(availableDate)));
+
+    newOrders[index] = { ...newOrders[index], masterId: val.id, date: availableDate };
     onChange(newOrders);
 
     setSelectedMasters((prev) => {
@@ -199,10 +282,11 @@ export default function ServiceFormItem(props: Props) {
       setMasterIdsInStore(val.id ? [val.id] : undefined);
     }
 
-    if (slots) {
+    if (slots && slots[index]) {
       const newSlot = {
         ...slots[index],
         masterId: val.id,
+        date: availableDate,
       };
       const newSlots = [...slots];
       newSlots[index] = newSlot;
@@ -222,22 +306,50 @@ export default function ServiceFormItem(props: Props) {
     />
   );
 
-  const onDateChange = (newDate: string) => {
+  const onDateChange = async (newDate: string) => {
+    const availabilityParams: {
+      rangeFromTime: string;
+      masterIds?: number[];
+      serviceId?: number;
+      combinationId?: number;
+      index: number;
+    } = {
+      rangeFromTime: newDate,
+      index,
+    };
+
+    if (selectedMasters[index]) {
+      availabilityParams.masterIds = [selectedMasters[index]?.id];
+    }
+
+    if (selectedService) {
+      availabilityParams.serviceId = selectedService.id;
+    }
+
+    const availableDate = await getAvailableDate(availabilityParams);
+
+    if (!availableDate) {
+      toast.error('No available date and time');
+      return;
+    }
+
+    setDate(timeUtils.toDayBegin(new Date(availableDate)));
+
     const newOrders = [...value];
     newOrders[index] = {
       ...newOrders[index],
-      date: newDate,
+      date: availableDate,
     };
     onChange(newOrders);
 
     if (index === 0 && setStartDate) {
-      setStartDate(newDate);
+      setStartDate(availableDate);
     }
 
-    if (slots) {
+    if (slots && slots[index]) {
       const newSlot = {
         ...slots[index],
-        date: newDate,
+        date: availableDate,
       };
       const newSlots = [...slots];
       newSlots[index] = newSlot;

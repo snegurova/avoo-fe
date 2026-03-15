@@ -7,8 +7,10 @@ import {
   GetMastersQueryParams,
   MasterWithRelationsEntity,
 } from '@avoo/axios/types/apiTypes';
-import { masterHooks } from '@avoo/hooks';
+import { calendarHooks, masterHooks } from '@avoo/hooks';
 import { messages } from '@avoo/intl/messages/private/orders/create';
+import { timeUtils } from '@avoo/shared';
+import { useCalendarStore } from '@avoo/store';
 
 import CombinationElement from '@/_components/CombinationElement/CombinationElement';
 import FormDatePicker from '@/_components/FormDatePicker/FormDatePicker';
@@ -17,6 +19,7 @@ import FormTimePicker from '@/_components/FormTimePicker/FormTimePicker';
 import { IconButton } from '@/_components/IconButton/IconButton';
 import MasterElement from '@/_components/MasterElement/MasterElement';
 import SearchField from '@/_components/SearchField/SearchField';
+import { useToast } from '@/_hooks/useToast';
 import CallSplitIcon from '@/_icons/CallSplitIcon';
 
 type Props = {
@@ -58,6 +61,12 @@ export default function CombinationForm(props: Props) {
     fetchNextPage: fetchNextMastersPage,
     hasNextPage: hasMoreMasters,
   } = masterHooks.useGetMastersInfinite(masterParams);
+  const toast = useToast();
+
+  const { getAvailableDate } = calendarHooks.useGetPrivateAvailability();
+  const setDate = useCalendarStore((state) => state.setDate);
+  const slots = useCalendarStore((state) => state.slots);
+  const setSlots = useCalendarStore((state) => state.setSlots);
 
   const masters = useMemo(
     () =>
@@ -74,30 +83,92 @@ export default function CombinationForm(props: Props) {
     }));
   }, [masterSearch]);
 
-  const selectMaster = (val: { id: number } | null) => {
+  const selectMaster = async (val: { id: number } | null) => {
     if (!val) {
       return;
     }
     const newOrders = [...value];
-    newOrders[0] = { ...newOrders[0], masterId: val.id };
+
+    const availabilityParams: {
+      rangeFromTime: string;
+      masterIds?: number[];
+      serviceId?: number;
+      combinationId?: number;
+      index: number;
+    } = {
+      index: 0,
+      rangeFromTime: newOrders[0].date,
+      combinationId: selectedCombination.id,
+    };
+
+    if (val.id) {
+      availabilityParams.masterIds = [val.id];
+    }
+
+    const availableDate = await getAvailableDate(availabilityParams);
+
+    if (!availableDate) {
+      toast.error('No available date and time');
+      return;
+    }
+
+    setDate(timeUtils.toDayBegin(new Date(availableDate)));
+
+    newOrders[0] = { ...newOrders[0], masterId: val.id, date: availableDate };
     onChange(newOrders);
 
     setSelectedMasters((prev) => {
       const newMaster = masters?.find((master) => master.id === val.id) || null;
       return prev.map(() => newMaster);
     });
+
+    if (slots && slots[0]) {
+      const newSlot = {
+        ...slots[0],
+        masterId: val.id,
+        date: availableDate,
+      };
+      const newSlots = [...slots];
+      newSlots[0] = newSlot;
+      setSlots(newSlots);
+    }
   };
 
-  const onDateChange = (newDate: string) => {
+  const onDateChange = async (newDate: string) => {
+    const availabilityParams: {
+      rangeFromTime: string;
+      masterIds?: number[];
+      serviceId?: number;
+      combinationId?: number;
+      index: number;
+    } = {
+      rangeFromTime: newDate,
+      index: 0,
+      combinationId: selectedCombination.id,
+    };
+
+    if (selectedMasters[0]) {
+      availabilityParams.masterIds = [selectedMasters[0].id];
+    }
+
+    const availableDate = await getAvailableDate(availabilityParams);
+
+    if (!availableDate) {
+      toast.error('No available date and time');
+      return;
+    }
+
+    setDate(timeUtils.toDayBegin(new Date(availableDate)));
+
     const newOrders = [...value];
     newOrders[0] = {
       ...newOrders[0],
-      date: newDate,
+      date: availableDate,
     };
     onChange(newOrders);
 
     if (setStartDate) {
-      setStartDate(newDate);
+      setStartDate(availableDate);
     }
   };
 
@@ -112,8 +183,8 @@ export default function CombinationForm(props: Props) {
   };
 
   return (
-    <div className='rounded-lg border border-gray-200'>
-      <div className='bg-primary-50 px-4 p-2 h-14 rounded-t-lg flex items-center justify-between'>
+    <div className='rounded-lg border border-primary-200'>
+      <div className='px-4 py-2 h-10 rounded-t-lg flex items-center justify-between transition-colors border-b bg-primary-200 border-primary-200'>
         <h3 className='font-medium'>{selectedCombination?.name}</h3>
         <IconButton
           className='group'

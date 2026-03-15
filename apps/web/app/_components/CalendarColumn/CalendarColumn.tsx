@@ -7,6 +7,7 @@ import { CalendarItem, MasterWithRelationsEntity, PrivateEvent } from '@avoo/axi
 import { CalendarType } from '@avoo/hooks/types/calendarType';
 import { CalendarViewType } from '@avoo/hooks/types/calendarViewType';
 import { timeUtils } from '@avoo/shared';
+import { useCalendarStore } from '@avoo/store';
 
 import CalendarCurrentTime from '@/_components/CalendarCurrentTime/CalendarCurrentTime';
 import CalendarEvent from '@/_components/CalendarEvent/CalendarEvent';
@@ -14,7 +15,7 @@ import { PX_IN_MINUTE } from '@/_constants/time';
 import { localizationHooks } from '@/_hooks/localizationHooks';
 import { useToast } from '@/_hooks/useToast';
 import { AppRoutes } from '@/_routes/routes';
-import { useCalendarStore } from '@avoo/store';
+
 import CalendarSlots from '../CalendarSlots/CalendarSlots';
 
 const DAY_CELLS = Array.from({ length: 96 });

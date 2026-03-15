@@ -3,6 +3,7 @@ export * from './checks';
 export * from './currencyUtils';
 export * from './files';
 export * from './timeUtils';
+export * from './types/calendarSlot';
 export * from './types/geocode';
 export * from './types/profile';
 export * from './utils/address';

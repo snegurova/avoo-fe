@@ -1,5 +1,6 @@
 import React, { useMemo } from 'react';
 
+import { timeUtils } from '@avoo/shared';
 import { useCalendarStore } from '@avoo/store';
 
 import CalendarSlot from '@/_components/CalendarSlot/CalendarSlot';
@@ -11,10 +12,13 @@ type Props = {
 export default function CalendarSlots(props: Props) {
   const { masterId } = props;
   const slots = useCalendarStore((state) => state.slots);
+  const date = useCalendarStore((state) => state.date);
 
   const filteredSlots = useMemo(() => {
-    return slots?.filter((slot) => slot.masterId === masterId);
-  }, [slots, masterId]);
+    return slots?.filter(
+      (slot) => slot.masterId === masterId && timeUtils.isSameDay(new Date(slot.date), date),
+    );
+  }, [slots, masterId, date]);
 
   return (
     <>

@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 
 import { calendarApi } from '@avoo/axios';
 import {
@@ -19,6 +19,8 @@ import {
   PublicGetAvailabilityQueryParams,
 } from '@avoo/axios/types/apiTypes';
 import { utils } from '@avoo/hooks/utils/utils';
+import { timeUtils } from '@avoo/shared';
+import { useCalendarStore } from '@avoo/store';
 
 import { queryKeys } from './queryKeys';
 
@@ -105,44 +107,149 @@ export const calendarHooks = {
 
     return { data: null, refetch };
   },
-  useGetPrivateAvailability: (params: PrivateGetAvailabilityQueryParams) => {
-    const memoParams = useMemo<PrivateGetAvailabilityQueryParams>(() => params, [params]);
-
-    const {
-      data: availabilityData,
-      isPending,
-      refetch,
-    } = useQuery<BaseResponse<GetAvailabilityResponse>, Error>({
-      queryKey: ['availability', queryKeys.availability.byParams(memoParams)],
-      queryFn: () => calendarApi.getPrivateAvailability(memoParams),
+  useGetPrivateAvailability: () => {
+    const mutation = useMutation<
+      BaseResponse<GetAvailabilityResponse>,
+      Error,
+      PrivateGetAvailabilityQueryParams
+    >({
+      mutationFn: (params: PrivateGetAvailabilityQueryParams) =>
+        calendarApi.getPrivateAvailability(params),
     });
 
-    utils.useSetPendingApi(isPending);
+    utils.useSetPendingApi(mutation.isPending);
 
-    if (availabilityData?.status === ApiStatus.SUCCESS && availabilityData.data) {
-      return { data: availabilityData.data, refetch };
+    const slots = useCalendarStore((state) => state.slots);
+
+    const getAvailableDate = async ({
+      rangeFromTime,
+      masterIds,
+      serviceId,
+      combinationId,
+      index,
+    }: {
+      rangeFromTime: string;
+      masterIds?: number[];
+      serviceId?: number;
+      combinationId?: number;
+      index: number;
+    }) => {
+      let checkedDate = rangeFromTime;
+      const now = new Date();
+
+      const minutes = now.getMinutes();
+      const roundedMinutes = Math.ceil(minutes / 15) * 15;
+      if (roundedMinutes === 60) {
+        now.setHours(now.getHours() + 1);
+        now.setMinutes(0, 0, 0);
+      } else {
+        now.setMinutes(roundedMinutes, 0, 0);
+      }
+      const inputDate = new Date(rangeFromTime);
+      if (inputDate < now) {
+        checkedDate = timeUtils.convertDateToString(now);
+      }
+
+      let tryCount = 0;
+      while (true) {
+        const params: PrivateGetAvailabilityQueryParams = {
+          rangeFromTime: timeUtils.convertLocalToUTC(checkedDate),
+          workingTimeOnly: false,
+        };
+
+        if (masterIds) {
+          params.masterIds = masterIds;
+        }
+        if (serviceId) {
+          params.serviceId = serviceId;
+        }
+        if (combinationId) {
+          params.combinationId = combinationId;
+        }
+
+        const res = await mutation.mutateAsync(params);
+        let availableDate = res?.data?.availability?.start;
+        if (!availableDate) {
+          return null;
+        }
+
+        const currDuration = slots?.[index]?.duration || 15;
+
+        let overlapped = false;
+        let nextCheckedDate = null;
+
+        if (slots) {
+          const availableStart = new Date(availableDate);
+          const availableEnd = new Date(availableStart.getTime() + currDuration * 60000);
+
+          for (let i = 0; i < slots.length; i++) {
+            if (i === index) continue;
+            const slot = slots[i];
+            if (slot.masterId && masterIds && !masterIds.includes(slot.masterId)) {
+              continue;
+            }
+
+            const slotStart = new Date(slot.date);
+            const slotEnd = new Date(slotStart.getTime() + (slot.duration || 15) * 60000);
+            if (slotStart < availableEnd && slotEnd > availableStart) {
+              overlapped = true;
+              if (!nextCheckedDate || slotEnd > new Date(nextCheckedDate)) {
+                nextCheckedDate = slotEnd;
+              }
+            }
+          }
+        }
+
+        if (!overlapped) {
+          return availableDate;
+        }
+        if (nextCheckedDate) {
+          checkedDate = timeUtils.convertDateToString(nextCheckedDate);
+        } else {
+          return null;
+        }
+
+        tryCount++;
+        if (tryCount > 20) {
+          return null;
+        }
+      }
+    };
+
+    if (mutation.data?.status === ApiStatus.SUCCESS && mutation.data.data) {
+      return {
+        getAvailableDate,
+      };
     }
 
-    return { data: null, refetch };
+    return {
+      getAvailableDate,
+    };
   },
-  useGetPublicAvailability: (params: PublicGetAvailabilityQueryParams) => {
-    const memoParams = useMemo<PublicGetAvailabilityQueryParams>(() => params, [params]);
-
-    const {
-      data: availabilityData,
-      isPending,
-      refetch,
-    } = useQuery<BaseResponse<GetAvailabilityResponse>, Error>({
-      queryKey: ['publicAvailability', queryKeys.publicAvailability.byParams(memoParams)],
-      queryFn: () => calendarApi.getPublicAvailability(memoParams),
+  useGetPublicAvailability: () => {
+    const mutation = useMutation<
+      BaseResponse<GetAvailabilityResponse>,
+      Error,
+      PublicGetAvailabilityQueryParams
+    >({
+      mutationFn: (params: PublicGetAvailabilityQueryParams) =>
+        calendarApi.getPublicAvailability(params),
     });
 
-    utils.useSetPendingApi(isPending);
+    utils.useSetPendingApi(mutation.isPending);
 
-    if (availabilityData?.status === ApiStatus.SUCCESS && availabilityData.data) {
-      return { data: availabilityData.data, refetch };
+    if (mutation.data?.status === ApiStatus.SUCCESS && mutation.data.data) {
+      return {
+        data: mutation.data.data,
+        fetchAvailability: mutation.mutateAsync,
+        isPending: mutation.isPending,
+      };
     }
 
-    return { data: null, refetch };
+    return {
+      data: null,
+      fetchAvailability: mutation.mutateAsync,
+      isPending: mutation.isPending,
+    };
   },
 };
