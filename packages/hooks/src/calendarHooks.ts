@@ -210,7 +210,7 @@ export const calendarHooks = {
         }
 
         tryCount++;
-        if (tryCount > 20) {
+        if (tryCount > (slots?.length || 0)) {
           return null;
         }
       }

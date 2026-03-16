@@ -123,21 +123,12 @@ export const orderHooks = {
     >({
       mutationFn: orderApi.createOrder,
       onSuccess: async () => {
-        await queryClient.invalidateQueries({
-          queryKey: queryKeys.calendar.all,
-        });
-
-        await queryClient.invalidateQueries({
-          queryKey: queryKeys.monthCalendar.all,
-        });
-
-        await queryClient.invalidateQueries({
-          queryKey: queryKeys.orders.all,
-        });
-
-        await queryClient.invalidateQueries({
-          queryKey: queryKeys.customers.all,
-        });
+        await Promise.all([
+          queryClient.invalidateQueries({ queryKey: queryKeys.calendar.all }),
+          queryClient.invalidateQueries({ queryKey: queryKeys.monthCalendar.all }),
+          queryClient.invalidateQueries({ queryKey: queryKeys.orders.all }),
+          queryClient.invalidateQueries({ queryKey: queryKeys.customers.all }),
+        ]);
 
         onSuccess?.();
       },
