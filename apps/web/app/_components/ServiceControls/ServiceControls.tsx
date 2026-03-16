@@ -1,9 +1,9 @@
 import Link from 'next/link';
 
-import { Button, InputAdornment, TextField, Typography } from '@mui/material';
+import { Button, Typography } from '@mui/material';
 
+import SearchTextInput from '@/_components/SearchTextInput/SearchTextInput';
 import { localizationHooks } from '@/_hooks/localizationHooks';
-import SearchIcon from '@/_icons/SearchIcon';
 import { AppRoutes } from '@/_routes/routes';
 
 type Props = {
@@ -28,43 +28,11 @@ export default function ServiceControls(props: Props) {
           </Link>
         </div>
 
-        <div className='order-3 md:order-2 w-full md:w-auto md:ml-auto'>
-          <TextField
-            size='small'
+        <div className='order-3 md:order-2 w-full md:ml-auto md:w-auto'>
+          <SearchTextInput
             fullWidth
-            placeholder='Search service name'
-            onChange={(e) => setSearchQuery(e.target.value)}
-            sx={{
-              width: {
-                md: '306px',
-                lg: '306px',
-              },
-              marginRight: {
-                md: '32px',
-                lg: '48px',
-              },
-              '& .MuiOutlinedInput-root': {
-                borderRadius: '18px',
-                paddingLeft: 0,
-                height: '44px',
-                minHeight: '44px',
-              },
-            }}
-            slotProps={{
-              input: {
-                startAdornment: (
-                  <InputAdornment position='start'>
-                    <SearchIcon
-                      style={{
-                        marginLeft: '12px',
-                        marginRight: '10px',
-                        fill: 'var(--color-gray-500)',
-                      }}
-                    />
-                  </InputAdornment>
-                ),
-              },
-            }}
+            placeholder='Search by service name'
+            setSearchQuery={setSearchQuery}
           />
         </div>
       </div>

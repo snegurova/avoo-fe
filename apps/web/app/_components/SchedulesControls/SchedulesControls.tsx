@@ -1,12 +1,12 @@
 import Link from 'next/link';
 
-import { Button, InputAdornment, TextField, Typography } from '@mui/material';
+import { Button, Typography } from '@mui/material';
 
 import { colors } from '@avoo/design-tokens';
 
+import SearchTextInput from '@/_components/SearchTextInput/SearchTextInput';
 import SortOptions from '@/_components/SortOptions/SortOptions';
 import { localizationHooks } from '@/_hooks/localizationHooks';
-import SearchIcon from '@/_icons/SearchIcon';
 import { AppRoutes } from '@/_routes/routes';
 
 type Props = {
@@ -36,11 +36,10 @@ export default function SchedulesControls(props: Props) {
           </div>
         </div>
         <div className='order-3 lg:order-2 w-full lg:w-auto lg:ml-auto flex items-center gap-2 md:bg-primary-50 md:p-2 lg:bg-transparent lg:p-0'>
-          <TextField
-            size='small'
+          <SearchTextInput
             placeholder='Search by schedule name or master'
-            onChange={(e) => setSearchQuery(e.target.value)}
-            sx={{
+            setSearchQuery={setSearchQuery}
+            style={{
               minWidth: {
                 xs: '160px',
                 md: '306px',
@@ -64,21 +63,6 @@ export default function SchedulesControls(props: Props) {
                   xs: '34px',
                   lg: '44px',
                 },
-              },
-            }}
-            slotProps={{
-              input: {
-                startAdornment: (
-                  <InputAdornment position='start'>
-                    <SearchIcon
-                      style={{
-                        marginLeft: '12px',
-                        marginRight: '10px',
-                        fill: colors.gray[500],
-                      }}
-                    />
-                  </InputAdornment>
-                ),
               },
             }}
           />

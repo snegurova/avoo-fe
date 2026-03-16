@@ -28,4 +28,6 @@ export enum AppRoutes {
   PublicOrderCreate = '/create-order',
   SecuritySettings = '/app/profile/security-settings',
   AccountSettings = '/app/profile/account-settings',
+  ComboServiceTime = '/app/calendar/combo-service-time',
+  ComboServiceTimeCreate = '/app/calendar/combo-service-time/create',
 }

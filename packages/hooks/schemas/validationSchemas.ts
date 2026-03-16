@@ -266,6 +266,42 @@ export const updateServiceSchema = yup.object({
     .min(1, 'At least one master is required'),
 });
 
+export const updateCombinationSchema = yup.object({
+  name: yup.string().min(3).required(),
+  durationMinutes: yup.number().min(1).required(),
+  isActive: yup.boolean().required(),
+  masterIds: yup
+    .array()
+    .of(yup.number().required())
+    .required()
+    .default([])
+    .min(1, 'At least one master is required'),
+  serviceIds: yup
+    .array()
+    .of(yup.number().required())
+    .required()
+    .default([])
+    .min(1, 'At least one service is required'),
+});
+
+export const createCombinationSchema = yup.object({
+  name: yup.string().min(3).required(),
+  durationMinutes: yup.number().min(1).required(),
+  isActive: yup.boolean().required(),
+  masterIds: yup
+    .array()
+    .of(yup.number().required())
+    .required()
+    .default([])
+    .min(1, 'At least one master is required'),
+  serviceIds: yup
+    .array()
+    .of(yup.number().required())
+    .required()
+    .default([])
+    .min(2, 'At least two services are required'),
+});
+
 export type RegisterFormData = yup.InferType<typeof registerSchema>;
 export type LoginFormData = yup.InferType<typeof loginSchema>;
 export type ForgotPasswordFormData = yup.InferType<typeof forgotPasswordSchema>;
@@ -280,3 +316,5 @@ export type UpdateOrderData = yup.InferType<typeof updateOrderSchema>;
 export type CreateServiceFormData = yup.InferType<typeof createServiceSchema>;
 export type CreatePublicOrdersData = yup.InferType<typeof createPublicOrdersSchema>;
 export type UpdateServiceFormData = yup.InferType<typeof updateServiceSchema>;
+export type UpdateCombinationFormData = yup.InferType<typeof updateCombinationSchema>;
+export type CreateCombinationFormData = yup.InferType<typeof createCombinationSchema>;

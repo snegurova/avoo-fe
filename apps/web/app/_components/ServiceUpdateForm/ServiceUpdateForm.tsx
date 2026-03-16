@@ -279,7 +279,7 @@ export default function ServiceUpdateForm(props: Props) {
             control={control}
             render={({ field }) => (
               <>
-                <Switch {...field} defaultChecked />
+                <Switch {...field} checked={field.value} />
                 {errors.isActive?.message && (
                   <FormHelperText>{errors.isActive?.message}</FormHelperText>
                 )}
