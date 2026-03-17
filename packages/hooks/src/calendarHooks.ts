@@ -64,6 +64,30 @@ export const calendarHooks = {
 
     return { data: null, refetch };
   },
+  useGetCalendarByDatesForTimeOff: (
+    params: PrivateCalendarQueryParams,
+    options?: { enabled?: boolean },
+  ) => {
+    const memoParams = useMemo<PrivateCalendarByDatesQueryParams>(() => params, [params]);
+
+    const {
+      data: calendarData,
+      isPending,
+      refetch,
+    } = useQuery<BaseResponse<GetCalendarByDatesResponse>, Error>({
+      queryKey: ['monthCalendar', 'timeOff', queryKeys.monthCalendar.byParams(memoParams)],
+      queryFn: () => calendarApi.getCalendarByDates(memoParams),
+      enabled: options?.enabled ?? true,
+    });
+
+    utils.useSetPendingApi(isPending);
+
+    if (calendarData?.status === ApiStatus.SUCCESS && calendarData.data) {
+      return { data: calendarData.data, refetch, isPending };
+    }
+
+    return { data: null, refetch, isPending };
+  },
   useGetPublicCalendar: (params: PublicCalendarQueryParams, options?: { enabled?: boolean }) => {
     const memoParams = useMemo<PublicCalendarQueryParams>(() => params, [params]);
 

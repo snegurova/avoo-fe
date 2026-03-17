@@ -3,6 +3,7 @@ import * as yup from 'yup';
 import { VALID_LANGUAGE_CODES } from '@avoo/constants';
 import { OrderStatus } from '@avoo/hooks/types/orderStatus';
 import { OrderType } from '@avoo/hooks/types/orderType';
+import { TimeOffMode, WholeDay } from '@avoo/hooks/types/timeOffType';
 
 export const registerSchema = yup.object({
   name: yup.string().nullable().trim(),
@@ -214,6 +215,22 @@ export const createPublicOrdersSchema = yup.object({
   referralCode: yup.string().optional(),
 });
 
+export const createExceptionSchema = yup.object({
+  mode: yup.string().oneOf(Object.values(TimeOffMode), 'Invalid mode option').defined(),
+  wholeDay: yup.string().oneOf(Object.values(WholeDay), 'Invalid whole day option').defined(),
+  staff: yup
+    .array()
+    .of(yup.string().required())
+    .min(1, 'Choose a master')
+    .required('Choose a master'),
+  type: yup.string().required('Select a time off type'),
+  startDate: yup.string().required('Select a start date'),
+  endDate: yup.string().required('Select an end date'),
+  startTime: yup.string().required('Select a start time'),
+  endTime: yup.string().required('Select an end time'),
+  note: yup.string().max(200, 'Note can be not more than 200 characters').optional(),
+});
+
 export const updateOrderStatusSchema = yup.object({
   status: yup
     .string()
@@ -279,4 +296,5 @@ export type OrdersData = yup.InferType<typeof ordersDataSchema>;
 export type UpdateOrderData = yup.InferType<typeof updateOrderSchema>;
 export type CreateServiceFormData = yup.InferType<typeof createServiceSchema>;
 export type CreatePublicOrdersData = yup.InferType<typeof createPublicOrdersSchema>;
+export type CreateExceptionFormData = yup.InferType<typeof createExceptionSchema>;
 export type UpdateServiceFormData = yup.InferType<typeof updateServiceSchema>;

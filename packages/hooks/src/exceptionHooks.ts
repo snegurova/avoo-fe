@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 
+import { yupResolver } from '@hookform/resolvers/yup';
 import {
   QueryClient,
   useInfiniteQuery,
@@ -23,6 +24,7 @@ import { VALUE_DATE_FORMAT } from '@avoo/constants';
 import { TimeOffMode, TimeOffType, WholeDay } from '@avoo/hooks/types/timeOffType';
 import { utils } from '@avoo/hooks/utils/utils';
 
+import { createExceptionSchema } from '../schemas/validationSchemas';
 import {
   buildMastersLabel,
   ExceptionFormData,
@@ -108,9 +110,6 @@ export const exceptionHooks = {
       CreateExceptionRequest
     >({
       mutationFn: (data: CreateExceptionRequest) => exceptionApi.createException(data),
-      onSuccess: () => {
-        exceptionHooks.invalidateOnSuccess(queryClient);
-      },
     });
 
     utils.useSetPendingApi(isPending);
@@ -124,6 +123,7 @@ export const exceptionHooks = {
       reset,
       formState: { errors },
     } = useForm<ExceptionFormData>({
+      resolver: yupResolver(createExceptionSchema),
       mode: 'onSubmit',
       defaultValues: {
         type: TimeOffType.Personal,
@@ -151,6 +151,7 @@ export const exceptionHooks = {
         onSuccess: () => {
           reset();
           onSuccess?.({ mastersLabel });
+          exceptionHooks.invalidateOnSuccess(queryClient);
         },
       });
     };
@@ -186,11 +187,14 @@ export const exceptionHooks = {
     const onSuccess = typeof config === 'function' ? config : config?.onSuccess;
 
     const { mutate, isPending } = useMutation<
-      BaseResponse<Exception>,
+      BaseResponse<Exception[]>,
       Error,
       { id: number; data: CreateExceptionRequest }
     >({
-      mutationFn: ({ id, data }) => exceptionApi.updateException(id, data),
+      mutationFn: async ({ id, data }) => {
+        await exceptionApi.deleteException(id);
+        return exceptionApi.createException(data);
+      },
       onSuccess: () => {
         exceptionHooks.invalidateOnSuccess(queryClient, onSuccess);
       },

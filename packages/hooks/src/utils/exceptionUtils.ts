@@ -27,6 +27,18 @@ export const timeToMinutes = (time: string): number => {
 export const toIsoDateString = (date: string) =>
   dayjs(date, VALUE_DATE_FORMAT).format(VALUE_DATE_FORMAT);
 
+export const normalizeExceptionEndDate = (
+  dateFrom: string | null | undefined,
+  dateTo: string | null | undefined,
+) => {
+  const startDate = dayjs(dateFrom);
+  const endDate = dayjs(dateTo);
+
+  if (!startDate.isValid() || !endDate.isValid()) return endDate;
+
+  return endDate.isAfter(startDate, 'day') ? endDate.subtract(1, 'day') : endDate;
+};
+
 export const normalizeMasterIds = (staff: string[], availableMasters?: MasterInfo[]) => {
   if (staff.includes('all')) {
     const masterIds = availableMasters?.map((master) => master.id).filter(Number.isFinite);

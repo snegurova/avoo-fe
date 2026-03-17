@@ -7,8 +7,14 @@ import { FormControlLabel, Switch } from '@mui/material';
 import type { Dayjs } from 'dayjs';
 import dayjs from 'dayjs';
 
+import type { ShortMasterInfo } from '@avoo/axios/types/apiTypes';
 import { VALUE_DATE_FORMAT } from '@avoo/constants';
-import { exceptionHooks, masterHooks, timeToMinutes } from '@avoo/hooks';
+import {
+  exceptionHooks,
+  normalizeExceptionEndDate,
+  timeToMinutes,
+  useTimeOffConflicts,
+} from '@avoo/hooks';
 import {
   TimeOffMode,
   TimeOffType,
@@ -30,6 +36,7 @@ import { FormSelect } from '../FormSelect/FormSelect';
 import FormTextarea from '../FormTextArea/FormTextArea';
 import ModalActions from '../ModalActions/ModalActions';
 import ModeToggle from '../ModeToggle/ModeToggle';
+import TimeOffConflictsSection from '../TimeOffConflictsSection/TimeOffConflictsSection';
 import type { TimeOffItem } from '../TimeOffEditModal/TimeOffEditModal';
 
 type FormValues = {
@@ -51,16 +58,18 @@ const mapTimeOffToFormValues = (timeOff: TimeOffItem): FormValues => {
   const typeMapping =
     timeOffTypes.find((t) => t.api === timeOff.type)?.value || TimeOffType.Personal;
   const isWholeDay = timeOff.startTimeMinutes === 0 && timeOff.endTimeMinutes === MINUTES_IN_DAY;
-  const selectedStaff = timeOff.master.id ? [String(timeOff.master.id)] : ['all'];
+  const selectedStaff = timeOff.master.id ? [String(timeOff.master.id)] : [];
+  const startDate = dayjs(timeOff.dateFrom);
+  const endDate = normalizeExceptionEndDate(timeOff.dateFrom, timeOff.dateTo);
 
   return {
     type: typeMapping,
     mode: isWorkingType ? TimeOffMode.ExtraTime : TimeOffMode.TimeOff,
     staff: selectedStaff,
     wholeDay: isWholeDay ? WholeDay.Whole : WholeDay.Partial,
-    startDate: dayjs(timeOff.dateFrom).format(VALUE_DATE_FORMAT),
+    startDate: startDate.format(VALUE_DATE_FORMAT),
     startTime: timeUtils.getTimeFromMinutes(timeOff.startTimeMinutes),
-    endDate: dayjs(timeOff.dateTo).format(VALUE_DATE_FORMAT),
+    endDate: endDate.format(VALUE_DATE_FORMAT),
     endTime: timeUtils.getTimeFromMinutes(timeOff.endTimeMinutes),
     note: timeOff.note || '',
   };
@@ -79,17 +88,32 @@ export default function TimeOffEditForm({
   onRequestClose,
   onDirtyChange,
 }: Readonly<Props>) {
-  const masters = masterHooks.useGetMastersProfileInfo()?.items;
+  const fixedMaster = React.useMemo<ShortMasterInfo>(
+    () => ({
+      id: timeOff.master.id,
+      name: timeOff.master.name ?? `Master #${timeOff.master.id}`,
+      avatarPreviewUrl: timeOff.master.avatarPreviewUrl ?? null,
+    }),
+    [timeOff.master.avatarPreviewUrl, timeOff.master.id, timeOff.master.name],
+  );
+  const masters = React.useMemo<ShortMasterInfo[]>(() => [fixedMaster], [fixedMaster]);
   const toast = useToast();
   const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = React.useState(false);
 
-  const mastersOptions = [
-    { label: 'All Staff', value: 'all' },
-    ...(masters?.map((master) => ({
-      label: master.name ?? `Master #${master.id}`,
-      value: String(master.id),
-    })) ?? []),
-  ];
+  const mastersOptions = React.useMemo(
+    () => [
+      {
+        label: fixedMaster.name ?? `Master #${fixedMaster.id}`,
+        value: String(fixedMaster.id),
+      },
+    ],
+    [fixedMaster.id, fixedMaster.name],
+  );
+
+  const selectedMasterValues = React.useMemo(
+    () => mastersOptions.map((option) => option.value),
+    [mastersOptions],
+  );
 
   const {
     control,
@@ -120,7 +144,7 @@ export default function TimeOffEditForm({
 
   const { mutate: deleteException, isPending: isDeletePending } = exceptionHooks.useDeleteException(
     () => {
-      toast.info('Time off was deleted!');
+      toast.error('Time off was deleted!');
       setIsDeleteConfirmOpen(false);
       onClose();
     },
@@ -135,6 +159,13 @@ export default function TimeOffEditForm({
   }, [timeOff, reset]);
 
   const values = watch();
+
+  const { conflictMessage, hasConflict, isConflictsLoading, affectedBookings } =
+    useTimeOffConflicts({
+      values,
+      masters,
+      excludeId: timeOff.id,
+    });
 
   const timeOffTypeOptions = React.useMemo(
     () =>
@@ -221,7 +252,7 @@ export default function TimeOffEditForm({
       dateTo: data.endDate,
       startTimeMinutes: timeToMinutes(data.startTime),
       endTimeMinutes: timeToMinutes(data.endTime),
-      masterIds: data.staff.includes('all') ? [] : data.staff.map((id) => Number.parseInt(id, 10)),
+      masterIds: [fixedMaster.id],
       note: data.note || undefined,
     });
   };
@@ -289,14 +320,15 @@ export default function TimeOffEditForm({
               <Controller
                 name='staff'
                 control={control}
-                render={({ field, fieldState }) => (
+                render={({ fieldState }) => (
                   <>
                     <FormMultiSelect
                       id='staff'
                       name='staff'
                       options={mastersOptions}
-                      selected={field.value}
-                      onChange={field.onChange}
+                      selected={selectedMasterValues}
+                      onChange={() => undefined}
+                      disabled={true}
                     />
                     {fieldState.error && (
                       <p className='text-sm text-red-600'>{String(fieldState.error.message)}</p>
@@ -370,6 +402,7 @@ export default function TimeOffEditForm({
                         dateValue={field.value}
                         timeValue={values.startTime}
                         wholeDay={values.wholeDay === WholeDay.Whole}
+                        hasError={Boolean(fieldState.error)}
                         variant={DateTimePickersVariant.Modal}
                         onDateChange={handleStartDateChange}
                         onTimeChange={handleStartTimeChange}
@@ -396,6 +429,7 @@ export default function TimeOffEditForm({
                         dateValue={field.value}
                         timeValue={values.endTime}
                         wholeDay={values.wholeDay === WholeDay.Whole}
+                        hasError={Boolean(fieldState.error)}
                         variant={DateTimePickersVariant.Modal}
                         onDateChange={handleEndDateChange}
                         onTimeChange={handleEndTimeChange}
@@ -411,11 +445,17 @@ export default function TimeOffEditForm({
           </div>
         </div>
 
+        <TimeOffConflictsSection
+          isConflictsLoading={isConflictsLoading}
+          conflictMessage={conflictMessage}
+          affectedBookings={affectedBookings}
+        />
+
         <ModalActions
           onCancel={handleCancel}
           submitType='submit'
           loading={isUpdatePending}
-          submitDisabled={!hasChanges}
+          submitDisabled={!hasChanges || hasConflict || isConflictsLoading}
         />
       </form>
 

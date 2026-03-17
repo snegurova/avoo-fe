@@ -1,10 +1,12 @@
 'use client';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
-import { Exception } from '@avoo/axios/types/apiTypes';
-import { exceptionHooks, useDebounce } from '@avoo/hooks';
+import dayjs from 'dayjs';
+
+import type { Exception } from '@avoo/axios/types/apiTypes';
+import { exceptionHooks, normalizeExceptionEndDate, useDebounce } from '@avoo/hooks';
 
 import AppPlaceholder from '@/_components/AppPlaceholder/AppPlaceholder';
 import AppWrapper from '@/_components/AppWrapper/AppWrapper';
@@ -25,12 +27,54 @@ export default function TimeOffPage() {
     () => ({ limit: DEFAULT_LIMIT, search: debouncedSearch }),
     [debouncedSearch],
   );
-  const { data, fetchNextPage, hasNextPage } = exceptionHooks.useGetExceptionsInfinite(queryParams);
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
+    exceptionHooks.useGetExceptionsInfinite(queryParams);
 
   const exceptions: Exception[] = useMemo(
     () => data?.pages.flatMap((page) => page.data?.items ?? []) ?? [],
     [data],
   );
+
+  const currentAndFutureExceptions = useMemo(() => {
+    const now = dayjs();
+
+    return exceptions.filter((item) => {
+      if (!item.dateTo) return true;
+
+      const endDate = normalizeExceptionEndDate(item.dateFrom, item.dateTo);
+      return !endDate.isValid() || endDate.isSame(now, 'day') || endDate.isAfter(now, 'day');
+    });
+  }, [exceptions]);
+
+  useEffect(() => {
+    if (!debouncedSearch.trim()) return;
+    if (!hasNextPage || isFetchingNextPage) return;
+
+    fetchNextPage();
+  }, [debouncedSearch, fetchNextPage, hasNextPage, isFetchingNextPage]);
+
+  useEffect(() => {
+    if (debouncedSearch.trim()) return;
+    if (currentAndFutureExceptions.length > 0) return;
+    if (!hasNextPage || isFetchingNextPage) return;
+
+    fetchNextPage();
+  }, [
+    currentAndFutureExceptions.length,
+    debouncedSearch,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  ]);
+
+  const filteredExceptions = useMemo(() => {
+    const normalizedQuery = searchQuery.trim().toLowerCase();
+    if (!normalizedQuery) return currentAndFutureExceptions;
+
+    return currentAndFutureExceptions.filter((item) =>
+      (item.master?.name ?? '').toLowerCase().includes(normalizedQuery),
+    );
+  }, [currentAndFutureExceptions, searchQuery]);
 
   const router = useRouter();
   const addTimeOffPath = localizationHooks.useWithLocale(AppRoutes.AddTimeOff);
@@ -64,7 +108,7 @@ export default function TimeOffPage() {
         />
 
         <div className='px-5 md:px-11 pb-11 lg:flex-1 lg:min-h-0 lg:overflow-hidden'>
-          {exceptions.length === 0 ? (
+          {filteredExceptions.length === 0 ? (
             <AppPlaceholder
               title='No time off added yet'
               icon={<EditCalendarIcon className='w-20 h-20 lg:w-25 lg:h-25 fill-primary-300' />}
@@ -79,9 +123,9 @@ export default function TimeOffPage() {
             />
           ) : (
             <TimeOffList
-              items={exceptions}
+              items={filteredExceptions}
               incrementPage={fetchNextPage}
-              hasMore={!!hasNextPage}
+              hasMore={!searchQuery.trim() && !!hasNextPage}
               onEdit={handleEditTimeOff}
             />
           )}

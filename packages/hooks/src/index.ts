@@ -24,4 +24,5 @@ export * from './useIntervalAction';
 export * from './useLanguagePicker';
 export * from './usePhoneField';
 export * from './userHooks';
+export * from './useTimeOffConflicts';
 export * from './utils/exceptionUtils';
