@@ -33,7 +33,7 @@ export default function ServicesPage() {
       {params.search === '' && total === 0 ? (
         <AppPlaceholder
           title={isPending ? 'Loading...' : 'No services added'}
-          icon={<AutoStoriesIcon className='w-20 h-20 lg:w-25 lg:h-25 fill-primary-300' />}
+          icon={<AutoStoriesIcon className='w-20 h-20 xl:w-25 xl:h-25 fill-primary-300' />}
           description={
             isPending ? null : (
               <p>

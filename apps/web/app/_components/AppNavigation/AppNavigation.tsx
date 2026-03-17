@@ -98,6 +98,10 @@ export default function AppNavigation({ menuOpen, setMenuOpen }: Props) {
       href: localizationHooks.useWithLocale(AppRoutes.TimeOff),
       label: <FormattedMessage {...messages.scheduleException} />,
     },
+    {
+      href: localizationHooks.useWithLocale(AppRoutes.ComboServiceTime),
+      label: 'Combo service time',
+    },
   ];
 
   const calendarNav = tv({

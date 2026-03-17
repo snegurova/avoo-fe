@@ -22,6 +22,10 @@ type Props = {
       | (MasterWithRelationsEntity | null)[]
       | ((prev: (MasterWithRelationsEntity | null)[]) => (MasterWithRelationsEntity | null)[]),
   ) => void;
+
+  setActiveOrder?: (index: number | ((prev: number) => number)) => void;
+  activeOrder?: number;
+  setStartDate?: (date: string | null) => void;
   Item: React.ComponentType<{
     order: CreateOrder;
     onChange: (orders: CreateOrder[]) => void;
@@ -41,6 +45,9 @@ type Props = {
         | ((prev: (MasterWithRelationsEntity | null)[]) => (MasterWithRelationsEntity | null)[]),
     ) => void;
     errors: { [key: string]: { message: string } };
+    setActiveOrder?: (index: number) => void;
+    activeOrder?: number;
+    setStartDate?: (date: string | null) => void;
   }>;
 };
 
@@ -56,8 +63,13 @@ export default function ServiceForm(props: Props) {
     selectedMasters,
     setSelectedMasters,
     Item,
+    setActiveOrder,
+    activeOrder,
+    setStartDate,
   } = props;
   const setMasterIds = useCalendarStore((state) => state.setMasterIds);
+  const slots = useCalendarStore((state) => state.slots);
+  const setSlots = useCalendarStore((state) => state.setSlots);
 
   const currentService = (index: number): Service | null => {
     return selectedServices[index] || null;
@@ -78,8 +90,19 @@ export default function ServiceForm(props: Props) {
       newServices.splice(index, 1);
       return newServices;
     });
+    setSelectedMasters((prev) => {
+      const newMasters = [...prev];
+      newMasters.splice(index, 1);
+      return newMasters;
+    });
 
-    setMasterIds(undefined);
+    if (activeOrder && setActiveOrder && activeOrder === index) {
+      setActiveOrder((prev) => prev - 1);
+    } else {
+      setMasterIds(undefined);
+    }
+
+    setSlots([...(slots ? [...slots] : []).splice(index, 1)]);
   };
 
   return (
@@ -102,6 +125,9 @@ export default function ServiceForm(props: Props) {
               ? (errors[index] as { [key: string]: { message: string } }) || {}
               : {}
           }
+          setActiveOrder={setActiveOrder}
+          activeOrder={activeOrder}
+          setStartDate={setStartDate}
         />
       ))}
     </div>

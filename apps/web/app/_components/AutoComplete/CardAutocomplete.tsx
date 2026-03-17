@@ -71,7 +71,7 @@ const Listbox = styled('ul')(() => ({
   maxHeight: '250px',
   borderRadius: '4px',
   boxShadow: `0 2px 8px ${colors.gray[100]}`,
-  zIndex: 1,
+  zIndex: 2,
   '& li': {
     padding: '5px 12px',
     display: 'flex',
