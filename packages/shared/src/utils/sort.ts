@@ -1,4 +1,4 @@
-export type SortDirection = 'asc' | 'desc' | null;
+import { SortDirection } from '../types/sort';
 
 export function sortByName<T extends { name?: string | null }>(
   items: T[] | null | undefined,
