@@ -32,6 +32,11 @@ export const timeUtils = {
   getMinutesFromDate(date: Date): number {
     return date.getHours() * 60 + date.getMinutes();
   },
+  minutesToDate(minutes: number): Date {
+    const d = new Date();
+    d.setHours(Math.floor(minutes / 60), minutes % 60, 0, 0);
+    return d;
+  },
   isSameDay(date1: Date, date2: Date): boolean {
     return (
       date1.getFullYear() === date2.getFullYear() &&

@@ -2,7 +2,7 @@ import React, { useCallback } from 'react';
 
 import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material';
 
-export type Option = { label: string; value: string };
+import { Option } from '@avoo/shared';
 
 export type Props = {
   id?: string;

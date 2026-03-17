@@ -44,7 +44,8 @@ export default function EditProfileForm({
   };
 
   const form = useForm<FormValues>({
-    defaultValues: createProfileDefaults(initial),
+    defaultValues: createProfileDefaults(null),
+    values: initial ? createProfileDefaults(initial) : undefined,
   });
 
   const { register, handleSubmit, setValue, setError, watch } = form;

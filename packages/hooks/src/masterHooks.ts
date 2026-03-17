@@ -2,7 +2,13 @@ import { useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import {
+  QueryClient,
+  useInfiniteQuery,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from '@tanstack/react-query';
 
 import { masterApi } from '@avoo/axios';
 import type { ShortMasterInfo } from '@avoo/axios/types/apiTypes';
@@ -15,6 +21,7 @@ import {
   MasterWithRelationsEntityResponse,
 } from '@avoo/axios/types/apiTypes';
 import { utils } from '@avoo/hooks/utils/utils';
+import { Option } from '@avoo/shared';
 
 import { CreateMasterFormData, createMasterSchema } from '../schemas/validationSchemas';
 import { queryKeys } from './queryKeys';
@@ -30,6 +37,16 @@ type UseUpdateMasterFormParams = {
 };
 
 export const masterHooks = {
+  invalidateOnSuccess: (queryClient: QueryClient, callback?: () => void) => {
+    queryClient.invalidateQueries({ queryKey: queryKeys.exceptions.all });
+    queryClient.invalidateQueries({ queryKey: queryKeys.calendar.all });
+    queryClient.invalidateQueries({ queryKey: queryKeys.monthCalendar.all });
+    queryClient.invalidateQueries({ queryKey: queryKeys.masters.all });
+    queryClient.invalidateQueries({ queryKey: queryKeys.services.all });
+    queryClient.invalidateQueries({ queryKey: queryKeys.schedules.all });
+    callback?.();
+  },
+
   useStableMasters(mastersFromResponse: ShortMasterInfo[]): ShortMasterInfo[] {
     const [stableMasters, setStableMasters] = useState<ShortMasterInfo[]>([]);
     useEffect(() => {
@@ -85,6 +102,38 @@ export const masterHooks = {
       masters,
       searchTerm,
       setSearchTerm,
+      ...masterQuery,
+    };
+  },
+  useMasterQueryWithOptions() {
+    const [isInputFocused, setIsInputFocused] = useState(false);
+    const [optionsPool, setOptionsPool] = useState<Option[]>([]);
+
+    const masterQuery = masterHooks.useMasterQuery();
+
+    const mastersOptions = useMemo(() => {
+      return (masterQuery.masters || []).map((m) => ({
+        label: m.name ?? `Master #${m.id}`,
+        value: m.id.toString(),
+      }));
+    }, [masterQuery.masters]);
+
+    useEffect(() => {
+      setOptionsPool((prevPool) => {
+        const newOptions = mastersOptions.filter(
+          (newOpt) => !prevPool.some((p) => p.value === newOpt.value),
+        );
+        if (newOptions.length === 0) return prevPool;
+
+        return [...prevPool, ...newOptions];
+      });
+    }, [mastersOptions]);
+
+    return {
+      mastersOptions,
+      optionsPool,
+      isInputFocused,
+      setIsInputFocused,
       ...masterQuery,
     };
   },
@@ -175,8 +224,7 @@ export const masterHooks = {
         successMessage: 'Master updated successfully',
       },
       onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: queryKeys.masters.all });
-        onSuccess?.();
+        masterHooks.invalidateOnSuccess(queryClient, onSuccess);
       },
     });
 
@@ -208,8 +256,7 @@ export const masterHooks = {
         successMessage: 'Master deleted successfully',
       },
       onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: queryKeys.masters.all });
-        onSuccess?.();
+        masterHooks.invalidateOnSuccess(queryClient, onSuccess);
       },
     });
 

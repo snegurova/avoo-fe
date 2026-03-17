@@ -21,7 +21,7 @@ import { masterHooks, mediaHooks, servicesHooks } from '@avoo/hooks';
 import { timeUtils } from '@avoo/shared';
 
 import CategorySelect from '@/_components/CategorySelect/CategorySelect';
-import MasterAutoCompleteSelect from '@/_components/MasterAutoCompleteSelect/MasterAutoCompleteSelect';
+import MasterAutocompleteCardSelect from '@/_components/MasterAutoCompleteCardSelect/MasterAutoCompleteCardSelect';
 import ServiceGalleryUpload from '@/_components/ServiceGalleryUpload/ServiceGalleryUpload';
 import { localizationHooks } from '@/_hooks/localizationHooks';
 import { useToast } from '@/_hooks/useToast';
@@ -196,7 +196,7 @@ export default function ServiceAddForm(props: Props) {
                   name='masterIds'
                   control={control}
                   render={({ field }) => (
-                    <MasterAutoCompleteSelect
+                    <MasterAutocompleteCardSelect
                       masters={masters}
                       searchTerm={searchTerm}
                       onSearchChange={setSearchTerm}
