@@ -314,3 +314,21 @@ export type GetCombinationsResponse = {
   items: Combination[];
   pagination: components['schemas']['PaginationDto'];
 };
+
+export type UpdateCombinationRequest = Omit<
+  components['schemas']['CombinationDto'],
+  'services' | 'masters'
+> & {
+  services: Service[];
+  masters: MasterWithRelationsEntity[];
+};
+export type UpdateCombinationResponse = Combination;
+
+export type CreateCombinationRequest = Omit<
+  components['schemas']['CombinationDto'],
+  'services' | 'masters'
+> & {
+  services: Service[];
+  masters: MasterWithRelationsEntity[];
+};
+export type CreateCombinationResponse = Combination;

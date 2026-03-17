@@ -34,7 +34,7 @@ import {
 import { OrderStatus } from '../types/orderStatus';
 import { queryKeys } from './queryKeys';
 
-function convertOrdersDataDatesToUTC<T extends { ordersData?: { date?: string }[] }>(data: T): T {
+function convertOrdersDataDatesToUTC<T extends { ordersData?: { date: string }[] }>(data: T): T {
   if (Array.isArray(data.ordersData)) {
     return {
       ...data,
@@ -123,18 +123,13 @@ export const orderHooks = {
     >({
       mutationFn: orderApi.createOrder,
       onSuccess: async () => {
-        await queryClient.invalidateQueries({
-          queryKey: [
-            queryKeys.orders.all,
-            queryKeys.orders.byParams,
-            queryKeys.customers.all,
-            queryKeys.customers.byParams,
-            queryKeys.calendar.all,
-            queryKeys.calendar.byParams,
-            queryKeys.monthCalendar.all,
-            queryKeys.monthCalendar.byParams,
-          ],
-        });
+        await Promise.all([
+          queryClient.invalidateQueries({ queryKey: queryKeys.calendar.all }),
+          queryClient.invalidateQueries({ queryKey: queryKeys.monthCalendar.all }),
+          queryClient.invalidateQueries({ queryKey: queryKeys.orders.all }),
+          queryClient.invalidateQueries({ queryKey: queryKeys.customers.all }),
+        ]);
+
         onSuccess?.();
       },
     });

@@ -15,6 +15,7 @@ type Props = {
     items?: { label: string | null; id: number | string; handler: () => void }[];
   }[];
   values: ((string | number)[] | boolean | undefined)[];
+  Item?: React.ReactNode;
 };
 
 const selectButton = tv({
@@ -31,7 +32,7 @@ const selectIcon = tv({
 });
 
 export default function CheckboxesButton(props: Props) {
-  const { addCount = false, label, options, values } = props;
+  const { addCount = false, label, options, values, Item } = props;
   const ref = useRef<HTMLDivElement>(null);
 
   const [isOpen, setIsOpen] = useState(false);
@@ -79,7 +80,7 @@ export default function CheckboxesButton(props: Props) {
         <span className='capitalize'>{label}</span>
         <ArrowDownIcon className={selectIcon({ open: isOpen })} />
       </button>
-      {isOpen && <CheckboxesList options={options} values={values} />}
+      {isOpen && <CheckboxesList options={options} values={values} Item={Item} />}
     </div>
   );
 }

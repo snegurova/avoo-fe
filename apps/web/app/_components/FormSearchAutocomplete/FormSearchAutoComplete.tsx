@@ -23,7 +23,6 @@ export function FormSearchAutocomplete(props: Props) {
   const {
     label,
     placeholder = 'Search...',
-    emptyDefaultLabel = 'Select items',
     error,
     value = [],
     onChange,
@@ -49,7 +48,6 @@ export function FormSearchAutocomplete(props: Props) {
       onInputChange={(_, input) => {
         onSearchChange(input);
       }}
-      emptyDefaultLabel={emptyDefaultLabel}
       renderInput={(params) => (
         <TextField
           {...params}

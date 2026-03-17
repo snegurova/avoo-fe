@@ -134,7 +134,7 @@ export default function ServiceList(props: Props) {
                   }
                 }}
               >
-                <ul className='flex flex-col gap-4  mb-30'>
+                <ul className='flex flex-col gap-4 mb-30'>
                   {services.map((service) => (
                     <li key={service.id} onClick={() => handleServiceClick(service)}>
                       <ServiceCard
