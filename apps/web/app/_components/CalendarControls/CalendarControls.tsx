@@ -1,6 +1,6 @@
 'use client';
 import React, { useCallback, useMemo } from 'react';
-import { FormattedMessage } from 'react-intl';
+import { useTranslations } from 'next-intl';
 
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { DatePicker } from '@mui/x-date-pickers';
@@ -16,8 +16,6 @@ import { CalendarType } from '@avoo/hooks/types/calendarType';
 import { CalendarViewType } from '@avoo/hooks/types/calendarViewType';
 import { ElementStyleType } from '@avoo/hooks/types/elementStyleType';
 import { OrderStatus } from '@avoo/hooks/types/orderStatus';
-import { messages } from '@avoo/intl/messages/private/calendar/calendar';
-import { messages as orderMessages } from '@avoo/intl/messages/private/orders/order';
 import { timeUtils } from '@avoo/shared';
 
 import SelectButton from '@/_components/SelectButton/SelectButton';
@@ -29,12 +27,7 @@ import CalendarViewWeek from '@/_icons/CalendarViewWeek';
 
 import CheckboxesButton from '../CheckboxesButton/CheckboxesButton';
 
-const STATUSES_ITEMS = [
-  { label: <FormattedMessage {...orderMessages.pending} />, id: OrderStatus.PENDING },
-  { label: <FormattedMessage {...orderMessages.confirmed} />, id: OrderStatus.CONFIRMED },
-  { label: <FormattedMessage {...orderMessages.completed} />, id: OrderStatus.COMPLETED },
-];
-
+// Removed from top scope to move into component where t is accessible
 type Props = {
   scrollToCurrentTime: () => void;
   params: PrivateCalendarQueryParams;
@@ -77,6 +70,8 @@ const showOptionsWrapper = tv({
 import { useCalendarStore } from '@avoo/store';
 
 export default function CalendarControls(props: Props) {
+  const t = useTranslations('private.calendar.calendar');
+  const tOrder = useTranslations('private.orders.order');
   const { scrollToCurrentTime, masters, calendarType } = props;
   const date = useCalendarStore((state) => state.date);
   const setDate = useCalendarStore((state) => state.setDate);
@@ -89,6 +84,15 @@ export default function CalendarControls(props: Props) {
   const setStatuses = useCalendarStore((state) => state.setStatuses);
   const orderIsOutOfSchedule = useCalendarStore((state) => state.orderIsOutOfSchedule);
   const setOrderIsOutOfSchedule = useCalendarStore((state) => state.setOrderIsOutOfSchedule);
+
+  const STATUSES_ITEMS = useMemo(
+    () => [
+      { label: tOrder('pending'), id: OrderStatus.PENDING },
+      { label: tOrder('confirmed'), id: OrderStatus.CONFIRMED },
+      { label: tOrder('completed'), id: OrderStatus.COMPLETED },
+    ],
+    [tOrder],
+  );
 
   const tabletUp = useMediaQuery('(min-width:768px)');
   const desktopLargeUp = useMediaQuery('(min-width:1280px)');
@@ -215,7 +219,7 @@ export default function CalendarControls(props: Props) {
   const viewOptions = useMemo(
     () => [
       {
-        label: <FormattedMessage {...messages.day} />,
+        label: t('day'),
         icon: <CalendarViewDay className={icon()} />,
         handler: () => {
           setType(CalendarViewType.DAY);
@@ -223,7 +227,7 @@ export default function CalendarControls(props: Props) {
         },
       },
       {
-        label: <FormattedMessage {...messages.week} />,
+        label: t('week'),
         icon: <CalendarViewWeek className={icon()} />,
         handler: () => {
           setType(CalendarViewType.WEEK);
@@ -231,7 +235,7 @@ export default function CalendarControls(props: Props) {
         },
       },
       {
-        label: <FormattedMessage {...messages.month} />,
+        label: t('month'),
         icon: <CalendarViewMonth className={icon()} />,
         handler: () => {
           setType(CalendarViewType.MONTH);
@@ -244,7 +248,7 @@ export default function CalendarControls(props: Props) {
 
   const statusesOptions = useMemo(
     () => ({
-      label: <FormattedMessage {...messages.allStatusesLabel} />,
+      label: t('allStatusesLabel'),
       handler: () => {
         if (!statuses || statuses.length === 3) {
           setStatuses([]);
@@ -278,7 +282,7 @@ export default function CalendarControls(props: Props) {
 
   const mastersOptions = useMemo(
     () => ({
-      label: <FormattedMessage {...messages.allMastersLabel} />,
+      label: t('allMastersLabel'),
       handler: () => {
         if (!masterIds || masterIds.length === masters.length) {
           setMasterIds([]);
@@ -313,7 +317,7 @@ export default function CalendarControls(props: Props) {
 
   const outOfCheduleOptions = useMemo(
     () => ({
-      label: <FormattedMessage {...messages.outOfScheduleLabel} />,
+      label: t('outOfScheduleLabel'),
       handler: () => {
         if (orderIsOutOfSchedule === undefined) {
           setOrderIsOutOfSchedule(true);
@@ -348,7 +352,7 @@ export default function CalendarControls(props: Props) {
           scrollToCurrentTime();
         }}
       >
-        <FormattedMessage {...messages.todayButton} />
+        {t('todayButton')}
       </button>
       <div className='flex'>
         <button
@@ -382,7 +386,7 @@ export default function CalendarControls(props: Props) {
         </button>
       </div>
       <SelectButton
-        label={<FormattedMessage {...messages[type]} />}
+        label={t(type as Parameters<typeof t>[0])}
         options={viewOptions}
         type={ElementStyleType.OUTLINE}
       />
@@ -390,13 +394,13 @@ export default function CalendarControls(props: Props) {
         <>
           <CheckboxesButton
             addCount
-            label={<FormattedMessage {...messages.mastersLabel} />}
+            label={t('mastersLabel')}
             options={[mastersOptions]}
             values={[masterIds]}
           />
           <CheckboxesButton
             addCount
-            label={<FormattedMessage {...messages.statusesLabel} />}
+            label={t('statusesLabel')}
             options={[statusesOptions, outOfCheduleOptions]}
             values={[statuses, orderIsOutOfSchedule]}
           />
@@ -404,7 +408,7 @@ export default function CalendarControls(props: Props) {
       ) : (
         <div className={showOptionsWrapper({ calendarType })}>
           <CheckboxesButton
-            label={<FormattedMessage {...messages.optionsLabel} />}
+            label={t('optionsLabel')}
             options={[mastersOptions, statusesOptions, outOfCheduleOptions]}
             values={[masterIds, statuses, orderIsOutOfSchedule]}
           />

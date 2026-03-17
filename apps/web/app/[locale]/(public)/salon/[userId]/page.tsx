@@ -1,14 +1,13 @@
 'use client';
-import { FormattedMessage } from 'react-intl';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
-
-import { messages } from '@avoo/intl/messages/public/salon/page';
+import { useTranslations } from 'next-intl';
 
 import { localizationHooks } from '@/_hooks/localizationHooks';
 import { AppRoutes } from '@/_routes/routes';
 
 export default function SalonPublicPage() {
+  const t = useTranslations('public.salon.page');
   const params = useParams();
   const userId = params.userId;
   return (
@@ -16,7 +15,7 @@ export default function SalonPublicPage() {
       <Link
         href={`${localizationHooks.useWithLocale(AppRoutes.PublicSalon)}/${userId}${AppRoutes.PublicOrderCreate}`}
       >
-        <FormattedMessage {...messages.ctaButton} />
+        {t('ctaButton')}
       </Link>
     </div>
   );

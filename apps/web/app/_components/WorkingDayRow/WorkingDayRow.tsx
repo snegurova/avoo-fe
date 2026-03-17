@@ -1,5 +1,5 @@
 import React from 'react';
-import { FormattedMessage } from 'react-intl';
+import { useTranslations } from 'next-intl';
 
 import { Button, IconButton, Switch, Typography } from '@mui/material';
 import { tv } from 'tailwind-variants';
@@ -7,7 +7,6 @@ import { tv } from 'tailwind-variants';
 import { BREAK_END_MINUTES, BREAK_START_MINUTES } from '@avoo/constants';
 import { colors } from '@avoo/design-tokens';
 import { scheduleHooks } from '@avoo/hooks';
-import { messages } from '@avoo/intl/messages/private/calendar/calendar';
 import { timeUtils } from '@avoo/shared';
 
 import { FormTimeSelect } from '@/_components/FormTimeSelect/FormTimeSelect';
@@ -36,6 +35,7 @@ type Props = {
 };
 
 export const WorkingDayRow = (props: Props) => {
+  const t = useTranslations('private.calendar.calendar');
   const {
     index,
     patternShift,
@@ -76,13 +76,9 @@ export const WorkingDayRow = (props: Props) => {
       <div className={cardDayVariant({ enabled })}>
         <div className='flex justify-start items-center gap-2'>
           <Typography variant='h4'>
-            {scheduleType === 'weekly' ? (
-              <FormattedMessage
-                {...messages[timeUtils.getWeekDay(shiftedIndex) as keyof typeof messages]}
-              />
-            ) : (
-              `Day ${index + 1}`
-            )}
+            {scheduleType === 'weekly'
+              ? t(timeUtils.getWeekDay(shiftedIndex) as Parameters<typeof t>[0])
+              : `Day ${index + 1}`}
           </Typography>
           {scheduleType === 'custom' && (
             <Button

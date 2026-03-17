@@ -1,9 +1,8 @@
 import React, { useRef } from 'react';
-import { FormattedMessage } from 'react-intl';
+import { useTranslations } from 'next-intl';
 
 import { ClickAwayListener } from '@mui/material';
 
-import { messages } from '@avoo/intl/messages/private/orders/create';
 import { useApiStatusStore } from '@avoo/store';
 
 import { IconButton } from '@/_components/IconButton/IconButton';
@@ -32,7 +31,7 @@ type Props<R, T extends { id: number }> = {
   children?: React.ReactNode;
 };
 
-const getAddLabelMessageKey = (label: string): keyof typeof messages => {
+const getAddLabelMessageKey = (label: string): string => {
   switch (label.toLowerCase()) {
     case 'client':
       return 'addClientLabel';
@@ -41,10 +40,7 @@ const getAddLabelMessageKey = (label: string): keyof typeof messages => {
     case 'service':
       return 'addServiceLabel';
     default:
-      return ('add' +
-        label.charAt(0).toUpperCase() +
-        label.slice(1) +
-        'Label') as keyof typeof messages;
+      return 'add' + label.charAt(0).toUpperCase() + label.slice(1) + 'Label';
   }
 };
 
@@ -70,6 +66,8 @@ export default function SearchField<R, T extends { id: number }>(props: Props<R,
   } = props;
   const listRef = useRef<HTMLUListElement>(null);
   const isPending = useApiStatusStore((state) => state.isPending);
+
+  const t = useTranslations('private.orders.create');
 
   const onSearchBtnClick = () => {
     setIsActive(true);
@@ -115,9 +113,7 @@ export default function SearchField<R, T extends { id: number }>(props: Props<R,
       <div>
         <div className={`${!searchMode ? 'mb-3' : ''} ${className}`}>
           <div className='flex items-center justify-between gap-2 mb-2'>
-            <h3 className='font-medium leading-loose'>
-              <FormattedMessage {...messages[label as keyof typeof messages]} />
-            </h3>
+            <h3 className='font-medium leading-loose'>{t(label as Parameters<typeof t>[0])}</h3>
             <div className='flex gap-0.5'>
               {!isActive && !searchMode && <IconButton icon={<CancelIcon />} onClick={onClear} />}
               {!isActive && !searchMode && (
@@ -149,11 +145,7 @@ export default function SearchField<R, T extends { id: number }>(props: Props<R,
                         <div className='shrink-0 rounded-full w-10 h-10 bg-primary-100 group-hover:bg-primary-200 group-focus:bg-primary-200 flex items-center justify-center transition-colors'>
                           <AddIcon />
                         </div>
-                        <span>
-                          <FormattedMessage
-                            {...messages[getAddLabelMessageKey(label) as keyof typeof messages]}
-                          />
-                        </span>
+                        <span>{t(getAddLabelMessageKey(label) as Parameters<typeof t>[0])}</span>
                       </button>
                     </div>
                   )}
@@ -170,16 +162,9 @@ export default function SearchField<R, T extends { id: number }>(props: Props<R,
                     ))}
                   {items.length === 0 && (
                     <li className='text-gray-500'>
-                      <FormattedMessage
-                        {...messages.noResults}
-                        values={{
-                          label: (
-                            <FormattedMessage
-                              {...messages[(label.toLowerCase() + 's') as keyof typeof messages]}
-                            />
-                          ),
-                        }}
-                      />
+                      {t('noResults', {
+                        label: t((label.toLowerCase() + 's') as Parameters<typeof t>[0]),
+                      })}
                     </li>
                   )}
                 </ul>

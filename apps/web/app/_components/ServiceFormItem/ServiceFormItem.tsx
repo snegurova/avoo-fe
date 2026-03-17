@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { FormattedMessage } from 'react-intl';
+import { useTranslations } from 'next-intl';
 
 import {
   CreateOrder,
@@ -8,7 +8,6 @@ import {
   Service,
 } from '@avoo/axios/types/apiTypes';
 import { masterHooks, servicesHooks } from '@avoo/hooks';
-import { messages } from '@avoo/intl/messages/private/orders/create';
 import { isEmptyObject } from '@avoo/shared';
 import { useCalendarStore } from '@avoo/store';
 
@@ -43,6 +42,7 @@ type Props = {
 };
 
 export default function ServiceFormItem(props: Props) {
+  const t = useTranslations('private.orders.create');
   const {
     order,
     onChange,
@@ -199,9 +199,7 @@ export default function ServiceFormItem(props: Props) {
   return (
     <div className='rounded-lg border border-gray-200'>
       <div className='bg-primary-50 px-4 p-2 h-14 rounded-t-lg flex items-center justify-between'>
-        <h3 className='font-medium'>
-          {selectedService?.name ?? <FormattedMessage {...messages.selectServiceLabel} />}
-        </h3>
+        <h3 className='font-medium'>{selectedService?.name ?? t('selectServiceLabel')}</h3>
         {remove && (
           <IconButton
             className='group'
@@ -258,14 +256,12 @@ export default function ServiceFormItem(props: Props) {
         </div>
         <div className='grid grid-cols-3 lg:grid-cols-12 xl:grid-cols-3 gap-x-3'>
           <div className='col-span-2 lg:col-span-7 xl:col-span-2'>
-            <label className='block mb-2 font-medium'>
-              <FormattedMessage {...messages.date} />
-            </label>
+            <label className='block mb-2 font-medium'>{t('date')}</label>
             <FormDatePicker date={order.date} onChange={onDateChange} />
           </div>
           <div className=' lg:col-span-5 xl:col-span-1'>
             <label className='block mb-2 font-medium' htmlFor={`time-${index}`}>
-              <FormattedMessage {...messages.time} />
+              {t('time')}
             </label>
             <FormTimePicker date={order.date} onChange={onDateChange} />
           </div>

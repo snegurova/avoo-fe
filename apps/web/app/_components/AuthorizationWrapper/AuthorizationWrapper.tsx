@@ -1,9 +1,7 @@
 'use client';
 import React from 'react';
-import { FormattedMessage } from 'react-intl';
 import Link from 'next/link';
-
-import { messages } from '@avoo/intl/messages/public/authorizationWrapper/index';
+import { useTranslations } from 'next-intl';
 
 import { LocalizedLink } from '@/_components/LocalizedLink/LocalizedLink';
 import bg from '@/_images/auth-bg.jpg';
@@ -16,6 +14,7 @@ type Props = {
 };
 
 export default function AuthorizationWrapper(props: Props) {
+  const t = useTranslations('public.authorizationWrapper.index');
   const { children, title, description } = props;
 
   return (
@@ -47,7 +46,7 @@ export default function AuthorizationWrapper(props: Props) {
               href='#'
               className='font-medium text-sm hover:text-primary-600 focus:text-primary-600'
             >
-              <FormattedMessage {...messages.privacyPolicy} />
+              {t('privacyPolicy')}
             </Link>
           </div>
         </div>
@@ -63,7 +62,7 @@ export default function AuthorizationWrapper(props: Props) {
             AVOO
           </p>
           <p className='font-montserrat text-2xl text-gray-600 capitalize text-center'>
-            <FormattedMessage {...messages.slogan} />
+            {t('slogan')}
           </p>
         </div>
       </div>

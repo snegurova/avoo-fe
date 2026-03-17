@@ -1,12 +1,11 @@
 import React from 'react';
-import { FormattedMessage } from 'react-intl';
+import { useTranslations } from 'next-intl';
 
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { tv } from 'tailwind-variants';
 
 import { CalendarViewType } from '@avoo/hooks/types/calendarViewType';
 import { DateStatus } from '@avoo/hooks/types/dateStatus';
-import { messages } from '@avoo/intl/messages/private/calendar/calendar';
 import { timeUtils } from '@avoo/shared';
 
 import CalendarCurrentTime from '../CalendarCurrentTime/CalendarCurrentTime';
@@ -64,6 +63,7 @@ const weekDay = tv({
 });
 
 export default function CalendarTimeScale(props: Props) {
+  const t = useTranslations('private.calendar.calendar');
   const { type, date, time, setTime, hideBorder = false } = props;
 
   const belowDesktop = useMediaQuery('(max-width:1023px)');
@@ -123,15 +123,9 @@ export default function CalendarTimeScale(props: Props) {
                   {getWeekDate(idx).getDate()}
                 </span>
               )}
-              {belowDesktop ? (
-                <FormattedMessage
-                  {...messages[timeUtils.getWeekDay(idx).slice(0, 3) as keyof typeof messages]}
-                />
-              ) : (
-                <FormattedMessage
-                  {...messages[timeUtils.getWeekDay(idx) as keyof typeof messages]}
-                />
-              )}
+              {belowDesktop
+                ? t(timeUtils.getWeekDay(idx).slice(0, 3) as Parameters<typeof t>[0])
+                : t(timeUtils.getWeekDay(idx) as Parameters<typeof t>[0])}
             </div>
           );
         })}

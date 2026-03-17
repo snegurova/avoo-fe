@@ -1,11 +1,10 @@
 import React from 'react';
-import { FormattedMessage } from 'react-intl';
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 
 import { tv } from 'tailwind-variants';
 
 import { authHooks, userHooks } from '@avoo/hooks';
-import { messages } from '@avoo/intl/messages/private/navigation/navigation';
 
 import Avatar, { AvatarSize } from '@/_components/Avatar/Avatar';
 import LanguageSwitcher from '@/_components/LanguageSwitcher/LanguageSwitcher';
@@ -21,6 +20,7 @@ const button = tv({
 });
 
 export default function AppProfileDropdown(props: Props) {
+  const t = useTranslations('private.navigation.navigation');
   const { closeDropdown } = props;
   const { logoutMutation } = authHooks.useLogout();
   const { visualProfileInfo } = userHooks.useGetUserProfile();
@@ -31,15 +31,15 @@ export default function AppProfileDropdown(props: Props) {
 
   const links = [
     {
-      label: <FormattedMessage {...messages.profile} />,
+      label: t('profile'),
       link: profilePath,
     },
     {
-      label: <FormattedMessage {...messages.accountSettings} />,
+      label: t('accountSettings'),
       link: accountSettingsPath,
     },
     {
-      label: <FormattedMessage {...messages.securitySettings} />,
+      label: t('securitySettings'),
       link: securitySettingsPath,
     },
   ];
@@ -83,7 +83,7 @@ export default function AppProfileDropdown(props: Props) {
             closeDropdown();
           }}
         >
-          <FormattedMessage {...messages.logout} />
+          {t('logout')}
         </button>
       </div>
     </div>

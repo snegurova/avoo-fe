@@ -1,11 +1,10 @@
 'use client';
 
 import React, { useEffect } from 'react';
-import { FormattedMessage } from 'react-intl';
+import { useTranslations } from 'next-intl';
 
 import { authHooks } from '@avoo/hooks';
 import { utils } from '@avoo/hooks';
-import { messages } from '@avoo/intl/messages/private/profile/changePassword';
 import { useApiStatusStore } from '@avoo/store';
 
 import { Button, ButtonFit, ButtonIntent } from '@/_components/Button/Button';
@@ -14,6 +13,7 @@ import ShowPasswordToggler from '@/_components/ShowPasswordToggler/ShowPasswordT
 import { useToast } from '@/_hooks/useToast';
 
 export default function ChangePasswordForm() {
+  const t = useTranslations('private.profile.changePassword');
   const isPending = useApiStatusStore((state) => state.isPending);
   const toast = useToast();
   const errorMessage = useApiStatusStore((s) => s.errorMessage);
@@ -43,7 +43,7 @@ export default function ChangePasswordForm() {
       <form onSubmit={handleSubmit} className='w-full grid lg:grid-cols-2 gap-x-8 gap-y-6 '>
         <label>
           <span className='text-sm font-medium mb-1 leading-none block'>
-            <FormattedMessage {...messages.oldPasswordLabel} />
+            {t('oldPasswordLabel')}
           </span>
           <FormInput
             {...register('oldPassword')}
@@ -57,7 +57,7 @@ export default function ChangePasswordForm() {
         </label>
         <label>
           <span className='text-sm font-medium mb-1 leading-none block'>
-            <FormattedMessage {...messages.newPasswordLabel} />
+            {t('newPasswordLabel')}
           </span>
           <FormInput
             {...register('password')}
@@ -66,14 +66,12 @@ export default function ChangePasswordForm() {
             error={errors.password?.message}
             accessory={<ShowPasswordToggler value={isShowPassword} toggle={toggleShowPassword} />}
           />
-          <p className='text-gray-500 text-xs mt-1'>
-            <FormattedMessage {...messages.notation} />
-          </p>
+          <p className='text-gray-500 text-xs mt-1'>{t('notation')}</p>
         </label>
 
         <label>
           <span className='text-sm font-medium mb-1 leading-none block'>
-            <FormattedMessage {...messages.confirmPasswordLabel} />
+            {t('confirmPasswordLabel')}
           </span>
           <FormInput
             {...register('confirmPassword')}
@@ -94,7 +92,7 @@ export default function ChangePasswordForm() {
             fit={ButtonFit.Fill}
             intent={ButtonIntent.Primary}
           >
-            <FormattedMessage {...messages.saveButton} />
+            {t('saveButton')}
           </Button>
         </div>
       </form>
