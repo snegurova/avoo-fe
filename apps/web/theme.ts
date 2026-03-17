@@ -514,6 +514,46 @@ const theme = createTheme({
         },
       },
     },
+    MuiAlert: {
+      styleOverrides: {
+        root: {
+          borderRadius: '8px',
+          padding: '0px 16px',
+          display: 'flex',
+          alignItems: 'center',
+          fontSize: '14px',
+        },
+      },
+      variants: [
+        {
+          props: { severity: 'info', variant: 'standard' },
+          style: {
+            backgroundColor: colors.primary[100],
+            '& .MuiAlert-icon': {
+              color: colors.primary[800],
+            },
+          },
+        },
+        {
+          props: { severity: 'error', variant: 'standard' },
+          style: {
+            backgroundColor: colors.red[100],
+            '& .MuiAlert-icon': {
+              color: colors.red[800],
+            },
+          },
+        },
+        {
+          props: { severity: 'success', variant: 'standard' },
+          style: {
+            backgroundColor: colors.green[100],
+            '& .MuiAlert-icon': {
+              color: colors.green[800],
+            },
+          },
+        },
+      ],
+    },
   },
   breakpoints: {
     values: {
