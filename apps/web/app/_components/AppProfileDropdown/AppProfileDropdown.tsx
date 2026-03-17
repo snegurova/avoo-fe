@@ -72,9 +72,8 @@ export default function AppProfileDropdown(props: Props) {
             {option.label}
           </Link>
         ))}
-        <LanguageSwitcher />
       </div>
-      <div className=''>
+      <div className='border-b border-primary-100'>
         <button
           type='button'
           className={button()}
@@ -85,6 +84,9 @@ export default function AppProfileDropdown(props: Props) {
         >
           <FormattedMessage {...messages.logout} />
         </button>
+      </div>
+      <div className=''>
+        <LanguageSwitcher />
       </div>
     </div>
   );

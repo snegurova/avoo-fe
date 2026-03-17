@@ -6,14 +6,14 @@ import { FormattedMessage } from 'react-intl';
 import { useRouter, useSearchParams } from 'next/navigation';
 
 import { CreateOrder, MasterWithRelationsEntity } from '@avoo/axios/types/apiTypes';
-import { combinationHooks, orderHooks } from '@avoo/hooks';
+import { calendarHooks, combinationHooks, orderHooks } from '@avoo/hooks';
 import { CalendarType } from '@avoo/hooks/types/calendarType';
+import { CalendarViewType } from '@avoo/hooks/types/calendarViewType';
 import { OrderQueryParams } from '@avoo/hooks/types/orderQueryParams';
 import { OrderType } from '@avoo/hooks/types/orderType';
 import { messages } from '@avoo/intl/messages/private/orders/create';
-import { timeUtils } from '@avoo/shared';
-import { useApiStatusStore } from '@avoo/store';
-import { useCalendarStore } from '@avoo/store';
+import { CalendarSlot, timeUtils } from '@avoo/shared';
+import { useApiStatusStore, useCalendarStore } from '@avoo/store';
 
 import { Button, ButtonFit, ButtonIntent, ButtonType } from '@/_components/Button/Button';
 import Calendar from '@/_components/Calendar/Calendar';
@@ -42,10 +42,20 @@ export default function OrderCreate() {
     null,
   ]);
   const [startDate, setStartDate] = useState<string | null>(null);
+  const [activeOrder, setActiveOrder] = useState<number>(0);
+
   const setMasterIds = useCalendarStore((state) => state.setMasterIds);
+  const setDate = useCalendarStore((state) => state.setDate);
+  const setType = useCalendarStore((state) => state.setType);
+  const setStatuses = useCalendarStore((state) => state.setStatuses);
+  const setOrderIsOutOfSchedule = useCalendarStore((state) => state.setOrderIsOutOfSchedule);
+  const slots = useCalendarStore((state) => state.slots);
+  const setSlots = useCalendarStore((state) => state.setSlots);
 
   const orderCreatePath = localizationHooks.useWithLocale(AppRoutes.OrderCreate);
   const calendarPath = localizationHooks.useWithLocale(AppRoutes.Calendar);
+
+  const { getAvailableDate } = calendarHooks.useGetPrivateAvailability();
 
   const initialParams = useMemo(() => {
     const parsedQuery = Object.fromEntries(
@@ -60,6 +70,12 @@ export default function OrderCreate() {
       date: parsedQuery.date ?? undefined,
     };
   }, [searchParams]);
+
+  useEffect(() => {
+    if (initialParams.date) {
+      setStartDate(initialParams.date);
+    }
+  }, [initialParams.date]);
 
   useEffect(() => {
     if (searchParams.toString()) {
@@ -97,10 +113,40 @@ export default function OrderCreate() {
   });
 
   useEffect(() => {
-    if (fields[0]?.date) {
-      setStartDate(fields[0].date);
+    const initSlot = {
+      index: 0,
+      title: selectedServices?.[0]?.name || null,
+      masterId: initialParams.masterId || selectedMasters[0]?.id || null,
+      date: initialParams.date || fields[0]?.date || timeUtils.convertDateToString(new Date()),
+      duration: selectedServices?.[0]?.durationMinutes || 15,
+      serviceId: selectedServices?.[0]?.id || null,
+      combinationId: selectedCombinations?.[0]?.id || null,
+    };
+    setSlots([initSlot]);
+  }, [initialParams]);
+
+  useEffect(() => {
+    if (fields[activeOrder]) {
+      const activeOrderData = fields[activeOrder];
+      setDate(new Date(activeOrderData.date));
+      setType(CalendarViewType.DAY);
+      setStatuses(undefined);
+      setOrderIsOutOfSchedule(undefined);
+
+      if (activeOrderData.masterId) {
+        setMasterIds([activeOrderData.masterId]);
+      } else if (activeOrderData.serviceId) {
+        const activeOrderService = selectedServices[activeOrder]?.id
+          ? selectedServices[activeOrder]
+          : null;
+        const masterIdsProvideService =
+          activeOrderService?.masters.map((master) => master.id) ?? undefined;
+        setMasterIds(masterIdsProvideService);
+      } else {
+        setMasterIds(undefined);
+      }
     }
-  }, [fields]);
+  }, [activeOrder]);
 
   const addService = () => {
     const prevOrder = fields[fields.length - 1];
@@ -126,6 +172,21 @@ export default function OrderCreate() {
     setSelectedServices((prev) => [...prev, null]);
 
     setMasterIds(undefined);
+
+    setActiveOrder(fields.length);
+
+    setSlots([
+      ...(slots ? [...slots] : []),
+      {
+        index: fields.length,
+        title: null,
+        masterId: null,
+        date: timeUtils.convertDateToString(nextDate),
+        duration: 15,
+        serviceId: null,
+        combinationId: null,
+      },
+    ]);
   };
 
   const combinations = combinationHooks.useGetCombinations({
@@ -170,66 +231,123 @@ export default function OrderCreate() {
       notes,
       combinationId: combination.id,
     });
+    setActiveOrder(0);
+
+    const newSlot = {
+      index: 0,
+      title: combination.name,
+      masterId: masterId || null,
+      date: date || timeUtils.convertDateToString(new Date()),
+      duration: combination.durationMinutes,
+      serviceId: null,
+      combinationId: combination.id,
+    };
+    setSlots([newSlot]);
   };
 
   const onSplitCombination = () => {
     let countDuration = 0;
     const ordersData: CreateOrder[] = [];
+    const newSlots: CalendarSlot[] = [];
 
     selectedServices.forEach((service, index) => {
+      const selectedDate = fields[0].date ? new Date(fields[0].date) : new Date();
+      const orderDate = timeUtils.convertDateToString(
+        timeUtils.addMinutesToDate(selectedDate, countDuration),
+      );
       ordersData.push({
         type: OrderType.Service,
         serviceId: service?.id,
         masterId: selectedMasters[index]?.id ?? fields[0].masterId,
-        date: fields[0].date
-          ? timeUtils.convertDateToString(
-              timeUtils.addMinutesToDate(new Date(fields[0].date), countDuration),
-            )
-          : '',
+        date: orderDate,
         notes: index === 0 ? fields[0].notes : '',
       });
 
-      if (service) {
-        countDuration += service.durationMinutes;
-      }
+      countDuration += service ? service.durationMinutes : 15;
+
+      newSlots.push({
+        index,
+        title: service?.name || null,
+        masterId: selectedMasters[index]?.id || null,
+        date: orderDate,
+        duration: service?.durationMinutes || 15,
+        serviceId: service?.id || null,
+        combinationId: null,
+      });
     });
 
     remove();
     append(ordersData);
     setSelectedCombinations([]);
+    setSlots(newSlots);
   };
 
-  const setDateAndMasterInLastItem = (
+  const setDateAndMasterInSelectedItem = async (
     field: { value: CreateOrder[]; onChange: (value: CreateOrder[]) => void },
     date: string,
     master: MasterWithRelationsEntity,
+    index: number,
   ) => {
-    const updatedOrders = [...field.value];
-    const lastIndex = updatedOrders.length - 1;
+    const params: {
+      rangeFromTime: string;
+      masterIds?: number[];
+      serviceId?: number;
+      combinationId?: number;
+      index: number;
+    } = {
+      rangeFromTime: date,
+      masterIds: [master.id],
+      index,
+    };
 
-    const isMasterProvidesService = selectedServices[lastIndex]?.masters.some(
+    if (field.value[index].serviceId) {
+      params.serviceId = field.value[index].serviceId;
+    }
+    if (field.value[index].combinationId) {
+      params.combinationId = field.value[index].combinationId;
+    }
+
+    const availableDate = await getAvailableDate(params);
+
+    if (!availableDate) {
+      toast.error('No available date and time');
+      return;
+    }
+
+    setMasterIds([master.id]);
+
+    const updatedOrders = [...field.value];
+    const isMasterProvidesService = selectedServices[activeOrder]?.masters.some(
       (m) => m.id === master.id,
     );
-
-    if (selectedServices[lastIndex] && !isMasterProvidesService) {
+    if (selectedServices[activeOrder] && !isMasterProvidesService) {
       toast.error('Selected master does not provide selected service');
       return;
     }
     setSelectedMasters((prev) => {
       const newMasters = [...prev];
-      newMasters[lastIndex] = master;
+      newMasters[activeOrder] = master;
       return newMasters;
     });
-
-    updatedOrders[lastIndex] = {
-      ...updatedOrders[lastIndex],
-      date,
+    setMasterIds([master.id]);
+    updatedOrders[activeOrder] = {
+      ...updatedOrders[activeOrder],
+      date: availableDate,
       masterId: master.id,
     };
-
+    if (index === 0) {
+      setStartDate(availableDate);
+    }
     field.onChange(updatedOrders);
-
-    setMasterIds([master.id]);
+    if (slots && slots[index]) {
+      const newSlots = [...slots];
+      newSlots[activeOrder] = {
+        ...newSlots[activeOrder],
+        masterId: master.id,
+        date: availableDate,
+      };
+      setSlots(newSlots);
+    }
   };
 
   return (
@@ -265,6 +383,9 @@ export default function OrderCreate() {
                 remove={remove}
                 errors={Array.isArray(errors.ordersData) ? errors.ordersData : []}
                 Item={ServiceFormItem}
+                setActiveOrder={setActiveOrder}
+                activeOrder={activeOrder}
+                setStartDate={setStartDate}
               />
             ) : (
               <CombinationForm
@@ -275,6 +396,7 @@ export default function OrderCreate() {
                 selectedMasters={selectedMasters}
                 setSelectedMasters={setSelectedMasters}
                 splitCombination={onSplitCombination}
+                setStartDate={setStartDate}
               />
             )
           }
@@ -332,7 +454,9 @@ export default function OrderCreate() {
           render={({ field }) => (
             <Calendar
               calendarType={CalendarType.SELECTOR}
-              onClickDateTime={(date, master) => setDateAndMasterInLastItem(field, date, master)}
+              onClickDateTime={(date, master) =>
+                setDateAndMasterInSelectedItem(field, date, master, activeOrder)
+              }
             />
           )}
         />

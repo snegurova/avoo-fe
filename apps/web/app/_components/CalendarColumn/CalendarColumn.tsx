@@ -7,6 +7,7 @@ import { CalendarItem, MasterWithRelationsEntity, PrivateEvent } from '@avoo/axi
 import { CalendarType } from '@avoo/hooks/types/calendarType';
 import { CalendarViewType } from '@avoo/hooks/types/calendarViewType';
 import { timeUtils } from '@avoo/shared';
+import { useCalendarStore } from '@avoo/store';
 
 import CalendarCurrentTime from '@/_components/CalendarCurrentTime/CalendarCurrentTime';
 import CalendarEvent from '@/_components/CalendarEvent/CalendarEvent';
@@ -15,11 +16,12 @@ import { localizationHooks } from '@/_hooks/localizationHooks';
 import { useToast } from '@/_hooks/useToast';
 import { AppRoutes } from '@/_routes/routes';
 
+import CalendarSlots from '../CalendarSlots/CalendarSlots';
+
 const DAY_CELLS = Array.from({ length: 96 });
 const WEEK_CELLS = Array.from({ length: 7 });
 const HOUR_SEPARATE = 4;
 
-import { useCalendarStore } from '@avoo/store';
 type Props = {
   data: CalendarItem | undefined;
   master: MasterWithRelationsEntity;
@@ -171,7 +173,7 @@ export default function CalendarColumn(props: Props) {
 
   const orderCreatePath = localizationHooks.useWithLocale(AppRoutes.OrderCreate);
 
-  const onAvailabelTimeClick = (e: React.MouseEvent<HTMLDivElement>) => {
+  const onAvailableTimeClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!availableBooking) return;
     const parent = e.currentTarget.parentElement;
     if (!parent) return;
@@ -248,7 +250,7 @@ export default function CalendarColumn(props: Props) {
       {type === CalendarViewType.DAY && (
         <div
           className={col({ type, isSingleWeek, calendarType })}
-          onClick={onAvailabelTimeClick}
+          onClick={onAvailableTimeClick}
           ref={ref}
           onMouseMove={handleMouseMove}
           onMouseLeave={handleMouseLeave}
@@ -288,6 +290,7 @@ export default function CalendarColumn(props: Props) {
                 calendarType={calendarType}
               />
             ))}
+          {calendarType === CalendarType.SELECTOR && <CalendarSlots masterId={master.id} />}
           {timeUtils.isSameDay(date, new Date()) && (
             <CalendarCurrentTime time={time} setTime={setTime} isSingleWeek={isSingleWeek} />
           )}

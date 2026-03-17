@@ -20,14 +20,14 @@ import { messages } from '@avoo/intl/messages/private/calendar/calendar';
 import { messages as orderMessages } from '@avoo/intl/messages/private/orders/order';
 import { timeUtils } from '@avoo/shared';
 
+import CheckboxesButton from '@/_components/CheckboxesButton/CheckboxesButton';
 import SelectButton from '@/_components/SelectButton/SelectButton';
 import ArrowBackIcon from '@/_icons/ArrowBackIcon';
 import ArrowForwardIcon from '@/_icons/ArrowForwardIcon';
 import CalendarViewDay from '@/_icons/CalendarViewDay';
 import CalendarViewMonth from '@/_icons/CalendarViewMonth';
 import CalendarViewWeek from '@/_icons/CalendarViewWeek';
-
-import CheckboxesButton from '../CheckboxesButton/CheckboxesButton';
+import ResetSettingsIcon from '@/_icons/ResetSettingsIcon';
 
 const STATUSES_ITEMS = [
   { label: <FormattedMessage {...orderMessages.pending} />, id: OrderStatus.PENDING },
@@ -76,6 +76,10 @@ const showOptionsWrapper = tv({
 
 import { useCalendarStore } from '@avoo/store';
 
+import { IconButton } from '@/_components/IconButton/IconButton';
+
+import CheckboxesListButton from '../CheckboxesListButton/CheckboxesListButton';
+
 export default function CalendarControls(props: Props) {
   const { scrollToCurrentTime, masters, calendarType } = props;
   const date = useCalendarStore((state) => state.date);
@@ -89,18 +93,22 @@ export default function CalendarControls(props: Props) {
   const setStatuses = useCalendarStore((state) => state.setStatuses);
   const orderIsOutOfSchedule = useCalendarStore((state) => state.orderIsOutOfSchedule);
   const setOrderIsOutOfSchedule = useCalendarStore((state) => state.setOrderIsOutOfSchedule);
+  const resetStorage = useCalendarStore((state) => state.resetStorage);
 
-  const tabletUp = useMediaQuery('(min-width:768px)');
+  const mobileLargeUp = useMediaQuery('(min-width:600px)');
+  const desktopUp = useMediaQuery('(min-width:1024px)');
   const desktopLargeUp = useMediaQuery('(min-width:1280px)');
+  const desktopExtraLargeUp = useMediaQuery('(min-width:1440px)');
+
   const showOptions = useMemo(() => {
     if (calendarType === CalendarType.REGULAR) {
       return desktopLargeUp;
     } else if (calendarType === CalendarType.WIDGET) {
-      return tabletUp;
+      return desktopExtraLargeUp;
     } else {
       return false;
     }
-  }, [tabletUp, desktopLargeUp, calendarType]);
+  }, [desktopLargeUp, desktopExtraLargeUp, calendarType]);
 
   const setCurrentDate = (type: CalendarViewType) => {
     const today = new Date();
@@ -221,6 +229,7 @@ export default function CalendarControls(props: Props) {
           setType(CalendarViewType.DAY);
           setCurrentDate(CalendarViewType.DAY);
         },
+        value: CalendarViewType.DAY,
       },
       {
         label: <FormattedMessage {...messages.week} />,
@@ -229,6 +238,7 @@ export default function CalendarControls(props: Props) {
           setType(CalendarViewType.WEEK);
           setCurrentDate(CalendarViewType.WEEK);
         },
+        value: CalendarViewType.WEEK,
       },
       {
         label: <FormattedMessage {...messages.month} />,
@@ -237,6 +247,7 @@ export default function CalendarControls(props: Props) {
           setType(CalendarViewType.MONTH);
           setCurrentDate(CalendarViewType.MONTH);
         },
+        value: CalendarViewType.MONTH,
       },
     ],
     [],
@@ -335,7 +346,7 @@ export default function CalendarControls(props: Props) {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'flex-end',
-    paddingRight: 10,
+    marginRight: 0,
   };
 
   return (
@@ -381,11 +392,14 @@ export default function CalendarControls(props: Props) {
           <ArrowForwardIcon className='fill-gray-800 w-3.5 h-3.5' />
         </button>
       </div>
-      <SelectButton
-        label={<FormattedMessage {...messages[type]} />}
-        options={viewOptions}
-        type={ElementStyleType.OUTLINE}
-      />
+      {(mobileLargeUp && calendarType !== CalendarType.SELECTOR) ||
+      (desktopExtraLargeUp && calendarType === CalendarType.SELECTOR) ? (
+        <SelectButton
+          label={<FormattedMessage {...messages[type]} />}
+          options={viewOptions}
+          type={ElementStyleType.OUTLINE}
+        />
+      ) : null}
       {showOptions ? (
         <>
           <CheckboxesButton
@@ -407,8 +421,38 @@ export default function CalendarControls(props: Props) {
             label={<FormattedMessage {...messages.optionsLabel} />}
             options={[mastersOptions, statusesOptions, outOfCheduleOptions]}
             values={[masterIds, statuses, orderIsOutOfSchedule]}
+            Item={
+              (!mobileLargeUp ||
+                (!desktopExtraLargeUp && calendarType === CalendarType.SELECTOR)) && (
+                <div className=''>
+                  {viewOptions.map((option) => (
+                    <CheckboxesListButton
+                      key={option.label.toString()}
+                      option={option}
+                      isActive={type === option.value}
+                    />
+                  ))}
+                </div>
+              )
+            }
           />
         </div>
+      )}
+      {(!desktopUp || calendarType !== CalendarType.REGULAR) && (
+        <IconButton
+          icon={<ResetSettingsIcon className='fill-gray-800' />}
+          onClick={resetStorage}
+          className='rounded-2xl cursor-pointer flex items-center justify-center border border-gray-200 bg-transparent hover:bg-primary-200 focus:bg-primary-200 transition-colors h-9 w-9'
+        />
+      )}
+      {desktopUp && calendarType === CalendarType.REGULAR && (
+        <button
+          type='button'
+          onClick={resetStorage}
+          className={controlsButton({ variant: 'full' })}
+        >
+          Reset
+        </button>
       )}
     </div>
   );

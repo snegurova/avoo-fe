@@ -1,14 +1,17 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 
+import { tv } from 'tailwind-variants';
+
 import {
   CreateOrder,
   GetMastersQueryParams,
   MasterWithRelationsEntity,
   Service,
 } from '@avoo/axios/types/apiTypes';
-import { masterHooks, servicesHooks } from '@avoo/hooks';
+import { calendarHooks, masterHooks, servicesHooks } from '@avoo/hooks';
 import { messages } from '@avoo/intl/messages/private/orders/create';
+import { timeUtils } from '@avoo/shared';
 import { isEmptyObject } from '@avoo/shared';
 import { useCalendarStore } from '@avoo/store';
 
@@ -19,6 +22,7 @@ import { IconButton } from '@/_components/IconButton/IconButton';
 import MasterElement from '@/_components/MasterElement/MasterElement';
 import SearchField from '@/_components/SearchField/SearchField';
 import ServiceElement from '@/_components/ServiceElement/ServiceElement';
+import { useToast } from '@/_hooks/useToast';
 import DeleteIcon from '@/_icons/DeleteIcon';
 
 type Props = {
@@ -40,7 +44,30 @@ type Props = {
       | (MasterWithRelationsEntity | null)[]
       | ((prev: (MasterWithRelationsEntity | null)[]) => (MasterWithRelationsEntity | null)[]),
   ) => void;
+  setActiveOrder?: (index: number) => void;
+  activeOrder?: number;
+  setStartDate?: (date: string | null) => void;
 };
+
+const root = tv({
+  base: 'rounded-lg border transition-colors',
+  variants: {
+    isActive: {
+      true: 'border-primary-200',
+      false: 'border-transparent',
+    },
+  },
+});
+
+const top = tv({
+  base: 'px-4 py-2 h-10 rounded-t-lg flex items-center justify-between transition-colors border-b',
+  variants: {
+    isActive: {
+      true: 'bg-primary-200 border-primary-200',
+      false: 'border-primary-100',
+    },
+  },
+});
 
 export default function ServiceFormItem(props: Props) {
   const {
@@ -55,17 +82,42 @@ export default function ServiceFormItem(props: Props) {
     errors,
     selectedMasters,
     setSelectedMasters,
+    setActiveOrder,
+    activeOrder,
+    setStartDate,
   } = props;
 
   const [masterSearch, setMasterSearch] = useState('');
   const [masterParams, setMasterParams] = useState<GetMastersQueryParams>({ limit: 10 });
   const [isActiveMasterSearch, setIsActiveMasterSearch] = useState(false);
   const [isActiveServiceSearch, setIsActiveServiceSearch] = useState(false);
+  const toast = useToast();
 
   const { params, queryParams, setSearchQuery, setMasterIds } = servicesHooks.useServicesQuery();
 
-  const isLastItem = useMemo(() => index === value.length - 1, [index, value.length]);
+  const { getAvailableDate } = calendarHooks.useGetPrivateAvailability();
+  const setDate = useCalendarStore((state) => state.setDate);
+
+  useEffect(() => {
+    if (order.masterId) {
+      setMasterParams((prev) => ({
+        ...prev,
+        serviceId: order.serviceId,
+      }));
+      setMasterIds(order.masterId ? [order.masterId] : []);
+    }
+    if (order.serviceId) {
+      setMasterParams((prev) => ({
+        ...prev,
+        serviceId: order.serviceId,
+      }));
+    }
+  }, [order.masterId, order.serviceId]);
+
+  const isActive = useMemo(() => activeOrder === index, [activeOrder, index]);
   const setMasterIdsInStore = useCalendarStore((state) => state.setMasterIds);
+  const slots = useCalendarStore((state) => state.slots);
+  const setSlots = useCalendarStore((state) => state.setSlots);
 
   const {
     data,
@@ -121,10 +173,40 @@ export default function ServiceFormItem(props: Props) {
     }
   }, [masters]);
 
-  const selectService = (val: { id: number } | null) => {
+  const selectService = async (val: { id: number } | null) => {
     if (!val) return;
+
     const newOrders = [...value];
-    newOrders[index] = { ...newOrders[index], serviceId: val.id };
+
+    const availabilityParams: {
+      rangeFromTime: string;
+      masterIds?: number[];
+      serviceId?: number;
+      combinationId?: number;
+      index: number;
+    } = {
+      index,
+      rangeFromTime: newOrders[index].date,
+    };
+
+    if (selectedMasters[index]) {
+      availabilityParams.masterIds = [selectedMasters[index]?.id];
+    }
+
+    if (val.id) {
+      availabilityParams.serviceId = val.id;
+    }
+
+    const availableDate = await getAvailableDate(availabilityParams);
+
+    if (!availableDate) {
+      toast.error('No available date and time');
+      return;
+    }
+
+    setDate(timeUtils.toDayBegin(new Date(availableDate)));
+
+    newOrders[index] = { ...newOrders[index], serviceId: val.id, date: availableDate };
     onChange(newOrders);
 
     const newService = services?.find((service) => service?.id === val.id) || null;
@@ -135,18 +217,58 @@ export default function ServiceFormItem(props: Props) {
       serviceId: newService?.id || undefined,
     }));
 
-    if (isLastItem) {
+    if (isActive) {
       const masterIdsProvideService = newService?.masters.map((master) => master.id) || undefined;
       setMasterIdsInStore(masterIdsProvideService);
     }
+    if (slots && slots[index]) {
+      const newSlot = {
+        ...slots[index],
+        title: newService?.name || null,
+        duration: newService?.durationMinutes || 15,
+        date: availableDate,
+      };
+      const newSlots = [...slots];
+      newSlots[index] = newSlot;
+      setSlots(newSlots);
+    }
   };
 
-  const selectMaster = (val: { id: number } | null) => {
+  const selectMaster = async (val: { id: number } | null) => {
     if (!val) {
       return;
     }
     const newOrders = [...value];
-    newOrders[index] = { ...newOrders[index], masterId: val.id };
+
+    const availabilityParams: {
+      rangeFromTime: string;
+      masterIds?: number[];
+      serviceId?: number;
+      combinationId?: number;
+      index: number;
+    } = {
+      index,
+      rangeFromTime: newOrders[index].date,
+    };
+
+    if (val.id) {
+      availabilityParams.masterIds = [val.id];
+    }
+
+    if (selectedService) {
+      availabilityParams.serviceId = selectedService.id;
+    }
+
+    const availableDate = await getAvailableDate(availabilityParams);
+
+    if (!availableDate) {
+      toast.error('No available date and time');
+      return;
+    }
+
+    setDate(timeUtils.toDayBegin(new Date(availableDate)));
+
+    newOrders[index] = { ...newOrders[index], masterId: val.id, date: availableDate };
     onChange(newOrders);
 
     setSelectedMasters((prev) => {
@@ -156,8 +278,19 @@ export default function ServiceFormItem(props: Props) {
     });
     setMasterIds(val.id ? [val.id] : []);
 
-    if (isLastItem) {
+    if (isActive) {
       setMasterIdsInStore(val.id ? [val.id] : undefined);
+    }
+
+    if (slots && slots[index]) {
+      const newSlot = {
+        ...slots[index],
+        masterId: val.id,
+        date: availableDate,
+      };
+      const newSlots = [...slots];
+      newSlots[index] = newSlot;
+      setSlots(newSlots);
     }
   };
 
@@ -173,13 +306,55 @@ export default function ServiceFormItem(props: Props) {
     />
   );
 
-  const onDateChange = (newDate: string) => {
+  const onDateChange = async (newDate: string) => {
+    const availabilityParams: {
+      rangeFromTime: string;
+      masterIds?: number[];
+      serviceId?: number;
+      combinationId?: number;
+      index: number;
+    } = {
+      rangeFromTime: newDate,
+      index,
+    };
+
+    if (selectedMasters[index]) {
+      availabilityParams.masterIds = [selectedMasters[index]?.id];
+    }
+
+    if (selectedService) {
+      availabilityParams.serviceId = selectedService.id;
+    }
+
+    const availableDate = await getAvailableDate(availabilityParams);
+
+    if (!availableDate) {
+      toast.error('No available date and time');
+      return;
+    }
+
+    setDate(timeUtils.toDayBegin(new Date(availableDate)));
+
     const newOrders = [...value];
     newOrders[index] = {
       ...newOrders[index],
-      date: newDate,
+      date: availableDate,
     };
     onChange(newOrders);
+
+    if (index === 0 && setStartDate) {
+      setStartDate(availableDate);
+    }
+
+    if (slots && slots[index]) {
+      const newSlot = {
+        ...slots[index],
+        date: availableDate,
+      };
+      const newSlots = [...slots];
+      newSlots[index] = newSlot;
+      setSlots(newSlots);
+    }
   };
 
   const onNotesChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -196,9 +371,18 @@ export default function ServiceFormItem(props: Props) {
     setIsActiveMasterSearch(true);
   };
 
+  const handleRootClick = () => {
+    if (setActiveOrder) setActiveOrder(index);
+  };
+
+  const handleRemove = (e: React.MouseEvent<HTMLButtonElement>) => {
+    remove?.();
+    e.stopPropagation();
+  };
+
   return (
-    <div className='rounded-lg border border-gray-200'>
-      <div className='bg-primary-50 px-4 p-2 h-14 rounded-t-lg flex items-center justify-between'>
+    <div className={root({ isActive })} onClick={handleRootClick}>
+      <div className={top({ isActive })}>
         <h3 className='font-medium'>
           {selectedService?.name ?? <FormattedMessage {...messages.selectServiceLabel} />}
         </h3>
@@ -208,7 +392,7 @@ export default function ServiceFormItem(props: Props) {
             icon={
               <DeleteIcon className='w-5 h-5 transition-colors group-hover:fill-primary-500 group-focus:fill-primary-500' />
             }
-            onClick={remove}
+            onClick={handleRemove}
           />
         )}
       </div>

@@ -169,6 +169,7 @@ export default function Calendar(props: Props) {
 
   useEffect(() => {
     if (
+      calendarType !== CalendarType.REGULAR ||
       type === CalendarViewType.MONTH ||
       (type === CalendarViewType.WEEK && filteredMasters.length !== 1)
     )
@@ -197,7 +198,7 @@ export default function Calendar(props: Props) {
     } else {
       scrollToCurrentTime();
     }
-  }, [type, filteredMasters]);
+  }, [type, filteredMasters, calendarType]);
 
   const isWeekSingleMasterView = useMemo(() => {
     return type === CalendarViewType.WEEK && filteredMasters.length === 1;
@@ -285,7 +286,7 @@ export default function Calendar(props: Props) {
             {filteredMasters.length === 0 && (
               <AppPlaceholder
                 title={<FormattedMessage {...messages.noSchedules} />}
-                icon={<CalendarClockIcon className='w-20 h-20 lg:w-25 lg:h-25 fill-primary-300' />}
+                icon={<CalendarClockIcon className='w-20 h-20 xl:w-25 xl:h-25 fill-primary-300' />}
                 description={<FormattedMessage {...messages.noSchedulesDescription} />}
               />
             )}
