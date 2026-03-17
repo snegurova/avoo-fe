@@ -9,7 +9,7 @@ import type { Dayjs } from 'dayjs';
 
 import type { ShortMasterInfo } from '@avoo/axios/types/apiTypes';
 import { VALUE_DATE_FORMAT } from '@avoo/constants';
-import { exceptionHooks, masterHooks, useTimeOffConflicts } from '@avoo/hooks';
+import { exceptionHooks, masterHooks, timeOffConflictsHooks } from '@avoo/hooks';
 import {
   TimeOffMode,
   timeOffTypeLabels,
@@ -80,7 +80,7 @@ export default function TimeOffAddForm() {
 
   const values = watch();
   const { conflictMessage, hasConflict, isConflictsLoading, affectedBookings } =
-    useTimeOffConflicts({
+    timeOffConflictsHooks.useTimeOffConflicts({
       values,
       masters,
     });

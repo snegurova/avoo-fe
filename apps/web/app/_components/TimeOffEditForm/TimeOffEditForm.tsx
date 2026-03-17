@@ -12,8 +12,8 @@ import { VALUE_DATE_FORMAT } from '@avoo/constants';
 import {
   exceptionHooks,
   normalizeExceptionEndDate,
+  timeOffConflictsHooks,
   timeToMinutes,
-  useTimeOffConflicts,
 } from '@avoo/hooks';
 import {
   TimeOffMode,
@@ -161,7 +161,7 @@ export default function TimeOffEditForm({
   const values = watch();
 
   const { conflictMessage, hasConflict, isConflictsLoading, affectedBookings } =
-    useTimeOffConflicts({
+    timeOffConflictsHooks.useTimeOffConflicts({
       values,
       masters,
       excludeId: timeOff.id,

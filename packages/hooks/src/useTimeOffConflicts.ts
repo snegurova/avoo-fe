@@ -157,7 +157,7 @@ const getAffectedBookings = (
   );
 };
 
-export const useTimeOffConflicts = ({ values, masters, excludeId }: UseTimeOffConflictsParams) => {
+const useTimeOffConflicts = ({ values, masters, excludeId }: UseTimeOffConflictsParams) => {
   const {
     data: exceptionsPages,
     hasNextPage: hasNextExceptionsPage,
@@ -268,4 +268,8 @@ export const useTimeOffConflicts = ({ values, masters, excludeId }: UseTimeOffCo
     isConflictsLoading,
     affectedBookings,
   };
+};
+
+export const timeOffConflictsHooks = {
+  useTimeOffConflicts,
 };
