@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { useTranslations } from 'next-intl';
 
 import type { CustomerInfoResponse } from '@avoo/axios/types/apiTypes';
 import { customerHooks } from '@avoo/hooks';
@@ -11,6 +12,7 @@ import { ClientsList } from '@/_components/ClientsList/ClientsList';
 import Controls from '@/_components/Controls/Controls';
 
 export default function ClientsPage() {
+  const t = useTranslations('private.clients');
   const [searchQuery, setSearchQuery] = React.useState('');
 
   const customers = customerHooks.useGetCustomers()?.items ?? null;
@@ -31,10 +33,10 @@ export default function ClientsPage() {
     <AppWrapper>
       <div className='p-6 flex-1 min-h-0 overflow-auto lg:overflow-hidden hide-scrollbar flex flex-col'>
         <Controls
-          title='Clients'
+          title={t('clients')}
           searchValue={searchQuery}
           onSearchChange={setSearchQuery}
-          placeholder='Search by name, phone or email'
+          placeholder={t('searchNamePhoneEmail')}
           titleClassName={'self-center md:self-auto text-center md:text-left'}
           searchContainerClassName={
             'order-3 md:order-2 w-auto mx-auto md:mx-0 md:ml-auto max-w-[135px] focus-within:max-w-full overflow-hidden transition-[max-width] duration-300 ease-in-out md:max-w-none md:overflow-visible md:transition-none'

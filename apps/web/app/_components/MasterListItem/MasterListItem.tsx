@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { useTranslations } from 'next-intl';
 
 import { Typography } from '@mui/material';
 
@@ -25,16 +26,17 @@ type Props = {
 };
 
 export const MasterListItem = ({ master, onEdit, isSelected }: Props) => {
+  const t = useTranslations('private.components.MasterListItem.MasterListItem');
   const toast = useToast();
   const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = React.useState(false);
-  const displayName = master.name || 'No name';
-  const phone = master.phone || 'No phone';
+  const displayName = master.name || t('noName');
+  const phone = master.phone || t('noPhone');
   const languagesArr = master.languages || [];
 
   const { deleteMaster, isPending: isDeletePending } = masterHooks.useDeleteMaster({
     onSuccess: () => {
-      const masterName = master.name?.trim() || 'Master';
-      toast.info(`Master ${masterName} was deleted!`);
+      const masterName = master.name?.trim() || t('masterFallback');
+      toast.info(t('masterDeleted', { name: masterName }));
       setIsDeleteConfirmOpen(false);
     },
   });
@@ -61,7 +63,7 @@ export const MasterListItem = ({ master, onEdit, isSelected }: Props) => {
         type='button'
         className='flex items-center gap-4 w-full lg:hidden cursor-pointer text-left'
         onClick={handleOpenDetails}
-        aria-label={`Open ${displayName} details`}
+        aria-label={t('openDetails', { name: displayName })}
       >
         <div className='flex-shrink-0'>
           <Avatar name={displayName} src={master.avatarPreviewUrl} size={AvatarSize.Large} />
@@ -81,7 +83,7 @@ export const MasterListItem = ({ master, onEdit, isSelected }: Props) => {
             {displayName}
           </Typography>
           <div className='text-sm text-gray-500 break-words whitespace-normal'>
-            {master.email ?? 'No email'}
+            {master.email ?? t('noEmail')}
           </div>
           <div className='text-sm text-gray-500 mt-1 break-words whitespace-normal'>{phone}</div>
 
@@ -116,7 +118,7 @@ export const MasterListItem = ({ master, onEdit, isSelected }: Props) => {
         </div>
         <div className='w-1/5 text-sm text-gray-700 break-words whitespace-normal'>{phone}</div>
         <div className='w-1/5 text-sm text-gray-700 break-words whitespace-normal'>
-          {master.email ?? 'No email'}
+          {master.email ?? t('noEmail')}
         </div>
         <div className='w-1/5 break-words whitespace-normal'>
           <MasterLanguageList languages={languagesArr} />
@@ -124,18 +126,18 @@ export const MasterListItem = ({ master, onEdit, isSelected }: Props) => {
         <div className='w-12 flex items-center gap-0'>
           <IconButton
             icon={<EditSquareIcon />}
-            ariaLabel='Edit master'
+            ariaLabel={t('editMaster')}
             onClick={handleOpenDetails}
             className='flex items-center justify-center p-2.5'
           />
           <IconButton
             icon={<ShareIcon />}
-            ariaLabel='Share'
+            ariaLabel={t('share')}
             className='flex items-center justify-center p-2.5'
           />
           <IconButton
             icon={<DeleteIcon />}
-            ariaLabel='Delete'
+            ariaLabel={t('delete')}
             onClick={handleDeleteClick}
             className='flex items-center justify-center p-2.5'
           />
@@ -146,9 +148,9 @@ export const MasterListItem = ({ master, onEdit, isSelected }: Props) => {
         isOpen={isDeleteConfirmOpen}
         onCancel={() => setIsDeleteConfirmOpen(false)}
         onConfirm={handleConfirmDelete}
-        title='Delete master'
-        description='Are you sure you want to permanently delete this master profile? All related information will be removed and cannot be recovered.'
-        confirmText='Delete master'
+        title={t('deleteMaster')}
+        description={t('deleteDescription')}
+        confirmText={t('deleteConfirm')}
         submitDisabled={isDeletePending}
       />
     </div>

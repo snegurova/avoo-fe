@@ -48,6 +48,7 @@ const sidebarStyles = tv({
 });
 
 export default function AppNavigation({ menuOpen, setMenuOpen }: Props) {
+  const tCommon = useTranslations('private.components.AppNavigation.AppNavigation');
   const t = useTranslations('private.navigation.navigation');
   const desktopAbove = useMediaQuery('(min-width:1024px)');
   const isOpen = desktopAbove || menuOpen;
@@ -138,7 +139,7 @@ export default function AppNavigation({ menuOpen, setMenuOpen }: Props) {
               className='font-inter font-semibold text-4xl text-gray-600'
               onClick={handleCloseMenu}
             >
-              Avoo
+              {tCommon('avoo')}
             </Link>
           </div>
 

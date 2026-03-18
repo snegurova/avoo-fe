@@ -69,6 +69,7 @@ const top = tv({
 });
 
 export default function ServiceFormItem(props: Props) {
+  const tCommon = useTranslations('private.components.ServiceFormItem.ServiceFormItem');
   const t = useTranslations('private.orders.create');
   const {
     order,
@@ -200,7 +201,7 @@ export default function ServiceFormItem(props: Props) {
     const availableDate = await getAvailableDate(availabilityParams);
 
     if (!availableDate) {
-      toast.error('No available date and time');
+      toast.error(tCommon('noAvailableTime'));
       return;
     }
 
@@ -262,7 +263,7 @@ export default function ServiceFormItem(props: Props) {
     const availableDate = await getAvailableDate(availabilityParams);
 
     if (!availableDate) {
-      toast.error('No available date and time');
+      toast.error(tCommon('noAvailableTime'));
       return;
     }
 
@@ -329,7 +330,7 @@ export default function ServiceFormItem(props: Props) {
     const availableDate = await getAvailableDate(availabilityParams);
 
     if (!availableDate) {
-      toast.error('No available date and time');
+      toast.error(tCommon('noAvailableTime'));
       return;
     }
 
@@ -397,7 +398,7 @@ export default function ServiceFormItem(props: Props) {
       <div className='flex flex-col gap-4 p-4'>
         <div className=''>
           <SearchField
-            label='Service'
+            label={tCommon('service')}
             value={order.serviceId ? { id: order.serviceId } : null}
             onChange={selectService}
             items={services}
@@ -405,7 +406,7 @@ export default function ServiceFormItem(props: Props) {
             setSearch={setSearchQuery}
             ItemElement={ServiceElementWrapped}
             searchMode={!order.serviceId}
-            placeholder='Search by service name'
+            placeholder={tCommon('searchServiceName')}
             error={errors?.serviceId?.message}
             hasMore={hasMoreServices}
             fetchNextPage={fetchNextServicesPage}
@@ -419,7 +420,7 @@ export default function ServiceFormItem(props: Props) {
         </div>
         <div className=''>
           <SearchField
-            label='Master'
+            label={tCommon('master')}
             value={order.masterId ? { id: order.masterId } : null}
             onChange={selectMaster}
             items={masters}
@@ -461,8 +462,8 @@ export default function ServiceFormItem(props: Props) {
             name={`notes-${index}`}
             value={order.notes || ''}
             onChange={onNotesChange}
-            label='Notes'
-            helperText='Additional information for the master'
+            label={tCommon('notes')}
+            helperText={tCommon('notesHelperText')}
             maxLength={200}
             error={errors?.notes?.message}
             classNames={{

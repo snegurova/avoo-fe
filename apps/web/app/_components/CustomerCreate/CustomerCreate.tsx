@@ -33,6 +33,7 @@ const wrapper = tv({
 });
 
 export default function CustomerCreate(props: Props) {
+  const tCommon = useTranslations('private.components.CustomerCreate.CustomerCreate');
   const t = useTranslations('private.orders.create');
   const { setPhone, value, onChange, error, isFullWidth = false } = props;
 
@@ -91,7 +92,7 @@ export default function CustomerCreate(props: Props) {
           </label>
           <FormInput
             type='text'
-            placeholder='Enter name'
+            placeholder={tCommon('enterName')}
             id='name'
             value={isCustomerValues(value) ? value.name : ''}
             onChange={handleNameChange}
@@ -104,7 +105,7 @@ export default function CustomerCreate(props: Props) {
           </label>
           <FormInput
             type='email'
-            placeholder='Enter email'
+            placeholder={tCommon('enterEmail')}
             id='email'
             value={isCustomerValues(value) ? value.email : ''}
             onChange={handleEmailChange}
@@ -128,7 +129,7 @@ export default function CustomerCreate(props: Props) {
             <div className='flex-1'>
               <FormInput
                 type='text'
-                placeholder='Enter phone'
+                placeholder={tCommon('enterPhone')}
                 id='phone'
                 value={phoneNumber}
                 onChange={handlePhoneNumberChange}

@@ -9,9 +9,23 @@
         "saveButton": "Save changes",
         "changePassword": "Change password"
       },
-      "profile": {
-        "accountSettings": "Account Settings",
-        "securitySettings": "Security Settings"
+      "profile": "Profile",
+      "certificates": {
+        "back": "Back",
+        "certificates": "Certificates"
+      },
+      "editProfile": {
+        "editProfile": "Edit Profile"
+      },
+      "gallery": {
+        "back": "Back",
+        "gallery": "Gallery",
+        "galleryContentHere": "Gallery content will be here"
+      },
+      "posts": {
+        "back": "Back",
+        "posts": "Posts",
+        "postsContentHere": "Posts content will be here"
       }
     },
     "navigation": {
@@ -35,7 +49,9 @@
         "masters": "Masters",
         "posts": "Posts",
         "workingSchedule": "Working schedule",
-        "scheduleException": "Schedule exception"
+        "scheduleException": "Schedule exception",
+        "billingNotification": "Billing or marketing notification",
+        "notifications": "Notifications"
       }
     },
     "calendar": {
@@ -67,6 +83,21 @@
         "Sun": "Sun",
         "noSchedules": "No schedules",
         "noSchedulesDescription": "There are currently no schedules to display. Choose masters to see their schedules here."
+      },
+      "comboServiceTime": {
+        "create": {
+          "setupNewCombo": "Setup new combo service time"
+        },
+        "createComboService": "Create a combo service"
+      },
+      "workingHours": {
+        "create": {
+          "setupNewSchedule": "Setup new schedule"
+        },
+        "createWorkingSchedule": "Create a working schedule",
+        "loading": "Loading...",
+        "setupFirstSchedule": "Setup your first working schedule",
+        "setupScheduleDescription": "<link>Create a working schedule</link> to define when your masters are available for bookings."
       }
     },
     "orders": {
@@ -113,6 +144,730 @@
         "bookSeparately": "Book separately",
         "applyCombination": "Apply combination"
       }
+    },
+    "addPost": {
+      "appPostPage": "AppPost Page"
+    },
+    "clients": {
+      "clients": "Clients",
+      "searchNamePhoneEmail": "Search by name, phone or email"
+    },
+    "masters": {
+      "addMaster": {
+        "addMaster": "Add Master"
+      },
+      "masters": "Masters",
+      "newMaster": "New master",
+      "searchNamePhoneEmail": "Search by name, phone or email"
+    },
+    "notifications": {
+      "notificationsPage": "Notifications Page"
+    },
+    "services": {
+      "create": {
+        "addService": "Add service"
+      }
+    },
+    "timeOff": {
+      "scheduleException": "Schedule exception",
+      "addTimeOff": "Add time off",
+      "searchByMasterName": "Search by master's name",
+      "noTimeOffAdded": "No time off added yet",
+      "noTimeOffDescription": "<link>Add time off</link>, vacations, breaks, or unavailable hours to keep the schedule accurate."
+    },
+    "forgotPassword": {
+      "recoveryPassword": "Recovery password",
+      "backToLogin": "Back to login"
+    },
+    "resetPassword": {
+      "createNewPassword": "Create a new password"
+    },
+    "signIn": {
+      "logIn": "Log In",
+      "createAccount": "Create an account",
+      "forgotPassword": "Forgot Password"
+    },
+    "signUp": {
+      "createProfAccount": "Create a professional account",
+      "logInSmall": "Log in"
+    },
+    "verifyCode": {
+      "verifyCode": "Verify Code"
+    },
+    "components": {
+      "AppNavigation": {
+        "AppNavigation": {
+          "avoo": "Avoo"
+        }
+      },
+      "AuthorizationWrapper": {
+        "AuthorizationWrapper": {
+          "avoo": "Avoo",
+          "avooCaps": "AVOO"
+        }
+      },
+      "AvatarUpload": {
+        "AvatarUpload": {
+          "avatarImage": "Avatar image",
+          "saveAvatar": "Save avatar",
+          "editAvatar": "Edit avatar"
+        }
+      },
+      "Button": {
+        "Button": {
+          "loading": "Loading..."
+        }
+      },
+      "CalendarControls": {
+        "CalendarControls": {
+          "reset": "Reset"
+        }
+      },
+      "CalendarColumn": {
+        "CalendarColumn": {
+          "bookAdvanceError": "You can only book up to 1 year in advance",
+          "outOfWorkingHoursInfo": "Selected time is out of available working hours",
+          "nextPossibleTimeError": "There will be next possible time selected"
+        }
+      },
+      "CategorySelect": {
+        "CategorySelect": {
+          "category": "Category"
+        }
+      },
+      "CertificateAdd": {
+        "CertificateAdd": {
+          "addCertificate": "Add Certificate",
+          "title": "Title",
+          "enterCertTitle": "Enter certificate title",
+          "description": "Description",
+          "enterCertDesc": "Enter certificate description",
+          "issueDate": "Issue Date",
+          "master": "Master",
+          "uploadCertFile": "Upload certificate file",
+          "fileUploadHint": "JPG, PNG only, file size no more than 10MB",
+          "selectFileCaps": "SELECT FILE",
+          "cancel": "Cancel",
+          "save": "Save",
+          "titleRequired": "Title is required",
+          "titleTooShort": "Title is too short",
+          "maxLength500": "Max length is 500",
+          "issueDateRequired": "Issue date is required",
+          "invalidDateFormat": "Invalid date format",
+          "dateNotInFuture": "Date cannot be in the future",
+          "salon": "Salon",
+          "selectOrDrag": "Select a file or drag and drop here"
+        }
+      },
+      "ChangePasswordForm": {
+        "ChangePasswordForm": {
+          "changePassword": "Change password",
+          "currentPassword": "Current password",
+          "newPassword": "New password",
+          "confirmPassword": "Confirm password"
+        }
+      },
+      "CheckboxesButton": {
+        "CheckboxesButton": {
+          "all": "All"
+        }
+      },
+      "ClientEditForm": {
+        "ClientEditForm": {
+          "clientInformation": "Client information",
+          "name": "Name",
+          "phone": "Phone",
+          "notes": "Notes",
+          "emailLabel": "Email address *",
+          "updateSuccess": "Client's information changed successfully"
+        }
+      },
+      "ClientEditModal": {
+        "ClientEditModal": {
+          "unsavedChanges": "Unsaved changes",
+          "unsavedChangesDescription": "You having unsaved changes. Are you sure you want to leave?",
+          "discardChanges": "Discard changes"
+        }
+      },
+      "ClientOrdersHistory": {
+        "ClientOrdersHistory": {
+          "nextAppointment": "Next appointment",
+          "noUpcomingAppt": "No upcoming appointments",
+          "upcomingVisitsHint": "Upcoming visits will appear after booking confirmation.",
+          "history": "History",
+          "noPrevAppt": "No previous appointments",
+          "historyHint": "Your past visits will be listed here after completion.",
+          "bookingFallback": "Booking",
+          "anyMaster": "Any master",
+          "priceInEuro": "{price} Euro"
+        }
+      },
+      "ClientsList": {
+        "ClientsList": {
+          "noClientsYet": "No clients yet",
+          "clientName": "Client name",
+          "sortAsc": "Sort Ascending",
+          "sortDesc": "Sort Descending",
+          "mobileNumber": "Mobile number",
+          "emailAddress": "Email address",
+          "lastVisit": "Last visit"
+        }
+      },
+      "ClientListItem": {
+        "ClientListItem": {
+          "noName": "No name",
+          "noPhone": "No phone",
+          "noEmail": "No email",
+          "lastVisit": "last visit {date}"
+        }
+      },
+      "CombinationForm": {
+        "CombinationForm": {
+          "master": "Master",
+          "noAvailableTime": "No available date and time"
+        }
+      },
+      "ComboServiceAddFrom": {
+        "ComboServiceAddFrom": {
+          "comboServiceName": "Combo service name",
+          "serviceTotalDuration": "Service total duration",
+          "selectAtLeast2": "Select at least 2 service per combination",
+          "availableOnline": "Available for online booking",
+          "cancel": "Cancel",
+          "add": "Add",
+          "masters": "Masters *",
+          "serviceCreated": "Service has been created!",
+          "serviceCreateError": "Failed to create service: {error}"
+        }
+      },
+      "ComboServiceCard": {
+        "ComboServiceCard": {
+          "editSm": "Edit",
+          "deleteSm": "Delete"
+        }
+      },
+      "ComboServiceControls": {
+        "ComboServiceControls": {
+          "comboServiceTime": "Combo service time",
+          "newCombo": "New combo",
+          "searchComboName": "Search by combo name"
+        }
+      },
+      "ComboServiceList": {
+        "ComboServiceList": {
+          "loading": "Loading...",
+          "noComboFound": "No combo services found",
+          "deleteComboService": "Delete Combo Service",
+          "comboServiceTime": "Combo service time",
+          "shareSm": "Share",
+          "deleteSm": "Delete"
+        }
+      },
+      "ComboServiceSelector": {
+        "ComboServiceSelector": {
+          "service": "Service",
+          "serviceSearch": "Service search",
+          "addMoreServices": "Add more services"
+        }
+      },
+      "ComboServiceUpdateForm": {
+        "ComboServiceUpdateForm": {
+          "comboServiceName": "Combo service name",
+          "masters": "Masters",
+          "services": "Services",
+          "serviceTotalDuration": "Service total duration",
+          "availableOnline": "Available for online booking",
+          "cancel": "Cancel",
+          "edit": "Edit",
+          "updateSuccess": "Combination has been updated!",
+          "updateError": "Failed to update combination: {message}"
+        }
+      },
+      "CustomerCreate": {
+        "CustomerCreate": {
+          "enterName": "Enter name",
+          "enterEmail": "Enter email",
+          "enterPhone": "Enter phone"
+        }
+      },
+      "CustomerSelect": {
+        "CustomerSelect": {
+          "client": "Client"
+        }
+      },
+      "DragAndDropZone": {
+        "DragAndDropZone": {
+          "uploadDnd": "Upload file (Drag & Drop)",
+          "defaultTitle": "Upload file",
+          "defaultButtonTitle": "SELECT FILE",
+          "uploading": "Uploading...",
+          "uploadingDescription": "It may take a few seconds"
+        }
+      },
+      "MasterAddForm": {
+        "MasterAddForm": {
+          "personalInfo": "Personal info",
+          "displayName": "Display Name",
+          "headline": "Headline",
+          "email": "Email",
+          "phone": "Phone",
+          "about": "About",
+          "languages": "Languages",
+          "addLanguagesOffer": "Add languages in which the service is offered",
+          "close": "Close",
+          "add": "Add",
+          "addSuccess": "New master added successfully",
+          "infoDisplayPlatform": "Information will display on the platform."
+        }
+      },
+      "MasterEditForm": {
+        "MasterEditForm": {
+          "masters": "Masters",
+          "share": "Share",
+          "delete": "Delete",
+          "personalInfo": "Personal info",
+          "displayName": "Display Name",
+          "headline": "Headline",
+          "phone": "Phone",
+          "about": "About",
+          "languages": "Languages",
+          "addLanguagesOffer": "Add languages in which the service is offered",
+          "deleteMaster": "Delete master",
+          "updateSuccess": "Master updated successfully",
+          "masterDeleted": "Master {name} was deleted!",
+          "deleteDescription": "Are you sure you want to permanently delete this master profile? All related information will be removed and cannot be recovered.",
+          "deleteConfirm": "Delete master",
+          "masterFallback": "Master",
+          "infoDisplayPlatform": "Information will display on the platform."
+        }
+      },
+      "MasterEditModal": {
+        "MasterEditModal": {
+          "unsavedChanges": "Unsaved changes",
+          "unsavedChangesDescription": "You having unsaved changes. Are you sure you want to leave?",
+          "discardChanges": "Discard changes"
+        }
+      },
+      "MasterLanguageList": {
+        "MasterLanguageList": {
+          "noLanguages": "No languages",
+          "languages": "Languages"
+        }
+      },
+      "MasterList": {
+        "MasterList": {
+          "noMastersYet": "No masters yet",
+          "masterName": "Master name",
+          "sortAsc": "Sort Ascending",
+          "sortDesc": "Sort Descending",
+          "mobileNumber": "Mobile number",
+          "emailAddress": "Email address",
+          "languages": "Languages",
+          "actions": "Actions"
+        }
+      },
+      "MasterListItem": {
+        "MasterListItem": {
+          "editMaster": "Edit master",
+          "share": "Share",
+          "delete": "Delete",
+          "deleteMaster": "Delete master",
+          "noName": "No name",
+          "noPhone": "No phone",
+          "noEmail": "No email",
+          "masterDeleted": "Master {name} was deleted!",
+          "openDetails": "Open {name} details",
+          "deleteDescription": "Are you sure you want to permanently delete this master profile? All related information will be removed and cannot be recovered.",
+          "deleteConfirm": "Delete master",
+          "masterFallback": "Master"
+        }
+      },
+      "ModeToggle": {
+        "ModeToggle": {
+          "timeOffMode": "Time off mode",
+          "timeOff": "Time off",
+          "extraWorkingTime": "Extra working time"
+        }
+      },
+      "NotificationField": {
+        "NotificationField": {
+          "toggleSendNot": "Toggle send notifications"
+        }
+      },
+      "OrderConfirmation": {
+        "OrderConfirmation": {
+          "outOfSchedule": "Out of schedule",
+          "service": "Service",
+          "notes": "Notes",
+          "serviceDuration": "Service duration",
+          "client": "Client",
+          "reject": "Reject",
+          "confirm": "Confirm",
+          "notesHelper": "Additional information for the master",
+          "customerNote": "Note: {note}",
+          "status": {
+            "canceled": "canceled",
+            "confirmed": "confirmed",
+            "pending": "pending"
+          }
+        }
+      },
+      "OrderEdit": {
+        "OrderEdit": {
+          "editBooking": "Edit Booking",
+          "outOfSchedule": "Out of schedule",
+          "service": "Service",
+          "notes": "Notes",
+          "serviceDuration": "Service duration",
+          "master": "Master",
+          "date": "Date",
+          "time": "Time",
+          "client": "Client",
+          "close": "Close",
+          "save": "Save",
+          "notesHelper": "Additional information for the master",
+          "customerNote": "Note: {note}"
+        }
+      },
+      "OrderView": {
+        "OrderView": {
+          "outOfSchedule": "Out of schedule",
+          "service": "Service",
+          "client": "Client",
+          "edit": "Edit"
+        }
+      },
+      "PhoneCodeSelect": {
+        "PhoneCodeSelect": {
+          "countryCode": "Country code"
+        }
+      },
+      "ProfileCertificates": {
+        "ProfileCertificates": {
+          "certificates": "Certificates",
+          "noCertificates": "No certificates added",
+          "addCertificates": "Add certificates",
+          "addCertificatesRich": "<a>Add certificates</a> to highlight your professional qualifications."
+        }
+      },
+      "ProfileEdit": {
+        "EditProfileForm": {
+          "displayName": "Display Name",
+          "phone": "Phone",
+          "address": "Address",
+          "useMyLocation": "Use my location",
+          "about": "About",
+          "cancel": "Cancel",
+          "searching": "Searching...",
+          "search": "Search",
+          "saving": "Saving...",
+          "save": "Save"
+        }
+      },
+      "ProfileGallery": {
+        "ProfileGallery": {
+          "gallery": "Gallery",
+          "galleryEmpty": "Your gallery is empty",
+          "addPhotos": "Add photos",
+          "addPhotosRich": "<a>Add photos</a> to highlight your professional qualifications and salon atmosphere."
+        }
+      },
+      "ProfileInfo": {
+        "ProfileInfo": {
+          "profilePreview": "Profile Preview",
+          "about": "About"
+        }
+      },
+      "ProfileLanguages": {
+        "ProfileLanguages": {
+          "languages": "Languages",
+          "masterFallback": "Master"
+        }
+      },
+      "PublicCombinationForm": {
+        "PublicCombinationForm": {
+          "master": "Master",
+          "date": "Date",
+          "notes": "Notes",
+          "notesHelper": "Additional information for the master"
+        }
+      },
+      "PublicServiceFormItem": {
+        "PublicServiceFormItem": {
+          "service": "Service",
+          "searchServiceName": "Search by service name",
+          "master": "Master",
+          "date": "Date",
+          "notes": "Notes",
+          "notesHelper": "Additional information for the master",
+          "selectService": "Select a service"
+        }
+      },
+      "ResetPasswordForm": {
+        "ResetPasswordForm": {
+          "password": "Password",
+          "confirmPassword": "Confirm password"
+        }
+      },
+      "ScheduleAddForm": {
+        "ScheduleAddForm": {
+          "name": "Name",
+          "type": "Type",
+          "applyTo": "Apply to",
+          "searchMasters": "Search masters...",
+          "startDate": "Start date",
+          "endDate": "End date",
+          "schedule": "Schedule",
+          "addDay": "Add day",
+          "cancel": "Cancel",
+          "save": "Save",
+          "addSuccess": "Schedule added successfully",
+          "addError": "Schedule add failed: {error}",
+          "applyToAll": "Apply to all"
+        }
+      },
+      "ScheduleList": {
+        "ScheduleList": {
+          "scheduleName": "Schedule name",
+          "appliesTo": "Applies to",
+          "startDate": "Start date",
+          "endDate": "End date",
+          "actions": "Actions",
+          "loading": "Loading...",
+          "noSchedulesFound": "No schedules found",
+          "deleteSchedule": "Delete schedule",
+          "schedule": "Schedule",
+          "deleteSm": "Delete",
+          "deleteSuccess": "Schedule deleted successfully",
+          "deleteError": "Failed to delete schedule",
+          "deleteContent": "This will permanently delete the schedule and remove it from all assigned masters. This action cannot be undone.",
+          "cancel": "Cancel",
+          "delete": "Delete"
+        }
+      },
+      "ScheduleListItem": {
+        "ScheduleListItem": {
+          "allMasters": "All Masters",
+          "editSm": "Edit",
+          "deleteSm": "Delete",
+          "ongoing": "Ongoing",
+          "startDate": "Start date:",
+          "endDate": "End date:"
+        }
+      },
+      "ScheduleUpdateForm": {
+        "ScheduleUpdateForm": {
+          "name": "Name",
+          "typeOfSchedule": "Type of schedule",
+          "appliesTo": "Applies to",
+          "startDate": "Start date",
+          "endDate": "End date",
+          "cancel": "Cancel",
+          "edit": "Edit",
+          "updateSuccess": "Schedule has been updated!",
+          "updateError": "Failed to update schedule: {error}",
+          "allMasters": "All masters"
+        }
+      },
+      "SchedulesControls": {
+        "SchedulesControls": {
+          "workingSchedules": "Working schedules",
+          "setupNewSchedule": "Setup new schedule",
+          "searchScheduleNameMaster": "Search by schedule name or master",
+          "sortByName": "Sort by name",
+          "sortByStartDate": "Sort by start date",
+          "sortByEndDate": "Sort by end date"
+        }
+      },
+      "ServiceAddForm": {
+        "ServiceAddForm": {
+          "basicDetail": "Basic detail",
+          "title": "Title",
+          "price": "Price",
+          "duration": "Duration",
+          "description": "Description",
+          "shortDescription": "Short description for the service",
+          "infoWillDisplay": "Information will display on platform",
+          "masters": "Masters",
+          "gallery": "Gallery",
+          "availableOnline": "Available for online booking",
+          "cancel": "Cancel",
+          "save": "Save",
+          "mediaUploaded": "Media has been uploaded!",
+          "mediaUploadError": "Failed to upload media: {error}",
+          "mediaRemoved": "Removed {id}",
+          "serviceCreated": "Service has been created!",
+          "serviceCreateError": "Failed to create service: {error}"
+        }
+      },
+      "ServiceCard": {
+        "ServiceCard": {
+          "editSm": "Edit",
+          "shareService": "Share Service",
+          "deleteSm": "Delete"
+        }
+      },
+      "ServiceControls": {
+        "ServiceControls": {
+          "services": "Services",
+          "addService": "Add service",
+          "searchServiceName": "Search by service name"
+        }
+      },
+      "ServiceFormItem": {
+        "ServiceFormItem": {
+          "service": "Service",
+          "searchServiceName": "Search by service name",
+          "master": "Master",
+          "notes": "Notes",
+          "noAvailableTime": "No available date and time",
+          "notesHelperText": "Additional information for the master"
+        }
+      },
+      "ServiceGalleryUpload": {
+        "ServiceGalleryUpload": {
+          "addPhoto": "Add photo",
+          "selectFile": "Select file",
+          "selectOrDrag": "Select a file or drag and drop here"
+        }
+      },
+      "ServiceList": {
+        "ServiceList": {
+          "categories": "Categories",
+          "loading": "Loading...",
+          "noServicesFound": "No services found",
+          "deleteService": "Delete Service",
+          "service": "Service",
+          "shareSm": "Share",
+          "deleteSm": "Delete",
+          "deleteSuccess": "Service deleted successfully",
+          "deleteError": "Failed to delete service",
+          "deleteConfirmContent": "Are you sure you want to delete this service? This action cannot be undone.",
+          "cancel": "Cancel",
+          "delete": "Delete"
+        }
+      },
+      "ServiceUpdateForm": {
+        "ServiceUpdateForm": {
+          "basicDetail": "Basic detail",
+          "title": "Title",
+          "price": "Price",
+          "duration": "Duration",
+          "description": "Description",
+          "shortDescription": "Short description for the service",
+          "infoWillDisplay": "Information will display on platform",
+          "masters": "Masters",
+          "gallery": "Gallery",
+          "loadMore": "Load more",
+          "availableOnline": "Available for online booking",
+          "cancel": "Cancel",
+          "edit": "Edit",
+          "updateSuccess": "Service has been updated!",
+          "updateError": "Failed to update service: {error}",
+          "mediaUploaded": "Media has been uploaded!",
+          "mediaUploadError": "Failed to upload media: {error}",
+          "mediaDeleted": "Media has been deleted!",
+          "mediaDeleteError": "Failed to delete media: {error}",
+          "mediaRemoved": "Media has been removed!"
+        }
+      },
+      "TimeOffAddForm": {
+        "TimeOffAddForm": {
+          "scheduleException": "Schedule exception",
+          "addTimeOffExtraHours": "Add time off or extra working hours for a master",
+          "note": "Note",
+          "wholeDay": "Whole day",
+          "cancel": "Cancel",
+          "save": "Save",
+          "allStaff": "All Staff",
+          "master": "Master *",
+          "timeOff": "Time off",
+          "workingTime": "Working time",
+          "optional": "Optional",
+          "startDate": "Start Date *",
+          "endDate": "End Date *",
+          "masterFallback": "Master #{id}",
+          "timeOffSuccess": "Time off for {mastersLabel} added successfully",
+          "typeOfTimeOff": "Type of Time off *"
+        }
+      },
+      "TimeOffEditForm": {
+        "TimeOffEditForm": {
+          "scheduleException": "Schedule exception",
+          "delete": "Delete",
+          "note": "Note",
+          "wholeDay": "Whole day",
+          "deleteTimeOff": "Delete time off",
+          "allStaff": "All Staff",
+          "master": "Master *",
+          "timeOff": "Time off",
+          "workingTime": "Working time",
+          "optional": "Optional",
+          "endDate": "End Date *",
+          "updateSuccess": "Time off updated successfully",
+          "deleteInfo": "Time off was deleted!",
+          "deleteConfirmDescription": "Are you sure you want to permanently delete this schedule exception? This action cannot be undone.",
+          "confirmDeleteTimeOff": "Delete time off"
+        }
+      },
+      "TimeOffEditModal": {
+        "TimeOffEditModal": {
+          "unsavedChanges": "Unsaved changes",
+          "unsavedChangesDescription": "You have unsaved changes. Are you sure you want to leave?",
+          "confirmDiscard": "Discard changes"
+        }
+      },
+      "TimeOffList": {
+        "TimeOffList": {
+          "masterName": "Master name",
+          "sortAsc": "Sort Ascending",
+          "sortDesc": "Sort Descending",
+          "exceptionType": "Exception type",
+          "date": "Date",
+          "note": "Note",
+          "actions": "Actions"
+        }
+      },
+      "TimeOffListItem": {
+        "TimeOffListItem": {
+          "editTimeOff": "Edit time off",
+          "delete": "Delete",
+          "deleteTimeOff": "Delete time off",
+          "deleteInfo": "Time off was deleted!",
+          "timeOff": "Time off",
+          "workingTime": "Working time",
+          "from": "from",
+          "to": "to",
+          "deleteConfirmDescription": "Are you sure you want to permanently delete this schedule exception? This action cannot be undone."
+        }
+      },
+      "TimeSlotField": {
+        "TimeSlotField": {
+          "timeSlot": "Time slot",
+          "selectValidTimeSlot": "Please select a valid time slot"
+        }
+      },
+      "VerifyCodeForm": {
+        "VerifyCodeForm": {
+          "verify": "Verify",
+          "resendCode": "Resend code",
+          "invalidCode": "Invalid verification code. Please try again.",
+          "resendSuccess": "Verification code resent successfully",
+          "resendError": "Failed to resend verification code",
+          "codeSentTo": "We've sent a 6-digit verification code to your email {email}"
+        }
+      },
+      "WorkingDayRow": {
+        "WorkingDayRow": {
+          "remove": "Remove",
+          "break": "Break",
+          "addBreak": "Add break",
+          "day": "Day",
+          "workingDay": "Working day",
+          "dayOff": "Day off",
+          "to": "to"
+        }
+      }
     }
   },
   "public": {
@@ -125,6 +880,12 @@
     "salon": {
       "page": {
         "ctaButton": "Book appointment"
+      },
+      "createOrder": {
+        "bookingForm": "Booking form",
+        "addMoreService": "Add more service",
+        "cancel": "Cancel",
+        "book": "Book"
       }
     },
     "forgotPassword": {

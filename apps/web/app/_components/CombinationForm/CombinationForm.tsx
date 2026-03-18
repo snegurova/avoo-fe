@@ -37,6 +37,7 @@ type Props = {
 };
 
 export default function CombinationForm(props: Props) {
+  const tCommon = useTranslations('private.components.CombinationForm.CombinationForm');
   const t = useTranslations('private.orders.create');
   const {
     value,
@@ -108,7 +109,7 @@ export default function CombinationForm(props: Props) {
     const availableDate = await getAvailableDate(availabilityParams);
 
     if (!availableDate) {
-      toast.error('No available date and time');
+      toast.error(tCommon('noAvailableTime'));
       return;
     }
 
@@ -154,7 +155,7 @@ export default function CombinationForm(props: Props) {
     const availableDate = await getAvailableDate(availabilityParams);
 
     if (!availableDate) {
-      toast.error('No available date and time');
+      toast.error(tCommon('noAvailableTime'));
       return;
     }
 
@@ -203,7 +204,7 @@ export default function CombinationForm(props: Props) {
         />
         <div className=''>
           <SearchField
-            label='Master'
+            label={tCommon('master')}
             value={value[0].masterId ? { id: value[0].masterId } : null}
             onChange={selectMaster}
             items={masters}

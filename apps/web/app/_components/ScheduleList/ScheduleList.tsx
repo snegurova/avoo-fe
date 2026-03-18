@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { useTranslations } from 'next-intl';
 
 import { IconButton, Typography, useMediaQuery } from '@mui/material';
 
@@ -20,6 +21,7 @@ type Props = {
 };
 
 export default function ScheduleList(props: Props) {
+  const t = useTranslations('private.components.ScheduleList.ScheduleList');
   const { schedules, incrementPage, hasMore } = props;
   const toast = useToast();
   const listRef = useRef<HTMLUListElement>(null);
@@ -44,9 +46,9 @@ export default function ScheduleList(props: Props) {
     if (!scheduleIdToDelete) return;
     try {
       await deleteScheduleMutationAsync(scheduleIdToDelete);
-      toast.success('Schedule deleted successfully');
+      toast.success(t('deleteSuccess'));
     } catch {
-      toast.error('Failed to delete schedule');
+      toast.error(t('deleteError'));
     }
   };
 
@@ -68,11 +70,11 @@ export default function ScheduleList(props: Props) {
   return (
     <>
       <div className='hidden lg:grid grid-cols-[2fr_1.2fr_1.2fr_1.2fr_72px] gap-3 p-6 mb-8 text-sm text-black font-semibold bg-primary-50'>
-        <div>Schedule name</div>
-        <div>Applies to</div>
-        <div>Start date</div>
-        <div>End date</div>
-        <div>Actions</div>
+        <div>{t('scheduleName')}</div>
+        <div>{t('appliesTo')}</div>
+        <div>{t('startDate')}</div>
+        <div>{t('endDate')}</div>
+        <div>{t('actions')}</div>
       </div>
       <div className='overflow-y-auto'>
         <ul className='flex flex-col gap-2 lg:block lg:divide-y lg:divide-gray-200' ref={listRef}>
@@ -96,11 +98,11 @@ export default function ScheduleList(props: Props) {
             ))
           ) : isPending ? (
             <Typography variant='h1' className='text-center'>
-              Loading...
+              {t('loading')}
             </Typography>
           ) : (
             <Typography variant='h1' className='text-center'>
-              No schedules found
+              {t('noSchedulesFound')}
             </Typography>
           )}
         </ul>
@@ -109,10 +111,10 @@ export default function ScheduleList(props: Props) {
       <ConfirmationDialog
         open={!!scheduleIdToDelete}
         onClose={handleCloseDeleteDialog}
-        title='Delete schedule'
-        content='This will permanently delete the schedule and remove it from all assigned masters. This action cannot be undone.'
-        cancelText='Cancel'
-        confirmText='Delete'
+        title={t('deleteSchedule')}
+        content={t('deleteContent')}
+        cancelText={t('cancel')}
+        confirmText={t('delete')}
         onCancel={handleCloseDeleteDialog}
         onConfirm={handleConfirmDelete}
         loading={isPending}
@@ -121,11 +123,11 @@ export default function ScheduleList(props: Props) {
         {selectedSchedule && (
           <div className='w-full h-full overflow-y-auto'>
             <div className='sticky top-[-1] flex items-center justify-between py-2 bg-white z-2'>
-              <Typography variant='h1'>Schedule</Typography>
+              <Typography variant='h1'>{t('schedule')}</Typography>
               <div className='flex flex-row gap-4 lg:hidden'>
                 <div className='bg-primary-50 w-10 h-10 rounded-lg flex items-center justify-center'>
                   <IconButton
-                    aria-label='delete'
+                    aria-label={t('deleteSm')}
                     onClick={() => {
                       handleOpenDeleteDialog(selectedSchedule.id);
                     }}

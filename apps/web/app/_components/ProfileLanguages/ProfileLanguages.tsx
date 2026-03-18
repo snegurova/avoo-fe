@@ -1,5 +1,7 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
+
 import { LANGUAGE_NAMES, VALID_LANGUAGE_CODES } from '@avoo/constants';
 import { colors } from '@avoo/design-tokens';
 import { masterHooks } from '@avoo/hooks';
@@ -14,6 +16,7 @@ type Props = {
 const AVATAR_BG_BY_INDEX = [colors.primary[200], colors.blue[200], colors.orange[200]];
 
 export const ProfileLanguages = (props: Props) => {
+  const t = useTranslations('private.components.ProfileLanguages.ProfileLanguages');
   const { languages } = props;
   const mastersInfo = masterHooks.useGetMastersProfileInfo({ limit: 400 })?.items ?? [];
 
@@ -32,7 +35,7 @@ export const ProfileLanguages = (props: Props) => {
 
   return (
     <div className='py-4'>
-      <SectionHeader title='Languages' />
+      <SectionHeader title={t('languages')} />
       <ul className='space-y-4 md:space-y-0 md:grid md:grid-cols-3 md:gap-x-6 md:gap-y-4 lg:grid-cols-1'>
         {languageGroups.map(({ lang, label, masters }) => (
           <li key={lang} className='last:border-0 last:pb-0'>
@@ -45,7 +48,7 @@ export const ProfileLanguages = (props: Props) => {
                   <li key={master.id} className='relative group -mr-2 hover:z-10'>
                     <Avatar
                       className='border-2 border-white'
-                      name={master.name ?? 'Master'}
+                      name={master.name ?? t('masterFallback')}
                       src={master.avatarPreviewUrl ?? master.avatarUrl}
                       size={AvatarSize.Large}
                       bgColor={AVATAR_BG_BY_INDEX[index % AVATAR_BG_BY_INDEX.length]}
@@ -55,7 +58,7 @@ export const ProfileLanguages = (props: Props) => {
                         index === 0 ? 'left-0' : 'left-1/2 -translate-x-1/2'
                       }`}
                     >
-                      {master.name ?? 'Master'}
+                      {master.name ?? t('masterFallback')}
                     </span>
                   </li>
                 ))}

@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useMemo, useState } from 'react';
+import { useTranslations } from 'next-intl';
 
 import type { CustomerInfoResponse, GetCustomersResponse } from '@avoo/axios/types/apiTypes';
 import { customerHooks } from '@avoo/hooks';
@@ -18,6 +19,7 @@ type Props = {
 };
 
 export const ClientsList: React.FC<Props> = ({ onEdit, customers: customersProp, selectedId }) => {
+  const t = useTranslations('private.components.ClientsList.ClientsList');
   const customersFromHook = customerHooks.useGetCustomers();
   const customersSource = customersProp ?? customersFromHook;
   const items: CustomerInfoResponse[] = Array.isArray(customersSource)
@@ -27,7 +29,7 @@ export const ClientsList: React.FC<Props> = ({ onEdit, customers: customersProp,
 
   const sorted = useMemo(() => sortByName(items ?? [], sortDirection), [items, sortDirection]);
   if (!items || items.length === 0) {
-    return <div className='py-8 text-center text-gray-500'>No clients yet</div>;
+    return <div className='py-8 text-center text-gray-500'>{t('noClientsYet')}</div>;
   }
 
   return (
@@ -36,16 +38,16 @@ export const ClientsList: React.FC<Props> = ({ onEdit, customers: customersProp,
         <div className='hidden lg:flex sticky top-0 z-9 items-center gap-3 px-8 py-3 text-sm text-black font-semibold bg-primary-50'>
           <div className='w-1/4'>
             <div className='flex items-center gap-4 pl-2.5'>
-              <span>Client name</span>
+              <span>{t('clientName')}</span>
               <div className='flex flex-col'>
                 <IconButton
-                  aria-label='sort-asc'
+                  aria-label={t('sortAsc')}
                   onClick={() => setSortDirection('asc')}
                   className='p-0 text-sm text-gray-400 hover:text-gray-700'
                   icon={<ArrowUpIcon width={14} height={14} />}
                 />
                 <IconButton
-                  aria-label='sort-desc'
+                  aria-label={t('sortDesc')}
                   onClick={() => setSortDirection('desc')}
                   className='p-0 text-sm text-gray-400 hover:text-gray-700'
                   icon={<ArrowDownIcon width={14} height={14} />}
@@ -53,9 +55,9 @@ export const ClientsList: React.FC<Props> = ({ onEdit, customers: customersProp,
               </div>
             </div>
           </div>
-          <div className='w-1/4'>Mobile number</div>
-          <div className='w-1/4'>Email address</div>
-          <div className='w-1/4 text-center'>Last visit</div>
+          <div className='w-1/4'>{t('mobileNumber')}</div>
+          <div className='w-1/4'>{t('emailAddress')}</div>
+          <div className='w-1/4 text-center'>{t('lastVisit')}</div>
         </div>
 
         <div className='flex flex-col gap-4 lg:gap-0 mb-4'>

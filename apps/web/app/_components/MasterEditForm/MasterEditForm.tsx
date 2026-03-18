@@ -2,6 +2,7 @@
 
 import React, { useCallback, useEffect, useState } from 'react';
 import { useController } from 'react-hook-form';
+import { useTranslations } from 'next-intl';
 
 import type { FileEntity, MasterWithRelationsEntityResponse } from '@avoo/axios/types/apiTypes';
 import { masterHooks, phoneHooks } from '@avoo/hooks';
@@ -32,6 +33,7 @@ export default function MasterEditForm({
   onRequestClose,
   onDirtyChange,
 }: Readonly<Props>) {
+  const t = useTranslations('private.components.MasterEditForm.MasterEditForm');
   const toast = useToast();
   const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
 
@@ -44,15 +46,15 @@ export default function MasterEditForm({
   } = masterHooks.useUpdateMasterForm({
     master,
     onSuccess: () => {
-      toast.success('Master updated successfully');
+      toast.success(t('updateSuccess'));
       onClose();
     },
   });
 
   const { deleteMaster, isPending: isDeletePending } = masterHooks.useDeleteMaster({
     onSuccess: () => {
-      const masterName = master.name?.trim() || 'Master';
-      toast.info(`Master ${masterName} was deleted!`);
+      const masterName = master.name?.trim() || t('masterFallback');
+      toast.info(t('masterDeleted', { name: masterName }));
       setIsDeleteConfirmOpen(false);
       onClose();
     },
@@ -128,22 +130,22 @@ export default function MasterEditForm({
     >
       <div className='flex-1 max-w-4xl space-y-6 md:space-y-8 xl:mx-auto'>
         <div className='flex justify-between'>
-          <h2 className='text-2xl'>Masters</h2>
+          <h2 className='text-2xl'>{t('masters')}</h2>
           <div className='flex items-center gap-2'>
             <IconButton
-              ariaLabel='Share'
+              ariaLabel={t('share')}
               icon={<ShareIcon className='fill-current' />}
               className='inline-flex items-center justify-center bg-primary-50 p-2.5 rounded-[8px] hover:bg-primary-100 focus:bg-primary-100 transition-colors'
             />
             <IconButton
-              ariaLabel='Delete'
+              ariaLabel={t('delete')}
               icon={<DeleteIcon className='fill-current' />}
               onClick={handleDeleteClick}
               className='inline-flex items-center justify-center bg-primary-50 p-2.5 rounded-[8px] hover:bg-red-100 focus:bg-red-100 hover:text-red-900 focus:text-red-900 transition-colors'
             />
           </div>
         </div>
-        <h3 className='text-base md:text-xl mb-0'>Personal info</h3>
+        <h3 className='text-base md:text-xl mb-0'>{t('personalInfo')}</h3>
         <div className='flex items-center gap-4 py-6 mb-0'>
           <AvatarUpload
             imageUri={avatarUrlField.value}
@@ -157,14 +159,14 @@ export default function MasterEditForm({
         <div className='flex flex-col gap-6 md:gap-8'>
           <div>
             <label htmlFor='name' className='text-sm block mb-1'>
-              Display Name
+              {t('displayName')}
             </label>
             <FormInput id='name' {...nameField} value={nameField.value ?? ''} />
           </div>
 
           <div>
             <label htmlFor='headline' className='text-sm block mb-1'>
-              Headline
+              {t('headline')}
             </label>
             <FormInput id='headline' {...headlineField} value={headlineField.value ?? ''} />
           </div>
@@ -186,7 +188,7 @@ export default function MasterEditForm({
 
           <div>
             <label htmlFor='phone' className='text-sm block mb-1'>
-              Phone
+              {t('phone')}
             </label>
             <div className='flex items-stretch gap-3'>
               <div className='w-[84px] flex-shrink-0'>
@@ -218,8 +220,8 @@ export default function MasterEditForm({
             onChange={bioField.onChange}
             onBlur={bioField.onBlur}
             ref={bioField.ref}
-            label='About'
-            helperText='Information will display on the platform.'
+            label={t('about')}
+            helperText={t('infoDisplayPlatform')}
             maxLength={200}
             classNames={{
               textarea:
@@ -229,9 +231,9 @@ export default function MasterEditForm({
         </div>
 
         <label htmlFor='languages' className='text-sm block mb-1'>
-          Languages
+          {t('languages')}
         </label>
-        <p className='text-xs text-gray-500'>Add languages in which the service is offered</p>
+        <p className='text-xs text-gray-500'>{t('addLanguagesOffer')}</p>
         <FormLanguageSearch
           name={languagesField.name}
           control={control}
@@ -252,9 +254,9 @@ export default function MasterEditForm({
         isOpen={isDeleteConfirmOpen}
         onCancel={() => setIsDeleteConfirmOpen(false)}
         onConfirm={handleConfirmDelete}
-        title='Delete master'
-        description='Are you sure you want to permanently delete this master profile? All related information will be removed and cannot be recovered.'
-        confirmText='Delete master'
+        title={t('deleteMaster')}
+        description={t('deleteDescription')}
+        confirmText={t('deleteConfirm')}
         submitDisabled={isDeletePending}
       />
     </form>

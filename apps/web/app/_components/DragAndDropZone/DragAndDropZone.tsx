@@ -1,4 +1,5 @@
 import React, { useRef } from 'react';
+import { useTranslations } from 'next-intl';
 
 import { tv } from 'tailwind-variants';
 
@@ -19,10 +20,11 @@ type Props = {
 };
 
 export default function DragAndDropZone(props: Props) {
+  const t = useTranslations('private.components.DragAndDropZone.DragAndDropZone');
   const {
-    title = 'Upload file',
+    title = t('defaultTitle'),
     description,
-    buttonTitle = 'SELECT FILE',
+    buttonTitle = t('defaultButtonTitle'),
     accept = '.jpg,.png',
     onFilePicked,
     fileError,
@@ -67,7 +69,7 @@ export default function DragAndDropZone(props: Props) {
     <div className={className}>
       <button
         type='button'
-        aria-label='Upload dnd file'
+        aria-label={t('uploadDnd')}
         onDragOver={(e) => e.preventDefault()}
         onDrop={(e) => {
           e.preventDefault();
@@ -83,16 +85,16 @@ export default function DragAndDropZone(props: Props) {
         ) : null}
 
         <p className='lg:mb-2 text-xs lg:text-sm font-semibold '>
-          {isUploading ? 'Uploading...' : title}
+          {isUploading ? t('uploading') : title}
         </p>
 
         {description && (
           <p className='text-xs lg:text-sm text-gray-500 lg:mb-4'>
-            {isUploading ? 'It may take a few seconds' : description}
+            {isUploading ? t('uploadingDescription') : description}
           </p>
         )}
         {displayButton && (
-          <span className='drag-and-drop-button'>{isUploading ? 'Uploading...' : buttonTitle}</span>
+          <span className='drag-and-drop-button'>{isUploading ? t('uploading') : buttonTitle}</span>
         )}
         <input
           id='dndFileInput'

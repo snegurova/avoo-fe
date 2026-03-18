@@ -1,4 +1,5 @@
 import { Metadata } from 'next/types';
+import { useTranslations } from 'next-intl';
 
 import AuthorizationWrapper from '@/_components/AuthorizationWrapper/AuthorizationWrapper';
 import ForgotPasswordForm from '@/_components/ForgotPasswordForm/ForgotPasswordForm';
@@ -11,9 +12,10 @@ export const metadata: Metadata = {
 };
 
 export default function ForgotPasswordPage() {
+  const t = useTranslations('private.forgotPassword');
   return (
     <AuthorizationWrapper
-      title='Recovery password'
+      title={t('recoveryPassword')}
       description='Enter your email to reset your password'
     >
       <ForgotPasswordForm />
@@ -23,7 +25,7 @@ export default function ForgotPasswordPage() {
           href={AppRoutes.SignIn}
           className='hover:text-primary-600 focus:text-primary-600'
         >
-          Back to login
+          {t('backToLogin')}
         </LocalizedLink>
       </div>
     </AuthorizationWrapper>

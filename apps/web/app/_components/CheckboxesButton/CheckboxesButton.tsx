@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { useTranslations } from 'next-intl';
 
 import { tv } from 'tailwind-variants';
 
@@ -32,6 +33,7 @@ const selectIcon = tv({
 });
 
 export default function CheckboxesButton(props: Props) {
+  const t = useTranslations('private.components.CheckboxesButton.CheckboxesButton');
   const { addCount = false, label, options, values, Item } = props;
   const ref = useRef<HTMLDivElement>(null);
 
@@ -75,7 +77,7 @@ export default function CheckboxesButton(props: Props) {
               {counter}
             </span>
           ) : (
-            <span className='-mr-1'>All</span>
+            <span className='-mr-1'>{t('all')}</span>
           ))}
         <span className='capitalize'>{label}</span>
         <ArrowDownIcon className={selectIcon({ open: isOpen })} />

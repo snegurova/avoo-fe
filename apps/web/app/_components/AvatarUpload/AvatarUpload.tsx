@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import { useTranslations } from 'next-intl';
 
 import { Avatar, ButtonBase, IconButton } from '@mui/material';
 
@@ -39,6 +40,7 @@ type Props = {
 };
 
 export const AvatarUpload = (props: Props) => {
+  const t = useTranslations('private.components.AvatarUpload.AvatarUpload');
   const {
     imageUri,
     isLoading,
@@ -116,7 +118,7 @@ export const AvatarUpload = (props: Props) => {
       <ButtonBase
         component='label'
         tabIndex={-1}
-        aria-label='Avatar image'
+        aria-label={t('avatarImage')}
         className='rounded-full overflow-hidden focus-visible:ring-2 focus-visible:ring-primary-500 block'
         sx={{ borderRadius: '50%', overflow: 'hidden' }}
         disabled={isBusy}
@@ -151,7 +153,7 @@ export const AvatarUpload = (props: Props) => {
           {newAvatar && confirmSave ? (
             <IconButton
               className='avatar-edit'
-              aria-label='Save avatar'
+              aria-label={t('saveAvatar')}
               size='small'
               onClick={handleSaveAvatarClick}
               disabled={isBusy}
@@ -161,7 +163,7 @@ export const AvatarUpload = (props: Props) => {
           ) : (
             <IconButton
               className='avatar-edit'
-              aria-label='Edit avatar'
+              aria-label={t('editAvatar')}
               size='small'
               onClick={handleEditClick}
               onKeyDown={handleEditKey}

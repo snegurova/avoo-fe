@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Controller } from 'react-hook-form';
+import { useTranslations } from 'next-intl';
 
 import {
   GetMastersQueryParams,
@@ -31,6 +32,7 @@ type Props = {
 };
 
 export default function OrderEdit(props: Props) {
+  const t = useTranslations('private.components.OrderEdit.OrderEdit');
   const { order, onClose, refetchCalendar, refetchOrder, isOutOfSchedule } = props;
   const [selectedMaster, setSelectedMaster] = React.useState<MasterWithRelationsEntity | undefined>(
     order.master,
@@ -126,16 +128,16 @@ export default function OrderEdit(props: Props) {
       <div className='flex flex-col gap-8 '>
         <div className='flex flex-col gap-2 items-start'>
           <div className='flex items-center justify-between gap-6 pr-6'>
-            <span className='text-2xl font-medium tracking-wider'>Edit Booking</span>
+            <span className='text-2xl font-medium tracking-wider'>{t('editBooking')}</span>
           </div>
           {isOutOfSchedule && (
             <span className='text-[10px] font-medium text-white leading-none px-1.5 py-1 flex items-center justify-center rounded-2xl capitalize bg-red-800'>
-              Out of schedule
+              {t('outOfSchedule')}
             </span>
           )}
         </div>
         <div className='flex flex-col gap-3'>
-          <h3 className='font-medium tracking-wider'>Service</h3>
+          <h3 className='font-medium tracking-wider'>{t('service')}</h3>
           {order.service && <ServiceElement item={order.service} isCard />}
           {order.combination && (
             <CombinationElement item={order.combination} isCard master={order.master} hideMasters />
@@ -152,8 +154,8 @@ export default function OrderEdit(props: Props) {
                       name='confirmation-notes'
                       value={field.value || ''}
                       onChange={field.onChange}
-                      label='Notes'
-                      helperText='Additional information for the master'
+                      label={t('notes')}
+                      helperText={t('notesHelper')}
                       maxLength={200}
                       error={errors?.notes?.message}
                       classNames={{
@@ -173,7 +175,7 @@ export default function OrderEdit(props: Props) {
                 render={({ field }) => (
                   <div className=''>
                     <span className='block mb-1 text-sm tracking-wider font-medium'>
-                      Service duration
+                      {t('serviceDuration')}
                     </span>
                     <FormCounter
                       value={field.value}
@@ -192,7 +194,7 @@ export default function OrderEdit(props: Props) {
                 control={control}
                 render={({ field }) => (
                   <SearchField
-                    label='Master'
+                    label={t('master')}
                     value={field.value ?? undefined}
                     onChange={onMasterChange}
                     items={masters}
@@ -219,11 +221,11 @@ export default function OrderEdit(props: Props) {
               render={({ field }) => (
                 <div className='grid grid-cols-3 gap-x-3 w-full'>
                   <div className='col-span-2'>
-                    <label className='block mb-2 font-medium'>Date</label>
+                    <label className='block mb-2 font-medium'>{t('date')}</label>
                     <FormDatePicker date={field.value} onChange={field.onChange} />
                   </div>
                   <div className=' '>
-                    <label className='block mb-2 font-medium'>Time</label>
+                    <label className='block mb-2 font-medium'>{t('time')}</label>
                     <FormTimePicker date={field.value} onChange={field.onChange} />
                   </div>
 
@@ -246,10 +248,12 @@ export default function OrderEdit(props: Props) {
         </div>
 
         <div className='flex flex-col gap-3'>
-          <h3 className='font-medium tracking-wider'>Client</h3>
+          <h3 className='font-medium tracking-wider'>{t('client')}</h3>
           {order.customer && <CustomerElement item={order.customer} isCard />}
           {order.customer.notes && (
-            <p className='text-xs text-gray-500'>Note: {order.customer.notes}</p>
+            <p className='text-xs text-gray-500'>
+              {t('customerNote', { note: order.customer.notes })}
+            </p>
           )}
         </div>
       </div>
@@ -261,7 +265,7 @@ export default function OrderEdit(props: Props) {
           intent={ButtonIntent.Secondary}
           onClick={onClose}
         >
-          Close
+          {t('close')}
         </Button>
         <Button
           loading={isPending}
@@ -269,7 +273,7 @@ export default function OrderEdit(props: Props) {
           intent={ButtonIntent.Primary}
           type={ButtonType.Submit}
         >
-          Save
+          {t('save')}
         </Button>
       </div>
     </form>

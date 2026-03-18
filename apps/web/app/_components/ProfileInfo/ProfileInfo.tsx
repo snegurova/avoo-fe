@@ -2,6 +2,7 @@
 
 import { useCallback } from 'react';
 import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 
 import { userHooks } from '@avoo/hooks';
 import { useApiStatusStore } from '@avoo/store';
@@ -17,6 +18,7 @@ import PinDropIcon from '@/_icons/PinDropIcon';
 import { AppRoutes } from '@/_routes/routes';
 
 export const ProfileInfo = () => {
+  const t = useTranslations('private.components.ProfileInfo.ProfileInfo');
   const router = useRouter();
   const { visualProfileInfo, userId } = userHooks.useGetUserProfile();
   const isPending = useApiStatusStore((state) => state.isPending);
@@ -61,7 +63,7 @@ export const ProfileInfo = () => {
           disabled={!userId}
           className='w-[168px] h-9 min-w-[168px] px-0 py-0 border-0 bg-primary-100 text-[16px] font-medium text-primary-800 shadow-none hover:bg-primary-200 hover:shadow-none focus:bg-primary-200 focus:ring-0 focus:ring-offset-0 focus:shadow-none active:bg-primary-200'
         >
-          Profile Preview
+          {t('profilePreview')}
         </Button>
       </div>
 
@@ -91,7 +93,7 @@ export const ProfileInfo = () => {
 
         {visualProfileInfo.description && (
           <div className='mb-6'>
-            <h3 className='text-base font-medium text-slate-900 mb-1'>About</h3>
+            <h3 className='text-base font-medium text-slate-900 mb-1'>{t('about')}</h3>
             <p className='text-sm text-slate-600'>{visualProfileInfo.description}</p>
           </div>
         )}

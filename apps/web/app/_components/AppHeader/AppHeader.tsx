@@ -59,7 +59,7 @@ export default function AppHeader({ setMenuOpen }: Props) {
         </div>
         {tabletUp && (
           <div className='bg-primary-100 rounded-2xl px-4 py-3.5 font-medium grow'>
-            <p className='text-primary-800'>Billing or marketing notification</p>
+            <p className='text-primary-800'>{t('billingNotification')}</p>
           </div>
         )}
         <div className='flex items-center lg:gap-6 xl:gap-10 2xl:gap-25 shrink-0'>
@@ -77,7 +77,7 @@ export default function AppHeader({ setMenuOpen }: Props) {
             <IconLink
               href={localizationHooks.useWithLocale(AppRoutes.Notifications)}
               icon={<NotificationsIcon className='transition-colors' />}
-              label='Notifications'
+              label={t('notifications')}
             />
             <AppProfileSelect />
           </div>
@@ -85,7 +85,7 @@ export default function AppHeader({ setMenuOpen }: Props) {
       </div>
       {!tabletUp && (
         <div className='bg-primary-100 rounded-2xl px-4 py-3.5 font-medium grow'>
-          <p className='text-primary-800'>Billing or marketing notification</p>
+          <p className='text-primary-800'>{t('billingNotification')}</p>
         </div>
       )}
     </header>

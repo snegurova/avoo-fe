@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useParams } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 
 import {
   CreateOrder,
@@ -45,6 +46,7 @@ type Props = {
 };
 
 export default function PublicServiceFormItem(props: Props) {
+  const t = useTranslations('private.components.PublicServiceFormItem.PublicServiceFormItem');
   const {
     order,
     onChange,
@@ -228,7 +230,7 @@ export default function PublicServiceFormItem(props: Props) {
   return (
     <div className='rounded-lg border border-gray-200'>
       <div className='bg-primary-50 px-4 p-2 h-14 rounded-t-lg flex items-center justify-between'>
-        <h3 className='font-medium'>{selectedService?.name ?? 'Select a service'}</h3>
+        <h3 className='font-medium'>{selectedService?.name ?? t('selectService')}</h3>
         {remove && (
           <IconButton
             className='group'
@@ -242,7 +244,7 @@ export default function PublicServiceFormItem(props: Props) {
       <div className='grid md:grid-cols-2 gap-4 p-4'>
         <div className=''>
           <SearchField
-            label='Service'
+            label={t('service')}
             value={order.serviceId ? { id: order.serviceId } : null}
             onChange={selectService}
             items={services}
@@ -250,7 +252,7 @@ export default function PublicServiceFormItem(props: Props) {
             setSearch={setSearchQuery}
             ItemElement={ServiceElementWrapped}
             searchMode={!order.serviceId}
-            placeholder='Search by service name'
+            placeholder={t('searchServiceName')}
             error={errors?.serviceId?.message}
             hasMore={hasMoreServices}
             fetchNextPage={fetchNextServicesPage}
@@ -264,7 +266,7 @@ export default function PublicServiceFormItem(props: Props) {
         </div>
         <div className=''>
           <SearchField
-            label='Master'
+            label={t('master')}
             value={order.masterId ? { id: order.masterId } : null}
             onChange={selectMaster}
             items={masters}
@@ -284,7 +286,7 @@ export default function PublicServiceFormItem(props: Props) {
           </SearchField>
         </div>
         <div className=''>
-          <label className='block mb-2 font-medium'>Date</label>
+          <label className='block mb-2 font-medium'>{t('date')}</label>
           <FormDatePicker
             date={order.date}
             onChange={onDateChange}
@@ -310,8 +312,8 @@ export default function PublicServiceFormItem(props: Props) {
             name={`notes-${index}`}
             value={order.notes || ''}
             onChange={onNotesChange}
-            label='Notes'
-            helperText='Additional information for the master'
+            label={t('notes')}
+            helperText={t('notesHelper')}
             maxLength={200}
             error={errors?.notes?.message}
             classNames={{

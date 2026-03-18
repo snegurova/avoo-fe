@@ -14,6 +14,7 @@ import { localizationHooks } from '@/_hooks/localizationHooks';
 import { AppRoutes } from '@/_routes/routes';
 
 export default function ResetPasswordForm() {
+  const tCommon = useTranslations('private.components.ResetPasswordForm.ResetPasswordForm');
   const t = useTranslations('public.resetPassword.page');
   const isPending = useApiStatusStore((state) => state.isPending);
 
@@ -37,7 +38,7 @@ export default function ResetPasswordForm() {
         <FormInput
           {...register('password')}
           type={isShowPassword ? 'text' : 'password'}
-          placeholder='Password'
+          placeholder={tCommon('password')}
           error={errors.password?.message}
           accessory={<ShowPasswordToggler value={isShowPassword} toggle={toggleShowPassword} />}
         />
@@ -50,7 +51,7 @@ export default function ResetPasswordForm() {
         <FormInput
           {...register('confirmPassword')}
           type={isShowConfirmPassword ? 'text' : 'password'}
-          placeholder='Confirm password'
+          placeholder={tCommon('confirmPassword')}
           error={errors.confirmPassword?.message}
           accessory={
             <ShowPasswordToggler value={isShowConfirmPassword} toggle={toggleConfirmPassword} />

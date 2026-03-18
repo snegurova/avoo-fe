@@ -1,3 +1,5 @@
+import { useTranslations } from 'next-intl';
+
 import { IconButton } from '@mui/material';
 import { tv } from 'tailwind-variants';
 
@@ -22,6 +24,7 @@ type Props = {
 };
 
 export default function ServiceCard(props: Props) {
+  const t = useTranslations('private.components.ServiceCard.ServiceCard');
   const { id, name, durationMinutes, price, currency, isActive, isSelected, onDelete, onEdit } =
     props;
 
@@ -70,7 +73,7 @@ export default function ServiceCard(props: Props) {
           </span>
           <div className='hidden lg:flex items-center gap-0'>
             <IconButton
-              aria-label='edit'
+              aria-label={t('editSm')}
               onClick={() => onEdit(id)}
               loading={isPending}
               disabled={isPending}
@@ -80,10 +83,10 @@ export default function ServiceCard(props: Props) {
             <IconLink
               href={'#'}
               icon={<ShareIcon className='transition-colors' />}
-              label='Share Service'
+              label={t('shareService')}
             />
             <IconButton
-              aria-label='delete'
+              aria-label={t('deleteSm')}
               onClick={() => {
                 onDelete(id);
               }}

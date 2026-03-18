@@ -1,3 +1,5 @@
+import { useTranslations } from 'next-intl';
+
 import { IconButton } from '@mui/material';
 import { tv } from 'tailwind-variants';
 
@@ -22,12 +24,13 @@ type Props = {
 };
 
 export default function ScheduleListItem(props: Props) {
+  const t = useTranslations('private.components.ScheduleListItem.ScheduleListItem');
   const { id, name, startAt, endAt, master, isActive, isSelected, onDelete, onEdit } = props;
 
   const isPending = useApiStatusStore((state) => state.isPending);
 
   const convertDate = (date: Date | null) => {
-    if (!date) return 'Ongoing';
+    if (!date) return t('ongoing');
     return date.toLocaleDateString();
   };
 
@@ -60,7 +63,7 @@ export default function ScheduleListItem(props: Props) {
           ) : (
             <span className='flex items-center gap-2 flex-row'>
               <GroupIcon />
-              <span>All Masters</span>
+              <span>{t('allMasters')}</span>
             </span>
           )}
         </div>
@@ -69,18 +72,18 @@ export default function ScheduleListItem(props: Props) {
 
       <div className='flex flex-col gap-2 md:flex-row lg:contents'>
         <div className='flex flex-row justify-between md:justify-start gap-2 lg:flex-col lg:justify-center'>
-          <p className='lg:hidden text-sm text-gray-500'>Start date:</p>
+          <p className='lg:hidden text-sm text-gray-500'>{t('startDate')}</p>
           <p className='text-sm text-gray-700 font-medium lg:font-normal'>{convertDate(startAt)}</p>
         </div>
 
         <div className='flex flex-row justify-between md:justify-start gap-2 lg:flex-col lg:justify-center'>
-          <p className='lg:hidden text-sm text-gray-500'>End date:</p>
+          <p className='lg:hidden text-sm text-gray-500'>{t('endDate')}</p>
           <p className='text-sm text-gray-700 font-medium lg:font-normal'>{convertDate(endAt)}</p>
         </div>
       </div>
       <div className='hidden lg:flex items-center me-2'>
         <IconButton
-          aria-label='edit'
+          aria-label={t('editSm')}
           onClick={() => onEdit(id)}
           loading={isPending}
           disabled={isPending}
@@ -88,7 +91,7 @@ export default function ScheduleListItem(props: Props) {
           <EditSquareIcon className='transition-colors' />
         </IconButton>
         <IconButton
-          aria-label='delete'
+          aria-label={t('deleteSm')}
           onClick={() => {
             onDelete(id);
           }}

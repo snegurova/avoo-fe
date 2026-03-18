@@ -1,3 +1,5 @@
+import { useTranslations } from 'next-intl';
+
 import { tv } from 'tailwind-variants';
 
 import { UploadMediaResponse } from '@avoo/axios/types/apiTypes';
@@ -20,6 +22,7 @@ type Props = {
 };
 
 export default function ServiceGalleryUpload(props: Props) {
+  const t = useTranslations('private.components.ServiceGalleryUpload.ServiceGalleryUpload');
   const {
     id,
     medias,
@@ -104,8 +107,8 @@ export default function ServiceGalleryUpload(props: Props) {
               {addButtonPosition === 'first' && (
                 <li key='add-more-button' className={buttonWrapper({ isSmall })}>
                   <DragAndDropZone
-                    title='Add photo'
-                    buttonTitle='Select file'
+                    title={t('addPhoto')}
+                    buttonTitle={t('selectFile')}
                     accept={accept}
                     onFilePicked={onFilePicked}
                     icon={<AddIcon fill={colors.primary[300]} width={60} height={60} />}
@@ -154,8 +157,8 @@ export default function ServiceGalleryUpload(props: Props) {
               {addButtonPosition === 'last' && !isLast(medias.length, imagePerRow) && (
                 <li key='add-more-button' className={buttonWrapper({ isSmall })}>
                   <DragAndDropZone
-                    title='Add photo'
-                    buttonTitle='Select file'
+                    title={t('addPhoto')}
+                    buttonTitle={t('selectFile')}
                     accept={accept}
                     onFilePicked={onFilePicked}
                     icon={<AddIcon fill={colors.primary[300]} width={60} height={60} />}
@@ -171,9 +174,9 @@ export default function ServiceGalleryUpload(props: Props) {
           ) : (
             <div className='flex flex-col items-center justify-center'>
               <DragAndDropZone
-                title='Select a file or drag and drop here'
+                title={t('selectOrDrag')}
                 description={isSmall ? '' : 'Upload up to 5 images (JPG, PNG only, max 10MB each)'}
-                buttonTitle='Select file'
+                buttonTitle={t('selectFile')}
                 accept={accept}
                 onFilePicked={onFilePicked}
                 icon={<BackupIcon fill={colors.primary[300]} width={60} height={60} />}

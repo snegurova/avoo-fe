@@ -9,9 +9,23 @@
         "saveButton": "Зберегти зміни",
         "changePassword": "Змінити пароль"
       },
-      "profile": {
-        "accountSettings": "Налаштування акаунта",
-        "securitySettings": "Налаштування безпеки"
+      "profile": "Профіль",
+      "certificates": {
+        "back": "Назад",
+        "certificates": "Сертифікати"
+      },
+      "editProfile": {
+        "editProfile": "Редагувати профіль"
+      },
+      "gallery": {
+        "back": "Назад",
+        "gallery": "Галерея",
+        "galleryContentHere": "Тут буде вміст галереї"
+      },
+      "posts": {
+        "back": "Назад",
+        "posts": "Пости",
+        "postsContentHere": "Тут буде вміст постів"
       }
     },
     "navigation": {
@@ -35,7 +49,9 @@
         "masters": "Майстри",
         "posts": "Пости",
         "workingSchedule": "Графік роботи",
-        "scheduleException": "Виняток у графіку"
+        "scheduleException": "Виняток у графіку",
+        "billingNotification": "Платіжні або маркетингові сповіщення",
+        "notifications": "Сповіщення"
       }
     },
     "calendar": {
@@ -67,6 +83,21 @@
         "Sun": "Нд",
         "noSchedules": "Немає розкладів",
         "noSchedulesDescription": "Наразі немає розкладів для відображення. Виберіть майстрів, щоб побачити їх розклади тут."
+      },
+      "comboServiceTime": {
+        "create": {
+          "setupNewCombo": "Налаштувати новий час комбо-послуг"
+        },
+        "createComboService": "Створити комбо-послугу"
+      },
+      "workingHours": {
+        "create": {
+          "setupNewSchedule": "Налаштувати новий графік"
+        },
+        "createWorkingSchedule": "Створити робочий графік",
+        "loading": "Завантаження...",
+        "setupFirstSchedule": "Налаштуйте свій перший робочий графік",
+        "setupScheduleDescription": "<link>Створити робочий графік</link>, щоб визначити, коли ваші майстри доступні для бронювань."
       }
     },
     "orders": {
@@ -113,6 +144,730 @@
         "bookSeparately": "Забронювати окремо",
         "applyCombination": "Застосувати комбінацію"
       }
+    },
+    "addPost": {
+      "appPostPage": "Сторінка постів"
+    },
+    "clients": {
+      "clients": "Клієнти",
+      "searchNamePhoneEmail": "Пошук за ім'ям, телефоном або email"
+    },
+    "masters": {
+      "addMaster": {
+        "addMaster": "Додати майстра"
+      },
+      "masters": "Майстри",
+      "newMaster": "Новий майстер",
+      "searchNamePhoneEmail": "Пошук за ім'ям, телефоном або email"
+    },
+    "notifications": {
+      "notificationsPage": "Сторінка сповіщень"
+    },
+    "services": {
+      "create": {
+        "addService": "Додати послугу"
+      }
+    },
+    "timeOff": {
+      "scheduleException": "Виняток графіку",
+      "addTimeOff": "Додати вихідний",
+      "searchByMasterName": "Пошук за іменем майстра",
+      "noTimeOffAdded": "Ще не додано жодного вихідного",
+      "noTimeOffDescription": "<link>Додати вихідний</link>, відпустки, перерви або недоступні години, щоб графік був точним."
+    },
+    "forgotPassword": {
+      "recoveryPassword": "Відновлення паролю",
+      "backToLogin": "Повернутись до входу"
+    },
+    "resetPassword": {
+      "createNewPassword": "Створити новий пароль"
+    },
+    "signIn": {
+      "logIn": "Увійти",
+      "createAccount": "Створити акаунт",
+      "forgotPassword": "Забули пароль?"
+    },
+    "signUp": {
+      "createProfAccount": "Створити професійний акаунт",
+      "logInSmall": "Увійти"
+    },
+    "verifyCode": {
+      "verifyCode": "Перевірити код"
+    },
+    "components": {
+      "AppNavigation": {
+        "AppNavigation": {
+          "avoo": "Avoo"
+        }
+      },
+      "AuthorizationWrapper": {
+        "AuthorizationWrapper": {
+          "avoo": "Avoo",
+          "avooCaps": "AVOO"
+        }
+      },
+      "AvatarUpload": {
+        "AvatarUpload": {
+          "avatarImage": "Зображення аватару",
+          "saveAvatar": "Зберегти аватар",
+          "editAvatar": "Редагувати аватар"
+        }
+      },
+      "Button": {
+        "Button": {
+          "loading": "Завантаження..."
+        }
+      },
+      "CalendarControls": {
+        "CalendarControls": {
+          "reset": "Скинути"
+        }
+      },
+      "CalendarColumn": {
+        "CalendarColumn": {
+          "bookAdvanceError": "Ви можете забронювати максимум на 1 рік вперед",
+          "outOfWorkingHoursInfo": "Вибраний час знаходиться поза межами робочого часу",
+          "nextPossibleTimeError": "Буде вибрано наступний можливий час"
+        }
+      },
+      "CategorySelect": {
+        "CategorySelect": {
+          "category": "Категорія"
+        }
+      },
+      "CertificateAdd": {
+        "CertificateAdd": {
+          "addCertificate": "Додати сертифікат",
+          "title": "Назва",
+          "enterCertTitle": "Введіть назву сертифіката",
+          "description": "Опис",
+          "enterCertDesc": "Введіть опис сертифіката",
+          "issueDate": "Дата видачі",
+          "master": "Майстер",
+          "uploadCertFile": "Завантажити файл сертифіката",
+          "fileUploadHint": "Тільки JPG, PNG, розмір файлу не більше 10МБ",
+          "selectFileCaps": "ВИБРАТИ ФАЙЛ",
+          "cancel": "Скасувати",
+          "save": "Зберегти",
+          "titleRequired": "Назва обов'язкова",
+          "titleTooShort": "Назва занадто коротка",
+          "maxLength500": "Максимальна довжина — 500",
+          "issueDateRequired": "Дата видачі обов'язкова",
+          "invalidDateFormat": "Невірний формат дати",
+          "dateNotInFuture": "Дата не може бути в майбутньому",
+          "salon": "Салон",
+          "selectOrDrag": "Виберіть файл або перетягніть сюди"
+        }
+      },
+      "ChangePasswordForm": {
+        "ChangePasswordForm": {
+          "changePassword": "Змінити пароль",
+          "currentPassword": "Поточний пароль",
+          "newPassword": "Новий пароль",
+          "confirmPassword": "Підтвердіть пароль"
+        }
+      },
+      "CheckboxesButton": {
+        "CheckboxesButton": {
+          "all": "Всі"
+        }
+      },
+      "ClientEditForm": {
+        "ClientEditForm": {
+          "clientInformation": "Інформація про клієнта",
+          "name": "Ім'я",
+          "phone": "Телефон",
+          "notes": "Нотатки",
+          "emailLabel": "Електронна пошта *",
+          "updateSuccess": "Інформацію про клієнта успішно змінено"
+        }
+      },
+      "ClientEditModal": {
+        "ClientEditModal": {
+          "unsavedChanges": "Незбережені зміни",
+          "unsavedChangesDescription": "У вас є незбережені зміни. Ви впевнені, що хочете вийти?",
+          "discardChanges": "Відхилити зміни"
+        }
+      },
+      "ClientOrdersHistory": {
+        "ClientOrdersHistory": {
+          "nextAppointment": "Наступний візит",
+          "noUpcomingAppt": "Немає майбутніх візитів",
+          "upcomingVisitsHint": "Майбутні візити з'являться після підтвердження бронювання.",
+          "history": "Історія",
+          "noPrevAppt": "Немає попередніх візитів",
+          "historyHint": "Історія з'явиться після першого завершеного візиту.",
+          "bookingFallback": "Бронювання",
+          "anyMaster": "Будь-який майстер",
+          "priceInEuro": "{price} євро"
+        }
+      },
+      "ClientsList": {
+        "ClientsList": {
+          "noClientsYet": "Ще немає клієнтів",
+          "clientName": "Ім'я клієнта",
+          "sortAsc": "За зростанням",
+          "sortDesc": "За спаданням",
+          "mobileNumber": "Номер телефону",
+          "emailAddress": "Електронна пошта",
+          "lastVisit": "Останній візит"
+        }
+      },
+      "ClientListItem": {
+        "ClientListItem": {
+          "noName": "Без імені",
+          "noPhone": "Без телефону",
+          "noEmail": "Без пошти",
+          "lastVisit": "останній візит {date}"
+        }
+      },
+      "CombinationForm": {
+        "CombinationForm": {
+          "master": "Майстер",
+          "noAvailableTime": "Немає вільної дати та часу"
+        }
+      },
+      "ComboServiceAddFrom": {
+        "ComboServiceAddFrom": {
+          "comboServiceName": "Назва комбо-послуги",
+          "serviceTotalDuration": "Загальна тривалість послуги",
+          "selectAtLeast2": "Виберіть хоча б 2 послуги для комбінації",
+          "availableOnline": "Доступно для онлайн-бронювання",
+          "cancel": "Скасувати",
+          "add": "Додати",
+          "masters": "Майстри *",
+          "serviceCreated": "Послугу створено!",
+          "serviceCreateError": "Не вдалося створити послугу: {error}"
+        }
+      },
+      "ComboServiceCard": {
+        "ComboServiceCard": {
+          "editSm": "Редагувати",
+          "deleteSm": "Видалити"
+        }
+      },
+      "ComboServiceControls": {
+        "ComboServiceControls": {
+          "comboServiceTime": "Час комбо-послуги",
+          "newCombo": "Нове комбо",
+          "searchComboName": "Пошук за назвою комбо"
+        }
+      },
+      "ComboServiceList": {
+        "ComboServiceList": {
+          "loading": "Завантаження...",
+          "noComboFound": "Комбо-послуги не знайдено",
+          "deleteComboService": "Видалити комбо-послугу",
+          "comboServiceTime": "Час комбо-послуги",
+          "shareSm": "Поділитися",
+          "deleteSm": "Видалити"
+        }
+      },
+      "ComboServiceSelector": {
+        "ComboServiceSelector": {
+          "service": "Послуга",
+          "serviceSearch": "Пошук послуг",
+          "addMoreServices": "Додати ще послуги"
+        }
+      },
+      "ComboServiceUpdateForm": {
+        "ComboServiceUpdateForm": {
+          "comboServiceName": "Назва комбо-послуги",
+          "masters": "Майстри",
+          "services": "Послуги",
+          "serviceTotalDuration": "Загальна тривалість послуги",
+          "availableOnline": "Доступно для онлайн-бронювання",
+          "cancel": "Скасувати",
+          "edit": "Редагувати",
+          "updateSuccess": "Комбінацію оновлено!",
+          "updateError": "Не вдалося оновити комбінацію: {message}"
+        }
+      },
+      "CustomerCreate": {
+        "CustomerCreate": {
+          "enterName": "Введіть ім'я",
+          "enterEmail": "Введіть email",
+          "enterPhone": "Введіть телефон"
+        }
+      },
+      "CustomerSelect": {
+        "CustomerSelect": {
+          "client": "Клієнт"
+        }
+      },
+      "DragAndDropZone": {
+        "DragAndDropZone": {
+          "uploadDnd": "Завантажити файл (Drag & Drop)",
+          "defaultTitle": "Завантажити файл",
+          "defaultButtonTitle": "ВИБРАТИ ФАЙЛ",
+          "uploading": "Завантаження...",
+          "uploadingDescription": "Це може зайняти кілька секунд"
+        }
+      },
+      "MasterAddForm": {
+        "MasterAddForm": {
+          "personalInfo": "Особиста інформація",
+          "displayName": "Відображуване ім'я",
+          "headline": "Заголовок",
+          "email": "Email",
+          "phone": "Телефон",
+          "about": "Про",
+          "languages": "Мови",
+          "addLanguagesOffer": "Додайте мови, якими надається послуга",
+          "close": "Закрити",
+          "add": "Додати",
+          "addSuccess": "Нового майстра успішно додано",
+          "infoDisplayPlatform": "Інформація буде відображатися на платформі."
+        }
+      },
+      "MasterEditForm": {
+        "MasterEditForm": {
+          "masters": "Майстри",
+          "share": "Поділитися",
+          "delete": "Видалити",
+          "personalInfo": "Особиста інформація",
+          "displayName": "Відображуване ім'я",
+          "headline": "Заголовок",
+          "phone": "Телефон",
+          "about": "Про",
+          "languages": "Мови",
+          "addLanguagesOffer": "Додайте мови, якими надається послуга",
+          "deleteMaster": "Видалити майстра",
+          "updateSuccess": "Майстра успішно оновлено",
+          "masterDeleted": "Майстра {name} було видалено!",
+          "deleteDescription": "Ви впевнені, що хочете назавжди видалити цей профіль майстра? Вся пов'язана інформація буде видалена, і її неможливо буде відновити.",
+          "deleteConfirm": "Видалити майстра",
+          "masterFallback": "Майстер",
+          "infoDisplayPlatform": "Інформація буде відображатися на платформі."
+        }
+      },
+      "MasterEditModal": {
+        "MasterEditModal": {
+          "unsavedChanges": "Незбережені зміни",
+          "unsavedChangesDescription": "У вас є незбережені зміни. Ви впевнені, що хочете вийти?",
+          "discardChanges": "Відхилити зміни"
+        }
+      },
+      "MasterLanguageList": {
+        "MasterLanguageList": {
+          "noLanguages": "Немає мов",
+          "languages": "Мови"
+        }
+      },
+      "MasterList": {
+        "MasterList": {
+          "noMastersYet": "Ще немає майстрів",
+          "masterName": "Ім'я майстра",
+          "sortAsc": "За зростанням",
+          "sortDesc": "За спаданням",
+          "mobileNumber": "Номер телефону",
+          "emailAddress": "Електронна пошта",
+          "languages": "Мови",
+          "actions": "Дії"
+        }
+      },
+      "MasterListItem": {
+        "MasterListItem": {
+          "editMaster": "Редагувати майстра",
+          "share": "Поділитися",
+          "delete": "Видалити",
+          "deleteMaster": "Видалити майстра",
+          "noName": "Без імені",
+          "noPhone": "Без телефону",
+          "noEmail": "Без email",
+          "masterDeleted": "Майстра {name} було видалено!",
+          "openDetails": "Відкрити деталі {name}",
+          "deleteDescription": "Ви впевнені, що хочете назавжди видалити цей профіль майстра? Вся пов'язана інформація буде видалена, і її неможливо буде відновити.",
+          "deleteConfirm": "Видалити майстра",
+          "masterFallback": "Майстер"
+        }
+      },
+      "ModeToggle": {
+        "ModeToggle": {
+          "timeOffMode": "Режим вихідного",
+          "timeOff": "Вихідний",
+          "extraWorkingTime": "Додатковий робочий час"
+        }
+      },
+      "NotificationField": {
+        "NotificationField": {
+          "toggleSendNot": "Переключити відправку сповіщень"
+        }
+      },
+      "OrderConfirmation": {
+        "OrderConfirmation": {
+          "outOfSchedule": "Поза графіком",
+          "service": "Послуга",
+          "notes": "Нотатки",
+          "serviceDuration": "Тривалість послуги",
+          "client": "Клієнт",
+          "reject": "Відхилити",
+          "confirm": "Підтвердити",
+          "notesHelper": "Додаткова інформація для майстра",
+          "customerNote": "Примітка: {note}",
+          "status": {
+            "canceled": "скасовано",
+            "confirmed": "підтверджено",
+            "pending": "очікується"
+          }
+        }
+      },
+      "OrderEdit": {
+        "OrderEdit": {
+          "editBooking": "Редагувати бронювання",
+          "outOfSchedule": "Поза графіком",
+          "service": "Послуга",
+          "notes": "Нотатки",
+          "serviceDuration": "Тривалість послуги",
+          "master": "Майстер",
+          "date": "Дата",
+          "time": "Час",
+          "client": "Клієнт",
+          "close": "Закрити",
+          "save": "Зберегти",
+          "notesHelper": "Додаткова інформація для майстра",
+          "customerNote": "Примітка: {note}"
+        }
+      },
+      "OrderView": {
+        "OrderView": {
+          "outOfSchedule": "Поза графіком",
+          "service": "Послуга",
+          "client": "Клієнт",
+          "edit": "Редагувати"
+        }
+      },
+      "PhoneCodeSelect": {
+        "PhoneCodeSelect": {
+          "countryCode": "Код країни"
+        }
+      },
+      "ProfileCertificates": {
+        "ProfileCertificates": {
+          "certificates": "Сертифікати",
+          "noCertificates": "Сертифікати не додано",
+          "addCertificates": "Додати сертифікати",
+          "addCertificatesRich": "<a>Додайте сертифікати</a>, щоб підкреслити свою професійну кваліфікацію."
+        }
+      },
+      "ProfileEdit": {
+        "EditProfileForm": {
+          "displayName": "Відображуване ім'я",
+          "phone": "Телефон",
+          "address": "Адреса",
+          "useMyLocation": "Використати мою локацію",
+          "about": "Про",
+          "cancel": "Скасувати",
+          "searching": "Пошук...",
+          "search": "Пошук",
+          "saving": "Збереження...",
+          "save": "Зберегти"
+        }
+      },
+      "ProfileGallery": {
+        "ProfileGallery": {
+          "gallery": "Галерея",
+          "galleryEmpty": "Ваша галерея порожня",
+          "addPhotos": "Додати фотографії",
+          "addPhotosRich": "<a>Додайте фотографії</a>, щоб підкреслити свою професійну кваліфікацію та атмосферу салону."
+        }
+      },
+      "ProfileInfo": {
+        "ProfileInfo": {
+          "profilePreview": "Попередній перегляд профілю",
+          "about": "Про"
+        }
+      },
+      "ProfileLanguages": {
+        "ProfileLanguages": {
+          "languages": "Мови",
+          "masterFallback": "Майстер"
+        }
+      },
+      "PublicCombinationForm": {
+        "PublicCombinationForm": {
+          "master": "Майстер",
+          "date": "Дата",
+          "notes": "Нотатки",
+          "notesHelper": "Додаткова інформація для майстра"
+        }
+      },
+      "PublicServiceFormItem": {
+        "PublicServiceFormItem": {
+          "service": "Послуга",
+          "searchServiceName": "Пошук за назвою послуги",
+          "master": "Майстер",
+          "date": "Дата",
+          "notes": "Нотатки",
+          "notesHelper": "Додаткова інформація для майстра",
+          "selectService": "Виберіть послугу"
+        }
+      },
+      "ResetPasswordForm": {
+        "ResetPasswordForm": {
+          "password": "Пароль",
+          "confirmPassword": "Підтвердіть пароль"
+        }
+      },
+      "ScheduleAddForm": {
+        "ScheduleAddForm": {
+          "name": "Ім'я",
+          "type": "Тип",
+          "applyTo": "Застосувати до",
+          "searchMasters": "Пошук майстрів...",
+          "startDate": "Дата початку",
+          "endDate": "Дата завершення",
+          "schedule": "Графік",
+          "addDay": "Додати день",
+          "cancel": "Скасувати",
+          "save": "Зберегти",
+          "addSuccess": "Розклад успішно додано",
+          "addError": "Помилка додавання розкладу: {error}",
+          "applyToAll": "Застосувати до всіх"
+        }
+      },
+      "ScheduleList": {
+        "ScheduleList": {
+          "scheduleName": "Назва графіку",
+          "appliesTo": "Застосовується до",
+          "startDate": "Дата початку",
+          "endDate": "Дата завершення",
+          "actions": "Дії",
+          "loading": "Завантаження...",
+          "noSchedulesFound": "Графіків не знайдено",
+          "deleteSchedule": "Видалити графік",
+          "schedule": "Графік",
+          "deleteSm": "Видалити",
+          "deleteSuccess": "Розклад успішно видалено",
+          "deleteError": "Не вдалося видалити розклад",
+          "deleteContent": "Це назавжди видалить розклад і вилучить його з усіх призначених майстрів. Цю дію неможливо скасувати.",
+          "cancel": "Скасувати",
+          "delete": "Видалити"
+        }
+      },
+      "ScheduleListItem": {
+        "ScheduleListItem": {
+          "allMasters": "Всі майстри",
+          "editSm": "Редагувати",
+          "deleteSm": "Видалити",
+          "ongoing": "Триває",
+          "startDate": "Дата початку:",
+          "endDate": "Дата завершення:"
+        }
+      },
+      "ScheduleUpdateForm": {
+        "ScheduleUpdateForm": {
+          "name": "Ім'я",
+          "typeOfSchedule": "Тип графіку",
+          "appliesTo": "Застосовується до",
+          "startDate": "Дата початку",
+          "endDate": "Дата завершення",
+          "cancel": "Скасувати",
+          "edit": "Редагувати",
+          "updateSuccess": "Графік успішно оновлено!",
+          "updateError": "Не вдалося оновити розклад: {error}",
+          "allMasters": "Всі майстри"
+        }
+      },
+      "SchedulesControls": {
+        "SchedulesControls": {
+          "workingSchedules": "Робочі графіки",
+          "setupNewSchedule": "Налаштувати новий графік",
+          "searchScheduleNameMaster": "Пошук за назвою графіку або майстром",
+          "sortByName": "Сортувати за назвою",
+          "sortByStartDate": "Сортувати за датою початку",
+          "sortByEndDate": "Сортувати за датою закінчення"
+        }
+      },
+      "ServiceAddForm": {
+        "ServiceAddForm": {
+          "basicDetail": "Основна інформація",
+          "title": "Назва",
+          "price": "Ціна",
+          "duration": "Тривалість",
+          "description": "Опис",
+          "shortDescription": "Короткий опис послуги",
+          "infoWillDisplay": "Інформація відображатиметься на платформі",
+          "masters": "Майстри",
+          "gallery": "Галерея",
+          "availableOnline": "Доступно для онлайн-бронювання",
+          "cancel": "Скасувати",
+          "save": "Зберегти",
+          "mediaUploaded": "Медіафайли завантажено!",
+          "mediaUploadError": "Не вдалося завантажити медіа: {error}",
+          "mediaRemoved": "Видалено {id}",
+          "serviceCreated": "Послугу створено!",
+          "serviceCreateError": "Не вдалося створити послугу: {error}"
+        }
+      },
+      "ServiceCard": {
+        "ServiceCard": {
+          "editSm": "Редагувати",
+          "shareService": "Поділитися послугою",
+          "deleteSm": "Видалити"
+        }
+      },
+      "ServiceControls": {
+        "ServiceControls": {
+          "services": "Послуги",
+          "addService": "Додати послугу",
+          "searchServiceName": "Пошук за назвою послуги"
+        }
+      },
+      "ServiceFormItem": {
+        "ServiceFormItem": {
+          "service": "Послуга",
+          "searchServiceName": "Пошук за назвою послуги",
+          "master": "Майстер",
+          "notes": "Нотатки",
+          "noAvailableTime": "Немає доступної дати та часу",
+          "notesHelperText": "Додаткова інформація для майстра"
+        }
+      },
+      "ServiceGalleryUpload": {
+        "ServiceGalleryUpload": {
+          "addPhoto": "Додати фото",
+          "selectFile": "Вибрати файл",
+          "selectOrDrag": "Виберіть файл або перетягніть сюди"
+        }
+      },
+      "ServiceList": {
+        "ServiceList": {
+          "categories": "Категорії",
+          "loading": "Завантаження...",
+          "noServicesFound": "Послуги не знайдено",
+          "deleteService": "Видалити послугу",
+          "service": "Послуга",
+          "shareSm": "Поділитися",
+          "deleteSm": "Видалити",
+          "deleteSuccess": "Послугу успішно видалено",
+          "deleteError": "Не вдалося видалити послугу",
+          "deleteConfirmContent": "Ви впевнені, що хочете видалити цю послугу? Цю дію неможливо скасувати.",
+          "cancel": "Скасувати",
+          "delete": "Видалити"
+        }
+      },
+      "ServiceUpdateForm": {
+        "ServiceUpdateForm": {
+          "basicDetail": "Основна інформація",
+          "title": "Назва",
+          "price": "Ціна",
+          "duration": "Тривалість",
+          "description": "Опис",
+          "shortDescription": "Короткий опис послуги",
+          "infoWillDisplay": "Інформація відображатиметься на платформі",
+          "masters": "Майстри",
+          "gallery": "Галерея",
+          "loadMore": "Завантажити ще",
+          "availableOnline": "Доступно для онлайн-бронювання",
+          "cancel": "Скасувати",
+          "edit": "Редагувати",
+          "updateSuccess": "Послугу оновлено!",
+          "updateError": "Не вдалося оновити послугу: {error}",
+          "mediaUploaded": "Медіафайли завантажено!",
+          "mediaUploadError": "Не вдалося завантажити медіа: {error}",
+          "mediaDeleted": "Медіафайл видалено!",
+          "mediaDeleteError": "Не вдалося видалити медіафайл: {error}",
+          "mediaRemoved": "Медіафайл вилучено!"
+        }
+      },
+      "TimeOffAddForm": {
+        "TimeOffAddForm": {
+          "scheduleException": "Виняток графіку",
+          "addTimeOffExtraHours": "Додайте вихідний або додаткові робочі години",
+          "note": "Примітка",
+          "wholeDay": "Цілий день",
+          "cancel": "Скасувати",
+          "save": "Зберегти",
+          "allStaff": "Весь персонал",
+          "master": "Майстер *",
+          "timeOff": "Вихідний",
+          "workingTime": "Робочий час",
+          "optional": "Опціонально",
+          "startDate": "Дата початку *",
+          "endDate": "Дата завершення *",
+          "masterFallback": "Майстер #{id}",
+          "timeOffSuccess": "Вихідний для {mastersLabel} успішно додано",
+          "typeOfTimeOff": "Тип вихідного *"
+        }
+      },
+      "TimeOffEditForm": {
+        "TimeOffEditForm": {
+          "scheduleException": "Виняток графіку",
+          "delete": "Видалити",
+          "note": "Примітка",
+          "wholeDay": "Цілий день",
+          "deleteTimeOff": "Видалити вихідний",
+          "allStaff": "Весь персонал",
+          "master": "Майстер *",
+          "timeOff": "Вихідний",
+          "workingTime": "Робочий час",
+          "optional": "Опціонально",
+          "endDate": "Дата завершення *",
+          "updateSuccess": "Вихідний успішно оновлено",
+          "deleteInfo": "Виняток із графіка видалено!",
+          "deleteConfirmDescription": "Ви впевнені, що хочете остаточно видалити цей виняток із графіка? Цю дію неможливо скасувати.",
+          "confirmDeleteTimeOff": "Видалити вихідний"
+        }
+      },
+      "TimeOffEditModal": {
+        "TimeOffEditModal": {
+          "unsavedChanges": "Незбережені зміни",
+          "unsavedChangesDescription": "У вас є незбережені зміни. Ви впевнені, що хочете вийти?",
+          "confirmDiscard": "Відкинути зміни"
+        }
+      },
+      "TimeOffList": {
+        "TimeOffList": {
+          "masterName": "Ім'я майстра",
+          "sortAsc": "За зростанням",
+          "sortDesc": "За спаданням",
+          "exceptionType": "Тип винятку",
+          "date": "Дата",
+          "note": "Примітка",
+          "actions": "Дії"
+        }
+      },
+      "TimeOffListItem": {
+        "TimeOffListItem": {
+          "editTimeOff": "Редагувати вихідний",
+          "delete": "Видалити",
+          "deleteTimeOff": "Видалити вихідний",
+          "deleteInfo": "Виняток із графіка видалено!",
+          "timeOff": "Вихідний",
+          "workingTime": "Робочий час",
+          "from": "з",
+          "to": "по",
+          "deleteConfirmDescription": "Ви впевнені, що хочете остаточно видалити цей виняток із графіка? Цю дію неможливо скасувати."
+        }
+      },
+      "TimeSlotField": {
+        "TimeSlotField": {
+          "timeSlot": "Часовий слот",
+          "selectValidTimeSlot": "Будь ласка, виберіть дійсний часовий слот"
+        }
+      },
+      "VerifyCodeForm": {
+        "VerifyCodeForm": {
+          "verify": "Перевірити",
+          "resendCode": "Надіслати код повторно",
+          "invalidCode": "Невірний код підтвердження. Будь ласка, спробуйте ще раз.",
+          "resendSuccess": "Код підтвердження успішно надіслано повторно",
+          "resendError": "Не вдалося повторно надіслати код підтвердження",
+          "codeSentTo": "Ми надіслали 6-значний код підтвердження на вашу електронну пошту {email}"
+        }
+      },
+      "WorkingDayRow": {
+        "WorkingDayRow": {
+          "remove": "Видалити",
+          "break": "Перерва",
+          "addBreak": "Додати перерву",
+          "day": "День",
+          "workingDay": "Робочий день",
+          "dayOff": "Вихідний",
+          "to": "до"
+        }
+      }
     }
   },
   "public": {
@@ -125,6 +880,12 @@
     "salon": {
       "page": {
         "ctaButton": "Забронювати візит"
+      },
+      "createOrder": {
+        "bookingForm": "Форма бронювання",
+        "addMoreService": "Додати більше послуг",
+        "cancel": "Скасувати",
+        "book": "Забронювати"
       }
     },
     "forgotPassword": {

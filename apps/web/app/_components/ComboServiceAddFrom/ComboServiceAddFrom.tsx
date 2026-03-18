@@ -1,5 +1,6 @@
 import { Controller } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 
 import {
   Alert,
@@ -23,6 +24,7 @@ import { AppRoutes } from '@/_routes/routes';
 import { getAllErrorMessages } from '@/_utils/formError';
 
 export default function ComboServiceAddForm() {
+  const t = useTranslations('private.components.ComboServiceAddFrom.ComboServiceAddFrom');
   const router = useRouter();
   const toast = useToast();
   const comboServicePath = localizationHooks.useWithLocale(AppRoutes.ComboServiceTime);
@@ -31,11 +33,11 @@ export default function ComboServiceAddForm() {
   const { control, watch, setValue, handleSubmit, errors } =
     combinationHooks.useCreateCombinationForm({
       onSuccess: () => {
-        toast.success('Service has been created!');
+        toast.success(t('serviceCreated'));
         router.replace(comboServicePath);
       },
       onError: (error) => {
-        toast.error('Failed to create service: ' + error.message);
+        toast.error(t('serviceCreateError', { error: error.message }));
       },
     });
 
@@ -67,7 +69,7 @@ export default function ComboServiceAddForm() {
                       required
                       fullWidth
                       value={field.value}
-                      label='Combo service name'
+                      label={t('comboServiceName')}
                     />
                   )}
                 />
@@ -76,7 +78,7 @@ export default function ComboServiceAddForm() {
               <div className='mt-4'>
                 <div className='bg-primary-50 p-2 rounded-lg'>
                   <Typography variant='h6' className='font-semibold'>
-                    Masters *
+                    {t('masters')}
                   </Typography>
                 </div>
                 <div className='mt-2'>
@@ -130,7 +132,7 @@ export default function ComboServiceAddForm() {
                     render={({ field }) => (
                       <div className='mt-2'>
                         <InputLabel id='duration-label' required>
-                          Service total duration
+                          {t('serviceTotalDuration')}
                         </InputLabel>
                         <FormCounter
                           value={field.value}
@@ -149,11 +151,11 @@ export default function ComboServiceAddForm() {
                 </FormControl>
               ) : (
                 <Alert severity='info' sx={{ width: '100%', mt: 2 }}>
-                  Select at least 2 service per combination
+                  {t('selectAtLeast2')}
                 </Alert>
               )}
               <div className='mt-8 flex items-center justify-between'>
-                <Typography variant='h5'>Available for online booking</Typography>
+                <Typography variant='h5'>{t('availableOnline')}</Typography>
                 <Controller
                   name='isActive'
                   control={control}
@@ -174,10 +176,10 @@ export default function ComboServiceAddForm() {
       <section id='create-new-service-controls' className='shrink-0 bg-white z-10'>
         <div className='w-full flex gap-8 p-4 pr-3 justify-center md:justify-end  lg:pr-3'>
           <Button color='secondary' variant='outlined' onClick={() => router.back()}>
-            Cancel
+            {t('cancel')}
           </Button>
           <Button form='add-combo-service' type='submit' color='secondary' variant='contained'>
-            Add
+            {t('add')}
           </Button>
         </div>
       </section>

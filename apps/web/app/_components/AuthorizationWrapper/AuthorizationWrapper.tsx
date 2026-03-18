@@ -14,6 +14,7 @@ type Props = {
 };
 
 export default function AuthorizationWrapper(props: Props) {
+  const tCommon = useTranslations('private.components.AuthorizationWrapper.AuthorizationWrapper');
   const t = useTranslations('public.authorizationWrapper.index');
   const { children, title, description } = props;
 
@@ -26,7 +27,7 @@ export default function AuthorizationWrapper(props: Props) {
               href={AppRoutes.Home}
               className='font-inter font-semibold text-4xl text-gray-600'
             >
-              Avoo
+              {tCommon('avoo')}
             </LocalizedLink>
           </div>
           <div className='flex flex-col justify-center xl:px-5 2xl:px-15 w-full'>
@@ -41,7 +42,9 @@ export default function AuthorizationWrapper(props: Props) {
             {children}
           </div>
           <div className='flex items-center gap-15 justify-between text-xs leading-normal'>
-            <span>© {new Date().getFullYear()} Avoo</span>
+            <span>
+              © {new Date().getFullYear()} {tCommon('avoo')}
+            </span>
             <Link
               href='#'
               className='font-medium text-sm hover:text-primary-600 focus:text-primary-600'
@@ -59,7 +62,7 @@ export default function AuthorizationWrapper(props: Props) {
       >
         <div className='px-8 pt-[30%]'>
           <p className='text-8xl xl:text-[8.375rem] font-advent-pro text-gray-800 mb-7 text-center leading-none'>
-            AVOO
+            {tCommon('avooCaps')}
           </p>
           <p className='font-montserrat text-2xl text-gray-600 capitalize text-center'>
             {t('slogan')}

@@ -1,4 +1,5 @@
 import { Metadata } from 'next/types';
+import { useTranslations } from 'next-intl';
 
 import AuthorizationWrapper from '@/_components/AuthorizationWrapper/AuthorizationWrapper';
 import VerifyCodeForm from '@/_components/VerifyCodeForm/VerifyCodeForm';
@@ -9,8 +10,9 @@ export const metadata: Metadata = {
 };
 
 export default function VerifyCodePage() {
+  const t = useTranslations('private.verifyCode');
   return (
-    <AuthorizationWrapper title='Verify Code'>
+    <AuthorizationWrapper title={t('verifyCode')}>
       <VerifyCodeForm />
     </AuthorizationWrapper>
   );

@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 
 import { tv } from 'tailwind-variants';
 
@@ -125,6 +126,7 @@ export default function CalendarColumn(props: Props) {
   const ref = useRef<HTMLDivElement | null>(null);
   const router = useRouter();
   const toast = useToast();
+  const t = useTranslations('private.components.CalendarColumn.CalendarColumn');
 
   const [showEvents, setShowEvents] = useState<number>(1);
 
@@ -194,11 +196,11 @@ export default function CalendarColumn(props: Props) {
     const oneYearFromNow = new Date();
     oneYearFromNow.setFullYear(oneYearFromNow.getFullYear() + 1);
     if (selectedDateTime > oneYearFromNow) {
-      toast.error('You can only book up to 1 year in advance');
+      toast.error(t('bookAdvanceError'));
       return;
     }
     if (!isAvailable) {
-      toast.info('Selected time is out of available working hours');
+      toast.info(t('outOfWorkingHoursInfo'));
     }
 
     if (onClickDateTime) {
@@ -207,7 +209,7 @@ export default function CalendarColumn(props: Props) {
 
     if (calendarType !== CalendarType.SELECTOR) {
       if (selectedDateTime < currentDateTime) {
-        toast.error('There will be next possible time selected');
+        toast.error(t('nextPossibleTimeError'));
       }
 
       setMasterIds([master.id]);

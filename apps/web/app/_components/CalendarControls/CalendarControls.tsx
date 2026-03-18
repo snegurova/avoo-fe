@@ -74,6 +74,7 @@ import { IconButton } from '@/_components/IconButton/IconButton';
 import CheckboxesListButton from '../CheckboxesListButton/CheckboxesListButton';
 
 export default function CalendarControls(props: Props) {
+  const tCommon = useTranslations('private.components.CalendarControls.CalendarControls');
   const t = useTranslations('private.calendar.calendar');
   const tOrder = useTranslations('private.orders.order');
   const { scrollToCurrentTime, masters, calendarType } = props;
@@ -455,7 +456,7 @@ export default function CalendarControls(props: Props) {
           onClick={resetStorage}
           className={controlsButton({ variant: 'full' })}
         >
-          Reset
+          {tCommon('reset')}
         </button>
       )}
     </div>

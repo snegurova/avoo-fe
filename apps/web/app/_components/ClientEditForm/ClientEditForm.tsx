@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { Controller, useForm } from 'react-hook-form';
+import { useTranslations } from 'next-intl';
 
 import { customerHooks } from '@avoo/hooks';
 
@@ -32,6 +33,7 @@ type ClientFormProps = {
 };
 
 export default function ClientEditForm(props: Readonly<ClientFormProps>) {
+  const t = useTranslations('private.components.ClientEditForm.ClientEditForm');
   const { initial, onClose, onRequestClose, onDirtyChange, id, notifyInitial = true } = props;
 
   const update = customerHooks.useUpdateCustomer();
@@ -68,7 +70,7 @@ export default function ClientEditForm(props: Readonly<ClientFormProps>) {
     };
 
     await update.updateCustomerAsync({ id, body: customerUpdateData });
-    toast.success("Client's information changed successfully");
+    toast.success(t('updateSuccess'));
     onClose();
   };
 
@@ -81,18 +83,18 @@ export default function ClientEditForm(props: Readonly<ClientFormProps>) {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col gap-11'>
       <div className='flex flex-col space-y-6'>
-        <h2 className='text-lg font-semibold mb-3'>Client information</h2>
+        <h2 className='text-lg font-semibold mb-3'>{t('clientInformation')}</h2>
 
         <div>
           <label htmlFor='name' className='text-sm'>
-            Name
+            {t('name')}
           </label>
           <FormInput id='name' {...register('name')} />
         </div>
 
         <div>
           <label htmlFor='email' className='text-sm'>
-            Email address *
+            {t('emailLabel')}
           </label>
           <FormInput
             id='email'
@@ -105,7 +107,7 @@ export default function ClientEditForm(props: Readonly<ClientFormProps>) {
 
         <div>
           <label htmlFor='phone' className='text-sm'>
-            Phone
+            {t('phone')}
           </label>
           <FormInput id='phone' {...register('phone')} />
         </div>
@@ -117,7 +119,7 @@ export default function ClientEditForm(props: Readonly<ClientFormProps>) {
             <FormTextarea
               {...field}
               rows={3}
-              label='Notes'
+              label={t('notes')}
               showCounter={true}
               textareaClassAppend='text-xs'
             />

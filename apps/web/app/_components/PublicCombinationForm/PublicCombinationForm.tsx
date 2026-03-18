@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useParams } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 
 import {
   Combination,
@@ -36,6 +37,7 @@ type Props = {
 };
 
 export default function PublicCombinationForm(props: Props) {
+  const t = useTranslations('private.components.PublicCombinationForm.PublicCombinationForm');
   const {
     value,
     onChange,
@@ -168,7 +170,7 @@ export default function PublicCombinationForm(props: Props) {
         />
         <div className=''>
           <SearchField
-            label='Master'
+            label={t('master')}
             value={value[0].masterId ? { id: value[0].masterId } : null}
             onChange={selectMaster}
             items={masters}
@@ -189,7 +191,7 @@ export default function PublicCombinationForm(props: Props) {
         </div>
         <div className=''>
           <div className=''>
-            <label className='block mb-2 font-medium'>Date</label>
+            <label className='block mb-2 font-medium'>{t('date')}</label>
             <FormDatePicker date={value[0].date} onChange={onDateChange} />
           </div>
           {errors?.date?.message && (
@@ -212,8 +214,8 @@ export default function PublicCombinationForm(props: Props) {
             name={`combination-notes`}
             value={value[0].notes || ''}
             onChange={onNotesChange}
-            label='Notes'
-            helperText='Additional information for the master'
+            label={t('notes')}
+            helperText={t('notesHelper')}
             maxLength={200}
             error={errors?.notes?.message}
             classNames={{

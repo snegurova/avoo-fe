@@ -1,5 +1,6 @@
 'use client';
 import React from 'react';
+import { useTranslations } from 'next-intl';
 
 import type { UpdateProfile } from '@avoo/axios/types/apiTypes';
 import { userHooks } from '@avoo/hooks';
@@ -12,6 +13,7 @@ import { routerHooks } from '@/_hooks/routerHooks';
 import { AppRoutes } from '@/_routes/routes';
 
 export default function EditProfilePage() {
+  const t = useTranslations('private.profile.editProfile');
   const handleBackClick = routerHooks.useBackWithFallback(
     localizationHooks.useWithLocale(AppRoutes.Profile),
   );
@@ -31,7 +33,7 @@ export default function EditProfilePage() {
 
   return (
     <AppWrapper>
-      <SectionHeader title='Edit Profile' />
+      <SectionHeader title={t('editProfile')} />
 
       <EditProfileForm
         initial={{

@@ -1,4 +1,5 @@
 import { Metadata } from 'next/types';
+import { useTranslations } from 'next-intl';
 
 import AuthorizationWrapper from '@/_components/AuthorizationWrapper/AuthorizationWrapper';
 import { LocalizedLink } from '@/_components/LocalizedLink/LocalizedLink';
@@ -11,9 +12,10 @@ export const metadata: Metadata = {
 };
 
 export default function SignUpPage() {
+  const t = useTranslations('private.signUp');
   return (
     <AuthorizationWrapper
-      title='Create a professional account'
+      title={t('createProfAccount')}
       description='Set up your profile to start managing your services and bookings.'
     >
       <RegisterForm />
@@ -25,7 +27,7 @@ export default function SignUpPage() {
             href={AppRoutes.SignIn}
             className='text-primary-800 hover:text-primary-600 focus:text-primary-600 underline font-bold'
           >
-            Log in
+            {t('logInSmall')}
           </LocalizedLink>
         </p>
       </div>

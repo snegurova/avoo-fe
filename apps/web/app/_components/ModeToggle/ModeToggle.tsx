@@ -1,4 +1,5 @@
 import React, { useCallback } from 'react';
+import { useTranslations } from 'next-intl';
 
 import { TimeOffMode } from '@avoo/hooks/types/timeOffType';
 
@@ -9,6 +10,7 @@ type Props = {
 };
 
 export default function ModeToggle({ value, onChange, className = '' }: Props) {
+  const t = useTranslations('private.components.ModeToggle.ModeToggle');
   const handleTimeOffClick = useCallback(() => onChange(TimeOffMode.TimeOff), [onChange]);
 
   const handleExtraTimeClick = useCallback(() => onChange(TimeOffMode.ExtraTime), [onChange]);
@@ -17,7 +19,7 @@ export default function ModeToggle({ value, onChange, className = '' }: Props) {
     <div
       className={`${className} mt-6 mb-8 flex w-full relative bg-white border border-gray-200 rounded-lg md:max-w-[335px]`}
       role='tablist'
-      aria-label='Time off mode'
+      aria-label={t('timeOffMode')}
     >
       <div
         className={`absolute left-0 top-0 h-full bg-primary-100 rounded-md transition-transform duration-500 ease-in-out w-1/2 transform ${
@@ -31,7 +33,7 @@ export default function ModeToggle({ value, onChange, className = '' }: Props) {
         onClick={handleTimeOffClick}
         className='relative z-10 flex-1 py-1.5 px-4 font-normal text-base transition-colors duration-300 text-center cursor-pointer'
       >
-        Time off
+        {t('timeOff')}
       </button>
       <button
         type='button'
@@ -40,7 +42,7 @@ export default function ModeToggle({ value, onChange, className = '' }: Props) {
         onClick={handleExtraTimeClick}
         className='relative z-10 flex-1 py-1.5 px-4 font-normal text-base transition-colors duration-300 text-center cursor-pointer'
       >
-        Extra working time
+        {t('extraWorkingTime')}
       </button>
     </div>
   );
