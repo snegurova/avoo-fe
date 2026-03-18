@@ -122,8 +122,8 @@ export type UpdateScheduleRequest = components['schemas']['UpdateScheduleDto'];
 export type CreateScheduleResponse = ScheduleEntity;
 export type UpdateScheduleResponse = ScheduleEntity;
 
-export type QuerySchedules = components['schemas']['QueryScheduleDto'];
-export type SchedulesQueryParams = Omit<QuerySchedules, 'page'>;
+export type QuerySchedules = operations['SchedulesController_findAll']['parameters']['query'];
+export type SchedulesQueryParams = QuerySchedules;
 export type GetSchedulesResponse = {
   items: ScheduleEntity[];
   pagination: components['schemas']['PaginationDto'];

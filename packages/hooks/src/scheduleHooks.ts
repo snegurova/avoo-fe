@@ -47,7 +47,7 @@ type UseUpdateScheduleFormParams = {
   onError?: (error: Error) => void;
 };
 
-type SortField = 'name' | 'startAt' | 'endAt';
+export type SortScheduleField = 'name' | 'startAt' | 'endAt';
 
 type ScheduleQueryStateParams = {
   limit: number;
@@ -67,8 +67,8 @@ export const scheduleHooks = {
               .padStart(2, '0')}:30`,
       value: String(i * 30),
     })),
-  useGetSchedulesInfinite: ({ limit = DEFAULT_LIMIT, search }: SchedulesQueryParams) => {
-    const filterParams = { limit, search };
+  useGetSchedulesInfinite: ({ limit = DEFAULT_LIMIT, search, sort }: SchedulesQueryParams = {}) => {
+    const filterParams = { limit, search, sort };
     const query = useInfiniteQuery<BaseResponse<GetSchedulesResponse>, Error>({
       queryKey: ['schedules', 'list', filterParams],
       queryFn: ({ pageParam = 1 }) =>
@@ -99,7 +99,10 @@ export const scheduleHooks = {
       }));
     };
 
-    const { field, direction, sortQuery, onSortClick } = useSort<SortField>('startAt', 'asc');
+    const { field, direction, sortQuery, onSortClick } = useSort<SortScheduleField>(
+      'startAt',
+      'asc',
+    );
     const debouncedSearch = useDebounce(params.search, 400);
 
     const queryParams = useMemo(

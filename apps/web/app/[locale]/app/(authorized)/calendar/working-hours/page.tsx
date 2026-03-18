@@ -16,7 +16,8 @@ import EditCalendarIcon from '@/_icons/EditCalendarIcon';
 export default function WorkingHoursPage() {
   const t = useTranslations('private.calendar.workingHours');
   const isPending = useApiStatusStore((state) => state.isPending);
-  const { setSearchQuery, queryParams } = scheduleHooks.useScheduleQuery();
+  const { queryParams, setSearchQuery, onSortClick, activeSortDirection, activeSortField } =
+    scheduleHooks.useScheduleQuery();
   const { data, fetchNextPage, hasNextPage } = scheduleHooks.useGetSchedulesInfinite({
     ...queryParams,
   });
@@ -28,7 +29,12 @@ export default function WorkingHoursPage() {
 
   return (
     <AppWrapper withPadding>
-      <SchedulesControls setSearchQuery={setSearchQuery} />
+      <SchedulesControls
+        setSearchQuery={setSearchQuery}
+        onSortClick={onSortClick}
+        activeSortDirection={activeSortDirection}
+        activeSortField={activeSortField}
+      />
       {schedules.length === 0 && !queryParams.search ? (
         <AppPlaceholder
           title={isPending ? t('loading') : t('setupFirstSchedule')}

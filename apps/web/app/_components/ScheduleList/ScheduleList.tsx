@@ -69,13 +69,6 @@ export default function ScheduleList(props: Props) {
 
   return (
     <>
-      <div className='hidden lg:grid grid-cols-[2fr_1.2fr_1.2fr_1.2fr_72px] gap-3 p-6 mb-8 text-sm text-black font-semibold bg-primary-50'>
-        <div>{t('scheduleName')}</div>
-        <div>{t('appliesTo')}</div>
-        <div>{t('startDate')}</div>
-        <div>{t('endDate')}</div>
-        <div>{t('actions')}</div>
-      </div>
       <div className='overflow-y-auto'>
         <ul className='flex flex-col gap-2 lg:block lg:divide-y lg:divide-gray-200' ref={listRef}>
           {schedules && schedules.length !== 0 ? (

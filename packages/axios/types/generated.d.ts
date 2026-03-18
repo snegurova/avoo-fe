@@ -1277,6 +1277,8 @@ export interface components {
       /** @example 10 */
       perPage: number;
     };
+    /** @enum {string} */
+    SortDirection: 'asc' | 'desc';
     CreateMasterDto: {
       /**
        * @description Master email address (must be unique)
@@ -3163,6 +3165,8 @@ export interface operations {
         combinationId?: number;
         /** @description Salon ID */
         userId?: number;
+        /** @description Sorting by name */
+        sort?: components['schemas']['SortDirection'];
       };
       header?: never;
       path?: never;
@@ -3348,6 +3352,8 @@ export interface operations {
         combinationId?: number;
         /** @description Salon ID */
         userId?: number;
+        /** @description Sorting by name */
+        sort?: components['schemas']['SortDirection'];
       };
       header?: never;
       path?: never;
@@ -5152,6 +5158,8 @@ export interface operations {
         limit?: number;
         /** @description Filter by name, email or phone */
         search?: string;
+        /** @description Sorting by name */
+        sort?: components['schemas']['SortDirection'];
       };
       header?: never;
       path?: never;
@@ -5228,6 +5236,10 @@ export interface operations {
         page?: number;
         /** @description Items per page */
         limit?: number;
+        /** @description Filter by master name */
+        search?: string;
+        /** @description Sorting by master name */
+        sort?: components['schemas']['SortDirection'];
       };
       header?: never;
       path?: never;

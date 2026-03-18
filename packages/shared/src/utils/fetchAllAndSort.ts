@@ -1,4 +1,5 @@
-import { sortByName, SortDirection } from './sort';
+import { SortDirection } from '../types/sort';
+import { sortByName } from './sort';
 
 export type BaseItemsResponse<T> = { data?: { items?: T[] } | null };
 
