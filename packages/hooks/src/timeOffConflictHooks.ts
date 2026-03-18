@@ -262,3 +262,5 @@ export const timeOffConflictHooks = {
     };
   },
 };
+
+export const timeOffConflictsHooks = timeOffConflictHooks;
