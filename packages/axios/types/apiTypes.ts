@@ -305,6 +305,10 @@ export type DeleteMediaParams = NonNullable<
   operations['MediasController_deleteById']['parameters']['query']
 >;
 
+export type GetPublicMediaParams = NonNullable<
+  operations['MediasPublicController_getAll']['parameters']['query']
+>;
+
 /* Combination */
 
 export type Combination = Omit<
