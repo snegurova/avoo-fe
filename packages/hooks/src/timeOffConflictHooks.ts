@@ -270,6 +270,8 @@ const useTimeOffConflicts = ({ values, masters, excludeId }: UseTimeOffConflicts
   };
 };
 
-export const timeOffConflictsHooks = {
+export const timeOffConflictHooks = {
   useTimeOffConflicts,
 };
+
+export const timeOffConflictsHooks = timeOffConflictHooks;
