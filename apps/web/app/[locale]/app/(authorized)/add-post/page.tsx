@@ -1,6 +1,8 @@
 'use client';
 import React from 'react';
+import { useTranslations } from 'next-intl';
 
 export default function AppPostPage() {
-  return <>AppPost Page</>;
+  const t = useTranslations('private.addPost');
+  return <>{t('appPostPage')}</>;
 }

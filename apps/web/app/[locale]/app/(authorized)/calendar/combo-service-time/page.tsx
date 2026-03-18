@@ -2,6 +2,7 @@
 
 import { useMemo } from 'react';
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 
 import { combinationHooks } from '@avoo/hooks';
 import { useApiStatusStore } from '@avoo/store';
@@ -13,6 +14,7 @@ import ComboServiceList from '@/_components/ComboServiceList/ComboServiceList';
 import AutoStoriesIcon from '@/_icons/AutoStoriesIcon';
 
 export default function WorkingHoursPage() {
+  const t = useTranslations('private.calendar.comboServiceTime');
   const isPending = useApiStatusStore((state) => state.isPending);
   const { setSearchQuery, queryParams } = combinationHooks.useCombinationQuery();
   const { data, fetchNextPage, hasNextPage } = combinationHooks.useGetCombinationsInfinite({
@@ -35,7 +37,7 @@ export default function WorkingHoursPage() {
             isPending ? null : (
               <p>
                 <Link href='#' className='text-primary-300'>
-                  Create a combo service
+                  {t('createComboService')}
                 </Link>{' '}
                 to make it easier for your clients to book multiple services at once.
               </p>

@@ -1,6 +1,7 @@
 'use client';
 import React, { useCallback } from 'react';
 import { useForm } from 'react-hook-form';
+import { useTranslations } from 'next-intl';
 
 import { Button } from '@mui/material';
 
@@ -30,6 +31,7 @@ export default function EditProfileForm({
   isPending,
   showPreview = false,
 }: Readonly<Props>) {
+  const t = useTranslations('private.components.ProfileEdit.EditProfileForm');
   const { search, searchResults, isSearching, clear, getMyLocation } = useAddressSearch();
 
   type FormValues = {
@@ -122,30 +124,30 @@ export default function EditProfileForm({
 
       <div>
         <label htmlFor='name' className='text-sm text-gray-600'>
-          Display Name
+          {t('displayName')}
         </label>
         <FormInput id='name' {...register('name')} />
       </div>
 
       <div>
         <label htmlFor='phone' className='text-sm text-gray-600'>
-          Phone
+          {t('phone')}
         </label>
         <FormInput id='phone' {...register('phone')} />
       </div>
 
       <div>
         <label htmlFor='address' className='text-sm text-gray-600'>
-          Address
+          {t('address')}
         </label>
         <div className='space-y-2'>
           <div className='flex gap-2'>
             <FormInput id='address' {...register('address')} />
             <Button type='button' size='small' onClick={handleSearchClick}>
-              {isSearching ? 'Searching...' : 'Search'}
+              {isSearching ? t('searching') : t('search')}
             </Button>
             <Button type='button' size='small' onClick={handleUseMyLocation}>
-              Use my location
+              {t('useMyLocation')}
             </Button>
           </div>
 
@@ -159,7 +161,7 @@ export default function EditProfileForm({
 
       <div>
         <label htmlFor='description' className='text-sm text-gray-600'>
-          About
+          {t('about')}
         </label>
         <FormInput id='description' {...register('description')} />
       </div>
@@ -172,7 +174,7 @@ export default function EditProfileForm({
           variant='outlined'
           sx={{ minWidth: 150 }}
         >
-          Cancel
+          {t('cancel')}
         </Button>
         <Button
           type='submit'
@@ -181,7 +183,7 @@ export default function EditProfileForm({
           variant='contained'
           sx={{ minWidth: 150 }}
         >
-          {isPending ? 'Saving...' : 'Save'}
+          {isPending ? t('saving') : t('save')}
         </Button>
       </div>
     </form>

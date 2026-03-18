@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { useTranslations } from 'next-intl';
 
 import type { MasterWithRelationsEntityResponse } from '@avoo/axios/types/apiTypes';
 
@@ -16,6 +17,7 @@ type Props = {
 };
 
 export const MasterEditModal: React.FC<Props> = ({ master, open, onClose }) => {
+  const t = useTranslations('private.components.MasterEditModal.MasterEditModal');
   const [isDirty, setIsDirty] = React.useState(false);
   const [showUnsavedConfirm, setShowUnsavedConfirm] = React.useState(false);
 
@@ -44,9 +46,9 @@ export const MasterEditModal: React.FC<Props> = ({ master, open, onClose }) => {
           setShowUnsavedConfirm(false);
           onClose();
         }}
-        title='Unsaved changes'
-        description='You having unsaved changes. Are you sure you want to leave?'
-        confirmText='Discard changes'
+        title={t('unsavedChanges')}
+        description={t('unsavedChangesDescription')}
+        confirmText={t('discardChanges')}
       />
     </>
   );

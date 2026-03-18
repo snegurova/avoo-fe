@@ -3,15 +3,20 @@ import { useState } from 'react';
 import ArrowDownIcon from '@/_icons/ArrowDownIcon';
 import SortIcon from '@/_icons/SortIcon';
 
-type Props = {
-  onSelect: (value: string) => void;
-  options: { label: string; value: string }[];
+type Props<T extends string> = {
+  onSelect: (value: T) => void;
+  options: { label: string; value: T }[];
   className?: string;
 };
 
-export default function SortOptions(props: Props) {
+export default function SortOptions<T extends string>(props: Props<T>) {
   const { options, className, onSelect } = props;
   const [showOptions, setShowOptions] = useState(false);
+
+  const handleSelect = (value: T) => {
+    onSelect(value);
+    setShowOptions(false);
+  };
 
   return (
     <div className={className}>
@@ -24,12 +29,12 @@ export default function SortOptions(props: Props) {
         <ArrowDownIcon width={24} height={24} />
       </button>
       {showOptions && (
-        <ul className='absolute top-full left-0 bg-white border border-gray-300 rounded-lg mt-1 w-full p-2'>
+        <ul className='absolute top-full left-0 bg-white border border-gray-300 rounded-lg mt-1 w-full p-2 z-1'>
           {options.map((option) => (
             <li
               key={option.value}
               className='cursor-pointer hover:bg-gray-100 px-2 py-1 rounded'
-              onClick={() => onSelect(option.value)}
+              onClick={() => handleSelect(option.value)}
             >
               {option.label}
             </li>

@@ -1,11 +1,10 @@
 'use client';
 
 import { useEffect } from 'react';
-import { FormattedMessage } from 'react-intl';
 import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 
 import { authHooks } from '@avoo/hooks';
-import { messages } from '@avoo/intl/messages/public/forgotPassword/page';
 import { useApiStatusStore } from '@avoo/store';
 
 import { Button, ButtonFit, ButtonIntent } from '@/_components/Button/Button';
@@ -15,6 +14,7 @@ import { useToast } from '@/_hooks/useToast';
 import { AppRoutes } from '@/_routes/routes';
 
 export default function ForgotPasswordForm() {
+  const t = useTranslations('public.forgotPassword.page');
   const isPending = useApiStatusStore((state) => state.isPending);
 
   const router = useRouter();
@@ -43,13 +43,11 @@ export default function ForgotPasswordForm() {
   return (
     <form onSubmit={handleSubmit} className='w-full flex flex-col gap-6'>
       <label>
-        <span className='text-sm font-medium mb-1 leading-none block'>
-          <FormattedMessage {...messages.emailLabel} />
-        </span>
+        <span className='text-sm font-medium mb-1 leading-none block'>{t('emailLabel')}</span>
         <FormInput
           {...register('email')}
           type='email'
-          placeholder={messages.emailPlaceholder.defaultMessage}
+          placeholder={t('emailPlaceholder')}
           error={errors.email?.message}
           autoCapitalize='none'
         />
@@ -61,7 +59,7 @@ export default function ForgotPasswordForm() {
         fit={ButtonFit.Fill}
         intent={ButtonIntent.Primary}
       >
-        <FormattedMessage {...messages.button} />
+        {t('button')}
       </Button>
     </form>
   );

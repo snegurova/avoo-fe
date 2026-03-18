@@ -1,3 +1,5 @@
+import { useTranslations } from 'next-intl';
+
 import { IconButton } from '@mui/material';
 import { tv } from 'tailwind-variants';
 
@@ -21,6 +23,7 @@ type Props = {
 };
 
 export default function ComboServiceCard(props: Props) {
+  const t = useTranslations('private.components.ComboServiceCard.ComboServiceCard');
   const { id, name, durationMinutes, isActive, services, onDelete, onEdit, isSelected } = props;
 
   const isPending = useApiStatusStore((state) => state.isPending);
@@ -67,7 +70,7 @@ export default function ComboServiceCard(props: Props) {
         </ul>
         <div className='hidden lg:flex flex-row items-center gap-0'>
           <IconButton
-            aria-label='edit'
+            aria-label={t('editSm')}
             onClick={() => onEdit(id)}
             loading={isPending}
             disabled={isPending}
@@ -75,7 +78,7 @@ export default function ComboServiceCard(props: Props) {
             <EditSquareIcon className='transition-colors' />
           </IconButton>
           <IconButton
-            aria-label='delete'
+            aria-label={t('deleteSm')}
             onClick={() => {
               onDelete(id);
             }}

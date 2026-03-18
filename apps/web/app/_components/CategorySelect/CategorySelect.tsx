@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import { Control, Controller } from 'react-hook-form';
+import { useTranslations } from 'next-intl';
 
 import { Autocomplete, FormControl, FormHelperText, TextField } from '@mui/material';
 
@@ -14,6 +15,7 @@ type Props = {
 };
 
 export default function CategorySelect(props: Props) {
+  const t = useTranslations('private.components.CategorySelect.CategorySelect');
   const { categories, control, error } = props;
   const options = useMemo(() => {
     return categories.map((category) => ({
@@ -36,7 +38,7 @@ export default function CategorySelect(props: Props) {
             onChange={(_, newValue) => {
               field.onChange(newValue?.id ?? null);
             }}
-            renderInput={(params) => <TextField {...params} label='Category' required />}
+            renderInput={(params) => <TextField {...params} label={t('category')} required />}
           />
         )}
       />

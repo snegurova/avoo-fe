@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { useTranslations } from 'next-intl';
 
 import type { CustomerInfoResponse } from '@avoo/axios/types/apiTypes';
 import { customerHooks } from '@avoo/hooks';
@@ -25,6 +26,7 @@ type FormValues = {
 };
 
 export const ClientEditModal: React.FC<Props> = ({ id, client, open, onClose }) => {
+  const t = useTranslations('private.components.ClientEditModal.ClientEditModal');
   const queriedCustomer = customerHooks.useGetCustomerById(id);
   const customer = client ?? queriedCustomer;
   const [isDirty, setIsDirty] = React.useState(false);
@@ -68,9 +70,9 @@ export const ClientEditModal: React.FC<Props> = ({ id, client, open, onClose }) 
           setShowUnsavedConfirm(false);
           onClose();
         }}
-        title='Unsaved changes'
-        description='You having unsaved changes. Are you sure you want to leave?'
-        confirmText='Discard changes'
+        title={t('unsavedChanges')}
+        description={t('unsavedChangesDescription')}
+        confirmText={t('discardChanges')}
       />
     </>
   );

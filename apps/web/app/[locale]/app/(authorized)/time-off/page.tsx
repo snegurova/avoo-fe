@@ -2,6 +2,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 
 import dayjs from 'dayjs';
 
@@ -18,6 +19,7 @@ import EditCalendarIcon from '@/_icons/EditCalendarIcon';
 import { AppRoutes } from '@/_routes/routes';
 
 export default function TimeOffPage() {
+  const t = useTranslations('private.timeOff');
   const [searchQuery, setSearchQuery] = useState('');
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [selectedTimeOff, setSelectedTimeOff] = useState<Exception | null>(null);
@@ -97,12 +99,12 @@ export default function TimeOffPage() {
     <AppWrapper className='flex-1 min-h-0'>
       <div className='flex-1 min-h-0 overflow-auto lg:overflow-hidden hide-scrollbar flex flex-col'>
         <Controls
-          title='Schedule exception'
+          title={t('scheduleException')}
           onAddItem={handleAddTimeOff}
-          addLabel='Add time off'
+          addLabel={t('addTimeOff')}
           searchValue={searchQuery}
           onSearchChange={setSearchQuery}
-          placeholder='Search by master`s name'
+          placeholder={t('searchByMasterName')}
           variant={ControlsVariant.StackedSearch}
           className='sticky top-0 z-10 bg-white px-5 md:px-11 lg:px-11 pt-6 lg:pt-14 lg:pb-8'
         />
@@ -110,14 +112,17 @@ export default function TimeOffPage() {
         <div className='px-5 md:px-11 pb-11 lg:flex-1 lg:min-h-0 lg:overflow-hidden'>
           {filteredExceptions.length === 0 ? (
             <AppPlaceholder
-              title='No time off added yet'
+              title={t('noTimeOffAdded')}
               icon={<EditCalendarIcon className='w-20 h-20 xl:w-25 xl:h-25 fill-primary-300' />}
               description={
                 <p>
-                  <Link href={addTimeOffPath} className='text-primary-300 font-bold'>
-                    Add time off
-                  </Link>
-                  , vacations, breaks, or unavailable hours to keep the schedule accurate.
+                  {t.rich('noTimeOffDescription', {
+                    link: (chunks) => (
+                      <Link href={addTimeOffPath} className='text-primary-300 font-bold'>
+                        {chunks}
+                      </Link>
+                    ),
+                  })}
                 </p>
               }
             />

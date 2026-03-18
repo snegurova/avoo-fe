@@ -3,6 +3,7 @@
 import React, { useCallback, useEffect, useMemo } from 'react';
 import { Controller, useController } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 
 import { Button, FormControlLabel, Switch } from '@mui/material';
 import type { Dayjs } from 'dayjs';
@@ -31,6 +32,7 @@ import ModeToggle from '../ModeToggle/ModeToggle';
 import TimeOffConflictsSection from '../TimeOffConflictsSection/TimeOffConflictsSection';
 
 export default function TimeOffAddForm() {
+  const t = useTranslations('private.components.TimeOffAddForm.TimeOffAddForm');
   const {
     data: mastersPages,
     hasNextPage,
@@ -63,9 +65,9 @@ export default function TimeOffAddForm() {
   }, [router, timeOffPath]);
 
   const mastersOptions = [
-    { label: 'All Staff', value: 'all' },
+    { label: t('allStaff'), value: 'all' },
     ...masters.map((master) => ({
-      label: master.name ?? `Master #${master.id}`,
+      label: master.name ?? t('masterFallback', { id: master.id }),
       value: String(master.id),
     })),
   ];
@@ -73,7 +75,7 @@ export default function TimeOffAddForm() {
   const { control, handleSubmit, setValue, watch, errors, isPending, getValues } =
     exceptionHooks.useCreateExceptionForm(({ mastersLabel } = {}) => {
       if (mastersLabel) {
-        toast.success(`Time off for ${mastersLabel} added successfully`);
+        toast.success(t('timeOffSuccess', { mastersLabel }));
       }
       handleNavigateToTimeOff();
     });
@@ -96,9 +98,11 @@ export default function TimeOffAddForm() {
 
   const headerLabel = useMemo(() => {
     if (values.mode === TimeOffMode.TimeOff) {
-      return timeOffTypeOptions.find((option) => option.value === values.type)?.label ?? 'Time off';
+      return (
+        timeOffTypeOptions.find((option) => option.value === values.type)?.label ?? t('timeOff')
+      );
     }
-    return 'Working time';
+    return t('workingTime');
   }, [values.mode, values.type, timeOffTypeOptions]);
 
   const handleStartTimeChange = useCallback(
@@ -150,10 +154,8 @@ export default function TimeOffAddForm() {
 
   return (
     <div className='py-7 px-5 md:px-11 flex-1 min-h-0 overflow-auto hide-scrollbar w-full'>
-      <h2 className='text-[20px] lg:text-[24px] font-semibold'>Schedule exception</h2>
-      <p className='text-xs lg:text-sm text-gray-500'>
-        Add time off or extra working hours for a master
-      </p>
+      <h2 className='text-[20px] lg:text-[24px] font-semibold'>{t('scheduleException')}</h2>
+      <p className='text-xs lg:text-sm text-gray-500'>{t('addTimeOffExtraHours')}</p>
 
       <ModeToggle value={values.mode} onChange={(mode) => setValue('mode', mode)} />
 
@@ -163,7 +165,7 @@ export default function TimeOffAddForm() {
             {values.mode === TimeOffMode.TimeOff && (
               <div className=''>
                 <label htmlFor='type' className='block text-sm font-medium text-gray-700'>
-                  Type of Time off *
+                  {t('typeOfTimeOff')}
                 </label>
                 <Controller
                   name='type'
@@ -184,7 +186,7 @@ export default function TimeOffAddForm() {
 
             <div className=''>
               <label htmlFor='staff' className='block text-sm font-medium text-gray-700'>
-                Master *
+                {t('master')}
               </label>
               <Controller
                 name='staff'
@@ -210,8 +212,8 @@ export default function TimeOffAddForm() {
                 onChange={noteField.onChange}
                 onBlur={noteField.onBlur}
                 ref={noteField.ref}
-                label='Note'
-                helperText='Optional'
+                label={t('note')}
+                helperText={t('optional')}
                 maxLength={200}
                 error={errors.note?.message}
                 classNames={{
@@ -233,7 +235,7 @@ export default function TimeOffAddForm() {
                     labelPlacement='start'
                     label={
                       <div style={{ marginRight: 10 }} className='text-gray-600 text-xs'>
-                        Whole day
+                        {t('wholeDay')}
                       </div>
                     }
                     control={
@@ -255,7 +257,7 @@ export default function TimeOffAddForm() {
             <div className='flex flex-col gap-4 p-4'>
               <div className=''>
                 <label htmlFor='startDate' className='block text-sm font-medium text-gray-700 mb-1'>
-                  Start Date *
+                  {t('startDate')}
                 </label>
                 <Controller
                   name='startDate'
@@ -280,7 +282,7 @@ export default function TimeOffAddForm() {
 
               <div className=''>
                 <label htmlFor='endDate' className='block text-sm font-medium text-gray-700 mb-1'>
-                  End Date *
+                  {t('endDate')}
                 </label>
                 <Controller
                   name='endDate'
@@ -324,7 +326,7 @@ export default function TimeOffAddForm() {
             variant='outlined'
             sx={{ width: { xs: 130, md: 170 }, height: 45 }}
           >
-            Cancel
+            {t('cancel')}
           </Button>
           <Button
             type='submit'
@@ -333,7 +335,7 @@ export default function TimeOffAddForm() {
             sx={{ width: { xs: 130, md: 170 }, height: 45 }}
             disabled={isPending || isConflictsLoading || hasConflict}
           >
-            Save
+            {t('save')}
           </Button>
         </div>
       </form>

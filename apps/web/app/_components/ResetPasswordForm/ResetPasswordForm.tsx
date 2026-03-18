@@ -1,11 +1,10 @@
 'use client';
 
-import { FormattedMessage } from 'react-intl';
 import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 
 import { authHooks } from '@avoo/hooks';
 import { utils } from '@avoo/hooks';
-import { messages } from '@avoo/intl/messages/public/resetPassword/page';
 import { useApiStatusStore } from '@avoo/store';
 
 import { Button, ButtonFit, ButtonIntent } from '@/_components/Button/Button';
@@ -15,6 +14,8 @@ import { localizationHooks } from '@/_hooks/localizationHooks';
 import { AppRoutes } from '@/_routes/routes';
 
 export default function ResetPasswordForm() {
+  const tCommon = useTranslations('private.components.ResetPasswordForm.ResetPasswordForm');
+  const t = useTranslations('public.resetPassword.page');
   const isPending = useApiStatusStore((state) => state.isPending);
 
   const router = useRouter();
@@ -33,28 +34,24 @@ export default function ResetPasswordForm() {
   return (
     <form onSubmit={handleSubmit} className='w-full flex flex-col gap-6'>
       <label>
-        <span className='text-sm font-medium mb-1 leading-none block'>
-          <FormattedMessage {...messages.newPasswordLabel} />
-        </span>
+        <span className='text-sm font-medium mb-1 leading-none block'>{t('newPasswordLabel')}</span>
         <FormInput
           {...register('password')}
           type={isShowPassword ? 'text' : 'password'}
-          placeholder='Password'
+          placeholder={tCommon('password')}
           error={errors.password?.message}
           accessory={<ShowPasswordToggler value={isShowPassword} toggle={toggleShowPassword} />}
         />
-        <p className='text-gray-500 text-xs mt-1'>
-          <FormattedMessage {...messages.notation} />
-        </p>
+        <p className='text-gray-500 text-xs mt-1'>{t('notation')}</p>
       </label>
       <label>
         <span className='text-sm font-medium mb-1 leading-none block'>
-          <FormattedMessage {...messages.confirmPasswordLabel} />
+          {t('confirmPasswordLabel')}
         </span>
         <FormInput
           {...register('confirmPassword')}
           type={isShowConfirmPassword ? 'text' : 'password'}
-          placeholder='Confirm password'
+          placeholder={tCommon('confirmPassword')}
           error={errors.confirmPassword?.message}
           accessory={
             <ShowPasswordToggler value={isShowConfirmPassword} toggle={toggleConfirmPassword} />
@@ -69,7 +66,7 @@ export default function ResetPasswordForm() {
         fit={ButtonFit.Fill}
         intent={ButtonIntent.Primary}
       >
-        <FormattedMessage {...messages.saveButton} />
+        {t('saveButton')}
       </Button>
     </form>
   );

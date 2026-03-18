@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { FormattedMessage } from 'react-intl';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 
 import { tv } from 'tailwind-variants';
 
@@ -13,7 +13,6 @@ import { calendarHooks, masterHooks } from '@avoo/hooks';
 import { CalendarType } from '@avoo/hooks/types/calendarType';
 import { CalendarViewType } from '@avoo/hooks/types/calendarViewType';
 import { OrderQueryParams } from '@avoo/hooks/types/orderQueryParams';
-import { messages } from '@avoo/intl/messages/private/calendar/calendar';
 import { timeUtils } from '@avoo/shared';
 import { useCalendarStore } from '@avoo/store';
 
@@ -91,6 +90,7 @@ type Props = {
 };
 
 export default function Calendar(props: Props) {
+  const t = useTranslations('private.calendar.calendar');
   const { calendarType = CalendarType.REGULAR, onClickDateTime } = props;
   const scrollRef = useRef<HTMLDivElement | null>(null);
   const date = useCalendarStore((state) => state.date);
@@ -285,9 +285,9 @@ export default function Calendar(props: Props) {
             )}
             {filteredMasters.length === 0 && (
               <AppPlaceholder
-                title={<FormattedMessage {...messages.noSchedules} />}
+                title={t('noSchedules')}
                 icon={<CalendarClockIcon className='w-20 h-20 xl:w-25 xl:h-25 fill-primary-300' />}
-                description={<FormattedMessage {...messages.noSchedulesDescription} />}
+                description={t('noSchedulesDescription')}
               />
             )}
           </div>

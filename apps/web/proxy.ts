@@ -1,25 +1,10 @@
-import { NextRequest, NextResponse } from 'next/server';
+import createMiddleware from 'next-intl/middleware';
 
-import { DEFAULT_LOCALE, SUPPORTED_LOCALES } from '@avoo/intl';
+import { routing } from './i18n/routing';
 
-export function proxy(req: NextRequest) {
-  const { pathname } = req.nextUrl;
-
-  if (pathname.startsWith('/_next') || pathname.startsWith('/api') || pathname.includes('.')) {
-    return NextResponse.next();
-  }
-
-  const pathnameStartsWith = pathname.split('/')[1];
-  const isLocale = (SUPPORTED_LOCALES as readonly string[]).includes(pathnameStartsWith);
-  if (isLocale) {
-    return NextResponse.next();
-  }
-
-  const url = req.nextUrl.clone();
-  url.pathname = `/${DEFAULT_LOCALE}${pathname}`;
-  return NextResponse.redirect(url);
-}
+export default createMiddleware(routing);
 
 export const config = {
-  matcher: ['/((?!_next|api).*)'],
+  // Match only internationalized pathnames
+  matcher: ['/', '/(pl|en|uk)/:path*'],
 };

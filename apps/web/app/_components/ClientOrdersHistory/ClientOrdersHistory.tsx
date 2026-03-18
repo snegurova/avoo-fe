@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { useTranslations } from 'next-intl';
 
 import { Order } from '@avoo/axios/types/apiTypes';
 import { orderHooks } from '@avoo/hooks';
@@ -26,6 +27,7 @@ type HistoryItem = {
 };
 
 export default function ClientOrdersHistory(props: Readonly<Props>) {
+  const t = useTranslations('private.components.ClientOrdersHistory.ClientOrdersHistory');
   const { customerId } = props;
   const customerOrders = orderHooks.useGetCustomerOrderHistory(customerId, 50);
 
@@ -37,7 +39,8 @@ export default function ClientOrdersHistory(props: Readonly<Props>) {
     const dateMonth = Number.isNaN(orderDate.getTime())
       ? '--'
       : orderDate.toLocaleDateString('en-US', { month: 'short' });
-    const title = order.service?.name ?? order.combination?.name ?? order.name ?? 'Booking';
+    const title =
+      order.service?.name ?? order.combination?.name ?? order.name ?? t('bookingFallback');
     const note = typeof order.notes === 'string' ? order.notes : undefined;
 
     return {
@@ -47,8 +50,8 @@ export default function ClientOrdersHistory(props: Readonly<Props>) {
       time: timeUtils.getTime(String(order.date)),
       title,
       duration: timeUtils.getHumanDuration(order.duration),
-      master: order.master?.name ?? 'Unknown master',
-      price: `${order.price} Euro`,
+      master: order.master?.name ?? t('anyMaster'),
+      price: t('priceInEuro', { price: order.price }),
       note,
     };
   }, []);
@@ -90,7 +93,7 @@ export default function ClientOrdersHistory(props: Readonly<Props>) {
   return (
     <>
       <div>
-        <h2 className='text-lg font-semibold mb-3'>Next appointment</h2>
+        <h2 className='text-lg font-semibold mb-3'>{t('nextAppointment')}</h2>
         {nextAppointments.length > 0 ? (
           <ul className='max-h-[140px] md:max-h-[270px] overflow-y-auto flex flex-col gap-3 pr-2'>
             {nextAppointments.map((item) => (
@@ -110,16 +113,14 @@ export default function ClientOrdersHistory(props: Readonly<Props>) {
           </ul>
         ) : (
           <div className='text-center py-6'>
-            <p className='text-[16px] font-semibold text-slate-900'>No upcoming appointments</p>
-            <p className='text-[12px] text-slate-500 mt-2'>
-              Upcoming visits will appear after booking confirmation.
-            </p>
+            <p className='text-[16px] font-semibold text-slate-900'>{t('noUpcomingAppt')}</p>
+            <p className='text-[12px] text-slate-500 mt-2'>{t('upcomingVisitsHint')}</p>
           </div>
         )}
       </div>
 
       <div>
-        <h2 className='text-lg font-semibold mb-3'>History</h2>
+        <h2 className='text-lg font-semibold mb-3'>{t('history')}</h2>
         {historyItems.length > 0 ? (
           <ul className='max-h-[140px] md:max-h-[270px] overflow-y-auto flex flex-col gap-3 pr-2'>
             {historyItems.map((item) => (
@@ -139,10 +140,8 @@ export default function ClientOrdersHistory(props: Readonly<Props>) {
           </ul>
         ) : (
           <div className='text-center py-6'>
-            <p className='text-[16px] font-semibold text-slate-900'>No previous appointments</p>
-            <p className='text-[12px] text-slate-500 mt-2'>
-              History will show after the first completed visit.
-            </p>
+            <p className='text-[16px] font-semibold text-slate-900'>{t('noPrevAppt')}</p>
+            <p className='text-[12px] text-slate-500 mt-2'>{t('historyHint')}</p>
           </div>
         )}
       </div>

@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { useTranslations } from 'next-intl';
 
 import { Typography } from '@mui/material';
 import dayjs from 'dayjs';
@@ -25,27 +26,28 @@ type Props = {
 };
 
 const TimeOffListItem = ({ item, onEdit }: Props) => {
+  const t = useTranslations('private.components.TimeOffListItem.TimeOffListItem');
   const toast = useToast();
   const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
 
   const { mutate: deleteException, isPending: isDeletePending } = exceptionHooks.useDeleteException(
     () => {
-      toast.info('Time off was deleted!');
+      toast.info(t('deleteInfo'));
       setIsDeleteConfirmOpen(false);
     },
   );
 
   const getModeLabel = (type?: string) => {
     const typeStr = String(type ?? '').toUpperCase();
-    if (!typeStr) return 'Time off';
+    if (!typeStr) return t('timeOff');
     switch (typeStr) {
       case 'PERSONAL_WORKING':
       case 'HOLIDAY_WORKING':
       case 'VACATION_WORKING':
       case 'OTHER_WORKING':
-        return 'Working time';
+        return t('workingTime');
       default:
-        return 'Time off';
+        return t('timeOff');
     }
   };
 
@@ -117,16 +119,20 @@ const TimeOffListItem = ({ item, onEdit }: Props) => {
     }
     return wholeDay ? (
       <div>
-        <div>from {formatDay(from)}</div>
-        <div>to {formatDay(to)}</div>
+        <div>
+          {t('from')} {formatDay(from)}
+        </div>
+        <div>
+          {t('to')} {formatDay(to)}
+        </div>
       </div>
     ) : (
       <div>
         <div>
-          from {minsToTime(item.startTimeMinutes)} {formatDay(from)}
+          {t('from')} {minsToTime(item.startTimeMinutes)} {formatDay(from)}
         </div>
         <div>
-          to {minsToTime(item.endTimeMinutes)} {formatDay(to)}
+          {t('to')} {minsToTime(item.endTimeMinutes)} {formatDay(to)}
         </div>
       </div>
     );
@@ -168,7 +174,7 @@ const TimeOffListItem = ({ item, onEdit }: Props) => {
             <div className='md:hidden'>
               <div className='w-full h-px my-3' style={{ backgroundColor: colors.primary[100] }} />
               <div className='text-sm text-gray-500 flex items-center gap-2'>
-                {modeLabel === 'Time off' ? (
+                {modeLabel === t('timeOff') ? (
                   <DoNotDisturbIcon className='w-4 h-4 text-red-600' />
                 ) : (
                   <ScheduleIcon className='w-4 h-4 text-green-600' />
@@ -185,7 +191,7 @@ const TimeOffListItem = ({ item, onEdit }: Props) => {
         <div className='hidden md:flex md:flex-col md:w-auto lg:w-1/5'>
           <div className='mt-3 md:mt-0 md:flex md:flex-col'>
             <div className='text-sm text-gray-500 flex items-center gap-2'>
-              {modeLabel === 'Time off' ? (
+              {modeLabel === t('timeOff') ? (
                 <DoNotDisturbIcon className='w-4 h-4 text-red-600' />
               ) : (
                 <ScheduleIcon className='w-4 h-4 text-green-600' />
@@ -224,7 +230,7 @@ const TimeOffListItem = ({ item, onEdit }: Props) => {
         </div>
 
         <div className='w-1/5 text-sm text-gray-700 break-words whitespace-normal flex items-center gap-2'>
-          {modeLabel === 'Time off' ? (
+          {modeLabel === t('timeOff') ? (
             <DoNotDisturbIcon className='w-4 h-4 text-red-600' />
           ) : (
             <ScheduleIcon className='w-4 h-4 text-green-600' />
@@ -249,13 +255,13 @@ const TimeOffListItem = ({ item, onEdit }: Props) => {
         <div className='w-12 flex items-center gap-2'>
           <IconButton
             icon={<EditSquareIcon />}
-            ariaLabel='Edit time off'
+            ariaLabel={t('editTimeOff')}
             onClick={handleOpenDetails}
             className='flex items-center justify-center p-2.5'
           />
           <IconButton
             icon={<DeleteIcon />}
-            ariaLabel='Delete'
+            ariaLabel={t('delete')}
             onClick={handleDeleteClick}
             className='flex items-center justify-center p-2.5'
           />
@@ -266,9 +272,9 @@ const TimeOffListItem = ({ item, onEdit }: Props) => {
         isOpen={isDeleteConfirmOpen}
         onCancel={() => setIsDeleteConfirmOpen(false)}
         onConfirm={handleConfirmDelete}
-        title='Delete time off'
-        description='Are you sure you want to permanently delete this schedule exception? This action cannot be undone.'
-        confirmText='Delete time off'
+        title={t('deleteTimeOff')}
+        description={t('deleteConfirmDescription')}
+        confirmText={t('deleteTimeOff')}
         submitDisabled={isDeletePending}
       />
     </div>

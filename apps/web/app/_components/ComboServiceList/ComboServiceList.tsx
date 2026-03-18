@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+import { useTranslations } from 'next-intl';
 
 import { IconButton, Typography } from '@mui/material';
 import useMediaQuery from '@mui/material/useMediaQuery';
@@ -22,6 +23,7 @@ type Props = {
 };
 
 export default function ComboServiceList(props: Props) {
+  const t = useTranslations('private.components.ComboServiceList.ComboServiceList');
   const { combinations, incrementPage, hasMore } = props;
   const toast = useToast();
   const listRef = useRef<HTMLDivElement>(null);
@@ -90,16 +92,16 @@ export default function ComboServiceList(props: Props) {
             </ul>
           </div>
         ) : isPending ? (
-          <Typography variant='h1'>Loading...</Typography>
+          <Typography variant='h1'>{t('loading')}</Typography>
         ) : (
-          <Typography variant='h1'>No combo services found</Typography>
+          <Typography variant='h1'>{t('noComboFound')}</Typography>
         )}
       </div>
 
       <ConfirmationDialog
         open={!!combinationToDelete}
         onClose={handleCloseDeleteDialog}
-        title='Delete Combo Service'
+        title={t('deleteComboService')}
         content='Are you sure you want to delete this combo service?'
         cancelText='Cancel'
         confirmText='Delete'
@@ -111,16 +113,16 @@ export default function ComboServiceList(props: Props) {
         {selectedCombination && (
           <div className='w-full h-full flex flex-col overflow-y-auto overflow-x-hidden'>
             <div className='sticky top-[-1] flex items-center justify-between py-2 bg-white z-2'>
-              <Typography variant='h1'>Combo service time</Typography>
+              <Typography variant='h1'>{t('comboServiceTime')}</Typography>
               <div className='flex flex-row gap-4 lg:hidden'>
                 <div className='bg-primary-50 w-10 h-10 rounded-lg flex items-center justify-center'>
-                  <IconButton aria-label='share'>
+                  <IconButton aria-label={t('shareSm')}>
                     <ShareIcon className='transition-colors' />
                   </IconButton>
                 </div>
                 <div className='bg-primary-50 w-10 h-10 rounded-lg flex items-center justify-center'>
                   <IconButton
-                    aria-label='delete'
+                    aria-label={t('deleteSm')}
                     onClick={() => {
                       handleOpenDeleteDialog(selectedCombination.id);
                     }}

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Controller } from 'react-hook-form';
+import { useTranslations } from 'next-intl';
 
 import {
   Button,
@@ -30,6 +31,7 @@ type Props = {
 };
 
 export default function ServiceUpdateForm(props: Props) {
+  const t = useTranslations('private.components.ServiceUpdateForm.ServiceUpdateForm');
   const { service, onCancel } = props;
   const toast = useToast();
   const categories = categoriesHooks.useGetPublicCategories();
@@ -58,23 +60,23 @@ export default function ServiceUpdateForm(props: Props) {
     {
       service,
       onSuccess: () => {
-        toast.success('Service has been updated!');
+        toast.success(t('updateSuccess'));
         onCancel();
       },
       onError: (error) => {
-        toast.error('Failed to update service: ' + error.message);
+        toast.error(t('updateError', { error: error.message }));
       },
     },
   );
 
   const { uploadMedia, isUploading } = mediaHooks.useUploadMedia({
     onSuccess: (data) => {
-      toast.success('Media has been uploaded!');
+      toast.success(t('mediaUploaded'));
       setAddedMedias((prev) => [data, ...prev]);
       setValue('mediaIds', [...getValues('mediaIds'), data.id]);
     },
     onError: (error) => {
-      toast.error('Failed to upload media: ' + error.message);
+      toast.error(t('mediaUploadError', { error: error.message }));
     },
   });
 
@@ -95,10 +97,10 @@ export default function ServiceUpdateForm(props: Props) {
         'mediaIds',
         getValues('mediaIds').filter((id) => id !== mediaId),
       );
-      toast.success('Media has been deleted!');
+      toast.success(t('mediaDeleted'));
     },
     onError: (error) => {
-      toast.error('Failed to delete media: ' + error.message);
+      toast.error(t('mediaDeleteError', { error: error.message }));
     },
   });
 
@@ -109,7 +111,7 @@ export default function ServiceUpdateForm(props: Props) {
         'mediaIds',
         getValues('mediaIds').filter((mediaId) => mediaId !== id),
       );
-      toast.success('Media has been removed!');
+      toast.success(t('mediaRemoved'));
       return;
     }
     deleteMedia({
@@ -133,13 +135,19 @@ export default function ServiceUpdateForm(props: Props) {
             ))}
           </div>
         )}
-        <Typography variant='h3'>Basic detail</Typography>
+        <Typography variant='h3'>{t('basicDetail')}</Typography>
         <FormControl fullWidth error={!!errors.name?.message}>
           <Controller
             name='name'
             control={control}
             render={({ field }) => (
-              <TextField {...field} required fullWidth value={field.value ?? ''} label='Title' />
+              <TextField
+                {...field}
+                required
+                fullWidth
+                value={field.value ?? ''}
+                label={t('title')}
+              />
             )}
           />
           {errors.name?.message && <FormHelperText>{errors.name?.message}</FormHelperText>}
@@ -158,7 +166,7 @@ export default function ServiceUpdateForm(props: Props) {
               <TextField
                 {...field}
                 required
-                label='Price'
+                label={t('price')}
                 type='number'
                 value={field.value ?? ''}
                 onChange={(e) => field.onChange(Number(e.target.value))}
@@ -169,7 +177,7 @@ export default function ServiceUpdateForm(props: Props) {
         </FormControl>
         <FormControl fullWidth error={!!errors.durationMinutes}>
           <InputLabel id='duration-label' required>
-            Duration
+            {t('duration')}
           </InputLabel>
           <Controller
             name='durationMinutes'
@@ -179,7 +187,7 @@ export default function ServiceUpdateForm(props: Props) {
                 {...field}
                 onChange={(e) => field.onChange(Number(e.target.value))}
                 value={field.value}
-                label='Duration'
+                label={t('duration')}
                 labelId='duration-label'
               >
                 {durationOptions.map((option) => (
@@ -204,23 +212,23 @@ export default function ServiceUpdateForm(props: Props) {
               <TextField
                 {...field}
                 value={field.value}
-                label='Description'
+                label={t('description')}
                 required
                 multiline
                 rows={3}
-                placeholder='Short description for the service'
+                placeholder={t('shortDescription')}
               />
             )}
           />
           {errors.description?.message && (
             <FormHelperText>{errors.description?.message}</FormHelperText>
           )}
-          <span className='text-sm text-gray-500'>Information will display on platform</span>
+          <span className='text-sm text-gray-500'>{t('infoWillDisplay')}</span>
         </FormControl>
 
         <div className='mt-8'>
           <div className='bg-primary-50 p-2 rounded-lg'>
-            <Typography variant='h3'>Masters</Typography>
+            <Typography variant='h3'>{t('masters')}</Typography>
           </div>
           <div className='mt-2'>
             <FormControl fullWidth error={!!errors.masterIds?.message}>
@@ -244,7 +252,7 @@ export default function ServiceUpdateForm(props: Props) {
         </div>
         <div id='gallery-upload' className='mt-8'>
           <div className='bg-primary-50 p-2 rounded-lg'>
-            <Typography variant='h3'>Gallery</Typography>
+            <Typography variant='h3'>{t('gallery')}</Typography>
           </div>
           <div className='mt-2'>
             <ServiceGalleryUpload
@@ -267,13 +275,13 @@ export default function ServiceUpdateForm(props: Props) {
                 disabled={!hasNextPage}
                 className='mt-4'
               >
-                Load more
+                {t('loadMore')}
               </Button>
             </div>
           )}
         </div>
         <div className='mt-8 flex items-center justify-between'>
-          <Typography variant='h5'>Available for online booking</Typography>
+          <Typography variant='h5'>{t('availableOnline')}</Typography>
           <Controller
             name='isActive'
             control={control}
@@ -290,10 +298,10 @@ export default function ServiceUpdateForm(props: Props) {
       </form>
       <div className='sticky bottom-0 z-20 pt-4 bg-white flex items-center justify-end gap-4'>
         <Button color='secondary' variant='outlined' onClick={onCancel}>
-          Cancel
+          {t('cancel')}
         </Button>
         <Button form='update-service' type='submit' color='secondary' variant='contained'>
-          Edit
+          {t('edit')}
         </Button>
       </div>
     </>

@@ -1,8 +1,7 @@
 import React from 'react';
-import { FormattedMessage } from 'react-intl';
+import { useTranslations } from 'next-intl';
 
 import { Combination } from '@avoo/axios/types/apiTypes';
-import { messages } from '@avoo/intl/messages/private/orders/create';
 
 import {
   Button,
@@ -19,13 +18,14 @@ type Props = {
 };
 
 export default function CombinationProposition(props: Props) {
+  const t = useTranslations('private.orders.create');
   const { data, onCancel, onApply } = props;
 
   return (
     <div className='bg-primary-100 rounded-lg p-4 text-center flex flex-col gap-4 text-sm'>
       <div className=''>
         <p>
-          {data.services[0].name} <FormattedMessage {...messages.canBeCombined} />{' '}
+          {data.services[0].name} {t('canBeCombined')}{' '}
           {data.services
             .slice(1)
             .map((service) => service.name)
@@ -33,9 +33,9 @@ export default function CombinationProposition(props: Props) {
           .
         </p>
         <p>
-          <FormattedMessage {...messages.totalDurationMessage} />{' '}
+          {t('totalDurationMessage')}{' '}
           <span className='font-medium'>
-            {data.durationMinutes} <FormattedMessage {...messages.minutes} />
+            {data.durationMinutes} {t('minutes')}
           </span>
           .
         </p>
@@ -48,7 +48,7 @@ export default function CombinationProposition(props: Props) {
           size={ButtonSize.Small}
           onClick={onCancel}
         >
-          <FormattedMessage {...messages.bookSeparetly} />
+          {t('bookSeparetly')}
         </Button>
         <Button
           fit={ButtonFit.Inline}
@@ -57,7 +57,7 @@ export default function CombinationProposition(props: Props) {
           size={ButtonSize.Small}
           onClick={onApply}
         >
-          <FormattedMessage {...messages.applyCombination} />
+          {t('applyCombination')}
         </Button>
       </div>
     </div>

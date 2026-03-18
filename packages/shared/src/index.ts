@@ -7,6 +7,7 @@ export * from './types/calendarSlot';
 export * from './types/geocode';
 export * from './types/option';
 export * from './types/profile';
+export * from './types/sort';
 export * from './utils/address';
 export * from './utils/avatar';
 export * from './utils/fetchAllAndSort';

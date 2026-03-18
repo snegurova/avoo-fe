@@ -2,6 +2,7 @@
 
 import React, { useCallback, useEffect } from 'react';
 import { Controller, useController, useForm } from 'react-hook-form';
+import { useTranslations } from 'next-intl';
 
 import { FormControlLabel, Switch } from '@mui/material';
 import type { Dayjs } from 'dayjs';
@@ -88,6 +89,7 @@ export default function TimeOffEditForm({
   onRequestClose,
   onDirtyChange,
 }: Readonly<Props>) {
+  const t = useTranslations('private.components.TimeOffEditForm.TimeOffEditForm');
   const fixedMaster = React.useMemo<ShortMasterInfo>(
     () => ({
       id: timeOff.master.id,
@@ -138,13 +140,13 @@ export default function TimeOffEditForm({
   });
 
   const { updateException, isPending: isUpdatePending } = exceptionHooks.useUpdateException(() => {
-    toast.success('Time off updated successfully');
+    toast.success(t('updateSuccess'));
     onClose();
   });
 
   const { mutate: deleteException, isPending: isDeletePending } = exceptionHooks.useDeleteException(
     () => {
-      toast.error('Time off was deleted!');
+      toast.error(t('deleteInfo'));
       setIsDeleteConfirmOpen(false);
       onClose();
     },
@@ -178,9 +180,11 @@ export default function TimeOffEditForm({
 
   const headerLabel = React.useMemo(() => {
     if (values.mode === TimeOffMode.TimeOff) {
-      return timeOffTypeOptions.find((option) => option.value === values.type)?.label ?? 'Time off';
+      return (
+        timeOffTypeOptions.find((option) => option.value === values.type)?.label ?? t('timeOff')
+      );
     }
-    return 'Working time';
+    return t('workingTime');
   }, [values.mode, values.type, timeOffTypeOptions]);
 
   const handleStartTimeChange = useCallback(
@@ -273,10 +277,10 @@ export default function TimeOffEditForm({
       >
         <div className='flex-1 max-w-4xl space-y-6 md:space-y-8'>
           <div className='flex justify-between'>
-            <h2 className='text-2xl'>Schedule exception</h2>
+            <h2 className='text-2xl'>{t('scheduleException')}</h2>
             <div>
               <IconButton
-                ariaLabel='Delete'
+                ariaLabel={t('delete')}
                 icon={<DeleteIcon className='fill-current' />}
                 onClick={handleDeleteClick}
                 className='inline-flex items-center justify-center bg-primary-50 p-2.5 rounded-[8px] hover:bg-red-100 focus:bg-red-100 hover:text-red-900 focus:text-red-900 transition-colors'
@@ -290,7 +294,7 @@ export default function TimeOffEditForm({
             {values.mode === TimeOffMode.TimeOff && (
               <div>
                 <label htmlFor='type' className='block text-sm font-medium text-gray-700'>
-                  Type of Time off *
+                  {t('typeOfTimeOff')}
                 </label>
                 <Controller
                   name='type'
@@ -315,7 +319,7 @@ export default function TimeOffEditForm({
 
             <div>
               <label htmlFor='staff' className='block text-sm font-medium text-gray-700'>
-                Master *
+                {t('master')}
               </label>
               <Controller
                 name='staff'
@@ -346,8 +350,8 @@ export default function TimeOffEditForm({
                 onChange={noteField.onChange}
                 onBlur={noteField.onBlur}
                 ref={noteField.ref}
-                label='Note'
-                helperText='Optional'
+                label={t('note')}
+                helperText={t('optional')}
                 maxLength={200}
                 error={errors.note?.message}
                 classNames={{
@@ -369,7 +373,7 @@ export default function TimeOffEditForm({
                     labelPlacement='start'
                     label={
                       <div style={{ marginRight: 10 }} className='text-gray-600 text-xs'>
-                        Whole day
+                        {t('wholeDay')}
                       </div>
                     }
                     control={
@@ -391,7 +395,7 @@ export default function TimeOffEditForm({
             <div className='flex flex-col gap-4 p-4'>
               <div>
                 <label htmlFor='startDate' className='block text-sm font-medium text-gray-700 mb-1'>
-                  Start Date *
+                  {t('startDate')}
                 </label>
                 <Controller
                   name='startDate'
@@ -417,7 +421,7 @@ export default function TimeOffEditForm({
 
               <div>
                 <label htmlFor='endDate' className='block text-sm font-medium text-gray-700 mb-1'>
-                  End Date *
+                  {t('endDate')}
                 </label>
                 <Controller
                   name='endDate'
@@ -463,9 +467,9 @@ export default function TimeOffEditForm({
         isOpen={isDeleteConfirmOpen}
         onCancel={() => setIsDeleteConfirmOpen(false)}
         onConfirm={handleConfirmDelete}
-        title='Delete time off'
-        description='Are you sure you want to permanently delete this schedule exception? This action cannot be undone.'
-        confirmText='Delete time off'
+        title={t('deleteTimeOff')}
+        description={t('deleteConfirmDescription')}
+        confirmText={t('confirmDeleteTimeOff')}
         submitDisabled={isDeletePending}
       />
     </>

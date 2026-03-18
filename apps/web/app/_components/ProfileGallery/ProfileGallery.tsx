@@ -2,6 +2,7 @@
 
 import { useCallback } from 'react';
 import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 
 import { userHooks } from '@avoo/hooks';
 
@@ -11,6 +12,7 @@ import { localizationHooks } from '@/_hooks/localizationHooks';
 import { AppRoutes } from '@/_routes/routes';
 
 export const ProfileGallery = () => {
+  const t = useTranslations('private.components.ProfileGallery.ProfileGallery');
   const userMedia = userHooks.useGetUserMedia();
   const router = useRouter();
   const galleryPath = localizationHooks.useWithLocale(AppRoutes.Gallery);
@@ -27,7 +29,7 @@ export const ProfileGallery = () => {
 
   return (
     <div className=''>
-      <SectionHeader title='Gallery' onEdit={handleNavigate} />
+      <SectionHeader title={t('gallery')} onEdit={handleNavigate} />
 
       {hasItems && (
         <div className='flex gap-3 overflow-x-auto'>
@@ -39,12 +41,15 @@ export const ProfileGallery = () => {
 
       {!hasItems && (
         <div className='text-center py-8'>
-          <p className='text-md font-semibold text-slate-900 mb-4'>Your gallery is empty</p>
+          <p className='text-md font-semibold text-slate-900 mb-4'>{t('galleryEmpty')}</p>
           <p className='text-sm text-slate-400 max-w-[340px] mx-auto leading-6'>
-            <LocalizedLink href={AppRoutes.Gallery} className='text-primary-300'>
-              Add photos
-            </LocalizedLink>{' '}
-            to highlight your professional qualifications and salon atmosphere.
+            {t.rich('addPhotosRich', {
+              a: (chunks) => (
+                <LocalizedLink href={AppRoutes.Gallery} className='text-primary-300'>
+                  {chunks}
+                </LocalizedLink>
+              ),
+            })}
           </p>
         </div>
       )}

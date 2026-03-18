@@ -1,6 +1,6 @@
 'use client';
 import React from 'react';
-import { IntlProvider } from 'react-intl';
+import { NextIntlClientProvider } from 'next-intl';
 
 import { DEFAULT_LOCALE, Locale, MESSAGES } from '@avoo/intl';
 
@@ -15,12 +15,8 @@ export const LocaleProvider = (props: Props) => {
   const messages = MESSAGES[locale] ?? MESSAGES[DEFAULT_LOCALE];
 
   return (
-    <IntlProvider
-      locale={locale || DEFAULT_LOCALE}
-      defaultLocale={DEFAULT_LOCALE}
-      messages={messages}
-    >
+    <NextIntlClientProvider locale={locale || DEFAULT_LOCALE} messages={messages}>
       {children}
-    </IntlProvider>
+    </NextIntlClientProvider>
   );
 };

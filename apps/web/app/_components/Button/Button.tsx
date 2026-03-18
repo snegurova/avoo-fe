@@ -1,5 +1,5 @@
-import React, { JSX } from 'react';
-import { useCallback } from 'react';
+import React, { JSX, useCallback } from 'react';
+import { useTranslations } from 'next-intl';
 
 import { tv } from 'tailwind-variants';
 
@@ -96,6 +96,7 @@ export type Props = {
 };
 
 export const Button = (props: Props) => {
+  const t = useTranslations('private.components.Button.Button');
   const {
     children,
     fit = ButtonFit.Inline,
@@ -118,7 +119,7 @@ export const Button = (props: Props) => {
       disabled={disabled}
       onClick={handleClick}
     >
-      {loading ? 'loading...' : children}
+      {loading ? t('loading') : children}
     </button>
   );
 };

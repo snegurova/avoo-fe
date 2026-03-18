@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { useTranslations } from 'next-intl';
 
 import { LANGUAGE_NAMES } from '@avoo/constants';
 import { colors, typography } from '@avoo/design-tokens';
@@ -21,9 +22,12 @@ export const MasterLanguageList = ({
   labelStyle,
   textStyle,
 }: Props & ExtraProps) => {
+  const t = useTranslations('private.components.MasterLanguageList.MasterLanguageList');
   if (!languages || languages.length === 0) {
     return (
-      <div style={{ fontSize: typography.fontSize.xs, color: colors.gray[700] }}>No languages</div>
+      <div style={{ fontSize: typography.fontSize.xs, color: colors.gray[700] }}>
+        {t('noLanguages')}
+      </div>
     );
   }
 
@@ -54,7 +58,7 @@ export const MasterLanguageList = ({
 
   return (
     <div style={finalTextStyle}>
-      {showLabel ? <span style={finalLabelStyle}>Languages:&nbsp;</span> : null}
+      {showLabel ? <span style={finalLabelStyle}>{t('languages')}:&nbsp;</span> : null}
       {names}
     </div>
   );

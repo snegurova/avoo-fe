@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { Controller, useFieldArray } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 
 import { Button, TextField } from '@mui/material';
 
@@ -19,6 +20,7 @@ import { AppRoutes } from '@/_routes/routes';
 import { getAllErrorMessages } from '@/_utils/formError';
 
 export const ScheduleAddForm = () => {
+  const t = useTranslations('private.components.ScheduleAddForm.ScheduleAddForm');
   const toast = useToast();
 
   const router = useRouter();
@@ -26,11 +28,11 @@ export const ScheduleAddForm = () => {
 
   const { control, handleSubmit, setValue, watch, errors } = scheduleHooks.useCreateScheduleForm({
     onSuccess: () => {
-      toast.success('Schedule added successfully');
+      toast.success(t('addSuccess'));
       router.replace(workingHoursPath);
     },
     onError: (error) => {
-      toast.error(`Schedule add failed: ${error.message}`);
+      toast.error(t('addError', { error: error.message }));
     },
   });
 
@@ -95,7 +97,7 @@ export const ScheduleAddForm = () => {
                     required
                     fullWidth
                     value={field.value ?? ''}
-                    label='Name'
+                    label={t('name')}
                     error={!!errors.name}
                     helperText={errors.name?.message}
                   />
@@ -110,7 +112,7 @@ export const ScheduleAddForm = () => {
                   <FormSelect
                     error={!!errors.patternType}
                     name='patternType'
-                    label='Type'
+                    label={t('type')}
                     required
                     options={SCHEDULE_OPTIONS}
                     value={field.value}
@@ -132,9 +134,9 @@ export const ScheduleAddForm = () => {
                 control={control}
                 render={({ field }) => (
                   <FormSearchAutocomplete
-                    label='Apply to'
-                    placeholder='Search masters...'
-                    emptyDefaultLabel='Apply to all'
+                    label={t('applyTo')}
+                    placeholder={t('searchMasters')}
+                    emptyDefaultLabel={t('applyToAll')}
                     error={errors.masterIds?.message}
                     value={field.value ?? undefined}
                     onChange={field.onChange}
@@ -152,7 +154,7 @@ export const ScheduleAddForm = () => {
                 render={({ field }) => (
                   <FormDatePicker
                     error={errors.startAt?.message}
-                    label='Start date'
+                    label={t('startDate')}
                     valueFormat={VALUE_DATE_FORMAT}
                     required
                     date={field.value}
@@ -166,7 +168,7 @@ export const ScheduleAddForm = () => {
                 render={({ field }) => (
                   <FormDatePicker
                     error={errors.endAt?.message}
-                    label='End date'
+                    label={t('endDate')}
                     valueFormat={VALUE_DATE_FORMAT}
                     date={field.value}
                     onChange={(value) => field.onChange(value)}
@@ -184,7 +186,9 @@ export const ScheduleAddForm = () => {
           </div>
 
           <div>
-            <p className='mb-8 font-medium'>Schedule {scheduleType}</p>
+            <p className='mb-8 font-medium'>
+              {t('schedule')} {scheduleType}
+            </p>
             <div className='flex flex-col gap-4'>
               {fields.map((field, index) => (
                 <CreateWorkingDayRow
@@ -199,7 +203,7 @@ export const ScheduleAddForm = () => {
               ))}
               {scheduleType === 'custom' && (
                 <Button variant='outlined' sx={{ mt: 2 }} onClick={appendDay}>
-                  Add day
+                  {t('addDay')}
                 </Button>
               )}
             </div>
@@ -209,10 +213,10 @@ export const ScheduleAddForm = () => {
       <section id='create-new-schedule-controls'>
         <div className='w-full flex gap-8 justify-end p-8'>
           <Button color='secondary' variant='outlined' onClick={() => router.back()}>
-            Cancel
+            {t('cancel')}
           </Button>
           <Button form='create-new-schedule' type='submit' color='secondary' variant='contained'>
-            Save
+            {t('save')}
           </Button>
         </div>
       </section>

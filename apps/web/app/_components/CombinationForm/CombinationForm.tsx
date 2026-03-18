@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { FormattedMessage } from 'react-intl';
+import { useTranslations } from 'next-intl';
 
 import {
   Combination,
@@ -8,7 +8,6 @@ import {
   MasterWithRelationsEntity,
 } from '@avoo/axios/types/apiTypes';
 import { calendarHooks, masterHooks } from '@avoo/hooks';
-import { messages } from '@avoo/intl/messages/private/orders/create';
 import { timeUtils } from '@avoo/shared';
 import { useCalendarStore } from '@avoo/store';
 
@@ -38,6 +37,8 @@ type Props = {
 };
 
 export default function CombinationForm(props: Props) {
+  const tCommon = useTranslations('private.components.CombinationForm.CombinationForm');
+  const t = useTranslations('private.orders.create');
   const {
     value,
     onChange,
@@ -108,7 +109,7 @@ export default function CombinationForm(props: Props) {
     const availableDate = await getAvailableDate(availabilityParams);
 
     if (!availableDate) {
-      toast.error('No available date and time');
+      toast.error(tCommon('noAvailableTime'));
       return;
     }
 
@@ -154,7 +155,7 @@ export default function CombinationForm(props: Props) {
     const availableDate = await getAvailableDate(availabilityParams);
 
     if (!availableDate) {
-      toast.error('No available date and time');
+      toast.error(tCommon('noAvailableTime'));
       return;
     }
 
@@ -203,7 +204,7 @@ export default function CombinationForm(props: Props) {
         />
         <div className=''>
           <SearchField
-            label='Master'
+            label={tCommon('master')}
             value={value[0].masterId ? { id: value[0].masterId } : null}
             onChange={selectMaster}
             items={masters}
@@ -224,14 +225,12 @@ export default function CombinationForm(props: Props) {
         </div>
         <div className='grid grid-cols-3 gap-x-3'>
           <div className='col-span-2'>
-            <label className='block mb-2 font-medium'>
-              <FormattedMessage {...messages.date} />
-            </label>
+            <label className='block mb-2 font-medium'>{t('date')}</label>
             <FormDatePicker date={value[0].date} onChange={onDateChange} />
           </div>
           <div className=' '>
             <label className='block mb-2 font-medium' htmlFor={`combination-time`}>
-              <FormattedMessage {...messages.time} />
+              {t('time')}
             </label>
             <FormTimePicker date={value[0].date} onChange={onDateChange} />
           </div>
@@ -245,8 +244,8 @@ export default function CombinationForm(props: Props) {
             name={`combination-notes`}
             value={value[0].notes || ''}
             onChange={onNotesChange}
-            label={<FormattedMessage {...messages.notes} />}
-            helperText={<FormattedMessage {...messages.helperText} />}
+            label={t('notes')}
+            helperText={t('helperText')}
             maxLength={200}
             error={errors?.notes?.message}
             classNames={{

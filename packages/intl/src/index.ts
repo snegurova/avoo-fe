@@ -12,7 +12,9 @@ export const Locales = {
 
 export const DEFAULT_LOCALE: Locale = 'pl';
 
-export const MESSAGES: Record<Locale, Record<string, string>> = {
+type Messages = typeof en;
+
+export const MESSAGES: Record<Locale, Messages> = {
   en,
   pl,
   uk,

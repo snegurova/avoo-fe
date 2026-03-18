@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react';
+import { useTranslations } from 'next-intl';
 
 import { Order, Service } from '@avoo/axios/types/apiTypes';
 import { OrderStatus } from '@avoo/hooks/types/orderStatus';
@@ -19,6 +20,7 @@ type Props = {
 };
 
 export default function OrderView(props: Props) {
+  const t = useTranslations('private.components.OrderView.OrderView');
   const { order, onEdit, timeAgo, endTime, isOutOfSchedule } = props;
   const isPending = useApiStatusStore((state) => state.isPending);
 
@@ -50,14 +52,14 @@ export default function OrderView(props: Props) {
             {isOutOfSchedule && (
               <div className='relative before:content-[""] before:absolute before:w-px before:top-0.5 before:bottom-0.5 before:bg-black before:-left-2.5'>
                 <span className='text-[10px] font-medium text-white leading-none px-1.5 py-1 flex items-center justify-center rounded-2xl capitalize bg-red-800'>
-                  Out of schedule
+                  {t('outOfSchedule')}
                 </span>
               </div>
             )}
           </div>
         </div>
         <div className='flex flex-col gap-3'>
-          <h3 className='font-medium tracking-wider'>Service</h3>
+          <h3 className='font-medium tracking-wider'>{t('service')}</h3>
           {serviceData && <ServiceElement item={serviceData} isCard master={order.master} />}
           {combinationData && (
             <CombinationElement item={combinationData} isCard master={order.master} />
@@ -67,7 +69,7 @@ export default function OrderView(props: Props) {
           )}
         </div>
         <div className='flex flex-col gap-3'>
-          <h3 className='font-medium tracking-wider'>Client</h3>
+          <h3 className='font-medium tracking-wider'>{t('client')}</h3>
           {order.customer && <CustomerElement item={order.customer} isCard />}
           {order.customer.notes && (
             <p className='text-xs text-gray-500'>Note: {order.customer.notes}</p>
@@ -82,7 +84,7 @@ export default function OrderView(props: Props) {
             intent={ButtonIntent.Secondary}
             onClick={onEdit}
           >
-            Edit
+            {t('edit')}
           </Button>
         </div>
       )}

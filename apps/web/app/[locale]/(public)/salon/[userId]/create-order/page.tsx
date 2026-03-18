@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { Controller, useFieldArray } from 'react-hook-form';
 import { useParams } from 'next/navigation';
 import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 
 import { CreateOrder, MasterWithRelationsEntity } from '@avoo/axios/types/apiTypes';
 import { combinationHooks, orderHooks } from '@avoo/hooks';
@@ -22,6 +23,7 @@ import AddCircleIcon from '@/_icons/AddCircleIcon';
 const SERVICES_KEY_IN_ORDER_CREATE = 'ordersData';
 
 export default function PublicOrderCreatePage() {
+  const t = useTranslations('public.salon.createOrder');
   const params = useParams();
   const userId = Number(params.userId);
   const isPending = useApiStatusStore((state) => state.isPending);
@@ -165,7 +167,7 @@ export default function PublicOrderCreatePage() {
 
   return (
     <div className='container mx-auto max-w-480 px-20 py-20'>
-      <h1 className='text-2xl font-bold mb-6'>Booking form</h1>
+      <h1 className='text-2xl font-bold mb-6'>{t('bookingForm')}</h1>
       <form className='flex flex-col gap-6' onSubmit={handleSubmit}>
         <Controller
           name='customerData'
@@ -231,7 +233,9 @@ export default function PublicOrderCreatePage() {
                 <div className='shrink-0'>
                   <AddCircleIcon className='fill-primary-900' />
                 </div>
-                <span className='text-primary-900 font-medium underline'>Add more service</span>
+                <span className='text-primary-900 font-medium underline'>
+                  {t('addMoreService')}
+                </span>
               </button>
             </div>
           )}
@@ -244,7 +248,7 @@ export default function PublicOrderCreatePage() {
             intent={ButtonIntent.Secondary}
             onClick={() => router.back()}
           >
-            Cancel
+            {t('cancel')}
           </Button>
           <Button
             type={ButtonType.Submit}
@@ -253,7 +257,7 @@ export default function PublicOrderCreatePage() {
             fit={ButtonFit.Inline}
             intent={ButtonIntent.Primary}
           >
-            Book
+            {t('book')}
           </Button>
         </div>
       </form>

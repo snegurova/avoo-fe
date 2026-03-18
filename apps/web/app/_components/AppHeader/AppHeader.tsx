@@ -1,12 +1,10 @@
 'use client';
 
 import React, { useMemo } from 'react';
-import { FormattedMessage } from 'react-intl';
 import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 
 import useMediaQuery from '@mui/material/useMediaQuery';
-
-import { messages } from '@avoo/intl/messages/private/navigation/navigation';
 
 import AppProfileSelect from '@/_components/AppProfileSelect/AppProfileSelect';
 import { IconButton } from '@/_components/IconButton/IconButton';
@@ -25,6 +23,7 @@ type Props = {
 };
 
 export default function AppHeader({ setMenuOpen }: Props) {
+  const t = useTranslations('private.navigation.navigation');
   const router = useRouter();
   const tabletUp = useMediaQuery('(min-width:768px)');
   const orderCreatePath = localizationHooks.useWithLocale(AppRoutes.OrderCreate);
@@ -32,13 +31,13 @@ export default function AppHeader({ setMenuOpen }: Props) {
 
   const options = [
     {
-      label: <FormattedMessage {...messages.newBooking} />,
+      label: t('newBooking'),
       handler: () => {
         router.push(orderCreatePath);
       },
     },
     {
-      label: <FormattedMessage {...messages.newPost} />,
+      label: t('newPost'),
       handler: () => {
         router.push(orderAddPostPath);
       },
@@ -60,12 +59,12 @@ export default function AppHeader({ setMenuOpen }: Props) {
         </div>
         {tabletUp && (
           <div className='bg-primary-100 rounded-2xl px-4 py-3.5 font-medium grow'>
-            <p className='text-primary-800'>Billing or marketing notification</p>
+            <p className='text-primary-800'>{t('billingNotification')}</p>
           </div>
         )}
         <div className='flex items-center lg:gap-6 xl:gap-10 2xl:gap-25 shrink-0'>
           <div className='hidden lg:block'>
-            <SelectButton label={<FormattedMessage {...messages.add} />} options={options} />
+            <SelectButton label={t('add')} options={options} />
           </div>
           <LocalizedLink
             href={AppRoutes.OrderCreate}
@@ -78,7 +77,7 @@ export default function AppHeader({ setMenuOpen }: Props) {
             <IconLink
               href={localizationHooks.useWithLocale(AppRoutes.Notifications)}
               icon={<NotificationsIcon className='transition-colors' />}
-              label='Notifications'
+              label={t('notifications')}
             />
             <AppProfileSelect />
           </div>
@@ -86,7 +85,7 @@ export default function AppHeader({ setMenuOpen }: Props) {
       </div>
       {!tabletUp && (
         <div className='bg-primary-100 rounded-2xl px-4 py-3.5 font-medium grow'>
-          <p className='text-primary-800'>Billing or marketing notification</p>
+          <p className='text-primary-800'>{t('billingNotification')}</p>
         </div>
       )}
     </header>

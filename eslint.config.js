@@ -83,7 +83,7 @@ export default defineConfig([
     },
   },
   {
-    files: ['**/*.config.js', '**/*.config.cjs', '**/*.config.mjs'],
+    files: ['**/*.config.js', '**/*.config.cjs', '**/*.config.mjs', 'plopfile.js'],
     languageOptions: {
       globals: globals.node,
     },

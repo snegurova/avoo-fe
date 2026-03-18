@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { useTranslations } from 'next-intl';
 
 import ToggleSwitch from '../ToggleSwitch/ToggleSwitch';
 
@@ -20,6 +21,7 @@ export default function NotificationField({
   label = 'Notification',
   description = 'Automatically sending appointment information to client via email',
 }: Props) {
+  const t = useTranslations('private.components.NotificationField.NotificationField');
   const handleToggle = React.useCallback(() => {
     field.onChange(!field.value);
   }, [field]);
@@ -32,7 +34,7 @@ export default function NotificationField({
       </div>
 
       <ToggleSwitch
-        ariaLabel='Toggle send notifications'
+        ariaLabel={t('toggleSendNot')}
         checked={!!field.value}
         onChange={handleToggle}
       />

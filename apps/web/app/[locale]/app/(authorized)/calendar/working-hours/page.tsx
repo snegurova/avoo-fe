@@ -2,6 +2,7 @@
 
 import { useMemo } from 'react';
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 
 import { scheduleHooks } from '@avoo/hooks';
 import { useApiStatusStore } from '@avoo/store';
@@ -13,8 +14,10 @@ import SchedulesControls from '@/_components/SchedulesControls/SchedulesControls
 import EditCalendarIcon from '@/_icons/EditCalendarIcon';
 
 export default function WorkingHoursPage() {
+  const t = useTranslations('private.calendar.workingHours');
   const isPending = useApiStatusStore((state) => state.isPending);
-  const { setSearchQuery, queryParams } = scheduleHooks.useScheduleQuery();
+  const { queryParams, setSearchQuery, onSortClick, activeSortDirection, activeSortField } =
+    scheduleHooks.useScheduleQuery();
   const { data, fetchNextPage, hasNextPage } = scheduleHooks.useGetSchedulesInfinite({
     ...queryParams,
   });
@@ -26,18 +29,26 @@ export default function WorkingHoursPage() {
 
   return (
     <AppWrapper withPadding>
-      <SchedulesControls setSearchQuery={setSearchQuery} />
+      <SchedulesControls
+        setSearchQuery={setSearchQuery}
+        onSortClick={onSortClick}
+        activeSortDirection={activeSortDirection}
+        activeSortField={activeSortField}
+      />
       {schedules.length === 0 && !queryParams.search ? (
         <AppPlaceholder
-          title={isPending ? 'Loading...' : 'Setup you first working schedule'}
+          title={isPending ? t('loading') : t('setupFirstSchedule')}
           icon={<EditCalendarIcon className='w-20 h-20 lg:w-25 lg:h-25 fill-primary-300' />}
           description={
             isPending ? null : (
               <p>
-                <Link href='#' className='text-primary-300'>
-                  Create a working schedule
-                </Link>{' '}
-                to define when your masters are available for bookings.
+                {t.rich('setupScheduleDescription', {
+                  link: (chunks) => (
+                    <Link href='#' className='text-primary-300'>
+                      {chunks}
+                    </Link>
+                  ),
+                })}
               </p>
             )
           }

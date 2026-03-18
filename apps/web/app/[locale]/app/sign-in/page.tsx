@@ -1,4 +1,5 @@
 import { Metadata } from 'next/types';
+import { useTranslations } from 'next-intl';
 
 import AuthorizationWrapper from '@/_components/AuthorizationWrapper/AuthorizationWrapper';
 import { LocalizedLink } from '@/_components/LocalizedLink/LocalizedLink';
@@ -11,9 +12,10 @@ export const metadata: Metadata = {
 };
 
 export default function SignInPage() {
+  const t = useTranslations('private.signIn');
   return (
     <AuthorizationWrapper
-      title='Log In'
+      title={t('logIn')}
       description='Access your dashboard and manage your business.'
     >
       <LoginForm />
@@ -23,13 +25,13 @@ export default function SignInPage() {
           href={AppRoutes.SignUp}
           className='hover:text-primary-600 focus:text-primary-600'
         >
-          Create an account
+          {t('createAccount')}
         </LocalizedLink>
         <LocalizedLink
           href={AppRoutes.ForgotPassword}
           className='hover:text-primary-600 focus:text-primary-600 text-sm'
         >
-          Forgot Password
+          {t('forgotPassword')}
         </LocalizedLink>
       </div>
     </AuthorizationWrapper>

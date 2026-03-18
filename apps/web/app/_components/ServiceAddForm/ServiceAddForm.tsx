@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Controller } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 
 import {
   Button,
@@ -32,6 +33,7 @@ type Props = {
 };
 
 export default function ServiceAddForm(props: Props) {
+  const t = useTranslations('private.components.ServiceAddForm.ServiceAddForm');
   const { categories } = props;
 
   const router = useRouter();
@@ -48,12 +50,12 @@ export default function ServiceAddForm(props: Props) {
 
   const { uploadMedia, isUploading } = mediaHooks.useUploadMedia({
     onSuccess: (data) => {
-      toast.success('Media has been uploaded!');
+      toast.success(t('mediaUploaded'));
       setValue('mediaIds', [...getValues('mediaIds'), data.id]);
       setMedias([...medias, data]);
     },
     onError: (error) => {
-      toast.error('Failed to upload media: ' + error.message);
+      toast.error(t('mediaUploadError', { error: error.message }));
     },
   });
 
@@ -67,18 +69,18 @@ export default function ServiceAddForm(props: Props) {
   };
 
   const onRemoveMedia = (id: number) => {
-    toast.info('Removed ' + id);
+    toast.info(t('mediaRemoved', { id }));
     setMedias(medias.filter((media) => media.id !== id));
   };
 
   const { control, setValue, getValues, handleSubmit, errors } = servicesHooks.useCreateServiceForm(
     {
       onSuccess: () => {
-        toast.success('Service has been created!');
+        toast.success(t('serviceCreated'));
         router.replace(servicePath);
       },
       onError: (error) => {
-        toast.error('Failed to create service: ' + error.message);
+        toast.error(t('serviceCreateError', { error: error.message }));
       },
     },
   );
@@ -88,7 +90,7 @@ export default function ServiceAddForm(props: Props) {
       <div className='overflow-y-auto'>
         <form id='create-new-service' onSubmit={handleSubmit} className='mt-8 lg:mt-0'>
           <>
-            <Typography variant='h3'>Basic detail</Typography>
+            <Typography variant='h3'>{t('basicDetail')}</Typography>
             <div className='mt-4'>
               <div className='grid grid-cols-1 lg:grid-cols-2 gap-8'>
                 <FormControl fullWidth error={!!errors.name?.message}>
@@ -101,7 +103,7 @@ export default function ServiceAddForm(props: Props) {
                         required
                         fullWidth
                         value={field.value ?? ''}
-                        label='Title'
+                        label={t('title')}
                       />
                     )}
                   />
@@ -121,7 +123,7 @@ export default function ServiceAddForm(props: Props) {
                       <TextField
                         {...field}
                         required
-                        label='Price'
+                        label={t('price')}
                         type='number'
                         value={field.value ?? ''}
                         onChange={(e) => field.onChange(Number(e.target.value))}
@@ -134,7 +136,7 @@ export default function ServiceAddForm(props: Props) {
                 </FormControl>
                 <FormControl fullWidth error={!!errors.durationMinutes}>
                   <InputLabel id='duration-label' required>
-                    Duration
+                    {t('duration')}
                   </InputLabel>
                   <Controller
                     name='durationMinutes'
@@ -144,7 +146,7 @@ export default function ServiceAddForm(props: Props) {
                         {...field}
                         onChange={(e) => field.onChange(Number(e.target.value))}
                         value={field.value}
-                        label='Duration'
+                        label={t('duration')}
                         labelId='duration-label'
                       >
                         {durationOptions.map((option) => (
@@ -168,27 +170,25 @@ export default function ServiceAddForm(props: Props) {
                     render={({ field }) => (
                       <TextField
                         {...field}
-                        label='Description'
+                        label={t('description')}
                         required
                         multiline
                         rows={3}
-                        placeholder='Short description for the service'
+                        placeholder={t('shortDescription')}
                       />
                     )}
                   />
                   {errors.description?.message && (
                     <FormHelperText>{errors.description?.message}</FormHelperText>
                   )}
-                  <span className='text-sm text-gray-500'>
-                    Information will display on platform
-                  </span>
+                  <span className='text-sm text-gray-500'>{t('infoWillDisplay')}</span>
                 </FormControl>
               </div>
             </div>
           </>
           <div className='mt-8'>
             <div className='bg-primary-50 p-2 rounded-lg'>
-              <Typography variant='h3'>Masters</Typography>
+              <Typography variant='h3'>{t('masters')}</Typography>
             </div>
             <div className='mt-2'>
               <FormControl fullWidth error={!!errors.masterIds?.message}>
@@ -212,7 +212,7 @@ export default function ServiceAddForm(props: Props) {
           </div>
           <div id='gallery-upload' className='mt-8'>
             <div className='bg-primary-50 p-2 rounded-lg'>
-              <Typography variant='h3'>Gallery</Typography>
+              <Typography variant='h3'>{t('gallery')}</Typography>
             </div>
             <div className='mt-2'>
               <ServiceGalleryUpload
@@ -226,7 +226,7 @@ export default function ServiceAddForm(props: Props) {
             </div>
           </div>
           <div className='mt-8 flex items-center justify-between'>
-            <Typography variant='h5'>Available for online booking</Typography>
+            <Typography variant='h5'>{t('availableOnline')}</Typography>
             <Controller
               name='isActive'
               control={control}
@@ -246,7 +246,7 @@ export default function ServiceAddForm(props: Props) {
       <section id='create-new-service-controls'>
         <div className='w-full flex gap-8 p-2 py-4 justify-center md:justify-end lg:p-8'>
           <Button color='secondary' variant='outlined'>
-            Cancel
+            {t('cancel')}
           </Button>
           <Button
             form='create-new-service'
@@ -255,7 +255,7 @@ export default function ServiceAddForm(props: Props) {
             variant='contained'
             disabled={isUploading}
           >
-            Save
+            {t('save')}
           </Button>
         </div>
       </section>

@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { useTranslations } from 'next-intl';
 
 import { Typography } from '@mui/material';
 
@@ -17,8 +18,9 @@ type Props = {
 };
 
 const ClientListItem: React.FC<Props> = ({ client, onEdit, isSelected }) => {
-  const clientDisplayName = client.name || 'No name';
-  const phone = client.phone || 'No phone';
+  const t = useTranslations('private.components.ClientListItem.ClientListItem');
+  const clientDisplayName = client.name || t('noName');
+  const phone = client.phone || t('noPhone');
   const formattedLastVisit = timeUtils.formatLastVisitDate(client.lastVisit) ?? '-';
   const handleOpenDetails = () => {
     onEdit?.(client);
@@ -69,17 +71,21 @@ const ClientListItem: React.FC<Props> = ({ client, onEdit, isSelected }) => {
             {clientDisplayName}
           </Typography>
           <div className='text-sm text-gray-500 break-words whitespace-normal'>
-            {client.email ?? 'No email'}
+            {client.email ?? t('noEmail')}
           </div>
           <div className='text-sm text-gray-500 mt-1 break-words whitespace-normal'>{phone}</div>
 
           <div className='md:hidden'>
             <div className='w-full h-px my-3' style={{ backgroundColor: colors.primary[100] }} />
-            <div className='text-sm text-gray-500'>last visit {formattedLastVisit}</div>
+            <div className='text-sm text-gray-500'>
+              {t('lastVisit', { date: formattedLastVisit })}
+            </div>
           </div>
         </div>
 
-        <div className='hidden md:flex text-sm text-gray-500'>last visit {formattedLastVisit}</div>
+        <div className='hidden md:flex text-sm text-gray-500'>
+          {t('lastVisit', { date: formattedLastVisit })}
+        </div>
       </div>
 
       <div
@@ -115,7 +121,7 @@ const ClientListItem: React.FC<Props> = ({ client, onEdit, isSelected }) => {
 
         <div className='w-1/4 text-sm text-gray-700 break-words whitespace-normal'>{phone}</div>
         <div className='w-1/4 text-sm text-gray-700 break-words whitespace-normal'>
-          {client.email ?? 'No email'}
+          {client.email ?? t('noEmail')}
         </div>
         <div className='w-1/4 break-words whitespace-normal text-center'>{formattedLastVisit}</div>
       </div>
