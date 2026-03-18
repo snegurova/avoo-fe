@@ -22,6 +22,7 @@ import { masterHooks, mediaHooks, servicesHooks } from '@avoo/hooks';
 import { timeUtils } from '@avoo/shared';
 
 import CategorySelect from '@/_components/CategorySelect/CategorySelect';
+import ConfirmationDialog from '@/_components/ConfirmationDialog/ConfirmationDialog';
 import MasterAutocompleteCardSelect from '@/_components/MasterAutoCompleteCardSelect/MasterAutoCompleteCardSelect';
 import ServiceGalleryUpload from '@/_components/ServiceGalleryUpload/ServiceGalleryUpload';
 import { localizationHooks } from '@/_hooks/localizationHooks';
@@ -73,8 +74,8 @@ export default function ServiceAddForm(props: Props) {
     setMedias(medias.filter((media) => media.id !== id));
   };
 
-  const { control, setValue, getValues, handleSubmit, errors } = servicesHooks.useCreateServiceForm(
-    {
+  const { control, setValue, getValues, handleSubmit, isDirty, errors, isValid } =
+    servicesHooks.useCreateServiceForm({
       onSuccess: () => {
         toast.success(t('serviceCreated'));
         router.replace(servicePath);
@@ -82,8 +83,22 @@ export default function ServiceAddForm(props: Props) {
       onError: (error) => {
         toast.error(t('serviceCreateError', { error: error.message }));
       },
-    },
-  );
+    });
+
+  const [openConfirmDialog, setOpenConfirmDialog] = useState(false);
+
+  const handleCancel = () => {
+    if (isDirty) {
+      setOpenConfirmDialog(true);
+    } else {
+      router.back();
+    }
+  };
+
+  const handleConfirmLeave = () => {
+    setOpenConfirmDialog(false);
+    router.back();
+  };
 
   return (
     <>
@@ -245,7 +260,7 @@ export default function ServiceAddForm(props: Props) {
       </div>
       <section id='create-new-service-controls'>
         <div className='w-full flex gap-8 p-2 py-4 justify-center md:justify-end lg:p-8'>
-          <Button color='secondary' variant='outlined'>
+          <Button color='secondary' variant='outlined' onClick={handleCancel}>
             {t('cancel')}
           </Button>
           <Button
@@ -253,12 +268,23 @@ export default function ServiceAddForm(props: Props) {
             type='submit'
             color='secondary'
             variant='contained'
-            disabled={isUploading}
+            disabled={isUploading || !isValid}
           >
             {t('save')}
           </Button>
         </div>
       </section>
+      <ConfirmationDialog
+        open={!!openConfirmDialog}
+        onClose={() => setOpenConfirmDialog(false)}
+        title='Are you sure you want to leave this page?'
+        content='You have unsaved changes. Are you sure you want to leave this page?'
+        cancelText='Cancel'
+        confirmText='Leave'
+        onCancel={() => setOpenConfirmDialog(false)}
+        onConfirm={handleConfirmLeave}
+        loading={false}
+      />
     </>
   );
 }

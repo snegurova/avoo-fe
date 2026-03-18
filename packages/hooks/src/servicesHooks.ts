@@ -193,11 +193,15 @@ export const servicesHooks = {
       setValue,
       getValues,
       handleSubmit,
-      formState: { errors },
+      formState: { errors, isDirty, isValid },
     } = useForm<CreateServiceFormData>({
       resolver: yupResolver(createServiceSchema),
       mode: 'onSubmit',
       defaultValues: {
+        categoryId: undefined,
+        price: undefined,
+        name: '',
+        description: '',
         durationMinutes: 15,
         mediaIds: [],
         masterIds: [],
@@ -240,6 +244,8 @@ export const servicesHooks = {
       handleSubmit: handleSubmit(
         utils.submitAdapter<CreateServiceRequest, CreateServiceFormData>(createService),
       ),
+      isDirty,
+      isValid,
       errors,
     };
   },
@@ -309,7 +315,7 @@ export const servicesHooks = {
       setValue,
       getValues,
       handleSubmit,
-      formState: { errors },
+      formState: { errors, isDirty },
     } = useForm<UpdateServiceFormData>({
       resolver: yupResolver(createServiceSchema),
       mode: 'onSubmit',
@@ -364,6 +370,7 @@ export const servicesHooks = {
         utils.submitAdapter<UpdateServiceRequest, UpdateServiceFormData>(updateService),
       ),
       errors,
+      isDirty,
     };
   },
   useServicesControls() {

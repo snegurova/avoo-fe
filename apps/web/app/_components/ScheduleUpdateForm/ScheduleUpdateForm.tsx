@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Controller, useFieldArray } from 'react-hook-form';
 import { useTranslations } from 'next-intl';
 
@@ -21,15 +21,16 @@ import { getAllErrorMessages } from '@/_utils/formError';
 type Props = {
   schedule: ScheduleEntity;
   onCancel: () => void;
+  onDirtyChange?: (isDirty: boolean) => void;
 };
 
 export default function ScheduleUpdateForm(props: Props) {
   const t = useTranslations('private.components.ScheduleUpdateForm.ScheduleUpdateForm');
-  const { schedule, onCancel } = props;
+  const { schedule, onCancel, onDirtyChange } = props;
   const toast = useToast();
 
   const locale = localizationHooks.useGetLocale();
-  const { control, setValue, handleSubmit, errors, handleScheduleShift } =
+  const { control, setValue, handleSubmit, errors, handleScheduleShift, isDirty } =
     scheduleHooks.useUpdateScheduleForm({
       defaultValues: schedule,
       startAt: schedule.startAt,
@@ -53,6 +54,10 @@ export default function ScheduleUpdateForm(props: Props) {
   const errorsList = getAllErrorMessages(errors);
   const patternShift = timeUtils.getPatternShift(schedule.startAt);
   const visuallyOrderedFields = handleScheduleShift(fields, patternShift, scheduleType);
+
+  useEffect(() => {
+    onDirtyChange?.(isDirty);
+  }, [isDirty, onDirtyChange]);
 
   return (
     <>
@@ -130,7 +135,13 @@ export default function ScheduleUpdateForm(props: Props) {
         <Button color='secondary' variant='outlined' onClick={onCancel}>
           {t('cancel')}
         </Button>
-        <Button form='update-service' type='submit' color='secondary' variant='contained'>
+        <Button
+          form='update-service'
+          type='submit'
+          color='secondary'
+          variant='contained'
+          disabled={!isDirty}
+        >
           {t('edit')}
         </Button>
       </div>

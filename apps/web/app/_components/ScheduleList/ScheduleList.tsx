@@ -66,6 +66,21 @@ export default function ScheduleList(props: Props) {
     }
     setSelectedSchedule(schedule);
   };
+  const [isFormDirty, setIsFormDirty] = useState<boolean>(false);
+  const [openConfirmDialog, setOpenConfirmDialog] = useState<boolean>(false);
+
+  const handleCancel = () => {
+    if (isFormDirty) {
+      setOpenConfirmDialog(true);
+    } else {
+      setSelectedSchedule(null);
+    }
+  };
+
+  const handleConfirmLeave = () => {
+    setOpenConfirmDialog(false);
+    setSelectedSchedule(null);
+  };
 
   return (
     <>
@@ -112,7 +127,18 @@ export default function ScheduleList(props: Props) {
         onConfirm={handleConfirmDelete}
         loading={isPending}
       />
-      <AsideModal open={!!selectedSchedule} handleClose={() => setSelectedSchedule(null)}>
+      <ConfirmationDialog
+        open={!!openConfirmDialog}
+        onClose={() => setOpenConfirmDialog(false)}
+        title='Are you sure you want to leave this page?'
+        content='You have unsaved changes. Are you sure you want to leave this page?'
+        cancelText={t('cancel')}
+        confirmText='Leave'
+        onCancel={() => setOpenConfirmDialog(false)}
+        onConfirm={handleConfirmLeave}
+        loading={false}
+      />
+      <AsideModal open={!!selectedSchedule} handleClose={handleCancel}>
         {selectedSchedule && (
           <div className='w-full h-full overflow-y-auto'>
             <div className='sticky top-[-1] flex items-center justify-between py-2 bg-white z-2'>
@@ -134,7 +160,8 @@ export default function ScheduleList(props: Props) {
             </div>
             <ScheduleUpdateForm
               schedule={selectedSchedule}
-              onCancel={() => setSelectedSchedule(null)}
+              onCancel={handleCancel}
+              onDirtyChange={setIsFormDirty}
             />
           </div>
         )}

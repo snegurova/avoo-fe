@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Controller, useFieldArray } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
@@ -10,6 +10,7 @@ import { VALUE_DATE_FORMAT } from '@avoo/constants';
 import { masterHooks, scheduleHooks } from '@avoo/hooks';
 import { timeUtils } from '@avoo/shared';
 
+import ConfirmationDialog from '@/_components/ConfirmationDialog/ConfirmationDialog';
 import FormDatePicker from '@/_components/FormDatePicker/FormDatePicker';
 import { FormSearchAutocomplete } from '@/_components/FormSearchAutocomplete/FormSearchAutoComplete';
 import { FormSelect } from '@/_components/FormSelect/FormSelect';
@@ -26,15 +27,16 @@ export const ScheduleAddForm = () => {
   const router = useRouter();
   const workingHoursPath = localizationHooks.useWithLocale(AppRoutes.WorkingHours);
 
-  const { control, handleSubmit, setValue, watch, errors } = scheduleHooks.useCreateScheduleForm({
-    onSuccess: () => {
-      toast.success(t('addSuccess'));
-      router.replace(workingHoursPath);
-    },
-    onError: (error) => {
-      toast.error(t('addError', { error: error.message }));
-    },
-  });
+  const { control, handleSubmit, setValue, watch, errors, isDirty, isValid, touchedFields } =
+    scheduleHooks.useCreateScheduleForm({
+      onSuccess: () => {
+        toast.success(t('addSuccess'));
+        router.replace(workingHoursPath);
+      },
+      onError: (error) => {
+        toast.error(t('addError', { error: error.message }));
+      },
+    });
 
   const { fields, replace, append, remove } = useFieldArray({
     control,
@@ -77,6 +79,22 @@ export const ScheduleAddForm = () => {
   };
 
   const errorsList = getAllErrorMessages(errors);
+
+  const hasChanges = isDirty && Object.keys(touchedFields).length > 0;
+  const [openConfirmDialog, setOpenConfirmDialog] = useState(false);
+
+  const handleCancel = () => {
+    if (hasChanges) {
+      setOpenConfirmDialog(true);
+    } else {
+      router.back();
+    }
+  };
+
+  const handleConfirmLeave = () => {
+    setOpenConfirmDialog(false);
+    router.back();
+  };
 
   return (
     <>
@@ -212,14 +230,31 @@ export const ScheduleAddForm = () => {
       </form>
       <section id='create-new-schedule-controls'>
         <div className='w-full flex gap-8 justify-end p-8'>
-          <Button color='secondary' variant='outlined' onClick={() => router.back()}>
+          <Button color='secondary' variant='outlined' onClick={handleCancel}>
             {t('cancel')}
           </Button>
-          <Button form='create-new-schedule' type='submit' color='secondary' variant='contained'>
+          <Button
+            form='create-new-schedule'
+            type='submit'
+            color='secondary'
+            variant='contained'
+            disabled={!isValid}
+          >
             {t('save')}
           </Button>
         </div>
       </section>
+      <ConfirmationDialog
+        open={!!openConfirmDialog}
+        onClose={() => setOpenConfirmDialog(false)}
+        title='Are you sure you want to leave this page?'
+        content='You have unsaved changes. Are you sure you want to leave this page?'
+        cancelText={t('cancel')}
+        confirmText='Leave'
+        onCancel={() => setOpenConfirmDialog(false)}
+        onConfirm={handleConfirmLeave}
+        loading={false}
+      />
     </>
   );
 };

@@ -86,6 +86,22 @@ export default function ServiceList(props: Props) {
     setSelectedService(service);
   };
 
+  const [isFormDirty, setIsFormDirty] = useState<boolean>(false);
+  const [openConfirmDialog, setOpenConfirmDialog] = useState<boolean>(false);
+
+  const handleCancel = () => {
+    if (isFormDirty) {
+      setOpenConfirmDialog(true);
+    } else {
+      setSelectedService(null);
+    }
+  };
+
+  const handleConfirmLeave = () => {
+    setOpenConfirmDialog(false);
+    setSelectedService(null);
+  };
+
   return (
     <>
       <div className='py-4 grid grid-cols-1 lg:grid-cols-[240px_1fr] gap-6'>
@@ -175,7 +191,18 @@ export default function ServiceList(props: Props) {
         onConfirm={handleConfirmDelete}
         loading={isPending}
       />
-      <AsideModal open={!!selectedService} handleClose={() => setSelectedService(null)}>
+      <ConfirmationDialog
+        open={!!openConfirmDialog}
+        onClose={() => setOpenConfirmDialog(false)}
+        title='Are you sure you want to leave this page?'
+        content='You have unsaved changes. Are you sure you want to leave this page?'
+        cancelText={t('cancel')}
+        confirmText='Leave'
+        onCancel={() => setOpenConfirmDialog(false)}
+        onConfirm={handleConfirmLeave}
+        loading={false}
+      />
+      <AsideModal open={!!selectedService} handleClose={handleCancel}>
         {selectedService && (
           <div className='w-full h-full overflow-y-auto'>
             <div className='sticky top-[-1] flex items-center justify-between py-2 bg-white z-2'>
@@ -202,7 +229,8 @@ export default function ServiceList(props: Props) {
             </div>
             <ServiceUpdateForm
               service={selectedService}
-              onCancel={() => setSelectedService(null)}
+              onCancel={handleCancel}
+              onDirtyChange={setIsFormDirty}
             />
           </div>
         )}
