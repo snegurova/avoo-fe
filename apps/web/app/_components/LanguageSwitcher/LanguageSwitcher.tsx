@@ -1,12 +1,48 @@
 import React, { useMemo, useState } from 'react';
 import { useTranslations } from 'next-intl';
 
+import { tv } from 'tailwind-variants';
+
 import { SUPPORTED_LOCALES } from '@avoo/intl';
 
 import { localizationHooks } from '@/_hooks/localizationHooks';
 import LanguageIcon from '@/_icons/LanguageIcon';
 
-export default function LanguageSwitcher() {
+const mainButton = tv({
+  base: 'w-full cursor-pointer text-start transition-colors rounded-xl flex items-center gap-2 text-gray-700 font-medium text-sm leading-[1.15]',
+  variants: {
+    type: {
+      public: 'text-gray-600 hover:bg-gray-200 focus:bg-gray-200 py-1 px-3',
+      private: 'hover:bg-primary-100 focus:bg-primary-100 text-gray-700 p-3',
+    },
+  },
+});
+
+const button = tv({
+  base: 'w-full cursor-pointer text-start transition-colors rounded-xl flex items-center gap-2 text-gray-700 font-medium p-3 text-sm leading-[1.15]',
+  variants: {
+    type: {
+      public: 'text-gray-600 hover:bg-gray-200 focus:bg-gray-200',
+      private: 'hover:bg-primary-100 focus:bg-primary-100 text-gray-700',
+    },
+  },
+});
+
+const icon = tv({
+  base: 'w-6 h-6',
+  variants: {
+    type: {
+      public: 'fill-gray-600',
+      private: 'fill-gray-700',
+    },
+  },
+});
+
+type Props = {
+  type?: 'public' | 'private';
+};
+
+export default function LanguageSwitcher({ type = 'private' }: Props) {
   const t = useTranslations('private.navigation.navigation');
   const [isOpen, setIsOpen] = useState(false);
 
@@ -45,13 +81,8 @@ export default function LanguageSwitcher() {
       }}
       tabIndex={-1}
     >
-      <button
-        className='w-full cursor-pointer text-start transition-colors rounded-xl flex items-center gap-2 text-gray-700 font-medium p-3 text-sm leading-[1.15] hover:bg-primary-100 focus:bg-primary-100'
-        onMouseEnter={onOpen}
-        onFocus={onOpen}
-        tabIndex={0}
-      >
-        <LanguageIcon />
+      <button className={mainButton({ type })} onMouseEnter={onOpen} onFocus={onOpen} tabIndex={0}>
+        <LanguageIcon className={icon({ type })} />
         {t(currLocale as Parameters<typeof t>[0])}
       </button>
       {isOpen && (
@@ -67,7 +98,7 @@ export default function LanguageSwitcher() {
                   onClose();
                 }
               }}
-              className='w-full cursor-pointer text-start transition-colors rounded-xl text-gray-700 font-medium p-3 text-sm leading-[1.15] hover:bg-primary-100 focus:bg-primary-100'
+              className={button({ type })}
               tabIndex={0}
             >
               {option.label}

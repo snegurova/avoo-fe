@@ -73,6 +73,13 @@ export type CertificateResponse = components['schemas']['CertificateEntity'];
 
 export type UpdateProfile = components['schemas']['UpdateProfileDto'];
 
+export type GetPublicUsersResponse = components['schemas']['UserProfileEntity'][];
+
+export type GetPublicUserProfileResponse = Omit<
+  components['schemas']['UserWithRelationsEntity'],
+  'orders'
+>;
+
 /** Master */
 export type MasterWithRelationsEntityResponse = components['schemas']['MasterEntity'];
 

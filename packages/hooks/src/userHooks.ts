@@ -6,6 +6,8 @@ import {
   BaseResponse,
   CertificateResponse,
   FileEntity,
+  GetPublicUserProfileResponse,
+  GetPublicUsersResponse,
   UpdateProfile,
   UserMediaResponse,
   UserProfileResponse,
@@ -160,7 +162,7 @@ export const userHooks = {
         return userApi.updateProfile(payload);
       },
       onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: queryKeys.user.profile() });
+        queryClient.invalidateQueries({ queryKey: queryKeys.user.all });
       },
     });
 
@@ -199,5 +201,40 @@ export const userHooks = {
       handleUpdateProfileAvatarAsync: mutateAsync,
       isPending,
     };
+  },
+  useGetPublicUsers: () => {
+    const { data: publicUsersData, isPending } = useQuery<
+      BaseResponse<GetPublicUsersResponse>,
+      Error
+    >({
+      queryKey: queryKeys.user.all,
+      queryFn: userApi.getPublicUsers,
+    });
+
+    utils.useSetPendingApi(isPending);
+
+    if (publicUsersData?.status === ApiStatus.SUCCESS) {
+      return publicUsersData.data;
+    }
+
+    return null;
+  },
+  useGetPublicUser: (userId: number) => {
+    const { data: publicUserData, isPending } = useQuery<
+      BaseResponse<GetPublicUserProfileResponse>,
+      Error
+    >({
+      queryKey: queryKeys.users.byId(userId),
+      queryFn: () => userApi.getPublicUser(userId),
+      enabled: !!userId,
+    });
+
+    utils.useSetPendingApi(isPending);
+
+    if (publicUserData?.status === ApiStatus.SUCCESS) {
+      return publicUserData.data;
+    }
+
+    return null;
   },
 };
