@@ -13,7 +13,7 @@ import { VALUE_DATE_FORMAT } from '@avoo/constants';
 import {
   exceptionHooks,
   normalizeExceptionEndDate,
-  timeOffConflictsHooks,
+  timeOffConflictHooks,
   timeToMinutes,
 } from '@avoo/hooks';
 import {
@@ -93,10 +93,10 @@ export default function TimeOffEditForm({
   const fixedMaster = React.useMemo<ShortMasterInfo>(
     () => ({
       id: timeOff.master.id,
-      name: timeOff.master.name ?? `Master #${timeOff.master.id}`,
+      name: timeOff.master.name ?? t('masterFallback', { id: timeOff.master.id }),
       avatarPreviewUrl: timeOff.master.avatarPreviewUrl ?? null,
     }),
-    [timeOff.master.avatarPreviewUrl, timeOff.master.id, timeOff.master.name],
+    [timeOff.master.avatarPreviewUrl, timeOff.master.id, timeOff.master.name, t],
   );
   const masters = React.useMemo<ShortMasterInfo[]>(() => [fixedMaster], [fixedMaster]);
   const toast = useToast();
@@ -105,11 +105,11 @@ export default function TimeOffEditForm({
   const mastersOptions = React.useMemo(
     () => [
       {
-        label: fixedMaster.name ?? `Master #${fixedMaster.id}`,
+        label: fixedMaster.name ?? t('masterFallback', { id: fixedMaster.id }),
         value: String(fixedMaster.id),
       },
     ],
-    [fixedMaster.id, fixedMaster.name],
+    [fixedMaster.id, fixedMaster.name, t],
   );
 
   const selectedMasterValues = React.useMemo(
@@ -163,7 +163,7 @@ export default function TimeOffEditForm({
   const values = watch();
 
   const { conflictMessage, hasConflict, isConflictsLoading, affectedBookings } =
-    timeOffConflictsHooks.useTimeOffConflicts({
+    timeOffConflictHooks.useTimeOffConflicts({
       values,
       masters,
       excludeId: timeOff.id,

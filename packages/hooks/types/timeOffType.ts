@@ -18,6 +18,16 @@ export enum WholeDay {
   Partial = 'partial',
 }
 
+export type TimeOffFormValues = {
+  mode?: TimeOffMode;
+  staff?: string[];
+  startDate?: string;
+  endDate?: string;
+  startTime?: string;
+  endTime?: string;
+  wholeDay?: WholeDay;
+};
+
 export const timeOffTypeLabels: Record<TimeOffType, string> = {
   [TimeOffType.Personal]: 'Personal break',
   [TimeOffType.Holiday]: 'Holiday (Salon)',
