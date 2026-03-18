@@ -1,12 +1,11 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { FormattedMessage } from 'react-intl';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 
 import { authHooks } from '@avoo/hooks';
 import { utils } from '@avoo/hooks';
-import { messages } from '@avoo/intl/messages/public/login/form';
 import { useApiStatusStore } from '@avoo/store';
 
 import { Button, ButtonFit, ButtonIntent } from '@/_components/Button/Button';
@@ -18,6 +17,7 @@ import { AppRoutes } from '@/_routes/routes';
 import { routerUtils } from '@/_utils/routerUtils';
 
 export default function LoginForm() {
+  const t = useTranslations('public.login.form');
   const isPending = useApiStatusStore((state) => state.isPending);
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -56,25 +56,21 @@ export default function LoginForm() {
   return (
     <form onSubmit={handleSubmit} className='w-full flex flex-col gap-6'>
       <label>
-        <span className='text-sm font-medium mb-1 leading-none block'>
-          <FormattedMessage {...messages.emailLabel} />
-        </span>
+        <span className='text-sm font-medium mb-1 leading-none block'>{t('emailLabel')}</span>
         <FormInput
           {...register('email')}
           type='email'
-          placeholder={messages.emailPlaceholder.defaultMessage}
+          placeholder={t('emailPlaceholder')}
           error={errors.email?.message}
         />
       </label>
 
       <label>
-        <span className='text-sm font-medium mb-1 leading-none block'>
-          <FormattedMessage {...messages.passwordLabel} />
-        </span>
+        <span className='text-sm font-medium mb-1 leading-none block'>{t('passwordLabel')}</span>
         <FormInput
           {...register('password')}
           type={isShowPassword ? 'text' : 'password'}
-          placeholder={messages.passwordPlaceholder.defaultMessage}
+          placeholder={t('passwordPlaceholder')}
           error={errors.password?.message}
           accessory={<ShowPasswordToggler value={isShowPassword} toggle={toggleShowPassword} />}
         />
@@ -87,7 +83,7 @@ export default function LoginForm() {
         fit={ButtonFit.Fill}
         intent={ButtonIntent.Primary}
       >
-        <FormattedMessage {...messages.button} />
+        {t('button')}
       </Button>
     </form>
   );

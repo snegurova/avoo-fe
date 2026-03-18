@@ -3,6 +3,7 @@
 import React, { useCallback } from 'react';
 import { useController } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 
 import { Button, Typography } from '@mui/material';
 
@@ -20,6 +21,7 @@ import { AppRoutes } from '@/_routes/routes';
 import FormTextarea from '../FormTextArea/FormTextArea';
 
 export default function MasterAddForm() {
+  const t = useTranslations('private.components.MasterAddForm.MasterAddForm');
   const router = useRouter();
   const mastersPath = localizationHooks.useWithLocale(AppRoutes.Masters);
 
@@ -30,7 +32,7 @@ export default function MasterAddForm() {
   const toast = useToast();
   const { control, handleSubmit, isPending } = masterHooks.useCreateMasterForm({
     onSuccess: () => {
-      toast.success('New master added successfully');
+      toast.success(t('addSuccess'));
       handleNavigateToMasters();
     },
   });
@@ -80,7 +82,7 @@ export default function MasterAddForm() {
       className='flex-1 flex flex-col md:flex-row md:flex-wrap gap-6 md:gap-8 lg:gap-6 min-h-0'
     >
       <div className='flex-1 max-w-4xl space-y-6 md:space-y-8 xl:mx-auto'>
-        <Typography sx={{ fontSize: 16, fontWeight: 500 }}>Personal info</Typography>
+        <Typography sx={{ fontSize: 16, fontWeight: 500 }}>{t('personalInfo')}</Typography>
         <div className='flex items-center gap-4 py-8 md:py-6'>
           <AvatarUpload
             imageUri={null}
@@ -94,14 +96,14 @@ export default function MasterAddForm() {
         <div className='grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8 lg:gap-x-6 lg:gap-y-8'>
           <div>
             <label htmlFor='name' className='text-sm block mb-1'>
-              Display Name
+              {t('displayName')}
             </label>
             <FormInput id='name' {...nameField} value={nameField.value ?? ''} />
           </div>
 
           <div>
             <label htmlFor='headline' className='text-sm block mb-1'>
-              Headline
+              {t('headline')}
             </label>
             <FormInput id='headline' {...headlineField} value={headlineField.value ?? ''} />
           </div>
@@ -110,14 +112,14 @@ export default function MasterAddForm() {
         <div className='grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8 lg:gap-x-6 lg:gap-y-8'>
           <div>
             <label htmlFor='email' className='text-sm block mb-1'>
-              Email
+              {t('email')}
             </label>
             <FormInput id='email' type='email' {...emailField} value={emailField.value ?? ''} />
           </div>
 
           <div>
             <label htmlFor='phone' className='text-sm block mb-1'>
-              Phone
+              {t('phone')}
             </label>
             <div className='flex items-stretch gap-3'>
               <div className='w-[84px] flex-shrink-0'>
@@ -149,8 +151,8 @@ export default function MasterAddForm() {
             onChange={bioField.onChange}
             onBlur={bioField.onBlur}
             ref={bioField.ref}
-            label='About'
-            helperText='Information will display on the platform.'
+            label={t('about')}
+            helperText={t('infoDisplayPlatform')}
             maxLength={200}
             classNames={{
               textarea:
@@ -160,9 +162,9 @@ export default function MasterAddForm() {
         </div>
 
         <label htmlFor='languages' className='text-sm block mb-1'>
-          Languages
+          {t('languages')}
         </label>
-        <p className='text-xs text-gray-500'>Add languages in which the service is offered</p>
+        <p className='text-xs text-gray-500'>{t('addLanguagesOffer')}</p>
         <FormLanguageSearch
           name={languagesField.name}
           control={control}
@@ -178,7 +180,7 @@ export default function MasterAddForm() {
           variant='outlined'
           sx={{ width: { xs: 130, md: 170 }, height: 45 }}
         >
-          Close
+          {t('close')}
         </Button>
         <Button
           type='submit'
@@ -187,7 +189,7 @@ export default function MasterAddForm() {
           sx={{ width: { xs: 130, md: 170 }, height: 45 }}
           disabled={isPending}
         >
-          Add
+          {t('add')}
         </Button>
       </div>
     </form>

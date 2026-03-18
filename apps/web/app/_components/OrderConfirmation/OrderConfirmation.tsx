@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo } from 'react';
 import { Controller } from 'react-hook-form';
+import { useTranslations } from 'next-intl';
 
 import { Order, Service } from '@avoo/axios/types/apiTypes';
 import { orderHooks } from '@avoo/hooks';
@@ -26,6 +27,7 @@ type Props = {
 };
 
 export default function OrderConfirmation(props: Props) {
+  const t = useTranslations('private.components.OrderConfirmation.OrderConfirmation');
   const { order, timeAgo, endTime, onClose, refetchCalendar, refetchOrder, isOutOfSchedule } =
     props;
   const [error, setError] = React.useState<string | null>(null);
@@ -85,14 +87,14 @@ export default function OrderConfirmation(props: Props) {
               </span>
               {isOutOfSchedule && (
                 <span className='text-[10px] font-medium text-white leading-none px-1.5 py-1 flex items-center justify-center rounded-2xl capitalize bg-red-800'>
-                  Out of schedule
+                  {t('outOfSchedule')}
                 </span>
               )}
             </div>
           </div>
         </div>
         <div className='flex flex-col gap-3'>
-          <h3 className='font-medium tracking-wider'>Service</h3>
+          <h3 className='font-medium tracking-wider'>{t('service')}</h3>
           {serviceData && <ServiceElement item={serviceData} isCard master={order.master} />}
           {combinationData && (
             <CombinationElement item={combinationData} isCard master={order.master} hideMasters />
@@ -108,8 +110,8 @@ export default function OrderConfirmation(props: Props) {
                     name='confirmation-notes'
                     value={field.value || ''}
                     onChange={field.onChange}
-                    label='Notes'
-                    helperText='Additional information for the master'
+                    label={t('notes')}
+                    helperText={t('notesHelper')}
                     maxLength={200}
                     error={errors?.notes?.message}
                     classNames={{
@@ -129,7 +131,7 @@ export default function OrderConfirmation(props: Props) {
               render={({ field }) => (
                 <div className=''>
                   <span className='block mb-1 text-sm tracking-wider font-medium'>
-                    Service duration
+                    {t('serviceDuration')}
                   </span>
                   <FormCounter
                     value={field.value}
@@ -150,10 +152,12 @@ export default function OrderConfirmation(props: Props) {
           </div>
         </div>
         <div className='flex flex-col gap-3'>
-          <h3 className='font-medium tracking-wider'>Client</h3>
+          <h3 className='font-medium tracking-wider'>{t('client')}</h3>
           {order.customer && <CustomerElement item={order.customer} isCard />}
           {order.customer.notes && (
-            <p className='text-xs text-gray-500'>Note: {order.customer.notes}</p>
+            <p className='text-xs text-gray-500'>
+              {t('customerNote', { note: order.customer.notes })}
+            </p>
           )}
         </div>
       </div>
@@ -169,7 +173,7 @@ export default function OrderConfirmation(props: Props) {
           }}
           type={ButtonType.Button}
         >
-          Reject
+          {t('reject')}
         </Button>
         <Button
           loading={isPending}
@@ -181,7 +185,7 @@ export default function OrderConfirmation(props: Props) {
           }}
           type={ButtonType.Button}
         >
-          Confirm
+          {t('confirm')}
         </Button>
       </div>
     </form>

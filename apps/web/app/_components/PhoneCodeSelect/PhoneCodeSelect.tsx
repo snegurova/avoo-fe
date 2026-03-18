@@ -1,4 +1,5 @@
 import React, { useCallback, useMemo, useState } from 'react';
+import { useTranslations } from 'next-intl';
 
 import { PHONE_CODE_OPTIONS } from '@avoo/constants';
 
@@ -13,6 +14,7 @@ type Props = {
 };
 
 export default function PhoneCodeSelect({ value, onChange, id, className }: Readonly<Props>) {
+  const t = useTranslations('private.components.PhoneCodeSelect.PhoneCodeSelect');
   const [isOpen, setIsOpen] = useState(false);
 
   const handleChange = useCallback(
@@ -44,7 +46,7 @@ export default function PhoneCodeSelect({ value, onChange, id, className }: Read
         onBlur={handleBlur}
         onMouseDown={handleMouseDown}
         className={`p-3 w-full h-11 rounded-lg border border-gray-200 bg-transparent focus:outline-none focus:ring-1 focus:ring-purple-800 text-sm appearance-none pr-10 box-border leading-none py-0 ${className ?? ''}`}
-        aria-label='Country code'
+        aria-label={t('countryCode')}
       >
         {options}
       </select>

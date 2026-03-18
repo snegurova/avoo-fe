@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useTranslations } from 'next-intl';
 
 import {
   Combination,
@@ -21,6 +22,7 @@ type Props = {
 };
 
 export default function TimeSlotField(props: Props) {
+  const t = useTranslations('private.components.TimeSlotField.TimeSlotField');
   const { selectedSlot, setSelectedSlot, selectedService, calendar, calendarParams, isError } =
     props;
   const [slots, setSlots] = useState<Date[]>([]);
@@ -59,7 +61,7 @@ export default function TimeSlotField(props: Props) {
     <div className='row-span-2'>
       {slots.length > 0 && (
         <>
-          <label className='block mb-2 font-medium'>Time slot</label>
+          <label className='block mb-2 font-medium'>{t('timeSlot')}</label>
           <div className='gap-2 grid grid-cols-4'>
             {slots.map((slot) => (
               <TimeSlotOption
@@ -71,9 +73,7 @@ export default function TimeSlotField(props: Props) {
             ))}
           </div>
           {isError && (
-            <div className='mt-1 text-sm text-red-500 col-span-3'>
-              Please select a valid time slot
-            </div>
+            <div className='mt-1 text-sm text-red-500 col-span-3'>{t('selectValidTimeSlot')}</div>
           )}
         </>
       )}

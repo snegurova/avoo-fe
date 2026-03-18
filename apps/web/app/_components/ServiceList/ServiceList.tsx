@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { useTranslations } from 'next-intl';
 
 import { IconButton, Typography } from '@mui/material';
 import useMediaQuery from '@mui/material/useMediaQuery';
@@ -29,6 +30,7 @@ type Props = {
 };
 
 export default function ServiceList(props: Props) {
+  const t = useTranslations('private.components.ServiceList.ServiceList');
   const {
     categorySidebarItems,
     services,
@@ -63,9 +65,9 @@ export default function ServiceList(props: Props) {
     if (!serviceIdToDelete) return;
     try {
       await deleteServiceMutationAsync(serviceIdToDelete);
-      toast.success('Service deleted successfully');
+      toast.success(t('deleteSuccess'));
     } catch {
-      toast.error('Failed to delete service');
+      toast.error(t('deleteError'));
     }
   };
 
@@ -89,16 +91,16 @@ export default function ServiceList(props: Props) {
       <div className='py-4 grid grid-cols-1 lg:grid-cols-[240px_1fr] gap-6'>
         <div className='lg:overflow-visible lg:border lg:border-gray-200 lg:gap-0 lg:rounded-lg lg:p-4 lg:overflow-x-hidden lg:h-max'>
           <Typography variant='h6' className='hidden lg:block' sx={{ mb: 2 }}>
-            Categories
+            {t('categories')}
           </Typography>
           <ul className='flex lg:flex-col gap-4 overflow-x-auto'>
             {categorySidebarItems?.length !== 1 && (
               <li key={'all'}>
                 <CategoryFilterItem
-                  name='All categories'
+                  name={t('allCategories')}
                   count={allServicesCount}
                   isActive={selectedCategoryId === null}
-                  onClick={() => setSelectedCategory(null, 'All categories')}
+                  onClick={() => setSelectedCategory(null, t('allCategories'))}
                 />
               </li>
             )}
@@ -156,19 +158,19 @@ export default function ServiceList(props: Props) {
               </div>
             </section>
           ) : isPending ? (
-            <Typography variant='h1'>Loading...</Typography>
+            <Typography variant='h1'>{t('loading')}</Typography>
           ) : (
-            <Typography variant='h1'>No services found</Typography>
+            <Typography variant='h1'>{t('noServicesFound')}</Typography>
           )}
         </div>
       </div>
       <ConfirmationDialog
         open={!!serviceIdToDelete}
         onClose={handleCloseDeleteDialog}
-        title='Delete Service'
-        content='Are you sure you want to delete this service?'
-        cancelText='Cancel'
-        confirmText='Delete'
+        title={t('deleteService')}
+        content={t('deleteConfirmContent')}
+        cancelText={t('cancel')}
+        confirmText={t('delete')}
         onCancel={handleCloseDeleteDialog}
         onConfirm={handleConfirmDelete}
         loading={isPending}
@@ -177,16 +179,16 @@ export default function ServiceList(props: Props) {
         {selectedService && (
           <div className='w-full h-full overflow-y-auto'>
             <div className='sticky top-[-1] flex items-center justify-between py-2 bg-white z-2'>
-              <Typography variant='h1'>Service</Typography>
+              <Typography variant='h1'>{t('service')}</Typography>
               <div className='flex flex-row gap-4 lg:hidden'>
                 <div className='bg-primary-50 w-10 h-10 rounded-lg flex items-center justify-center'>
-                  <IconButton aria-label='share'>
+                  <IconButton aria-label={t('shareSm')}>
                     <ShareIcon className='transition-colors' />
                   </IconButton>
                 </div>
                 <div className='bg-primary-50 w-10 h-10 rounded-lg flex items-center justify-center'>
                   <IconButton
-                    aria-label='delete'
+                    aria-label={t('deleteSm')}
                     onClick={() => {
                       handleOpenDeleteDialog(selectedService.id);
                     }}

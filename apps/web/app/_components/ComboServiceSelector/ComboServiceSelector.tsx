@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import { useTranslations } from 'next-intl';
 
 import { Autocomplete, InputAdornment, InputLabel, TextField } from '@mui/material';
 import { tv } from 'tailwind-variants';
@@ -22,6 +23,7 @@ type Props = {
 };
 
 export default function ComboServiceSelector(props: Props) {
+  const t = useTranslations('private.components.ComboServiceSelector.ComboServiceSelector');
   const {
     value = [],
     onChange,
@@ -98,7 +100,7 @@ export default function ComboServiceSelector(props: Props) {
   return (
     <div className='flex flex-col w-full'>
       <InputLabel required={selectedObjects.length <= 1}>
-        {selectedObjects.length <= 1 ? 'Service search' : 'Add more services'}
+        {selectedObjects.length <= 1 ? t('serviceSearch') : t('addMoreServices')}
       </InputLabel>
 
       <Autocomplete
@@ -148,7 +150,9 @@ export default function ComboServiceSelector(props: Props) {
         <div className={listWrapperClasses}>
           {selectedObjects.map((service, index) => (
             <div key={service.id} className='flex flex-col gap-1'>
-              <InputLabel required={index <= 1}>Service {index + 1}</InputLabel>
+              <InputLabel required={index <= 1}>
+                {t('service')} {index + 1}
+              </InputLabel>
               <ServiceElement
                 item={service}
                 hideMasters={true}

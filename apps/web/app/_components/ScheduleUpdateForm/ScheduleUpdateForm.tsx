@@ -1,5 +1,6 @@
 import React from 'react';
 import { Controller, useFieldArray } from 'react-hook-form';
+import { useTranslations } from 'next-intl';
 
 import { Button, FormControl, FormHelperText, TextField } from '@mui/material';
 import dayjs from 'dayjs';
@@ -23,6 +24,7 @@ type Props = {
 };
 
 export default function ScheduleUpdateForm(props: Props) {
+  const t = useTranslations('private.components.ScheduleUpdateForm.ScheduleUpdateForm');
   const { schedule, onCancel } = props;
   const toast = useToast();
 
@@ -32,11 +34,11 @@ export default function ScheduleUpdateForm(props: Props) {
       defaultValues: schedule,
       startAt: schedule.startAt,
       onSuccess: () => {
-        toast.success('Schedule has been updated!');
+        toast.success(t('updateSuccess'));
         onCancel();
       },
       onError: (error) => {
-        toast.error('Failed to update schedule  : ' + error.message);
+        toast.error(t('updateError', { error: error.message }));
       },
     });
 
@@ -71,26 +73,32 @@ export default function ScheduleUpdateForm(props: Props) {
             name='name'
             control={control}
             render={({ field }) => (
-              <TextField {...field} required fullWidth value={field.value ?? ''} label='Name' />
+              <TextField
+                {...field}
+                required
+                fullWidth
+                value={field.value ?? ''}
+                label={t('name')}
+              />
             )}
           />
           {errors.name?.message && <FormHelperText>{errors.name?.message}</FormHelperText>}
         </FormControl>
         <DisabledFormField
           value={scheduleType?.label ?? ''}
-          label='Type of schedule'
+          label={t('typeOfSchedule')}
           required
           fullWidth
         />
         <DisabledFormField
-          value={schedule.master ? schedule.master.name : 'All masters'}
-          label='Applies to'
+          value={schedule.master ? schedule.master.name : t('allMasters')}
+          label={t('appliesTo')}
           required
           fullWidth
         />
         <DisabledFormField
           value={dayjs(schedule.startAt).locale(locale).format(DATE_PICKER_FORMAT)}
-          label='Start date'
+          label={t('startDate')}
           required
           fullWidth
         />
@@ -100,7 +108,7 @@ export default function ScheduleUpdateForm(props: Props) {
           render={({ field }) => (
             <FormDatePicker
               error={errors.endAt?.message}
-              label='End date'
+              label={t('endDate')}
               valueFormat={VALUE_DATE_FORMAT}
               date={field.value}
               onChange={(value) => field.onChange(value)}
@@ -120,10 +128,10 @@ export default function ScheduleUpdateForm(props: Props) {
       </form>
       <div className='sticky bottom-0 z-20 pt-4 bg-white flex items-center justify-end gap-4'>
         <Button color='secondary' variant='outlined' onClick={onCancel}>
-          Cancel
+          {t('cancel')}
         </Button>
         <Button form='update-service' type='submit' color='secondary' variant='contained'>
-          Edit
+          {t('edit')}
         </Button>
       </div>
     </>

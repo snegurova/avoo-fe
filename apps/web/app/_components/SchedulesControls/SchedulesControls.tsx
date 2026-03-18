@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 
 import { Button, Typography } from '@mui/material';
 
@@ -22,10 +23,11 @@ type Props = {
 
 export default function SchedulesControls(props: Props) {
   const { setSearchQuery, onSortClick, activeSortDirection, activeSortField } = props;
+  const t = useTranslations('private.components.SchedulesControls.SchedulesControls');
   const options: { label: string; value: SortScheduleField }[] = [
-    { label: 'Sort by name', value: 'name' },
-    { label: 'Sort by start date', value: 'startAt' },
-    { label: 'Sort by end date', value: 'endAt' },
+    { label: t('sortByName'), value: 'name' },
+    { label: t('sortByStartDate'), value: 'startAt' },
+    { label: t('sortByEndDate'), value: 'endAt' },
   ];
 
   const isPending = useApiStatusStore((state) => state.isPending);
@@ -36,19 +38,19 @@ export default function SchedulesControls(props: Props) {
         <div className='flex flex-col md:flex-col lg:flex-row w-full gap-4 lg:items-center'>
           <div className='flex flex-col md:flex-row md:items-center md:justify-between gap-4 lg:contents'>
             <Typography component='h1' variant='h1' className='order-1'>
-              Working schedules
+              {t('workingSchedules')}
             </Typography>
             <div className='order-2 lg:order-3 w-full md:w-auto'>
               <Link href={localizationHooks.useWithLocale(AppRoutes.WorkingHoursCreate)}>
                 <Button fullWidth color='primary' variant='outlined'>
-                  Setup new schedule
+                  {t('setupNewSchedule')}
                 </Button>
               </Link>
             </div>
           </div>
           <div className='order-3 lg:order-2 w-full lg:w-auto lg:ml-auto flex items-center gap-2 md:bg-primary-50 md:p-2 lg:bg-transparent lg:p-0'>
             <SearchTextInput
-              placeholder='Search by schedule name or master'
+              placeholder={t('searchScheduleNameMaster')}
               setSearchQuery={setSearchQuery}
               style={{
                 minWidth: {

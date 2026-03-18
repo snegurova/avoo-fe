@@ -1,4 +1,5 @@
 import { Controller } from 'react-hook-form';
+import { useTranslations } from 'next-intl';
 
 import {
   Button,
@@ -25,6 +26,7 @@ type Props = {
 };
 
 export default function ComboServiceUpdateForm(props: Props) {
+  const t = useTranslations('private.components.ComboServiceUpdateForm.ComboServiceUpdateForm');
   const { combination, onCancel } = props;
   const toast = useToast();
 
@@ -33,11 +35,11 @@ export default function ComboServiceUpdateForm(props: Props) {
   const { control, setValue, handleSubmit, errors } = combinationHooks.useUpdateCombinationForm({
     defaultValue: combination,
     onSuccess: () => {
-      toast.success('Combination has been updated!');
+      toast.success(t('updateSuccess'));
       onCancel();
     },
     onError: (error) => {
-      toast.error('Failed to update combination  : ' + error.message);
+      toast.error(t('updateError', { message: error.message }));
     },
   });
 
@@ -67,7 +69,7 @@ export default function ComboServiceUpdateForm(props: Props) {
                 required
                 fullWidth
                 value={field.value ?? ''}
-                label='Combo service name'
+                label={t('comboServiceName')}
               />
             )}
           />
@@ -75,7 +77,7 @@ export default function ComboServiceUpdateForm(props: Props) {
         </FormControl>
         <div className='mt-2'>
           <div className='bg-primary-50 p-2 rounded-lg'>
-            <Typography variant='h4'>Masters</Typography>
+            <Typography variant='h4'>{t('masters')}</Typography>
           </div>
           <div className='mt-2'>
             <FormControl fullWidth error={!!errors.masterIds?.message}>
@@ -99,7 +101,7 @@ export default function ComboServiceUpdateForm(props: Props) {
         </div>
         <div className='mt-2'>
           <div className='bg-primary-50 p-2 rounded-lg'>
-            <Typography variant='h4'>Services</Typography>
+            <Typography variant='h4'>{t('services')}</Typography>
           </div>
           <div className='mt-2'>
             <FormControl fullWidth error={!!errors.serviceIds?.message}>
@@ -129,7 +131,7 @@ export default function ComboServiceUpdateForm(props: Props) {
             render={({ field }) => (
               <div className=''>
                 <InputLabel id='duration-label' required>
-                  Service total duration
+                  {t('serviceTotalDuration')}
                 </InputLabel>
                 <FormCounter
                   value={field.value}
@@ -148,7 +150,7 @@ export default function ComboServiceUpdateForm(props: Props) {
         </FormControl>
 
         <div className='mt-2 flex items-center justify-between'>
-          <Typography variant='h5'>Available for online booking</Typography>
+          <Typography variant='h5'>{t('availableOnline')}</Typography>
           <Controller
             name='isActive'
             control={control}
@@ -165,10 +167,10 @@ export default function ComboServiceUpdateForm(props: Props) {
       </form>
       <div className='sticky bottom-0 z-20 pt-4 bg-white flex items-center justify-end gap-4'>
         <Button color='secondary' variant='outlined' onClick={onCancel}>
-          Cancel
+          {t('cancel')}
         </Button>
         <Button form='update-combo-service' type='submit' color='secondary' variant='contained'>
-          Edit
+          {t('edit')}
         </Button>
       </div>
     </>

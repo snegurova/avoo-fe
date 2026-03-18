@@ -1,12 +1,10 @@
 'use client';
 import React, { useCallback, useState } from 'react';
-import { FormattedMessage } from 'react-intl';
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { tv } from 'tailwind-variants';
-
-import { messages } from '@avoo/intl/messages/private/navigation/navigation';
 
 import { localizationHooks } from '@/_hooks/localizationHooks';
 import { routerHooks } from '@/_hooks/routerHooks';
@@ -50,6 +48,8 @@ const sidebarStyles = tv({
 });
 
 export default function AppNavigation({ menuOpen, setMenuOpen }: Props) {
+  const tCommon = useTranslations('private.components.AppNavigation.AppNavigation');
+  const t = useTranslations('private.navigation.navigation');
   const desktopAbove = useMediaQuery('(min-width:1024px)');
   const isOpen = desktopAbove || menuOpen;
 
@@ -59,44 +59,44 @@ export default function AppNavigation({ menuOpen, setMenuOpen }: Props) {
     {
       href: localizationHooks.useWithLocale(AppRoutes.Home),
       icon: <HomeIcon />,
-      label: <FormattedMessage {...messages.home} />,
+      label: t('home'),
     },
     {
       href: localizationHooks.useWithLocale(AppRoutes.Calendar),
       icon: <CalendarIcon />,
-      label: <FormattedMessage {...messages.calendar} />,
+      label: t('calendar'),
       hasDropdown: true,
     },
     {
       href: localizationHooks.useWithLocale(AppRoutes.Clients),
       icon: <CoPresentIcon />,
-      label: <FormattedMessage {...messages.clients} />,
+      label: t('clients'),
     },
     {
       href: localizationHooks.useWithLocale(AppRoutes.Services),
       icon: <BookIcon />,
-      label: <FormattedMessage {...messages.services} />,
+      label: t('services'),
     },
     {
       href: localizationHooks.useWithLocale(AppRoutes.Masters),
       icon: <GroupsIcon />,
-      label: <FormattedMessage {...messages.masters} />,
+      label: t('masters'),
     },
     {
       href: localizationHooks.useWithLocale(AppRoutes.Posts),
       icon: <MosaicIcon />,
-      label: <FormattedMessage {...messages.posts} />,
+      label: t('posts'),
     },
   ];
 
   const calendarSubMenuItems = [
     {
       href: localizationHooks.useWithLocale(AppRoutes.WorkingHours),
-      label: <FormattedMessage {...messages.workingSchedule} />,
+      label: t('workingSchedule'),
     },
     {
       href: localizationHooks.useWithLocale(AppRoutes.TimeOff),
-      label: <FormattedMessage {...messages.scheduleException} />,
+      label: t('scheduleException'),
     },
     {
       href: localizationHooks.useWithLocale(AppRoutes.ComboServiceTime),
@@ -139,7 +139,7 @@ export default function AppNavigation({ menuOpen, setMenuOpen }: Props) {
               className='font-inter font-semibold text-4xl text-gray-600'
               onClick={handleCloseMenu}
             >
-              Avoo
+              {tCommon('avoo')}
             </Link>
           </div>
 

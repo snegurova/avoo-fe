@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { FormattedMessage } from 'react-intl';
+import { useTranslations } from 'next-intl';
 
 import { tv } from 'tailwind-variants';
 
@@ -10,7 +10,6 @@ import {
   Service,
 } from '@avoo/axios/types/apiTypes';
 import { calendarHooks, masterHooks, servicesHooks } from '@avoo/hooks';
-import { messages } from '@avoo/intl/messages/private/orders/create';
 import { timeUtils } from '@avoo/shared';
 import { isEmptyObject } from '@avoo/shared';
 import { useCalendarStore } from '@avoo/store';
@@ -70,6 +69,8 @@ const top = tv({
 });
 
 export default function ServiceFormItem(props: Props) {
+  const tCommon = useTranslations('private.components.ServiceFormItem.ServiceFormItem');
+  const t = useTranslations('private.orders.create');
   const {
     order,
     onChange,
@@ -200,7 +201,7 @@ export default function ServiceFormItem(props: Props) {
     const availableDate = await getAvailableDate(availabilityParams);
 
     if (!availableDate) {
-      toast.error('No available date and time');
+      toast.error(tCommon('noAvailableTime'));
       return;
     }
 
@@ -262,7 +263,7 @@ export default function ServiceFormItem(props: Props) {
     const availableDate = await getAvailableDate(availabilityParams);
 
     if (!availableDate) {
-      toast.error('No available date and time');
+      toast.error(tCommon('noAvailableTime'));
       return;
     }
 
@@ -329,7 +330,7 @@ export default function ServiceFormItem(props: Props) {
     const availableDate = await getAvailableDate(availabilityParams);
 
     if (!availableDate) {
-      toast.error('No available date and time');
+      toast.error(tCommon('noAvailableTime'));
       return;
     }
 
@@ -383,9 +384,7 @@ export default function ServiceFormItem(props: Props) {
   return (
     <div className={root({ isActive })} onClick={handleRootClick}>
       <div className={top({ isActive })}>
-        <h3 className='font-medium'>
-          {selectedService?.name ?? <FormattedMessage {...messages.selectServiceLabel} />}
-        </h3>
+        <h3 className='font-medium'>{selectedService?.name ?? t('selectServiceLabel')}</h3>
         {remove && (
           <IconButton
             className='group'
@@ -399,7 +398,7 @@ export default function ServiceFormItem(props: Props) {
       <div className='flex flex-col gap-4 p-4'>
         <div className=''>
           <SearchField
-            label='Service'
+            label={tCommon('service')}
             value={order.serviceId ? { id: order.serviceId } : null}
             onChange={selectService}
             items={services}
@@ -407,7 +406,7 @@ export default function ServiceFormItem(props: Props) {
             setSearch={setSearchQuery}
             ItemElement={ServiceElementWrapped}
             searchMode={!order.serviceId}
-            placeholder='Search by service name'
+            placeholder={tCommon('searchServiceName')}
             error={errors?.serviceId?.message}
             hasMore={hasMoreServices}
             fetchNextPage={fetchNextServicesPage}
@@ -421,7 +420,7 @@ export default function ServiceFormItem(props: Props) {
         </div>
         <div className=''>
           <SearchField
-            label='Master'
+            label={tCommon('master')}
             value={order.masterId ? { id: order.masterId } : null}
             onChange={selectMaster}
             items={masters}
@@ -442,14 +441,12 @@ export default function ServiceFormItem(props: Props) {
         </div>
         <div className='grid grid-cols-3 lg:grid-cols-12 xl:grid-cols-3 gap-x-3'>
           <div className='col-span-2 lg:col-span-7 xl:col-span-2'>
-            <label className='block mb-2 font-medium'>
-              <FormattedMessage {...messages.date} />
-            </label>
+            <label className='block mb-2 font-medium'>{t('date')}</label>
             <FormDatePicker date={order.date} onChange={onDateChange} />
           </div>
           <div className=' lg:col-span-5 xl:col-span-1'>
             <label className='block mb-2 font-medium' htmlFor={`time-${index}`}>
-              <FormattedMessage {...messages.time} />
+              {t('time')}
             </label>
             <FormTimePicker date={order.date} onChange={onDateChange} />
           </div>
@@ -465,8 +462,8 @@ export default function ServiceFormItem(props: Props) {
             name={`notes-${index}`}
             value={order.notes || ''}
             onChange={onNotesChange}
-            label='Notes'
-            helperText='Additional information for the master'
+            label={tCommon('notes')}
+            helperText={tCommon('notesHelperText')}
             maxLength={200}
             error={errors?.notes?.message}
             classNames={{

@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import { useTranslations } from 'next-intl';
 
 import { masterApi } from '@avoo/axios';
 import { MasterWithRelationsEntityResponse } from '@avoo/axios/types/apiTypes';
@@ -22,6 +23,7 @@ type Props = {
 };
 
 export const MasterList = ({ masters, onEdit, selectedId, incrementPage, hasMore }: Props) => {
+  const t = useTranslations('private.components.MasterList.MasterList');
   const [sortDirection, setSortDirection] = useState<SortDirection>(null);
   const [list, setList] = useState(() => masters ?? []);
   const [error, setError] = useState<string | null>(null);
@@ -69,7 +71,7 @@ export const MasterList = ({ masters, onEdit, selectedId, incrementPage, hasMore
   }, [list]);
 
   if (uniqueList.length === 0) {
-    return <div className='py-8 text-center text-gray-500'>No masters yet</div>;
+    return <div className='py-8 text-center text-gray-500'>{t('noMastersYet')}</div>;
   }
 
   return (
@@ -84,16 +86,16 @@ export const MasterList = ({ masters, onEdit, selectedId, incrementPage, hasMore
         <div className='hidden lg:flex sticky top-0 z-9 items-center gap-3 px-8 py-3 text-sm text-black font-semibold bg-primary-50'>
           <div className='w-1/5'>
             <div className='flex items-center gap-4 pl-2.5'>
-              <span>Master name</span>
+              <span>{t('masterName')}</span>
               <div className='flex flex-col'>
                 <IconButton
-                  ariaLabel='sort-asc'
+                  ariaLabel={t('sortAsc')}
                   onClick={() => setSortDirection('asc')}
                   className='p-0 text-sm text-gray-400 hover:text-gray-700'
                   icon={<ArrowUpIcon width={14} height={14} />}
                 />
                 <IconButton
-                  ariaLabel='sort-desc'
+                  ariaLabel={t('sortDesc')}
                   onClick={() => setSortDirection('desc')}
                   className='p-0 text-sm text-gray-400 hover:text-gray-700'
                   icon={<ArrowDownIcon width={14} height={14} />}
@@ -101,10 +103,10 @@ export const MasterList = ({ masters, onEdit, selectedId, incrementPage, hasMore
               </div>
             </div>
           </div>
-          <div className='w-1/5'>Mobile number</div>
-          <div className='w-1/5'>Email address</div>
-          <div className='w-1/5'>Languages</div>
-          <div className='w-12 text-right'>Actions</div>
+          <div className='w-1/5'>{t('mobileNumber')}</div>
+          <div className='w-1/5'>{t('emailAddress')}</div>
+          <div className='w-1/5'>{t('languages')}</div>
+          <div className='w-12 text-right'>{t('actions')}</div>
         </div>
 
         <ul className='flex flex-col gap-4 lg:gap-0 mb-4'>

@@ -1,13 +1,13 @@
 import React, { useMemo, useState } from 'react';
-import { FormattedMessage } from 'react-intl';
+import { useTranslations } from 'next-intl';
 
 import { SUPPORTED_LOCALES } from '@avoo/intl';
-import { messages } from '@avoo/intl/messages/private/navigation/navigation';
 
 import { localizationHooks } from '@/_hooks/localizationHooks';
 import LanguageIcon from '@/_icons/LanguageIcon';
 
 export default function LanguageSwitcher() {
+  const t = useTranslations('private.navigation.navigation');
   const [isOpen, setIsOpen] = useState(false);
 
   const currLocale = localizationHooks.useGetLocale();
@@ -29,7 +29,7 @@ export default function LanguageSwitcher() {
 
   const options = useMemo(() => {
     return SUPPORTED_LOCALES.map((locale) => ({
-      label: <FormattedMessage {...messages[locale as keyof typeof messages]} />,
+      label: t(locale as Parameters<typeof t>[0]),
       handler: () => handleLocaleChange(locale),
     }));
   }, [SUPPORTED_LOCALES]);
@@ -52,9 +52,7 @@ export default function LanguageSwitcher() {
         tabIndex={0}
       >
         <LanguageIcon />
-        <span className=''>
-          {<FormattedMessage {...messages[currLocale as keyof typeof messages]} />}
-        </span>
+        {t(currLocale as Parameters<typeof t>[0])}
       </button>
       {isOpen && (
         <div className='absolute top-full w-full overflow-hidden rounded-xl z-15 right-0 bg-white border border-gray-200 flex flex-col'>

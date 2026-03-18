@@ -1,4 +1,5 @@
 import { Metadata } from 'next/types';
+import { useTranslations } from 'next-intl';
 
 import { AuthGuard } from '@/_components/AuthGuard/AuthGuard';
 import AuthorizationWrapper from '@/_components/AuthorizationWrapper/AuthorizationWrapper';
@@ -10,10 +11,11 @@ export const metadata: Metadata = {
 };
 
 export default function ResetPasswordPage() {
+  const t = useTranslations('private.resetPassword');
   return (
     <AuthGuard>
       <AuthorizationWrapper
-        title='Create a new password'
+        title={t('createNewPassword')}
         description='Choose a strong password to keep your account secure.'
       >
         <ResetPasswordForm />

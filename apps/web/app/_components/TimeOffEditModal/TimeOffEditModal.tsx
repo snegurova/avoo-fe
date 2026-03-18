@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { useTranslations } from 'next-intl';
 
 import type { Exception } from '@avoo/axios/types/apiTypes';
 
@@ -18,6 +19,7 @@ type Props = {
 };
 
 export const TimeOffEditModal: React.FC<Props> = ({ timeOff, open, onClose }) => {
+  const t = useTranslations('private.components.TimeOffEditModal.TimeOffEditModal');
   const [isDirty, setIsDirty] = React.useState(false);
   const [showUnsavedConfirm, setShowUnsavedConfirm] = React.useState(false);
 
@@ -46,9 +48,9 @@ export const TimeOffEditModal: React.FC<Props> = ({ timeOff, open, onClose }) =>
           setShowUnsavedConfirm(false);
           onClose();
         }}
-        title='Unsaved changes'
-        description='You have unsaved changes. Are you sure you want to leave?'
-        confirmText='Discard changes'
+        title={t('unsavedChanges')}
+        description={t('unsavedChangesDescription')}
+        confirmText={t('confirmDiscard')}
       />
     </>
   );

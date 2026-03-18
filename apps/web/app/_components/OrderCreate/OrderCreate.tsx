@@ -2,8 +2,8 @@
 
 import React, { useEffect, useMemo, useState } from 'react';
 import { Controller, useFieldArray } from 'react-hook-form';
-import { FormattedMessage } from 'react-intl';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 
 import { CreateOrder, MasterWithRelationsEntity } from '@avoo/axios/types/apiTypes';
 import { calendarHooks, combinationHooks, orderHooks } from '@avoo/hooks';
@@ -11,7 +11,6 @@ import { CalendarType } from '@avoo/hooks/types/calendarType';
 import { CalendarViewType } from '@avoo/hooks/types/calendarViewType';
 import { OrderQueryParams } from '@avoo/hooks/types/orderQueryParams';
 import { OrderType } from '@avoo/hooks/types/orderType';
-import { messages } from '@avoo/intl/messages/private/orders/create';
 import { CalendarSlot, timeUtils } from '@avoo/shared';
 import { useApiStatusStore, useCalendarStore } from '@avoo/store';
 
@@ -31,6 +30,7 @@ const SERVICES_KEY_IN_ORDER_CREATE = 'ordersData';
 const WRAPPER_HEADER_HEIGHT = '62px';
 
 export default function OrderCreate() {
+  const t = useTranslations('private.orders.create');
   const isPending = useApiStatusStore((state) => state.isPending);
   const errorMessage = useApiStatusStore((s) => s.errorMessage);
   const isError = useApiStatusStore((s) => s.isError);
@@ -420,9 +420,7 @@ export default function OrderCreate() {
                 <div className='shrink-0'>
                   <AddCircleIcon className='fill-primary-900' />
                 </div>
-                <span className='text-primary-900 font-medium underline'>
-                  <FormattedMessage {...messages.addService} />
-                </span>
+                <span className='text-primary-900 font-medium underline'>{t('addService')}</span>
               </button>
             </div>
           )}
@@ -434,7 +432,7 @@ export default function OrderCreate() {
             intent={ButtonIntent.Secondary}
             onClick={() => router.back()}
           >
-            <FormattedMessage {...messages.cancel} />
+            {t('cancel')}
           </Button>
           <Button
             type={ButtonType.Submit}
@@ -443,7 +441,7 @@ export default function OrderCreate() {
             fit={ButtonFit.Inline}
             intent={ButtonIntent.Primary}
           >
-            <FormattedMessage {...messages.create} />
+            {t('create')}
           </Button>
         </div>
       </form>

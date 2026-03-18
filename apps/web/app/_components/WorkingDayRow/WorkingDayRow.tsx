@@ -1,5 +1,5 @@
 import React from 'react';
-import { FormattedMessage } from 'react-intl';
+import { useTranslations } from 'next-intl';
 
 import { Button, IconButton, Switch, Typography } from '@mui/material';
 import { tv } from 'tailwind-variants';
@@ -7,7 +7,6 @@ import { tv } from 'tailwind-variants';
 import { BREAK_END_MINUTES, BREAK_START_MINUTES } from '@avoo/constants';
 import { colors } from '@avoo/design-tokens';
 import { scheduleHooks } from '@avoo/hooks';
-import { messages } from '@avoo/intl/messages/private/calendar/calendar';
 import { timeUtils } from '@avoo/shared';
 
 import { FormTimeSelect } from '@/_components/FormTimeSelect/FormTimeSelect';
@@ -36,6 +35,8 @@ type Props = {
 };
 
 export const WorkingDayRow = (props: Props) => {
+  const tCommon = useTranslations('private.components.WorkingDayRow.WorkingDayRow');
+  const t = useTranslations('private.calendar.calendar');
   const {
     index,
     patternShift,
@@ -76,13 +77,9 @@ export const WorkingDayRow = (props: Props) => {
       <div className={cardDayVariant({ enabled })}>
         <div className='flex justify-start items-center gap-2'>
           <Typography variant='h4'>
-            {scheduleType === 'weekly' ? (
-              <FormattedMessage
-                {...messages[timeUtils.getWeekDay(shiftedIndex) as keyof typeof messages]}
-              />
-            ) : (
-              `Day ${index + 1}`
-            )}
+            {scheduleType === 'weekly'
+              ? t(timeUtils.getWeekDay(shiftedIndex) as Parameters<typeof t>[0])
+              : `${tCommon('day')} ${index + 1}`}
           </Typography>
           {scheduleType === 'custom' && (
             <Button
@@ -91,13 +88,15 @@ export const WorkingDayRow = (props: Props) => {
               onClick={() => onRemoveDay?.(index)}
               disabled={disabledRemove}
             >
-              Remove
+              {tCommon('remove')}
             </Button>
           )}
         </div>
 
         <div className='flex justify-end items-center gap-2'>
-          <Typography variant='body2'>{enabled ? 'Working day' : 'Day off'}</Typography>
+          <Typography variant='body2'>
+            {enabled ? tCommon('workingDay') : tCommon('dayOff')}
+          </Typography>
           <Switch checked={enabled} onChange={handleSwitchChange} />
         </div>
       </div>
@@ -110,7 +109,7 @@ export const WorkingDayRow = (props: Props) => {
             options={options}
             onChange={(val) => onTimeChange('start', Number(val))}
           />
-          <span className='px-2 text-center'>to</span>
+          <span className='px-2 text-center'>{tCommon('to')}</span>
           <FormTimeSelect
             name={`endTime-${index}`}
             value={String(endTimeMinutes)}
@@ -128,7 +127,7 @@ export const WorkingDayRow = (props: Props) => {
           >
             <div className='flex items-center gap-2'>
               <Typography variant='h4' color={colors.gray[600]}>
-                Break
+                {tCommon('break')}
               </Typography>
               <FormTimeSelect
                 name={`breakStart-${index}-${brIndex}`}
@@ -137,7 +136,7 @@ export const WorkingDayRow = (props: Props) => {
                 onChange={(val) => onBreakTimeChange(brIndex, 'start', Number(val))}
               />
             </div>
-            <span className='px-2 text-center'>to</span>
+            <span className='px-2 text-center'>{tCommon('to')}</span>
             <div className='flex items-center gap-2'>
               <FormTimeSelect
                 name={`breakEnd-${index}-${brIndex}`}
@@ -165,7 +164,7 @@ export const WorkingDayRow = (props: Props) => {
               <AddOutlinedIcon fill={colors.primary[700]} />
             </IconButton>
             <Typography variant='h4' color={colors.primary[700]}>
-              Add break
+              {tCommon('addBreak')}
             </Typography>
           </div>
         )}

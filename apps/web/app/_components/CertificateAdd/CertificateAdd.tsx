@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useRef } from 'react';
+import { useTranslations } from 'next-intl';
 
 import { Button } from '@mui/material';
 
@@ -16,6 +17,7 @@ export enum OwnerType {
 }
 
 export const CertificateAdd = () => {
+  const t = useTranslations('private.components.CertificateAdd.CertificateAdd');
   const hook = useCertificateForm();
   const { form, handleSubmit, setValue, watch, masters, file, fileError, onFilePicked, onCancel } =
     hook;
@@ -31,53 +33,53 @@ export const CertificateAdd = () => {
 
   return (
     <form onSubmit={handleSubmit}>
-      <h2 className='text-2xl font-bold mb-4'>Add Certificate</h2>
+      <h2 className='text-2xl font-bold mb-4'>{t('addCertificate')}</h2>
       <div className='mb-4'>
         <label htmlFor='title' className='block text-gray-700 font-semibold mb-2'>
-          Title
+          {t('title')}
         </label>
         <FormInput
           type='text'
           id='title'
-          placeholder='Enter certificate title'
+          placeholder={t('enterCertTitle')}
           required
           {...form.register('title', {
-            required: 'Title is required',
-            minLength: { value: 2, message: 'Title is too short' },
+            required: t('titleRequired'),
+            minLength: { value: 2, message: t('titleTooShort') },
           })}
           error={errors.title?.message as string | undefined}
         />
         <label htmlFor='description' className='block text-gray-700 font-semibold mb-2'>
-          Description
+          {t('description')}
         </label>
         <FormInput
           type='text'
           id='description'
-          placeholder='Enter certificate description'
+          placeholder={t('enterCertDesc')}
           {...form.register('description', {
-            maxLength: { value: 500, message: 'Max length is 500' },
+            maxLength: { value: 500, message: t('maxLength500') },
           })}
           error={errors.description?.message as string | undefined}
         />
       </div>
       <div className='mb-4'>
         <label htmlFor='issueDate' className='block text-gray-700 font-semibold mb-2'>
-          Issue Date
+          {t('issueDate')}
         </label>
         <input
           type='date'
           id='issueDate'
           required
           {...form.register('issueDate', {
-            required: 'Issue date is required',
-            pattern: { value: /^\d{4}-\d{2}-\d{2}$/, message: 'Invalid date format' },
+            required: t('issueDateRequired'),
+            pattern: { value: /^\d{4}-\d{2}-\d{2}$/, message: t('invalidDateFormat') },
             validate: (v: string) => {
               if (!v) return true;
               const d = new Date(v);
               const today = new Date();
               today.setHours(0, 0, 0, 0);
               d.setHours(0, 0, 0, 0);
-              return d <= today || 'Date cannot be in the future';
+              return d <= today || t('dateNotInFuture');
             },
           })}
         />
@@ -87,25 +89,25 @@ export const CertificateAdd = () => {
       </div>
       <div className='mb-4'>
         <label htmlFor='masterId' className='block text-gray-700 font-semibold mb-2'>
-          Master
+          {t('master')}
         </label>
         <div>
           <SelectButton
             label={
               masterId
-                ? (masters?.find((x) => x.id === masterId)?.name ?? `Master ${masterId}`)
-                : 'Salon'
+                ? (masters?.find((x) => x.id === masterId)?.name ?? `${t('master')} ${masterId}`)
+                : t('salon')
             }
             options={[
               {
-                label: 'Salon',
+                label: t('salon'),
                 handler: () => {
                   setValue('ownerType', OwnerType.Salon);
                   setValue('masterId', null);
                 },
               },
               ...(masters ?? []).map((master): { label: string; handler: () => void } => ({
-                label: master.name ?? `Master ${master.id}`,
+                label: master.name ?? `${t('master')} ${master.id}`,
                 handler: () => {
                   setValue('ownerType', OwnerType.Master);
                   setValue('masterId', master.id);
@@ -120,7 +122,7 @@ export const CertificateAdd = () => {
       <div className='mb-4'>
         <button
           type='button'
-          aria-label='Upload certificate file'
+          aria-label={t('uploadCertFile')}
           className='w-full text-center border-2 border-dashed border-gray-300 rounded-lg p-6 text-center cursor-pointer'
           onDragOver={(e) => e.preventDefault()}
           onDrop={(e) => {
@@ -130,12 +132,10 @@ export const CertificateAdd = () => {
           }}
           onClick={() => fileInputRef.current?.click()}
         >
-          <p className='mb-2 font-semibold'>
-            {file ? file.name : 'Select a file or drag and drop here'}
-          </p>
-          <p className='text-sm text-gray-500 mb-4'>JPG, PNG only, file size no more than 10MB</p>
+          <p className='mb-2 font-semibold'>{file ? file.name : t('selectOrDrag')}</p>
+          <p className='text-sm text-gray-500 mb-4'>{t('fileUploadHint')}</p>
           <span className='px-4 py-2 border border-blue-300 text-blue-600 rounded-md inline-block'>
-            SELECT FILE
+            {t('selectFileCaps')}
           </span>
           <input
             id='certificateFileInput'
@@ -157,7 +157,7 @@ export const CertificateAdd = () => {
           variant='outlined'
           sx={{ minWidth: 150 }}
         >
-          Cancel
+          {t('cancel')}
         </Button>
         <Button
           type='submit'
@@ -166,7 +166,7 @@ export const CertificateAdd = () => {
           variant='contained'
           sx={{ minWidth: 150 }}
         >
-          Save
+          {t('save')}
         </Button>
       </div>
     </form>

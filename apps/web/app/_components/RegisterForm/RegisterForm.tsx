@@ -1,14 +1,13 @@
 'use client';
 
 import { useEffect } from 'react';
-import { FormattedMessage } from 'react-intl';
 import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 
 import Checkbox from '@mui/material/Checkbox';
 
 import { authHooks } from '@avoo/hooks';
 import { utils } from '@avoo/hooks';
-import { messages } from '@avoo/intl/messages/public/signUp/form';
 import { useApiStatusStore } from '@avoo/store';
 
 import { Button, ButtonFit, ButtonIntent } from '@/_components/Button/Button';
@@ -19,6 +18,7 @@ import { useToast } from '@/_hooks/useToast';
 import { AppRoutes } from '@/_routes/routes';
 
 export default function RegisterForm() {
+  const t = useTranslations('public.signUp.form');
   const isPending = useApiStatusStore((state) => state.isPending);
   const toast = useToast();
   const errorMessage = useApiStatusStore((s) => s.errorMessage);
@@ -46,48 +46,42 @@ export default function RegisterForm() {
   return (
     <form onSubmit={handleSubmit} className='w-full flex flex-col gap-6'>
       <label>
-        <span className='text-sm font-medium mb-1 leading-none block'>
-          <FormattedMessage {...messages.nameLabel} />
-        </span>
+        <span className='text-sm font-medium mb-1 leading-none block'>{t('nameLabel')}</span>
         <FormInput
           {...register('name')}
           type='text'
-          placeholder={messages.namePlaceholder.defaultMessage}
+          placeholder={t('namePlaceholder')}
           error={errors.name?.message}
         />
       </label>
       <label>
-        <span className='text-sm font-medium mb-1 leading-none block'>
-          <FormattedMessage {...messages.emailLabel} />
-        </span>
+        <span className='text-sm font-medium mb-1 leading-none block'>{t('emailLabel')}</span>
         <FormInput
           {...register('email')}
           type='email'
-          placeholder={messages.emailPlaceholder.defaultMessage}
+          placeholder={t('emailPlaceholder')}
           error={errors.email?.message}
         />
       </label>
 
       <label>
-        <span className='text-sm font-medium mb-1 leading-none block'>
-          <FormattedMessage {...messages.passwordLabel} />
-        </span>
+        <span className='text-sm font-medium mb-1 leading-none block'>{t('passwordLabel')}</span>
         <FormInput
           {...register('password')}
           type={isShowPassword ? 'text' : 'password'}
-          placeholder={messages.passwordPlaceholder.defaultMessage}
+          placeholder={t('passwordPlaceholder')}
           error={errors.password?.message}
           accessory={<ShowPasswordToggler value={isShowPassword} toggle={toggleShowPassword} />}
         />
       </label>
       <label>
         <span className='text-sm font-medium mb-1 leading-none block'>
-          <FormattedMessage {...messages.confirmPasswordLabel} />
+          {t('confirmPasswordLabel')}
         </span>
         <FormInput
           {...register('confirmPassword')}
           type={isShowConfirmPassword ? 'text' : 'password'}
-          placeholder={messages.confirmPasswordPlaceholder.defaultMessage}
+          placeholder={t('confirmPasswordPlaceholder')}
           error={errors.confirmPassword?.message}
           accessory={
             <ShowPasswordToggler value={isShowConfirmPassword} toggle={toggleConfirmPassword} />
@@ -110,9 +104,7 @@ export default function RegisterForm() {
               },
             }}
           />
-          <span className='ml-4 text-xs text-gray-500'>
-            <FormattedMessage {...messages.agreeToTerms} />
-          </span>
+          <span className='ml-4 text-xs text-gray-500'>{t('agreeToTerms')}</span>
         </label>
         {errors.agreeToTerms && (
           <p className='mt-1 text-sm text-red-500'>{errors.agreeToTerms.message}</p>
@@ -125,7 +117,7 @@ export default function RegisterForm() {
         fit={ButtonFit.Fill}
         intent={ButtonIntent.Primary}
       >
-        <FormattedMessage {...messages.button} />
+        {t('button')}
       </Button>
     </form>
   );

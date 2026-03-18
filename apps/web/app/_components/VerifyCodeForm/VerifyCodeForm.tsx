@@ -2,6 +2,7 @@
 
 import React, { useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 
 import { authHooks } from '@avoo/hooks';
 import { formatHooks } from '@avoo/hooks';
@@ -14,6 +15,7 @@ import { useToast } from '@/_hooks/useToast';
 import { AppRoutes } from '@/_routes/routes';
 
 export default function VerifyCodeForm() {
+  const t = useTranslations('private.components.VerifyCodeForm.VerifyCodeForm');
   const isPending = useApiStatusStore((state) => state.isPending);
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -42,7 +44,7 @@ export default function VerifyCodeForm() {
       router.push(resetPasswordPath);
     },
     onError: () => {
-      toast.error('Invalid verification code. Please try again.');
+      toast.error(t('invalidCode'));
       logoutMutation();
     },
   });
@@ -56,16 +58,16 @@ export default function VerifyCodeForm() {
   const resendCode = async () => {
     try {
       sendCodeHandler({ email });
-      toast.success('Verification code resent successfully');
+      toast.success(t('resendSuccess'));
     } catch {
-      toast.error('Failed to resend verification code');
+      toast.error(t('resendError'));
     }
   };
 
   return (
     <div className='w-full flex flex-col gap-6'>
       <p className='text-sm text-gray-500 text-center mb-4'>
-        We've sent a 6-digit verification code to your email {maskedEmail}
+        {t('codeSentTo', { email: maskedEmail })}
       </p>
       <form onSubmit={handleSubmit} className='space-y-6 pb-6 pt-8'>
         <CodeInput
@@ -85,7 +87,7 @@ export default function VerifyCodeForm() {
           fit={ButtonFit.Fill}
           intent={ButtonIntent.Primary}
         >
-          Verify
+          {t('verify')}
         </Button>
       </form>
       <div className='flex justify-center pt-8'>
@@ -94,7 +96,7 @@ export default function VerifyCodeForm() {
           onClick={resendCode}
           className='hover:text-primary-600 focus:text-primary-600 cursor-pointer'
         >
-          Resend code
+          {t('resendCode')}
         </button>
       </div>
     </div>

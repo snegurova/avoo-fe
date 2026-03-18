@@ -1,13 +1,12 @@
 import React, { useCallback } from 'react';
 import { FieldErrors } from 'react-hook-form';
-import { FormattedMessage } from 'react-intl';
+import { useTranslations } from 'next-intl';
 
 import { tv } from 'tailwind-variants';
 
 import { CreateCustomerRequest, CreatePublicCustomerRequest } from '@avoo/axios/types/apiTypes';
 import { phoneHooks } from '@avoo/hooks';
 import { CreatePublicOrdersData } from '@avoo/hooks';
-import { messages } from '@avoo/intl/messages/private/orders/create';
 
 import FormInput from '@/_components/FormInput/FormInput';
 import FormTextArea from '@/_components/FormTextArea/FormTextArea';
@@ -34,6 +33,8 @@ const wrapper = tv({
 });
 
 export default function CustomerCreate(props: Props) {
+  const tCommon = useTranslations('private.components.CustomerCreate.CustomerCreate');
+  const t = useTranslations('private.orders.create');
   const { setPhone, value, onChange, error, isFullWidth = false } = props;
 
   const { countryCode, phoneNumber, setCountryCode, setPhoneNumber } = phoneHooks.usePhoneField({
@@ -87,11 +88,11 @@ export default function CustomerCreate(props: Props) {
       <div className={wrapper({ isFullWidth })}>
         <div className=''>
           <label className='block mb-1 text-sm font-medium' htmlFor='name'>
-            <FormattedMessage {...messages.name} />
+            {t('name')}
           </label>
           <FormInput
             type='text'
-            placeholder='Enter name'
+            placeholder={tCommon('enterName')}
             id='name'
             value={isCustomerValues(value) ? value.name : ''}
             onChange={handleNameChange}
@@ -100,11 +101,11 @@ export default function CustomerCreate(props: Props) {
         </div>
         <div className=''>
           <label className='block mb-1 text-sm font-medium' htmlFor='email'>
-            <FormattedMessage {...messages.email} />
+            {t('email')}
           </label>
           <FormInput
             type='email'
-            placeholder='Enter email'
+            placeholder={tCommon('enterEmail')}
             id='email'
             value={isCustomerValues(value) ? value.email : ''}
             onChange={handleEmailChange}
@@ -113,7 +114,7 @@ export default function CustomerCreate(props: Props) {
         </div>
         <div className=''>
           <label className='block mb-1 text-sm font-medium' htmlFor='phone'>
-            <FormattedMessage {...messages.phone} />
+            {t('phone')}
           </label>
           <div className='flex items-stretch gap-2 lg:gap-3'>
             <div className='w-[84px] shrink-0'>
@@ -128,7 +129,7 @@ export default function CustomerCreate(props: Props) {
             <div className='flex-1'>
               <FormInput
                 type='text'
-                placeholder='Enter phone'
+                placeholder={tCommon('enterPhone')}
                 id='phone'
                 value={phoneNumber}
                 onChange={handlePhoneNumberChange}
@@ -144,8 +145,8 @@ export default function CustomerCreate(props: Props) {
               name='notes'
               value={value.notes}
               onChange={handleNotesChange}
-              label={<FormattedMessage {...messages.notes} />}
-              helperText={<FormattedMessage {...messages.helperText} />}
+              label={t('notes')}
+              helperText={t('helperText')}
               maxLength={200}
               classNames={{
                 label: 'block font-medium',
