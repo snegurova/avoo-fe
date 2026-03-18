@@ -733,6 +733,7 @@
       },
       "ServiceList": {
         "ServiceList": {
+          "allCategories": "Wszystkie kategorie",
           "categories": "Kategorie",
           "loading": "Wczytywanie...",
           "noServicesFound": "Nie znaleziono usług",
@@ -803,7 +804,9 @@
           "timeOff": "Czas wolny",
           "workingTime": "Czas pracy",
           "optional": "Opcjonalnie",
+          "startDate": "Data rozpoczęcia *",
           "endDate": "Data zakończenia *",
+          "typeOfTimeOff": "Typ czasu wolnego *",
           "updateSuccess": "Czas wolny zaktualizowany pomyślnie",
           "deleteInfo": "Wyjątek z harmonogramu został usunięty!",
           "deleteConfirmDescription": "Czy na pewno chcesz trwale usunąć ten wyjątek z harmonogramu? Tej czynności nie można cofnąć.",
@@ -938,8 +941,10 @@
       }
     },
     "authorizationWrapper": {
-      "privacyPolicy": "Polityka prywatności",
-      "slogan": "Więcej klientów. Jeden kalendarz. Zero chaosu."
+      "index": {
+        "privacyPolicy": "Polityka prywatności",
+        "slogan": "Więcej klientów. Jeden kalendarz. Zero chaosu."
+      }
     },
     "resetPassword": {
       "page": {
