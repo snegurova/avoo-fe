@@ -22,6 +22,7 @@ import SearchField from '@/_components/SearchField/SearchField';
 import ServiceElement from '@/_components/ServiceElement/ServiceElement';
 import DeleteIcon from '@/_icons/DeleteIcon';
 
+import PublicServiceSearch from '../PublicServiceSearch/PublicServiceSearch';
 import TimeSlotField from '../TimeSlotField/TimeSlotField';
 
 type Props = {
@@ -46,7 +47,7 @@ type Props = {
 };
 
 export default function PublicServiceFormItem(props: Props) {
-  const t = useTranslations('private.components.PublicServiceFormItem.PublicServiceFormItem');
+  const t = useTranslations('public.salon.createOrder');
   const {
     order,
     onChange,
@@ -77,6 +78,7 @@ export default function PublicServiceFormItem(props: Props) {
   const [selectedSlot, setSelectedSlot] = useState<Date | null>(null);
   const [isActiveMasterSearch, setIsActiveMasterSearch] = useState(false);
   const [isActiveServiceSearch, setIsActiveServiceSearch] = useState(false);
+  const [step, setStep] = useState(1);
 
   const { data: calendar } = calendarHooks.useGetPublicCalendar(calendarParams, {
     enabled: !!selectedService && !!selectedMasters[index],
@@ -95,7 +97,7 @@ export default function PublicServiceFormItem(props: Props) {
     onChange(newOrders);
   }, [selectedSlot]);
 
-  const { params, queryParams, setSearchQuery, setMasterIds } =
+  const { params, queryParams, setSearchQuery, setMasterIds, setCategory } =
     servicesHooks.usePublicServiceQuery(userId);
 
   const {
@@ -228,9 +230,11 @@ export default function PublicServiceFormItem(props: Props) {
   };
 
   return (
-    <div className='rounded-lg border border-gray-200'>
-      <div className='bg-primary-50 px-4 p-2 h-14 rounded-t-lg flex items-center justify-between'>
-        <h3 className='font-medium'>{selectedService?.name ?? t('selectService')}</h3>
+    <div className='py-4'>
+      <div className='flex items-center justify-between py-3'>
+        <h3 className='font-medium text-2xl leading-normal text-black'>
+          {selectedService?.name ?? t('selectService')}
+        </h3>
         {remove && (
           <IconButton
             className='group'
@@ -241,8 +245,20 @@ export default function PublicServiceFormItem(props: Props) {
           />
         )}
       </div>
-      <div className='grid md:grid-cols-2 gap-4 p-4'>
+      <div className='flex flex-col gap-4'>
         <div className=''>
+          <PublicServiceSearch
+            setCategory={setCategory}
+            items={services}
+            onChange={selectService}
+            value={order.serviceId ?? null}
+            search={params.search ?? ''}
+            setSearch={setSearchQuery}
+            hasMore={hasMoreServices}
+            fetchNextPage={fetchNextServicesPage}
+            nextStep={() => setStep(2)}
+            isActive={step === 1}
+          />
           <SearchField
             label={t('service')}
             value={order.serviceId ? { id: order.serviceId } : null}

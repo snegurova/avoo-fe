@@ -584,25 +584,6 @@
           "masterFallback": "Mistrz"
         }
       },
-      "PublicCombinationForm": {
-        "PublicCombinationForm": {
-          "master": "Mistrz",
-          "date": "Data",
-          "notes": "Notatki",
-          "notesHelper": "Dodatkowe informacje dla mistrza"
-        }
-      },
-      "PublicServiceFormItem": {
-        "PublicServiceFormItem": {
-          "service": "Usługa",
-          "searchServiceName": "Szukaj po nazwie",
-          "master": "Mistrz",
-          "date": "Data",
-          "notes": "Notatki",
-          "notesHelper": "Dodatkowe informacje dla mistrza",
-          "selectService": "Wybierz usługę"
-        }
-      },
       "ResetPasswordForm": {
         "ResetPasswordForm": {
           "password": "Hasło",
@@ -906,13 +887,21 @@
         "certificates": "Certyfikaty",
         "team": "Zespół",
         "termsPrivacy": "Regulamin i prywatność",
-        "allRightsReserved": "Wszelkie prawa zastrzeżone."
+        "allRightsReserved": "Wszelkie prawa zastrzeżone.",
+        "book": "Rezerwuj"
       },
       "createOrder": {
         "bookingForm": "Formularz rezerwacji",
         "addMoreService": "Dodaj więcej usług",
         "cancel": "Anuluj",
-        "book": "Rezerwuj"
+        "book": "Rezerwuj",
+        "service": "Usługa",
+        "searchServiceName": "Szukaj po nazwie",
+        "master": "Mistrz",
+        "date": "Data",
+        "notes": "Notatki",
+        "notesHelper": "Dodatkowe informacje dla mistrza",
+        "selectService": "Wybierz usługę"
       }
     },
     "forgotPassword": {

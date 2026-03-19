@@ -584,25 +584,6 @@
           "masterFallback": "Master"
         }
       },
-      "PublicCombinationForm": {
-        "PublicCombinationForm": {
-          "master": "Master",
-          "date": "Date",
-          "notes": "Notes",
-          "notesHelper": "Additional information for the master"
-        }
-      },
-      "PublicServiceFormItem": {
-        "PublicServiceFormItem": {
-          "service": "Service",
-          "searchServiceName": "Search by service name",
-          "master": "Master",
-          "date": "Date",
-          "notes": "Notes",
-          "notesHelper": "Additional information for the master",
-          "selectService": "Select a service"
-        }
-      },
       "ResetPasswordForm": {
         "ResetPasswordForm": {
           "password": "Password",
@@ -906,13 +887,21 @@
         "certificates": "Certificates",
         "team": "Team",
         "termsPrivacy": "Terms & Privacy",
-        "allRightsReserved": "All rights reserved."
+        "allRightsReserved": "All rights reserved.",
+        "book": "Book"
       },
       "createOrder": {
         "bookingForm": "Booking form",
         "addMoreService": "Add more service",
         "cancel": "Cancel",
-        "book": "Book"
+        "book": "Book",
+        "service": "Service",
+        "searchServiceName": "Search by service name",
+        "master": "Master",
+        "date": "Date",
+        "notes": "Notes",
+        "notesHelper": "Additional information for the master",
+        "selectService": "Select a service"
       }
     },
     "forgotPassword": {

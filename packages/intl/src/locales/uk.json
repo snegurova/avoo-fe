@@ -584,25 +584,6 @@
           "masterFallback": "Майстер"
         }
       },
-      "PublicCombinationForm": {
-        "PublicCombinationForm": {
-          "master": "Майстер",
-          "date": "Дата",
-          "notes": "Нотатки",
-          "notesHelper": "Додаткова інформація для майстра"
-        }
-      },
-      "PublicServiceFormItem": {
-        "PublicServiceFormItem": {
-          "service": "Послуга",
-          "searchServiceName": "Пошук за назвою послуги",
-          "master": "Майстер",
-          "date": "Дата",
-          "notes": "Нотатки",
-          "notesHelper": "Додаткова інформація для майстра",
-          "selectService": "Виберіть послугу"
-        }
-      },
       "ResetPasswordForm": {
         "ResetPasswordForm": {
           "password": "Пароль",
@@ -906,13 +887,21 @@
         "certificates": "Сертифікати",
         "team": "Команда",
         "termsPrivacy": "Умови та конфіденційність",
-        "allRightsReserved": "Всі права захищені."
+        "allRightsReserved": "Всі права захищені.",
+        "book": "Забронювати"
       },
       "createOrder": {
         "bookingForm": "Форма бронювання",
         "addMoreService": "Додати більше послуг",
         "cancel": "Скасувати",
-        "book": "Забронювати"
+        "book": "Забронювати",
+        "service": "Послуга",
+        "searchServiceName": "Пошук за назвою послуги",
+        "master": "Майстер",
+        "date": "Дата",
+        "notes": "Нотатки",
+        "notesHelper": "Додаткова інформація для майстра",
+        "selectService": "Виберіть послугу"
       }
     },
     "forgotPassword": {
