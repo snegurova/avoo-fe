@@ -6,9 +6,9 @@ import { useTranslations } from 'next-intl';
 import { Typography } from '@mui/material';
 import dayjs from 'dayjs';
 
-import { Exception } from '@avoo/axios/types/apiTypes';
+import type { Exception } from '@avoo/axios/types/apiTypes';
 import { colors, typography } from '@avoo/design-tokens';
-import { exceptionHooks } from '@avoo/hooks';
+import { exceptionHooks, exceptionUtils } from '@avoo/hooks';
 
 import Avatar, { AvatarSize } from '@/_components/Avatar/Avatar';
 import { IconButton } from '@/_components/IconButton/IconButton';
@@ -54,7 +54,7 @@ const TimeOffListItem = ({ item, onEdit }: Props) => {
   const modeLabel = getModeLabel(item.type);
 
   const from = dayjs(item.dateFrom);
-  const to = dayjs(item.dateTo);
+  const to = exceptionUtils.normalizeExceptionEndDate(item.dateFrom, item.dateTo);
   const sameDay = from.isSame(to, 'day');
   const wholeDay = item.startTimeMinutes === 0 && item.endTimeMinutes === 1440;
 

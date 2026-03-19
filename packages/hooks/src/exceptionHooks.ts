@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 
+import { yupResolver } from '@hookform/resolvers/yup';
 import {
   QueryClient,
   useInfiniteQuery,
@@ -20,15 +21,12 @@ import {
   GetExceptionsResponse,
 } from '@avoo/axios/types/apiTypes';
 import { VALUE_DATE_FORMAT } from '@avoo/constants';
+import type { ExceptionFormData, MasterInfo } from '@avoo/hooks/types/timeOffType';
 import { TimeOffMode, TimeOffType, WholeDay } from '@avoo/hooks/types/timeOffType';
 import { utils } from '@avoo/hooks/utils/utils';
 
-import {
-  buildMastersLabel,
-  ExceptionFormData,
-  formValuesToPayload,
-  MasterInfo,
-} from './utils/exceptionUtils';
+import { createExceptionSchema } from '../schemas/validationSchemas';
+import { exceptionUtils } from './utils/exceptionUtils';
 import { masterHooks } from './masterHooks';
 import { queryKeys } from './queryKeys';
 
@@ -108,9 +106,6 @@ export const exceptionHooks = {
       CreateExceptionRequest
     >({
       mutationFn: (data: CreateExceptionRequest) => exceptionApi.createException(data),
-      onSuccess: () => {
-        exceptionHooks.invalidateOnSuccess(queryClient);
-      },
     });
 
     utils.useSetPendingApi(isPending);
@@ -124,6 +119,7 @@ export const exceptionHooks = {
       reset,
       formState: { errors },
     } = useForm<ExceptionFormData>({
+      resolver: yupResolver(createExceptionSchema),
       mode: 'onSubmit',
       defaultValues: {
         type: TimeOffType.Personal,
@@ -145,12 +141,13 @@ export const exceptionHooks = {
     }));
 
     const submit = (data: ExceptionFormData) => {
-      const payload = formValuesToPayload(data, masters);
-      const mastersLabel = buildMastersLabel(data.staff, masters);
+      const payload = exceptionUtils.formValuesToPayload(data, masters);
+      const mastersLabel = exceptionUtils.buildMastersLabel(data.staff, masters);
       mutate(payload, {
         onSuccess: () => {
           reset();
           onSuccess?.({ mastersLabel });
+          exceptionHooks.invalidateOnSuccess(queryClient);
         },
       });
     };
@@ -186,11 +183,14 @@ export const exceptionHooks = {
     const onSuccess = typeof config === 'function' ? config : config?.onSuccess;
 
     const { mutate, isPending } = useMutation<
-      BaseResponse<Exception>,
+      BaseResponse<Exception[]>,
       Error,
       { id: number; data: CreateExceptionRequest }
     >({
-      mutationFn: ({ id, data }) => exceptionApi.updateException(id, data),
+      mutationFn: async ({ id, data }) => {
+        await exceptionApi.deleteException(id);
+        return exceptionApi.createException(data);
+      },
       onSuccess: () => {
         exceptionHooks.invalidateOnSuccess(queryClient, onSuccess);
       },

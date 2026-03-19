@@ -30,9 +30,4 @@ export const exceptionApi = {
     const res = await apiClient.delete<BaseResponse<Exception>>(`${EXCEPTIONS_ENDPOINT}/${id}`);
     return res.data;
   },
-
-  async updateException(id: number, data: CreateExceptionRequest) {
-    const res = await apiClient.put<BaseResponse<Exception>>(`${EXCEPTIONS_ENDPOINT}/${id}`, data);
-    return res.data;
-  },
 };

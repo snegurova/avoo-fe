@@ -19,6 +19,7 @@ export * from './phoneHooks';
 export * from './profileHooks';
 export * from './scheduleHooks';
 export * from './servicesHooks';
+export * from './timeOffConflictHooks';
 export * from './useDebounce';
 export * from './useIntervalAction';
 export * from './useLanguagePicker';

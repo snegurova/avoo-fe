@@ -1,17 +1,13 @@
 import dayjs from 'dayjs';
 
-import { WholeDay } from '@avoo/hooks/types/timeOffType';
+import { type TimeOffFormValues, WholeDay } from '@avoo/hooks/types/timeOffType';
 
-export type TimeOffFormValues = {
-  startDate: string;
-  startTime: string;
-  endDate: string;
-  endTime: string;
-  wholeDay: WholeDay;
-};
+type TimeOffValidationValues = Required<
+  Pick<TimeOffFormValues, 'startDate' | 'startTime' | 'endDate' | 'endTime' | 'wholeDay'>
+>;
 
 export const validateEndDateFactory =
-  (getValues: <K extends keyof TimeOffFormValues>(field: K) => TimeOffFormValues[K]) =>
+  (getValues: <K extends keyof TimeOffValidationValues>(field: K) => TimeOffValidationValues[K]) =>
   (end: string) => {
     const start = dayjs(getValues('startDate'));
     const endDate = dayjs(end);
