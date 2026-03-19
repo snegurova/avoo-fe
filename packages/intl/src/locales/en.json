@@ -557,11 +557,17 @@
           "address": "Address",
           "useMyLocation": "Use my location",
           "about": "About",
-          "cancel": "Cancel",
+          "close": "Close",
           "searching": "Searching...",
           "search": "Search",
           "saving": "Saving...",
-          "save": "Save"
+          "save": "Save",
+          "profilePreview": "Profile Preview",
+          "businessName": "Business name",
+          "headline": "Headline",
+          "emailAddress": "Email address",
+          "phoneNumber": "Phone number",
+          "nameRequired": "Name is required"
         }
       },
       "ProfileGallery": {
