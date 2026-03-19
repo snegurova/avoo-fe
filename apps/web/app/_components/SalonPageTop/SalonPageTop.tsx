@@ -22,7 +22,7 @@ export default function SalonPageTop(props: Props) {
   const t = useTranslations('public.salon.page');
 
   return (
-    <div className='pt-11 grid lg:grid-cols-4'>
+    <div className='px-5 md:px-0 pt-11 grid lg:grid-cols-4'>
       <div className='flex flex-col gap-15 items-center'>
         <div className='rounded-full w-28 h-28'>
           {data?.avatarPreviewUrl && (
@@ -35,7 +35,7 @@ export default function SalonPageTop(props: Props) {
         </div>
         <Link
           href={`${localizationHooks.useWithLocale(AppRoutes.PublicSalon)}/${userId}${AppRoutes.PublicOrderCreate}`}
-          className='font-semibold bg-black rounded-lg p-3.5 flex justify-center text-white w-full border-black transition-colors hover:bg-white focus:bg-white hover:text-black focus:text-black border'
+          className='font-semibold bg-black rounded-lg p-3.5 justify-center text-white w-full border-black transition-colors hover:bg-white focus:bg-white hover:text-black focus:text-black border hidden lg:flex'
         >
           {t('ctaButton')}
         </Link>

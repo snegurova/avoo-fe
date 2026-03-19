@@ -79,3 +79,7 @@ main::-webkit-scrollbar-thumb,
       rounded-md inline-block transition-colors;
   }
 }
+
+.container {
+  @apply max-w-360;
+}

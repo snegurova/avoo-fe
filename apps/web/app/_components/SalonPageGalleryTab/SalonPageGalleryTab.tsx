@@ -29,8 +29,10 @@ export default function SalonPageGalleryTab(props: Props) {
   );
 
   return (
-    <div className='flex justify-center items-center py-8 flex-1'>
-      {pictures.length < 1 && <p className='max-w-150 text-center'>{t('galleryPlaceholder')}</p>}
+    <div className='flex justify-center items-center py-4 xl:py-8 flex-1 '>
+      {pictures.length < 1 && (
+        <p className='max-w-160 px-5 text-center'>{t('galleryPlaceholder')}</p>
+      )}
     </div>
   );
 }

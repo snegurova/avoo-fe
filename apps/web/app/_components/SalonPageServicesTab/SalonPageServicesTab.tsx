@@ -13,7 +13,7 @@ type Props = {
 };
 
 const button = tv({
-  base: 'px-2 py-3 rounded-lg border transition-colors text-sm leading-none text-black flex justify-between items-center gap-2',
+  base: 'px-5.5 lg:px-2 py-3 rounded-full lg:rounded-lg border transition-colors text-sm leading-none text-black flex justify-between items-center gap-2 bg-white',
   variants: {
     active: {
       true: 'border-black',
@@ -74,9 +74,9 @@ export default function SalonPageServicesTab(props: Props) {
   const services = data?.pages.flatMap((page) => page.data?.items ?? []) ?? [];
 
   return (
-    <div className='pb-11 pt-8 lg:grid lg:grid-cols-4'>
-      <div>
-        <div className='sticky top-6 flex flex-col gap-2'>
+    <div className='pb-8 xl:pb-11 pt-4 xl:pt-8 lg:grid lg:grid-cols-4'>
+      <div className='sticky lg:static top-0 '>
+        <div className='lg:sticky lg:top-4 xl:top-6 flex lg:flex-col gap-3 py-2 lg:py-0 overflow-x-auto whitespace-nowrap lg:whitespace-normal bg-gray-50 lg:bg-transparent px-5 lg:px-0'>
           <button
             className={button({ active: selectedCategory === undefined })}
             onClick={() => handleCategoryClick(undefined)}
@@ -95,7 +95,7 @@ export default function SalonPageServicesTab(props: Props) {
         </div>
       </div>
 
-      <div className='lg:col-span-3 flex flex-col gap-3 pl-11'>
+      <div className='px-5 md:px-11 lg:px-0 lg:col-span-3 flex flex-col gap-3 lg:pl-6 xl:pl-11 pt-6 lg:pt-0'>
         {services.length === 0 && (
           <div className='text-gray-500 text-center py-8'>{t('noServices')}</div>
         )}

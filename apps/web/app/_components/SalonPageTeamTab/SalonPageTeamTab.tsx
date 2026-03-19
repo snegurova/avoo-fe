@@ -12,10 +12,10 @@ export default function SalonPageTeamTab(props: Props) {
   const { masters } = props;
 
   return (
-    <div className='pt-8 pb-22 grid lg:grid-cols-4 gap-y-4 gap-x-2'>
+    <div className='pt-4 pb-8 xl:pt-8 xl:pb-22 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-y-4 gap-x-2'>
       {masters?.map((master) => (
         <div key={master.id} className='flex flex-col items-center gap-3 p-1.5'>
-          <div className='rounded-full w-40 h-40 bg-gray-100'>
+          <div className='rounded-full w-25 h-25 md:w-40 md:h-40 bg-gray-100'>
             {master.avatarPreviewUrl && (
               <img
                 src={master.avatarPreviewUrl}

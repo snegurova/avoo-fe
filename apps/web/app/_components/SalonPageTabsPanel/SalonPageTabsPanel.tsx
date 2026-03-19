@@ -12,7 +12,7 @@ import SalonPageTeamTab from '@/_components/SalonPageTeamTab/SalonPageTeamTab';
 import SalonPageCertificatesTab from '../SalonPageCertificatesTab/SalonPageCertificatesTab';
 
 const tabButton = tv({
-  base: 'transition-colors p-4 rounded-t-[18px]',
+  base: 'transition-colors py-4 px-1 rounded-t-[18px] text-sm xl:text-base',
   variants: {
     active: {
       true: 'text-white bg-black',
@@ -38,8 +38,8 @@ export default function SalonPageTabsPanel(props: Props) {
   ];
 
   return (
-    <div className='mt-8 flex flex-col flex-1'>
-      <div className='grid grid-cols-4 border-b border-gray-200 mb-8'>
+    <div className='mt-6 xl:mt-8 flex flex-col flex-1'>
+      <div className='grid grid-cols-4 border-b border-gray-200 px-0.5 md:px-0'>
         {tabs.map((tab) => (
           <button
             key={tab.key}
@@ -50,7 +50,7 @@ export default function SalonPageTabsPanel(props: Props) {
           </button>
         ))}
       </div>
-      <div className='flex flex-col flex-1'>
+      <div className='flex flex-col flex-1 bg-gray-50 lg:bg-transparent pt-4 xl:pt-8'>
         {activeTab === 'services' && <SalonPageServicesTab userId={userId} />}
         {activeTab === 'gallery' && <SalonPageGalleryTab userId={userId} />}
         {activeTab === 'team' && <SalonPageTeamTab masters={data?.masters} />}
