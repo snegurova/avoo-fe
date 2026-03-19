@@ -888,7 +888,31 @@
     },
     "salon": {
       "page": {
-        "ctaButton": "Zarezerwuj wizytę"
+        "ctaButton": "Zarezerwuj wizytę",
+        "showMore": "Pokaż więcej",
+        "showLess": "Pokaż mniej",
+        "about": "O nas",
+        "sertificatesPlaceholder": "To jest zakładka certyfikatów. Tutaj wyświetlimy certyfikaty i nagrody salonu, prezentując ich doświadczenie i zaangażowanie w doskonałość w branży beauty. Śledź aktualizacje, gdy będziemy gromadzić i udostępniać osiągnięcia salonu!",
+        "galleryPlaceholder": "Pewnego dnia, gdy słońce będzie świecić, a ptaki śpiewać, wypełnimy tę zakładkę galerii pięknymi zdjęciami prac salonu. Śledź nas, aby zobaczyć oszałamiające metamorfozy i zadowolonych klientów!",
+        "weSpeak": "Mówimy w językach",
+        "allCategories": "Wszystkie kategorie",
+        "noServices": "Nie znaleziono usług.",
+        "minutes": "minut",
+        "euro": "Euro",
+        "loading": "Ładowanie...",
+        "Hair": "Włosy",
+        "Nails": "Paznokcie",
+        "Skin Care": "Pielęgnacja skóry",
+        "Makeup": "Makijaż",
+        "Massage & Spa": "Masaż i Spa",
+        "Eyebrows & Eyelashes": "Brwi i rzęsy",
+        "Body Treatments": "Zabiegi na ciało",
+        "services": "Usługi",
+        "gallery": "Galeria",
+        "certificates": "Certyfikaty",
+        "team": "Zespół",
+        "termsPrivacy": "Regulamin i prywatność",
+        "allRightsReserved": "Wszelkie prawa zastrzeżone."
       },
       "createOrder": {
         "bookingForm": "Formularz rezerwacji",
