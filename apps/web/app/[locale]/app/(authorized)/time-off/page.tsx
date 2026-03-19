@@ -7,7 +7,7 @@ import { useTranslations } from 'next-intl';
 import dayjs from 'dayjs';
 
 import type { Exception } from '@avoo/axios/types/apiTypes';
-import { exceptionHooks, normalizeExceptionEndDate, useDebounce } from '@avoo/hooks';
+import { exceptionHooks, exceptionUtils, useDebounce } from '@avoo/hooks';
 
 import AppPlaceholder from '@/_components/AppPlaceholder/AppPlaceholder';
 import AppWrapper from '@/_components/AppWrapper/AppWrapper';
@@ -43,7 +43,7 @@ export default function TimeOffPage() {
     return exceptions.filter((item) => {
       if (!item.dateTo) return true;
 
-      const endDate = normalizeExceptionEndDate(item.dateFrom, item.dateTo);
+      const endDate = exceptionUtils.normalizeExceptionEndDate(item.dateFrom, item.dateTo);
       return !endDate.isValid() || endDate.isSame(now, 'day') || endDate.isAfter(now, 'day');
     });
   }, [exceptions]);

@@ -2,7 +2,7 @@
 
 import React from 'react';
 
-import type { AffectedBooking } from '@avoo/hooks';
+import type { AffectedBooking } from '@avoo/hooks/types/timeOffType';
 import { timeUtils } from '@avoo/shared';
 
 import HistoryCard from '../HistoryCard/HistoryCard';

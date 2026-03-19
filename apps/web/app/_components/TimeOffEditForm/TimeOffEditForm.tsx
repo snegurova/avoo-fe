@@ -10,12 +10,7 @@ import dayjs from 'dayjs';
 
 import type { ShortMasterInfo } from '@avoo/axios/types/apiTypes';
 import { VALUE_DATE_FORMAT } from '@avoo/constants';
-import {
-  exceptionHooks,
-  normalizeExceptionEndDate,
-  timeOffConflictHooks,
-  timeToMinutes,
-} from '@avoo/hooks';
+import { exceptionHooks, exceptionUtils, timeOffConflictHooks } from '@avoo/hooks';
 import {
   TimeOffMode,
   TimeOffType,
@@ -61,7 +56,7 @@ const mapTimeOffToFormValues = (timeOff: TimeOffItem): FormValues => {
   const isWholeDay = timeOff.startTimeMinutes === 0 && timeOff.endTimeMinutes === MINUTES_IN_DAY;
   const selectedStaff = timeOff.master.id ? [String(timeOff.master.id)] : [];
   const startDate = dayjs(timeOff.dateFrom);
-  const endDate = normalizeExceptionEndDate(timeOff.dateFrom, timeOff.dateTo);
+  const endDate = exceptionUtils.normalizeExceptionEndDate(timeOff.dateFrom, timeOff.dateTo);
 
   return {
     type: typeMapping,
@@ -254,8 +249,8 @@ export default function TimeOffEditForm({
       type: typeApi,
       dateFrom: data.startDate,
       dateTo: data.endDate,
-      startTimeMinutes: timeToMinutes(data.startTime),
-      endTimeMinutes: timeToMinutes(data.endTime),
+      startTimeMinutes: exceptionUtils.timeToMinutes(data.startTime),
+      endTimeMinutes: exceptionUtils.timeToMinutes(data.endTime),
       masterIds: [fixedMaster.id],
       note: data.note || undefined,
     });

@@ -21,16 +21,12 @@ import {
   GetExceptionsResponse,
 } from '@avoo/axios/types/apiTypes';
 import { VALUE_DATE_FORMAT } from '@avoo/constants';
+import type { ExceptionFormData, MasterInfo } from '@avoo/hooks/types/timeOffType';
 import { TimeOffMode, TimeOffType, WholeDay } from '@avoo/hooks/types/timeOffType';
 import { utils } from '@avoo/hooks/utils/utils';
 
 import { createExceptionSchema } from '../schemas/validationSchemas';
-import {
-  buildMastersLabel,
-  ExceptionFormData,
-  formValuesToPayload,
-  MasterInfo,
-} from './utils/exceptionUtils';
+import { exceptionUtils } from './utils/exceptionUtils';
 import { masterHooks } from './masterHooks';
 import { queryKeys } from './queryKeys';
 
@@ -145,8 +141,8 @@ export const exceptionHooks = {
     }));
 
     const submit = (data: ExceptionFormData) => {
-      const payload = formValuesToPayload(data, masters);
-      const mastersLabel = buildMastersLabel(data.staff, masters);
+      const payload = exceptionUtils.formValuesToPayload(data, masters);
+      const mastersLabel = exceptionUtils.buildMastersLabel(data.staff, masters);
       mutate(payload, {
         onSuccess: () => {
           reset();
