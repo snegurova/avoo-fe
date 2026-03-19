@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { useTranslations } from 'next-intl';
 
 import { tv } from 'tailwind-variants';
 
@@ -23,6 +24,7 @@ const button = tv({
 
 export default function SalonPageServicesTab(props: Props) {
   const { userId } = props;
+  const t = useTranslations('public.salon.page');
 
   const { queryParams, setCategory } = servicesHooks.usePublicServiceQuery(userId);
 
@@ -79,7 +81,7 @@ export default function SalonPageServicesTab(props: Props) {
             className={button({ active: selectedCategory === undefined })}
             onClick={() => handleCategoryClick(undefined)}
           >
-            <span>All categories</span>
+            <span>{t('allCategories')}</span>
           </button>
           {categories?.map((cat) => (
             <button
@@ -87,7 +89,7 @@ export default function SalonPageServicesTab(props: Props) {
               className={button({ active: selectedCategory === cat.id })}
               onClick={() => handleCategoryClick(cat.id)}
             >
-              <span>{cat.name}</span>
+              <span>{t(cat.name)}</span>
             </button>
           ))}
         </div>
@@ -95,7 +97,7 @@ export default function SalonPageServicesTab(props: Props) {
 
       <div className='lg:col-span-3 flex flex-col gap-3 pl-11'>
         {services.length === 0 && (
-          <div className='text-gray-500 text-center py-8'>No services found.</div>
+          <div className='text-gray-500 text-center py-8'>{t('noServices')}</div>
         )}
         {services.map((service: Service) => (
           <div
@@ -109,16 +111,18 @@ export default function SalonPageServicesTab(props: Props) {
             <div className='flex justify-between gap-4 items-center'>
               <div className='text-xs leading-tight flex items-center gap-1'>
                 <ScheduleIcon className='fill-current' />
-                <span>{service.durationMinutes} mins</span>
+                <span>
+                  {service.durationMinutes} {t('minutes')}
+                </span>
               </div>
               <span className='text-sm text-black leading-none font-medium'>
-                {service.price} Euro
+                {service.price} {t('euro')}
               </span>
             </div>
           </div>
         ))}
         <div ref={sentinelRef} />
-        {isFetching && <div className='text-center py-4 '>Loading...</div>}
+        {isFetching && <div className='text-center py-4 '>{t('loading')}</div>}
       </div>
     </div>
   );

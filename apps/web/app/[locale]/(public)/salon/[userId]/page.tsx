@@ -1,6 +1,7 @@
 'use client';
 import React from 'react';
 import { useParams } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 
 import { userHooks } from '@avoo/hooks';
 
@@ -13,6 +14,8 @@ export default function SalonPublicPage() {
   const userId = params.userId;
 
   const data = userHooks.useGetPublicUser(userId ? Number(userId) : 0);
+
+  const t = useTranslations('public.salon.page');
 
   return (
     <div className='min-h-screen flex flex-col'>
@@ -34,10 +37,10 @@ export default function SalonPublicPage() {
               href='#'
               className='text-sm leading-[1.1] text-gray-600 hover:text-primary-500 focus:primary-500 transition-colors'
             >
-              Terms & Privacy
+              {t('termsPrivacy')}
             </a>
             <span className='text-sm leading-[1.1] text-gray-600'>
-              © {new Date().getFullYear()} Avoo. All rights reserved.
+              © {new Date().getFullYear()} Avoo. {t('allRightsReserved')}
             </span>
           </div>
         </div>

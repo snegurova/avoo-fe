@@ -80,7 +80,8 @@ export default function SalonPageTop(props: Props) {
             <li className='flex gap-2 items-center'>
               <LanguageIcon className='h-4 w-4 fill-current transition-colors' />
               <span>
-                We speak {data.businessInfo.languages.map((lang) => lang.toUpperCase()).join(', ')}
+                {t('weSpeak')}{' '}
+                {data.businessInfo.languages.map((lang) => lang.toUpperCase()).join(', ')}
               </span>
             </li>
           )}

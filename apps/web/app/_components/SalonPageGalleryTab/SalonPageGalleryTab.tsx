@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react';
+import { useTranslations } from 'next-intl';
 
 import { MEDIA_TYPE_ENUM } from '@avoo/axios/types/apiEnums';
 import { MediaEntity } from '@avoo/axios/types/apiTypes';
@@ -10,6 +11,7 @@ type Props = {
 
 export default function SalonPageGalleryTab(props: Props) {
   const { userId } = props;
+  const t = useTranslations('public.salon.page');
 
   const { data } = mediaHooks.useGetPublicMedia({
     limit: 9,
@@ -28,13 +30,7 @@ export default function SalonPageGalleryTab(props: Props) {
 
   return (
     <div className='flex justify-center items-center py-8 flex-1'>
-      {pictures.length < 1 && (
-        <p className='max-w-150 text-center'>
-          One day, when the sun is shining and the birds are singing, we will fill this gallery tab
-          with beautiful photos of the salon's work. Stay tuned for stunning transformations and
-          happy clients!
-        </p>
-      )}
+      {pictures.length < 1 && <p className='max-w-150 text-center'>{t('galleryPlaceholder')}</p>}
     </div>
   );
 }

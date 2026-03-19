@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslations } from 'next-intl';
 
 import { tv } from 'tailwind-variants';
 
@@ -27,12 +28,13 @@ type Props = {
 
 export default function SalonPageTabsPanel(props: Props) {
   const { userId, data } = props;
+  const t = useTranslations('public.salon.page');
   const [activeTab, setActiveTab] = useState('services');
   const tabs = [
-    { key: 'services', label: 'Services' },
-    { key: 'gallery', label: 'Gallery' },
-    { key: 'team', label: 'Team' },
-    { key: 'certificates', label: 'Certificates' },
+    { key: 'services', label: t('services') },
+    { key: 'gallery', label: t('gallery') },
+    { key: 'team', label: t('team') },
+    { key: 'certificates', label: t('certificates') },
   ];
 
   return (
