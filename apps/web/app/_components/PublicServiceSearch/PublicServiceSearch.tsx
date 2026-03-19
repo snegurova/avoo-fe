@@ -7,7 +7,8 @@ import { tv } from 'tailwind-variants';
 import { Service } from '@avoo/axios/types/apiTypes';
 import { categoriesHooks } from '@avoo/hooks';
 
-import PublicServiceCard from '../PublicServiceCard/PublicServiceCard';
+import PublicServiceCard from '@/_components/PublicServiceCard/PublicServiceCard';
+import ScheduleIcon from '@/_icons/ScheduleIcon';
 
 type Props = {
   setCategory: (categoryId?: number) => void;
@@ -19,7 +20,8 @@ type Props = {
   hasMore?: boolean;
   fetchNextPage?: () => void;
   isActive: boolean;
-  nextStep: () => void;
+  setStep: (step: number) => void;
+  selectedService: Service | null;
 };
 
 const button = tv({
@@ -33,7 +35,7 @@ const button = tv({
 });
 
 export default function PublicServiceSearch(props: Props) {
-  const { setCategory, items, onChange, isActive, nextStep } = props;
+  const { setCategory, items, onChange, isActive, setStep, selectedService } = props;
   const t = useTranslations('public.salon.page');
 
   const [selectedCategory, setSelectedCategory] = useState<number | undefined>(undefined);
@@ -47,11 +49,11 @@ export default function PublicServiceSearch(props: Props) {
 
   const onServiceClick = (id: number) => {
     onChange({ id });
-    nextStep();
+    setStep(2);
   };
 
   return (
-    <>
+    <div>
       {isActive && (
         <div className='flex flex-col gap-4'>
           <div className='sticky lg:static top-0 flex gap-y-2 gap-x-3 py-4 overflow-x-auto lg:overflow-visible whitespace-nowrap lg:flex-wrap'>
@@ -82,6 +84,31 @@ export default function PublicServiceSearch(props: Props) {
           </div>
         </div>
       )}
-    </>
+      {!isActive && selectedService && (
+        <div className='border border-gray-200 rounded-lg p-6 flex flex-col gap-3.5'>
+          <h3 className='text-black text-base'>{selectedService.name}</h3>
+          <div className='flex justify-between gap-8 items-center'>
+            <div className='flex gap-8 items-center'>
+              <div className='text-xs leading-tight flex items-center gap-1'>
+                <ScheduleIcon className='fill-current' />
+                <span>
+                  {selectedService.durationMinutes} {t('minutes')}
+                </span>
+              </div>
+              <span className='text-sm text-black leading-none font-medium shrink-0'>
+                {selectedService.price} {t('euro')}
+              </span>
+            </div>
+            <button
+              type='button'
+              onClick={() => setStep(1)}
+              className='font-medium text-sm leading-1.1 underline underline-offset-4 cursor-pointer transition-colors hover:text-primary-500 focus:text-primary-500'
+            >
+              {t('change')}
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
   );
 }

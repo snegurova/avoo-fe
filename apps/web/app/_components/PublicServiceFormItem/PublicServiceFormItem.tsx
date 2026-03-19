@@ -18,12 +18,11 @@ import FormDatePicker from '@/_components/FormDatePicker/FormDatePicker';
 import FormTextArea from '@/_components/FormTextArea/FormTextArea';
 import { IconButton } from '@/_components/IconButton/IconButton';
 import MasterElement from '@/_components/MasterElement/MasterElement';
+import PublicMasterSearch from '@/_components/PublicMasterSearch/PublicMasterSearch';
+import PublicServiceSearch from '@/_components/PublicServiceSearch/PublicServiceSearch';
 import SearchField from '@/_components/SearchField/SearchField';
-import ServiceElement from '@/_components/ServiceElement/ServiceElement';
+import TimeSlotField from '@/_components/TimeSlotField/TimeSlotField';
 import DeleteIcon from '@/_icons/DeleteIcon';
-
-import PublicServiceSearch from '../PublicServiceSearch/PublicServiceSearch';
-import TimeSlotField from '../TimeSlotField/TimeSlotField';
 
 type Props = {
   order: CreateOrder;
@@ -77,7 +76,6 @@ export default function PublicServiceFormItem(props: Props) {
   });
   const [selectedSlot, setSelectedSlot] = useState<Date | null>(null);
   const [isActiveMasterSearch, setIsActiveMasterSearch] = useState(false);
-  const [isActiveServiceSearch, setIsActiveServiceSearch] = useState(false);
   const [step, setStep] = useState(1);
 
   const { data: calendar } = calendarHooks.useGetPublicCalendar(calendarParams, {
@@ -189,18 +187,6 @@ export default function PublicServiceFormItem(props: Props) {
     }));
   };
 
-  const ServiceElementWrapped: React.FC<{
-    item: Service;
-    onClick: () => void;
-  }> = ({ item, onClick }) => (
-    <ServiceElement
-      item={item}
-      isCard={false}
-      hideMasters={!!selectedMasters[index]}
-      onClick={onClick}
-    />
-  );
-
   const onDateChange = (newDate: string) => {
     const newOrders = [...value];
     newOrders[index] = {
@@ -225,16 +211,12 @@ export default function PublicServiceFormItem(props: Props) {
     setIsActiveMasterSearch(true);
   };
 
-  const onServiceElementClick = () => {
-    setIsActiveServiceSearch(true);
-  };
-
   return (
     <div className='py-4'>
       <div className='flex items-center justify-between py-3'>
-        <h3 className='font-medium text-2xl leading-normal text-black'>
+        <h2 className='font-medium text-2xl leading-normal text-black'>
           {selectedService?.name ?? t('selectService')}
-        </h3>
+        </h2>
         {remove && (
           <IconButton
             className='group'
@@ -246,40 +228,20 @@ export default function PublicServiceFormItem(props: Props) {
         )}
       </div>
       <div className='flex flex-col gap-4'>
-        <div className=''>
-          <PublicServiceSearch
-            setCategory={setCategory}
-            items={services}
-            onChange={selectService}
-            value={order.serviceId ?? null}
-            search={params.search ?? ''}
-            setSearch={setSearchQuery}
-            hasMore={hasMoreServices}
-            fetchNextPage={fetchNextServicesPage}
-            nextStep={() => setStep(2)}
-            isActive={step === 1}
-          />
-          <SearchField
-            label={t('service')}
-            value={order.serviceId ? { id: order.serviceId } : null}
-            onChange={selectService}
-            items={services}
-            search={params.search ?? ''}
-            setSearch={setSearchQuery}
-            ItemElement={ServiceElementWrapped}
-            searchMode={!order.serviceId}
-            placeholder={t('searchServiceName')}
-            error={errors?.serviceId?.message}
-            hasMore={hasMoreServices}
-            fetchNextPage={fetchNextServicesPage}
-            isActive={isActiveServiceSearch}
-            setIsActive={setIsActiveServiceSearch}
-          >
-            {selectedService && (
-              <ServiceElement item={selectedService} isCard onClick={onServiceElementClick} />
-            )}
-          </SearchField>
-        </div>
+        <PublicServiceSearch
+          setCategory={setCategory}
+          items={services}
+          onChange={selectService}
+          value={order.serviceId ?? null}
+          search={params.search ?? ''}
+          setSearch={setSearchQuery}
+          hasMore={hasMoreServices}
+          fetchNextPage={fetchNextServicesPage}
+          setStep={setStep}
+          isActive={step === 1}
+          selectedService={selectedService}
+        />
+        <PublicMasterSearch selectedMaster={selectedMasters[index]} />
         <div className=''>
           <SearchField
             label={t('master')}

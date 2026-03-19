@@ -40,7 +40,7 @@ export default function PublicServiceCard(props: Props) {
             onClick={onClick}
             className='font-semibold bg-black rounded-lg py-3.5 px-5 justify-center text-white border-black transition-colors hover:bg-white focus:bg-white hover:text-black focus:text-black border cursor-pointer leading-none'
           >
-            {t('book')}
+            {t('select')}
           </button>
         )}
       </div>

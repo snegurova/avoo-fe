@@ -37,7 +37,7 @@ export default function PublicOrderCreatePage() {
           </p>
         </Link>
       }
-      classes='px-5 lg:px-11 text-gray-600'
+      classes='px-5 md:px-9 xl:px-16 2xl:px-47 text-gray-600'
     >
       <PublicOrderCreate />
     </PublicWrapper>
