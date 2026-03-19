@@ -6,6 +6,7 @@ import {
   BaseResponse,
   DeleteMediaParams,
   GetMediaResponse,
+  GetPublicMediaParams,
   MediaQueryParams,
   UploadMediaRequest,
   UploadMediaResponse,
@@ -97,5 +98,23 @@ export const mediaHooks = {
       deleteMediaAsync: deleteMediaMutation.mutateAsync,
       ...deleteMediaMutation,
     };
+  },
+  useGetPublicMedia: (params: GetPublicMediaParams) => {
+    const query = useInfiniteQuery<BaseResponse<GetMediaResponse>, Error>({
+      queryKey: queryKeys.medias.byParams(params.type.toLocaleLowerCase(), params.typeEntityId),
+      queryFn: ({ pageParam = 1 }) =>
+        mediaApi.getPublicMedia({ ...params, page: pageParam as number }),
+      initialPageParam: 1,
+      getNextPageParam: (lastPage) => {
+        const { currentPage, total } = lastPage.data?.pagination || { currentPage: 0, total: 0 };
+        return currentPage * (params.limit || DEFAULT_LIMIT) < total ? currentPage + 1 : undefined;
+      },
+    });
+
+    const isPending = query.isFetching;
+
+    utils.useSetPendingApi(isPending);
+
+    return query;
   },
 };

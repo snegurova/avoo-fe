@@ -2,6 +2,8 @@ import { apiClient } from '@avoo/axios';
 import {
   BaseResponse,
   CertificateResponse,
+  GetPublicUserProfileResponse,
+  GetPublicUsersResponse,
   UpdateProfile,
   UserMediaResponse,
   UserProfileResponse,
@@ -13,6 +15,7 @@ const UPDATE_AVATAR_ENDPOINT = '/update-avatar';
 const PROFILE_ENDPOINT = '/profile';
 const GET_USER_MEDIA_ENDPOINT = '/media';
 const CERTIFICATES_ENDPOINT = '/certificates';
+const PUBLIC_USERS_ENDPOINT = '/public/users';
 
 export const userApi = {
   async getUserProfile() {
@@ -62,6 +65,18 @@ export const userApi = {
 
   async updateProfile(body: UpdateProfile) {
     const response = await apiClient.put<BaseResponse<UserProfileResponse>>(PROFILE_ENDPOINT, body);
+    return response.data;
+  },
+
+  async getPublicUsers() {
+    const response =
+      await apiClient.get<BaseResponse<GetPublicUsersResponse>>(PUBLIC_USERS_ENDPOINT);
+    return response.data;
+  },
+  async getPublicUser(userId: number) {
+    const response = await apiClient.get<BaseResponse<GetPublicUserProfileResponse>>(
+      `${PUBLIC_USERS_ENDPOINT}/${userId}`,
+    );
     return response.data;
   },
 };
