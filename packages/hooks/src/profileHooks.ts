@@ -4,6 +4,9 @@ import type { VisualProfileInfo } from '@avoo/shared';
 export function createProfileDefaults(initial?: VisualProfileInfo | null) {
   return {
     name: initial?.name ?? '',
+    headline: initial?.headline ?? '',
+    policy: initial?.policy ?? '',
+    email: initial?.email ?? '',
     phone: initial?.phone ?? '',
     address: initial?.address ?? '',
     location_lat: initial?.location_lat ?? undefined,
@@ -11,12 +14,14 @@ export function createProfileDefaults(initial?: VisualProfileInfo | null) {
     description: initial?.description ?? '',
     avatarUrl: initial?.avatarUrl ?? undefined,
     avatarPreviewUrl: initial?.avatarPreviewUrl ?? undefined,
-  } as const;
+  };
 }
 
 export function buildUpdateProfilePayload(values: Record<string, unknown>): UpdateProfile {
   const parsedValues = values as {
     name?: string;
+    headline?: string;
+    policy?: string;
     phone?: string;
     description?: string;
     address?: string;
@@ -28,6 +33,8 @@ export function buildUpdateProfilePayload(values: Record<string, unknown>): Upda
 
   return {
     name: parsedValues.name || undefined,
+    headline: parsedValues.headline || undefined,
+    policy: parsedValues.policy || undefined,
     phone: parsedValues.phone || undefined,
     description: parsedValues.description || undefined,
     address: parsedValues.address || undefined,
