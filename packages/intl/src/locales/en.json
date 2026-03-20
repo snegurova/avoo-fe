@@ -574,11 +574,17 @@
           "address": "Address",
           "useMyLocation": "Use my location",
           "about": "About",
-          "cancel": "Cancel",
+          "close": "Close",
           "searching": "Searching...",
           "search": "Search",
           "saving": "Saving...",
-          "save": "Save"
+          "save": "Save",
+          "profilePreview": "Profile Preview",
+          "businessName": "Business name",
+          "headline": "Headline",
+          "emailAddress": "Email address",
+          "phoneNumber": "Phone number",
+          "nameRequired": "Name is required"
         }
       },
       "ProfileGallery": {
@@ -933,7 +939,31 @@
     },
     "salon": {
       "page": {
-        "ctaButton": "Book appointment"
+        "ctaButton": "Book appointment",
+        "showMore": "Show more",
+        "showLess": "Show less",
+        "about": "About",
+        "sertificatesPlaceholder": "This is the certificates tab. Here we will display the salon's certificates and awards,showcasing their expertise and commitment to excellence in the beauty industry. Stay tuned for updates as we gather and share the salon's achievements!",
+        "galleryPlaceholder": "One day, when the sun is shining and the birds are singing, we will fill this gallery tab with beautiful photos of the salon's work. Stay tuned for stunning transformations and happy clients!",
+        "weSpeak": "We speak",
+        "allCategories": "All categories",
+        "noServices": "No services found.",
+        "minutes": "minutes",
+        "euro": "Euro",
+        "loading": "Loading...",
+        "Hair": "Hair",
+        "Nails": "Nails",
+        "Skin Care": "Skin Care",
+        "Makeup": "Makeup",
+        "Massage & Spa": "Massage & Spa",
+        "Eyebrows & Eyelashes": "Eyebrows & Eyelashes",
+        "Body Treatments": "Body Treatments",
+        "services": "Services",
+        "gallery": "Gallery",
+        "certificates": "Certificates",
+        "team": "Team",
+        "termsPrivacy": "Terms & Privacy",
+        "allRightsReserved": "All rights reserved."
       },
       "createOrder": {
         "bookingForm": "Booking form",

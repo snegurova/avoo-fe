@@ -72,7 +72,20 @@ export type UserUpdateAvatarResponse = components['schemas']['UserEntity'];
 
 export type CertificateResponse = components['schemas']['CertificateEntity'];
 
-export type UpdateProfile = components['schemas']['UpdateProfileDto'];
+export type UpdateProfile = Omit<
+  components['schemas']['UpdateProfileDto'],
+  'headline' | 'policy'
+> & {
+  headline?: string;
+  policy?: string;
+};
+
+export type GetPublicUsersResponse = components['schemas']['UserProfileEntity'][];
+
+export type GetPublicUserProfileResponse = Omit<
+  components['schemas']['UserWithRelationsEntity'],
+  'orders'
+>;
 
 /** Master */
 export type MasterWithRelationsEntityResponse = components['schemas']['MasterEntity'];
@@ -297,6 +310,10 @@ export type GetMediaResponse = {
 export type MediaQueryParams = Omit<GetMediaParams, 'page'>;
 export type DeleteMediaParams = NonNullable<
   operations['MediasController_deleteById']['parameters']['query']
+>;
+
+export type GetPublicMediaParams = NonNullable<
+  operations['MediasPublicController_getAll']['parameters']['query']
 >;
 
 /* Combination */

@@ -92,4 +92,8 @@ export const queryKeys = {
     byParams: (params: GetCombinationsQueryParams) =>
       [...queryKeys.combinations.all, params] as const,
   },
+  users: {
+    all: ['users'] as const,
+    byId: (id: number) => [...queryKeys.users.all, id] as const,
+  },
 } as const;
