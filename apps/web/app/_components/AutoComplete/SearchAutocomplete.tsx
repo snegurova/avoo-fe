@@ -1,4 +1,5 @@
 import React, { useMemo, useState } from 'react';
+import { useTranslations } from 'next-intl';
 
 import {
   Autocomplete,
@@ -17,10 +18,11 @@ type Option = {
 
 type AppAutocompleteProps<T> = AutocompleteProps<T, true, false, false> & {
   renderMode?: 'texted';
-  emptyDefaultLabel?: string;
 };
 
 export default function SearchAutocomplete<T extends Option>(props: AppAutocompleteProps<T>) {
+  const t = useTranslations('private.components.AutoComplete.SearchAutocomplete');
+
   const { renderMode, options = [], onChange, renderInput, value = [], ...rest } = props;
 
   const [inputValueState, setInputValueState] = useState('');
@@ -107,15 +109,15 @@ export default function SearchAutocomplete<T extends Option>(props: AppAutocompl
 
         if (!isFocused) {
           if (selected.length > 0 && renderMode === 'texted') {
-            displayText = `${selected.length} selected`;
+            displayText = `${selected.length} ${t('selected')}`;
           } else if (selected.length === 0) {
-            displayText = 'Apply to all';
+            displayText = t('applyToAll');
           }
           params.inputProps.placeholder = '';
         }
 
         if (renderMode === 'texted' && selected.length > 0) {
-          displayText = `${selected.length} selected`;
+          displayText = `${selected.length} ${t('selected')}`;
         }
         if (displayText) {
           params.InputProps.startAdornment = (

@@ -26,6 +26,6 @@ apiClient.interceptors.response.use(
       useAuthStore.getState().logoutStore();
       queryClient.clear();
     }
-    return Promise.reject(error);
+    return Promise.reject(error.response?.data);
   },
 );

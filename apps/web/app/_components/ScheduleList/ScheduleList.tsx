@@ -162,6 +162,7 @@ export default function ScheduleList(props: Props) {
               schedule={selectedSchedule}
               onCancel={handleCancel}
               onDirtyChange={setIsFormDirty}
+              onClose={() => setSelectedSchedule(null)}
             />
           </div>
         )}

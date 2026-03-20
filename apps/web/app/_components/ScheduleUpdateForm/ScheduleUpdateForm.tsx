@@ -21,12 +21,13 @@ import { getAllErrorMessages } from '@/_utils/formError';
 type Props = {
   schedule: ScheduleEntity;
   onCancel: () => void;
+  onClose: () => void;
   onDirtyChange?: (isDirty: boolean) => void;
 };
 
 export default function ScheduleUpdateForm(props: Props) {
   const t = useTranslations('private.components.ScheduleUpdateForm.ScheduleUpdateForm');
-  const { schedule, onCancel, onDirtyChange } = props;
+  const { schedule, onCancel, onClose, onDirtyChange } = props;
   const toast = useToast();
 
   const locale = localizationHooks.useGetLocale();
@@ -36,10 +37,10 @@ export default function ScheduleUpdateForm(props: Props) {
       startAt: schedule.startAt,
       onSuccess: () => {
         toast.success(t('updateSuccess'));
-        onCancel();
+        onClose();
       },
       onError: (error) => {
-        toast.error(t('updateError', { error: error.message }));
+        toast.error(t('updateError', { error: error.errorMessage }));
       },
     });
 

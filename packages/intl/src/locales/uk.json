@@ -206,6 +206,12 @@
           "avooCaps": "AVOO"
         }
       },
+      "AutoComplete": {
+        "SearchAutocomplete": {
+          "applyToAll": "Застосувати до всіх",
+          "selected": "вибрано"
+        }
+      },
       "AvatarUpload": {
         "AvatarUpload": {
           "avatarImage": "Зображення аватару",
@@ -623,7 +629,40 @@
           "save": "Зберегти",
           "addSuccess": "Розклад успішно додано",
           "addError": "Помилка додавання розкладу: {error}",
-          "applyToAll": "Застосувати до всіх"
+          "applyToAll": "Застосувати до всіх",
+          "scheduleTypes": {
+            "weekly": "Щотижневий",
+            "2x2": "2 через 2",
+            "3x2": "3 через 2",
+            "custom": "Гнучкий"
+          },
+          "defaultScheduleName": "Робочий графік",
+          "areYouSureYouWantToLeaveThisPage": "Ви впевнені, що хочете покинути цю сторінку?",
+          "youHaveUnsavedChanges": "У вас є незбережені зміни. Ви впевнені, що хочете покинути цю сторінку?",
+          "leave": "Покинути"
+        },
+        "ConflictScheduleDialog": {
+          "scheduleConflictDetected": "Виявлено конфлікт розкладу",
+          "loadingConflictDetails": "Завантаження деталей конфлікту...",
+          "youAlreadyHaveASchedule": "У вас вже є розклад, який конфліктує з датою початку",
+          "wouldYouLikeToUpdateTheNewSchedulesStartDate": "Бажаєте оновити дату початку нового розкладу на",
+          "soItCanStartAfterTheCurrentOneEnds": "щоб він почався після завершення поточного?",
+          "existingSchedule": "Існуючий розклад",
+          "youAlreadyHaveAScheduleThatConflictsWithTheStartDate": "У вас вже є розклад, який конфліктує з датою початку",
+          "wouldYouLikeToUpdateTheNewSchedulesStartDateQuestion": "Бажаєте оновити дату початку нового розкладу на",
+          "soItCanStartAfterTheCurrentOneEndsQuestion": "щоб він почався після завершення поточного?",
+          "thisNewScheduleStartsOn": "Цей новий розклад починається",
+          "butYourCurrentScheduleEndsOn": "але ваш поточний розклад закінчується",
+          "wouldYouLikeToEndTheCurrentScheduleEarly": "Бажаєте завершити поточний розклад раніше",
+          "soTheNewOneCanBegin": "щоб новий міг початися?",
+          "name": "Назва",
+          "startDate": "Дата початку",
+          "endDate": "Дата завершення",
+          "newSchedule": "Новий розклад",
+          "updateNewStartDateAndSave": "Оновити дату розкладу та зберегти",
+          "updatePreviousScheduleAndSave": "Оновити попередній розклад та зберегти",
+          "editDatesManually": "Редагувати дати вручну",
+          "ongoing": "Безкінечний"
         }
       },
       "ScheduleList": {

@@ -5,8 +5,13 @@ import { useTranslations } from 'next-intl';
 
 import { Button, TextField } from '@mui/material';
 
-import { END_MINUTE, SCHEDULE_OPTIONS, START_MINUTE } from '@avoo/constants';
-import { VALUE_DATE_FORMAT } from '@avoo/constants';
+import {
+  END_MINUTE,
+  SCHEDULE_ERRORS,
+  SCHEDULE_OPTIONS,
+  START_MINUTE,
+  VALUE_DATE_FORMAT,
+} from '@avoo/constants';
 import { masterHooks, scheduleHooks } from '@avoo/hooks';
 import { timeUtils } from '@avoo/shared';
 
@@ -14,6 +19,7 @@ import ConfirmationDialog from '@/_components/ConfirmationDialog/ConfirmationDia
 import FormDatePicker from '@/_components/FormDatePicker/FormDatePicker';
 import { FormSearchAutocomplete } from '@/_components/FormSearchAutocomplete/FormSearchAutoComplete';
 import { FormSelect } from '@/_components/FormSelect/FormSelect';
+import { ConflictScheduleDialog } from '@/_components/ScheduleAddForm/ConflictScheduleDialog';
 import { CreateWorkingDayRow } from '@/_components/ScheduleAddForm/CreateWorkingDayRow';
 import { localizationHooks } from '@/_hooks/localizationHooks';
 import { useToast } from '@/_hooks/useToast';
@@ -27,14 +33,26 @@ export const ScheduleAddForm = () => {
   const router = useRouter();
   const workingHoursPath = localizationHooks.useWithLocale(AppRoutes.WorkingHours);
 
+  const [conflictIds, setConflictIds] = useState<number[]>([]);
+  const [openConflictDialog, setOpenConflictDialog] = useState(false);
+
   const { control, handleSubmit, setValue, watch, errors, isDirty, isValid, touchedFields } =
     scheduleHooks.useCreateScheduleForm({
+      defaultName: t('defaultScheduleName'),
       onSuccess: () => {
         toast.success(t('addSuccess'));
         router.replace(workingHoursPath);
       },
       onError: (error) => {
-        toast.error(t('addError', { error: error.message }));
+        const errorCode = error.errorCode;
+        if (SCHEDULE_ERRORS.includes(errorCode)) {
+          const errors = error.errors;
+          const ids = errors?.map((e) => e.value);
+          setConflictIds(ids || []);
+          setOpenConflictDialog(true);
+          return;
+        }
+        toast.error(t('addError'));
       },
     });
 
@@ -132,7 +150,10 @@ export const ScheduleAddForm = () => {
                     name='patternType'
                     label={t('type')}
                     required
-                    options={SCHEDULE_OPTIONS}
+                    options={SCHEDULE_OPTIONS.map((option) => ({
+                      value: option.value,
+                      label: t(`scheduleTypes.${option.value}`),
+                    }))}
                     value={field.value}
                     onChange={(value) => {
                       field.onChange(value);
@@ -154,7 +175,6 @@ export const ScheduleAddForm = () => {
                   <FormSearchAutocomplete
                     label={t('applyTo')}
                     placeholder={t('searchMasters')}
-                    emptyDefaultLabel={t('applyToAll')}
                     error={errors.masterIds?.message}
                     value={field.value ?? undefined}
                     onChange={field.onChange}
@@ -205,7 +225,7 @@ export const ScheduleAddForm = () => {
 
           <div>
             <p className='mb-8 font-medium'>
-              {t('schedule')} {scheduleType}
+              {t('schedule')} - {t(`scheduleTypes.${scheduleType}`)}
             </p>
             <div className='flex flex-col gap-4'>
               {fields.map((field, index) => (
@@ -247,13 +267,28 @@ export const ScheduleAddForm = () => {
       <ConfirmationDialog
         open={!!openConfirmDialog}
         onClose={() => setOpenConfirmDialog(false)}
-        title='Are you sure you want to leave this page?'
-        content='You have unsaved changes. Are you sure you want to leave this page?'
+        title={t('areYouSureYouWantToLeaveThisPage')}
+        content={t('youHaveUnsavedChanges')}
         cancelText={t('cancel')}
-        confirmText='Leave'
+        confirmText={t('leave')}
         onCancel={() => setOpenConfirmDialog(false)}
         onConfirm={handleConfirmLeave}
         loading={false}
+      />
+      <ConflictScheduleDialog
+        conflictIds={conflictIds}
+        newScheduleData={{
+          newScheduleName: watch('name'),
+          startAt: watch('startAt'),
+        }}
+        open={!!openConflictDialog}
+        onClose={() => {
+          setOpenConflictDialog(false);
+          setConflictIds([]);
+        }}
+        handleConfirm={handleSubmit}
+        onCurrentStartDateUpdate={(newStartDate) => setValue('startAt', newStartDate)}
+        onCurrentEndDateUpdate={(newEndDate) => setValue('endAt', newEndDate)}
       />
     </>
   );

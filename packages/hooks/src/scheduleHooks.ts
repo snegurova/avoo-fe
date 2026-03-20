@@ -15,9 +15,11 @@ import {
   ApiStatus,
   BaseResponse,
   CreateScheduleResponse,
+  ErrorResponse,
   GetSchedulesResponse,
   ScheduleEntity,
   SchedulesQueryParams,
+  UpdateScheduleRequest,
   UpdateScheduleResponse,
 } from '@avoo/axios/types/apiTypes';
 import { END_MINUTE, ScheduleOption, START_MINUTE } from '@avoo/constants';
@@ -37,14 +39,16 @@ import { useSort } from './useSort';
 const DEFAULT_LIMIT = 10;
 
 type UseCreateScheduleFormParams = {
+  defaultName: string;
   onSuccess?: () => void;
-  onError?: (error: Error) => void;
+  onError?: (error: ErrorResponse) => void;
 };
+
 type UseUpdateScheduleFormParams = {
   defaultValues: ScheduleUpdateFormData;
   startAt: string;
   onSuccess?: () => void;
-  onError?: (error: Error) => void;
+  onError?: (error: ErrorResponse) => void;
 };
 
 export type SortScheduleField = 'name' | 'startAt' | 'endAt';
@@ -123,21 +127,21 @@ export const scheduleHooks = {
       onSortClick,
     };
   },
-  useGetScheduleById: (id: number): ScheduleEntity | null => {
-    const { data: scheduleData, isPending } = useQuery<BaseResponse<ScheduleEntity>, Error>({
+  useGetScheduleById: (id: number, options?: { enabled?: boolean }) => {
+    const query = useQuery<BaseResponse<ScheduleEntity>, Error>({
       queryKey: ['schedule', id],
-      queryFn: () => scheduleApi.getScheduleById(id),
+      queryFn: () => scheduleApi.getScheduleById(id!),
+      enabled: !!id && (options?.enabled ?? true),
     });
 
-    utils.useSetPendingApi(isPending);
+    utils.useSetPendingApi(query.isPending);
 
-    if (scheduleData?.status === ApiStatus.SUCCESS && scheduleData.data) {
-      return scheduleData.data;
-    }
-
-    return null;
+    return {
+      ...query,
+      schedule: query.data?.status === ApiStatus.SUCCESS ? query.data.data : null,
+    };
   },
-  useCreateScheduleForm: ({ onSuccess, onError }: UseCreateScheduleFormParams = {}) => {
+  useCreateScheduleForm: ({ defaultName, onSuccess, onError }: UseCreateScheduleFormParams) => {
     const {
       register,
       control,
@@ -149,7 +153,7 @@ export const scheduleHooks = {
       resolver: yupResolver(scheduleCreateSchema),
       mode: 'onSubmit',
       defaultValues: {
-        name: 'Working schedule',
+        name: defaultName,
         pattern: 7,
         patternType: 'weekly',
         masterIds: [],
@@ -169,7 +173,7 @@ export const scheduleHooks = {
 
     const { mutate: createSchedule, isPending } = useMutation<
       BaseResponse<CreateScheduleResponse>,
-      Error,
+      ErrorResponse,
       ScheduleCreateFormData
     >({
       mutationFn: scheduleApi.createSchedule,
@@ -270,7 +274,7 @@ export const scheduleHooks = {
 
     const { mutate: updateSchedule, isPending } = useMutation<
       BaseResponse<UpdateScheduleResponse>,
-      Error,
+      ErrorResponse,
       ScheduleUpdateFormData
     >({
       mutationFn: scheduleApi.updateSchedule,
@@ -340,6 +344,45 @@ export const scheduleHooks = {
       watch,
       setValue,
       updateSchedule,
+      isPending,
+    };
+  },
+  useUpdateScheduleEndAt: (scheduleId: number) => {
+    const queryClient = useQueryClient();
+
+    const { mutate, mutateAsync, isPending } = useMutation<
+      BaseResponse<UpdateScheduleResponse>,
+      ErrorResponse,
+      UpdateScheduleRequest
+    >({
+      mutationFn: (payload) => {
+        const updateSchedulePayload: UpdateScheduleRequest = {
+          endAt: payload.endAt,
+        };
+        return scheduleApi.updateScheduleById(scheduleId, updateSchedulePayload);
+      },
+      onSuccess: () => {
+        queryClient.invalidateQueries({
+          queryKey: queryKeys.schedules.detail(scheduleId),
+          exact: true,
+        });
+        queryClient.invalidateQueries({
+          queryKey: queryKeys.schedules.all,
+        });
+        queryClient.invalidateQueries({
+          queryKey: queryKeys.calendar.all,
+        });
+        queryClient.invalidateQueries({
+          queryKey: queryKeys.monthCalendar.all,
+        });
+      },
+    });
+
+    utils.useSetPendingApi(isPending);
+
+    return {
+      handleUpdateScheduleEndAt: mutate,
+      handleUpdateScheduleEndAtAsync: mutateAsync,
       isPending,
     };
   },
