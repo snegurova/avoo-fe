@@ -35,6 +35,8 @@ type Props = {
 
 export default function ServiceAddForm(props: Props) {
   const t = useTranslations('private.components.ServiceAddForm.ServiceAddForm');
+  const tCommon = useTranslations('private.common');
+
   const { categories } = props;
 
   const router = useRouter();
@@ -248,7 +250,6 @@ export default function ServiceAddForm(props: Props) {
               render={({ field }) => (
                 <>
                   <Switch {...field} defaultChecked />
-
                   {errors.isActive?.message && (
                     <FormHelperText>{errors.isActive?.message}</FormHelperText>
                   )}
@@ -277,10 +278,10 @@ export default function ServiceAddForm(props: Props) {
       <ConfirmationDialog
         open={!!openConfirmDialog}
         onClose={() => setOpenConfirmDialog(false)}
-        title='Are you sure you want to leave this page?'
-        content='You have unsaved changes. Are you sure you want to leave this page?'
-        cancelText='Cancel'
-        confirmText='Leave'
+        title={tCommon('areYouSureYouWantToLeaveThisPage')}
+        content={tCommon('youHaveUnsavedChanges')}
+        cancelText={tCommon('cancel')}
+        confirmText={tCommon('leave')}
         onCancel={() => setOpenConfirmDialog(false)}
         onConfirm={handleConfirmLeave}
         loading={false}

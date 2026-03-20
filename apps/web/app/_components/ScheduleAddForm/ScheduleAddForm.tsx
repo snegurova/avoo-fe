@@ -28,6 +28,7 @@ import { getAllErrorMessages } from '@/_utils/formError';
 
 export const ScheduleAddForm = () => {
   const t = useTranslations('private.components.ScheduleAddForm.ScheduleAddForm');
+  const tCommon = useTranslations('private.common');
   const toast = useToast();
 
   const router = useRouter();
@@ -267,10 +268,10 @@ export const ScheduleAddForm = () => {
       <ConfirmationDialog
         open={!!openConfirmDialog}
         onClose={() => setOpenConfirmDialog(false)}
-        title={t('areYouSureYouWantToLeaveThisPage')}
-        content={t('youHaveUnsavedChanges')}
-        cancelText={t('cancel')}
-        confirmText={t('leave')}
+        title={tCommon('areYouSureYouWantToLeaveThisPage')}
+        content={tCommon('youHaveUnsavedChanges')}
+        cancelText={tCommon('cancel')}
+        confirmText={tCommon('leave')}
         onCancel={() => setOpenConfirmDialog(false)}
         onConfirm={handleConfirmLeave}
         loading={false}

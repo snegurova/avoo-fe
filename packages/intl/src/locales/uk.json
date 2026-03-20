@@ -1,5 +1,15 @@
 {
   "private": {
+    "common": {
+      "areYouSureYouWantToLeaveThisPage": "Ви впевнені, що хочете покинути цю сторінку?",
+      "youHaveUnsavedChanges": "У вас є незбережені зміни. Ви впевнені, що хочете покинути цю сторінку?",
+      "leave": "Покинути",
+      "cancel": "Скасувати",
+      "delete": "Видалити",
+      "areYouSureYouWantToLeaveThisWindow": "Ви впевнені, що хочете закрити вікно?",
+      "youHaveUnsavedChangesInThisWindow": "У вас є незбережені зміни. Ви впевнені, що хочете закрити вікно?",
+      "leaveWindow": "Закрити"
+    },
     "profile": {
       "changePassword": {
         "oldPasswordLabel": "Поточний пароль *",
@@ -50,6 +60,7 @@
         "posts": "Пости",
         "workingSchedule": "Графік роботи",
         "scheduleException": "Виняток у графіку",
+        "comboServiceTime": "Час комбо-послуг",
         "billingNotification": "Платіжні або маркетингові сповіщення",
         "notifications": "Сповіщення"
       }
@@ -636,10 +647,7 @@
             "3x2": "3 через 2",
             "custom": "Гнучкий"
           },
-          "defaultScheduleName": "Робочий графік",
-          "areYouSureYouWantToLeaveThisPage": "Ви впевнені, що хочете покинути цю сторінку?",
-          "youHaveUnsavedChanges": "У вас є незбережені зміни. Ви впевнені, що хочете покинути цю сторінку?",
-          "leave": "Покинути"
+          "defaultScheduleName": "Робочий графік"
         },
         "ConflictScheduleDialog": {
           "scheduleConflictDetected": "Виявлено конфлікт розкладу",
@@ -660,9 +668,9 @@
           "endDate": "Дата завершення",
           "newSchedule": "Новий розклад",
           "updateNewStartDateAndSave": "Оновити дату розкладу та зберегти",
-          "updatePreviousScheduleAndSave": "Оновити попередній розклад та зберегти",
+          "updatePreviousScheduleAndSave": "Оновити розклад та зберегти",
           "editDatesManually": "Редагувати дати вручну",
-          "ongoing": "Безкінечний"
+          "ongoing": "не має дати завершення"
         }
       },
       "ScheduleList": {
@@ -680,8 +688,7 @@
           "deleteSuccess": "Розклад успішно видалено",
           "deleteError": "Не вдалося видалити розклад",
           "deleteContent": "Це назавжди видалить розклад і вилучить його з усіх призначених майстрів. Цю дію неможливо скасувати.",
-          "cancel": "Скасувати",
-          "delete": "Видалити"
+          "cancel": "Скасувати"
         }
       },
       "ScheduleListItem": {
@@ -715,7 +722,12 @@
           "searchScheduleNameMaster": "Пошук за назвою графіку або майстром",
           "sortByName": "Сортувати за назвою",
           "sortByStartDate": "Сортувати за датою початку",
-          "sortByEndDate": "Сортувати за датою закінчення"
+          "sortByEndDate": "Сортувати за датою закінчення",
+          "scheduleName": "Назва графіку",
+          "appliesTo": "Застосовується до",
+          "startDate": "Дата початку",
+          "endDate": "Дата завершення",
+          "actions": "Дії"
         }
       },
       "ServiceAddForm": {
@@ -767,7 +779,8 @@
         "ServiceGalleryUpload": {
           "addPhoto": "Додати фото",
           "selectFile": "Вибрати файл",
-          "selectOrDrag": "Виберіть файл або перетягніть сюди"
+          "selectOrDrag": "Виберіть файл або перетягніть сюди",
+          "uploadDescription": "Завантажте до 5 зображень (тільки JPG, PNG, максимум 10 МБ кожне)"
         }
       },
       "ServiceList": {

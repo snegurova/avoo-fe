@@ -22,6 +22,8 @@ type Props = {
 
 export default function ScheduleList(props: Props) {
   const t = useTranslations('private.components.ScheduleList.ScheduleList');
+  const tCommon = useTranslations('private.common');
+
   const { schedules, incrementPage, hasMore } = props;
   const toast = useToast();
   const listRef = useRef<HTMLUListElement>(null);
@@ -121,8 +123,8 @@ export default function ScheduleList(props: Props) {
         onClose={handleCloseDeleteDialog}
         title={t('deleteSchedule')}
         content={t('deleteContent')}
-        cancelText={t('cancel')}
-        confirmText={t('delete')}
+        cancelText={tCommon('cancel')}
+        confirmText={tCommon('delete')}
         onCancel={handleCloseDeleteDialog}
         onConfirm={handleConfirmDelete}
         loading={isPending}
@@ -130,13 +132,13 @@ export default function ScheduleList(props: Props) {
       <ConfirmationDialog
         open={!!openConfirmDialog}
         onClose={() => setOpenConfirmDialog(false)}
-        title='Are you sure you want to leave this page?'
-        content='You have unsaved changes. Are you sure you want to leave this page?'
-        cancelText={t('cancel')}
-        confirmText='Leave'
+        title={tCommon('areYouSureYouWantToLeaveThisWindow')}
+        content={tCommon('youHaveUnsavedChanges')}
+        cancelText={tCommon('cancel')}
+        confirmText={tCommon('leave')}
         onCancel={() => setOpenConfirmDialog(false)}
         onConfirm={handleConfirmLeave}
-        loading={false}
+        loading={isPending}
       />
       <AsideModal open={!!selectedSchedule} handleClose={handleCancel}>
         {selectedSchedule && (

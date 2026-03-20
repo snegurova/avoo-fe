@@ -175,7 +175,7 @@ export default function ServiceGalleryUpload(props: Props) {
             <div className='flex flex-col items-center justify-center'>
               <DragAndDropZone
                 title={t('selectOrDrag')}
-                description={isSmall ? '' : 'Upload up to 5 images (JPG, PNG only, max 10MB each)'}
+                description={isSmall ? '' : t('uploadDescription')}
                 buttonTitle={t('selectFile')}
                 accept={accept}
                 onFilePicked={onFilePicked}

@@ -1,5 +1,15 @@
 {
   "private": {
+    "common": {
+      "areYouSureYouWantToLeaveThisPage": "Are you sure you want to leave this page?",
+      "youHaveUnsavedChanges": "You have unsaved changes. Are you sure you want to leave this page?",
+      "leave": "Leave",
+      "cancel": "Cancel",
+      "delete": "Delete",
+      "areYouSureYouWantToLeaveThisWindow": "Are you sure you want to close this window?",
+      "youHaveUnsavedChangesInThisWindow": "You have unsaved changes. Are you sure you want to close this window?",
+      "leaveWindow": "Close"
+    },
     "profile": {
       "changePassword": {
         "oldPasswordLabel": "Current password *",
@@ -50,6 +60,7 @@
         "posts": "Posts",
         "workingSchedule": "Working schedule",
         "scheduleException": "Schedule exception",
+        "comboServiceTime": "Combo service time",
         "billingNotification": "Billing or marketing notification",
         "notifications": "Notifications"
       }
@@ -636,10 +647,7 @@
             "3x2": "3x2",
             "custom": "Custom"
           },
-          "defaultScheduleName": "Working schedule",
-          "areYouSureYouWantToLeaveThisPage": "Are you sure you want to leave this page?",
-          "youHaveUnsavedChanges": "You have unsaved changes. Are you sure you want to leave this page?",
-          "leave": "Leave"
+          "defaultScheduleName": "Working schedule"
         },
         "ConflictScheduleDialog": {
           "scheduleConflictDetected": "Schedule conflict detected",
@@ -679,9 +687,7 @@
           "deleteSm": "Delete",
           "deleteSuccess": "Schedule deleted successfully",
           "deleteError": "Failed to delete schedule",
-          "deleteContent": "This will permanently delete the schedule and remove it from all assigned masters. This action cannot be undone.",
-          "cancel": "Cancel",
-          "delete": "Delete"
+          "deleteContent": "This will permanently delete the schedule and remove it from all assigned masters. This action cannot be undone."
         }
       },
       "ScheduleListItem": {
@@ -715,7 +721,12 @@
           "searchScheduleNameMaster": "Search by schedule name or master",
           "sortByName": "Sort by name",
           "sortByStartDate": "Sort by start date",
-          "sortByEndDate": "Sort by end date"
+          "sortByEndDate": "Sort by end date",
+          "scheduleName": "Schedule name",
+          "appliesTo": "Applies to",
+          "startDate": "Start date",
+          "endDate": "End date",
+          "actions": "Actions"
         }
       },
       "ServiceAddForm": {
@@ -767,7 +778,8 @@
         "ServiceGalleryUpload": {
           "addPhoto": "Add photo",
           "selectFile": "Select file",
-          "selectOrDrag": "Select a file or drag and drop here"
+          "selectOrDrag": "Select a file or drag and drop here",
+          "uploadDescription": "Upload up to 5 images (JPG, PNG only, max 10MB each)"
         }
       },
       "ServiceList": {

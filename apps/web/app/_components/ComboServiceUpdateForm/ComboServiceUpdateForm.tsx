@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { Controller } from 'react-hook-form';
 import { useTranslations } from 'next-intl';
 
@@ -23,25 +24,32 @@ import { getAllErrorMessages } from '@/_utils/formError';
 type Props = {
   combination: Combination;
   onCancel: () => void;
+  onClose: () => void;
+  onDirtyChange: (isDirty: boolean) => void;
 };
 
 export default function ComboServiceUpdateForm(props: Props) {
   const t = useTranslations('private.components.ComboServiceUpdateForm.ComboServiceUpdateForm');
-  const { combination, onCancel } = props;
+  const { combination, onCancel, onDirtyChange, onClose } = props;
   const toast = useToast();
 
   const { masters, searchTerm, setSearchTerm } = masterHooks.useMasterQuery();
 
-  const { control, setValue, handleSubmit, errors } = combinationHooks.useUpdateCombinationForm({
-    defaultValue: combination,
-    onSuccess: () => {
-      toast.success(t('updateSuccess'));
-      onCancel();
-    },
-    onError: (error) => {
-      toast.error(t('updateError', { message: error.message }));
-    },
-  });
+  const { control, setValue, handleSubmit, errors, isDirty } =
+    combinationHooks.useUpdateCombinationForm({
+      defaultValue: combination,
+      onSuccess: () => {
+        toast.success(t('updateSuccess'));
+        onClose();
+      },
+      onError: (error) => {
+        toast.error(t('updateError', { message: error.message }));
+      },
+    });
+
+  useEffect(() => {
+    onDirtyChange(isDirty);
+  }, [isDirty, onDirtyChange]);
 
   const errorsList = getAllErrorMessages(errors);
 
@@ -169,7 +177,13 @@ export default function ComboServiceUpdateForm(props: Props) {
         <Button color='secondary' variant='outlined' onClick={onCancel}>
           {t('cancel')}
         </Button>
-        <Button form='update-combo-service' type='submit' color='secondary' variant='contained'>
+        <Button
+          form='update-combo-service'
+          type='submit'
+          color='secondary'
+          variant='contained'
+          disabled={!isDirty}
+        >
           {t('edit')}
         </Button>
       </div>

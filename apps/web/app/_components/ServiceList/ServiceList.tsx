@@ -31,6 +31,7 @@ type Props = {
 
 export default function ServiceList(props: Props) {
   const t = useTranslations('private.components.ServiceList.ServiceList');
+  const tCommon = useTranslations('private.common');
   const {
     categorySidebarItems,
     services,
@@ -194,10 +195,10 @@ export default function ServiceList(props: Props) {
       <ConfirmationDialog
         open={!!openConfirmDialog}
         onClose={() => setOpenConfirmDialog(false)}
-        title='Are you sure you want to leave this page?'
-        content='You have unsaved changes. Are you sure you want to leave this page?'
-        cancelText={t('cancel')}
-        confirmText='Leave'
+        title={tCommon('areYouSureYouWantToLeaveThisWindow')}
+        content={tCommon('youHaveUnsavedChangesInThisWindow')}
+        cancelText={tCommon('cancel')}
+        confirmText={tCommon('leaveWindow')}
         onCancel={() => setOpenConfirmDialog(false)}
         onConfirm={handleConfirmLeave}
         loading={false}
@@ -231,6 +232,7 @@ export default function ServiceList(props: Props) {
               service={selectedService}
               onCancel={handleCancel}
               onDirtyChange={setIsFormDirty}
+              onClose={() => setSelectedService(null)}
             />
           </div>
         )}

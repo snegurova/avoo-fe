@@ -1,5 +1,15 @@
 {
   "private": {
+    "common": {
+      "areYouSureYouWantToLeaveThisPage": "Czy na pewno chcesz opuścić tę stronę?",
+      "youHaveUnsavedChanges": "Masz niezapisane zmiany. Czy na pewno chcesz opuścić tę stronę?",
+      "leave": "Opuść",
+      "delete": "Usuń",
+      "areYouSureYouWantToLeaveThisWindow": "Czy na pewno chcesz zamknąć to okno?",
+      "youHaveUnsavedChangesInThisWindow": "Masz niezapisane zmiany. Czy na pewno chcesz zamknąć to okno?",
+      "leaveWindow": "Zamknij",
+      "cancel": "Anuluj"
+    },
     "profile": {
       "changePassword": {
         "oldPasswordLabel": "Aktualne hasło *",
@@ -50,6 +60,7 @@
         "posts": "Posty",
         "workingSchedule": "Grafik pracy",
         "scheduleException": "Wyjątek w grafiku",
+        "comboServiceTime": "Czas usług pakietu",
         "billingNotification": "Powiadomienia o rozliczeniach lub marketingu",
         "notifications": "Powiadomienia"
       }
@@ -628,7 +639,7 @@
           "cancel": "Anuluj",
           "save": "Zapisz",
           "addSuccess": "Harmonogram dodany pomyślnie",
-          "addError": "Błąd dodawania harmonogramу: {error}",
+          "addError": "Błąd dodawania harmonogramy: {error}",
           "applyToAll": "Zastosuj do wszystkich",
           "scheduleTypes": {
             "weekly": "Co tydzień",
@@ -636,10 +647,7 @@
             "3x2": "3 przez 2",
             "custom": "Elastyczny"
           },
-          "defaultScheduleName": "Harmonogram roboczy",
-          "areYouSureYouWantToLeaveThisPage": "Czy na pewno chcesz opuścić tę stronę?",
-          "youHaveUnsavedChanges": "Masz niezapisane zmiany. Czy na pewno chcesz opuścić tę stronę?",
-          "leave": "Opuść"
+          "defaultScheduleName": "Harmonogram roboczy"
         },
         "ConflictScheduleDialog": {
           "scheduleConflictDetected": "Wykryto konflikt harmonogramu",
@@ -660,7 +668,7 @@
           "endDate": "Data zakończenia",
           "newSchedule": "Nowy harmonogram",
           "updateNewStartDateAndSave": "Zaktualizuj datę harmonogramu i zapisz",
-          "updatePreviousScheduleAndSave": "Zaktualizuj poprzedni harmonogram i zapisz",
+          "updatePreviousScheduleAndSave": "Zaktualizuj harmonogram i zapisz",
           "editDatesManually": "Edytuj daty ręcznie",
           "ongoing": "Bezkończny"
         }
@@ -680,8 +688,7 @@
           "deleteSuccess": "Harmonogram usunięty pomyślnie",
           "deleteError": "Nie udało się usunąć harmonogramu",
           "deleteContent": "Spowoduje to trwałe usunięcie harmonogramu i usunięcie go ze wszystkich przypisanych mistrzów. Tej czynności nie można cofnąć.",
-          "cancel": "Anuluj",
-          "delete": "Usuń"
+          "cancel": "Anuluj"
         }
       },
       "ScheduleListItem": {
@@ -715,7 +722,12 @@
           "searchScheduleNameMaster": "Szukaj po nazwie harmonogramu lub mistrzu",
           "sortByName": "Sortuj według nazwy",
           "sortByStartDate": "Sortuj według daty rozpoczęcia",
-          "sortByEndDate": "Sortuj według daty zakończenia"
+          "sortByEndDate": "Sortuj według daty zakończenia",
+          "scheduleName": "Nazwa harmonogramu",
+          "appliesTo": "Dotyczy",
+          "startDate": "Data rozpoczęcia",
+          "endDate": "Data zakończenia",
+          "actions": "Akcje"
         }
       },
       "ServiceAddForm": {
@@ -767,7 +779,8 @@
         "ServiceGalleryUpload": {
           "addPhoto": "Dodaj zdjęcie",
           "selectFile": "Wybierz plik",
-          "selectOrDrag": "Wybierz plik lub przeciągnij i upuść tutaj"
+          "selectOrDrag": "Wybierz plik lub przeciągnij i upuść tutaj",
+          "uploadDescription": "Prześlij do 5 zdjęć (tylko JPG, PNG, maksymalnie 10 MB każde)"
         }
       },
       "ServiceList": {
