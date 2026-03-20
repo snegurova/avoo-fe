@@ -557,11 +557,17 @@
           "address": "Адреса",
           "useMyLocation": "Використати мою локацію",
           "about": "Про",
-          "cancel": "Скасувати",
+          "close": "Закрити",
           "searching": "Пошук...",
           "search": "Пошук",
           "saving": "Збереження...",
-          "save": "Зберегти"
+          "save": "Зберегти",
+          "profilePreview": "Попередній перегляд профілю",
+          "businessName": "Назва бізнесу",
+          "headline": "Заголовок",
+          "emailAddress": "Електронна пошта",
+          "phoneNumber": "Номер телефону",
+          "nameRequired": "Назва обов’язкова"
         }
       },
       "ProfileGallery": {

@@ -56,7 +56,7 @@ export const FormMultiSelect = (props: Props) => {
 
   return (
     <div className={className}>
-      <FormControl size={size} fullWidth disabled={disabled}>
+      <FormControl size={size} fullWidth disabled={disabled} error={Boolean(error)}>
         <InputLabel id={`multiple-${name}-label`} required={required}>
           {label}
         </InputLabel>
@@ -66,7 +66,7 @@ export const FormMultiSelect = (props: Props) => {
           multiple
           value={selected}
           onChange={handleChange}
-          input={<OutlinedInput label={label} />}
+          input={<OutlinedInput label={label} error={Boolean(error)} />}
           renderValue={() => selectLabelsValue}
         >
           {options.map((option) => (

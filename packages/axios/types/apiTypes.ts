@@ -71,7 +71,13 @@ export type UserUpdateAvatarResponse = components['schemas']['UserEntity'];
 
 export type CertificateResponse = components['schemas']['CertificateEntity'];
 
-export type UpdateProfile = components['schemas']['UpdateProfileDto'];
+export type UpdateProfile = Omit<
+  components['schemas']['UpdateProfileDto'],
+  'headline' | 'policy'
+> & {
+  headline?: string;
+  policy?: string;
+};
 
 export type GetPublicUsersResponse = components['schemas']['UserProfileEntity'][];
 

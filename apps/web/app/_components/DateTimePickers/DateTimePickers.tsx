@@ -6,7 +6,7 @@ import { DatePicker, TimePicker } from '@mui/x-date-pickers';
 import type { Dayjs } from 'dayjs';
 import dayjs from 'dayjs';
 
-import { DATE_DISPLAY_FORMAT, TIME_FORMAT } from '@avoo/constants';
+import { DATE_DISPLAY_FORMAT, TIME_FORMAT, VALUE_DATE_FORMAT } from '@avoo/constants';
 
 export enum DateTimePickersVariant {
   Default = 'default',
@@ -17,6 +17,7 @@ type Props = Readonly<{
   dateValue?: string;
   timeValue?: string;
   wholeDay: boolean;
+  hasError?: boolean;
   variant?: DateTimePickersVariant;
   onDateChange: (d: Dayjs | null) => void;
   onTimeChange?: (t: Dayjs | null) => void;
@@ -63,6 +64,7 @@ export default function DateTimePickers({
   dateValue,
   timeValue,
   wholeDay,
+  hasError = false,
   variant = DateTimePickersVariant.Default,
   onDateChange,
   onTimeChange,
@@ -73,6 +75,12 @@ export default function DateTimePickers({
     wholeDay,
     isModalVariant,
   );
+  const selectedDate = dateValue ? dayjs(dateValue, VALUE_DATE_FORMAT, true) : null;
+  const selectedTime = timeValue ? dayjs(timeValue, TIME_FORMAT, true) : null;
+  const timePickerDateTimeValue =
+    selectedDate && selectedTime
+      ? selectedDate.hour(selectedTime.hour()).minute(selectedTime.minute())
+      : selectedTime;
 
   const dateSx = {
     '& .MuiPickersInputBase-root': { borderRadius: 1, height: 44 },
@@ -96,16 +104,21 @@ export default function DateTimePickers({
     <Box sx={{ display: 'flex', gap: 1.5, justifyContent: 'center', alignItems: 'center' }}>
       <DatePicker
         format={DATE_DISPLAY_FORMAT}
-        value={dateValue ? dayjs(dateValue) : null}
+        value={selectedDate}
         onChange={onDateChange}
-        slotProps={{ textField: { sx: dateSx } }}
+        slotProps={{ textField: { sx: dateSx, error: hasError } }}
       />
 
       <TimePicker
+        ampm={false}
         format={TIME_FORMAT}
-        value={timeValue ? dayjs(timeValue, TIME_FORMAT) : null}
+        views={['hours', 'minutes']}
+        minutesStep={15}
+        timeSteps={{ minutes: 15 }}
+        closeOnSelect={true}
+        value={timePickerDateTimeValue}
         onChange={onTimeChange}
-        slotProps={{ textField: { sx: timeSx } }}
+        slotProps={{ textField: { sx: timeSx, error: hasError } }}
       />
     </Box>
   );

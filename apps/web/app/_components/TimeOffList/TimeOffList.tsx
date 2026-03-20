@@ -43,7 +43,7 @@ const TimeOffList = ({ items, onEdit, incrementPage, hasMore }: Props) => {
       setError(null);
       const sorted = await fetchAllAndSort(
         (params) => exceptionApi.getExceptions(params),
-        (item: Exception) => String(item.master.id ?? item.userId ?? ''),
+        (item: Exception) => item.master?.name ?? '',
         sortDirection,
       );
       if (isComponentMounted) setList(sorted);
