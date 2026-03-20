@@ -46,7 +46,7 @@ const slotProps = {
       },
       maxWidth: {
         xs: '100%',
-        lg: 688,
+        lg: 700,
         xl: 768,
       },
     },
