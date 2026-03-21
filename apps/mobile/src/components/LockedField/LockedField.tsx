@@ -1,19 +1,37 @@
-import { Text, View } from 'react-native';
+import { Pressable, Text } from 'react-native';
 
 import { colors } from '@avoo/design-tokens';
 
-import { LockIcon } from '@/icons/LockIcon';
+import { MaterialIcons } from '@/shared/icons';
 
-type Props = { value: string };
+type Props = {
+  value: string;
+  onPress?: () => void;
+  disabled?: boolean;
+  error?: boolean;
+  isPlaceholder?: boolean;
+};
 
 export const LockedField = (props: Props) => {
-  const { value } = props;
+  const { value, onPress, disabled, error, isPlaceholder } = props;
   return (
-    <View className='rounded-lg border border-gray-200 bg-white px-4 py-4 flex-row items-center justify-between'>
-      <Text className='text-base text-gray-900 flex-1 mr-2' numberOfLines={1}>
+    <Pressable
+      className='rounded-lg border bg-white px-4 py-4 flex-row items-center justify-between'
+      style={{ borderColor: error ? colors.red[500] : colors.gray[200] }}
+      onPress={onPress}
+      disabled={disabled || !onPress}
+    >
+      <Text
+        className='text-base flex-1 mr-2'
+        style={{ color: isPlaceholder ? colors.gray[400] : colors.gray[900] }}
+        numberOfLines={1}
+      >
         {value}
       </Text>
-      <LockIcon width={14} height={14} fill={colors.gray[500]} />
-    </View>
+      {disabled && <MaterialIcons name='lock' size={18} color={colors.gray[400]} />}
+      {!disabled && onPress && (
+        <MaterialIcons name='expand-more' size={20} color={colors.gray[400]} />
+      )}
+    </Pressable>
   );
 };

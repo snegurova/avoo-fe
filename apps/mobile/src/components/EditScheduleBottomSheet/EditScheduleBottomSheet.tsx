@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useFieldArray, useFormState } from 'react-hook-form';
-import { Alert, Platform, Pressable, ScrollView, Text, View } from 'react-native';
+import { Platform, Pressable, ScrollView, Text, View } from 'react-native';
 
 import {
   DateTimePickerAndroid,
@@ -8,15 +8,17 @@ import {
 } from '@react-native-community/datetimepicker';
 
 import { ScheduleEntity } from '@avoo/axios/types/apiTypes';
-import { scheduleHooks } from '@avoo/hooks';
+import { scheduleHooks, utils } from '@avoo/hooks';
 
 import { DatePickerSheet } from '@/components/DatePickerSheet/DatePickerSheet';
 import { EndDateField } from '@/components/EndDateField/EndDateField';
 import { LockedField } from '@/components/LockedField/LockedField';
 import { TimePickerSheet } from '@/components/TimePickerSheet/TimePickerSheet';
 import { WorkingDayCard } from '@/components/WorkingDayCard/WorkingDayCard';
+import { uiHooks } from '@/hooks/uiHooks';
 import { useWorkingHoursEditor } from '@/hooks/useWorkingHoursEditor';
 import { BottomSheetHeader } from '@/shared/BottomSheetHeader/BottomSheetHeader';
+import { ConfirmModal } from '@/shared/ConfirmModal/ConfirmModal';
 import { CustomBottomSheet } from '@/shared/CustomBottomSheet/CustomBottomSheet';
 import FormTextInput from '@/shared/FormTextInput';
 import { scheduleUtils } from '@/utils/scheduleUtils';
@@ -69,37 +71,21 @@ const EditScheduleForm = ({ schedule, onClose }: FormProps) => {
     confirmTime,
   } = useWorkingHoursEditor(workingHours, update);
 
-  const handleClose = () => {
-    if (isDirty) {
-      Alert.alert('Unsaved changes', 'You have unsaved changes. Are you sure you want to leave?', [
-        { text: 'Cancel', style: 'cancel' },
-        { text: 'Discard changes', style: 'destructive', onPress: onClose },
-      ]);
-    } else {
-      onClose();
-    }
-  };
+  const { handleClose, isConfirmVisible, confirmDiscard, cancelDiscard } =
+    uiHooks.useUnsavedChanges(isDirty, onClose);
 
-  const handleDelete = () => {
-    Alert.alert(
-      'Delete schedule',
-      'This will permanently delete the schedule and remove it from all assigned masters. This action cannot be undone.',
-      [
-        { text: 'Cancel', style: 'cancel' },
-        {
-          text: 'Delete',
-          style: 'destructive',
-          onPress: async () => {
-            try {
-              await deleteScheduleMutationAsync(schedule.id);
-              onClose();
-            } catch {
-              Alert.alert('Error', 'Failed to delete schedule. Please try again.');
-            }
-          },
-        },
-      ],
-    );
+  const {
+    value: isDeleteConfirmVisible,
+    enable: showDeleteConfirm,
+    disable: hideDeleteConfirm,
+  } = utils.useBooleanState(false);
+
+  const handleDelete = () => showDeleteConfirm();
+
+  const confirmDelete = async () => {
+    hideDeleteConfirm();
+    await deleteScheduleMutationAsync(schedule.id);
+    onClose();
   };
 
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
@@ -110,7 +96,10 @@ const EditScheduleForm = ({ schedule, onClose }: FormProps) => {
     if (Platform.OS === 'ios') {
       setPendingDate(date);
     } else {
-      setValue('endAt', date.toISOString().slice(0, 10), { shouldValidate: true });
+      setValue('endAt', date.toISOString().slice(0, 10), {
+        shouldValidate: true,
+        shouldDirty: true,
+      });
     }
   };
 
@@ -126,6 +115,26 @@ const EditScheduleForm = ({ schedule, onClose }: FormProps) => {
 
   return (
     <>
+      <ConfirmModal
+        visible={isConfirmVisible}
+        onClose={cancelDiscard}
+        onCancel={cancelDiscard}
+        onConfirm={confirmDiscard}
+        title='Unsaved changes'
+        description='You have unsaved changes. Are you sure you want to leave?'
+        onCancelText='Cancel'
+        onConfirmText='Discard changes'
+      />
+      <ConfirmModal
+        visible={isDeleteConfirmVisible}
+        onClose={hideDeleteConfirm}
+        onCancel={hideDeleteConfirm}
+        onConfirm={confirmDelete}
+        title='Delete schedule'
+        description='This will permanently delete the schedule and remove it from all assigned masters. This action cannot be undone.'
+        onCancelText='Cancel'
+        onConfirmText='Delete schedule'
+      />
       <BottomSheetHeader handleClose={handleClose} handleConfirm={handleSubmit} />
       <ScrollView
         className='px-4'
@@ -143,15 +152,15 @@ const EditScheduleForm = ({ schedule, onClose }: FormProps) => {
         </View>
         <View className='mb-3'>
           <Text className='mb-2 text-sm font-medium text-black'>Type of schedule *</Text>
-          <LockedField value={scheduleUtils.getPatternLabel(schedule.pattern)} />
+          <LockedField value={scheduleUtils.getPatternLabel(schedule.pattern)} disabled />
         </View>
         <View className='mb-3'>
           <Text className='mb-2 text-sm font-medium text-black'>Apply schedule to *</Text>
-          <LockedField value={schedule.master?.name ?? 'All masters'} />
+          <LockedField value={schedule.master?.name ?? 'All masters'} disabled />
         </View>
         <View className='mb-3'>
           <Text className='mb-2 text-sm font-medium text-black'>Start date *</Text>
-          <LockedField value={scheduleUtils.formatDate(schedule.startAt)} />
+          <LockedField value={scheduleUtils.formatDate(schedule.startAt)} disabled />
         </View>
         <View className='mb-5'>
           <Text className='mb-2 text-sm font-medium text-black'>End date</Text>
@@ -187,7 +196,10 @@ const EditScheduleForm = ({ schedule, onClose }: FormProps) => {
             setPendingDate(null);
           }}
           onConfirm={() => {
-            setValue('endAt', pendingDate.toISOString().slice(0, 10), { shouldValidate: true });
+            setValue('endAt', pendingDate.toISOString().slice(0, 10), {
+              shouldValidate: true,
+              shouldDirty: true,
+            });
             setIsDatePickerOpen(false);
             setPendingDate(null);
           }}

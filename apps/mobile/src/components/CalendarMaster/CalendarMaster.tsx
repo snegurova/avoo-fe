@@ -53,6 +53,7 @@ export default function CalendarMaster(props: Props) {
     <View className='flex-row items-center gap-2 flex-1 min-w-0' style={{ minHeight: 24 }}>
       <Avatar
         name={initial}
+        uri={rawMaster?.avatarPreviewUrl}
         size={24}
         textStyle={{ fontSize: 14, lineHeight: 14 }}
         backgroundColor={avatarBg}
@@ -76,7 +77,12 @@ export default function CalendarMaster(props: Props) {
       }
       style={{ height: headerHeight }}
     >
-      <Avatar name={initial} size={32} backgroundColor={avatarBg} />
+      <Avatar
+        name={initial}
+        uri={rawMaster?.avatarPreviewUrl}
+        size={32}
+        backgroundColor={avatarBg}
+      />
       <View className='mt-1 items-center' style={{ minHeight: 32 }}>
         <Text variant='bodySmall' style={{ textAlign: 'center' }}>
           {firstLine}

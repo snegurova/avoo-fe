@@ -12,9 +12,9 @@ import { colors } from '@avoo/design-tokens';
 import { masterHooks, scheduleHooks, utils } from '@avoo/hooks';
 
 import { DatePickerSheet } from '@/components/DatePickerSheet/DatePickerSheet';
+import { LockedField } from '@/components/LockedField/LockedField';
 import { MastersSheet } from '@/components/MastersSheet/MastersSheet';
 import { ScheduleTypeSheet } from '@/components/ScheduleTypeSheet/ScheduleTypeSheet';
-import { SelectableField } from '@/components/SelectableField/SelectableField';
 import { TimePickerSheet } from '@/components/TimePickerSheet/TimePickerSheet';
 import { TimeField, useWorkingHoursEditor } from '@/hooks/useWorkingHoursEditor';
 import { BottomSheetHeader } from '@/shared/BottomSheetHeader/BottomSheetHeader';
@@ -163,7 +163,7 @@ export const CreateScheduleBottomSheet = (props: Props) => {
 
         <View className='mb-4'>
           <Text className='mb-2 text-sm font-medium text-black'>Type of schedule *</Text>
-          <SelectableField
+          <LockedField
             value={SCHEDULE_OPTIONS.find((o) => o.value === scheduleType)?.label ?? 'Select type'}
             onPress={openTypeSheet}
           />
@@ -171,7 +171,7 @@ export const CreateScheduleBottomSheet = (props: Props) => {
 
         <View className='mb-4'>
           <Text className='mb-2 text-sm font-medium text-black'>Apply schedule to *</Text>
-          <SelectableField value={mastersLabel} onPress={openMastersSheet} />
+          <LockedField value={mastersLabel} onPress={openMastersSheet} />
         </View>
 
         <View className='mb-4'>
