@@ -235,11 +235,14 @@ export const updateOrderSchema = yup.object({
 });
 
 export const createServiceSchema = yup.object({
-  name: yup.string().min(3).required(),
-  description: yup.string().min(5).required(),
-  price: yup.number().min(1).required(),
-  categoryId: yup.number().required(),
-  durationMinutes: yup.number().min(1).required(),
+  name: yup.string().min(3, 'Name must be at least 3 characters').required('Name is required'),
+  description: yup
+    .string()
+    .min(5, 'Description must be at least 5 characters')
+    .required('Description is required'),
+  price: yup.number().min(1, 'Price must be at least 1').required('Price is required'),
+  categoryId: yup.number().required('Category is required'),
+  durationMinutes: yup.number().min(1).required('Duration is required'),
   isActive: yup.boolean().required(),
   mediaIds: yup.array().of(yup.number().required()).required(),
   masterIds: yup
@@ -251,11 +254,14 @@ export const createServiceSchema = yup.object({
 });
 
 export const updateServiceSchema = yup.object({
-  name: yup.string().min(3).required(),
-  description: yup.string().min(5).required(),
-  price: yup.number().min(1).required(),
-  categoryId: yup.number().required(),
-  durationMinutes: yup.number().min(1).required(),
+  name: yup.string().min(3, 'Name must be at least 3 characters').required('Name is required'),
+  description: yup
+    .string()
+    .min(5, 'Description must be at least 5 characters')
+    .required('Description is required'),
+  price: yup.number().min(1, 'Price must be at least 1').required('Price is required'),
+  categoryId: yup.number().required('Category is required'),
+  durationMinutes: yup.number().min(1).required('Duration is required'),
   isActive: yup.boolean().required(),
   mediaIds: yup.array().of(yup.number().required()).required(),
   masterIds: yup
