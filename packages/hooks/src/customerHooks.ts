@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+import { useForm } from 'react-hook-form';
 
 import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
@@ -12,6 +13,13 @@ import {
   GetCustomersResponse,
 } from '@avoo/axios/types/apiTypes';
 import { utils } from '@avoo/hooks/utils/utils';
+
+export type UpdateCustomerFormValues = {
+  name: string;
+  phone: string;
+  notes: string;
+  isNotificationEnable: boolean;
+};
 
 import { queryKeys } from './queryKeys';
 
@@ -157,6 +165,57 @@ export const customerHooks = {
 
     utils.useSetPendingApi(isPending);
     return { updateCustomer, updateCustomerAsync, isPending };
+  },
+
+  useUpdateCustomerForm: ({
+    customer,
+    onSuccess,
+  }: {
+    customer: CustomerInfoResponse;
+    onSuccess: () => void;
+  }) => {
+    const queryClient = useQueryClient();
+
+    const {
+      control,
+      handleSubmit,
+      formState: { isDirty },
+    } = useForm<UpdateCustomerFormValues>({
+      defaultValues: {
+        name: customer.name ?? '',
+        phone: customer.phone ?? '',
+        notes: customer.notes ?? '',
+        isNotificationEnable: customer.isNotificationEnable ?? true,
+      },
+    });
+
+    const { mutateAsync: updateCustomerAsync, isPending } = useMutation<
+      BaseResponse<CustomerInfoResponse>,
+      Error,
+      { id: number; body: Partial<CreateCustomerRequest> }
+    >({
+      mutationFn: ({ id, body }) => customerApi.updateCustomer(id, body),
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: queryKeys.customers.all });
+        onSuccess();
+      },
+    });
+
+    utils.useSetPendingApi(isPending);
+
+    const onSubmit = handleSubmit(async (values) => {
+      await updateCustomerAsync({
+        id: customer.id,
+        body: {
+          name: values.name,
+          phone: values.phone,
+          notes: values.notes,
+          isNotificationEnable: values.isNotificationEnable,
+        },
+      });
+    });
+
+    return { control, onSubmit, isDirty, isPending };
   },
 
   useDeleteCustomer: () => {

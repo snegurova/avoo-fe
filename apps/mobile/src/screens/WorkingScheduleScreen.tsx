@@ -29,7 +29,10 @@ export const WorkingScheduleScreen = (props: Props) => {
         </Pressable>
       </View>
 
-      <ScheduleList onSelectSchedule={setSelectedSchedule} />
+      <ScheduleList
+        onSelectSchedule={setSelectedSchedule}
+        onCreatePress={() => setIsCreateOpen(true)}
+      />
 
       <EditScheduleBottomSheet
         schedule={selectedSchedule}
