@@ -1,6 +1,6 @@
 import { CustomBottomSheet } from '@/shared/CustomBottomSheet/CustomBottomSheet';
 
-import { CreateServiceForm } from './CreateServiceForm';
+import { CreateServiceForm } from '../CreateServiceForm/CreateServiceForm';
 
 type Props = {
   visible: boolean;

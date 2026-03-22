@@ -2,6 +2,7 @@ import { Pressable, Text } from 'react-native';
 
 import { colors } from '@avoo/design-tokens';
 
+import { LockIcon } from '@/icons/LockIcon';
 import { MaterialIcons } from '@/shared/icons';
 
 type Props = {
@@ -28,7 +29,7 @@ export const LockedField = (props: Props) => {
       >
         {value}
       </Text>
-      {disabled && <MaterialIcons name='lock' size={18} color={colors.gray[400]} />}
+      {disabled && <LockIcon size={18} color={colors.gray[400]} />}
       {!disabled && onPress && (
         <MaterialIcons name='expand-more' size={20} color={colors.gray[400]} />
       )}

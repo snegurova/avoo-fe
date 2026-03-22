@@ -2,7 +2,7 @@ import { Service } from '@avoo/axios/types/apiTypes';
 
 import { CustomBottomSheet } from '@/shared/CustomBottomSheet/CustomBottomSheet';
 
-import { EditServiceForm } from './EditServiceForm';
+import { EditServiceForm } from '../EditServiceForm/EditServiceForm';
 
 type Props = {
   service: Service;

@@ -21,11 +21,11 @@ import FormTextInput from '@/shared/FormTextInput';
 import { MaterialIcons } from '@/shared/icons';
 
 import { AvatarDisplay } from '../Avatar/AvatarDisplay';
-import { CategoryPickerSheet } from '../CreateServiceBottomSheet/CategoryPickerSheet';
-import { DurationPickerSheet } from '../CreateServiceBottomSheet/DurationPickerSheet';
-import { MasterPickerSheet } from '../CreateServiceBottomSheet/MasterPickerSheet';
+import { CategoryPickerSheet } from '../CategoryPickerSheet/CategoryPickerSheet';
+import { DurationPickerSheet } from '../DurationPickerSheet/DurationPickerSheet';
 import { LockedField } from '../LockedField/LockedField';
-import { ServiceGalleryField } from './ServiceGalleryField';
+import { MasterPickerSheet } from '../MasterPickerSheet/MasterPickerSheet';
+import { ServiceGalleryField } from '../ServiceGalleryField/ServiceGalleryField';
 
 type Props = {
   control: Control<CreateServiceFormData>;
