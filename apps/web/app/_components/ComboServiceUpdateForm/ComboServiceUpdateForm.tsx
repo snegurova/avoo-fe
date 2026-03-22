@@ -1,3 +1,4 @@
+'use client';
 import { useEffect } from 'react';
 import { Controller } from 'react-hook-form';
 import { useTranslations } from 'next-intl';
