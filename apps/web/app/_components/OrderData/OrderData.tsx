@@ -1,7 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-
-import dayjs from 'dayjs';
-import relativeTime from 'dayjs/plugin/relativeTime';
+import { useLocale } from 'next-intl';
 
 import { orderHooks } from '@avoo/hooks';
 import { useIntervalAction } from '@avoo/hooks';
@@ -11,8 +9,7 @@ import { timeUtils } from '@avoo/shared';
 import OrderConfirmation from '@/_components/OrderConfirmation/OrderConfirmation';
 import OrderEdit from '@/_components/OrderEdit/OrderEdit';
 import OrderView from '@/_components/OrderView/OrderView';
-
-dayjs.extend(relativeTime);
+import { formatRelativeTimeFromNow } from '@/_utils/intlFormatters';
 
 type Props = {
   orderId: number;
@@ -29,6 +26,7 @@ enum Mode {
 
 export default function OrderData(props: Props) {
   const { orderId, onClose, refetchCalendar, isOutOfSchedule } = props;
+  const locale = useLocale();
   const [mode, setMode] = useState<Mode>(Mode.View);
   const { data: order, refetch } = orderHooks.useGetOrderById(orderId);
   const [timeAgo, setTimeAgo] = React.useState<string>('');
@@ -50,7 +48,7 @@ export default function OrderData(props: Props) {
 
   useIntervalAction(() => {
     if (!order) return;
-    setTimeAgo(dayjs(order.createdAt).fromNow());
+    setTimeAgo(formatRelativeTimeFromNow(order.createdAt, locale));
   });
 
   const onEdit = () => {

@@ -70,7 +70,7 @@ export const WorkingDayRow = (props: Props) => {
   });
   const options = scheduleHooks.useWorkingHoursOptions();
 
-  const shiftedIndex = (index + patternShift) % 7;
+  const shiftedIndex = (((index + patternShift) % 7) + 7) % 7;
 
   return (
     <div className='border border-gray-200 rounded-lg'>

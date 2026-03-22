@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslations } from 'next-intl';
 
 import ArrowDownIcon from '@/_icons/ArrowDownIcon';
 import SortIcon from '@/_icons/SortIcon';
@@ -11,6 +12,7 @@ type Props<T extends string> = {
 
 export default function SortOptions<T extends string>(props: Props<T>) {
   const { options, className, onSelect } = props;
+  const t = useTranslations('private.components.SortOptions.SortOptions');
   const [showOptions, setShowOptions] = useState(false);
 
   const handleSelect = (value: T) => {
@@ -25,7 +27,7 @@ export default function SortOptions<T extends string>(props: Props<T>) {
         onClick={() => setShowOptions(!showOptions)}
       >
         <SortIcon width={24} height={24} />
-        <span className='text-small'>Sort by:</span>
+        <span className='text-small'>{t('sortBy')}</span>
         <ArrowDownIcon width={24} height={24} />
       </button>
       {showOptions && (

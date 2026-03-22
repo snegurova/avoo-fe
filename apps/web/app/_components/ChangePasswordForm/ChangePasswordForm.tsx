@@ -22,7 +22,7 @@ export default function ChangePasswordForm() {
 
   const { register, handleSubmit, errors } = authHooks.useChangePasswordForm({
     onSuccess: () => {
-      toast.success('Password changed successfully');
+      toast.success(tCommon('success'));
     },
   });
 

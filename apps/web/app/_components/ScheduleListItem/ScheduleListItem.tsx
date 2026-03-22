@@ -1,4 +1,4 @@
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 
 import { IconButton } from '@mui/material';
 import { tv } from 'tailwind-variants';
@@ -10,6 +10,7 @@ import Avatar, { AvatarSize } from '@/_components/Avatar/Avatar';
 import DeleteIcon from '@/_icons/DeleteIcon';
 import EditSquareIcon from '@/_icons/EditSquareIcon';
 import GroupIcon from '@/_icons/GroupIcon';
+import { formatLocalizedDate } from '@/_utils/intlFormatters';
 
 type Props = {
   id: number;
@@ -25,13 +26,14 @@ type Props = {
 
 export default function ScheduleListItem(props: Props) {
   const t = useTranslations('private.components.ScheduleListItem.ScheduleListItem');
+  const locale = useLocale();
   const { id, name, startAt, endAt, master, isActive, isSelected, onDelete, onEdit } = props;
 
   const isPending = useApiStatusStore((state) => state.isPending);
 
   const convertDate = (date: Date | null) => {
     if (!date) return t('ongoing');
-    return date.toLocaleDateString();
+    return formatLocalizedDate(date, locale);
   };
 
   const scheduleVariants = tv({

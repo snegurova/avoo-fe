@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo } from 'react';
 import { Controller } from 'react-hook-form';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 
 import { Order, Service } from '@avoo/axios/types/apiTypes';
 import { orderHooks } from '@avoo/hooks';
@@ -15,6 +15,7 @@ import FormCounter from '@/_components/FormCounter/FormCounter';
 import FormTextArea from '@/_components/FormTextArea/FormTextArea';
 import ServiceElement from '@/_components/ServiceElement/ServiceElement';
 import ErrorIcon from '@/_icons/ErrorIcon';
+import { formatLocalizedHumanDate } from '@/_utils/intlFormatters';
 
 type Props = {
   order: Order;
@@ -28,8 +29,14 @@ type Props = {
 
 export default function OrderConfirmation(props: Props) {
   const t = useTranslations('private.components.OrderConfirmation.OrderConfirmation');
+  const locale = useLocale();
   const { order, timeAgo, endTime, onClose, refetchCalendar, refetchOrder, isOutOfSchedule } =
     props;
+  const statusLabels = {
+    [OrderStatus.CANCELED]: t('status.canceled'),
+    [OrderStatus.CONFIRMED]: t('status.confirmed'),
+    [OrderStatus.PENDING]: t('status.pending'),
+  } as const;
   const [error, setError] = React.useState<string | null>(null);
   const isPending = useApiStatusStore((state) => state.isPending);
   const errorMessage = useApiStatusStore((s) => s.errorMessage);
@@ -72,7 +79,7 @@ export default function OrderConfirmation(props: Props) {
         <div className='flex flex-col gap-2'>
           <div className='flex items-center justify-between gap-6 pr-6'>
             <span className='text-2xl font-medium tracking-wider'>
-              {timeUtils.getHumanDate(order.date)}
+              {formatLocalizedHumanDate(order.date, locale)}
             </span>
             <span className='text-gray-500 text-xs leading-none'>{timeAgo}</span>
           </div>
@@ -83,7 +90,7 @@ export default function OrderConfirmation(props: Props) {
             </span>
             <div className='relative before:content-[""] before:absolute before:w-px before:top-0.5 before:bottom-0.5 before:bg-black before:-left-2.5 flex gap-2'>
               <span className='text-[10px] font-medium text-white leading-none px-1.5 py-1 flex items-center justify-center rounded-2xl capitalize bg-orange-500'>
-                {order.status.toLowerCase()}
+                {statusLabels[order.status as keyof typeof statusLabels]}
               </span>
               {isOutOfSchedule && (
                 <span className='text-[10px] font-medium text-white leading-none px-1.5 py-1 flex items-center justify-center rounded-2xl capitalize bg-red-800'>

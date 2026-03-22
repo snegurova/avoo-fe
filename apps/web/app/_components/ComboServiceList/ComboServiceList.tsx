@@ -46,9 +46,9 @@ export default function ComboServiceList(props: Props) {
     if (!combinationToDelete) return;
     try {
       await deleteCombinationMutationAsync(combinationToDelete);
-      toast.success('Combo service deleted successfully');
+      toast.success(t('deleteSuccess'));
     } catch {
-      toast.error('Failed to delete combo service');
+      toast.error(t('deleteError'));
     }
   };
 
@@ -102,9 +102,9 @@ export default function ComboServiceList(props: Props) {
         open={!!combinationToDelete}
         onClose={handleCloseDeleteDialog}
         title={t('deleteComboService')}
-        content='Are you sure you want to delete this combo service?'
-        cancelText='Cancel'
-        confirmText='Delete'
+        content={t('deleteConfirmContent')}
+        cancelText={t('cancel')}
+        confirmText={t('delete')}
         onCancel={handleCloseDeleteDialog}
         onConfirm={handleConfirmDelete}
         loading={isPending}

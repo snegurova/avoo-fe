@@ -1,15 +1,15 @@
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 
 import { IconButton } from '@mui/material';
 import { tv } from 'tailwind-variants';
 
-import { currencyUtils, timeUtils } from '@avoo/shared';
 import { useApiStatusStore } from '@avoo/store';
 
 import IconLink from '@/_components/IconLink/IconLink';
 import DeleteIcon from '@/_icons/DeleteIcon';
 import EditSquareIcon from '@/_icons/EditSquareIcon';
 import ShareIcon from '@/_icons/ShareIcon';
+import { formatLocalizedCurrency, formatLocalizedDuration } from '@/_utils/intlFormatters';
 
 type Props = {
   id: number;
@@ -25,6 +25,7 @@ type Props = {
 
 export default function ServiceCard(props: Props) {
   const t = useTranslations('private.components.ServiceCard.ServiceCard');
+  const locale = useLocale();
   const { id, name, durationMinutes, price, currency, isActive, isSelected, onDelete, onEdit } =
     props;
 
@@ -61,15 +62,17 @@ export default function ServiceCard(props: Props) {
         <div>
           <h3 className='text-base font-medium'>{name}</h3>
           <div className='flex items-center gap-2'>
-            <p className='text-sm text-gray-700'>{timeUtils.convertDuration(durationMinutes)}</p>
+            <p className='text-sm text-gray-700'>
+              {formatLocalizedDuration(durationMinutes, locale)}
+            </p>
             <span className='hidden lg:inline text-sm text-gray-700'>
-              | {currencyUtils.formatNamePrice(price, currency)}
+              | {formatLocalizedCurrency(price, currency, locale, 'name')}
             </span>
           </div>
         </div>
         <div className='flex items-center gap-3'>
           <span className='font-regular font-weight-400 lg:hidden'>
-            {currencyUtils.formatPrice(price, currency)}
+            {formatLocalizedCurrency(price, currency, locale)}
           </span>
           <div className='hidden lg:flex items-center gap-0'>
             <IconButton

@@ -1,15 +1,15 @@
 'use client';
 
 import React from 'react';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 
 import { Typography } from '@mui/material';
 
 import type { CustomerInfoResponse } from '@avoo/axios/types/apiTypes';
 import { colors, typography } from '@avoo/design-tokens';
-import { timeUtils } from '@avoo/shared';
 
 import Avatar, { AvatarSize } from '@/_components/Avatar/Avatar';
+import { formatLocalizedDate } from '@/_utils/intlFormatters';
 
 type Props = {
   client: CustomerInfoResponse;
@@ -19,9 +19,10 @@ type Props = {
 
 const ClientListItem: React.FC<Props> = ({ client, onEdit, isSelected }) => {
   const t = useTranslations('private.components.ClientListItem.ClientListItem');
+  const locale = useLocale();
   const clientDisplayName = client.name || t('noName');
   const phone = client.phone || t('noPhone');
-  const formattedLastVisit = timeUtils.formatLastVisitDate(client.lastVisit) ?? '-';
+  const formattedLastVisit = client.lastVisit ? formatLocalizedDate(client.lastVisit, locale) : '-';
   const handleOpenDetails = () => {
     onEdit?.(client);
   };
@@ -46,7 +47,7 @@ const ClientListItem: React.FC<Props> = ({ client, onEdit, isSelected }) => {
         tabIndex={0}
         onClick={handleOpenDetails}
         onKeyDown={handleKeyDown}
-        aria-label={`Open ${clientDisplayName} details`}
+        aria-label={t('openDetails', { name: clientDisplayName })}
       >
         <div className='flex-shrink-0'>
           <Avatar
@@ -94,7 +95,7 @@ const ClientListItem: React.FC<Props> = ({ client, onEdit, isSelected }) => {
         tabIndex={0}
         onClick={handleOpenDetails}
         onKeyDown={handleKeyDown}
-        aria-label={`Open ${clientDisplayName} details`}
+        aria-label={t('openDetails', { name: clientDisplayName })}
       >
         <div className='flex items-center gap-3 w-1/4'>
           <Avatar

@@ -119,6 +119,8 @@
         "addService": "Додати ще послугу",
         "cancel": "Скасувати",
         "create": "Забронювати",
+        "noAvailableDateAndTime": "Немає доступної дати та часу",
+        "selectedMasterDoesNotProvideService": "Вибраний майстер не надає вибрану послугу",
         "addNew": "Додати нового {label}",
         "noResults": "Не знайдено {label}",
         "client": "клієнт",
@@ -186,7 +188,14 @@
       "noTimeOffDescription": "<link>Додати вихідний</link>, відпустки, перерви або недоступні години, щоб графік був точним.",
       "loading": "Завантаження...",
       "noTimeOff": "Винятки часу відпусток відсутні",
-      "detailedNoTimeOffDescription": "Додайте <link>відпустку</link> або додаткові робочі години, щоб графік був актуальним."
+      "detailedNoTimeOffDescription": "Додайте <link>відпустку</link> або додаткові робочі години, щоб графік був актуальним.",
+      "types": {
+        "personal": "Особиста перерва",
+        "holiday": "Свято (салон)",
+        "vacation": "Відпустка",
+        "sick": "Лікарняний",
+        "other": "Інше"
+      }
     },
     "forgotPassword": {
       "recoveryPassword": "Відновлення паролю",
@@ -223,7 +232,12 @@
         "AvatarUpload": {
           "avatarImage": "Зображення аватару",
           "saveAvatar": "Зберегти аватар",
-          "editAvatar": "Редагувати аватар"
+          "editAvatar": "Редагувати аватар",
+          "uploadNewAvatar": "Завантажити новий аватар",
+          "uploadSuccess": "Аватар завантажено. Натисніть Зберегти, щоб застосувати зміни.",
+          "uploadError": "Не вдалося завантажити аватар: {error}",
+          "saveSuccess": "Аватар збережено!",
+          "noNewAvatar": "Немає нового аватара для збереження"
         }
       },
       "Button": {
@@ -269,7 +283,11 @@
           "invalidDateFormat": "Невірний формат дати",
           "dateNotInFuture": "Дата не може бути в майбутньому",
           "salon": "Салон",
-          "selectOrDrag": "Виберіть файл або перетягніть сюди"
+          "selectOrDrag": "Виберіть файл або перетягніть сюди",
+          "chooseMasterError": "Будь ласка, виберіть майстра",
+          "uploadFileError": "Будь ласка, завантажте файл",
+          "unsupportedFileType": "Непідтримуваний тип файлу. Використовуйте: {types}.",
+          "fileTooLarge": "Файл занадто великий. Максимум {maxSizeMb} МБ."
         }
       },
       "ChangePasswordForm": {
@@ -277,7 +295,8 @@
           "changePassword": "Змінити пароль",
           "currentPassword": "Поточний пароль",
           "newPassword": "Новий пароль",
-          "confirmPassword": "Підтвердіть пароль"
+          "confirmPassword": "Підтвердіть пароль",
+          "success": "Пароль успішно змінено"
         }
       },
       "CheckboxesButton": {
@@ -331,7 +350,8 @@
           "noName": "Без імені",
           "noPhone": "Без телефону",
           "noEmail": "Без пошти",
-          "lastVisit": "останній візит {date}"
+          "lastVisit": "останній візит {date}",
+          "openDetails": "Відкрити деталі {name}"
         }
       },
       "CombinationForm": {
@@ -373,7 +393,12 @@
           "deleteComboService": "Видалити комбо-послугу",
           "comboServiceTime": "Час комбо-послуги",
           "shareSm": "Поділитися",
-          "deleteSm": "Видалити"
+          "deleteSm": "Видалити",
+          "deleteSuccess": "Комбо-послугу видалено",
+          "deleteError": "Не вдалося видалити комбо-послугу",
+          "deleteConfirmContent": "Ви впевнені, що хочете видалити цю комбо-послугу?",
+          "cancel": "Скасувати",
+          "delete": "Видалити"
         }
       },
       "ComboServiceSelector": {
@@ -401,6 +426,11 @@
           "enterName": "Введіть ім'я",
           "enterEmail": "Введіть email",
           "enterPhone": "Введіть телефон"
+        }
+      },
+      "CustomerElement": {
+        "CustomerElement": {
+          "lastVisit": "Останній візит"
         }
       },
       "CustomerSelect": {
@@ -441,6 +471,7 @@
           "personalInfo": "Особиста інформація",
           "displayName": "Відображуване ім'я",
           "headline": "Заголовок",
+          "email": "Електронна пошта *",
           "phone": "Телефон",
           "about": "Про",
           "languages": "Мови",
@@ -547,7 +578,22 @@
           "outOfSchedule": "Поза графіком",
           "service": "Послуга",
           "client": "Клієнт",
-          "edit": "Редагувати"
+          "edit": "Редагувати",
+          "noteWithValue": "Примітка: {note}"
+        }
+      },
+      "ConfirmationModal": {
+        "ConfirmationModal": {
+          "title": "Ви впевнені?",
+          "confirm": "Підтвердити",
+          "cancel": "Скасувати"
+        }
+      },
+      "ModalActions": {
+        "ModalActions": {
+          "close": "Закрити",
+          "save": "Зберегти",
+          "saving": "Збереження..."
         }
       },
       "PhoneCodeSelect": {
@@ -753,7 +799,19 @@
         "ServiceGalleryUpload": {
           "addPhoto": "Додати фото",
           "selectFile": "Вибрати файл",
-          "selectOrDrag": "Виберіть файл або перетягніть сюди"
+          "selectOrDrag": "Виберіть файл або перетягніть сюди",
+          "uploadHint": "Завантажте до 5 зображень (лише JPG і PNG, до 10 МБ кожне)",
+          "mediaAlt": "Медіа послуги"
+        }
+      },
+      "SortIconButton": {
+        "SortIconButton": {
+          "sort": "Сортувати"
+        }
+      },
+      "SortOptions": {
+        "SortOptions": {
+          "sortBy": "Сортувати за:"
         }
       },
       "ServiceList": {
@@ -803,6 +861,7 @@
           "addTimeOffExtraHours": "Додайте вихідний або додаткові робочі години",
           "note": "Примітка",
           "wholeDay": "Цілий день",
+          "wholeDayAriaLabel": "Цілий день",
           "cancel": "Скасувати",
           "save": "Зберегти",
           "allStaff": "Весь персонал",
@@ -823,6 +882,7 @@
           "delete": "Видалити",
           "note": "Примітка",
           "wholeDay": "Цілий день",
+          "wholeDayAriaLabel": "Цілий день",
           "deleteTimeOff": "Видалити вихідний",
           "allStaff": "Весь персонал",
           "master": "Майстер *",
@@ -836,6 +896,12 @@
           "deleteInfo": "Виняток із графіка видалено!",
           "deleteConfirmDescription": "Ви впевнені, що хочете остаточно видалити цей виняток із графіка? Цю дію неможливо скасувати.",
           "confirmDeleteTimeOff": "Видалити вихідний"
+        }
+      },
+      "TimeOffConflictsSection": {
+        "TimeOffConflictsSection": {
+          "affectedBookings": "Затронуті бронювання",
+          "bookingFallback": "Бронювання"
         }
       },
       "TimeOffEditModal": {
@@ -866,7 +932,8 @@
           "workingTime": "Робочий час",
           "from": "з",
           "to": "по",
-          "deleteConfirmDescription": "Ви впевнені, що хочете остаточно видалити цей виняток із графіка? Цю дію неможливо скасувати."
+          "deleteConfirmDescription": "Ви впевнені, що хочете остаточно видалити цей виняток із графіка? Цю дію неможливо скасувати.",
+          "openDetails": "Відкрити деталі {name}"
         }
       },
       "TimeSlotField": {
@@ -899,6 +966,11 @@
     }
   },
   "public": {
+    "metadata": {
+      "root": {
+        "description": "Професійна платформа AVOO"
+      }
+    },
     "home": {
       "topSection": {
         "ctaButton": "Перейти до додатку бронювання",
@@ -930,6 +1002,7 @@
         "gallery": "Галерея",
         "certificates": "Сертифікати",
         "team": "Команда",
+        "avatarAlt": "Аватар салону",
         "termsPrivacy": "Умови та конфіденційність",
         "allRightsReserved": "Всі права захищені."
       },
@@ -949,7 +1022,8 @@
         "button": "Відправити код",
         "emailLabel": "Електронна пошта *",
         "emailPlaceholder": "Електронна пошта",
-        "linkText": "Повернутися до входу"
+        "linkText": "Повернутися до входу",
+        "sendCodeSuccess": "Код підтвердження надіслано на вашу електронну пошту"
       }
     },
     "login": {
@@ -974,6 +1048,7 @@
         "metaTitle": "Реєстрація - AVOO App",
         "description": "Налаштуйте профіль для керування послугами та бронюваннями.",
         "havingAccount": "Вже маєте акаунт?",
+        "accountPrompt": "Вже маєте акаунт? <link>Увійти</link>",
         "login": "Увійти"
       },
       "form": {
@@ -995,10 +1070,18 @@
         "slogan": "Більше клієнтів. Один календар. Жодного хаосу."
       }
     },
+    "verifyCode": {
+      "page": {
+        "metaTitle": "Перевірка коду - AVOO App",
+        "metaDescription": "Перевірте код, надісланий на електронну пошту"
+      }
+    },
     "resetPassword": {
       "page": {
         "title": "Створіть новий пароль",
         "description": "Виберіть надійний пароль, щоб захистити свій акаунт.",
+        "metaTitle": "Скидання паролю - AVOO App",
+        "metaDescription": "Скиньте свій пароль",
         "newPasswordLabel": "Новий пароль *",
         "confirmPasswordLabel": "Підтвердіть пароль *",
         "saveButton": "Зберегти новий пароль",

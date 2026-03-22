@@ -1,13 +1,14 @@
 import React, { useMemo } from 'react';
+import { useLocale } from 'next-intl';
 
 import { tv } from 'tailwind-variants';
 
 import { Combination, MasterWithRelationsEntity } from '@avoo/axios/types/apiTypes';
 import { colors } from '@avoo/design-tokens';
-import { currencyUtils, timeUtils } from '@avoo/shared';
 
 import Avatar, { AvatarSize } from '@/_components/Avatar/Avatar';
 import { CURRENCY } from '@/_constants/currency';
+import { formatLocalizedCurrency, formatLocalizedDuration } from '@/_utils/intlFormatters';
 
 type Props = {
   item: Combination;
@@ -29,6 +30,7 @@ const wrapperStyles = tv({
 
 export default function CombinationElement(props: Props) {
   const { item, onClick, isCard, hideMasters = false, master } = props;
+  const locale = useLocale();
 
   const Wrapper = isCard ? 'div' : 'button';
 
@@ -55,18 +57,18 @@ export default function CombinationElement(props: Props) {
               <div className='flex items-center gap-2'>
                 <span className='text-sm font-medium'>{service.name}</span>
                 <span className='text-gray-600 line-through text-xs'>
-                  {timeUtils.convertDuration(service.durationMinutes)}
+                  {formatLocalizedDuration(service.durationMinutes, locale)}
                 </span>
               </div>
               <span className='text-sm text-gray-600'>
-                {currencyUtils.formatPrice(service.price, CURRENCY)}
+                {formatLocalizedCurrency(service.price, CURRENCY, locale)}
               </span>
             </li>
           ))}
         </ul>
         <div className='flex items-center gap-4 justify-between'>
-          <p className=' text-gray-600'>{timeUtils.convertDuration(item.durationMinutes)}</p>
-          <p className='text-base'>{currencyUtils.formatPrice(price, CURRENCY)}</p>
+          <p className=' text-gray-600'>{formatLocalizedDuration(item.durationMinutes, locale)}</p>
+          <p className='text-base'>{formatLocalizedCurrency(price, CURRENCY, locale)}</p>
         </div>
         {!isCard && item.masters && !hideMasters && (
           <ul className='flex flex-wrap gap-y-0.5 gap-x-1'>
