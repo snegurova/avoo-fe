@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Controller } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
@@ -16,6 +17,7 @@ import {
 import { combinationHooks, masterHooks } from '@avoo/hooks';
 
 import ComboServiceSelector from '@/_components/ComboServiceSelector/ComboServiceSelector';
+import ConfirmationDialog from '@/_components/ConfirmationDialog/ConfirmationDialog';
 import FormCounter from '@/_components/FormCounter/FormCounter';
 import MasterAutocompleteCardSelect from '@/_components/MasterAutoCompleteCardSelect/MasterAutoCompleteCardSelect';
 import { localizationHooks } from '@/_hooks/localizationHooks';
@@ -25,12 +27,15 @@ import { getAllErrorMessages } from '@/_utils/formError';
 
 export default function ComboServiceAddForm() {
   const t = useTranslations('private.components.ComboServiceAddFrom.ComboServiceAddFrom');
+  const tCommon = useTranslations('private.common');
   const router = useRouter();
   const toast = useToast();
+  const [openConfirmDialog, setOpenConfirmDialog] = useState(false);
+
   const comboServicePath = localizationHooks.useWithLocale(AppRoutes.ComboServiceTime);
   const { masters, searchTerm, setSearchTerm } = masterHooks.useMasterQuery();
 
-  const { control, watch, setValue, handleSubmit, errors } =
+  const { control, watch, setValue, handleSubmit, isDirty, errors } =
     combinationHooks.useCreateCombinationForm({
       onSuccess: () => {
         toast.success(t('serviceCreated'));
@@ -45,6 +50,19 @@ export default function ComboServiceAddForm() {
   const currentComboName = watch('name');
   const masterIds = watch('masterIds');
   const errorsList = getAllErrorMessages(errors);
+
+  const handleCancel = () => {
+    if (isDirty) {
+      setOpenConfirmDialog(true);
+    } else {
+      router.back();
+    }
+  };
+
+  const handleConfirmLeave = () => {
+    setOpenConfirmDialog(false);
+    router.back();
+  };
 
   return (
     <div className='flex flex-col h-full relative overflow-hidden'>
@@ -175,7 +193,7 @@ export default function ComboServiceAddForm() {
       </div>
       <section id='create-new-service-controls' className='shrink-0 bg-white z-10'>
         <div className='w-full flex gap-8 p-4 pr-3 justify-center md:justify-end  lg:pr-3'>
-          <Button color='secondary' variant='outlined' onClick={() => router.back()}>
+          <Button color='secondary' variant='outlined' onClick={handleCancel}>
             {t('cancel')}
           </Button>
           <Button form='add-combo-service' type='submit' color='secondary' variant='contained'>
@@ -183,6 +201,17 @@ export default function ComboServiceAddForm() {
           </Button>
         </div>
       </section>
+      <ConfirmationDialog
+        open={!!openConfirmDialog}
+        onClose={() => setOpenConfirmDialog(false)}
+        title={tCommon('areYouSureYouWantToLeaveThisPage')}
+        content={tCommon('youHaveUnsavedChanges')}
+        cancelText={tCommon('cancel')}
+        confirmText={tCommon('leave')}
+        onCancel={() => setOpenConfirmDialog(false)}
+        onConfirm={handleConfirmLeave}
+        loading={false}
+      />
     </div>
   );
 }

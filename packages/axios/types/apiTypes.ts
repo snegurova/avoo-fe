@@ -11,7 +11,7 @@ export enum ApiStatus {
 }
 
 export type ErrorItemDto = components['schemas']['ErrorItemDto'];
-
+export type ErrorCode = components['schemas']['ErrorResponseDto']['errorCode'];
 export type SuccessResponse<T> = {
   status: ApiStatus.SUCCESS;
   data: T;
@@ -19,6 +19,7 @@ export type SuccessResponse<T> = {
 
 export type ErrorResponse = {
   status: ApiStatus.ERROR;
+  errorCode: ErrorCode;
   data: null;
   errorMessage: string;
   errors?: ErrorItemDto[];

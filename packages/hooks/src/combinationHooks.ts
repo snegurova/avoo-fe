@@ -230,7 +230,7 @@ export const combinationHooks = {
       handleSubmit,
       watch,
       setValue,
-      formState: { errors },
+      formState: { errors, isDirty },
     } = useForm<CreateCombinationFormData>({
       resolver: yupResolver(createCombinationSchema),
       mode: 'onSubmit',
@@ -270,6 +270,7 @@ export const combinationHooks = {
       handleSubmit: handleSubmit(
         utils.submitAdapter<CreateCombinationRequest, CreateCombinationFormData>(createCombination),
       ),
+      isDirty,
       errors,
       watch,
       setValue,
@@ -289,7 +290,7 @@ export const combinationHooks = {
       handleSubmit,
       watch,
       setValue,
-      formState: { errors },
+      formState: { errors, isDirty },
     } = useForm<UpdateCombinationFormData>({
       resolver: yupResolver(updateCombinationSchema),
       mode: 'onSubmit',
@@ -330,6 +331,7 @@ export const combinationHooks = {
         utils.submitAdapter<UpdateCombinationRequest, UpdateCombinationFormData>(updateCombination),
       ),
       errors,
+      isDirty,
       watch,
       setValue,
       isPending,

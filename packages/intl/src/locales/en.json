@@ -1,5 +1,16 @@
 {
   "private": {
+    "common": {
+      "areYouSureYouWantToLeaveThisPage": "Are you sure you want to leave this page?",
+      "youHaveUnsavedChanges": "You have unsaved changes. Are you sure you want to leave this page?",
+      "leave": "Leave",
+      "cancel": "Cancel",
+      "delete": "Delete",
+      "areYouSureYouWantToLeaveThisWindow": "Are you sure you want to close this window?",
+      "youHaveUnsavedChangesInThisWindow": "You have unsaved changes. Are you sure you want to close this window?",
+      "leaveWindow": "Close",
+      "defaultFailError": "Something went wrong. Please try again later."
+    },
     "profile": {
       "changePassword": {
         "oldPasswordLabel": "Current password *",
@@ -50,6 +61,7 @@
         "posts": "Posts",
         "workingSchedule": "Working schedule",
         "scheduleException": "Schedule exception",
+        "comboServiceTime": "Combo service time",
         "billingNotification": "Billing or marketing notification",
         "notifications": "Notifications"
       }
@@ -204,6 +216,12 @@
         "AuthorizationWrapper": {
           "avoo": "Avoo",
           "avooCaps": "AVOO"
+        }
+      },
+      "AutoComplete": {
+        "SearchAutocomplete": {
+          "applyToAll": "Apply to all",
+          "selected": "selected"
         }
       },
       "AvatarUpload": {
@@ -629,7 +647,37 @@
           "save": "Save",
           "addSuccess": "Schedule added successfully",
           "addError": "Schedule add failed: {error}",
-          "applyToAll": "Apply to all"
+          "applyToAll": "Apply to all",
+          "scheduleTypes": {
+            "weekly": "Weekly",
+            "2x2": "2x2",
+            "3x2": "3x2",
+            "custom": "Custom"
+          },
+          "defaultScheduleName": "Working schedule"
+        },
+        "ConflictScheduleDialog": {
+          "scheduleConflictDetected": "Schedule conflict detected",
+          "loadingConflictDetails": "Loading conflict details...",
+          "youAlreadyHaveASchedule": "You already have a schedule that conflicts with the start date",
+          "wouldYouLikeToUpdateTheNewSchedulesStartDate": "Would you like to update the new schedule's start date to",
+          "soItCanStartAfterTheCurrentOneEnds": "so it can start after the current one ends?",
+          "existingSchedule": "Existing Schedule",
+          "youAlreadyHaveAScheduleThatConflictsWithTheStartDate": "You already have a schedule that conflicts with the start date",
+          "wouldYouLikeToUpdateTheNewSchedulesStartDateQuestion": "Would you like to update the new schedule's start date to",
+          "soItCanStartAfterTheCurrentOneEndsQuestion": "so it can start after the current one ends?",
+          "thisNewScheduleStartsOn": "This new schedule starts on",
+          "butYourCurrentScheduleEndsOn": "but your current schedule ends on",
+          "wouldYouLikeToEndTheCurrentScheduleEarly": "Would you like to end the current schedule early on",
+          "soTheNewOneCanBegin": "so the new one can begin?",
+          "name": "Name",
+          "startDate": "Start date",
+          "endDate": "End date",
+          "newSchedule": "New Schedule",
+          "updateNewStartDateAndSave": "Update new start date & save",
+          "updatePreviousScheduleAndSave": "Update previous schedule & save",
+          "editDatesManually": "Edit dates manually",
+          "ongoing": "Ongoing"
         }
       },
       "ScheduleList": {
@@ -646,9 +694,7 @@
           "deleteSm": "Delete",
           "deleteSuccess": "Schedule deleted successfully",
           "deleteError": "Failed to delete schedule",
-          "deleteContent": "This will permanently delete the schedule and remove it from all assigned masters. This action cannot be undone.",
-          "cancel": "Cancel",
-          "delete": "Delete"
+          "deleteContent": "This will permanently delete the schedule and remove it from all assigned masters. This action cannot be undone."
         }
       },
       "ScheduleListItem": {
@@ -682,7 +728,12 @@
           "searchScheduleNameMaster": "Search by schedule name or master",
           "sortByName": "Sort by name",
           "sortByStartDate": "Sort by start date",
-          "sortByEndDate": "Sort by end date"
+          "sortByEndDate": "Sort by end date",
+          "scheduleName": "Schedule name",
+          "appliesTo": "Applies to",
+          "startDate": "Start date",
+          "endDate": "End date",
+          "actions": "Actions"
         }
       },
       "ServiceAddForm": {
@@ -734,7 +785,8 @@
         "ServiceGalleryUpload": {
           "addPhoto": "Add photo",
           "selectFile": "Select file",
-          "selectOrDrag": "Select a file or drag and drop here"
+          "selectOrDrag": "Select a file or drag and drop here",
+          "uploadDescription": "Upload up to 5 images (JPG, PNG only, max 10MB each)"
         }
       },
       "ServiceList": {
