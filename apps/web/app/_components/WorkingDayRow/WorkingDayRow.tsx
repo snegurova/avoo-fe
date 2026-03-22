@@ -60,7 +60,7 @@ export const WorkingDayRow = (props: Props) => {
   };
 
   const cardDayVariant = tv({
-    base: 'flex flex-row justify-between items-center px-4 py-2 bg-primary-50',
+    base: 'flex flex-row justify-between items-center px-4 py-2 bg-primary-50 rounded-t-lg',
     variants: {
       enabled: {
         true: '',

@@ -31,6 +31,7 @@ type Props = {
 
 export default function ServiceList(props: Props) {
   const t = useTranslations('private.components.ServiceList.ServiceList');
+  const tCommon = useTranslations('private.common');
   const {
     categorySidebarItems,
     services,
@@ -84,6 +85,22 @@ export default function ServiceList(props: Props) {
       return;
     }
     setSelectedService(service);
+  };
+
+  const [isFormDirty, setIsFormDirty] = useState<boolean>(false);
+  const [openConfirmDialog, setOpenConfirmDialog] = useState<boolean>(false);
+
+  const handleCancel = () => {
+    if (isFormDirty) {
+      setOpenConfirmDialog(true);
+    } else {
+      setSelectedService(null);
+    }
+  };
+
+  const handleConfirmLeave = () => {
+    setOpenConfirmDialog(false);
+    setSelectedService(null);
   };
 
   return (
@@ -175,7 +192,18 @@ export default function ServiceList(props: Props) {
         onConfirm={handleConfirmDelete}
         loading={isPending}
       />
-      <AsideModal open={!!selectedService} handleClose={() => setSelectedService(null)}>
+      <ConfirmationDialog
+        open={!!openConfirmDialog}
+        onClose={() => setOpenConfirmDialog(false)}
+        title={tCommon('areYouSureYouWantToLeaveThisWindow')}
+        content={tCommon('youHaveUnsavedChangesInThisWindow')}
+        cancelText={tCommon('cancel')}
+        confirmText={tCommon('leaveWindow')}
+        onCancel={() => setOpenConfirmDialog(false)}
+        onConfirm={handleConfirmLeave}
+        loading={false}
+      />
+      <AsideModal open={!!selectedService} handleClose={handleCancel}>
         {selectedService && (
           <div className='w-full h-full overflow-y-auto'>
             <div className='sticky top-[-1] flex items-center justify-between py-2 bg-white z-2'>
@@ -202,7 +230,9 @@ export default function ServiceList(props: Props) {
             </div>
             <ServiceUpdateForm
               service={selectedService}
-              onCancel={() => setSelectedService(null)}
+              onCancel={handleCancel}
+              onDirtyChange={setIsFormDirty}
+              onClose={() => setSelectedService(null)}
             />
           </div>
         )}

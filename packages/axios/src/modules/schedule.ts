@@ -4,6 +4,7 @@ import {
   CreateScheduleResponse,
   GetSchedulesResponse,
   ScheduleEntity,
+  UpdateScheduleRequest,
   UpdateScheduleResponse,
 } from '@avoo/axios/types/apiTypes';
 import { QuerySchedules } from '@avoo/axios/types/apiTypes';
@@ -37,6 +38,13 @@ export const scheduleApi = {
   async createSchedule(data: ScheduleCreateFormData) {
     const response = await apiClient.post<BaseResponse<CreateScheduleResponse>>(
       SCHEDULES_ENDPOINT,
+      data,
+    );
+    return response.data;
+  },
+  async updateScheduleById(id: number, data: UpdateScheduleRequest) {
+    const response = await apiClient.put<BaseResponse<UpdateScheduleResponse>>(
+      SCHEDULES_ENDPOINT + '/' + id.toString(),
       data,
     );
     return response.data;
