@@ -320,6 +320,15 @@
           "priceInEuro": "{price} Euro"
         }
       },
+      "NextAppointmentsWidget": {
+        "NextAppointmentsWidget": {
+          "back": "Back",
+          "next": "Next",
+          "todayDate": "Today, {date}",
+          "tomorrowDate": "Tomorrow, {date}",
+          "outOfSchedule": "Out of schedule"
+        }
+      },
       "ClientsList": {
         "ClientsList": {
           "noClientsYet": "No clients yet",

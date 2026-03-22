@@ -7,6 +7,7 @@ import { CalendarType } from '@avoo/hooks/types/calendarType';
 
 import AppWrapper from '@/_components/AppWrapper/AppWrapper';
 import Calendar from '@/_components/Calendar/Calendar';
+import NextAppointmentsWidget from '@/_components/NextAppointmentsWidget/NextAppointmentsWidget';
 
 export default function DashboardPage() {
   const t = useTranslations('private.calendar.calendar');
@@ -38,6 +39,7 @@ export default function DashboardPage() {
                 {navT('nextAppointments')}
               </Typography>
             </div>
+            <NextAppointmentsWidget />
           </AppWrapper>
         </div>
       </div>

@@ -320,6 +320,15 @@
           "priceInEuro": "{price} євро"
         }
       },
+      "NextAppointmentsWidget": {
+        "NextAppointmentsWidget": {
+          "back": "Назад",
+          "next": "Далі",
+          "todayDate": "Сьогодні, {date}",
+          "tomorrowDate": "Завтра, {date}",
+          "outOfSchedule": "Поза графіком"
+        }
+      },
       "ClientsList": {
         "ClientsList": {
           "noClientsYet": "Ще немає клієнтів",
