@@ -1,5 +1,16 @@
 {
   "private": {
+    "common": {
+      "areYouSureYouWantToLeaveThisPage": "Czy na pewno chcesz opuścić tę stronę?",
+      "youHaveUnsavedChanges": "Masz niezapisane zmiany. Czy na pewno chcesz opuścić tę stronę?",
+      "leave": "Opuść",
+      "delete": "Usuń",
+      "areYouSureYouWantToLeaveThisWindow": "Czy na pewno chcesz zamknąć to okno?",
+      "youHaveUnsavedChangesInThisWindow": "Masz niezapisane zmiany. Czy na pewno chcesz zamknąć to okno?",
+      "leaveWindow": "Zamknij",
+      "cancel": "Anuluj",
+      "defaultFailError": "Coś poszło nie tak. Spróbuj ponownie później."
+    },
     "profile": {
       "changePassword": {
         "oldPasswordLabel": "Aktualne hasło *",
@@ -226,6 +237,12 @@
         "AuthorizationWrapper": {
           "avoo": "Avoo",
           "avooCaps": "AVOO"
+        }
+      },
+      "AutoComplete": {
+        "SearchAutocomplete": {
+          "applyToAll": "Zastosuj do wszystkich",
+          "selected": "wybrano"
         }
       },
       "AvatarUpload": {
@@ -688,8 +705,38 @@
           "cancel": "Anuluj",
           "save": "Zapisz",
           "addSuccess": "Harmonogram dodany pomyślnie",
-          "addError": "Błąd dodawania harmonogramу: {error}",
-          "applyToAll": "Zastosuj do wszystkich"
+          "addError": "Błąd dodawania harmonogramy: {error}",
+          "applyToAll": "Zastosuj do wszystkich",
+          "scheduleTypes": {
+            "weekly": "Co tydzień",
+            "2x2": "2 przez 2",
+            "3x2": "3 przez 2",
+            "custom": "Elastyczny"
+          },
+          "defaultScheduleName": "Harmonogram roboczy"
+        },
+        "ConflictScheduleDialog": {
+          "scheduleConflictDetected": "Wykryto konflikt harmonogramu",
+          "loadingConflictDetails": "Ładowanie szczegółów konfliktu...",
+          "youAlreadyHaveASchedule": "Masz już harmonogram, który koliduje z datą rozpoczęcia",
+          "wouldYouLikeToUpdateTheNewSchedulesStartDate": "Czy chcesz zaktualizować datę rozpoczęcia nowego harmonogramu na",
+          "soItCanStartAfterTheCurrentOneEnds": "aby zaczynał się po zakończeniu bieżącego?",
+          "existingSchedule": "Istniejący harmonogram",
+          "youAlreadyHaveAScheduleThatConflictsWithTheStartDate": "Masz już harmonogram, który koliduje z datą rozpoczęcia",
+          "wouldYouLikeToUpdateTheNewSchedulesStartDateQuestion": "Czy chcesz zaktualizować datę rozpoczęcia nowego harmonogramu na",
+          "soItCanStartAfterTheCurrentOneEndsQuestion": "aby zaczynał się po zakończeniu bieżącego?",
+          "thisNewScheduleStartsOn": "Ten nowy harmonogram zaczyna się",
+          "butYourCurrentScheduleEndsOn": "ale Twój bieżący harmonogram kończy się",
+          "wouldYouLikeToEndTheCurrentScheduleEarly": "Czy chcesz zakończyć bieżący harmonogram wcześniej",
+          "soTheNewOneCanBegin": "aby nowy mógł się rozpocząć?",
+          "name": "Nazwa",
+          "startDate": "Data rozpoczęcia",
+          "endDate": "Data zakończenia",
+          "newSchedule": "Nowy harmonogram",
+          "updateNewStartDateAndSave": "Zaktualizuj datę harmonogramu i zapisz",
+          "updatePreviousScheduleAndSave": "Zaktualizuj harmonogram i zapisz",
+          "editDatesManually": "Edytuj daty ręcznie",
+          "ongoing": "Bezkończny"
         }
       },
       "ScheduleList": {
@@ -707,8 +754,7 @@
           "deleteSuccess": "Harmonogram usunięty pomyślnie",
           "deleteError": "Nie udało się usunąć harmonogramu",
           "deleteContent": "Spowoduje to trwałe usunięcie harmonogramu i usunięcie go ze wszystkich przypisanych mistrzów. Tej czynności nie można cofnąć.",
-          "cancel": "Anuluj",
-          "delete": "Usuń"
+          "cancel": "Anuluj"
         }
       },
       "ScheduleListItem": {
@@ -747,7 +793,7 @@
           "appliesTo": "Dotyczy",
           "startDate": "Data rozpoczęcia",
           "endDate": "Data zakończenia",
-          "actions": "Działania"
+          "actions": "Akcje"
         }
       },
       "ServiceAddForm": {
@@ -799,6 +845,7 @@
         "ServiceGalleryUpload": {
           "addPhoto": "Dodaj zdjęcie",
           "selectFile": "Wybierz plik",
+          "uploadDescription": "Prześlij do 5 zdjęć (tylko JPG, PNG, maksymalnie 10 MB każde)",
           "selectOrDrag": "Wybierz plik lub przeciągnij i upuść tutaj",
           "uploadHint": "Prześlij maksymalnie 5 obrazów (tylko JPG i PNG, maks. 10 MB każdy)",
           "mediaAlt": "Multimedia usługi"

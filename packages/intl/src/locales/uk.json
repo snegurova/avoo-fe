@@ -1,5 +1,16 @@
 {
   "private": {
+    "common": {
+      "areYouSureYouWantToLeaveThisPage": "Ви впевнені, що хочете покинути цю сторінку?",
+      "youHaveUnsavedChanges": "У вас є незбережені зміни. Ви впевнені, що хочете покинути цю сторінку?",
+      "leave": "Покинути",
+      "cancel": "Скасувати",
+      "delete": "Видалити",
+      "areYouSureYouWantToLeaveThisWindow": "Ви впевнені, що хочете закрити вікно?",
+      "youHaveUnsavedChangesInThisWindow": "У вас є незбережені зміни. Ви впевнені, що хочете закрити вікно?",
+      "leaveWindow": "Закрити",
+      "defaultFailError": "Сталося щось дивне. Спробуйте пізніше."
+    },
     "profile": {
       "changePassword": {
         "oldPasswordLabel": "Поточний пароль *",
@@ -226,6 +237,12 @@
         "AuthorizationWrapper": {
           "avoo": "Avoo",
           "avooCaps": "AVOO"
+        }
+      },
+      "AutoComplete": {
+        "SearchAutocomplete": {
+          "applyToAll": "Застосувати до всіх",
+          "selected": "вибрано"
         }
       },
       "AvatarUpload": {
@@ -689,7 +706,37 @@
           "save": "Зберегти",
           "addSuccess": "Розклад успішно додано",
           "addError": "Помилка додавання розкладу: {error}",
-          "applyToAll": "Застосувати до всіх"
+          "applyToAll": "Застосувати до всіх",
+          "scheduleTypes": {
+            "weekly": "Щотижневий",
+            "2x2": "2 через 2",
+            "3x2": "3 через 2",
+            "custom": "Гнучкий"
+          },
+          "defaultScheduleName": "Робочий графік"
+        },
+        "ConflictScheduleDialog": {
+          "scheduleConflictDetected": "Виявлено конфлікт розкладу",
+          "loadingConflictDetails": "Завантаження деталей конфлікту...",
+          "youAlreadyHaveASchedule": "У вас вже є розклад, який конфліктує з датою початку",
+          "wouldYouLikeToUpdateTheNewSchedulesStartDate": "Бажаєте оновити дату початку нового розкладу на",
+          "soItCanStartAfterTheCurrentOneEnds": "щоб він почався після завершення поточного?",
+          "existingSchedule": "Існуючий розклад",
+          "youAlreadyHaveAScheduleThatConflictsWithTheStartDate": "У вас вже є розклад, який конфліктує з датою початку",
+          "wouldYouLikeToUpdateTheNewSchedulesStartDateQuestion": "Бажаєте оновити дату початку нового розкладу на",
+          "soItCanStartAfterTheCurrentOneEndsQuestion": "щоб він почався після завершення поточного?",
+          "thisNewScheduleStartsOn": "Цей новий розклад починається",
+          "butYourCurrentScheduleEndsOn": "але ваш поточний розклад закінчується",
+          "wouldYouLikeToEndTheCurrentScheduleEarly": "Бажаєте завершити поточний розклад раніше",
+          "soTheNewOneCanBegin": "щоб новий міг початися?",
+          "name": "Назва",
+          "startDate": "Дата початку",
+          "endDate": "Дата завершення",
+          "newSchedule": "Новий розклад",
+          "updateNewStartDateAndSave": "Оновити дату розкладу та зберегти",
+          "updatePreviousScheduleAndSave": "Оновити розклад та зберегти",
+          "editDatesManually": "Редагувати дати вручну",
+          "ongoing": "не має дати завершення"
         }
       },
       "ScheduleList": {
@@ -707,8 +754,7 @@
           "deleteSuccess": "Розклад успішно видалено",
           "deleteError": "Не вдалося видалити розклад",
           "deleteContent": "Це назавжди видалить розклад і вилучить його з усіх призначених майстрів. Цю дію неможливо скасувати.",
-          "cancel": "Скасувати",
-          "delete": "Видалити"
+          "cancel": "Скасувати"
         }
       },
       "ScheduleListItem": {
@@ -743,7 +789,7 @@
           "sortByName": "Сортувати за назвою",
           "sortByStartDate": "Сортувати за датою початку",
           "sortByEndDate": "Сортувати за датою закінчення",
-          "scheduleName": "Назва графіка",
+          "scheduleName": "Назва графіку",
           "appliesTo": "Застосовується до",
           "startDate": "Дата початку",
           "endDate": "Дата завершення",
@@ -799,6 +845,7 @@
         "ServiceGalleryUpload": {
           "addPhoto": "Додати фото",
           "selectFile": "Вибрати файл",
+          "uploadDescription": "Завантажте до 5 зображень (тільки JPG, PNG, максимум 10 МБ кожне)",
           "selectOrDrag": "Виберіть файл або перетягніть сюди",
           "uploadHint": "Завантажте до 5 зображень (лише JPG і PNG, до 10 МБ кожне)",
           "mediaAlt": "Медіа послуги"

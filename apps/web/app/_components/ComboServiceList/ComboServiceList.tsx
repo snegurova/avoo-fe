@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslations } from 'next-intl';
 
 import { IconButton, Typography } from '@mui/material';
@@ -24,6 +24,8 @@ type Props = {
 
 export default function ComboServiceList(props: Props) {
   const t = useTranslations('private.components.ComboServiceList.ComboServiceList');
+  const tCommon = useTranslations('private.common');
+
   const { combinations, incrementPage, hasMore } = props;
   const toast = useToast();
   const listRef = useRef<HTMLDivElement>(null);
@@ -65,6 +67,22 @@ export default function ComboServiceList(props: Props) {
       return;
     }
     setSelectedCombination(combination);
+  };
+
+  const [isFormDirty, setIsFormDirty] = useState<boolean>(false);
+  const [openConfirmDialog, setOpenConfirmDialog] = useState<boolean>(false);
+
+  const handleCancel = () => {
+    if (isFormDirty) {
+      setOpenConfirmDialog(true);
+    } else {
+      setSelectedCombination(null);
+    }
+  };
+
+  const handleConfirmLeave = () => {
+    setOpenConfirmDialog(false);
+    setSelectedCombination(null);
   };
 
   return (
@@ -109,6 +127,17 @@ export default function ComboServiceList(props: Props) {
         onConfirm={handleConfirmDelete}
         loading={isPending}
       />
+      <ConfirmationDialog
+        open={!!openConfirmDialog}
+        onClose={() => setOpenConfirmDialog(false)}
+        title={tCommon('areYouSureYouWantToLeaveThisWindow')}
+        content={tCommon('youHaveUnsavedChanges')}
+        cancelText={tCommon('cancel')}
+        confirmText={tCommon('leave')}
+        onCancel={() => setOpenConfirmDialog(false)}
+        onConfirm={handleConfirmLeave}
+        loading={isPending}
+      />
       <AsideModal open={!!selectedCombination} handleClose={() => setSelectedCombination(null)}>
         {selectedCombination && (
           <div className='w-full h-full flex flex-col overflow-y-auto overflow-x-hidden'>
@@ -136,7 +165,9 @@ export default function ComboServiceList(props: Props) {
             </div>
             <ComboServiceUpdateForm
               combination={selectedCombination}
-              onCancel={() => setSelectedCombination(null)}
+              onCancel={handleCancel}
+              onClose={() => setSelectedCombination(null)}
+              onDirtyChange={setIsFormDirty}
             />
           </div>
         )}
