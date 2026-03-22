@@ -89,10 +89,9 @@ export const orderHooks = {
       limit: DEFAULT_LIMIT,
     });
 
-    const setOrderStatus = (value: OrderStatus[] | undefined) => {
+    const setOrderStatus = () => {
       setParams((prev) => ({
         ...prev,
-        status: value,
       }));
     };
 
