@@ -33,6 +33,7 @@ type Props = {
     field: TimeField.BreakStart | TimeField.BreakEnd,
     direction: -1 | 1,
   ) => void;
+  onRemove?: (index: number) => void;
 };
 
 export const WorkingDayCard = (props: Props) => {
@@ -46,61 +47,92 @@ export const WorkingDayCard = (props: Props) => {
     onAddBreak,
     onRemoveBreak,
     onShiftBreak,
+    onRemove,
   } = props;
   const isEnabled = value?.enabled ?? false;
   const breaks = value?.breaks ?? [];
 
   return (
-    <View className='mb-3 rounded-2xl bg-white border border-gray-200 px-4 pt-4 pb-3'>
-      <View className='flex-row items-center justify-between mb-4'>
-        <Text className='text-base font-semibold text-gray-900'>
-          {DAYS_NAME[field.day - 1] ?? `Day ${field.day}`}
-        </Text>
-        <View className='flex-row items-center gap-3'>
-          <Text className='text-xs text-gray-400'>Working day</Text>
-          <Switch
-            value={isEnabled}
-            onValueChange={(v) => onToggle(index, v)}
-            trackColor={{ false: colors.gray[300], true: colors.primary[700] }}
-            thumbColor={colors.white}
-            ios_backgroundColor={colors.gray[300]}
-          />
-        </View>
-      </View>
-      {isEnabled && (
-        <>
-          <View className='flex-row items-center gap-3 mb-3'>
-            <TimeStepper
-              value={value?.startTimeMinutes ?? 0}
-              onDecrement={() => onShift(index, TimeField.StartTime, -1)}
-              onIncrement={() => onShift(index, TimeField.StartTime, 1)}
-              onPress={() => onOpen(index, TimeField.StartTime)}
-            />
-            <Text className='text-xs text-gray-400'>to</Text>
-            <TimeStepper
-              value={value?.endTimeMinutes ?? 0}
-              onDecrement={() => onShift(index, TimeField.EndTime, -1)}
-              onIncrement={() => onShift(index, TimeField.EndTime, 1)}
-              onPress={() => onOpen(index, TimeField.EndTime)}
+    <View className='mb-3' style={{ marginTop: onRemove ? 10 : 0 }}>
+      {onRemove && (
+        <Pressable
+          hitSlop={6}
+          onPress={() => onRemove(index)}
+          style={{
+            position: 'absolute',
+            top: -10,
+            right: -10,
+            zIndex: 10,
+            width: 22,
+            height: 22,
+            borderRadius: 11,
+            backgroundColor: '#ef4444',
+            alignItems: 'center',
+            justifyContent: 'center',
+            shadowColor: '#000',
+            shadowOffset: { width: 0, height: 1 },
+            shadowOpacity: 0.15,
+            shadowRadius: 2,
+            elevation: 3,
+          }}
+        >
+          <Text style={{ color: '#fff', fontSize: 14, lineHeight: 16, fontWeight: '600' }}>×</Text>
+        </Pressable>
+      )}
+      <View className='rounded-2xl bg-white border border-gray-200 px-4 pt-4 pb-3'>
+        <View className='flex-row items-center justify-between mb-4'>
+          <Text className='text-base font-semibold text-gray-900'>
+            {DAYS_NAME[field.day - 1] ?? `Day ${field.day}`}
+          </Text>
+          <View className='flex-row items-center gap-3'>
+            <Text className='text-xs text-gray-400'>Working day</Text>
+            <Switch
+              value={isEnabled}
+              onValueChange={(v) => onToggle(index, v)}
+              trackColor={{ false: colors.gray[300], true: colors.primary[700] }}
+              thumbColor={colors.white}
+              ios_backgroundColor={colors.gray[300]}
             />
           </View>
-          {breaks.map((brk, breakIndex) => (
-            <BreakItem
-              key={breakIndex}
-              brk={brk}
-              breakIndex={breakIndex}
-              dayIndex={index}
-              onRemove={onRemoveBreak}
-              onShift={onShiftBreak}
-              onOpen={(dayIdx, field, brkIdx) => onOpen(dayIdx, field, brkIdx)}
-            />
-          ))}
-          <Pressable className='flex-row items-center gap-1 mt-1' onPress={() => onAddBreak(index)}>
-            <Text className='text-lg text-primary-700 leading-none'>⊕</Text>
-            <Text className='text-sm text-primary-700'>Add break</Text>
-          </Pressable>
-        </>
-      )}
+        </View>
+        {isEnabled && (
+          <>
+            <View className='flex-row items-center gap-3 mb-3'>
+              <TimeStepper
+                value={value?.startTimeMinutes ?? 0}
+                onDecrement={() => onShift(index, TimeField.StartTime, -1)}
+                onIncrement={() => onShift(index, TimeField.StartTime, 1)}
+                onPress={() => onOpen(index, TimeField.StartTime)}
+              />
+              <Text className='text-xs text-gray-400'>to</Text>
+              <TimeStepper
+                value={value?.endTimeMinutes ?? 0}
+                onDecrement={() => onShift(index, TimeField.EndTime, -1)}
+                onIncrement={() => onShift(index, TimeField.EndTime, 1)}
+                onPress={() => onOpen(index, TimeField.EndTime)}
+              />
+            </View>
+            {breaks.map((brk, breakIndex) => (
+              <BreakItem
+                key={breakIndex}
+                brk={brk}
+                breakIndex={breakIndex}
+                dayIndex={index}
+                onRemove={onRemoveBreak}
+                onShift={onShiftBreak}
+                onOpen={(dayIdx, field, brkIdx) => onOpen(dayIdx, field, brkIdx)}
+              />
+            ))}
+            <Pressable
+              className='flex-row items-center gap-1 mt-1'
+              onPress={() => onAddBreak(index)}
+            >
+              <Text className='text-lg text-primary-700 leading-none'>⊕</Text>
+              <Text className='text-sm text-primary-700'>Add break</Text>
+            </Pressable>
+          </>
+        )}
+      </View>
     </View>
   );
 };

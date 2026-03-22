@@ -355,4 +355,29 @@ export const orderHooks = {
 
     return [];
   },
+
+  useCustomerOrdersHistory: (customerId?: number | null) => {
+    const orders = orderHooks.useGetCustomerOrderHistory(customerId, 50);
+
+    return useMemo(() => {
+      const now = Date.now();
+      const upcomingStatuses = new Set([OrderStatus.PENDING, OrderStatus.CONFIRMED]);
+      const sorted = [...orders].sort(
+        (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime(),
+      );
+
+      return {
+        nextAppointments: sorted.filter((o) => {
+          const t = new Date(o.date).getTime();
+          return Number.isFinite(t) && t >= now && upcomingStatuses.has(o.status);
+        }),
+        historyItems: sorted
+          .filter((o) => {
+            const t = new Date(o.date).getTime();
+            return Number.isFinite(t) && t < now && o.status === OrderStatus.COMPLETED;
+          })
+          .reverse(),
+      };
+    }, [orders]);
+  },
 };
