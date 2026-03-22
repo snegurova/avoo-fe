@@ -30,6 +30,8 @@ type Props = {
 
 export default function ComboServiceUpdateForm(props: Props) {
   const t = useTranslations('private.components.ComboServiceUpdateForm.ComboServiceUpdateForm');
+  const tCommon = useTranslations('private.common');
+
   const { combination, onCancel, onDirtyChange, onClose } = props;
   const toast = useToast();
 
@@ -42,8 +44,8 @@ export default function ComboServiceUpdateForm(props: Props) {
         toast.success(t('updateSuccess'));
         onClose();
       },
-      onError: (error) => {
-        toast.error(t('updateError', { message: error.message }));
+      onError: () => {
+        toast.error(tCommon('defaultFailError'));
       },
     });
 

@@ -8,7 +8,8 @@
       "delete": "Delete",
       "areYouSureYouWantToLeaveThisWindow": "Are you sure you want to close this window?",
       "youHaveUnsavedChangesInThisWindow": "You have unsaved changes. Are you sure you want to close this window?",
-      "leaveWindow": "Close"
+      "leaveWindow": "Close",
+      "defaultFailError": "Something went wrong. Please try again later."
     },
     "profile": {
       "changePassword": {

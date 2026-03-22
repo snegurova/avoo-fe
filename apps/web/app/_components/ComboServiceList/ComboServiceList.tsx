@@ -50,7 +50,7 @@ export default function ComboServiceList(props: Props) {
       await deleteCombinationMutationAsync(combinationToDelete);
       toast.success('Combo service deleted successfully');
     } catch {
-      toast.error('Failed to delete combo service');
+      toast.error(tCommon('defaultFailError'));
     }
   };
 

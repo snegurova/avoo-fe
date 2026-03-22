@@ -8,7 +8,8 @@
       "areYouSureYouWantToLeaveThisWindow": "Czy na pewno chcesz zamknąć to okno?",
       "youHaveUnsavedChangesInThisWindow": "Masz niezapisane zmiany. Czy na pewno chcesz zamknąć to okno?",
       "leaveWindow": "Zamknij",
-      "cancel": "Anuluj"
+      "cancel": "Anuluj",
+      "defaultFailError": "Coś poszło nie tak. Spróbuj ponownie później."
     },
     "profile": {
       "changePassword": {

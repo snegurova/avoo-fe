@@ -8,7 +8,8 @@
       "delete": "Видалити",
       "areYouSureYouWantToLeaveThisWindow": "Ви впевнені, що хочете закрити вікно?",
       "youHaveUnsavedChangesInThisWindow": "У вас є незбережені зміни. Ви впевнені, що хочете закрити вікно?",
-      "leaveWindow": "Закрити"
+      "leaveWindow": "Закрити",
+      "defaultFailError": "Сталося щось дивне. Спробуйте пізніше."
     },
     "profile": {
       "changePassword": {
