@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 import { orderApi } from '@avoo/axios';
 import {
@@ -11,6 +11,7 @@ import {
   Combination,
   CreatePrivateOrdersRequest,
   CreatePublicOrdersRequest,
+  GetOrdersResponse,
   Order,
   PrivateOrderQueryParams,
   Service,
@@ -61,31 +62,53 @@ type UseUpdateOrderParams = {
   onSuccess?: () => void;
 };
 
-export const orderHooks = {
-  useGetOrders: (params: PrivateOrderQueryParams) => {
-    const memoParams = useMemo<PrivateOrderQueryParams>(
-      () => ({
-        page: params.page,
-        limit: params.limit,
-        status: params.status,
-        customerId: params.customerId,
-        masterId: params.masterId,
-      }),
-      [params],
-    );
+const DEFAULT_LIMIT = 10;
 
-    const { data: ordersData, isPending } = useQuery<BaseResponse<Order[]>, Error>({
-      queryKey: ['orders', queryKeys.orders.byParams(memoParams)],
-      queryFn: () => orderApi.getOrders(params),
+export const orderHooks = {
+  useGetOrdersInfinite: ({ limit = DEFAULT_LIMIT }: PrivateOrderQueryParams) => {
+    const filterParams = { limit };
+    const query = useInfiniteQuery<BaseResponse<GetOrdersResponse>, Error>({
+      queryKey: ['orders', 'list', filterParams],
+      queryFn: ({ pageParam = 1 }) =>
+        orderApi.getOrders({ ...filterParams, page: pageParam as number }),
+      initialPageParam: 1,
+      getNextPageParam: (lastPage) => {
+        const { currentPage, total } = lastPage.data?.pagination || { currentPage: 0, total: 0 };
+        return currentPage * limit < total ? currentPage + 1 : undefined;
+      },
     });
+
+    const isPending = query.isFetching;
 
     utils.useSetPendingApi(isPending);
 
-    if (ordersData?.status === ApiStatus.SUCCESS && ordersData.data) {
-      return ordersData.data;
-    }
+    return query;
+  },
+  useOrderQuery() {
+    const [params, setParams] = useState<PrivateOrderQueryParams>({
+      limit: DEFAULT_LIMIT,
+    });
 
-    return null;
+    const setOrderStatus = (value: OrderStatus[] | undefined) => {
+      setParams((prev) => ({
+        ...prev,
+        status: value,
+      }));
+    };
+
+    const queryParams = useMemo(
+      () => ({
+        limit: params.limit,
+        status: params.status,
+      }),
+      [params.limit, params.status],
+    );
+
+    return {
+      params,
+      setOrderStatus,
+      queryParams,
+    };
   },
   useCreateOrder: ({ order, onSuccess }: UseCreateOrderFormParams) => {
     const [selectedServices, setSelectedServices] = useState<(Service | null)[]>([null]);

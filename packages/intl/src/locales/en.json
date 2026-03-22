@@ -48,6 +48,7 @@
         "services": "Services",
         "masters": "Masters",
         "posts": "Posts",
+        "orders": "Orders",
         "workingSchedule": "Working schedule",
         "scheduleException": "Schedule exception",
         "billingNotification": "Billing or marketing notification",
@@ -101,6 +102,13 @@
       }
     },
     "orders": {
+      "orders": "Orders",
+      "loading": "Loading...",
+      "noOrdersFound": "No orders found",
+      "hereYouCanSeeAllYourOrdersOrYouCan": "Here you can see all your orders or you can",
+      "orYou": "or you",
+      "canCreate": "can create",
+      "taNewOrderOrUseCalendarToBookServiceForClient": "a new order or use calendar to book service for client",
       "order": {
         "pending": "Pending",
         "completed": "Completed",
@@ -534,7 +542,26 @@
           "outOfSchedule": "Out of schedule",
           "service": "Service",
           "client": "Client",
-          "edit": "Edit"
+          "edit": "Edit",
+          "note": "Note"
+        }
+      },
+      "OrderControls": {
+        "OrderControls": {
+          "orders": "Orders",
+          "createOrder": "Create order"
+        }
+      },
+      "OrderList": {
+        "OrderList": {
+          "loading": "Loading...",
+          "noOrdersFound": "No orders found"
+        }
+      },
+      "OrderDelete": {
+        "OrderDelete": {
+          "deleteOrder": "Delete order",
+          "areYouSureYouWantToDeleteThisOrder": "Are you sure you want to delete this order?"
         }
       },
       "PhoneCodeSelect": {

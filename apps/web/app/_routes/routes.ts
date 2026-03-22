@@ -21,6 +21,7 @@ export enum AppRoutes {
   Profile = '/app/profile',
   Notifications = '/app/notifications',
   CreateService = '/app/services/create',
+  Orders = '/app/orders',
   OrderCreate = '/app/orders/create',
   Public = '/',
   PublicSalon = '/salon',

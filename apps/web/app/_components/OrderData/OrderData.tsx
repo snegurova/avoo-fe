@@ -11,6 +11,7 @@ import { timeUtils } from '@avoo/shared';
 import OrderConfirmation from '@/_components/OrderConfirmation/OrderConfirmation';
 import OrderEdit from '@/_components/OrderEdit/OrderEdit';
 import OrderView from '@/_components/OrderView/OrderView';
+import { localizationHooks } from '@/_hooks/localizationHooks';
 
 dayjs.extend(relativeTime);
 
@@ -19,19 +20,21 @@ type Props = {
   onClose: () => void;
   refetchCalendar: () => void;
   isOutOfSchedule?: boolean;
+  initialMode?: Mode;
 };
 
-enum Mode {
+export enum Mode {
   View = 'View',
   Edit = 'Edit',
   Confirmation = 'Confirmation',
 }
 
 export default function OrderData(props: Props) {
-  const { orderId, onClose, refetchCalendar, isOutOfSchedule } = props;
-  const [mode, setMode] = useState<Mode>(Mode.View);
+  const { orderId, onClose, refetchCalendar, isOutOfSchedule, initialMode } = props;
+  const [mode, setMode] = useState<Mode>(initialMode || Mode.View);
   const { data: order, refetch } = orderHooks.useGetOrderById(orderId);
   const [timeAgo, setTimeAgo] = React.useState<string>('');
+  const locale = localizationHooks.useGetLocale();
 
   useEffect(() => {
     if (!order) return;
@@ -50,7 +53,7 @@ export default function OrderData(props: Props) {
 
   useIntervalAction(() => {
     if (!order) return;
-    setTimeAgo(dayjs(order.createdAt).fromNow());
+    setTimeAgo(dayjs(order.createdAt).locale(locale).fromNow());
   });
 
   const onEdit = () => {

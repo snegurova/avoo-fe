@@ -48,6 +48,7 @@
         "services": "Послуги",
         "masters": "Майстри",
         "posts": "Пости",
+        "orders": "Візити",
         "workingSchedule": "Графік роботи",
         "scheduleException": "Виняток у графіку",
         "billingNotification": "Платіжні або маркетингові сповіщення",
@@ -101,6 +102,13 @@
       }
     },
     "orders": {
+      "orders": "Візити",
+      "loading": "Завантаження...",
+      "noOrdersFound": "Візитів не знайдено",
+      "hereYouCanSeeAllYourOrdersOrYouCan": "Тут ви можете побачити всі ваші візити або можете",
+      "orYou": "або ви",
+      "canCreate": "можете створити",
+      "taNewOrderOrUseCalendarToBookServiceForClient": "новий візит або використати календар для бронювання послуги для клієнта",
       "order": {
         "pending": "В очікуванні",
         "completed": "Завершено",
@@ -534,7 +542,26 @@
           "outOfSchedule": "Поза графіком",
           "service": "Послуга",
           "client": "Клієнт",
-          "edit": "Редагувати"
+          "edit": "Редагувати",
+          "note": "Нотатки"
+        }
+      },
+      "OrderControls": {
+        "OrderControls": {
+          "orders": "Візити",
+          "createOrder": "Нове бронювання"
+        }
+      },
+      "OrderList": {
+        "OrderList": {
+          "loading": "Завантаження...",
+          "noOrdersFound": "Записи не знайдено"
+        }
+      },
+      "OrderDelete": {
+        "OrderDelete": {
+          "deleteOrder": "Видалити запис",
+          "areYouSureYouWantToDeleteThisOrder": "Ви впевнені, що хочете видалити цей запис?"
         }
       },
       "PhoneCodeSelect": {

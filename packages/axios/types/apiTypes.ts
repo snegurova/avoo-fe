@@ -258,6 +258,11 @@ export type PrivateOrderQueryParams = NonNullable<
 export type Order = Omit<components['schemas']['OrderEntity'], 'status'> & {
   status: OrderStatus;
 };
+export type GetOrdersResponse = {
+  items: Order[];
+  pagination: components['schemas']['PaginationDto'];
+};
+
 export type CreateOrder = Omit<components['schemas']['CreateOrderDto'], 'type'> & {
   type: OrderType;
 };

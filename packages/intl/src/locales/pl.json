@@ -48,6 +48,7 @@
         "services": "Usługi",
         "masters": "Pracownicy",
         "posts": "Posty",
+        "orders": "Zamówienia",
         "workingSchedule": "Grafik pracy",
         "scheduleException": "Wyjątek w grafiku",
         "billingNotification": "Powiadomienia o rozliczeniach lub marketingu",
@@ -101,6 +102,13 @@
       }
     },
     "orders": {
+      "orders": "Zamówienia",
+      "loading": "Ładowanie...",
+      "noOrdersFound": "Nie znaleziono zamówień",
+      "hereYouCanSeeAllYourOrdersOrYouCan": "Tutaj możesz zobaczyć wszystkie swoje zamówienia lub możesz",
+      "orYou": "lub Ty",
+      "canCreate": "możesz utworzyć",
+      "taNewOrderOrUseCalendarToBookServiceForClient": "nowe zamówienie lub użyć kalendarza do zarezerwowania usługi dla klienta",
       "order": {
         "pending": "Oczekujące",
         "completed": "Zakończone",
@@ -534,7 +542,26 @@
           "outOfSchedule": "Poza harmonogramem",
           "service": "Usługa",
           "client": "Klient",
-          "edit": "Edytuj"
+          "edit": "Edytuj",
+          "note": "Notatka"
+        }
+      },
+      "OrderControls": {
+        "OrderControls": {
+          "orders": "Zlecenia",
+          "createOrder": "Utwórz zlecenie"
+        }
+      },
+      "OrderList": {
+        "OrderList": {
+          "loading": "Ładowanie...",
+          "noOrdersFound": "Nie znaleziono zleceń"
+        }
+      },
+      "OrderDelete": {
+        "OrderDelete": {
+          "deleteOrder": "Usuń zlecenie",
+          "areYouSureYouWantToDeleteThisOrder": "Czy na pewno chcesz usunąć to zlecenie?"
         }
       },
       "PhoneCodeSelect": {
