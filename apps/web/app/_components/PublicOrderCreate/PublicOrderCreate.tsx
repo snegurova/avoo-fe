@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Controller, useFieldArray } from 'react-hook-form';
 import { useParams } from 'next/navigation';
 import { useRouter } from 'next/navigation';
@@ -15,15 +15,18 @@ import { Button, ButtonFit, ButtonIntent, ButtonType } from '@/_components/Butto
 import CombinationProposition from '@/_components/CombinationProposition/CombinationProposition';
 import CustomerCreate from '@/_components/CustomerCreate/CustomerCreate';
 import PublicCombinationForm from '@/_components/PublicCombinationForm/PublicCombinationForm';
+import PublicOrderTitle from '@/_components/PublicOrderTitle/PublicOrderTitle';
+import PublicOrderTotal from '@/_components/PublicOrderTotal/PublicOrderTotal';
 import PublicServiceFormItem from '@/_components/PublicServiceFormItem/PublicServiceFormItem';
 import ServiceForm from '@/_components/ServiceForm/ServiceForm';
 import { useToast } from '@/_hooks/useToast';
-import AddCircleIcon from '@/_icons/AddCircleIcon';
+import AddIcon from '@/_icons/AddIcon';
 
 const SERVICES_KEY_IN_ORDER_CREATE = 'ordersData';
 
 export default function PublicOrderCreate() {
   const t = useTranslations('public.salon.createOrder');
+  const customerDataRef = useRef<HTMLDivElement>(null);
   const params = useParams();
   const userId = Number(params.userId);
   const isPending = useApiStatusStore((state) => state.isPending);
@@ -36,6 +39,8 @@ export default function PublicOrderCreate() {
   const [selectedMasters, setSelectedMasters] = useState<(MasterWithRelationsEntity | null)[]>([
     null,
   ]);
+  const [ordersDataFilled, setOrdersDataFilled] = useState(false);
+  const [customerDataFilled, setCustomerDataFilled] = useState(false);
 
   const initialParams = {};
 
@@ -60,6 +65,17 @@ export default function PublicOrderCreate() {
     control,
     name: SERVICES_KEY_IN_ORDER_CREATE,
   });
+
+  useEffect(() => {
+    const values = getValues();
+    const ordersData = values.ordersData as CreateOrder[] | undefined;
+    if (ordersData) {
+      const allFilled = ordersData.every(
+        (order) => order.masterId && (order.serviceId || order.combinationId),
+      );
+      setOrdersDataFilled(allFilled);
+    }
+  }, [selectedServices, selectedMasters, selectedCombinations, getValues]);
 
   useEffect(() => {
     const values = getValues();
@@ -161,12 +177,16 @@ export default function PublicOrderCreate() {
       }
     });
     setSelectedCombinations([]);
-    const values = getValues();
-    values.ordersData = ordersData;
+    for (let i = fields.length - 1; i >= 0; i--) {
+      remove(i);
+    }
+    ordersData.forEach((order) => {
+      append(order);
+    });
   };
 
   return (
-    <form className='flex flex-col gap-6' onSubmit={handleSubmit}>
+    <form className='flex flex-col gap-6 pt-4 pb-35' onSubmit={handleSubmit}>
       <Controller
         name='ordersData'
         control={control}
@@ -203,6 +223,7 @@ export default function PublicOrderCreate() {
           data={combinations?.items[0]}
           onCancel={onCancelCombination}
           onApply={onApplyCombination}
+          isPublic
         />
       )}
       {selectedServices.length > 0 &&
@@ -212,48 +233,67 @@ export default function PublicOrderCreate() {
             <button
               type='button'
               onClick={addService}
-              className='flex gap-2 items-center font-medium text-sm group cursor-pointer rounded-lg px-4 py-2.5 hover:bg-primary-100 focus:bg-primary-100 transition-colors'
+              className='flex gap-2 items-center font-medium group cursor-pointer rounded-lg px-5 py-2.5 hover:bg-gray-100 focus:bg-gray-100 transition-colors border border-black'
             >
               <div className='shrink-0'>
-                <AddCircleIcon className='fill-primary-900' />
+                <AddIcon className='fill-black' />
               </div>
-              <span className='text-primary-900 font-medium underline'>{t('addMoreService')}</span>
+              <span className='text-black font-medium'>{t('addExtraService')}</span>
             </button>
           </div>
         )}
 
+      {ordersDataFilled && (
+        <Controller
+          name='customerData'
+          control={control}
+          render={({ field }) => (
+            <div className='flex flex-col gap-6' ref={customerDataRef}>
+              <PublicOrderTitle title='yourBookingDetails' isActive={ordersDataFilled} />
+              <CustomerCreate
+                value={field.value ?? {}}
+                onChange={field.onChange}
+                error={errors?.customerData}
+                phone={phone}
+                setPhone={setPhone}
+                isPublic
+                setCustomerDataFilled={setCustomerDataFilled}
+              />
+            </div>
+          )}
+        />
+      )}
       <Controller
-        name='customerData'
+        name='ordersData'
         control={control}
         render={({ field }) => (
-          <CustomerCreate
-            value={field.value ?? {}}
-            onChange={field.onChange}
-            error={errors?.customerData}
-            phone={phone}
-            setPhone={setPhone}
-            isFullWidth
+          <PublicOrderTotal
+            fields={field.value}
+            selectedServices={selectedServices}
+            selectedMasters={selectedMasters}
+            selectedCombinations={selectedCombinations}
           />
         )}
       />
-      <div className='flex gap-8 mt-6'>
+
+      <div className='flex gap-8 justify-end'>
         <Button
           disabled={isPending || formPending}
           loading={isPending || formPending}
           fit={ButtonFit.Inline}
-          intent={ButtonIntent.Secondary}
+          intent={ButtonIntent.Cancel}
           onClick={() => router.back()}
         >
           {t('cancel')}
         </Button>
         <Button
           type={ButtonType.Submit}
-          disabled={isPending || formPending}
+          disabled={isPending || formPending || !ordersDataFilled || !customerDataFilled}
           loading={isPending || formPending}
           fit={ButtonFit.Inline}
-          intent={ButtonIntent.Primary}
+          intent={ButtonIntent.Submit}
         >
-          {t('book')}
+          {t('confirmBooking')}
         </Button>
       </div>
     </form>

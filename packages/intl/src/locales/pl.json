@@ -896,7 +896,8 @@
         "allRightsReserved": "Wszelkie prawa zastrzeżone.",
         "book": "Rezerwuj",
         "select": "Wybierz",
-        "change": "Zmień"
+        "change": "Zmień",
+        "selected": "Wybrane"
       },
       "createOrder": {
         "bookingForm": "Formularz rezerwacji",
@@ -936,7 +937,19 @@
         "bookingConfirmed": "Rezerwacja potwierdzona",
         "confirmationMessage": "Twoja wizyta została pomyślnie zarezerwowana. Potwierdzenie zostało wysłane na Twój e-mail ze wszystkimi szczegółami.",
         "bookingCancel": "Twoja rezerwacja nie jest potwierdzona",
-        "cancelMessage": "Zamierzasz opuścić stronę bez potwierdzenia rezerwacji. Wybrane usługi i godzina mogą zostać utracone."
+        "cancelMessage": "Zamierzasz opuścić stronę bez potwierdzenia rezerwacji. Wybrane usługi i godzina mogą zostać utracone.",
+        "searchServices": "Szukaj usług",
+        "searchMasters": "Szukaj mistrzów",
+        "anyMasterHeadline": "dla maksymalnej dostępności",
+        "euro": "Euro",
+        "selectDateTime": "Wybierz datę i godzinę",
+        "selectValidTimeSlot": "Wybierz prawidłowy przedział czasu",
+        "noAvailableSlots": "Brak dostępnych przedziałów czasowych na wybrany dzień. Wybierz inny dzień lub 'Dowolny mistrz', aby uzyskać więcej opcji.",
+        "search": "Szukaj",
+        "remove": "Usuń",
+        "clear": "Wyczyść",
+        "splitBooking": "Podziel rezerwację",
+        "selectedServices": "Wybrane usługi"
       }
     },
     "forgotPassword": {

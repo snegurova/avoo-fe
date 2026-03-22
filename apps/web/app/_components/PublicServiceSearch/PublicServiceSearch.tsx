@@ -1,14 +1,15 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { useTranslations } from 'next-intl';
 
 import { tv } from 'tailwind-variants';
 
 import { Service } from '@avoo/axios/types/apiTypes';
 import { categoriesHooks } from '@avoo/hooks';
+import { useApiStatusStore } from '@avoo/store';
 
+import PublicOrderTitle from '@/_components/PublicOrderTitle/PublicOrderTitle';
 import PublicServiceCard from '@/_components/PublicServiceCard/PublicServiceCard';
-import ScheduleIcon from '@/_icons/ScheduleIcon';
 
 type Props = {
   setCategory: (categoryId?: number) => void;
@@ -17,11 +18,12 @@ type Props = {
   value: number | null;
   search: string;
   setSearch: (value: string) => void;
-  hasMore?: boolean;
-  fetchNextPage?: () => void;
+  hasMore: boolean;
+  fetchNextPage: () => void;
   isActive: boolean;
   setStep: (step: number) => void;
   selectedService: Service | null;
+  ref: React.Ref<HTMLDivElement>;
 };
 
 const button = tv({
@@ -35,8 +37,22 @@ const button = tv({
 });
 
 export default function PublicServiceSearch(props: Props) {
-  const { setCategory, items, onChange, isActive, setStep, selectedService } = props;
+  const {
+    setCategory,
+    items,
+    onChange,
+    isActive,
+    setStep,
+    selectedService,
+    search,
+    setSearch,
+    fetchNextPage,
+    hasMore,
+    ref,
+  } = props;
   const t = useTranslations('public.salon.page');
+  const listRef = useRef<HTMLDivElement>(null);
+  const isPending = useApiStatusStore((state) => state.isPending);
 
   const [selectedCategory, setSelectedCategory] = useState<number | undefined>(undefined);
 
@@ -52,10 +68,31 @@ export default function PublicServiceSearch(props: Props) {
     setStep(2);
   };
 
+  const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
+    if (!listRef.current || !hasMore || !fetchNextPage || isPending) return;
+    const { scrollTop, scrollHeight, clientHeight } = e.currentTarget;
+
+    if (scrollHeight - scrollTop <= clientHeight + 50) {
+      fetchNextPage();
+    }
+  };
+
+  const onServiceClear = () => {
+    onChange({ id: 0 });
+    setStep(1);
+  };
+
   return (
-    <div>
+    <div ref={ref}>
+      <PublicOrderTitle
+        isActive={isActive}
+        title='selectService'
+        search={search}
+        setSearch={setSearch}
+        placeholder='searchServices'
+      />
       {isActive && (
-        <div className='flex flex-col gap-4'>
+        <div className='flex flex-col'>
           <div className='sticky lg:static top-0 flex gap-y-2 gap-x-3 py-4 overflow-x-auto lg:overflow-visible whitespace-nowrap lg:flex-wrap'>
             <button
               className={button({ active: selectedCategory === undefined })}
@@ -73,41 +110,29 @@ export default function PublicServiceSearch(props: Props) {
               </button>
             ))}
           </div>
-          <div className='flex flex-col gap-3'>
+          <div
+            className='flex flex-col gap-3 max-h-[calc(100vh-200px)] overflow-y-auto'
+            ref={listRef}
+            onScroll={handleScroll}
+          >
             {items.map((service) => (
               <PublicServiceCard
                 key={service.id}
                 service={service}
                 onClick={() => onServiceClick(service.id)}
+                isSelected={selectedService?.id === service.id}
               />
             ))}
           </div>
         </div>
       )}
       {!isActive && selectedService && (
-        <div className='border border-gray-200 rounded-lg p-6 flex flex-col gap-3.5'>
-          <h3 className='text-black text-base'>{selectedService.name}</h3>
-          <div className='flex justify-between gap-8 items-center'>
-            <div className='flex gap-8 items-center'>
-              <div className='text-xs leading-tight flex items-center gap-1'>
-                <ScheduleIcon className='fill-current' />
-                <span>
-                  {selectedService.durationMinutes} {t('minutes')}
-                </span>
-              </div>
-              <span className='text-sm text-black leading-none font-medium shrink-0'>
-                {selectedService.price} {t('euro')}
-              </span>
-            </div>
-            <button
-              type='button'
-              onClick={() => setStep(1)}
-              className='font-medium text-sm leading-1.1 underline underline-offset-4 cursor-pointer transition-colors hover:text-primary-500 focus:text-primary-500'
-            >
-              {t('change')}
-            </button>
-          </div>
-        </div>
+        <PublicServiceCard
+          service={selectedService}
+          onClick={() => setStep(1)}
+          type='change'
+          onClear={onServiceClear}
+        />
       )}
     </div>
   );

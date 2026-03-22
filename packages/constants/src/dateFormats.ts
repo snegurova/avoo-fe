@@ -4,6 +4,9 @@ export const TIME_FORMAT = 'HH:mm';
 export const DATE_PICKER_FORMAT = 'DD MMM YYYY';
 export const DATE_TIME_PICKER_FORMAT = 'DD MMM YYYY HH:mm';
 export const DATE_TIME_FORMAT = 'YYYY-MM-DDTHH:mm:ss';
+export const CALENDAR_DATE_FORMAT = 'MMMM YYYY';
+export const LONG_DATE_FORMAT = 'dddd, D MMMM YYYY';
+export const LONG_DATE_TIME_FORMAT = 'dddd, D MMMM YYYY HH:mm';
 
 export default {
   VALUE_DATE_FORMAT,
@@ -12,4 +15,7 @@ export default {
   DATE_PICKER_FORMAT,
   DATE_TIME_FORMAT,
   DATE_TIME_PICKER_FORMAT,
+  CALENDAR_DATE_FORMAT,
+  LONG_DATE_FORMAT,
+  LONG_DATE_TIME_FORMAT,
 };

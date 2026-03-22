@@ -1,6 +1,8 @@
 import React from 'react';
 import { useTranslations } from 'next-intl';
 
+import { tv } from 'tailwind-variants';
+
 import { Combination } from '@avoo/axios/types/apiTypes';
 
 import {
@@ -15,14 +17,25 @@ type Props = {
   data: Combination;
   onCancel: () => void;
   onApply: () => void;
+  isPublic?: boolean;
 };
+
+const wrapper = tv({
+  base: 'rounded-lg p-4 text-center flex flex-col gap-4 text-sm',
+  variants: {
+    isPublic: {
+      true: 'bg-gray-100 text-black',
+      false: 'bg-primary-100',
+    },
+  },
+});
 
 export default function CombinationProposition(props: Props) {
   const t = useTranslations('private.orders.create');
-  const { data, onCancel, onApply } = props;
+  const { data, onCancel, onApply, isPublic = false } = props;
 
   return (
-    <div className='bg-primary-100 rounded-lg p-4 text-center flex flex-col gap-4 text-sm'>
+    <div className={wrapper({ isPublic })}>
       <div className=''>
         <p>
           {data.services[0].name} {t('canBeCombined')}{' '}
@@ -48,7 +61,7 @@ export default function CombinationProposition(props: Props) {
           size={ButtonSize.Small}
           onClick={onCancel}
         >
-          {t('bookSeparetly')}
+          {t('bookSeparately')}
         </Button>
         <Button
           fit={ButtonFit.Inline}

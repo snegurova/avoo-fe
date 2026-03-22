@@ -896,7 +896,8 @@
         "allRightsReserved": "All rights reserved.",
         "book": "Book",
         "select": "Select",
-        "change": "Change"
+        "change": "Change",
+        "selected": "Selected"
       },
       "createOrder": {
         "bookingForm": "Booking form",
@@ -936,7 +937,19 @@
         "bookingConfirmed": "Booking confirmed",
         "confirmationMessage": "Your appointment has been successfully booked. A confirmation email has been sent to your inbox with all the details.",
         "bookingCancel": "Your booking isn’t confirmed",
-        "cancelMessage": "You’re about to leave without confirming your appointment. Your selected services and time may be lost."
+        "cancelMessage": "You’re about to leave without confirming your appointment. Your selected services and time may be lost.",
+        "searchServices": "Search for services",
+        "searchMasters": "Search for masters",
+        "anyMasterHeadline": "for maximum availability",
+        "euro": "Euro",
+        "selectDateTime": "Select date and time",
+        "selectValidTimeSlot": "Please select a valid time slot",
+        "noAvailableSlots": "No available time slots for the selected date. Please choose another date or select 'Any master' for more options.",
+        "search": "Search",
+        "remove": "Remove",
+        "clear": "Clear",
+        "splitBooking": "Split booking",
+        "selectedServices": "Selected services"
       }
     },
     "forgotPassword": {

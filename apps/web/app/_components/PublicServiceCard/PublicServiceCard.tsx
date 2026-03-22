@@ -1,6 +1,8 @@
 import React from 'react';
 import { useTranslations } from 'next-intl';
 
+import { tv } from 'tailwind-variants';
+
 import { Service } from '@avoo/axios/types/apiTypes';
 
 import ScheduleIcon from '@/_icons/ScheduleIcon';
@@ -8,16 +10,29 @@ import ScheduleIcon from '@/_icons/ScheduleIcon';
 type Props = {
   service: Service;
   onClick?: () => void;
+  isSelected?: boolean;
+  type?: 'change' | 'select';
+  onClear?: () => void;
 };
 
+const card = tv({
+  base: 'p-6 border rounded-lg flex flex-col gap-5 transition-colors',
+  variants: {
+    selected: {
+      true: 'border-black',
+      false: 'border-gray-200',
+    },
+  },
+});
+
 export default function PublicServiceCard(props: Props) {
-  const { service, onClick } = props;
-  const t = useTranslations('public.salon.page');
+  const { service, onClick, isSelected, type = 'select', onClear } = props;
+  const t = useTranslations('public.salon.createOrder');
 
   const isClickable = Boolean(onClick);
 
   return (
-    <div className='px-4 py-3 border rounded-lg border-gray-200 flex flex-col gap-5'>
+    <div className={card({ selected: isSelected })}>
       <div className=''>
         <h3 className='text-base text-black'>{service.name}</h3>
         <p className='text-xs mt-2'>{service.description}</p>
@@ -34,13 +49,34 @@ export default function PublicServiceCard(props: Props) {
             {service.price} {t('euro')}
           </span>
         </div>
-        {isClickable && (
+        {isClickable && !isSelected && (
+          <div className='flex items-center gap-4'>
+            {type === 'change' && (
+              <button
+                type='button'
+                onClick={onClear}
+                className='font-semibold bg-white rounded-lg py-3.5 px-5 justify-center text-black border-black border leading-none cursor-pointer transition-colors hover:bg-gray-100 focus:bg-gray-100'
+              >
+                {t('clear')}
+              </button>
+            )}
+            <button
+              type='button'
+              onClick={onClick}
+              className='font-semibold bg-black rounded-lg py-3.5 px-5 justify-center text-white border-black transition-colors hover:bg-white focus:bg-white hover:text-black focus:text-black border cursor-pointer leading-none'
+            >
+              {type === 'select' ? t('select') : t('change')}
+            </button>
+          </div>
+        )}
+
+        {isClickable && isSelected && (
           <button
             type='button'
             onClick={onClick}
-            className='font-semibold bg-black rounded-lg py-3.5 px-5 justify-center text-white border-black transition-colors hover:bg-white focus:bg-white hover:text-black focus:text-black border cursor-pointer leading-none'
+            className='font-semibold bg-white rounded-lg py-3.5 px-5 justify-center text-black border-black border leading-none cursor-pointer transition-colors hover:bg-gray-100 focus:bg-gray-100'
           >
-            {t('select')}
+            {t('selected')}
           </button>
         )}
       </div>
