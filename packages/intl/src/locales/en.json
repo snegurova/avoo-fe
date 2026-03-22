@@ -141,6 +141,7 @@
         "phonePlaceholder": "Enter phone",
         "notes": "Notes",
         "helperText": "Additional information about the client",
+        "searchPlaceholder": "Search by name, email, phone",
         "selectServiceLabel": "Select service",
         "time": "Time",
         "date": "Date",

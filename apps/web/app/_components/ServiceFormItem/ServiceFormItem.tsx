@@ -398,7 +398,7 @@ export default function ServiceFormItem(props: Props) {
       <div className='flex flex-col gap-4 p-4'>
         <div className=''>
           <SearchField
-            label={tCommon('service')}
+            label='Service'
             value={order.serviceId ? { id: order.serviceId } : null}
             onChange={selectService}
             items={services}
@@ -420,7 +420,7 @@ export default function ServiceFormItem(props: Props) {
         </div>
         <div className=''>
           <SearchField
-            label={tCommon('master')}
+            label='Master'
             value={order.masterId ? { id: order.masterId } : null}
             onChange={selectMaster}
             items={masters}

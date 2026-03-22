@@ -244,7 +244,7 @@ export default function PublicServiceFormItem(props: Props) {
       <div className='grid md:grid-cols-2 gap-4 p-4'>
         <div className=''>
           <SearchField
-            label={t('service')}
+            label='Service'
             value={order.serviceId ? { id: order.serviceId } : null}
             onChange={selectService}
             items={services}
@@ -266,7 +266,7 @@ export default function PublicServiceFormItem(props: Props) {
         </div>
         <div className=''>
           <SearchField
-            label={t('master')}
+            label='Master'
             value={order.masterId ? { id: order.masterId } : null}
             onChange={selectMaster}
             items={masters}

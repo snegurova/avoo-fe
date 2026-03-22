@@ -141,6 +141,7 @@
         "phonePlaceholder": "Wpisz numer telefonu",
         "notes": "Notatki",
         "helperText": "Dodatkowe informacje o kliencie",
+        "searchPlaceholder": "Szukaj według imienia, e-maila, telefonu",
         "selectServiceLabel": "Wybierz usługę",
         "time": "Godzina",
         "date": "Data",

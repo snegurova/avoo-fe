@@ -141,6 +141,7 @@
         "phonePlaceholder": "Введіть номер телефону",
         "notes": "Нотатки",
         "helperText": "Додаткова інформація про клієнта",
+        "searchPlaceholder": "Пошук за ім'ям, поштою, телефоном",
         "selectServiceLabel": "Виберіть послугу",
         "time": "Час",
         "date": "Дата",
