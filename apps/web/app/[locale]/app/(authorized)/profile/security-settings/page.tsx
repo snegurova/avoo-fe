@@ -6,7 +6,7 @@ import AppWrapper from '@/_components/AppWrapper/AppWrapper';
 import ChangePasswordForm from '@/_components/ChangePasswordForm/ChangePasswordForm';
 
 export default function SecuritySettingsPage() {
-  const t = useTranslations('private.profile.profile');
+  const t = useTranslations('private.navigation.navigation');
   return (
     <AppWrapper withPadding>
       <div className='md:px-4 pb-4 mb-6'>
