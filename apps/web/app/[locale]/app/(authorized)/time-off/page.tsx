@@ -8,6 +8,7 @@ import dayjs from 'dayjs';
 
 import type { Exception } from '@avoo/axios/types/apiTypes';
 import { exceptionHooks, exceptionUtils, useDebounce } from '@avoo/hooks';
+import { useApiStatusStore } from '@avoo/store';
 
 import AppPlaceholder from '@/_components/AppPlaceholder/AppPlaceholder';
 import AppWrapper from '@/_components/AppWrapper/AppWrapper';
@@ -20,6 +21,7 @@ import { AppRoutes } from '@/_routes/routes';
 
 export default function TimeOffPage() {
   const t = useTranslations('private.timeOff');
+  const isPending = useApiStatusStore((state) => state.isPending);
   const [searchQuery, setSearchQuery] = useState('');
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [selectedTimeOff, setSelectedTimeOff] = useState<Exception | null>(null);
@@ -112,11 +114,11 @@ export default function TimeOffPage() {
         <div className='px-5 md:px-11 pb-11 lg:flex-1 lg:min-h-0 lg:overflow-hidden'>
           {filteredExceptions.length === 0 ? (
             <AppPlaceholder
-              title={t('noTimeOffAdded')}
+              title={isPending ? t('loading') : t('noTimeOff')}
               icon={<EditCalendarIcon className='w-20 h-20 xl:w-25 xl:h-25 fill-primary-300' />}
               description={
                 <p>
-                  {t.rich('noTimeOffDescription', {
+                  {t.rich('detailedNoTimeOffDescription', {
                     link: (chunks) => (
                       <Link href={addTimeOffPath} className='text-primary-300 font-bold'>
                         {chunks}

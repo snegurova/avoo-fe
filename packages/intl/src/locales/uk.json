@@ -51,7 +51,8 @@
         "workingSchedule": "Графік роботи",
         "scheduleException": "Виняток у графіку",
         "billingNotification": "Платіжні або маркетингові сповіщення",
-        "notifications": "Сповіщення"
+        "notifications": "Сповіщення",
+        "comboServiceTime": "Час комбо-послуг"
       }
     },
     "calendar": {
@@ -85,19 +86,24 @@
         "noSchedulesDescription": "Наразі немає розкладів для відображення. Виберіть майстрів, щоб побачити їх розклади тут."
       },
       "comboServiceTime": {
+        "loading": "Завантаження...",
+        "setupFirstCombo": "Налаштуйте свою першу комбо-послугу",
+        "createComboService": "Створити комбо-послугу",
+        "detailedMultipleServicesDescription": "<link>Створити комбо-послугу</link>, щоб вашим клієнтам було легше бронювати кілька послуг одночасно.",
         "create": {
           "setupNewCombo": "Налаштувати новий час комбо-послуг"
-        },
-        "createComboService": "Створити комбо-послугу"
+        }
       },
       "workingHours": {
+        "loading": "Завантаження...",
+        "noSchedules": "Графіки роботи відсутні",
+        "setupFirstSchedule": "Налаштуйте свій перший робочий графік",
+        "setupScheduleDescription": "Почніть з <link>налаштування вашого першого графіка</link>, щоб керувати робочим часом.",
+        "detailedNoSchedulesDescription": "<link>Створити робочий графік</link>, щоб визначити, коли ваші майстри доступні для бронювань.",
         "create": {
           "setupNewSchedule": "Налаштувати новий графік"
         },
-        "createWorkingSchedule": "Створити робочий графік",
-        "loading": "Завантаження...",
-        "setupFirstSchedule": "Налаштуйте свій перший робочий графік",
-        "setupScheduleDescription": "<link>Створити робочий графік</link>, щоб визначити, коли ваші майстри доступні для бронювань."
+        "createWorkingSchedule": "Створити робочий графік"
       }
     },
     "orders": {
@@ -166,14 +172,20 @@
     "services": {
       "create": {
         "addService": "Додати послугу"
-      }
+      },
+      "loading": "Завантаження...",
+      "noServicesAdded": "Послуг не додано",
+      "detailedNoServicesDescription": "Почніть зі <link>створення вашої першої послуги</link>, щоб зробити її доступною для бронювання"
     },
     "timeOff": {
       "scheduleException": "Виняток графіку",
       "addTimeOff": "Додати вихідний",
       "searchByMasterName": "Пошук за іменем майстра",
       "noTimeOffAdded": "Ще не додано жодного вихідного",
-      "noTimeOffDescription": "<link>Додати вихідний</link>, відпустки, перерви або недоступні години, щоб графік був точним."
+      "noTimeOffDescription": "<link>Додати вихідний</link>, відпустки, перерви або недоступні години, щоб графік був точним.",
+      "loading": "Завантаження...",
+      "noTimeOff": "Винятки часу відпусток відсутні",
+      "detailedNoTimeOffDescription": "Додайте <link>відпустку</link> або додаткові робочі години, щоб графік був актуальним."
     },
     "forgotPassword": {
       "recoveryPassword": "Відновлення паролю",
@@ -552,6 +564,7 @@
       },
       "ProfileEdit": {
         "EditProfileForm": {
+          "businessProfile": "Бізнес-профіль",
           "displayName": "Відображуване ім'я",
           "phone": "Телефон",
           "address": "Адреса",
@@ -682,7 +695,12 @@
           "searchScheduleNameMaster": "Пошук за назвою графіку або майстром",
           "sortByName": "Сортувати за назвою",
           "sortByStartDate": "Сортувати за датою початку",
-          "sortByEndDate": "Сортувати за датою закінчення"
+          "sortByEndDate": "Сортувати за датою закінчення",
+          "scheduleName": "Назва графіка",
+          "appliesTo": "Застосовується до",
+          "startDate": "Дата початку",
+          "endDate": "Дата завершення",
+          "actions": "Дії"
         }
       },
       "ServiceAddForm": {

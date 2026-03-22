@@ -42,7 +42,7 @@ export default function WorkingHoursPage() {
           description={
             isPending ? null : (
               <p>
-                {t.rich('setupScheduleDescription', {
+                {t.rich('detailedNoSchedulesDescription', {
                   link: (chunks) => (
                     <Link href='#' className='text-primary-300'>
                       {chunks}

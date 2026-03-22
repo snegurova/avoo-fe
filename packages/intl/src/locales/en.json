@@ -51,7 +51,8 @@
         "workingSchedule": "Working schedule",
         "scheduleException": "Schedule exception",
         "billingNotification": "Billing or marketing notification",
-        "notifications": "Notifications"
+        "notifications": "Notifications",
+        "comboServiceTime": "Combo service time"
       }
     },
     "calendar": {
@@ -85,19 +86,24 @@
         "noSchedulesDescription": "There are currently no schedules to display. Choose masters to see their schedules here."
       },
       "comboServiceTime": {
+        "loading": "Loading...",
+        "setupFirstCombo": "Setup your first combo service",
+        "createComboService": "Create combo service",
+        "detailedMultipleServicesDescription": "<link>Create combo service</link> to make it easier for your clients to book multiple services at once.",
         "create": {
           "setupNewCombo": "Setup new combo service time"
-        },
-        "createComboService": "Create a combo service"
+        }
       },
       "workingHours": {
+        "loading": "Loading...",
+        "noSchedules": "No working schedules",
+        "setupFirstSchedule": "Setup your first working schedule",
+        "setupScheduleDescription": "Start by <link>setting up your first schedule</link> to manage your working hours.",
+        "detailedNoSchedulesDescription": "<link>Create a working schedule</link> to define when your masters are available for bookings.",
         "create": {
           "setupNewSchedule": "Setup new schedule"
         },
-        "createWorkingSchedule": "Create a working schedule",
-        "loading": "Loading...",
-        "setupFirstSchedule": "Setup your first working schedule",
-        "setupScheduleDescription": "<link>Create a working schedule</link> to define when your masters are available for bookings."
+        "createWorkingSchedule": "Create a working schedule"
       }
     },
     "orders": {
@@ -166,14 +172,20 @@
     "services": {
       "create": {
         "addService": "Add service"
-      }
+      },
+      "loading": "Loading...",
+      "noServicesAdded": "No services added",
+      "detailedNoServicesDescription": "Start by <link>creating your first service</link> to make it available for booking"
     },
     "timeOff": {
       "scheduleException": "Schedule exception",
       "addTimeOff": "Add time off",
       "searchByMasterName": "Search by master's name",
       "noTimeOffAdded": "No time off added yet",
-      "noTimeOffDescription": "<link>Add time off</link>, vacations, breaks, or unavailable hours to keep the schedule accurate."
+      "noTimeOffDescription": "<link>Add time off</link>, vacations, breaks, or unavailable hours to keep the schedule accurate.",
+      "loading": "Loading...",
+      "noTimeOff": "No time off exceptions",
+      "detailedNoTimeOffDescription": "Add <link>time off</link> or extra working hours to keep the schedule accurate."
     },
     "forgotPassword": {
       "recoveryPassword": "Recovery password",
@@ -552,6 +564,7 @@
       },
       "ProfileEdit": {
         "EditProfileForm": {
+          "businessProfile": "Business profile",
           "displayName": "Display Name",
           "phone": "Phone",
           "address": "Address",
@@ -682,7 +695,12 @@
           "searchScheduleNameMaster": "Search by schedule name or master",
           "sortByName": "Sort by name",
           "sortByStartDate": "Sort by start date",
-          "sortByEndDate": "Sort by end date"
+          "sortByEndDate": "Sort by end date",
+          "scheduleName": "Schedule name",
+          "appliesTo": "Applies to",
+          "startDate": "Start date",
+          "endDate": "End date",
+          "actions": "Actions"
         }
       },
       "ServiceAddForm": {

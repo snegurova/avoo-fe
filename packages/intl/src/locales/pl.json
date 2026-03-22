@@ -51,7 +51,8 @@
         "workingSchedule": "Grafik pracy",
         "scheduleException": "Wyjątek w grafiku",
         "billingNotification": "Powiadomienia o rozliczeniach lub marketingu",
-        "notifications": "Powiadomienia"
+        "notifications": "Powiadomienia",
+        "comboServiceTime": "Czas usług łączonych"
       }
     },
     "calendar": {
@@ -85,19 +86,24 @@
         "noSchedulesDescription": "Aktualnie nie ma grafików do wyświetlenia. Wybierz pracowników, aby zobaczyć ich grafiki tutaj."
       },
       "comboServiceTime": {
+        "loading": "Wczytywanie...",
+        "setupFirstCombo": "Skonfiguruj swoją pierwszą usługę łączoną",
+        "createComboService": "Utwórz usługę łączoną",
+        "detailedMultipleServicesDescription": "<link>Utwórz usługę łączoną</link>, aby ułatwić klientom rezerwację wielu usług naraz.",
         "create": {
           "setupNewCombo": "Skonfiguruj nowy czas usług objętych pakietem"
-        },
-        "createComboService": "Utwórz pakiet usług"
+        }
       },
       "workingHours": {
+        "loading": "Wczytywanie...",
+        "noSchedules": "Brak harmonogramów pracy",
+        "setupFirstSchedule": "Skonfiguruj swój pierwszy harmonogram pracy",
+        "setupScheduleDescription": "Zacznij od <link>skonfigurowania swojego pierwszego harmonogramu</link>, aby zarządzać godzinami pracy.",
+        "detailedNoSchedulesDescription": "<link>Utwórz harmonogram pracy</link>, aby określić, kiedy Twoi mistrzowie są dostępni na rezerwacje.",
         "create": {
           "setupNewSchedule": "Skonfiguruj nowy harmonogram"
         },
-        "createWorkingSchedule": "Utwórz harmonogram pracy",
-        "loading": "Wczytywanie...",
-        "setupFirstSchedule": "Skonfiguruj swój pierwszy harmonogram pracy",
-        "setupScheduleDescription": "<link>Utwórz harmonogram pracy</link>, aby określić, kiedy Twoi mistrzowie są dostępni na rezerwacje."
+        "createWorkingSchedule": "Utwórz harmonogram pracy"
       }
     },
     "orders": {
@@ -166,14 +172,20 @@
     "services": {
       "create": {
         "addService": "Dodaj usługę"
-      }
+      },
+      "loading": "Wczytywanie...",
+      "noServicesAdded": "Nie dodano żadnych usług",
+      "detailedNoServicesDescription": "Zacznij od <link>utworzenia swojej pierwszej usługi</link>, aby udostępnić ją do rezerwacji"
     },
     "timeOff": {
       "scheduleException": "Wyjątek harmonogramu",
       "addTimeOff": "Dodaj czas wolny",
       "searchByMasterName": "Szukaj po nazwisku mistrza",
       "noTimeOffAdded": "Nie dodano jeszcze czasu wolnego",
-      "noTimeOffDescription": "<link>Dodaj czas wolny</link>, urlopy, przerwy lub niedostępne godziny, aby harmonogram był dokładny."
+      "noTimeOffDescription": "<link>Dodaj czas wolny</link>, urlopy, przerwy lub niedostępne godziny, aby harmonogram był dokładny.",
+      "loading": "Wczytywanie...",
+      "noTimeOff": "Brak wyjątków czasu wolnego",
+      "detailedNoTimeOffDescription": "Dodaj <link>czas wolny</link> lub dodatkowe godziny pracy, aby harmonogram był dokładny."
     },
     "forgotPassword": {
       "recoveryPassword": "Odzyskiwanie hasła",
@@ -552,6 +564,7 @@
       },
       "ProfileEdit": {
         "EditProfileForm": {
+          "businessProfile": "Profil biznesowy",
           "displayName": "Wyświetlana nazwa",
           "phone": "Telefon",
           "address": "Adres",
@@ -682,7 +695,12 @@
           "searchScheduleNameMaster": "Szukaj po nazwie harmonogramu lub mistrzu",
           "sortByName": "Sortuj według nazwy",
           "sortByStartDate": "Sortuj według daty rozpoczęcia",
-          "sortByEndDate": "Sortuj według daty zakończenia"
+          "sortByEndDate": "Sortuj według daty zakończenia",
+          "scheduleName": "Nazwa harmonogramu",
+          "appliesTo": "Dotyczy",
+          "startDate": "Data rozpoczęcia",
+          "endDate": "Data zakończenia",
+          "actions": "Działania"
         }
       },
       "ServiceAddForm": {
