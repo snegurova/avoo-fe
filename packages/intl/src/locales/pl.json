@@ -676,25 +676,6 @@
           "masterFallback": "Mistrz"
         }
       },
-      "PublicCombinationForm": {
-        "PublicCombinationForm": {
-          "master": "Mistrz",
-          "date": "Data",
-          "notes": "Notatki",
-          "notesHelper": "Dodatkowe informacje dla mistrza"
-        }
-      },
-      "PublicServiceFormItem": {
-        "PublicServiceFormItem": {
-          "service": "Usługa",
-          "searchServiceName": "Szukaj po nazwie",
-          "master": "Mistrz",
-          "date": "Data",
-          "notes": "Notatki",
-          "notesHelper": "Dodatkowe informacje dla mistrza",
-          "selectService": "Wybierz usługę"
-        }
-      },
       "ResetPasswordForm": {
         "ResetPasswordForm": {
           "password": "Hasło",
@@ -1060,13 +1041,63 @@
         "team": "Zespół",
         "avatarAlt": "Awatar salonu",
         "termsPrivacy": "Regulamin i prywatność",
-        "allRightsReserved": "Wszelkie prawa zastrzeżone."
+        "allRightsReserved": "Wszelkie prawa zastrzeżone.",
+        "book": "Rezerwuj",
+        "select": "Wybierz",
+        "change": "Zmień",
+        "selected": "Wybrane"
       },
       "createOrder": {
         "bookingForm": "Formularz rezerwacji",
         "addMoreService": "Dodaj więcej usług",
         "cancel": "Anuluj",
-        "book": "Rezerwuj"
+        "book": "Rezerwuj",
+        "service": "Usługa",
+        "searchServiceName": "Szukaj po nazwie",
+        "master": "Mistrz",
+        "date": "Data",
+        "notes": "Notatki",
+        "notesHelper": "Dodatkowe informacje dla mistrza",
+        "selectService": "Wybierz usługę",
+        "select": "Wybierz",
+        "change": "Zmień",
+        "selectMaster": "Wybierz mistrza",
+        "selectDate": "Wybierz datę",
+        "selectTime": "Wybierz godzinę",
+        "morning": "Rano",
+        "afternoon": "Popołudnie",
+        "evening": "Wieczór",
+        "anyMaster": "Dowolny mistrz",
+        "yourBookingDetails": "Szczegóły rezerwacji",
+        "addExtraService": "Dodaj dodatkową usługę",
+        "total": "Suma",
+        "selected": "Wybrane",
+        "confirmBooking": "Potwierdź rezerwację",
+        "dateNotSelected": "Data nie została wybrana",
+        "timeNotSelected": "Godzina nie została wybrana",
+        "masterNotSelected": "Mistrz nie został wybrany",
+        "serviceNotSelected": "Usługa nie została wybrana",
+        "canBeCombined": "można połączyć z",
+        "totalDurationMessage": "Całkowity czas wizyty będzie wynosił",
+        "minutes": "minut",
+        "bookSeparately": "Rezerwuj osobno",
+        "applyCombination": "Zastosuj kombinację",
+        "bookingConfirmed": "Rezerwacja potwierdzona",
+        "confirmationMessage": "Twoja wizyta została pomyślnie zarezerwowana. Potwierdzenie zostało wysłane na Twój e-mail ze wszystkimi szczegółami.",
+        "bookingCancel": "Twoja rezerwacja nie jest potwierdzona",
+        "cancelMessage": "Zamierzasz opuścić stronę bez potwierdzenia rezerwacji. Wybrane usługi i godzina mogą zostać utracone.",
+        "searchServices": "Szukaj usług",
+        "searchMasters": "Szukaj mistrzów",
+        "anyMasterHeadline": "dla maksymalnej dostępności",
+        "euro": "Euro",
+        "selectDateTime": "Wybierz datę i godzinę",
+        "selectValidTimeSlot": "Wybierz prawidłowy przedział czasu",
+        "noAvailableSlots": "Brak dostępnych przedziałów czasowych na wybrany dzień. Wybierz inny dzień lub 'Dowolny mistrz', aby uzyskać więcej opcji.",
+        "search": "Szukaj",
+        "remove": "Usuń",
+        "clear": "Wyczyść",
+        "splitBooking": "Podziel rezerwację",
+        "selectedServices": "Wybrane usługi"
       }
     },
     "forgotPassword": {

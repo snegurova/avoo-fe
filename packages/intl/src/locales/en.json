@@ -676,25 +676,6 @@
           "masterFallback": "Master"
         }
       },
-      "PublicCombinationForm": {
-        "PublicCombinationForm": {
-          "master": "Master",
-          "date": "Date",
-          "notes": "Notes",
-          "notesHelper": "Additional information for the master"
-        }
-      },
-      "PublicServiceFormItem": {
-        "PublicServiceFormItem": {
-          "service": "Service",
-          "searchServiceName": "Search by service name",
-          "master": "Master",
-          "date": "Date",
-          "notes": "Notes",
-          "notesHelper": "Additional information for the master",
-          "selectService": "Select a service"
-        }
-      },
       "ResetPasswordForm": {
         "ResetPasswordForm": {
           "password": "Password",
@@ -1059,13 +1040,63 @@
         "team": "Team",
         "avatarAlt": "Salon avatar",
         "termsPrivacy": "Terms & Privacy",
-        "allRightsReserved": "All rights reserved."
+        "allRightsReserved": "All rights reserved.",
+        "book": "Book",
+        "select": "Select",
+        "change": "Change",
+        "selected": "Selected"
       },
       "createOrder": {
         "bookingForm": "Booking form",
         "addMoreService": "Add more service",
         "cancel": "Cancel",
-        "book": "Book"
+        "book": "Book",
+        "service": "Service",
+        "searchServiceName": "Search by service name",
+        "master": "Master",
+        "date": "Date",
+        "notes": "Notes",
+        "notesHelper": "Additional information for the master",
+        "selectService": "Select a service",
+        "select": "Select",
+        "change": "Change",
+        "selectMaster": "Select a master",
+        "selectDate": "Select a date",
+        "selectTime": "Select a time",
+        "morning": "Morning",
+        "afternoon": "Afternoon",
+        "evening": "Evening",
+        "anyMaster": "Any master",
+        "yourBookingDetails": "Your booking details",
+        "addExtraService": "Add extra service",
+        "total": "Total",
+        "selected": "Selected",
+        "confirmBooking": "Confirm booking",
+        "dateNotSelected": "Date not selected",
+        "timeNotSelected": "Time not selected",
+        "masterNotSelected": "Master not selected",
+        "serviceNotSelected": "Service not selected",
+        "canBeCombined": "can be combined with",
+        "totalDurationMessage": "The total appointment duration will be",
+        "minutes": "minutes",
+        "bookSeparately": "Book separately",
+        "applyCombination": "Apply combination",
+        "bookingConfirmed": "Booking confirmed",
+        "confirmationMessage": "Your appointment has been successfully booked. A confirmation email has been sent to your inbox with all the details.",
+        "bookingCancel": "Your booking isn’t confirmed",
+        "cancelMessage": "You’re about to leave without confirming your appointment. Your selected services and time may be lost.",
+        "searchServices": "Search for services",
+        "searchMasters": "Search for masters",
+        "anyMasterHeadline": "for maximum availability",
+        "euro": "Euro",
+        "selectDateTime": "Select date and time",
+        "selectValidTimeSlot": "Please select a valid time slot",
+        "noAvailableSlots": "No available time slots for the selected date. Please choose another date or select 'Any master' for more options.",
+        "search": "Search",
+        "remove": "Remove",
+        "clear": "Clear",
+        "splitBooking": "Split booking",
+        "selectedServices": "Selected services"
       }
     },
     "forgotPassword": {

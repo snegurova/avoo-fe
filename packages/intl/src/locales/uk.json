@@ -676,25 +676,6 @@
           "masterFallback": "Майстер"
         }
       },
-      "PublicCombinationForm": {
-        "PublicCombinationForm": {
-          "master": "Майстер",
-          "date": "Дата",
-          "notes": "Нотатки",
-          "notesHelper": "Додаткова інформація для майстра"
-        }
-      },
-      "PublicServiceFormItem": {
-        "PublicServiceFormItem": {
-          "service": "Послуга",
-          "searchServiceName": "Пошук за назвою послуги",
-          "master": "Майстер",
-          "date": "Дата",
-          "notes": "Нотатки",
-          "notesHelper": "Додаткова інформація для майстра",
-          "selectService": "Виберіть послугу"
-        }
-      },
       "ResetPasswordForm": {
         "ResetPasswordForm": {
           "password": "Пароль",
@@ -1060,13 +1041,64 @@
         "team": "Команда",
         "avatarAlt": "Аватар салону",
         "termsPrivacy": "Умови та конфіденційність",
-        "allRightsReserved": "Всі права захищені."
+        "allRightsReserved": "Всі права захищені.",
+        "book": "Забронювати",
+        "select": "Вибрати",
+        "change": "Змінити",
+        "selected": "Вибрано",
+        "search": "Пошук"
       },
       "createOrder": {
         "bookingForm": "Форма бронювання",
         "addMoreService": "Додати більше послуг",
         "cancel": "Скасувати",
-        "book": "Забронювати"
+        "book": "Забронювати",
+        "service": "Послуга",
+        "searchServiceName": "Пошук за назвою послуги",
+        "master": "Майстер",
+        "date": "Дата",
+        "notes": "Нотатки",
+        "notesHelper": "Додаткова інформація для майстра",
+        "selectService": "Виберіть послугу",
+        "select": "Вибрати",
+        "change": "Змінити",
+        "selectMaster": "Виберіть майстра",
+        "selectDate": "Виберіть дату",
+        "selectTime": "Виберіть час",
+        "morning": "Ранок",
+        "afternoon": "Після обіду",
+        "evening": "Вечір",
+        "anyMaster": "Будь-який майстер",
+        "yourBookingDetails": "Деталі вашого бронювання",
+        "addExtraService": "Додати додаткову послугу",
+        "total": "Всього",
+        "selected": "Обрано",
+        "confirmBooking": "Підтвердити бронювання",
+        "dateNotSelected": "Дату не вибрано",
+        "timeNotSelected": "Час не вибрано",
+        "masterNotSelected": "Майстра не вибрано",
+        "serviceNotSelected": "Послугу не вибрано",
+        "canBeCombined": "можна поєднати з",
+        "totalDurationMessage": "Загальна тривалість запису складе",
+        "minutes": "хвилин",
+        "bookSeparately": "Бронювати окремо",
+        "applyCombination": "Застосувати комбінацію",
+        "bookingConfirmed": "Бронювання підтверджено",
+        "confirmationMessage": "Ваш запис успішно заброньовано. Підтвердження надіслано на вашу електронну пошту з усіма деталями.",
+        "bookingCancel": "Ваше бронювання не підтверджено",
+        "cancelMessage": "Ви збираєтеся вийти, не підтвердивши запис. Обрані послуги та час можуть бути втрачені.",
+        "searchServices": "Пошук послуг",
+        "searchMasters": "Пошук майстрів",
+        "anyMasterHeadline": "для максимальної доступності",
+        "euro": "Євро",
+        "selectDateTime": "Виберіть дату та час",
+        "selectValidTimeSlot": "Будь ласка, виберіть дійсний часовий слот",
+        "noAvailableSlots": "Немає доступних часових слотів на вибрану дату. Будь ласка, виберіть іншу дату або оберіть 'Будь-який майстер' для додаткових варіантів.",
+        "search": "Пошук",
+        "remove": "Видалити",
+        "clear": "Очистити",
+        "splitBooking": "Розділити бронювання",
+        "selectedServices": "Вибрані послуги"
       }
     },
     "forgotPassword": {

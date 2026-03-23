@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 
@@ -12,15 +12,11 @@ import {
 import { calendarHooks, masterHooks } from '@avoo/hooks';
 import { timeUtils } from '@avoo/shared';
 
-import CombinationElement from '@/_components/CombinationElement/CombinationElement';
-import FormDatePicker from '@/_components/FormDatePicker/FormDatePicker';
 import FormTextArea from '@/_components/FormTextArea/FormTextArea';
-import { IconButton } from '@/_components/IconButton/IconButton';
-import MasterElement from '@/_components/MasterElement/MasterElement';
-import SearchField from '@/_components/SearchField/SearchField';
-import CallSplitIcon from '@/_icons/CallSplitIcon';
-
-import TimeSlotField from '../TimeSlotField/TimeSlotField';
+import PublicCombinationCard from '@/_components/PublicCombinationCard/PublicCombinationCard';
+import PublicDateTimeSelection from '@/_components/PublicDateTimeSelection/PublicDateTimeSelection';
+import PublicMasterSearch from '@/_components/PublicMasterSearch/PublicMasterSearch';
+import PublicOrderTitle from '@/_components/PublicOrderTitle/PublicOrderTitle';
 
 type Props = {
   value: CreateOrder[];
@@ -37,7 +33,7 @@ type Props = {
 };
 
 export default function PublicCombinationForm(props: Props) {
-  const t = useTranslations('private.components.PublicCombinationForm.PublicCombinationForm');
+  const t = useTranslations('public.salon.createOrder');
   const {
     value,
     onChange,
@@ -47,14 +43,17 @@ export default function PublicCombinationForm(props: Props) {
     setSelectedMasters,
     splitCombination,
   } = props;
+
+  const masterSelectionRef = useRef<HTMLDivElement>(null);
+  const DateTimeSelectionRef = useRef<HTMLDivElement>(null);
+
   const searchParams = useParams();
   const userId = Number(searchParams.userId);
 
-  const [isActiveMasterSearch, setIsActiveMasterSearch] = useState(false);
   const [masterSearch, setMasterSearch] = useState('');
   const [masterParams, setMasterParams] = useState<GetMastersQueryParams>({
     limit: 10,
-    combinationId: selectedCombination.id,
+    combinationId: selectedCombination?.id ?? undefined,
   });
   const [calendarParams, setCalendarParams] = useState<PublicCalendarQueryParams>({
     userId,
@@ -66,6 +65,8 @@ export default function PublicCombinationForm(props: Props) {
     ),
   });
   const [selectedSlot, setSelectedSlot] = useState<Date | null>(null);
+  const [step, setStep] = useState(1);
+  const [selectAnyMaster, setSelectAnyMaster] = useState(false);
 
   const { data: calendar } = calendarHooks.useGetPublicCalendar(calendarParams, {
     enabled: !!selectedCombination && !!selectedMasters[0],
@@ -144,71 +145,14 @@ export default function PublicCombinationForm(props: Props) {
     onChange(newOrders);
   };
 
-  const onMasterElementClick = () => {
-    setIsActiveMasterSearch(true);
-  };
-
   return (
-    <div className='rounded-lg border border-gray-200'>
-      {' '}
-      <div className='bg-primary-50 px-4 p-2 h-14 rounded-t-lg flex items-center justify-between'>
-        <h3 className='font-medium'>{selectedCombination?.name}</h3>
-        <IconButton
-          className='group'
-          icon={
-            <CallSplitIcon className='w-5 h-5 transition-colors group-hover:fill-primary-500 group-focus:fill-primary-500' />
-          }
-          onClick={splitCombination}
-        />
-      </div>
-      <div className='flex flex-col gap-4 p-4'>
-        <CombinationElement
-          item={selectedCombination}
-          isCard
-          hideMasters
-          master={selectedMasters[0] || undefined}
-        />
-        <div className=''>
-          <SearchField
-            label='Master'
-            value={value[0].masterId ? { id: value[0].masterId } : null}
-            onChange={selectMaster}
-            items={masters}
-            search={masterSearch}
-            setSearch={setMasterSearch}
-            ItemElement={MasterElement}
-            searchMode={!value[0].masterId}
-            error={errors?.masterId?.message}
-            hasMore={hasMoreMasters}
-            fetchNextPage={fetchNextMastersPage}
-            isActive={isActiveMasterSearch}
-            setIsActive={setIsActiveMasterSearch}
-          >
-            {selectedMasters[0] && (
-              <MasterElement item={selectedMasters[0]} isCard onClick={onMasterElementClick} />
-            )}
-          </SearchField>
-        </div>
-        <div className=''>
-          <div className=''>
-            <label className='block mb-2 font-medium'>{t('date')}</label>
-            <FormDatePicker date={value[0].date} onChange={onDateChange} />
-          </div>
-          {errors?.date?.message && (
-            <div className='mt-1 text-sm text-red-500 col-span-3'>{errors?.date?.message}</div>
+    <div className=''>
+      <div className='flex flex-col gap-4 py-4'>
+        <div className='flex flex-col gap-4'>
+          <PublicOrderTitle isActive={false} title='selectedServices' />
+          {selectedCombination && (
+            <PublicCombinationCard item={selectedCombination} onClick={splitCombination} />
           )}
-        </div>
-
-        <TimeSlotField
-          selectedSlot={selectedSlot}
-          setSelectedSlot={setSelectedSlot}
-          selectedService={selectedCombination}
-          calendar={calendar}
-          calendarParams={calendarParams}
-          userId={userId}
-          isError={!!errors?.date?.message && !selectedSlot}
-        />
-        <div className=''>
           <FormTextArea
             id={`combination-notes`}
             name={`combination-notes`}
@@ -219,12 +163,43 @@ export default function PublicCombinationForm(props: Props) {
             maxLength={200}
             error={errors?.notes?.message}
             classNames={{
-              label: 'block font-medium',
+              label: 'block text-black font-medium',
               textarea:
-                'block w-full text-sm text-black border border-gray-200 p-3 rounded-lg min-h-[70px] focus:outline-none focus:ring-1 focus:ring-purple-800',
+                'block w-full text-sm text-black border border-gray-200 p-3 rounded-lg min-h-[70px] focus:outline-none focus:ring-1 focus:ring-black',
             }}
           />
         </div>
+
+        <PublicMasterSearch
+          selectedMaster={selectedMasters[0]}
+          isActive={step === 2}
+          items={masters}
+          onChange={selectMaster}
+          value={value[0].masterId ?? null}
+          search={masterSearch}
+          setSearch={setMasterSearch}
+          hasMore={hasMoreMasters}
+          fetchNextPage={fetchNextMastersPage}
+          setStep={setStep}
+          selectAnyMaster={selectAnyMaster}
+          setSelectAnyMaster={setSelectAnyMaster}
+          ref={masterSelectionRef}
+        />
+
+        <PublicDateTimeSelection
+          ref={DateTimeSelectionRef}
+          isActive={step === 3}
+          date={value[0].date}
+          onChange={onDateChange}
+          error={errors?.date?.message}
+          selectedSlot={selectedSlot}
+          setSelectedSlot={setSelectedSlot}
+          selectedService={selectedCombination}
+          calendar={calendar}
+          calendarParams={calendarParams}
+          userId={userId}
+          setStep={setStep}
+        />
       </div>
     </div>
   );

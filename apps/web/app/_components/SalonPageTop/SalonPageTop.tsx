@@ -28,7 +28,7 @@ export default function SalonPageTop(props: Props) {
           {data?.avatarPreviewUrl && (
             <img
               src={data.avatarPreviewUrl}
-              alt={t('avatarAlt')}
+              alt={data?.businessInfo?.name ?? 'salon avatar'}
               className='rounded-full w-full h-full object-cover'
             />
           )}

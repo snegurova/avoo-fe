@@ -110,9 +110,9 @@ export const createMasterSchema = yup.object({
 });
 
 export const publicCustomerSchema = yup.object({
-  name: yup.string().required(),
-  phone: yup.string().required(),
-  email: yup.string().email('Invalid email').required(),
+  name: yup.string().required('Name is required').trim(),
+  phone: yup.string().required('Phone is required').trim(),
+  email: yup.string().email('Invalid email').required('Email is required').trim(),
 });
 
 export const customerSchema = yup
