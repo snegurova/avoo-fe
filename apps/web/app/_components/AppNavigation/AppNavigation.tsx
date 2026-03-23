@@ -106,7 +106,7 @@ export default function AppNavigation({ menuOpen, setMenuOpen }: Props) {
     },
     {
       href: localizationHooks.useWithLocale(AppRoutes.ComboServiceTime),
-      label: 'Combo service time',
+      label: t('comboServiceTime'),
     },
   ];
 

@@ -1,12 +1,19 @@
 'use client';
 
 import React from 'react';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 
 import { Order } from '@avoo/axios/types/apiTypes';
 import { orderHooks } from '@avoo/hooks';
 import { OrderStatus } from '@avoo/hooks/types/orderStatus';
 import { timeUtils } from '@avoo/shared';
+
+import { CURRENCY } from '@/_constants/currency';
+import {
+  formatLocalizedCurrency,
+  formatLocalizedDuration,
+  getLocalizedDayMonthParts,
+} from '@/_utils/intlFormatters';
 
 import HistoryCard from '../HistoryCard/HistoryCard';
 
@@ -28,33 +35,31 @@ type HistoryItem = {
 
 export default function ClientOrdersHistory(props: Readonly<Props>) {
   const t = useTranslations('private.components.ClientOrdersHistory.ClientOrdersHistory');
+  const locale = useLocale();
   const { customerId } = props;
   const customerOrders = orderHooks.useGetCustomerOrderHistory(customerId, 50);
 
-  const mapOrderToHistoryItem = React.useCallback((order: Order): HistoryItem => {
-    const orderDate = new Date(order.date);
-    const dateDay = Number.isNaN(orderDate.getTime())
-      ? '--'
-      : orderDate.toLocaleDateString('en-US', { day: '2-digit' });
-    const dateMonth = Number.isNaN(orderDate.getTime())
-      ? '--'
-      : orderDate.toLocaleDateString('en-US', { month: 'short' });
-    const title =
-      order.service?.name ?? order.combination?.name ?? order.name ?? t('bookingFallback');
-    const note = typeof order.notes === 'string' ? order.notes : undefined;
+  const mapOrderToHistoryItem = React.useCallback(
+    (order: Order): HistoryItem => {
+      const { day: dateDay, month: dateMonth } = getLocalizedDayMonthParts(order.date, locale);
+      const title =
+        order.service?.name ?? order.combination?.name ?? order.name ?? t('bookingFallback');
+      const note = typeof order.notes === 'string' ? order.notes : undefined;
 
-    return {
-      id: order.id,
-      dateDay,
-      dateMonth,
-      time: timeUtils.getTime(String(order.date)),
-      title,
-      duration: timeUtils.getHumanDuration(order.duration),
-      master: order.master?.name ?? t('anyMaster'),
-      price: t('priceInEuro', { price: order.price }),
-      note,
-    };
-  }, []);
+      return {
+        id: order.id,
+        dateDay,
+        dateMonth,
+        time: timeUtils.getTime(String(order.date)),
+        title,
+        duration: formatLocalizedDuration(order.duration, locale),
+        master: order.master?.name ?? t('anyMaster'),
+        price: formatLocalizedCurrency(order.price, CURRENCY, locale, 'name'),
+        note,
+      };
+    },
+    [locale, t],
+  );
 
   const { nextAppointments, historyItems } = React.useMemo(() => {
     const now = Date.now();

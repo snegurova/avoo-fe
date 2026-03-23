@@ -1,7 +1,5 @@
 import React, { useMemo } from 'react';
-import { useTranslations } from 'next-intl';
-
-import dayjs from 'dayjs';
+import { useLocale, useTranslations } from 'next-intl';
 
 import { Order, Service } from '@avoo/axios/types/apiTypes';
 import { OrderStatus } from '@avoo/hooks/types/orderStatus';
@@ -12,7 +10,7 @@ import { Button, ButtonFit, ButtonIntent } from '@/_components/Button/Button';
 import CombinationElement from '@/_components/CombinationElement/CombinationElement';
 import CustomerElement from '@/_components/CustomerElement/CustomerElement';
 import ServiceElement from '@/_components/ServiceElement/ServiceElement';
-import { localizationHooks } from '@/_hooks/localizationHooks';
+import { formatLocalizedHumanDate } from '@/_utils/intlFormatters';
 
 type Props = {
   order: Order;
@@ -24,9 +22,9 @@ type Props = {
 
 export default function OrderView(props: Props) {
   const t = useTranslations('private.components.OrderView.OrderView');
+  const locale = useLocale();
   const { order, onEdit, timeAgo, endTime, isOutOfSchedule } = props;
   const isPending = useApiStatusStore((state) => state.isPending);
-  const locale = localizationHooks.useGetLocale();
 
   const serviceData = useMemo((): Service | null => {
     if (!order.service) return null;
@@ -44,7 +42,7 @@ export default function OrderView(props: Props) {
         <div className='flex flex-col gap-2'>
           <div className='flex items-center justify-between gap-6 pr-6'>
             <span className='text-2xl font-medium tracking-wider'>
-              {dayjs(order.date).locale(locale).format('ddd, DD MMM')}
+              {formatLocalizedHumanDate(order.date, locale)}
             </span>
             <span className='text-gray-500 text-xs leading-none'>{timeAgo}</span>
           </div>
@@ -69,9 +67,7 @@ export default function OrderView(props: Props) {
             <CombinationElement item={combinationData} isCard master={order.master} />
           )}
           {order.notes && typeof order.notes === 'string' && (
-            <p className='text-xs text-gray-500'>
-              {t('note')}: {order.notes}
-            </p>
+            <p className='text-xs text-gray-500'>{t('noteWithValue', { note: order.notes })}</p>
           )}
         </div>
         <div className='flex flex-col gap-3'>
@@ -79,7 +75,7 @@ export default function OrderView(props: Props) {
           {order.customer && <CustomerElement item={order.customer} isCard />}
           {order.customer.notes && (
             <p className='text-xs text-gray-500'>
-              {t('note')}: {order.customer.notes}
+              {t('noteWithValue', { note: order.customer.notes })}
             </p>
           )}
         </div>

@@ -31,15 +31,18 @@ export default function WorkingHoursPage() {
       <ComboServiceControls setSearchQuery={setSearchQuery} />
       {combinations.length === 0 && !queryParams.search ? (
         <AppPlaceholder
-          title={isPending ? 'Loading...' : 'Setup you first combo service'}
+          title={isPending ? t('loading') : t('setupFirstCombo')}
           icon={<AutoStoriesIcon className='w-20 h-20 lg:w-25 lg:h-25 fill-primary-300' />}
           description={
             isPending ? null : (
               <p>
-                <Link href='#' className='text-primary-300'>
-                  {t('createComboService')}
-                </Link>{' '}
-                to make it easier for your clients to book multiple services at once.
+                {t.rich('detailedMultipleServicesDescription', {
+                  link: (chunks) => (
+                    <Link href='#' className='text-primary-300'>
+                      {chunks}
+                    </Link>
+                  ),
+                })}
               </p>
             )
           }

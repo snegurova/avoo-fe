@@ -3,6 +3,7 @@
 import { useCallback, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 
 import { masterHooks, userHooks } from '@avoo/hooks';
 import { FileInput } from '@avoo/shared';
@@ -25,6 +26,7 @@ type Values = {
 };
 
 export function useCertificateForm() {
+  const t = useTranslations('private.components.CertificateAdd.CertificateAdd');
   const router = useRouter();
   const { handleAddCertificate } = userHooks.usePostCertificate();
   const masters = masterHooks.useGetMastersProfileInfo()?.items;
@@ -58,7 +60,7 @@ export function useCertificateForm() {
 
     if (values.ownerType === OwnerType.Master) {
       if (!values.masterId) {
-        setFileError('Please choose a master');
+        setFileError(t('chooseMasterError'));
         return;
       }
       payload.masterId = values.masterId;
@@ -66,7 +68,7 @@ export function useCertificateForm() {
 
     // require file upload
     if (!file) {
-      setFileError('Please upload a file');
+      setFileError(t('uploadFileError'));
       return;
     }
 
@@ -89,7 +91,10 @@ export function useCertificateForm() {
       return;
     }
 
-    const validationError = getFileValidationError(f, DEFAULT_IMAGE_TYPES, DEFAULT_MAX_IMAGE_SIZE);
+    const validationError = getFileValidationError(f, DEFAULT_IMAGE_TYPES, DEFAULT_MAX_IMAGE_SIZE, {
+      unsupportedFileType: ({ types }) => t('unsupportedFileType', { types }),
+      fileTooLarge: ({ maxSizeMb }) => t('fileTooLarge', { maxSizeMb }),
+    });
     if (validationError) {
       setFile(null);
       setFileError(validationError);

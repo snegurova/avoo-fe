@@ -1,5 +1,16 @@
 {
   "private": {
+    "common": {
+      "areYouSureYouWantToLeaveThisPage": "Czy na pewno chcesz opuścić tę stronę?",
+      "youHaveUnsavedChanges": "Masz niezapisane zmiany. Czy na pewno chcesz opuścić tę stronę?",
+      "leave": "Opuść",
+      "delete": "Usuń",
+      "areYouSureYouWantToLeaveThisWindow": "Czy na pewno chcesz zamknąć to okno?",
+      "youHaveUnsavedChangesInThisWindow": "Masz niezapisane zmiany. Czy na pewno chcesz zamknąć to okno?",
+      "leaveWindow": "Zamknij",
+      "cancel": "Anuluj",
+      "defaultFailError": "Coś poszło nie tak. Spróbuj ponownie później."
+    },
     "profile": {
       "changePassword": {
         "oldPasswordLabel": "Aktualne hasło *",
@@ -52,7 +63,8 @@
         "workingSchedule": "Grafik pracy",
         "scheduleException": "Wyjątek w grafiku",
         "billingNotification": "Powiadomienia o rozliczeniach lub marketingu",
-        "notifications": "Powiadomienia"
+        "notifications": "Powiadomienia",
+        "comboServiceTime": "Czas usług łączonych"
       }
     },
     "calendar": {
@@ -86,19 +98,24 @@
         "noSchedulesDescription": "Aktualnie nie ma grafików do wyświetlenia. Wybierz pracowników, aby zobaczyć ich grafiki tutaj."
       },
       "comboServiceTime": {
+        "loading": "Wczytywanie...",
+        "setupFirstCombo": "Skonfiguruj swoją pierwszą usługę łączoną",
+        "createComboService": "Utwórz usługę łączoną",
+        "detailedMultipleServicesDescription": "<link>Utwórz usługę łączoną</link>, aby ułatwić klientom rezerwację wielu usług naraz.",
         "create": {
           "setupNewCombo": "Skonfiguruj nowy czas usług objętych pakietem"
-        },
-        "createComboService": "Utwórz pakiet usług"
+        }
       },
       "workingHours": {
+        "loading": "Wczytywanie...",
+        "noSchedules": "Brak harmonogramów pracy",
+        "setupFirstSchedule": "Skonfiguruj swój pierwszy harmonogram pracy",
+        "setupScheduleDescription": "Zacznij od <link>skonfigurowania swojego pierwszego harmonogramu</link>, aby zarządzać godzinami pracy.",
+        "detailedNoSchedulesDescription": "<link>Utwórz harmonogram pracy</link>, aby określić, kiedy Twoi mistrzowie są dostępni na rezerwacje.",
         "create": {
           "setupNewSchedule": "Skonfiguruj nowy harmonogram"
         },
-        "createWorkingSchedule": "Utwórz harmonogram pracy",
-        "loading": "Wczytywanie...",
-        "setupFirstSchedule": "Skonfiguruj swój pierwszy harmonogram pracy",
-        "setupScheduleDescription": "<link>Utwórz harmonogram pracy</link>, aby określić, kiedy Twoi mistrzowie są dostępni na rezerwacje."
+        "createWorkingSchedule": "Utwórz harmonogram pracy"
       }
     },
     "orders": {
@@ -121,6 +138,8 @@
         "addService": "Dodaj więcej usług",
         "cancel": "Anuluj",
         "create": "Zarezerwuj",
+        "noAvailableDateAndTime": "Brak dostępnej daty i godziny",
+        "selectedMasterDoesNotProvideService": "Wybrany pracownik nie wykonuje wybranej usługi",
         "addNew": "Dodaj nowy {label}",
         "noResults": "Nie znaleziono {label}",
         "client": "klient",
@@ -143,6 +162,7 @@
         "phonePlaceholder": "Wpisz numer telefonu",
         "notes": "Notatki",
         "helperText": "Dodatkowe informacje o kliencie",
+        "searchPlaceholder": "Szukaj według imienia, e-maila, telefonu",
         "selectServiceLabel": "Wybierz usługę",
         "time": "Godzina",
         "date": "Data",
@@ -174,14 +194,27 @@
     "services": {
       "create": {
         "addService": "Dodaj usługę"
-      }
+      },
+      "loading": "Wczytywanie...",
+      "noServicesAdded": "Nie dodano żadnych usług",
+      "detailedNoServicesDescription": "Zacznij od <link>utworzenia swojej pierwszej usługi</link>, aby udostępnić ją do rezerwacji"
     },
     "timeOff": {
       "scheduleException": "Wyjątek harmonogramu",
       "addTimeOff": "Dodaj czas wolny",
       "searchByMasterName": "Szukaj po nazwisku mistrza",
       "noTimeOffAdded": "Nie dodano jeszcze czasu wolnego",
-      "noTimeOffDescription": "<link>Dodaj czas wolny</link>, urlopy, przerwy lub niedostępne godziny, aby harmonogram był dokładny."
+      "noTimeOffDescription": "<link>Dodaj czas wolny</link>, urlopy, przerwy lub niedostępne godziny, aby harmonogram był dokładny.",
+      "loading": "Wczytywanie...",
+      "noTimeOff": "Brak wyjątków czasu wolnego",
+      "detailedNoTimeOffDescription": "Dodaj <link>czas wolny</link> lub dodatkowe godziny pracy, aby harmonogram był dokładny.",
+      "types": {
+        "personal": "Przerwa osobista",
+        "holiday": "Święto (salon)",
+        "vacation": "Urlop",
+        "sick": "Zwolnienie lekarskie",
+        "other": "Inne"
+      }
     },
     "forgotPassword": {
       "recoveryPassword": "Odzyskiwanie hasła",
@@ -214,11 +247,22 @@
           "avooCaps": "AVOO"
         }
       },
+      "AutoComplete": {
+        "SearchAutocomplete": {
+          "applyToAll": "Zastosuj do wszystkich",
+          "selected": "wybrano"
+        }
+      },
       "AvatarUpload": {
         "AvatarUpload": {
           "avatarImage": "Zdjęcie awatara",
           "saveAvatar": "Zapisz awatar",
-          "editAvatar": "Edytuj awatar"
+          "editAvatar": "Edytuj awatar",
+          "uploadNewAvatar": "Prześlij nowy awatar",
+          "uploadSuccess": "Awatar został przesłany. Kliknij Zapisz, aby zastosować zmiany.",
+          "uploadError": "Nie udało się przesłać awatara: {error}",
+          "saveSuccess": "Awatar zapisany!",
+          "noNewAvatar": "Brak nowego awatara do zapisania"
         }
       },
       "Button": {
@@ -264,7 +308,11 @@
           "invalidDateFormat": "Nieprawidłowy format daty",
           "dateNotInFuture": "Data nie może być w przyszłości",
           "salon": "Salon",
-          "selectOrDrag": "Wybierz plik lub przeciągnij i upuść tutaj"
+          "selectOrDrag": "Wybierz plik lub przeciągnij i upuść tutaj",
+          "chooseMasterError": "Wybierz pracownika",
+          "uploadFileError": "Prześlij plik",
+          "unsupportedFileType": "Nieobsługiwany typ pliku. Użyj: {types}.",
+          "fileTooLarge": "Plik jest za duży. Maksymalny rozmiar: {maxSizeMb} MB."
         }
       },
       "ChangePasswordForm": {
@@ -272,7 +320,8 @@
           "changePassword": "Zmień hasło",
           "currentPassword": "Aktualne hasło",
           "newPassword": "Nowe hasło",
-          "confirmPassword": "Potwierdź hasło"
+          "confirmPassword": "Potwierdź hasło",
+          "success": "Hasło zostało pomyślnie zmienione"
         }
       },
       "CheckboxesButton": {
@@ -310,6 +359,15 @@
           "priceInEuro": "{price} Euro"
         }
       },
+      "NextAppointmentsWidget": {
+        "NextAppointmentsWidget": {
+          "back": "Wstecz",
+          "next": "Dalej",
+          "todayDate": "Dzisiaj, {date}",
+          "tomorrowDate": "Jutro, {date}",
+          "outOfSchedule": "Poza harmonogramem"
+        }
+      },
       "ClientsList": {
         "ClientsList": {
           "noClientsYet": "Brak klientów",
@@ -326,7 +384,8 @@
           "noName": "Brak imienia",
           "noPhone": "Brak telefonu",
           "noEmail": "Brak e-maila",
-          "lastVisit": "ostatnia wizyta {date}"
+          "lastVisit": "ostatnia wizyta {date}",
+          "openDetails": "Otwórz szczegóły {name}"
         }
       },
       "CombinationForm": {
@@ -368,7 +427,12 @@
           "deleteComboService": "Usuń pakiet usług",
           "comboServiceTime": "Czas usług pakietu",
           "shareSm": "Udostępnij",
-          "deleteSm": "Usuń"
+          "deleteSm": "Usuń",
+          "deleteSuccess": "Pakiet usług został usunięty",
+          "deleteError": "Nie udało się usunąć pakietu usług",
+          "deleteConfirmContent": "Czy na pewno chcesz usunąć ten pakiet usług?",
+          "cancel": "Anuluj",
+          "delete": "Usuń"
         }
       },
       "ComboServiceSelector": {
@@ -396,6 +460,11 @@
           "enterName": "Wprowadź imię",
           "enterEmail": "Wprowadź e-mail",
           "enterPhone": "Wprowadź telefon"
+        }
+      },
+      "CustomerElement": {
+        "CustomerElement": {
+          "lastVisit": "Ostatnia wizyta"
         }
       },
       "CustomerSelect": {
@@ -436,6 +505,7 @@
           "personalInfo": "Dane osobowe",
           "displayName": "Wyświetlana nazwa",
           "headline": "Nagłówek",
+          "email": "E-mail *",
           "phone": "Telefon",
           "about": "O nas",
           "languages": "Języki",
@@ -543,25 +613,21 @@
           "service": "Usługa",
           "client": "Klient",
           "edit": "Edytuj",
-          "note": "Notatka"
+          "noteWithValue": "Notatka: {note}"
         }
       },
-      "OrderControls": {
-        "OrderControls": {
-          "orders": "Zlecenia",
-          "createOrder": "Utwórz zlecenie"
+      "ConfirmationModal": {
+        "ConfirmationModal": {
+          "title": "Czy na pewno?",
+          "confirm": "Potwierdź",
+          "cancel": "Anuluj"
         }
       },
-      "OrderList": {
-        "OrderList": {
-          "loading": "Ładowanie...",
-          "noOrdersFound": "Nie znaleziono zleceń"
-        }
-      },
-      "OrderDelete": {
-        "OrderDelete": {
-          "deleteOrder": "Usuń zlecenie",
-          "areYouSureYouWantToDeleteThisOrder": "Czy na pewno chcesz usunąć to zlecenie?"
+      "ModalActions": {
+        "ModalActions": {
+          "close": "Zamknij",
+          "save": "Zapisz",
+          "saving": "Zapisywanie..."
         }
       },
       "PhoneCodeSelect": {
@@ -579,6 +645,7 @@
       },
       "ProfileEdit": {
         "EditProfileForm": {
+          "businessProfile": "Profil biznesowy",
           "displayName": "Wyświetlana nazwa",
           "phone": "Telefon",
           "address": "Adres",
@@ -617,25 +684,6 @@
           "masterFallback": "Mistrz"
         }
       },
-      "PublicCombinationForm": {
-        "PublicCombinationForm": {
-          "master": "Mistrz",
-          "date": "Data",
-          "notes": "Notatki",
-          "notesHelper": "Dodatkowe informacje dla mistrza"
-        }
-      },
-      "PublicServiceFormItem": {
-        "PublicServiceFormItem": {
-          "service": "Usługa",
-          "searchServiceName": "Szukaj po nazwie",
-          "master": "Mistrz",
-          "date": "Data",
-          "notes": "Notatki",
-          "notesHelper": "Dodatkowe informacje dla mistrza",
-          "selectService": "Wybierz usługę"
-        }
-      },
       "ResetPasswordForm": {
         "ResetPasswordForm": {
           "password": "Hasło",
@@ -655,8 +703,38 @@
           "cancel": "Anuluj",
           "save": "Zapisz",
           "addSuccess": "Harmonogram dodany pomyślnie",
-          "addError": "Błąd dodawania harmonogramу: {error}",
-          "applyToAll": "Zastosuj do wszystkich"
+          "addError": "Błąd dodawania harmonogramy: {error}",
+          "applyToAll": "Zastosuj do wszystkich",
+          "scheduleTypes": {
+            "weekly": "Co tydzień",
+            "2x2": "2 przez 2",
+            "3x2": "3 przez 2",
+            "custom": "Elastyczny"
+          },
+          "defaultScheduleName": "Harmonogram roboczy"
+        },
+        "ConflictScheduleDialog": {
+          "scheduleConflictDetected": "Wykryto konflikt harmonogramu",
+          "loadingConflictDetails": "Ładowanie szczegółów konfliktu...",
+          "youAlreadyHaveASchedule": "Masz już harmonogram, który koliduje z datą rozpoczęcia",
+          "wouldYouLikeToUpdateTheNewSchedulesStartDate": "Czy chcesz zaktualizować datę rozpoczęcia nowego harmonogramu na",
+          "soItCanStartAfterTheCurrentOneEnds": "aby zaczynał się po zakończeniu bieżącego?",
+          "existingSchedule": "Istniejący harmonogram",
+          "youAlreadyHaveAScheduleThatConflictsWithTheStartDate": "Masz już harmonogram, który koliduje z datą rozpoczęcia",
+          "wouldYouLikeToUpdateTheNewSchedulesStartDateQuestion": "Czy chcesz zaktualizować datę rozpoczęcia nowego harmonogramu na",
+          "soItCanStartAfterTheCurrentOneEndsQuestion": "aby zaczynał się po zakończeniu bieżącego?",
+          "thisNewScheduleStartsOn": "Ten nowy harmonogram zaczyna się",
+          "butYourCurrentScheduleEndsOn": "ale Twój bieżący harmonogram kończy się",
+          "wouldYouLikeToEndTheCurrentScheduleEarly": "Czy chcesz zakończyć bieżący harmonogram wcześniej",
+          "soTheNewOneCanBegin": "aby nowy mógł się rozpocząć?",
+          "name": "Nazwa",
+          "startDate": "Data rozpoczęcia",
+          "endDate": "Data zakończenia",
+          "newSchedule": "Nowy harmonogram",
+          "updateNewStartDateAndSave": "Zaktualizuj datę harmonogramu i zapisz",
+          "updatePreviousScheduleAndSave": "Zaktualizuj harmonogram i zapisz",
+          "editDatesManually": "Edytuj daty ręcznie",
+          "ongoing": "Bezkończny"
         }
       },
       "ScheduleList": {
@@ -674,8 +752,7 @@
           "deleteSuccess": "Harmonogram usunięty pomyślnie",
           "deleteError": "Nie udało się usunąć harmonogramu",
           "deleteContent": "Spowoduje to trwałe usunięcie harmonogramu i usunięcie go ze wszystkich przypisanych mistrzów. Tej czynności nie można cofnąć.",
-          "cancel": "Anuluj",
-          "delete": "Usuń"
+          "cancel": "Anuluj"
         }
       },
       "ScheduleListItem": {
@@ -709,7 +786,12 @@
           "searchScheduleNameMaster": "Szukaj po nazwie harmonogramu lub mistrzu",
           "sortByName": "Sortuj według nazwy",
           "sortByStartDate": "Sortuj według daty rozpoczęcia",
-          "sortByEndDate": "Sortuj według daty zakończenia"
+          "sortByEndDate": "Sortuj według daty zakończenia",
+          "scheduleName": "Nazwa harmonogramu",
+          "appliesTo": "Dotyczy",
+          "startDate": "Data rozpoczęcia",
+          "endDate": "Data zakończenia",
+          "actions": "Akcje"
         }
       },
       "ServiceAddForm": {
@@ -761,7 +843,20 @@
         "ServiceGalleryUpload": {
           "addPhoto": "Dodaj zdjęcie",
           "selectFile": "Wybierz plik",
-          "selectOrDrag": "Wybierz plik lub przeciągnij i upuść tutaj"
+          "uploadDescription": "Prześlij do 5 zdjęć (tylko JPG, PNG, maksymalnie 10 MB każde)",
+          "selectOrDrag": "Wybierz plik lub przeciągnij i upuść tutaj",
+          "uploadHint": "Prześlij maksymalnie 5 obrazów (tylko JPG i PNG, maks. 10 MB każdy)",
+          "mediaAlt": "Multimedia usługi"
+        }
+      },
+      "SortIconButton": {
+        "SortIconButton": {
+          "sort": "Sortuj"
+        }
+      },
+      "SortOptions": {
+        "SortOptions": {
+          "sortBy": "Sortuj według:"
         }
       },
       "ServiceList": {
@@ -811,6 +906,7 @@
           "addTimeOffExtraHours": "Dodaj czas wolny lub dodatkowe godziny pracy",
           "note": "Notatka",
           "wholeDay": "Cały dzień",
+          "wholeDayAriaLabel": "Cały dzień",
           "cancel": "Anuluj",
           "save": "Zapisz",
           "allStaff": "Wszyscy pracownicy",
@@ -831,6 +927,7 @@
           "delete": "Usuń",
           "note": "Notatka",
           "wholeDay": "Cały dzień",
+          "wholeDayAriaLabel": "Cały dzień",
           "deleteTimeOff": "Usuń czas wolny",
           "allStaff": "Wszyscy pracownicy",
           "master": "Mistrz *",
@@ -844,6 +941,12 @@
           "deleteInfo": "Wyjątek z harmonogramu został usunięty!",
           "deleteConfirmDescription": "Czy na pewno chcesz trwale usunąć ten wyjątek z harmonogramu? Tej czynności nie można cofnąć.",
           "confirmDeleteTimeOff": "Usuń czas wolny"
+        }
+      },
+      "TimeOffConflictsSection": {
+        "TimeOffConflictsSection": {
+          "affectedBookings": "Powiązane rezerwacje",
+          "bookingFallback": "Rezerwacja"
         }
       },
       "TimeOffEditModal": {
@@ -874,7 +977,8 @@
           "workingTime": "Czas pracy",
           "from": "od",
           "to": "do",
-          "deleteConfirmDescription": "Czy na pewno chcesz trwale usunąć ten wyjątek z harmonogramu? Tej czynności nie można cofnąć."
+          "deleteConfirmDescription": "Czy na pewno chcesz trwale usunąć ten wyjątek z harmonogramu? Tej czynności nie można cofnąć.",
+          "openDetails": "Otwórz szczegóły {name}"
         }
       },
       "TimeSlotField": {
@@ -907,6 +1011,11 @@
     }
   },
   "public": {
+    "metadata": {
+      "root": {
+        "description": "Profesjonalna platforma AVOO"
+      }
+    },
     "home": {
       "topSection": {
         "title": "Strona główna AVOO",
@@ -938,14 +1047,65 @@
         "gallery": "Galeria",
         "certificates": "Certyfikaty",
         "team": "Zespół",
+        "avatarAlt": "Awatar salonu",
         "termsPrivacy": "Regulamin i prywatność",
-        "allRightsReserved": "Wszelkie prawa zastrzeżone."
+        "allRightsReserved": "Wszelkie prawa zastrzeżone.",
+        "book": "Rezerwuj",
+        "select": "Wybierz",
+        "change": "Zmień",
+        "selected": "Wybrane"
       },
       "createOrder": {
         "bookingForm": "Formularz rezerwacji",
         "addMoreService": "Dodaj więcej usług",
         "cancel": "Anuluj",
-        "book": "Rezerwuj"
+        "book": "Rezerwuj",
+        "service": "Usługa",
+        "searchServiceName": "Szukaj po nazwie",
+        "master": "Mistrz",
+        "date": "Data",
+        "notes": "Notatki",
+        "notesHelper": "Dodatkowe informacje dla mistrza",
+        "selectService": "Wybierz usługę",
+        "select": "Wybierz",
+        "change": "Zmień",
+        "selectMaster": "Wybierz mistrza",
+        "selectDate": "Wybierz datę",
+        "selectTime": "Wybierz godzinę",
+        "morning": "Rano",
+        "afternoon": "Popołudnie",
+        "evening": "Wieczór",
+        "anyMaster": "Dowolny mistrz",
+        "yourBookingDetails": "Szczegóły rezerwacji",
+        "addExtraService": "Dodaj dodatkową usługę",
+        "total": "Suma",
+        "selected": "Wybrane",
+        "confirmBooking": "Potwierdź rezerwację",
+        "dateNotSelected": "Data nie została wybrana",
+        "timeNotSelected": "Godzina nie została wybrana",
+        "masterNotSelected": "Mistrz nie został wybrany",
+        "serviceNotSelected": "Usługa nie została wybrana",
+        "canBeCombined": "można połączyć z",
+        "totalDurationMessage": "Całkowity czas wizyty będzie wynosił",
+        "minutes": "minut",
+        "bookSeparately": "Rezerwuj osobno",
+        "applyCombination": "Zastosuj kombinację",
+        "bookingConfirmed": "Rezerwacja potwierdzona",
+        "confirmationMessage": "Twoja wizyta została pomyślnie zarezerwowana. Potwierdzenie zostało wysłane na Twój e-mail ze wszystkimi szczegółami.",
+        "bookingCancel": "Twoja rezerwacja nie jest potwierdzona",
+        "cancelMessage": "Zamierzasz opuścić stronę bez potwierdzenia rezerwacji. Wybrane usługi i godzina mogą zostać utracone.",
+        "searchServices": "Szukaj usług",
+        "searchMasters": "Szukaj mistrzów",
+        "anyMasterHeadline": "dla maksymalnej dostępności",
+        "euro": "Euro",
+        "selectDateTime": "Wybierz datę i godzinę",
+        "selectValidTimeSlot": "Wybierz prawidłowy przedział czasu",
+        "noAvailableSlots": "Brak dostępnych przedziałów czasowych na wybrany dzień. Wybierz inny dzień lub 'Dowolny mistrz', aby uzyskać więcej opcji.",
+        "search": "Szukaj",
+        "remove": "Usuń",
+        "clear": "Wyczyść",
+        "splitBooking": "Podziel rezerwację",
+        "selectedServices": "Wybrane usługi"
       }
     },
     "forgotPassword": {
@@ -957,7 +1117,8 @@
         "button": "Wyślij kod",
         "emailLabel": "Adres e-mail *",
         "emailPlaceholder": "E-mail",
-        "linkText": "Powrót do logowania"
+        "linkText": "Powrót do logowania",
+        "sendCodeSuccess": "Kod weryfikacyjny został wysłany na Twój e-mail"
       }
     },
     "login": {
@@ -982,6 +1143,7 @@
         "metaTitle": "Rejestracja - AVOO App",
         "description": "Skonfiguruj swój profil, aby zarządzać usługami i rezerwacjami.",
         "havingAccount": "Masz konto?",
+        "accountPrompt": "Masz konto? <link>Zaloguj się</link>",
         "login": "Zaloguj się"
       },
       "form": {
@@ -1003,10 +1165,18 @@
         "slogan": "Więcej klientów. Jeden kalendarz. Zero chaosu."
       }
     },
+    "verifyCode": {
+      "page": {
+        "metaTitle": "Weryfikacja kodu - AVOO App",
+        "metaDescription": "Zweryfikuj kod wysłany na e-mail"
+      }
+    },
     "resetPassword": {
       "page": {
         "title": "Utwórz nowe hasło",
         "description": "Wybierz silne hasło, aby chronić swoje konto.",
+        "metaTitle": "Reset hasła - AVOO App",
+        "metaDescription": "Zresetuj swoje hasło",
         "newPasswordLabel": "Nowe hasło *",
         "confirmPasswordLabel": "Potwierdź hasło *",
         "saveButton": "Zapisz nowe hasło",

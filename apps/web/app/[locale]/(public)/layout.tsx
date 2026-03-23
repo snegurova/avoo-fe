@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react';
 
 export default function PublicLayout({ children }: { children: ReactNode }) {
-  return <main>{children}</main>;
+  return <>{children}</>;
 }

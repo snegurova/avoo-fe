@@ -14,9 +14,9 @@ const SixCodeInputBoxes: React.FC<Props> = (props) => {
         return (
           <View
             key={index}
-            className='w-[50px] h-[66px] rounded-lg bg-black items-center justify-center'
+            className='w-[50px] h-[66px] rounded-lg bg-primary-100 items-center justify-center'
           >
-            <Text className='text-2xl text-white'>{char || ' '}</Text>
+            <Text className='text-2xl text-primary-700'>{char || ' '}</Text>
           </View>
         );
       })}

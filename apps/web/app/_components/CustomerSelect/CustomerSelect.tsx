@@ -1,7 +1,6 @@
 'use client';
 import React, { useEffect, useState } from 'react';
 import { FieldErrors } from 'react-hook-form';
-import { useTranslations } from 'next-intl';
 
 import {
   CreateCustomerRequest,
@@ -24,7 +23,6 @@ type Props = {
 };
 
 export function CustomerSelect({ value, onChange, error }: Props) {
-  const t = useTranslations('private.components.CustomerSelect.CustomerSelect');
   const [search, setSearch] = useState('');
   const [params, setParams] = useState<GetCustomersQueryParams>({ limit: 4 });
   const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(null);
@@ -70,7 +68,7 @@ export function CustomerSelect({ value, onChange, error }: Props) {
   return (
     <div className='w-full'>
       <SearchField
-        label={t('client')}
+        label='Client'
         value={value}
         onChange={onChange}
         items={items}

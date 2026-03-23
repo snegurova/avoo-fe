@@ -1,18 +1,25 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Controller, useFieldArray } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 
 import { Button, TextField } from '@mui/material';
 
-import { END_MINUTE, SCHEDULE_OPTIONS, START_MINUTE } from '@avoo/constants';
-import { VALUE_DATE_FORMAT } from '@avoo/constants';
+import {
+  END_MINUTE,
+  SCHEDULE_ERRORS,
+  SCHEDULE_OPTIONS,
+  START_MINUTE,
+  VALUE_DATE_FORMAT,
+} from '@avoo/constants';
 import { masterHooks, scheduleHooks } from '@avoo/hooks';
 import { timeUtils } from '@avoo/shared';
 
+import ConfirmationDialog from '@/_components/ConfirmationDialog/ConfirmationDialog';
 import FormDatePicker from '@/_components/FormDatePicker/FormDatePicker';
 import { FormSearchAutocomplete } from '@/_components/FormSearchAutocomplete/FormSearchAutoComplete';
 import { FormSelect } from '@/_components/FormSelect/FormSelect';
+import { ConflictScheduleDialog } from '@/_components/ScheduleAddForm/ConflictScheduleDialog';
 import { CreateWorkingDayRow } from '@/_components/ScheduleAddForm/CreateWorkingDayRow';
 import { localizationHooks } from '@/_hooks/localizationHooks';
 import { useToast } from '@/_hooks/useToast';
@@ -21,20 +28,34 @@ import { getAllErrorMessages } from '@/_utils/formError';
 
 export const ScheduleAddForm = () => {
   const t = useTranslations('private.components.ScheduleAddForm.ScheduleAddForm');
+  const tCommon = useTranslations('private.common');
   const toast = useToast();
 
   const router = useRouter();
   const workingHoursPath = localizationHooks.useWithLocale(AppRoutes.WorkingHours);
 
-  const { control, handleSubmit, setValue, watch, errors } = scheduleHooks.useCreateScheduleForm({
-    onSuccess: () => {
-      toast.success(t('addSuccess'));
-      router.replace(workingHoursPath);
-    },
-    onError: (error) => {
-      toast.error(t('addError', { error: error.message }));
-    },
-  });
+  const [conflictIds, setConflictIds] = useState<number[]>([]);
+  const [openConflictDialog, setOpenConflictDialog] = useState(false);
+
+  const { control, handleSubmit, setValue, watch, errors, isDirty, isValid, touchedFields } =
+    scheduleHooks.useCreateScheduleForm({
+      defaultName: t('defaultScheduleName'),
+      onSuccess: () => {
+        toast.success(t('addSuccess'));
+        router.replace(workingHoursPath);
+      },
+      onError: (error) => {
+        const errorCode = error.errorCode;
+        if (SCHEDULE_ERRORS.includes(errorCode)) {
+          const errors = error.errors;
+          const ids = errors?.map((e) => e.value);
+          setConflictIds(ids || []);
+          setOpenConflictDialog(true);
+          return;
+        }
+        toast.error(t('addError'));
+      },
+    });
 
   const { fields, replace, append, remove } = useFieldArray({
     control,
@@ -78,6 +99,22 @@ export const ScheduleAddForm = () => {
 
   const errorsList = getAllErrorMessages(errors);
 
+  const hasChanges = isDirty && Object.keys(touchedFields).length > 0;
+  const [openConfirmDialog, setOpenConfirmDialog] = useState(false);
+
+  const handleCancel = () => {
+    if (hasChanges) {
+      setOpenConfirmDialog(true);
+    } else {
+      router.back();
+    }
+  };
+
+  const handleConfirmLeave = () => {
+    setOpenConfirmDialog(false);
+    router.back();
+  };
+
   return (
     <>
       <form
@@ -114,7 +151,10 @@ export const ScheduleAddForm = () => {
                     name='patternType'
                     label={t('type')}
                     required
-                    options={SCHEDULE_OPTIONS}
+                    options={SCHEDULE_OPTIONS.map((option) => ({
+                      value: option.value,
+                      label: t(`scheduleTypes.${option.value}`),
+                    }))}
                     value={field.value}
                     onChange={(value) => {
                       field.onChange(value);
@@ -136,7 +176,6 @@ export const ScheduleAddForm = () => {
                   <FormSearchAutocomplete
                     label={t('applyTo')}
                     placeholder={t('searchMasters')}
-                    emptyDefaultLabel={t('applyToAll')}
                     error={errors.masterIds?.message}
                     value={field.value ?? undefined}
                     onChange={field.onChange}
@@ -187,7 +226,7 @@ export const ScheduleAddForm = () => {
 
           <div>
             <p className='mb-8 font-medium'>
-              {t('schedule')} {scheduleType}
+              {t('schedule')} - {t(`scheduleTypes.${scheduleType}`)}
             </p>
             <div className='flex flex-col gap-4'>
               {fields.map((field, index) => (
@@ -212,14 +251,46 @@ export const ScheduleAddForm = () => {
       </form>
       <section id='create-new-schedule-controls'>
         <div className='w-full flex gap-8 justify-end p-8'>
-          <Button color='secondary' variant='outlined' onClick={() => router.back()}>
+          <Button color='secondary' variant='outlined' onClick={handleCancel}>
             {t('cancel')}
           </Button>
-          <Button form='create-new-schedule' type='submit' color='secondary' variant='contained'>
+          <Button
+            form='create-new-schedule'
+            type='submit'
+            color='secondary'
+            variant='contained'
+            disabled={!isValid}
+          >
             {t('save')}
           </Button>
         </div>
       </section>
+      <ConfirmationDialog
+        open={!!openConfirmDialog}
+        onClose={() => setOpenConfirmDialog(false)}
+        title={tCommon('areYouSureYouWantToLeaveThisPage')}
+        content={tCommon('youHaveUnsavedChanges')}
+        cancelText={tCommon('cancel')}
+        confirmText={tCommon('leave')}
+        onCancel={() => setOpenConfirmDialog(false)}
+        onConfirm={handleConfirmLeave}
+        loading={false}
+      />
+      <ConflictScheduleDialog
+        conflictIds={conflictIds}
+        newScheduleData={{
+          newScheduleName: watch('name'),
+          startAt: watch('startAt'),
+        }}
+        open={!!openConflictDialog}
+        onClose={() => {
+          setOpenConflictDialog(false);
+          setConflictIds([]);
+        }}
+        handleConfirm={handleSubmit}
+        onCurrentStartDateUpdate={(newStartDate) => setValue('startAt', newStartDate)}
+        onCurrentEndDateUpdate={(newEndDate) => setValue('endAt', newEndDate)}
+      />
     </>
   );
 };

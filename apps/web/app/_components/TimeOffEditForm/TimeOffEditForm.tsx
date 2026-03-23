@@ -11,13 +11,7 @@ import dayjs from 'dayjs';
 import type { ShortMasterInfo } from '@avoo/axios/types/apiTypes';
 import { VALUE_DATE_FORMAT } from '@avoo/constants';
 import { exceptionHooks, exceptionUtils, timeOffConflictHooks } from '@avoo/hooks';
-import {
-  TimeOffMode,
-  TimeOffType,
-  timeOffTypeLabels,
-  timeOffTypes,
-  WholeDay,
-} from '@avoo/hooks/types/timeOffType';
+import { TimeOffMode, TimeOffType, timeOffTypes, WholeDay } from '@avoo/hooks/types/timeOffType';
 import { timeUtils, validateEndDateFactory } from '@avoo/shared';
 
 import { IconButton } from '@/_components/IconButton/IconButton';
@@ -85,6 +79,7 @@ export default function TimeOffEditForm({
   onDirtyChange,
 }: Readonly<Props>) {
   const t = useTranslations('private.components.TimeOffEditForm.TimeOffEditForm');
+  const tTimeOffTypes = useTranslations('private.timeOff.types');
   const fixedMaster = React.useMemo<ShortMasterInfo>(
     () => ({
       id: timeOff.master.id,
@@ -167,10 +162,10 @@ export default function TimeOffEditForm({
   const timeOffTypeOptions = React.useMemo(
     () =>
       timeOffTypes.map(({ value }) => ({
-        label: timeOffTypeLabels[value],
+        label: tTimeOffTypes(value),
         value,
       })),
-    [],
+    [tTimeOffTypes],
   );
 
   const headerLabel = React.useMemo(() => {
@@ -379,7 +374,7 @@ export default function TimeOffEditForm({
                         onChange={(_e, checked) =>
                           field.onChange(checked ? WholeDay.Whole : WholeDay.Partial)
                         }
-                        slotProps={{ input: { 'aria-label': 'whole day' } }}
+                        slotProps={{ input: { 'aria-label': t('wholeDayAriaLabel') } }}
                       />
                     }
                   />

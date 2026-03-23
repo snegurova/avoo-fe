@@ -55,7 +55,7 @@ export default function SearchField<R, T extends { id: number }>(props: Props<R,
     ItemElement,
     onAddClick,
     searchMode = true,
-    placeholder = 'Search by name, email, phone',
+    placeholder,
     className = '',
     error,
     hasMore,
@@ -127,7 +127,7 @@ export default function SearchField<R, T extends { id: number }>(props: Props<R,
                 value={search}
                 onChange={setSearch}
                 borderRadius={8}
-                placeholder={placeholder}
+                placeholder={placeholder || t('searchPlaceholder')}
                 onFocus={onSearchFocus}
                 error={error}
               />

@@ -1,6 +1,7 @@
 import React from 'react';
 import { redirect } from 'next/navigation';
 import { Metadata } from 'next/types';
+import { getTranslations } from 'next-intl/server';
 
 import { DEFAULT_LOCALE, Locale, SUPPORTED_LOCALES } from '@avoo/intl';
 
@@ -13,15 +14,20 @@ import { SnackbarProvider } from '../_providers/SnackbarContextProvider';
 
 import '../../styles/globals.css';
 
-export const metadata: Metadata = {
-  title: 'AVOO App',
-  description: 'AVOO professional platform',
-};
-
 type Props = {
   children: React.ReactNode;
   params: Promise<{ locale: string }>;
 };
+
+export async function generateMetadata({ params }: Omit<Props, 'children'>): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: 'public.metadata.root' });
+
+  return {
+    title: 'AVOO App',
+    description: t('description'),
+  };
+}
 
 export default async function RootLayout(props: Props) {
   const { children, params } = props;

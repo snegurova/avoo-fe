@@ -3,23 +3,18 @@ import {
   BaseResponse,
   CreatePrivateOrdersRequest,
   CreatePublicOrdersRequest,
-  GetOrdersResponse,
   Order,
   PrivateOrderQueryParams,
   UpdateOrderRequest,
   UpdateOrderStatusRequest,
 } from '@avoo/axios/types/apiTypes';
-import { paramsSerializer } from '@avoo/axios/utils/paramsSerializer';
 
 const ORDER_ENDPOINT = '/orders';
 const PUBLIC_ORDER_ENDPOINT = '/public/orders';
 
 export const orderApi = {
   async getOrders(params: PrivateOrderQueryParams) {
-    const res = await apiClient.get<BaseResponse<GetOrdersResponse>>(ORDER_ENDPOINT, {
-      params,
-      paramsSerializer: paramsSerializer,
-    });
+    const res = await apiClient.get<BaseResponse<Order[]>>(ORDER_ENDPOINT, { params });
     return res.data;
   },
   async updateOrder(id: number, data: UpdateOrderRequest) {

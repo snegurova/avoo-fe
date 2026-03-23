@@ -6,7 +6,7 @@ import { tv } from 'tailwind-variants';
 import type { Service } from '@avoo/axios/types/apiTypes';
 import { categoriesHooks, servicesHooks } from '@avoo/hooks';
 
-import ScheduleIcon from '@/_icons/ScheduleIcon';
+import PublicServiceCard from '../PublicServiceCard/PublicServiceCard';
 
 type Props = {
   userId: number;
@@ -100,26 +100,7 @@ export default function SalonPageServicesTab(props: Props) {
           <div className='text-gray-500 text-center py-8'>{t('noServices')}</div>
         )}
         {services.map((service: Service) => (
-          <div
-            key={service.id}
-            className='px-4 py-3 border rounded-lg border-gray-200 flex flex-col gap-5'
-          >
-            <div className=''>
-              <h3 className='text-base text-black'>{service.name}</h3>
-              <p className='text-xs mt-2'>{service.description}</p>
-            </div>
-            <div className='flex justify-between gap-4 items-center'>
-              <div className='text-xs leading-tight flex items-center gap-1'>
-                <ScheduleIcon className='fill-current' />
-                <span>
-                  {service.durationMinutes} {t('minutes')}
-                </span>
-              </div>
-              <span className='text-sm text-black leading-none font-medium'>
-                {service.price} {t('euro')}
-              </span>
-            </div>
-          </div>
+          <PublicServiceCard key={service.id} service={service} />
         ))}
         <div ref={sentinelRef} />
         {isFetching && <div className='text-center py-4 '>{t('loading')}</div>}
