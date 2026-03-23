@@ -351,6 +351,15 @@
           "priceInEuro": "{price} Euro"
         }
       },
+      "NextAppointmentsWidget": {
+        "NextAppointmentsWidget": {
+          "back": "Wstecz",
+          "next": "Dalej",
+          "todayDate": "Dzisiaj, {date}",
+          "tomorrowDate": "Jutro, {date}",
+          "outOfSchedule": "Poza harmonogramem"
+        }
+      },
       "ClientsList": {
         "ClientsList": {
           "noClientsYet": "Brak klientów",
