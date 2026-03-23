@@ -82,6 +82,31 @@ type UseUpdateOrderParams = {
 const DEFAULT_LIMIT = 10;
 
 export const orderHooks = {
+  useGetOrders: (params: PrivateOrderQueryParams) => {
+    const memoParams = useMemo<PrivateOrderQueryParams>(
+      () => ({
+        page: params.page,
+        limit: params.limit,
+        status: params.status,
+        customerId: params.customerId,
+        masterId: params.masterId,
+      }),
+      [params],
+    );
+
+    const { data: ordersData, isPending } = useQuery<BaseResponse<unknown>, Error>({
+      queryKey: ['orders', queryKeys.orders.byParams(memoParams)],
+      queryFn: () => orderApi.getOrders(params),
+    });
+
+    utils.useSetPendingApi(isPending);
+
+    if (ordersData?.status === ApiStatus.SUCCESS) {
+      return normalizeOrdersData(ordersData.data);
+    }
+
+    return null;
+  },
   useGetOrdersInfinite: ({ limit = DEFAULT_LIMIT }: PrivateOrderQueryParams) => {
     const filterParams = { limit };
     const query = useInfiniteQuery<BaseResponse<GetOrdersResponse>, Error>({
@@ -382,7 +407,6 @@ export const orderHooks = {
 
     return [];
   },
-
   useCustomerOrdersHistory: (customerId?: number | null) => {
     const orders = orderHooks.useGetCustomerOrderHistory(customerId, 50);
 
