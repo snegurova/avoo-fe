@@ -14,7 +14,7 @@ export default function DashboardPage() {
   const navT = useTranslations('private.navigation.navigation');
   return (
     <div className='flex min-w-0 flex-col gap-8 h-full w-full lg:grid lg:grid-cols-3'>
-      <AppWrapper className='order-2 min-w-0 lg:col-span-2 lg:order-1'>
+      <AppWrapper className='order-2 min-w-0 lg:col-span-2 lg:order-1 shrink-0 h-full'>
         <div className='p-4 flex justify-between items-center'>
           <Typography component='h1' variant='h1'>
             {t('title')}
