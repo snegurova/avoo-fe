@@ -25,7 +25,7 @@ export default function ForgotPasswordForm() {
 
   const { sendCodeHandler } = authHooks.useSendCode({
     onSuccess: (email: string) => {
-      toast.success('Verification code sent to your email');
+      toast.success(t('sendCodeSuccess'));
       router.push(`${verifyCodePath}?email=${encodeURIComponent(email)}`);
     },
   });

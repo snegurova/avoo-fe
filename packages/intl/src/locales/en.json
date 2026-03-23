@@ -61,9 +61,9 @@
         "posts": "Posts",
         "workingSchedule": "Working schedule",
         "scheduleException": "Schedule exception",
-        "comboServiceTime": "Combo service time",
         "billingNotification": "Billing or marketing notification",
-        "notifications": "Notifications"
+        "notifications": "Notifications",
+        "comboServiceTime": "Combo service time"
       }
     },
     "calendar": {
@@ -97,19 +97,24 @@
         "noSchedulesDescription": "There are currently no schedules to display. Choose masters to see their schedules here."
       },
       "comboServiceTime": {
+        "loading": "Loading...",
+        "setupFirstCombo": "Setup your first combo service",
+        "createComboService": "Create combo service",
+        "detailedMultipleServicesDescription": "<link>Create combo service</link> to make it easier for your clients to book multiple services at once.",
         "create": {
           "setupNewCombo": "Setup new combo service time"
-        },
-        "createComboService": "Create a combo service"
+        }
       },
       "workingHours": {
+        "loading": "Loading...",
+        "noSchedules": "No working schedules",
+        "setupFirstSchedule": "Setup your first working schedule",
+        "setupScheduleDescription": "Start by <link>setting up your first schedule</link> to manage your working hours.",
+        "detailedNoSchedulesDescription": "<link>Create a working schedule</link> to define when your masters are available for bookings.",
         "create": {
           "setupNewSchedule": "Setup new schedule"
         },
-        "createWorkingSchedule": "Create a working schedule",
-        "loading": "Loading...",
-        "setupFirstSchedule": "Setup your first working schedule",
-        "setupScheduleDescription": "<link>Create a working schedule</link> to define when your masters are available for bookings."
+        "createWorkingSchedule": "Create a working schedule"
       }
     },
     "orders": {
@@ -125,6 +130,8 @@
         "addService": "Add more service",
         "cancel": "Cancel",
         "create": "Book",
+        "noAvailableDateAndTime": "No available date and time",
+        "selectedMasterDoesNotProvideService": "Selected master does not provide selected service",
         "addNew": "Add new {label}",
         "noResults": "No {label} found",
         "client": "client",
@@ -147,6 +154,7 @@
         "phonePlaceholder": "Enter phone",
         "notes": "Notes",
         "helperText": "Additional information about the client",
+        "searchPlaceholder": "Search by name, email, phone",
         "selectServiceLabel": "Select service",
         "time": "Time",
         "date": "Date",
@@ -178,14 +186,27 @@
     "services": {
       "create": {
         "addService": "Add service"
-      }
+      },
+      "loading": "Loading...",
+      "noServicesAdded": "No services added",
+      "detailedNoServicesDescription": "Start by <link>creating your first service</link> to make it available for booking"
     },
     "timeOff": {
       "scheduleException": "Schedule exception",
       "addTimeOff": "Add time off",
       "searchByMasterName": "Search by master's name",
       "noTimeOffAdded": "No time off added yet",
-      "noTimeOffDescription": "<link>Add time off</link>, vacations, breaks, or unavailable hours to keep the schedule accurate."
+      "noTimeOffDescription": "<link>Add time off</link>, vacations, breaks, or unavailable hours to keep the schedule accurate.",
+      "loading": "Loading...",
+      "noTimeOff": "No time off exceptions",
+      "detailedNoTimeOffDescription": "Add <link>time off</link> or extra working hours to keep the schedule accurate.",
+      "types": {
+        "personal": "Personal break",
+        "holiday": "Holiday (Salon)",
+        "vacation": "Vacation",
+        "sick": "Sick Leave",
+        "other": "Other"
+      }
     },
     "forgotPassword": {
       "recoveryPassword": "Recovery password",
@@ -228,7 +249,12 @@
         "AvatarUpload": {
           "avatarImage": "Avatar image",
           "saveAvatar": "Save avatar",
-          "editAvatar": "Edit avatar"
+          "editAvatar": "Edit avatar",
+          "uploadNewAvatar": "Upload new avatar",
+          "uploadSuccess": "Avatar uploaded! Click Save to apply changes.",
+          "uploadError": "Failed to upload avatar: {error}",
+          "saveSuccess": "Avatar saved!",
+          "noNewAvatar": "No new avatar to save"
         }
       },
       "Button": {
@@ -274,7 +300,11 @@
           "invalidDateFormat": "Invalid date format",
           "dateNotInFuture": "Date cannot be in the future",
           "salon": "Salon",
-          "selectOrDrag": "Select a file or drag and drop here"
+          "selectOrDrag": "Select a file or drag and drop here",
+          "chooseMasterError": "Please choose a master",
+          "uploadFileError": "Please upload a file",
+          "unsupportedFileType": "Unsupported file type. Use: {types}.",
+          "fileTooLarge": "File is too large. Max {maxSizeMb}MB."
         }
       },
       "ChangePasswordForm": {
@@ -282,7 +312,8 @@
           "changePassword": "Change password",
           "currentPassword": "Current password",
           "newPassword": "New password",
-          "confirmPassword": "Confirm password"
+          "confirmPassword": "Confirm password",
+          "success": "Password changed successfully"
         }
       },
       "CheckboxesButton": {
@@ -336,7 +367,8 @@
           "noName": "No name",
           "noPhone": "No phone",
           "noEmail": "No email",
-          "lastVisit": "last visit {date}"
+          "lastVisit": "last visit {date}",
+          "openDetails": "Open {name} details"
         }
       },
       "CombinationForm": {
@@ -378,7 +410,12 @@
           "deleteComboService": "Delete Combo Service",
           "comboServiceTime": "Combo service time",
           "shareSm": "Share",
-          "deleteSm": "Delete"
+          "deleteSm": "Delete",
+          "deleteSuccess": "Combo service deleted successfully",
+          "deleteError": "Failed to delete combo service",
+          "deleteConfirmContent": "Are you sure you want to delete this combo service?",
+          "cancel": "Cancel",
+          "delete": "Delete"
         }
       },
       "ComboServiceSelector": {
@@ -406,6 +443,11 @@
           "enterName": "Enter name",
           "enterEmail": "Enter email",
           "enterPhone": "Enter phone"
+        }
+      },
+      "CustomerElement": {
+        "CustomerElement": {
+          "lastVisit": "Last visit"
         }
       },
       "CustomerSelect": {
@@ -446,6 +488,7 @@
           "personalInfo": "Personal info",
           "displayName": "Display Name",
           "headline": "Headline",
+          "email": "Email *",
           "phone": "Phone",
           "about": "About",
           "languages": "Languages",
@@ -552,7 +595,22 @@
           "outOfSchedule": "Out of schedule",
           "service": "Service",
           "client": "Client",
-          "edit": "Edit"
+          "edit": "Edit",
+          "noteWithValue": "Note: {note}"
+        }
+      },
+      "ConfirmationModal": {
+        "ConfirmationModal": {
+          "title": "Are you sure?",
+          "confirm": "Confirm",
+          "cancel": "Cancel"
+        }
+      },
+      "ModalActions": {
+        "ModalActions": {
+          "close": "Close",
+          "save": "Save",
+          "saving": "Saving..."
         }
       },
       "PhoneCodeSelect": {
@@ -570,6 +628,7 @@
       },
       "ProfileEdit": {
         "EditProfileForm": {
+          "businessProfile": "Business profile",
           "displayName": "Display Name",
           "phone": "Phone",
           "address": "Address",
@@ -785,8 +844,20 @@
         "ServiceGalleryUpload": {
           "addPhoto": "Add photo",
           "selectFile": "Select file",
+          "uploadDescription": "Upload up to 5 images (JPG, PNG only, max 10MB each)",
           "selectOrDrag": "Select a file or drag and drop here",
-          "uploadDescription": "Upload up to 5 images (JPG, PNG only, max 10MB each)"
+          "uploadHint": "Upload up to 5 images (JPG, PNG only, max 10MB each)",
+          "mediaAlt": "Service media"
+        }
+      },
+      "SortIconButton": {
+        "SortIconButton": {
+          "sort": "Sort"
+        }
+      },
+      "SortOptions": {
+        "SortOptions": {
+          "sortBy": "Sort by:"
         }
       },
       "ServiceList": {
@@ -836,6 +907,7 @@
           "addTimeOffExtraHours": "Add time off or extra working hours for a master",
           "note": "Note",
           "wholeDay": "Whole day",
+          "wholeDayAriaLabel": "Whole day",
           "cancel": "Cancel",
           "save": "Save",
           "allStaff": "All Staff",
@@ -856,6 +928,7 @@
           "delete": "Delete",
           "note": "Note",
           "wholeDay": "Whole day",
+          "wholeDayAriaLabel": "Whole day",
           "deleteTimeOff": "Delete time off",
           "allStaff": "All Staff",
           "master": "Master *",
@@ -869,6 +942,12 @@
           "deleteInfo": "Time off was deleted!",
           "deleteConfirmDescription": "Are you sure you want to permanently delete this schedule exception? This action cannot be undone.",
           "confirmDeleteTimeOff": "Delete time off"
+        }
+      },
+      "TimeOffConflictsSection": {
+        "TimeOffConflictsSection": {
+          "affectedBookings": "Affected bookings",
+          "bookingFallback": "Booking"
         }
       },
       "TimeOffEditModal": {
@@ -899,7 +978,8 @@
           "workingTime": "Working time",
           "from": "from",
           "to": "to",
-          "deleteConfirmDescription": "Are you sure you want to permanently delete this schedule exception? This action cannot be undone."
+          "deleteConfirmDescription": "Are you sure you want to permanently delete this schedule exception? This action cannot be undone.",
+          "openDetails": "Open {name} details"
         }
       },
       "TimeSlotField": {
@@ -932,6 +1012,11 @@
     }
   },
   "public": {
+    "metadata": {
+      "root": {
+        "description": "AVOO professional platform"
+      }
+    },
     "home": {
       "topSection": {
         "ctaButton": "Go to booking app",
@@ -963,6 +1048,7 @@
         "gallery": "Gallery",
         "certificates": "Certificates",
         "team": "Team",
+        "avatarAlt": "Salon avatar",
         "termsPrivacy": "Terms & Privacy",
         "allRightsReserved": "All rights reserved."
       },
@@ -982,7 +1068,8 @@
         "button": "Send Code",
         "emailLabel": "Email address *",
         "emailPlaceholder": "Email",
-        "linkText": "Back to login"
+        "linkText": "Back to login",
+        "sendCodeSuccess": "Verification code sent to your email"
       }
     },
     "login": {
@@ -1007,6 +1094,7 @@
         "metaTitle": "Sign Up - AVOO App",
         "description": "Set up your profile to start managing your services and bookings.",
         "havingAccount": "Having account?",
+        "accountPrompt": "Having account? <link>Log in</link>",
         "login": "Log in"
       },
       "form": {
@@ -1028,10 +1116,18 @@
         "slogan": "More clients. One calendar. Zero chaos."
       }
     },
+    "verifyCode": {
+      "page": {
+        "metaTitle": "Verify Code - AVOO App",
+        "metaDescription": "Verify your email code"
+      }
+    },
     "resetPassword": {
       "page": {
         "title": "Create a new password",
         "description": "Choose a strong password to keep your account secure.",
+        "metaTitle": "Reset Password - AVOO App",
+        "metaDescription": "Reset your password",
         "newPasswordLabel": "New password *",
         "confirmPasswordLabel": "Confirm password *",
         "saveButton": "Save new password",

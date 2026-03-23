@@ -174,7 +174,7 @@ export default function ProfileEditForm({
 
   return (
     <form className='flex min-h-full flex-col gap-6' onSubmit={handleSubmit(onSubmitInternal)}>
-      <h2 className='text-2xl mb-6'>Business profile</h2>
+      <h2 className='text-2xl mb-6'>{t('businessProfile')}</h2>
 
       <div className='mt-6 md:mt-0 mb-8 md:mb-0 flex flex-col items-center gap-4 relative md:shrink-0'>
         <AvatarUpload

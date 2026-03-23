@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslations } from 'next-intl';
 
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { tv } from 'tailwind-variants';
@@ -114,6 +115,14 @@ const iconError = tv({
 
 export default function CalendarEvent(props: Props) {
   const { event, type, onEventSelect, calendarType = CalendarType.REGULAR } = props;
+  const tOrder = useTranslations('private.orders.order');
+  const statusLabels = {
+    [OrderStatus.PENDING]: tOrder('pending'),
+    [OrderStatus.CONFIRMED]: tOrder('confirmed'),
+    [OrderStatus.COMPLETED]: tOrder('completed'),
+    [OrderStatus.CANCELED]: tOrder('cancelled'),
+    [OrderStatus.EXPIRED]: tOrder('expired'),
+  } as const;
 
   const onEventClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
@@ -151,7 +160,7 @@ export default function CalendarEvent(props: Props) {
               )}
               {type === CalendarViewType.DAY && event.status === OrderStatus.PENDING && (
                 <div className={eventLabel({ status: event.status })}>
-                  {event.status.toLowerCase()}
+                  {statusLabels[event.status]}
                 </div>
               )}
             </div>

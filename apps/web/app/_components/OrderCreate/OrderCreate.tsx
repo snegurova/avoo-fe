@@ -310,7 +310,7 @@ export default function OrderCreate() {
     const availableDate = await getAvailableDate(params);
 
     if (!availableDate) {
-      toast.error('No available date and time');
+      toast.error(t('noAvailableDateAndTime'));
       return;
     }
 
@@ -321,7 +321,7 @@ export default function OrderCreate() {
       (m) => m.id === master.id,
     );
     if (selectedServices[activeOrder] && !isMasterProvidesService) {
-      toast.error('Selected master does not provide selected service');
+      toast.error(t('selectedMasterDoesNotProvideService'));
       return;
     }
     setSelectedMasters((prev) => {

@@ -204,7 +204,7 @@ export default function CombinationForm(props: Props) {
         />
         <div className=''>
           <SearchField
-            label={tCommon('master')}
+            label='Master'
             value={value[0].masterId ? { id: value[0].masterId } : null}
             onChange={selectMaster}
             items={masters}

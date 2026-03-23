@@ -7,7 +7,7 @@ import { Typography } from '@mui/material';
 import AppWrapper from '@/_components/AppWrapper/AppWrapper';
 
 export default function AccountSettingsPage() {
-  const t = useTranslations('private.profile.profile');
+  const t = useTranslations('private.navigation.navigation');
   return (
     <AppWrapper withPadding>
       <div className='p-4 flex justify-between items-center'>

@@ -27,7 +27,6 @@ import CalendarViewMonth from '@/_icons/CalendarViewMonth';
 import CalendarViewWeek from '@/_icons/CalendarViewWeek';
 import ResetSettingsIcon from '@/_icons/ResetSettingsIcon';
 
-// Removed from top scope to move into component where t is accessible
 type Props = {
   scrollToCurrentTime: () => void;
   params: PrivateCalendarQueryParams;

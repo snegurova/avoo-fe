@@ -194,7 +194,7 @@ export default function OrderEdit(props: Props) {
                 control={control}
                 render={({ field }) => (
                   <SearchField
-                    label={t('master')}
+                    label='Master'
                     value={field.value ?? undefined}
                     onChange={onMasterChange}
                     items={masters}

@@ -126,7 +126,11 @@ export default function ServiceGalleryUpload(props: Props) {
                 const lastIndex = index === medias.length - 1;
                 return (
                   <li key={media.id} className={imageVariants({ wide, isSmall })}>
-                    <img src={media.url} alt='media' className='w-full h-full object-cover' />
+                    <img
+                      src={media.url}
+                      alt={t('mediaAlt')}
+                      className='w-full h-full object-cover'
+                    />
 
                     <button
                       onClick={() => onRemove(media.id)}
@@ -175,7 +179,7 @@ export default function ServiceGalleryUpload(props: Props) {
             <div className='flex flex-col items-center justify-center'>
               <DragAndDropZone
                 title={t('selectOrDrag')}
-                description={isSmall ? '' : t('uploadDescription')}
+                description={isSmall ? '' : t('uploadHint')}
                 buttonTitle={t('selectFile')}
                 accept={accept}
                 onFilePicked={onFilePicked}

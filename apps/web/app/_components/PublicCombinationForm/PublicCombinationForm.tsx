@@ -170,7 +170,7 @@ export default function PublicCombinationForm(props: Props) {
         />
         <div className=''>
           <SearchField
-            label={t('master')}
+            label='Master'
             value={value[0].masterId ? { id: value[0].masterId } : null}
             onChange={selectMaster}
             items={masters}

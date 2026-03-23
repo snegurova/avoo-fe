@@ -1,15 +1,15 @@
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 
 import { IconButton } from '@mui/material';
 import { tv } from 'tailwind-variants';
 
 import { Service } from '@avoo/axios/types/apiTypes';
-import { timeUtils } from '@avoo/shared';
 import { useApiStatusStore } from '@avoo/store';
 
 import DeleteIcon from '@/_icons/DeleteIcon';
 import EditSquareIcon from '@/_icons/EditSquareIcon';
 import SearchActivity from '@/_icons/SearchActivity';
+import { formatLocalizedDuration } from '@/_utils/intlFormatters';
 
 type Props = {
   id: number;
@@ -24,6 +24,7 @@ type Props = {
 
 export default function ComboServiceCard(props: Props) {
   const t = useTranslations('private.components.ComboServiceCard.ComboServiceCard');
+  const locale = useLocale();
   const { id, name, durationMinutes, isActive, services, onDelete, onEdit, isSelected } = props;
 
   const isPending = useApiStatusStore((state) => state.isPending);
@@ -54,7 +55,7 @@ export default function ComboServiceCard(props: Props) {
         <span className='font-medium text-base'>{name}</span>
         <span className='bg-primary-100 rounded-lg py-1 px-2 flex items-center justify-center gap-1'>
           <SearchActivity className='w-4 h-4 text-primary-600' />
-          <span className='text-xs'>{timeUtils.convertDuration(durationMinutes)}</span>
+          <span className='text-xs'>{formatLocalizedDuration(durationMinutes, locale)}</span>
         </span>
       </div>
       <div className='flex items-center justify-between py-2 px-6'>
@@ -63,7 +64,7 @@ export default function ComboServiceCard(props: Props) {
             <li key={service.id}>
               <span className='font-medium text-sm'>{service.name}</span>{' '}
               <span className='text-gray-500 line-through text-xs'>
-                ({timeUtils.convertDuration(service.durationMinutes)})
+                ({formatLocalizedDuration(service.durationMinutes, locale)})
               </span>
             </li>
           ))}
