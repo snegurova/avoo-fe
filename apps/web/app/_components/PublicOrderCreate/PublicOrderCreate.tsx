@@ -54,6 +54,7 @@ export default function PublicOrderCreate() {
     setSelectedServices,
     selectedCombinations,
     setSelectedCombinations,
+    setValue,
   } = orderHooks.useCreatePublicOrder({
     onSuccess: () => {
       router.back();
@@ -80,7 +81,7 @@ export default function PublicOrderCreate() {
   useEffect(() => {
     const values = getValues();
     if (values.customerData) {
-      getValues().customerData.phone = phone;
+      setValue('customerData.phone', phone);
     }
   }, [phone]);
 

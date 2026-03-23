@@ -111,6 +111,7 @@ export const orderHooks = {
       control,
       handleSubmit,
       getValues,
+      setValue,
       formState: { errors },
     } = useForm<CreatePrivateOrdersData>({
       resolver: yupResolver(createPrivateOrdersSchema),
@@ -168,6 +169,7 @@ export const orderHooks = {
       setSelectedServices,
       selectedCombinations,
       setSelectedCombinations,
+      setValue,
     };
   },
   useCreatePublicOrder: ({ onSuccess, userId }: { onSuccess?: () => void; userId: number }) => {
@@ -177,6 +179,7 @@ export const orderHooks = {
       control,
       handleSubmit,
       getValues,
+      setValue,
       formState: { errors },
     } = useForm<CreatePublicOrdersData>({
       resolver: yupResolver(createPublicOrdersSchema),
@@ -236,6 +239,7 @@ export const orderHooks = {
       setSelectedServices,
       selectedCombinations,
       setSelectedCombinations,
+      setValue,
     };
   },
   useUpdateOrder: ({ id, order, onSuccess }: UseUpdateOrderParams) => {
