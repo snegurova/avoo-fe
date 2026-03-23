@@ -1,9 +1,17 @@
 'use client';
 
 import React from 'react';
+import { useLocale, useTranslations } from 'next-intl';
 
 import type { AffectedBooking } from '@avoo/hooks/types/timeOffType';
 import { timeUtils } from '@avoo/shared';
+
+import { CURRENCY } from '@/_constants/currency';
+import {
+  formatLocalizedCurrency,
+  formatLocalizedDuration,
+  getLocalizedDayMonthParts,
+} from '@/_utils/intlFormatters';
 
 import HistoryCard from '../HistoryCard/HistoryCard';
 import TimeOffConflictAlert from '../TimeOffConflictAlert/TimeOffConflictAlert';
@@ -19,30 +27,26 @@ export default function TimeOffConflictsSection({
   conflictMessage,
   affectedBookings,
 }: Readonly<Props>) {
+  const locale = useLocale();
+  const t = useTranslations('private.components.TimeOffConflictsSection.TimeOffConflictsSection');
   const affectedBookingItems = React.useMemo(
     () =>
       affectedBookings.map((booking) => {
-        const bookingDate = new Date(booking.start);
-        const dateDay = Number.isNaN(bookingDate.getTime())
-          ? '--'
-          : bookingDate.toLocaleDateString('en-US', { day: '2-digit' });
-        const dateMonth = Number.isNaN(bookingDate.getTime())
-          ? '--'
-          : bookingDate.toLocaleDateString('en-US', { month: 'short' });
+        const { day: dateDay, month: dateMonth } = getLocalizedDayMonthParts(booking.start, locale);
 
         return {
           id: booking.id,
           dateDay,
           dateMonth,
           time: timeUtils.getTime(String(booking.start)),
-          title: booking.title || 'Booking',
-          duration: timeUtils.getHumanDuration(booking.duration),
+          title: booking.title || t('bookingFallback'),
+          duration: formatLocalizedDuration(booking.duration, locale),
           master: booking.masterName,
-          price: `${booking.price} Euro`,
+          price: formatLocalizedCurrency(booking.price, CURRENCY, locale, 'name'),
           note: booking.note,
         };
       }),
-    [affectedBookings],
+    [affectedBookings, locale, t],
   );
 
   return (
@@ -53,7 +57,7 @@ export default function TimeOffConflictsSection({
 
       {!isConflictsLoading && affectedBookingItems.length > 0 ? (
         <div>
-          <h2 className='text-lg font-semibold mb-3'>Affected bookings</h2>
+          <h2 className='text-lg font-semibold mb-3'>{t('affectedBookings')}</h2>
           <ul className='max-h-[140px] md:max-h-[270px] overflow-y-auto flex flex-col gap-3 pr-2'>
             {affectedBookingItems.map((item) => (
               <li key={item.id} className='list-none'>

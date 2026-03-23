@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 
 import { Typography } from '@mui/material';
 import dayjs from 'dayjs';
@@ -17,6 +17,7 @@ import DeleteIcon from '@/_icons/DeleteIcon';
 import DoNotDisturbIcon from '@/_icons/DoNotDisturbIcon';
 import EditSquareIcon from '@/_icons/EditSquareIcon';
 import ScheduleIcon from '@/_icons/ScheduleIcon';
+import { formatLocalizedWeekdayDayMonth } from '@/_utils/intlFormatters';
 
 import ConfirmationModal from '../ConfirmationModal/ConfirmationModal';
 
@@ -27,6 +28,7 @@ type Props = {
 
 const TimeOffListItem = ({ item, onEdit }: Props) => {
   const t = useTranslations('private.components.TimeOffListItem.TimeOffListItem');
+  const locale = useLocale();
   const toast = useToast();
   const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
 
@@ -66,7 +68,7 @@ const TimeOffListItem = ({ item, onEdit }: Props) => {
     return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
   };
 
-  const formatDay = (d: dayjs.Dayjs) => d.format('ddd D. MMM');
+  const formatDay = (d: dayjs.Dayjs) => formatLocalizedWeekdayDayMonth(d.toDate(), locale);
 
   const noteRef = useRef<HTMLDivElement | null>(null);
   const [isNoteTruncated, setIsNoteTruncated] = useState(false);
@@ -144,7 +146,7 @@ const TimeOffListItem = ({ item, onEdit }: Props) => {
         type='button'
         className='flex flex-col md:flex-row gap-3 items-start md:items-center w-full lg:hidden cursor-pointer text-left'
         onClick={handleOpenDetails}
-        aria-label={`Open ${String(item.master.name)} details`}
+        aria-label={t('openDetails', { name: String(item.master.name) })}
       >
         <div className='w-full md:w-[464px] flex items-start md:items-center gap-4'>
           <div className='flex-shrink-0 self-center'>

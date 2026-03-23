@@ -60,7 +60,7 @@ export const WorkingDayRow = (props: Props) => {
   };
 
   const cardDayVariant = tv({
-    base: 'flex flex-row justify-between items-center px-4 py-2 bg-primary-50',
+    base: 'flex flex-row justify-between items-center px-4 py-2 bg-primary-50 rounded-t-lg',
     variants: {
       enabled: {
         true: '',
@@ -70,7 +70,7 @@ export const WorkingDayRow = (props: Props) => {
   });
   const options = scheduleHooks.useWorkingHoursOptions();
 
-  const shiftedIndex = (index + patternShift) % 7;
+  const shiftedIndex = (((index + patternShift) % 7) + 7) % 7;
 
   return (
     <div className='border border-gray-200 rounded-lg'>

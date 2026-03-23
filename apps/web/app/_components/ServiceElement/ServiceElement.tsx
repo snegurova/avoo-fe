@@ -1,14 +1,15 @@
 import React from 'react';
+import { useLocale } from 'next-intl';
 
 import { tv } from 'tailwind-variants';
 
 import { MasterWithRelationsEntity, Service } from '@avoo/axios/types/apiTypes';
 import { colors } from '@avoo/design-tokens';
-import { currencyUtils, timeUtils } from '@avoo/shared';
 
 import Avatar, { AvatarSize } from '@/_components/Avatar/Avatar';
 import { CURRENCY } from '@/_constants/currency';
 import CloseIcon from '@/_icons/CloseIcon';
+import { formatLocalizedCurrency, formatLocalizedDuration } from '@/_utils/intlFormatters';
 
 type Props = {
   item: Service;
@@ -41,6 +42,7 @@ const durationStyles = tv({
 });
 
 export default function ServiceElement(props: Props) {
+  const locale = useLocale();
   const {
     item,
     onClick,
@@ -66,7 +68,7 @@ export default function ServiceElement(props: Props) {
       <div className='flex flex-col text-sm text-start gap-2 tracking-wider leading-none'>
         <h3 className='font-medium text-black'>{item.name}</h3>
         <p className={durationStyles({ isDurationChanged })}>
-          {timeUtils.convertDuration(item.durationMinutes)}
+          {formatLocalizedDuration(item.durationMinutes, locale)}
         </p>
         {!isCard && item.masters && !hideMasters && (
           <ul className='flex flex-wrap gap-y-0.5 gap-x-1'>
@@ -85,7 +87,7 @@ export default function ServiceElement(props: Props) {
           </div>
         )}
       </div>
-      <div className=''>{currencyUtils.formatPrice(item.price, CURRENCY)}</div>
+      <div className=''>{formatLocalizedCurrency(item.price, CURRENCY, locale)}</div>
       {onDelete && (
         <button
           onClick={() => onDelete()}

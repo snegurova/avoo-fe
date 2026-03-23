@@ -88,6 +88,7 @@ declare module '@mui/material/styles' {
 
 declare module '@mui/material/Chip' {
   interface ChipPropsColorOverrides {
+    confirmed: true;
     pending: true;
     outOfSchedule: true;
   }

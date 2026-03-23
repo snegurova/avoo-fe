@@ -11,12 +11,7 @@ import type { Dayjs } from 'dayjs';
 import type { ShortMasterInfo } from '@avoo/axios/types/apiTypes';
 import { VALUE_DATE_FORMAT } from '@avoo/constants';
 import { exceptionHooks, masterHooks, timeOffConflictHooks } from '@avoo/hooks';
-import {
-  TimeOffMode,
-  timeOffTypeLabels,
-  timeOffTypes,
-  WholeDay,
-} from '@avoo/hooks/types/timeOffType';
+import { TimeOffMode, timeOffTypes, WholeDay } from '@avoo/hooks/types/timeOffType';
 import { validateEndDateFactory } from '@avoo/shared';
 
 import { localizationHooks } from '@/_hooks/localizationHooks';
@@ -33,6 +28,7 @@ import TimeOffConflictsSection from '../TimeOffConflictsSection/TimeOffConflicts
 
 export default function TimeOffAddForm() {
   const t = useTranslations('private.components.TimeOffAddForm.TimeOffAddForm');
+  const tTimeOffTypes = useTranslations('private.timeOff.types');
   const {
     data: mastersPages,
     hasNextPage,
@@ -90,10 +86,10 @@ export default function TimeOffAddForm() {
   const timeOffTypeOptions = useMemo(
     () =>
       timeOffTypes.map(({ value }) => ({
-        label: timeOffTypeLabels[value],
+        label: tTimeOffTypes(value),
         value,
       })),
-    [],
+    [tTimeOffTypes],
   );
 
   const headerLabel = useMemo(() => {
@@ -246,7 +242,7 @@ export default function TimeOffAddForm() {
                         onChange={(_e, checked) =>
                           field.onChange(checked ? WholeDay.Whole : WholeDay.Partial)
                         }
-                        slotProps={{ input: { 'aria-label': 'whole day' } }}
+                        slotProps={{ input: { 'aria-label': t('wholeDayAriaLabel') } }}
                       />
                     }
                   />

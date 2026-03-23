@@ -87,18 +87,18 @@ export default function SchedulesControls(props: Props) {
       </div>
       <div className='hidden lg:grid grid-cols-[2fr_1.2fr_1.2fr_1.2fr_72px] gap-3 p-6 mb-8 text-sm text-black font-semibold bg-primary-50'>
         <div onClick={() => onSortClick('name')} className='cursor-pointer flex items-center gap-1'>
-          <span>Schedule name</span>
+          <span>{t('scheduleName')}</span>
           <SortIconButton
             reverse={activeSortField === 'name' && activeSortDirection === 'asc'}
             isPending={isPending}
           />
         </div>
-        <div className='flex items-center'>Applies to</div>
+        <div className='flex items-center'>{t('appliesTo')}</div>
         <div
           onClick={() => onSortClick('startAt')}
           className='cursor-pointer flex items-center gap-1'
         >
-          <span>Start date</span>
+          <span>{t('startDate')}</span>
           <SortIconButton
             reverse={activeSortField === 'startAt' && activeSortDirection === 'asc'}
             isPending={isPending}
@@ -108,13 +108,13 @@ export default function SchedulesControls(props: Props) {
           onClick={() => onSortClick('endAt')}
           className='cursor-pointer flex items-center gap-1'
         >
-          <span>End date</span>
+          <span>{t('endDate')}</span>
           <SortIconButton
             reverse={activeSortField === 'endAt' && activeSortDirection === 'asc'}
             isPending={isPending}
           />
         </div>
-        <div className='flex items-center'>Actions</div>
+        <div className='flex items-center'>{t('actions')}</div>
       </div>
     </>
   );

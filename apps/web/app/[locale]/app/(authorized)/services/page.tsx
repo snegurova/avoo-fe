@@ -1,6 +1,7 @@
 'use client';
 import React, { useMemo } from 'react';
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 
 import { categoriesHooks, servicesHooks } from '@avoo/hooks';
 import { useApiStatusStore } from '@avoo/store';
@@ -27,24 +28,27 @@ export default function ServicesPage() {
     [data],
   );
 
+  const t = useTranslations('private.services');
   return (
     <AppWrapper withPadding>
       <ServiceControls setSearchQuery={setSearchQuery} />
       {params.search === '' && total === 0 ? (
         <AppPlaceholder
-          title={isPending ? 'Loading...' : 'No services added'}
+          title={isPending ? t('loading') : t('noServicesAdded')}
           icon={<AutoStoriesIcon className='w-20 h-20 xl:w-25 xl:h-25 fill-primary-300' />}
           description={
             isPending ? null : (
               <p>
-                Start by creating your first{' '}
-                <Link
-                  href={localizationHooks.useWithLocale(AppRoutes.CreateService)}
-                  className='text-primary-300'
-                >
-                  service
-                </Link>{' '}
-                to make it available for booking
+                {t.rich('detailedNoServicesDescription', {
+                  link: (chunks) => (
+                    <Link
+                      href={localizationHooks.useWithLocale(AppRoutes.CreateService)}
+                      className='text-primary-300'
+                    >
+                      {chunks}
+                    </Link>
+                  ),
+                })}
               </p>
             )
           }

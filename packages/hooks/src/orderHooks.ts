@@ -47,6 +47,23 @@ function convertOrdersDataDatesToUTC<T extends { ordersData?: { date: string }[]
   return data;
 }
 
+function normalizeOrdersData(data: unknown): Order[] {
+  if (Array.isArray(data)) {
+    return data;
+  }
+
+  if (
+    typeof data === 'object' &&
+    data !== null &&
+    'items' in data &&
+    Array.isArray((data as { items?: unknown }).items)
+  ) {
+    return (data as { items: Order[] }).items;
+  }
+
+  return [];
+}
+
 type UseCreateOrderFormParams = {
   order: {
     masterId?: number;
@@ -74,15 +91,15 @@ export const orderHooks = {
       [params],
     );
 
-    const { data: ordersData, isPending } = useQuery<BaseResponse<Order[]>, Error>({
+    const { data: ordersData, isPending } = useQuery<BaseResponse<unknown>, Error>({
       queryKey: ['orders', queryKeys.orders.byParams(memoParams)],
       queryFn: () => orderApi.getOrders(params),
     });
 
     utils.useSetPendingApi(isPending);
 
-    if (ordersData?.status === ApiStatus.SUCCESS && ordersData.data) {
-      return ordersData.data;
+    if (ordersData?.status === ApiStatus.SUCCESS) {
+      return normalizeOrdersData(ordersData.data);
     }
 
     return null;
@@ -316,11 +333,6 @@ export const orderHooks = {
   },
 
   useGetCustomerOrderHistory: (customerId?: number | null, limit = 10) => {
-    type CustomerHistoryData = Order[] | { items: Order[] };
-
-    const hasItemsArray = (value: unknown): value is { items: Order[] } =>
-      typeof value === 'object' && value !== null && 'items' in value && Array.isArray(value.items);
-
     const params = useMemo<PrivateOrderQueryParams>(
       () => ({
         page: 1,
@@ -330,7 +342,7 @@ export const orderHooks = {
       [customerId, limit],
     );
 
-    const { data: ordersData, isPending } = useQuery<BaseResponse<CustomerHistoryData>, Error>({
+    const { data: ordersData, isPending } = useQuery<BaseResponse<unknown>, Error>({
       queryKey: ['orders', 'customer-history', queryKeys.orders.byParams(params)],
       queryFn: () => orderApi.getOrders(params),
       enabled: !!customerId,
@@ -339,15 +351,74 @@ export const orderHooks = {
     utils.useSetPendingApi(isPending);
 
     if (ordersData?.status === ApiStatus.SUCCESS) {
-      if (Array.isArray(ordersData.data)) {
-        return ordersData.data;
-      }
-
-      if (hasItemsArray(ordersData.data)) {
-        return ordersData.data.items;
-      }
+      return normalizeOrdersData(ordersData.data);
     }
 
     return [];
+  },
+
+  useCustomerOrdersHistory: (customerId?: number | null) => {
+    const orders = orderHooks.useGetCustomerOrderHistory(customerId, 50);
+
+    return useMemo(() => {
+      const now = Date.now();
+      const upcomingStatuses = new Set([OrderStatus.PENDING, OrderStatus.CONFIRMED]);
+      const sorted = [...orders].sort(
+        (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime(),
+      );
+
+      return {
+        nextAppointments: sorted.filter((o) => {
+          const t = new Date(o.date).getTime();
+          return Number.isFinite(t) && t >= now && upcomingStatuses.has(o.status);
+        }),
+        historyItems: sorted
+          .filter((o) => {
+            const t = new Date(o.date).getTime();
+            return Number.isFinite(t) && t < now && o.status === OrderStatus.COMPLETED;
+          })
+          .reverse(),
+      };
+    }, [orders]);
+  },
+  useUpcomingAppointmentsByMaster: (limit = 100) => {
+    const pendingOrders = orderHooks.useGetOrders({
+      page: 1,
+      limit,
+      status: OrderStatus.PENDING,
+    });
+    const confirmedOrders = orderHooks.useGetOrders({
+      page: 1,
+      limit,
+      status: OrderStatus.CONFIRMED,
+    });
+
+    return useMemo(() => {
+      const now = Date.now();
+      const byId = new Map<number, Order>();
+
+      [...(pendingOrders ?? []), ...(confirmedOrders ?? [])].forEach((order) => {
+        byId.set(order.id, order);
+      });
+
+      const upcoming = Array.from(byId.values())
+        .filter((order) => {
+          const timestamp = new Date(order.date).getTime();
+          return Number.isFinite(timestamp) && timestamp >= now;
+        })
+        .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+
+      const byMaster = new Map<number, Order>();
+
+      upcoming.forEach((order) => {
+        if (!byMaster.has(order.master.id)) {
+          byMaster.set(order.master.id, order);
+        }
+      });
+
+      return Array.from(byMaster.values()).sort(
+        (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime(),
+      );
+    }, [confirmedOrders, pendingOrders]);
   },
 };

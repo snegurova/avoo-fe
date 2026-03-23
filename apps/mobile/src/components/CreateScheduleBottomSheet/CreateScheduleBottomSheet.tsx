@@ -1,26 +1,25 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useFieldArray } from 'react-hook-form';
-import { Platform, Pressable, ScrollView, Switch, Text, View } from 'react-native';
+import { Platform, Pressable, ScrollView, Text, View } from 'react-native';
 
 import {
   DateTimePickerAndroid,
   type DateTimePickerEvent,
 } from '@react-native-community/datetimepicker';
 
-import { DAYS_NAME, END_MINUTE, SCHEDULE_OPTIONS, START_MINUTE } from '@avoo/constants';
-import { colors } from '@avoo/design-tokens';
+import { END_MINUTE, SCHEDULE_OPTIONS, START_MINUTE } from '@avoo/constants';
 import { masterHooks, scheduleHooks, utils } from '@avoo/hooks';
 
 import { DatePickerSheet } from '@/components/DatePickerSheet/DatePickerSheet';
+import { LockedField } from '@/components/LockedField/LockedField';
 import { MastersSheet } from '@/components/MastersSheet/MastersSheet';
 import { ScheduleTypeSheet } from '@/components/ScheduleTypeSheet/ScheduleTypeSheet';
-import { SelectableField } from '@/components/SelectableField/SelectableField';
 import { TimePickerSheet } from '@/components/TimePickerSheet/TimePickerSheet';
-import { TimeField, useWorkingHoursEditor } from '@/hooks/useWorkingHoursEditor';
+import { WorkingDayCard } from '@/components/WorkingDayCard/WorkingDayCard';
+import { useWorkingHoursEditor } from '@/hooks/useWorkingHoursEditor';
 import { BottomSheetHeader } from '@/shared/BottomSheetHeader/BottomSheetHeader';
 import { CustomBottomSheet } from '@/shared/CustomBottomSheet/CustomBottomSheet';
 import FormTextInput from '@/shared/FormTextInput';
-import { TimeStepper } from '@/shared/TimeStepper/TimeStepper';
 
 type Props = {
   visible: boolean;
@@ -163,7 +162,7 @@ export const CreateScheduleBottomSheet = (props: Props) => {
 
         <View className='mb-4'>
           <Text className='mb-2 text-sm font-medium text-black'>Type of schedule *</Text>
-          <SelectableField
+          <LockedField
             value={SCHEDULE_OPTIONS.find((o) => o.value === scheduleType)?.label ?? 'Select type'}
             onPress={openTypeSheet}
           />
@@ -171,7 +170,7 @@ export const CreateScheduleBottomSheet = (props: Props) => {
 
         <View className='mb-4'>
           <Text className='mb-2 text-sm font-medium text-black'>Apply schedule to *</Text>
-          <SelectableField value={mastersLabel} onPress={openMastersSheet} />
+          <LockedField value={mastersLabel} onPress={openMastersSheet} />
         </View>
 
         <View className='mb-4'>
@@ -206,127 +205,21 @@ export const CreateScheduleBottomSheet = (props: Props) => {
 
         <Text className='mb-3 text-sm font-medium text-black'>Weekly breakdown</Text>
 
-        {fields.map((field, index) => {
-          const value = workingHours?.[index];
-          const isEnabled = value?.enabled ?? false;
-          const breaks = value?.breaks ?? [];
-          return (
-            <View
-              key={field.id}
-              className='mb-3'
-              style={{ marginTop: scheduleType === 'custom' && fields.length > 1 ? 10 : 0 }}
-            >
-              {scheduleType === 'custom' && fields.length > 1 && (
-                <Pressable
-                  hitSlop={6}
-                  onPress={() => remove(index)}
-                  style={{
-                    position: 'absolute',
-                    top: -10,
-                    right: -10,
-                    zIndex: 10,
-                    width: 22,
-                    height: 22,
-                    borderRadius: 11,
-                    backgroundColor: '#ef4444',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    shadowColor: '#000',
-                    shadowOffset: { width: 0, height: 1 },
-                    shadowOpacity: 0.15,
-                    shadowRadius: 2,
-                    elevation: 3,
-                  }}
-                >
-                  <Text style={{ color: '#fff', fontSize: 14, lineHeight: 16, fontWeight: '600' }}>
-                    ×
-                  </Text>
-                </Pressable>
-              )}
-              <View className='rounded-2xl bg-white border border-gray-200 px-4 pt-4 pb-3'>
-                <View className='flex-row items-center justify-between mb-4'>
-                  <Text className='text-base font-semibold text-gray-900'>
-                    {scheduleType === 'weekly'
-                      ? (DAYS_NAME[field.day - 1] ?? `Day ${field.day}`)
-                      : `Day ${index + 1}`}
-                  </Text>
-                  <View className='flex-row items-center gap-3'>
-                    <Text className='text-xs text-gray-400'>Working day</Text>
-                    <Switch
-                      value={isEnabled}
-                      onValueChange={(v) => handleToggleDay(index, v)}
-                      trackColor={{ false: colors.gray[300], true: colors.primary[700] }}
-                      thumbColor={colors.white}
-                      ios_backgroundColor={colors.gray[300]}
-                    />
-                  </View>
-                </View>
-                {isEnabled && (
-                  <>
-                    <View className='flex-row items-center gap-3 mb-3'>
-                      <TimeStepper
-                        value={value?.startTimeMinutes ?? 0}
-                        onDecrement={() => shiftTime(index, TimeField.StartTime, -1)}
-                        onIncrement={() => shiftTime(index, TimeField.StartTime, 1)}
-                        onPress={() => openTimePicker(index, TimeField.StartTime)}
-                      />
-                      <Text className='text-xs text-gray-400'>to</Text>
-                      <TimeStepper
-                        value={value?.endTimeMinutes ?? 0}
-                        onDecrement={() => shiftTime(index, TimeField.EndTime, -1)}
-                        onIncrement={() => shiftTime(index, TimeField.EndTime, 1)}
-                        onPress={() => openTimePicker(index, TimeField.EndTime)}
-                      />
-                    </View>
-                    {breaks.map((brk, breakIndex) => (
-                      <View
-                        key={breakIndex}
-                        className='mb-2 rounded-xl border border-gray-200 bg-gray-50 px-3 pt-2 pb-3'
-                      >
-                        <View className='flex-row items-center justify-between mb-2'>
-                          <Text className='text-xs font-medium text-gray-400'>Break</Text>
-                          <Pressable hitSlop={10} onPress={() => removeBreak(index, breakIndex)}>
-                            <Text className='text-base text-gray-400'>×</Text>
-                          </Pressable>
-                        </View>
-                        <View className='flex-row items-center gap-3'>
-                          <TimeStepper
-                            value={brk.breakStartTimeMinutes}
-                            onDecrement={() =>
-                              shiftBreakTime(index, breakIndex, TimeField.BreakStart, -1)
-                            }
-                            onIncrement={() =>
-                              shiftBreakTime(index, breakIndex, TimeField.BreakStart, 1)
-                            }
-                            onPress={() => openTimePicker(index, TimeField.BreakStart, breakIndex)}
-                          />
-                          <Text className='text-xs text-gray-400'>to</Text>
-                          <TimeStepper
-                            value={brk.breakEndTimeMinutes}
-                            onDecrement={() =>
-                              shiftBreakTime(index, breakIndex, TimeField.BreakEnd, -1)
-                            }
-                            onIncrement={() =>
-                              shiftBreakTime(index, breakIndex, TimeField.BreakEnd, 1)
-                            }
-                            onPress={() => openTimePicker(index, TimeField.BreakEnd, breakIndex)}
-                          />
-                        </View>
-                      </View>
-                    ))}
-                    <Pressable
-                      className='flex-row items-center gap-1 mt-1'
-                      onPress={() => addBreak(index)}
-                    >
-                      <Text className='text-lg text-primary-700 leading-none'>⊕</Text>
-                      <Text className='text-sm text-primary-700'>Add break</Text>
-                    </Pressable>
-                  </>
-                )}
-              </View>
-            </View>
-          );
-        })}
+        {fields.map((field, index) => (
+          <WorkingDayCard
+            key={field.id}
+            field={field}
+            index={index}
+            value={workingHours?.[index]}
+            onToggle={handleToggleDay}
+            onShift={shiftTime}
+            onOpen={openTimePicker}
+            onAddBreak={addBreak}
+            onRemoveBreak={removeBreak}
+            onShiftBreak={shiftBreakTime}
+            onRemove={scheduleType === 'custom' && fields.length > 1 ? remove : undefined}
+          />
+        ))}
 
         {scheduleType === 'custom' && (
           <Pressable

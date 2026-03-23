@@ -3,6 +3,7 @@ import {
   BaseResponse,
   CreatePrivateOrdersRequest,
   CreatePublicOrdersRequest,
+  GetOrdersResponse,
   Order,
   PrivateOrderQueryParams,
   UpdateOrderRequest,
@@ -14,7 +15,7 @@ const PUBLIC_ORDER_ENDPOINT = '/public/orders';
 
 export const orderApi = {
   async getOrders(params: PrivateOrderQueryParams) {
-    const res = await apiClient.get<BaseResponse<Order[]>>(ORDER_ENDPOINT, { params });
+    const res = await apiClient.get<BaseResponse<GetOrdersResponse>>(ORDER_ENDPOINT, { params });
     return res.data;
   },
   async updateOrder(id: number, data: UpdateOrderRequest) {
