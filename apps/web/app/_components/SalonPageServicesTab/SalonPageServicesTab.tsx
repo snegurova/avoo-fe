@@ -82,6 +82,9 @@ export default function SalonPageServicesTab(props: Props) {
             onClick={() => handleCategoryClick(undefined)}
           >
             <span>{t('allCategories')}</span>
+            <span className='w-5 h-5 rounded-full border border-gray-100 flex items-center justify-center text-xs text-black shrink-0'>
+              {categories?.total}
+            </span>
           </button>
           {categories?.categories.map((cat) =>
             cat.totalServices ? (
