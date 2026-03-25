@@ -16,16 +16,18 @@ type Props = {
   onClose: () => void;
   refetchCalendar: () => void;
   isOutOfSchedule?: boolean;
+  initialMode?: Mode;
+  showStatus?: boolean;
 };
 
-enum Mode {
+export enum Mode {
   View = 'View',
   Edit = 'Edit',
   Confirmation = 'Confirmation',
 }
 
 export default function OrderData(props: Props) {
-  const { orderId, onClose, refetchCalendar, isOutOfSchedule } = props;
+  const { orderId, onClose, refetchCalendar, isOutOfSchedule, showStatus } = props;
   const locale = useLocale();
   const [mode, setMode] = useState<Mode>(Mode.View);
   const { data: order, refetch } = orderHooks.useGetOrderById(orderId);
@@ -66,6 +68,7 @@ export default function OrderData(props: Props) {
               timeAgo={timeAgo}
               endTime={endTime}
               isOutOfSchedule={isOutOfSchedule}
+              showStatus={showStatus}
             />
           )}
           {mode === Mode.Edit && (

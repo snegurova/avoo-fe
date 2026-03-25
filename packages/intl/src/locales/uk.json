@@ -9,7 +9,8 @@
       "areYouSureYouWantToLeaveThisWindow": "Ви впевнені, що хочете закрити вікно?",
       "youHaveUnsavedChangesInThisWindow": "У вас є незбережені зміни. Ви впевнені, що хочете закрити вікно?",
       "leaveWindow": "Закрити",
-      "defaultFailError": "Сталося щось дивне. Спробуйте пізніше."
+      "defaultFailError": "Сталося щось дивне. Спробуйте пізніше.",
+      "ok": "Ок"
     },
     "profile": {
       "changePassword": {
@@ -51,6 +52,7 @@
         "newBooking": "Нове бронювання",
         "newPost": "Новий пост",
         "newNotifications": "Нові сповіщення",
+        "newOrders": "Нові бронювання",
         "nextAppointments": "Наступні записи",
         "add": "Додати",
         "home": "Головна",
@@ -59,6 +61,7 @@
         "services": "Послуги",
         "masters": "Майстри",
         "posts": "Пости",
+        "orders": "Візити",
         "workingSchedule": "Графік роботи",
         "scheduleException": "Виняток у графіку",
         "billingNotification": "Платіжні або маркетингові сповіщення",
@@ -118,6 +121,14 @@
       }
     },
     "orders": {
+      "orders": "Візити",
+      "loading": "Завантаження...",
+      "noOrdersFound": "Візитів не знайдено",
+      "hereYouCanSeeAllYourOrdersOrYouCan": "Тут ви можете побачити всі ваші візити або можете",
+      "orYou": "або ви",
+      "canCreate": "можете створити",
+      "taNewOrderOrUseCalendarToBookServiceForClient": "новий візит або використати календар для бронювання послуги для клієнта",
+      "detailedNoOrdersDescription": "<link>Створити новий візит</link> для керування бронюваннями клієнтів.",
       "order": {
         "pending": "В очікуванні",
         "completed": "Завершено",
@@ -351,6 +362,13 @@
           "priceInEuro": "{price} євро"
         }
       },
+      "NewOrdersWidget": {
+        "NewOrdersWidget": {
+          "seeAll": "Переглянути всі",
+          "noOrders": "Всі бронювання підтверджено",
+          "noOrdersHint": "Нові бронювання з'являться тут коли будуть створені."
+        }
+      },
       "NextAppointmentsWidget": {
         "NextAppointmentsWidget": {
           "back": "Назад",
@@ -462,6 +480,15 @@
       "CustomerSelect": {
         "CustomerSelect": {
           "client": "Клієнт"
+        }
+      },
+      "DateRangePicker": {
+        "DateRangePicker": {
+          "from": "З",
+          "to": "По",
+          "selectStartDate": "Виберіть дату початку",
+          "selectEndDate": "Виберіть дату завершення",
+          "selectTheStartAndEndDate": "Виберіть дату початку та завершення"
         }
       },
       "DragAndDropZone": {
@@ -606,6 +633,28 @@
           "client": "Клієнт",
           "edit": "Редагувати",
           "noteWithValue": "Примітка: {note}"
+        }
+      },
+      "OrderControls": {
+        "OrderControls": {
+          "orders": "Візити",
+          "createOrder": "Створити візит",
+          "allStatuses": "Всі статуси"
+        }
+      },
+      "OrderStatusChip": {
+        "OrderStatusChip": {
+          "pending": "В очікуванні",
+          "completed": "Завершено",
+          "cancelled": "Скасовано",
+          "confirmed": "Підтверджено",
+          "expired": "Прострочено",
+          "outOfSchedule": "Поза графіком"
+        }
+      },
+      "OrderListItem": {
+        "OrderListItem": {
+          "client": "Клієнт"
         }
       },
       "ConfirmationModal": {
@@ -890,6 +939,11 @@
           "mediaDeleted": "Медіафайл видалено!",
           "mediaDeleteError": "Не вдалося видалити медіафайл: {error}",
           "mediaRemoved": "Медіафайл вилучено!"
+        }
+      },
+      "SingleMasterSelect": {
+        "SingleMasterSelect": {
+          "allMasters": "Усі майстри"
         }
       },
       "TimeOffAddForm": {

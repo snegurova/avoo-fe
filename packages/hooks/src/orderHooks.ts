@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 import { orderApi } from '@avoo/axios';
 import {
@@ -11,6 +11,7 @@ import {
   Combination,
   CreatePrivateOrdersRequest,
   CreatePublicOrdersRequest,
+  GetOrdersResponse,
   Order,
   PrivateOrderQueryParams,
   Service,
@@ -78,6 +79,8 @@ type UseUpdateOrderParams = {
   onSuccess?: () => void;
 };
 
+const DEFAULT_LIMIT = 10;
+
 export const orderHooks = {
   useGetOrders: (params: PrivateOrderQueryParams) => {
     const memoParams = useMemo<PrivateOrderQueryParams>(
@@ -103,6 +106,100 @@ export const orderHooks = {
     }
 
     return null;
+  },
+  useGetOrdersInfinite: ({
+    limit = DEFAULT_LIMIT,
+    status,
+    masterId,
+    dateFrom,
+    dateTo,
+  }: PrivateOrderQueryParams) => {
+    const filterParams = { limit, status, masterId, dateFrom, dateTo };
+    const query = useInfiniteQuery<BaseResponse<GetOrdersResponse>, Error>({
+      queryKey: ['orders', 'list', filterParams],
+      queryFn: ({ pageParam = 1 }) =>
+        orderApi.getOrders({ ...filterParams, page: pageParam as number }),
+      initialPageParam: 1,
+      getNextPageParam: (lastPage) => {
+        const { currentPage, total } = lastPage.data?.pagination || { currentPage: 0, total: 0 };
+        return currentPage * limit < total ? currentPage + 1 : undefined;
+      },
+    });
+
+    const isPending = query.isFetching;
+
+    utils.useSetPendingApi(isPending);
+
+    return query;
+  },
+  useOrderQuery(status?: OrderStatus) {
+    const [params, setParams] = useState<PrivateOrderQueryParams>({
+      limit: DEFAULT_LIMIT,
+      status: status,
+      masterId: undefined,
+      dateFrom: undefined,
+      dateTo: undefined,
+    });
+
+    const setOrderStatus = (value: OrderStatus | undefined) => {
+      setParams((prev) => ({
+        ...prev,
+        status: value,
+      }));
+    };
+
+    const setMasterId = (value: number | undefined) => {
+      setParams((prev) => ({
+        ...prev,
+        masterId: value,
+      }));
+    };
+
+    const setDateFrom = (value: string | undefined) => {
+      setParams((prev) => ({
+        ...prev,
+        dateFrom: value,
+      }));
+    };
+
+    const setDateTo = (value: string | undefined) => {
+      setParams((prev) => ({
+        ...prev,
+        dateTo: value,
+      }));
+    };
+
+    const resetFilters = () => {
+      setParams({
+        limit: DEFAULT_LIMIT,
+        status: undefined,
+        masterId: undefined,
+        dateFrom: undefined,
+        dateTo: undefined,
+      });
+    };
+
+    const queryParams = useMemo(
+      () => ({
+        limit: params.limit,
+        status: params.status,
+        masterId: params.masterId,
+        dateFrom: params.dateFrom,
+        dateTo: params.dateTo,
+      }),
+      [params.limit, params.status, params.masterId, params.dateFrom, params.dateTo],
+    );
+
+    return {
+      params,
+      setParams,
+      setMasterId,
+      setOrderStatus,
+      setDateFrom,
+      setDateTo,
+      resetFilters,
+      queryParams,
+    };
   },
   useCreateOrder: ({ order, onSuccess }: UseCreateOrderFormParams) => {
     const [selectedServices, setSelectedServices] = useState<(Service | null)[]>([null]);
@@ -360,7 +457,6 @@ export const orderHooks = {
 
     return [];
   },
-
   useCustomerOrdersHistory: (customerId?: number | null) => {
     const orders = orderHooks.useGetCustomerOrderHistory(customerId, 50);
 

@@ -7,6 +7,7 @@ import { CalendarType } from '@avoo/hooks/types/calendarType';
 
 import AppWrapper from '@/_components/AppWrapper/AppWrapper';
 import Calendar from '@/_components/Calendar/Calendar';
+import NewOrdersWidget from '@/_components/NewOrdersWidget/NewOrdersWidget';
 import NextAppointmentsWidget from '@/_components/NextAppointmentsWidget/NextAppointmentsWidget';
 
 export default function DashboardPage() {
@@ -27,9 +28,10 @@ export default function DashboardPage() {
           <AppWrapper isWidget className='min-w-0'>
             <div className='p-4 flex justify-between items-center'>
               <Typography component='h1' variant='h1'>
-                {navT('newNotifications')}
+                {navT('newOrders')}
               </Typography>
             </div>
+            <NewOrdersWidget />
           </AppWrapper>
         </div>
         <div className='min-w-0'>

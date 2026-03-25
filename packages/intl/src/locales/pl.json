@@ -9,7 +9,8 @@
       "youHaveUnsavedChangesInThisWindow": "Masz niezapisane zmiany. Czy na pewno chcesz zamknąć to okno?",
       "leaveWindow": "Zamknij",
       "cancel": "Anuluj",
-      "defaultFailError": "Coś poszło nie tak. Spróbuj ponownie później."
+      "defaultFailError": "Coś poszło nie tak. Spróbuj ponownie później.",
+      "ok": "Ok"
     },
     "profile": {
       "changePassword": {
@@ -51,6 +52,7 @@
         "newBooking": "Nowa rezerwacja",
         "newPost": "Nowy post",
         "newNotifications": "Nowe powiadomienia",
+        "newOrders": "Nowe zamówienia",
         "nextAppointments": "Następne wizyty",
         "add": "Dodaj",
         "home": "Strona główna",
@@ -59,6 +61,7 @@
         "services": "Usługi",
         "masters": "Pracownicy",
         "posts": "Posty",
+        "orders": "Zamówienia",
         "workingSchedule": "Grafik pracy",
         "scheduleException": "Wyjątek w grafiku",
         "billingNotification": "Powiadomienia o rozliczeniach lub marketingu",
@@ -118,6 +121,10 @@
       }
     },
     "orders": {
+      "orders": "Zamówienia",
+      "loading": "Ładowanie...",
+      "noOrdersFound": "Nie znaleziono zamówień",
+      "detailedNoOrdersDescription": "<link>Create an new order</link> to manage client bookings.",
       "order": {
         "pending": "Oczekujące",
         "completed": "Zakończone",
@@ -351,6 +358,13 @@
           "priceInEuro": "{price} Euro"
         }
       },
+      "NewOrdersWidget": {
+        "NewOrdersWidget": {
+          "seeAll": "Zobacz wszystkie",
+          "noOrders": "Brak nowych zamówień",
+          "noOrdersHint": "Nowe zamówienia pojawią się tutaj gdy zostaną utworzone."
+        }
+      },
       "NextAppointmentsWidget": {
         "NextAppointmentsWidget": {
           "back": "Wstecz",
@@ -462,6 +476,15 @@
       "CustomerSelect": {
         "CustomerSelect": {
           "client": "Klient"
+        }
+      },
+      "DateRangePicker": {
+        "DateRangePicker": {
+          "from": "Z",
+          "to": "Do",
+          "selectStartDate": "Wybierz datę rozpoczęcia",
+          "selectEndDate": "Wybierz datę zakończenia",
+          "selectTheStartAndEndDate": "Wybierz datę rozpoczęcia i zakończenia"
         }
       },
       "DragAndDropZone": {
@@ -606,6 +629,28 @@
           "client": "Klient",
           "edit": "Edytuj",
           "noteWithValue": "Notatka: {note}"
+        }
+      },
+      "OrderControls": {
+        "OrderControls": {
+          "orders": "Wizyty",
+          "createOrder": "Utwórz wizytę",
+          "allStatuses": "Wszystkie statusy"
+        }
+      },
+      "OrderStatusChip": {
+        "OrderStatusChip": {
+          "pending": "Oczekujące",
+          "completed": "Zakończone",
+          "cancelled": "Anulowane",
+          "confirmed": "Potwierdzone",
+          "expired": "Wygasłe",
+          "outOfSchedule": "Poza harmonogramem"
+        }
+      },
+      "OrderListItem": {
+        "OrderListItem": {
+          "client": "Klient"
         }
       },
       "ConfirmationModal": {
@@ -890,6 +935,11 @@
           "mediaDeleted": "Multimedia zostały usunięte!",
           "mediaDeleteError": "Nie udało się usunąć multimediów: {error}",
           "mediaRemoved": "Multimedia zostały usunięte!"
+        }
+      },
+      "SingleMasterSelect": {
+        "SingleMasterSelect": {
+          "allMasters": "Wszyscy mistrzowie"
         }
       },
       "TimeOffAddForm": {

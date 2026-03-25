@@ -8,6 +8,7 @@ import {
   Order,
 } from '@avoo/axios/types/apiTypes';
 import { masterHooks, orderHooks } from '@avoo/hooks';
+import { OrderScheduleStatus } from '@avoo/hooks/types/orderStatus';
 import { useApiStatusStore } from '@avoo/store';
 
 import { Button, ButtonFit, ButtonIntent, ButtonType } from '@/_components/Button/Button';
@@ -17,6 +18,7 @@ import FormCounter from '@/_components/FormCounter/FormCounter';
 import FormDatePicker from '@/_components/FormDatePicker/FormDatePicker';
 import FormTextArea from '@/_components/FormTextArea/FormTextArea';
 import FormTimePicker from '@/_components/FormTimePicker/FormTimePicker';
+import OrderStatusChip from '@/_components/OrderStatusChip/OrderStatusChip';
 import SearchField from '@/_components/SearchField/SearchField';
 import ServiceElement from '@/_components/ServiceElement/ServiceElement';
 import ErrorIcon from '@/_icons/ErrorIcon';
@@ -130,11 +132,7 @@ export default function OrderEdit(props: Props) {
           <div className='flex items-center justify-between gap-6 pr-6'>
             <span className='text-2xl font-medium tracking-wider'>{t('editBooking')}</span>
           </div>
-          {isOutOfSchedule && (
-            <span className='text-[10px] font-medium text-white leading-none px-1.5 py-1 flex items-center justify-center rounded-2xl capitalize bg-red-800'>
-              {t('outOfSchedule')}
-            </span>
-          )}
+          {isOutOfSchedule && <OrderStatusChip status={OrderScheduleStatus.OUT_OF_SCHEDULE} />}
         </div>
         <div className='flex flex-col gap-3'>
           <h3 className='font-medium tracking-wider'>{t('service')}</h3>
