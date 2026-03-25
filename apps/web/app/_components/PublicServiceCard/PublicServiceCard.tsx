@@ -33,6 +33,25 @@ export default function PublicServiceCard(props: Props) {
 
   return (
     <div className={card({ selected: isSelected })}>
+      {service.medias && service.medias.length > 0 && (
+        <div className='flex gap-2'>
+          {service.medias.slice(0, 4).map((media) => (
+            <div className='rounded-sm overflow-hidden w-11 h-11' key={media.id}>
+              <img
+                key={media.id}
+                src={media.url}
+                alt={service.name}
+                className='w-full h-full object-cover object-center'
+              />
+            </div>
+          ))}
+          {service.medias.length > 4 && (
+            <div className='rounded-sm overflow-hidden w-11 h-11 flex items-center justify-center text-gray-500 text-sm border border-gray-500'>
+              +{service.medias.length - 4}
+            </div>
+          )}
+        </div>
+      )}
       <div className=''>
         <h3 className='text-base text-black'>{service.name}</h3>
         <p className='text-xs mt-2'>{service.description}</p>

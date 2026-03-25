@@ -38,6 +38,11 @@ export type GetServiceResponse = {
   pagination: components['schemas']['PaginationDto'];
 };
 
+export type GetPublicServicesGroupedByCategoriesParams =
+  operations['ServicesPublicController_getGroupByCategories']['parameters']['query'];
+export type GetPublicServicesGroupedByCategoriesResponse =
+  components['schemas']['PublicServicesGroupByCategoriesResponseDto'];
+
 export type GetCategoriesResponse = Category[];
 export type GetPrivateCategoriesResponse =
   components['schemas']['ServicesGroupByCategoriesResponseDto'];

@@ -13,7 +13,7 @@ type Props = {
 };
 
 const button = tv({
-  base: 'px-5.5 lg:px-2 py-3 rounded-full lg:rounded-lg border transition-colors text-sm leading-none text-black flex justify-between items-center gap-2 bg-white',
+  base: 'px-5.5 lg:px-2 py-2 rounded-full lg:rounded-lg border transition-colors text-sm leading-none text-black flex justify-between items-center gap-3 bg-white',
   variants: {
     active: {
       true: 'border-black',
@@ -28,7 +28,7 @@ export default function SalonPageServicesTab(props: Props) {
 
   const { queryParams, setCategory } = servicesHooks.usePublicServiceQuery(userId);
 
-  const categories = categoriesHooks.useGetPublicCategories();
+  const categories = categoriesHooks.useGetPublicCategoriesForUser({ userId });
 
   const {
     data,
@@ -83,15 +83,20 @@ export default function SalonPageServicesTab(props: Props) {
           >
             <span>{t('allCategories')}</span>
           </button>
-          {categories?.map((cat) => (
-            <button
-              key={cat.id}
-              className={button({ active: selectedCategory === cat.id })}
-              onClick={() => handleCategoryClick(cat.id)}
-            >
-              <span>{t(cat.name)}</span>
-            </button>
-          ))}
+          {categories?.categories.map((cat) =>
+            cat.totalServices ? (
+              <button
+                key={cat.category.id}
+                className={button({ active: selectedCategory === cat.category.id })}
+                onClick={() => handleCategoryClick(cat.category.id)}
+              >
+                <span>{t(cat.category.name)}</span>
+                <span className='w-5 h-5 rounded-full border border-gray-100 flex items-center justify-center text-xs text-black shrink-0'>
+                  {cat.totalServices}
+                </span>
+              </button>
+            ) : null,
+          )}
         </div>
       </div>
 
