@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useTranslations } from 'next-intl';
 
 import { Autocomplete, CircularProgress, InputAdornment, TextField } from '@mui/material';
@@ -19,7 +19,28 @@ export const SingleMasterSelect = (props: Props) => {
   const { selectedId, setSelectedId, withSearchIcon = true, fullWidth = false } = props;
   const t = useTranslations('private.components.SingleMasterSelect.SingleMasterSelect');
   const [inputValue, setInputValue] = useState('');
-  const masters = masterHooks.useGetMastersProfileInfo({ search: inputValue })?.items;
+  const { data, hasNextPage, fetchNextPage } = masterHooks.useGetMastersInfinite({
+    search: inputValue,
+  });
+
+  const masters = useMemo(
+    () => data?.pages.flatMap((page) => page.data?.items ?? []) ?? [],
+    [data],
+  );
+
+  const handleScroll = (event: React.UIEvent<HTMLUListElement>) => {
+    const listboxNode = event.currentTarget;
+
+    const scrollTop = listboxNode.scrollTop;
+    const scrollHeight = listboxNode.scrollHeight;
+    const clientHeight = listboxNode.clientHeight;
+
+    const isNearBottom = scrollHeight - scrollTop - clientHeight < 50;
+
+    if (isNearBottom && hasNextPage) {
+      fetchNextPage();
+    }
+  };
 
   return (
     <Autocomplete
@@ -33,6 +54,11 @@ export const SingleMasterSelect = (props: Props) => {
       isOptionEqualToValue={(option, value) => option.id === value.id}
       loading={masters?.length === 0}
       clearOnEscape
+      slotProps={{
+        listbox: {
+          onScroll: handleScroll,
+        },
+      }}
       renderInput={(renderParams) => {
         const { InputProps, ...rest } = renderParams;
 
