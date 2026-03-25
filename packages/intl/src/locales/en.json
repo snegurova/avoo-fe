@@ -9,7 +9,8 @@
       "areYouSureYouWantToLeaveThisWindow": "Are you sure you want to close this window?",
       "youHaveUnsavedChangesInThisWindow": "You have unsaved changes. Are you sure you want to close this window?",
       "leaveWindow": "Close",
-      "defaultFailError": "Something went wrong. Please try again later."
+      "defaultFailError": "Something went wrong. Please try again later.",
+      "ok": "Ok"
     },
     "profile": {
       "changePassword": {
@@ -122,10 +123,7 @@
       "orders": "Orders",
       "loading": "Loading...",
       "noOrdersFound": "No orders found",
-      "hereYouCanSeeAllYourOrdersOrYouCan": "Here you can see all your orders or you can",
-      "orYou": "or you",
-      "canCreate": "can create",
-      "taNewOrderOrUseCalendarToBookServiceForClient": "a new order or use calendar to book service for client",
+      "detailedNoOrdersDescription": "<link>Create an new order</link> to manage client bookings.",
       "order": {
         "pending": "Pending",
         "completed": "Completed",
@@ -472,6 +470,15 @@
           "client": "Client"
         }
       },
+      "DateRangePicker": {
+        "DateRangePicker": {
+          "from": "from",
+          "to": "to",
+          "selectStartDate": "Select start date",
+          "selectEndDate": "Select end date",
+          "selectTheStartAndEndDate": "Select the start and end date"
+        }
+      },
       "DragAndDropZone": {
         "DragAndDropZone": {
           "uploadDnd": "Upload file (Drag & Drop)",
@@ -614,6 +621,28 @@
           "client": "Client",
           "edit": "Edit",
           "noteWithValue": "Note: {note}"
+        }
+      },
+      "OrderControls": {
+        "OrderControls": {
+          "orders": "Orders",
+          "createOrder": "Create order",
+          "allStatuses": "All statuses"
+        }
+      },
+      "OrderStatusChip": {
+        "OrderStatusChip": {
+          "pending": "Pending",
+          "completed": "Completed",
+          "cancelled": "Cancelled",
+          "confirmed": "Confirmed",
+          "expired": "Expired",
+          "outOfSchedule": "Out of schedule"
+        }
+      },
+      "OrderListItem": {
+        "OrderListItem": {
+          "client": "Client"
         }
       },
       "ConfirmationModal": {
@@ -897,6 +926,11 @@
           "mediaDeleted": "Media has been deleted!",
           "mediaDeleteError": "Failed to delete media: {error}",
           "mediaRemoved": "Media has been removed!"
+        }
+      },
+      "SingleMasterSelect": {
+        "SingleMasterSelect": {
+          "allMasters": "All masters"
         }
       },
       "TimeOffAddForm": {

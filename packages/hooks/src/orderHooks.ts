@@ -107,8 +107,14 @@ export const orderHooks = {
 
     return null;
   },
-  useGetOrdersInfinite: ({ limit = DEFAULT_LIMIT }: PrivateOrderQueryParams) => {
-    const filterParams = { limit };
+  useGetOrdersInfinite: ({
+    limit = DEFAULT_LIMIT,
+    status,
+    masterId,
+    dateFrom,
+    dateTo,
+  }: PrivateOrderQueryParams) => {
+    const filterParams = { limit, status, masterId, dateFrom, dateTo };
     const query = useInfiniteQuery<BaseResponse<GetOrdersResponse>, Error>({
       queryKey: ['orders', 'list', filterParams],
       queryFn: ({ pageParam = 1 }) =>
@@ -129,25 +135,69 @@ export const orderHooks = {
   useOrderQuery() {
     const [params, setParams] = useState<PrivateOrderQueryParams>({
       limit: DEFAULT_LIMIT,
+      status: undefined,
+      masterId: undefined,
+      dateFrom: undefined,
+      dateTo: undefined,
     });
 
-    const setOrderStatus = () => {
+    const setOrderStatus = (value: OrderStatus | undefined) => {
       setParams((prev) => ({
         ...prev,
+        status: value,
       }));
+    };
+
+    const setMasterId = (value: number | undefined) => {
+      setParams((prev) => ({
+        ...prev,
+        masterId: value,
+      }));
+    };
+
+    const setDateFrom = (value: string | undefined) => {
+      setParams((prev) => ({
+        ...prev,
+        dateFrom: value,
+      }));
+    };
+
+    const setDateTo = (value: string | undefined) => {
+      setParams((prev) => ({
+        ...prev,
+        dateTo: value,
+      }));
+    };
+
+    const resetFilters = () => {
+      setParams({
+        limit: DEFAULT_LIMIT,
+        status: undefined,
+        masterId: undefined,
+        dateFrom: undefined,
+        dateTo: undefined,
+      });
     };
 
     const queryParams = useMemo(
       () => ({
         limit: params.limit,
         status: params.status,
+        masterId: params.masterId,
+        dateFrom: params.dateFrom,
+        dateTo: params.dateTo,
       }),
-      [params.limit, params.status],
+      [params.limit, params.status, params.masterId, params.dateFrom, params.dateTo],
     );
 
     return {
       params,
+      setParams,
+      setMasterId,
       setOrderStatus,
+      setDateFrom,
+      setDateTo,
+      resetFilters,
       queryParams,
     };
   },

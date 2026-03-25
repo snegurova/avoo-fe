@@ -16,15 +16,25 @@ import { AppRoutes } from '@/_routes/routes';
 
 export default function OrdersPage() {
   const isPending = useApiStatusStore((state) => state.isPending);
-  const { queryParams } = orderHooks.useOrderQuery();
+  const { params, queryParams, setOrderStatus, setMasterId, setDateFrom, setDateTo, resetFilters } =
+    orderHooks.useOrderQuery();
   const t = useTranslations('private.orders');
 
   const { data, fetchNextPage, hasNextPage } = orderHooks.useGetOrdersInfinite(queryParams);
+  const total = data?.pages[0]?.data?.pagination?.total ?? 0;
   const orders = useMemo(() => data?.pages.flatMap((page) => page.data?.items ?? []) ?? [], [data]);
 
   return (
-    <AppWrapper withPadding>
-      <OrderControls />
+    <AppWrapper>
+      <OrderControls
+        setOrderStatus={setOrderStatus}
+        setMasterId={setMasterId}
+        setDateFrom={setDateFrom}
+        setDateTo={setDateTo}
+        onResetFilters={resetFilters}
+        params={params}
+        total={total}
+      />
       {orders.length === 0 ? (
         <AppPlaceholder
           title={isPending ? t('loading') : t('noOrdersFound')}
@@ -32,14 +42,16 @@ export default function OrdersPage() {
           description={
             isPending ? null : (
               <p>
-                {t('hereYouCanSeeAllYourOrdersOrYouCan')}, {t('orYou')}
-                <Link
-                  href={localizationHooks.useWithLocale(AppRoutes.OrderCreate)}
-                  className='text-primary-300'
-                >
-                  {t('canCreate')}
-                </Link>{' '}
-                {t('taNewOrderOrUseCalendarToBookServiceForClient')}
+                {t.rich('detailedNoOrdersDescription', {
+                  link: (chunks) => (
+                    <Link
+                      href={localizationHooks.useWithLocale(AppRoutes.OrderCreate)}
+                      className='text-primary-300'
+                    >
+                      {chunks}
+                    </Link>
+                  ),
+                })}
               </p>
             )
           }

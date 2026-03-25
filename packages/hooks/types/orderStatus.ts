@@ -5,3 +5,7 @@ export enum OrderStatus {
   EXPIRED = 'EXPIRED',
   CANCELED = 'CANCELED',
 }
+
+export enum OrderScheduleStatus {
+  OUT_OF_SCHEDULE = 'OUT_OF_SCHEDULE',
+}

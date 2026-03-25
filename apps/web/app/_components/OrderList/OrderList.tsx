@@ -35,7 +35,7 @@ export default function OrderList(props: Props) {
 
   return (
     <>
-      <div className='flex flex-col gap-6 overflow-y-hidden max-h-[calc(100vh-200px)]'>
+      <div className='flex flex-col gap-6 overflow-y-hidden max-h-[calc(100vh-200px)] px-5 md:px-11'>
         <div
           className='flex flex-col overflow-y-auto gap-4 max-h-[70vh]'
           ref={listRef}
@@ -57,7 +57,7 @@ export default function OrderList(props: Props) {
                     client={order.customer}
                     status={order.status}
                     master={order.master}
-                    isSelected={false}
+                    isSelected={selectedOrder?.id === order.id}
                   />
                 </li>
               ))
@@ -77,6 +77,7 @@ export default function OrderList(props: Props) {
             refetchCalendar={() => {}}
             isOutOfSchedule={false}
             initialMode={Mode.View}
+            showStatus={true}
           />
         )}
       </AsideModal>

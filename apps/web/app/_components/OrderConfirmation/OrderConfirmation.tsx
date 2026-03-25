@@ -4,7 +4,7 @@ import { useLocale, useTranslations } from 'next-intl';
 
 import { Order, Service } from '@avoo/axios/types/apiTypes';
 import { orderHooks } from '@avoo/hooks';
-import { OrderStatus } from '@avoo/hooks/types/orderStatus';
+import { OrderScheduleStatus, OrderStatus } from '@avoo/hooks/types/orderStatus';
 import { timeUtils } from '@avoo/shared';
 import { useApiStatusStore } from '@avoo/store';
 
@@ -13,6 +13,7 @@ import CombinationElement from '@/_components/CombinationElement/CombinationElem
 import CustomerElement from '@/_components/CustomerElement/CustomerElement';
 import FormCounter from '@/_components/FormCounter/FormCounter';
 import FormTextArea from '@/_components/FormTextArea/FormTextArea';
+import OrderStatusChip from '@/_components/OrderStatusChip/OrderStatusChip';
 import ServiceElement from '@/_components/ServiceElement/ServiceElement';
 import ErrorIcon from '@/_icons/ErrorIcon';
 import { formatLocalizedHumanDate } from '@/_utils/intlFormatters';
@@ -32,11 +33,7 @@ export default function OrderConfirmation(props: Props) {
   const locale = useLocale();
   const { order, timeAgo, endTime, onClose, refetchCalendar, refetchOrder, isOutOfSchedule } =
     props;
-  const statusLabels = {
-    [OrderStatus.CANCELED]: t('status.canceled'),
-    [OrderStatus.CONFIRMED]: t('status.confirmed'),
-    [OrderStatus.PENDING]: t('status.pending'),
-  } as const;
+
   const [error, setError] = React.useState<string | null>(null);
   const isPending = useApiStatusStore((state) => state.isPending);
   const errorMessage = useApiStatusStore((s) => s.errorMessage);
@@ -89,14 +86,8 @@ export default function OrderConfirmation(props: Props) {
               {endTime && ` - ${endTime}`}
             </span>
             <div className='relative before:content-[""] before:absolute before:w-px before:top-0.5 before:bottom-0.5 before:bg-black before:-left-2.5 flex gap-2'>
-              <span className='text-[10px] font-medium text-white leading-none px-1.5 py-1 flex items-center justify-center rounded-2xl capitalize bg-orange-500'>
-                {statusLabels[order.status as keyof typeof statusLabels]}
-              </span>
-              {isOutOfSchedule && (
-                <span className='text-[10px] font-medium text-white leading-none px-1.5 py-1 flex items-center justify-center rounded-2xl capitalize bg-red-800'>
-                  {t('outOfSchedule')}
-                </span>
-              )}
+              <OrderStatusChip status={order.status} />
+              {isOutOfSchedule && <OrderStatusChip status={OrderScheduleStatus.OUT_OF_SCHEDULE} />}
             </div>
           </div>
         </div>

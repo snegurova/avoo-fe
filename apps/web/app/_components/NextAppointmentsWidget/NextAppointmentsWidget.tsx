@@ -4,25 +4,16 @@ import React from 'react';
 import { useParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 
-import { Chip } from '@mui/material';
-
 import { PrivateCalendarQueryParams } from '@avoo/axios/types/apiTypes';
 import { colors } from '@avoo/design-tokens';
 import { calendarHooks, orderHooks } from '@avoo/hooks';
-import { OrderStatus } from '@avoo/hooks/types/orderStatus';
+import { OrderScheduleStatus, OrderStatus } from '@avoo/hooks/types/orderStatus';
 import { timeUtils } from '@avoo/shared';
 
 import Avatar, { AvatarSize } from '@/_components/Avatar/Avatar';
+import OrderStatusChip from '@/_components/OrderStatusChip/OrderStatusChip';
 import ArrowBackIcon from '@/_icons/ArrowBackIcon';
 import ArrowForwardIcon from '@/_icons/ArrowForwardIcon';
-
-const ORDER_STATUS_TRANSLATION_KEY = {
-  [OrderStatus.PENDING]: 'pending',
-  [OrderStatus.CONFIRMED]: 'confirmed',
-  [OrderStatus.COMPLETED]: 'completed',
-  [OrderStatus.CANCELED]: 'cancelled',
-  [OrderStatus.EXPIRED]: 'expired',
-} as const;
 
 const LOCALE_MAP = {
   en: 'en-US',
@@ -30,86 +21,12 @@ const LOCALE_MAP = {
   uk: 'uk-UA',
 } as const;
 
-const CONFIRMED_COLOR = '#1B5192';
-
-type StatusVisuals = {
-  chipSx: {
-    alignSelf: 'flex-start';
-    backgroundColor: string;
-    border?: string;
-    borderRadius: string;
-    color: string;
-    height: number;
-    '& .MuiChip-label': {
-      fontSize: number;
-      fontWeight: number;
-      lineHeight: string;
-      px: string;
-    };
-  };
-};
-
-function getOrderStatusVisuals(status: OrderStatus): StatusVisuals {
-  if (status === OrderStatus.CONFIRMED) {
-    return {
-      chipSx: {
-        alignSelf: 'flex-start',
-        backgroundColor: CONFIRMED_COLOR,
-        borderRadius: '12px',
-        color: colors.white,
-        height: 18,
-        '& .MuiChip-label': {
-          fontSize: 10,
-          fontWeight: 500,
-          lineHeight: '10px',
-          px: '6px',
-        },
-      },
-    };
-  }
-
-  return {
-    chipSx: {
-      alignSelf: 'flex-start',
-      backgroundColor: colors.orange[400],
-      borderRadius: '18px',
-      color: colors.white,
-      height: 18,
-      '& .MuiChip-label': {
-        fontSize: 10,
-        fontWeight: 500,
-        lineHeight: '10px',
-        px: '8px',
-      },
-    },
-  };
-}
-
-function getOutOfScheduleVisuals(): StatusVisuals {
-  return {
-    chipSx: {
-      alignSelf: 'flex-start',
-      backgroundColor: colors.red[800],
-      border: `1px solid ${colors.red[800]}`,
-      borderRadius: '12px',
-      color: colors.white,
-      height: 18,
-      '& .MuiChip-label': {
-        fontSize: 10,
-        fontWeight: 500,
-        lineHeight: '10px',
-        px: '6px',
-      },
-    },
-  };
-}
-
 function getAccentColor(status: OrderStatus, isOutOfSchedule: boolean): string {
   if (isOutOfSchedule) {
     return colors.red[800];
   }
 
-  return status === OrderStatus.CONFIRMED ? CONFIRMED_COLOR : colors.orange[500];
+  return status === OrderStatus.CONFIRMED ? colors.confirm : colors.orange[500];
 }
 
 function getLocale(localeParam?: string | string[]): keyof typeof LOCALE_MAP {
@@ -131,7 +48,6 @@ export default function NextAppointmentsWidget() {
     'private.components.NextAppointmentsWidget.NextAppointmentsWidget',
   );
   const tHistory = useTranslations('private.components.ClientOrdersHistory.ClientOrdersHistory');
-  const tOrder = useTranslations('private.orders.order');
   const tCreate = useTranslations('private.orders.create');
   const appointments = orderHooks.useUpcomingAppointmentsByMaster(100);
   const [activeIndex, setActiveIndex] = React.useState(0);
@@ -248,19 +164,10 @@ export default function NextAppointmentsWidget() {
         const note = getOptionalString(appointment.notes);
         const phone = getOptionalString(appointment.customer.phone);
         const isAppointmentOutOfSchedule = outOfScheduleByOrderId.get(appointment.id) === true;
+
         const statusChips = [
-          {
-            label: tOrder(ORDER_STATUS_TRANSLATION_KEY[appointment.status]),
-            visuals: getOrderStatusVisuals(appointment.status),
-          },
-          ...(isAppointmentOutOfSchedule
-            ? [
-                {
-                  label: tWidget('outOfSchedule'),
-                  visuals: getOutOfScheduleVisuals(),
-                },
-              ]
-            : []),
+          appointment.status,
+          ...(isAppointmentOutOfSchedule ? [OrderScheduleStatus.OUT_OF_SCHEDULE] : []),
         ];
 
         return {
@@ -278,7 +185,7 @@ export default function NextAppointmentsWidget() {
           priceLabel: tHistory('priceInEuro', { price: appointment.price }),
         };
       }),
-    [appointments, formatDateLabel, outOfScheduleByOrderId, tCreate, tHistory, tOrder, tWidget],
+    [appointments, formatDateLabel, outOfScheduleByOrderId, tCreate, tHistory, tWidget],
   );
 
   if (visibleAppointments.length === 0) {
@@ -317,13 +224,8 @@ export default function NextAppointmentsWidget() {
                       </p>
                     </div>
                     <div className='flex flex-wrap items-start justify-end gap-2'>
-                      {appointment.statusChips.map((statusChip) => (
-                        <Chip
-                          key={statusChip.label}
-                          label={statusChip.label}
-                          size='small'
-                          sx={statusChip.visuals.chipSx}
-                        />
+                      {appointment.statusChips.map((status) => (
+                        <OrderStatusChip key={status} status={status} />
                       ))}
                     </div>
                   </div>

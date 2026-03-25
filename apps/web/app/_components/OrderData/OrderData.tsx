@@ -17,6 +17,7 @@ type Props = {
   refetchCalendar: () => void;
   isOutOfSchedule?: boolean;
   initialMode?: Mode;
+  showStatus?: boolean;
 };
 
 export enum Mode {
@@ -26,7 +27,7 @@ export enum Mode {
 }
 
 export default function OrderData(props: Props) {
-  const { orderId, onClose, refetchCalendar, isOutOfSchedule } = props;
+  const { orderId, onClose, refetchCalendar, isOutOfSchedule, showStatus } = props;
   const locale = useLocale();
   const [mode, setMode] = useState<Mode>(Mode.View);
   const { data: order, refetch } = orderHooks.useGetOrderById(orderId);
@@ -67,6 +68,7 @@ export default function OrderData(props: Props) {
               timeAgo={timeAgo}
               endTime={endTime}
               isOutOfSchedule={isOutOfSchedule}
+              showStatus={showStatus}
             />
           )}
           {mode === Mode.Edit && (

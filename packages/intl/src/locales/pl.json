@@ -9,7 +9,8 @@
       "youHaveUnsavedChangesInThisWindow": "Masz niezapisane zmiany. Czy na pewno chcesz zamknąć to okno?",
       "leaveWindow": "Zamknij",
       "cancel": "Anuluj",
-      "defaultFailError": "Coś poszło nie tak. Spróbuj ponownie później."
+      "defaultFailError": "Coś poszło nie tak. Spróbuj ponownie później.",
+      "ok": "Ok"
     },
     "profile": {
       "changePassword": {
@@ -122,10 +123,7 @@
       "orders": "Zamówienia",
       "loading": "Ładowanie...",
       "noOrdersFound": "Nie znaleziono zamówień",
-      "hereYouCanSeeAllYourOrdersOrYouCan": "Tutaj możesz zobaczyć wszystkie swoje zamówienia lub możesz",
-      "orYou": "lub Ty",
-      "canCreate": "możesz utworzyć",
-      "taNewOrderOrUseCalendarToBookServiceForClient": "nowe zamówienie lub użyć kalendarza do zarezerwowania usługi dla klienta",
+      "detailedNoOrdersDescription": "<link>Create an new order</link> to manage client bookings.",
       "order": {
         "pending": "Oczekujące",
         "completed": "Zakończone",
@@ -472,6 +470,15 @@
           "client": "Klient"
         }
       },
+      "DateRangePicker": {
+        "DateRangePicker": {
+          "from": "Z",
+          "to": "Do",
+          "selectStartDate": "Wybierz datę rozpoczęcia",
+          "selectEndDate": "Wybierz datę zakończenia",
+          "selectTheStartAndEndDate": "Wybierz datę rozpoczęcia i zakończenia"
+        }
+      },
       "DragAndDropZone": {
         "DragAndDropZone": {
           "uploadDnd": "Prześlij plik (przeciągnij i upuść)",
@@ -614,6 +621,28 @@
           "client": "Klient",
           "edit": "Edytuj",
           "noteWithValue": "Notatka: {note}"
+        }
+      },
+      "OrderControls": {
+        "OrderControls": {
+          "orders": "Wizyty",
+          "createOrder": "Utwórz wizytę",
+          "allStatuses": "Wszystkie statusy"
+        }
+      },
+      "OrderStatusChip": {
+        "OrderStatusChip": {
+          "pending": "Oczekujące",
+          "completed": "Zakończone",
+          "cancelled": "Anulowane",
+          "confirmed": "Potwierdzone",
+          "expired": "Wygasłe",
+          "outOfSchedule": "Poza harmonogramem"
+        }
+      },
+      "OrderListItem": {
+        "OrderListItem": {
+          "client": "Klient"
         }
       },
       "ConfirmationModal": {
@@ -898,6 +927,11 @@
           "mediaDeleted": "Multimedia zostały usunięte!",
           "mediaDeleteError": "Nie udało się usunąć multimediów: {error}",
           "mediaRemoved": "Multimedia zostały usunięte!"
+        }
+      },
+      "SingleMasterSelect": {
+        "SingleMasterSelect": {
+          "allMasters": "Wszyscy mistrzowie"
         }
       },
       "TimeOffAddForm": {
