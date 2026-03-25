@@ -52,6 +52,7 @@
         "newBooking": "New Booking",
         "newPost": "New Post",
         "newNotifications": "New notifications",
+        "newOrders": "New orders",
         "nextAppointments": "Next appointments",
         "add": "Add",
         "home": "Home",
@@ -355,6 +356,13 @@
           "bookingFallback": "Booking",
           "anyMaster": "Any master",
           "priceInEuro": "{price} Euro"
+        }
+      },
+      "NewOrdersWidget": {
+        "NewOrdersWidget": {
+          "seeAll": "See all",
+          "noOrders": "No new orders",
+          "noOrdersHint": "New orders will appear here when they are created."
         }
       },
       "NextAppointmentsWidget": {

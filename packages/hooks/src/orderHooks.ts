@@ -132,10 +132,10 @@ export const orderHooks = {
 
     return query;
   },
-  useOrderQuery() {
+  useOrderQuery(status?: OrderStatus) {
     const [params, setParams] = useState<PrivateOrderQueryParams>({
       limit: DEFAULT_LIMIT,
-      status: undefined,
+      status: status,
       masterId: undefined,
       dateFrom: undefined,
       dateTo: undefined,

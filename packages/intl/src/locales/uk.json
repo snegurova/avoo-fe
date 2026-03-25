@@ -52,6 +52,7 @@
         "newBooking": "Нове бронювання",
         "newPost": "Новий пост",
         "newNotifications": "Нові сповіщення",
+        "newOrders": "Нові бронювання",
         "nextAppointments": "Наступні записи",
         "add": "Додати",
         "home": "Головна",
@@ -359,6 +360,13 @@
           "bookingFallback": "Бронювання",
           "anyMaster": "Будь-який майстер",
           "priceInEuro": "{price} євро"
+        }
+      },
+      "NewOrdersWidget": {
+        "NewOrdersWidget": {
+          "seeAll": "Переглянути всі",
+          "noOrders": "Всі бронювання підтверджено",
+          "noOrdersHint": "Нові бронювання з'являться тут коли будуть створені."
         }
       },
       "NextAppointmentsWidget": {

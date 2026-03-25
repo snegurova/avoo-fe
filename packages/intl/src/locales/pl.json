@@ -52,6 +52,7 @@
         "newBooking": "Nowa rezerwacja",
         "newPost": "Nowy post",
         "newNotifications": "Nowe powiadomienia",
+        "newOrders": "Nowe zamówienia",
         "nextAppointments": "Następne wizyty",
         "add": "Dodaj",
         "home": "Strona główna",
@@ -355,6 +356,13 @@
           "bookingFallback": "Rezerwacja",
           "anyMaster": "Dowolny pracownik",
           "priceInEuro": "{price} Euro"
+        }
+      },
+      "NewOrdersWidget": {
+        "NewOrdersWidget": {
+          "seeAll": "Zobacz wszystkie",
+          "noOrders": "Brak nowych zamówień",
+          "noOrdersHint": "Nowe zamówienia pojawią się tutaj gdy zostaną utworzone."
         }
       },
       "NextAppointmentsWidget": {

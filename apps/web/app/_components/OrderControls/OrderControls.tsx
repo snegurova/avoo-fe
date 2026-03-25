@@ -1,3 +1,5 @@
+'use client';
+
 import { useMemo } from 'react';
 import { useTranslations } from 'next-intl';
 
@@ -16,13 +18,11 @@ type Props = {
   setDateFrom: (dateFrom?: string) => void;
   setDateTo: (dateTo?: string) => void;
   onResetFilters: () => void;
-  total: number;
   params: PrivateOrderQueryParams;
 };
 
 export default function OrderControls(props: Props) {
-  const { setOrderStatus, setMasterId, setDateFrom, setDateTo, onResetFilters, total, params } =
-    props;
+  const { setOrderStatus, setMasterId, setDateFrom, setDateTo, onResetFilters, params } = props;
   const t = useTranslations('private.components.OrderControls.OrderControls');
   const tOrder = useTranslations('private.orders.order');
 
@@ -34,7 +34,7 @@ export default function OrderControls(props: Props) {
       { label: tOrder('cancelled'), value: OrderStatus.CANCELED },
       { label: tOrder('expired'), value: OrderStatus.EXPIRED },
     ],
-    [tOrder, total],
+    [tOrder],
   );
 
   return (

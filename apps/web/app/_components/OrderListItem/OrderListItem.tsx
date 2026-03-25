@@ -18,11 +18,12 @@ type Props = {
   client: Customer;
   status: OrderStatus;
   master: MasterWithRelationsEntity;
-  isSelected: boolean;
+  isSelected?: boolean;
+  hideClientName?: boolean;
 };
 
 export default function OrderListItem(props: Props) {
-  const { name, date, client, status, master, isSelected } = props;
+  const { name, date, client, status, master, isSelected = false, hideClientName = false } = props;
   const locale = localizationHooks.useGetLocale();
   const t = useTranslations('private.components.OrderListItem.OrderListItem');
 
@@ -49,7 +50,7 @@ export default function OrderListItem(props: Props) {
       </div>
       <div className='flex justify-between'>
         <div className='flex items-center gap-2 flex-row'>
-          {isMobile ? (
+          {isMobile || hideClientName ? (
             <span>
               {t('client')}: {client.phone}
             </span>
