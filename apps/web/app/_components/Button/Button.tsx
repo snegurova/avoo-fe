@@ -61,8 +61,9 @@ const button = tv({
         'bg-black text-white hover:bg-primary-500  focus:bg-primary-500 disabled:bg-gray-500',
       secondary:
         'bg-white text-black border-black border hover:border-primary-500 focus:border-primary-500 hover:text-primary-500 focus:text-primary-500 disabled:text-gray-500 disabled:text-gray-500',
-      cancel: 'bg-transparent text-black border border-black hover:bg-gray-100',
-      submit: 'bg-black text-white hover:bg-gray-800',
+      cancel:
+        'bg-transparent text-black border border-black hover:bg-gray-100 disabled:bg-gray-500',
+      submit: 'bg-black text-white hover:bg-gray-800 disabled:bg-gray-500',
       simple:
         'bg-white text-black hover:text-primary-500 focus:text-primary-500 disabled:text-gray-500 disabled:text-gray-500',
     },

@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslations } from 'next-intl';
 
+import { tv } from 'tailwind-variants';
+
 import {
   Combination,
   GetPublicCalendarResponse,
   PublicCalendarQueryParams,
   Service,
 } from '@avoo/axios/types/apiTypes';
+import { TimeOfDay } from '@avoo/hooks/types/timeOfDay';
 import { timeUtils } from '@avoo/shared';
 
 import TimeSlotOption from '../TimeSlotOption/TimeSlotOption';
@@ -19,13 +22,35 @@ type Props = {
   calendar: GetPublicCalendarResponse | null;
   calendarParams: PublicCalendarQueryParams;
   isError: boolean;
+  setStep: (step: number) => void;
+  isTheSameDay: boolean;
 };
 
+const button = tv({
+  base: 'px-4 py-2 rounded-full border text-sm leading-none text-black disabled:text-gray-600 disabled:bg-gray-100 disabled:border-gray-200  disabled:cursor-auto transition-colors',
+  variants: {
+    active: {
+      true: 'border-black',
+      false: 'border-gray-200 cursor-pointer hover:bg-gray-200 focus:bg-gray-200',
+    },
+  },
+});
+
 export default function TimeSlotField(props: Props) {
-  const t = useTranslations('private.components.TimeSlotField.TimeSlotField');
-  const { selectedSlot, setSelectedSlot, selectedService, calendar, calendarParams, isError } =
-    props;
-  const [slots, setSlots] = useState<Date[]>([]);
+  const t = useTranslations('public.salon.createOrder');
+  const {
+    selectedSlot,
+    setSelectedSlot,
+    selectedService,
+    calendar,
+    calendarParams,
+    setStep,
+    isTheSameDay,
+  } = props;
+  const [morningSlots, setMorningSlots] = useState<Date[]>([]);
+  const [afternoonSlots, setAfternoonSlots] = useState<Date[]>([]);
+  const [eveningSlots, setEveningSlots] = useState<Date[]>([]);
+  const [activeGroup, setActiveGroup] = useState<TimeOfDay>(TimeOfDay.Morning);
 
   useEffect(() => {
     if (!calendar || !selectedService) return;
@@ -33,12 +58,16 @@ export default function TimeSlotField(props: Props) {
     const serviceDuration = selectedService.durationMinutes;
     const availability = calendar[0]?.days[0]?.availability;
     if (!availability) {
-      setSlots([]);
-      setSelectedSlot(null);
+      setMorningSlots([]);
+      setAfternoonSlots([]);
+      setEveningSlots([]);
       return;
     }
     const step = 15;
     const slotsArr: Date[] = [];
+    const morningArr: Date[] = [];
+    const afternoonArr: Date[] = [];
+    const eveningArr: Date[] = [];
 
     availability.forEach((period) => {
       const start = timeUtils.getMinutesInDay(period.start);
@@ -49,34 +78,106 @@ export default function TimeSlotField(props: Props) {
       }
 
       for (let time = start; time <= end - serviceDuration; time += step) {
-        slotsArr.push(timeUtils.addMinutesToDate(new Date(calendarParams.rangeFromDate), time));
+        const slotDate = timeUtils.addMinutesToDate(new Date(calendarParams.rangeFromDate), time);
+        slotsArr.push(slotDate);
+        const hour = slotDate.getHours();
+        if (hour < 12) {
+          morningArr.push(slotDate);
+        } else if (hour >= 12 && hour < 17) {
+          afternoonArr.push(slotDate);
+        } else {
+          eveningArr.push(slotDate);
+        }
       }
     });
 
-    setSlots(slotsArr);
-    setSelectedSlot(null);
+    setMorningSlots(morningArr);
+    setAfternoonSlots(afternoonArr);
+    setEveningSlots(eveningArr);
   }, [calendar, selectedService]);
 
+  useEffect(() => {
+    if (activeGroup === TimeOfDay.Morning && morningSlots.length === 0) {
+      if (afternoonSlots.length > 0) {
+        setActiveGroup(TimeOfDay.Afternoon);
+      } else if (eveningSlots.length > 0) {
+        setActiveGroup(TimeOfDay.Evening);
+      }
+    } else if (activeGroup === TimeOfDay.Afternoon && afternoonSlots.length === 0) {
+      if (eveningSlots.length > 0) {
+        setActiveGroup(TimeOfDay.Evening);
+      } else if (morningSlots.length > 0) {
+        setActiveGroup(TimeOfDay.Morning);
+      }
+    } else if (activeGroup === TimeOfDay.Evening && eveningSlots.length === 0) {
+      if (afternoonSlots.length > 0) {
+        setActiveGroup(TimeOfDay.Afternoon);
+      } else if (morningSlots.length > 0) {
+        setActiveGroup(TimeOfDay.Morning);
+      }
+    }
+  }, [activeGroup, morningSlots, afternoonSlots, eveningSlots]);
+
+  const onOptionSelect = (date: Date) => {
+    setSelectedSlot(date);
+    setStep(4);
+  };
+
   return (
-    <div className='row-span-2'>
-      {slots.length > 0 && (
-        <>
-          <label className='block mb-2 font-medium'>{t('timeSlot')}</label>
-          <div className='gap-2 grid grid-cols-4'>
-            {slots.map((slot) => (
-              <TimeSlotOption
-                key={slot.toISOString()}
-                date={slot}
-                onChange={setSelectedSlot}
-                selectedSlot={selectedSlot}
-              />
-            ))}
+    <div className='flex-1 flex flex-col items-center pt-5'>
+      <div className='flex gap-4 mb-6'>
+        {Object.values(TimeOfDay).map((timeOfDay) => (
+          <button
+            key={timeOfDay}
+            className={button({ active: activeGroup === timeOfDay })}
+            onClick={() => setActiveGroup(timeOfDay)}
+            disabled={
+              (timeOfDay === TimeOfDay.Morning && morningSlots.length === 0) ||
+              (timeOfDay === TimeOfDay.Afternoon && afternoonSlots.length === 0) ||
+              (timeOfDay === TimeOfDay.Evening && eveningSlots.length === 0)
+            }
+          >
+            {t(timeOfDay)}
+          </button>
+        ))}
+      </div>
+      <div className='gap-4 grid grid-cols-3 xl:grid-cols-4 2xl:grid-cols-3 w-full'>
+        {activeGroup === TimeOfDay.Morning &&
+          morningSlots.map((slot) => (
+            <TimeSlotOption
+              key={slot.toISOString()}
+              date={slot}
+              onChange={onOptionSelect}
+              selectedSlot={selectedSlot}
+              isTheSameDay={isTheSameDay}
+            />
+          ))}
+        {activeGroup === TimeOfDay.Afternoon &&
+          afternoonSlots.map((slot) => (
+            <TimeSlotOption
+              key={slot.toISOString()}
+              date={slot}
+              onChange={onOptionSelect}
+              selectedSlot={selectedSlot}
+              isTheSameDay={isTheSameDay}
+            />
+          ))}
+        {activeGroup === TimeOfDay.Evening &&
+          eveningSlots.map((slot) => (
+            <TimeSlotOption
+              key={slot.toISOString()}
+              date={slot}
+              onChange={onOptionSelect}
+              selectedSlot={selectedSlot}
+              isTheSameDay={isTheSameDay}
+            />
+          ))}
+        {morningSlots.length === 0 && afternoonSlots.length === 0 && eveningSlots.length === 0 && (
+          <div className='col-span-full text-center text-black py-6 md:max-w-[70%] mx-auto'>
+            {t('noAvailableSlots')}
           </div>
-          {isError && (
-            <div className='mt-1 text-sm text-red-500 col-span-3'>{t('selectValidTimeSlot')}</div>
-          )}
-        </>
-      )}
+        )}
+      </div>
     </div>
   );
 }

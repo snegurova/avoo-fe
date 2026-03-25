@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslations } from 'next-intl';
 
 import { Button } from '@mui/material';
 
@@ -17,11 +18,12 @@ type Props = {
 };
 
 export default function ModalActions(props: Readonly<Props>) {
+  const t = useTranslations('private.components.ModalActions.ModalActions');
   const {
     onCancel,
     onSubmit,
-    cancelText = 'Close',
-    submitText = 'Save',
+    cancelText = t('close'),
+    submitText = t('save'),
     loading = false,
     submitType = 'submit',
     className = '',
@@ -47,7 +49,7 @@ export default function ModalActions(props: Readonly<Props>) {
         variant='contained'
         disabled={loading || submitDisabled}
       >
-        {loading ? 'Saving...' : submitText}
+        {loading ? t('saving') : submitText}
       </Button>
     </div>
   );

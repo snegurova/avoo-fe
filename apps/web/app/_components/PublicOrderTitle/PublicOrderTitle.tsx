@@ -1,0 +1,53 @@
+import React from 'react';
+import { useTranslations } from 'next-intl';
+
+import { tv } from 'tailwind-variants';
+
+import PublicSearch from '@/_components/PublicSearch/PublicSearch';
+
+type Props = {
+  isActive: boolean;
+  title: string;
+  search?: string;
+  setSearch?: (value: string) => void;
+  placeholder?: string;
+};
+
+const titleWrapper = tv({
+  base: 'py-3 transition-colors flex gap-10 items-center pr-4',
+  variants: {
+    active: {
+      true: 'bg-gray-100',
+      false: '',
+    },
+  },
+});
+
+const titleStyle = tv({
+  base: 'font-medium text-2xl leading-normal text-black transition-transform',
+  variants: {
+    active: {
+      true: 'translate-x-6',
+      false: '',
+    },
+  },
+});
+
+export default function PublicOrderTitle(props: Props) {
+  const { isActive, title, search, setSearch, placeholder } = props;
+
+  const t = useTranslations('public.salon.createOrder');
+
+  return (
+    <div className={titleWrapper({ active: isActive })}>
+      <h3 className={titleStyle({ active: isActive })}>{t(title)}</h3>
+      {isActive && search !== undefined && setSearch !== undefined && (
+        <PublicSearch
+          placeholder={placeholder ?? t('search')}
+          value={search}
+          onChange={setSearch}
+        />
+      )}
+    </div>
+  );
+}

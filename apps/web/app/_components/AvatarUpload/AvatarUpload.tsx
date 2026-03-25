@@ -64,10 +64,10 @@ export const AvatarUpload = (props: Props) => {
       if (!confirmSave) {
         onAvatarSave?.(data);
       }
-      toast.success('Avatar uploaded! Click Save to apply changes.');
+      toast.success(t('uploadSuccess'));
     },
     onError: (error) => {
-      toast.error('Failed to upload avatar: ' + error.message);
+      toast.error(t('uploadError', { error: error.message }));
     },
   });
 
@@ -81,11 +81,11 @@ export const AvatarUpload = (props: Props) => {
   const handleSaveAvatarClick = () => {
     if (newAvatar) {
       onAvatarSave?.(newAvatar);
-      toast.success('Avatar saved!');
+      toast.success(t('saveSuccess'));
       setNewAvatar(null);
       return;
     }
-    toast.error('No new avatar to save');
+    toast.error(t('noNewAvatar'));
   };
 
   const handleChoosePhoto = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -124,10 +124,10 @@ export const AvatarUpload = (props: Props) => {
         disabled={isBusy}
       >
         {displayUri ? (
-          <Avatar alt='Upload new avatar' sx={{ width: size, height: size }} src={displayUri} />
+          <Avatar alt={t('uploadNewAvatar')} sx={{ width: size, height: size }} src={displayUri} />
         ) : (
           <Avatar
-            alt='Upload new avatar'
+            alt={t('uploadNewAvatar')}
             sx={{
               width: size,
               height: size,

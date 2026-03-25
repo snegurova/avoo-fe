@@ -9,7 +9,6 @@ import SearchAutocomplete from '@/_components/AutoComplete/SearchAutocomplete';
 type Props = {
   label: string;
   placeholder?: string;
-  emptyDefaultLabel?: string;
   error?: string | boolean;
   value?: (number | undefined)[];
   onChange: (value: number[]) => void;

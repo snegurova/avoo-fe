@@ -9,6 +9,7 @@ import { CalendarViewType } from '@avoo/hooks/types/calendarViewType';
 import { OrderStatus } from '@avoo/hooks/types/orderStatus';
 import { timeUtils } from '@avoo/shared';
 
+import OrderStatusChip from '@/_components/OrderStatusChip/OrderStatusChip';
 import { PX_IN_MINUTE } from '@/_constants/time';
 import BookmarkCheck from '@/_icons/BookmarkCheck';
 import CheckCircle from '@/_icons/CheckCircle';
@@ -80,16 +81,6 @@ const textWrapper = tv({
   },
 });
 
-const eventLabel = tv({
-  base: 'text-[10px] font-medium text-white leading-none px-1.5 py-1 flex items-center justify-center rounded-2xl capitalize',
-  variants: {
-    status: {
-      [OrderStatus.PENDING]: 'bg-orange-500',
-      conflict: 'bg-red-800',
-    },
-  },
-});
-
 const icon = tv({
   base: 'w-3 h-3 shrink-0',
   variants: {
@@ -150,9 +141,7 @@ export default function CalendarEvent(props: Props) {
                 <ErrorIcon className={iconError({ type })} />
               )}
               {type === CalendarViewType.DAY && event.status === OrderStatus.PENDING && (
-                <div className={eventLabel({ status: event.status })}>
-                  {event.status.toLowerCase()}
-                </div>
+                <OrderStatusChip status={event.status} />
               )}
             </div>
             {(type !== CalendarViewType.DAY || !desktop) && (

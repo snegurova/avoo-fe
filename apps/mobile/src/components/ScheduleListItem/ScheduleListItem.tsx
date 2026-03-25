@@ -4,7 +4,7 @@ import { Text } from 'react-native-paper';
 import { ScheduleEntity } from '@avoo/axios/types/apiTypes';
 import { colors, typography } from '@avoo/design-tokens';
 
-import { GroupIcon } from '@/icons/GroupIcon';
+import { GroupIcon } from '@/icons';
 import { Avatar } from '@/shared/Avatar/Avatar';
 import { scheduleUtils } from '@/utils/scheduleUtils';
 

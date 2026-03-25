@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 import { orderApi } from '@avoo/axios';
 import {
@@ -11,6 +11,7 @@ import {
   Combination,
   CreatePrivateOrdersRequest,
   CreatePublicOrdersRequest,
+  GetOrdersResponse,
   Order,
   PrivateOrderQueryParams,
   Service,
@@ -47,6 +48,23 @@ function convertOrdersDataDatesToUTC<T extends { ordersData?: { date: string }[]
   return data;
 }
 
+function normalizeOrdersData(data: unknown): Order[] {
+  if (Array.isArray(data)) {
+    return data;
+  }
+
+  if (
+    typeof data === 'object' &&
+    data !== null &&
+    'items' in data &&
+    Array.isArray((data as { items?: unknown }).items)
+  ) {
+    return (data as { items: Order[] }).items;
+  }
+
+  return [];
+}
+
 type UseCreateOrderFormParams = {
   order: {
     masterId?: number;
@@ -61,6 +79,8 @@ type UseUpdateOrderParams = {
   onSuccess?: () => void;
 };
 
+const DEFAULT_LIMIT = 10;
+
 export const orderHooks = {
   useGetOrders: (params: PrivateOrderQueryParams) => {
     const memoParams = useMemo<PrivateOrderQueryParams>(
@@ -74,18 +94,112 @@ export const orderHooks = {
       [params],
     );
 
-    const { data: ordersData, isPending } = useQuery<BaseResponse<Order[]>, Error>({
+    const { data: ordersData, isPending } = useQuery<BaseResponse<unknown>, Error>({
       queryKey: ['orders', queryKeys.orders.byParams(memoParams)],
       queryFn: () => orderApi.getOrders(params),
     });
 
     utils.useSetPendingApi(isPending);
 
-    if (ordersData?.status === ApiStatus.SUCCESS && ordersData.data) {
-      return ordersData.data;
+    if (ordersData?.status === ApiStatus.SUCCESS) {
+      return normalizeOrdersData(ordersData.data);
     }
 
     return null;
+  },
+  useGetOrdersInfinite: ({
+    limit = DEFAULT_LIMIT,
+    status,
+    masterId,
+    dateFrom,
+    dateTo,
+  }: PrivateOrderQueryParams) => {
+    const filterParams = { limit, status, masterId, dateFrom, dateTo };
+    const query = useInfiniteQuery<BaseResponse<GetOrdersResponse>, Error>({
+      queryKey: ['orders', 'list', filterParams],
+      queryFn: ({ pageParam = 1 }) =>
+        orderApi.getOrders({ ...filterParams, page: pageParam as number }),
+      initialPageParam: 1,
+      getNextPageParam: (lastPage) => {
+        const { currentPage, total } = lastPage.data?.pagination || { currentPage: 0, total: 0 };
+        return currentPage * limit < total ? currentPage + 1 : undefined;
+      },
+    });
+
+    const isPending = query.isFetching;
+
+    utils.useSetPendingApi(isPending);
+
+    return query;
+  },
+  useOrderQuery(status?: OrderStatus) {
+    const [params, setParams] = useState<PrivateOrderQueryParams>({
+      limit: DEFAULT_LIMIT,
+      status: status,
+      masterId: undefined,
+      dateFrom: undefined,
+      dateTo: undefined,
+    });
+
+    const setOrderStatus = (value: OrderStatus | undefined) => {
+      setParams((prev) => ({
+        ...prev,
+        status: value,
+      }));
+    };
+
+    const setMasterId = (value: number | undefined) => {
+      setParams((prev) => ({
+        ...prev,
+        masterId: value,
+      }));
+    };
+
+    const setDateFrom = (value: string | undefined) => {
+      setParams((prev) => ({
+        ...prev,
+        dateFrom: value,
+      }));
+    };
+
+    const setDateTo = (value: string | undefined) => {
+      setParams((prev) => ({
+        ...prev,
+        dateTo: value,
+      }));
+    };
+
+    const resetFilters = () => {
+      setParams({
+        limit: DEFAULT_LIMIT,
+        status: undefined,
+        masterId: undefined,
+        dateFrom: undefined,
+        dateTo: undefined,
+      });
+    };
+
+    const queryParams = useMemo(
+      () => ({
+        limit: params.limit,
+        status: params.status,
+        masterId: params.masterId,
+        dateFrom: params.dateFrom,
+        dateTo: params.dateTo,
+      }),
+      [params.limit, params.status, params.masterId, params.dateFrom, params.dateTo],
+    );
+
+    return {
+      params,
+      setParams,
+      setMasterId,
+      setOrderStatus,
+      setDateFrom,
+      setDateTo,
+      resetFilters,
+      queryParams,
+    };
   },
   useCreateOrder: ({ order, onSuccess }: UseCreateOrderFormParams) => {
     const [selectedServices, setSelectedServices] = useState<(Service | null)[]>([null]);
@@ -94,6 +208,7 @@ export const orderHooks = {
       control,
       handleSubmit,
       getValues,
+      setValue,
       formState: { errors },
     } = useForm<CreatePrivateOrdersData>({
       resolver: yupResolver(createPrivateOrdersSchema),
@@ -151,6 +266,7 @@ export const orderHooks = {
       setSelectedServices,
       selectedCombinations,
       setSelectedCombinations,
+      setValue,
     };
   },
   useCreatePublicOrder: ({ onSuccess, userId }: { onSuccess?: () => void; userId: number }) => {
@@ -160,6 +276,7 @@ export const orderHooks = {
       control,
       handleSubmit,
       getValues,
+      setValue,
       formState: { errors },
     } = useForm<CreatePublicOrdersData>({
       resolver: yupResolver(createPublicOrdersSchema),
@@ -193,18 +310,13 @@ export const orderHooks = {
     >({
       mutationFn: orderApi.createPublicOrder,
       onSuccess: async () => {
-        await queryClient.invalidateQueries({
-          queryKey: [
-            queryKeys.orders.all,
-            queryKeys.orders.byParams,
-            queryKeys.customers.all,
-            queryKeys.customers.byParams,
-            queryKeys.calendar.all,
-            queryKeys.calendar.byParams,
-            queryKeys.monthCalendar.all,
-            queryKeys.monthCalendar.byParams,
-          ],
-        });
+        await Promise.all([
+          queryClient.invalidateQueries({ queryKey: queryKeys.calendar.all }),
+          queryClient.invalidateQueries({ queryKey: queryKeys.monthCalendar.all }),
+          queryClient.invalidateQueries({ queryKey: queryKeys.orders.all }),
+          queryClient.invalidateQueries({ queryKey: queryKeys.customers.all }),
+        ]);
+
         onSuccess?.();
       },
     });
@@ -224,6 +336,7 @@ export const orderHooks = {
       setSelectedServices,
       selectedCombinations,
       setSelectedCombinations,
+      setValue,
     };
   },
   useUpdateOrder: ({ id, order, onSuccess }: UseUpdateOrderParams) => {
@@ -321,11 +434,6 @@ export const orderHooks = {
   },
 
   useGetCustomerOrderHistory: (customerId?: number | null, limit = 10) => {
-    type CustomerHistoryData = Order[] | { items: Order[] };
-
-    const hasItemsArray = (value: unknown): value is { items: Order[] } =>
-      typeof value === 'object' && value !== null && 'items' in value && Array.isArray(value.items);
-
     const params = useMemo<PrivateOrderQueryParams>(
       () => ({
         page: 1,
@@ -335,7 +443,7 @@ export const orderHooks = {
       [customerId, limit],
     );
 
-    const { data: ordersData, isPending } = useQuery<BaseResponse<CustomerHistoryData>, Error>({
+    const { data: ordersData, isPending } = useQuery<BaseResponse<unknown>, Error>({
       queryKey: ['orders', 'customer-history', queryKeys.orders.byParams(params)],
       queryFn: () => orderApi.getOrders(params),
       enabled: !!customerId,
@@ -344,15 +452,73 @@ export const orderHooks = {
     utils.useSetPendingApi(isPending);
 
     if (ordersData?.status === ApiStatus.SUCCESS) {
-      if (Array.isArray(ordersData.data)) {
-        return ordersData.data;
-      }
-
-      if (hasItemsArray(ordersData.data)) {
-        return ordersData.data.items;
-      }
+      return normalizeOrdersData(ordersData.data);
     }
 
     return [];
+  },
+  useCustomerOrdersHistory: (customerId?: number | null) => {
+    const orders = orderHooks.useGetCustomerOrderHistory(customerId, 50);
+
+    return useMemo(() => {
+      const now = Date.now();
+      const upcomingStatuses = new Set([OrderStatus.PENDING, OrderStatus.CONFIRMED]);
+      const sorted = [...orders].sort(
+        (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime(),
+      );
+
+      return {
+        nextAppointments: sorted.filter((o) => {
+          const t = new Date(o.date).getTime();
+          return Number.isFinite(t) && t >= now && upcomingStatuses.has(o.status);
+        }),
+        historyItems: sorted
+          .filter((o) => {
+            const t = new Date(o.date).getTime();
+            return Number.isFinite(t) && t < now && o.status === OrderStatus.COMPLETED;
+          })
+          .reverse(),
+      };
+    }, [orders]);
+  },
+  useUpcomingAppointmentsByMaster: (limit = 100) => {
+    const pendingOrders = orderHooks.useGetOrders({
+      page: 1,
+      limit,
+      status: OrderStatus.PENDING,
+    });
+    const confirmedOrders = orderHooks.useGetOrders({
+      page: 1,
+      limit,
+      status: OrderStatus.CONFIRMED,
+    });
+
+    return useMemo(() => {
+      const now = Date.now();
+      const byId = new Map<number, Order>();
+
+      [...(pendingOrders ?? []), ...(confirmedOrders ?? [])].forEach((order) => {
+        byId.set(order.id, order);
+      });
+
+      const upcoming = Array.from(byId.values())
+        .filter((order) => {
+          const timestamp = new Date(order.date).getTime();
+          return Number.isFinite(timestamp) && timestamp >= now;
+        })
+        .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+
+      const byMaster = new Map<number, Order>();
+
+      upcoming.forEach((order) => {
+        if (!byMaster.has(order.master.id)) {
+          byMaster.set(order.master.id, order);
+        }
+      });
+
+      return Array.from(byMaster.values()).sort(
+        (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime(),
+      );
+    }, [confirmedOrders, pendingOrders]);
   },
 };

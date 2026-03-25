@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 
@@ -9,20 +9,15 @@ import {
   PublicCalendarQueryParams,
   Service,
 } from '@avoo/axios/types/apiTypes';
-import { DATE_TIME_PICKER_FORMAT } from '@avoo/constants';
 import { calendarHooks, masterHooks, servicesHooks } from '@avoo/hooks';
 import { isEmptyObject } from '@avoo/shared';
 import { timeUtils } from '@avoo/shared';
 
-import FormDatePicker from '@/_components/FormDatePicker/FormDatePicker';
 import FormTextArea from '@/_components/FormTextArea/FormTextArea';
-import { IconButton } from '@/_components/IconButton/IconButton';
-import MasterElement from '@/_components/MasterElement/MasterElement';
-import SearchField from '@/_components/SearchField/SearchField';
-import ServiceElement from '@/_components/ServiceElement/ServiceElement';
-import DeleteIcon from '@/_icons/DeleteIcon';
+import PublicMasterSearch from '@/_components/PublicMasterSearch/PublicMasterSearch';
+import PublicServiceSearch from '@/_components/PublicServiceSearch/PublicServiceSearch';
 
-import TimeSlotField from '../TimeSlotField/TimeSlotField';
+import PublicDateTimeSelection from '../PublicDateTimeSelection/PublicDateTimeSelection';
 
 type Props = {
   order: CreateOrder;
@@ -46,7 +41,7 @@ type Props = {
 };
 
 export default function PublicServiceFormItem(props: Props) {
-  const t = useTranslations('private.components.PublicServiceFormItem.PublicServiceFormItem');
+  const t = useTranslations('public.salon.createOrder');
   const {
     order,
     onChange,
@@ -55,12 +50,14 @@ export default function PublicServiceFormItem(props: Props) {
     initialParams,
     selectedService,
     setSelectedService,
-    remove,
     errors,
     selectedMasters,
     setSelectedMasters,
   } = props;
 
+  const serviceSelectionRef = useRef<HTMLDivElement>(null);
+  const masterSelectionRef = useRef<HTMLDivElement>(null);
+  const DateTimeSelectionRef = useRef<HTMLDivElement>(null);
   const searchParams = useParams();
   const userId = Number(searchParams.userId);
   const [masterSearch, setMasterSearch] = useState('');
@@ -75,12 +72,29 @@ export default function PublicServiceFormItem(props: Props) {
     ),
   });
   const [selectedSlot, setSelectedSlot] = useState<Date | null>(null);
-  const [isActiveMasterSearch, setIsActiveMasterSearch] = useState(false);
-  const [isActiveServiceSearch, setIsActiveServiceSearch] = useState(false);
+  const [step, setStep] = useState(selectedService ? 4 : 1);
+  const [selectAnyMaster, setSelectAnyMaster] = useState(false);
+  const [maxStep, setMaxStep] = useState(selectedService ? 4 : 1);
 
   const { data: calendar } = calendarHooks.useGetPublicCalendar(calendarParams, {
     enabled: !!selectedService && !!selectedMasters[index],
   });
+
+  useEffect(() => {
+    if (step > maxStep) {
+      setMaxStep(step);
+    }
+  }, [step]);
+
+  useEffect(() => {
+    if (step === 1 && serviceSelectionRef.current) {
+      serviceSelectionRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } else if (step === 2 && masterSelectionRef.current) {
+      masterSelectionRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } else if (step === 3 && DateTimeSelectionRef.current) {
+      DateTimeSelectionRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }, [serviceSelectionRef.current, masterSelectionRef.current, DateTimeSelectionRef.current, step]);
 
   useEffect(() => {
     const newValue = timeUtils.convertDateToString(
@@ -95,7 +109,7 @@ export default function PublicServiceFormItem(props: Props) {
     onChange(newOrders);
   }, [selectedSlot]);
 
-  const { params, queryParams, setSearchQuery, setMasterIds } =
+  const { params, queryParams, setSearchQuery, setMasterIds, setCategory } =
     servicesHooks.usePublicServiceQuery(userId);
 
   const {
@@ -187,18 +201,6 @@ export default function PublicServiceFormItem(props: Props) {
     }));
   };
 
-  const ServiceElementWrapped: React.FC<{
-    item: Service;
-    onClick: () => void;
-  }> = ({ item, onClick }) => (
-    <ServiceElement
-      item={item}
-      isCard={false}
-      hideMasters={!!selectedMasters[index]}
-      onClick={onClick}
-    />
-  );
-
   const onDateChange = (newDate: string) => {
     const newOrders = [...value];
     newOrders[index] = {
@@ -219,94 +221,24 @@ export default function PublicServiceFormItem(props: Props) {
     onChange(newOrders);
   };
 
-  const onMasterElementClick = () => {
-    setIsActiveMasterSearch(true);
-  };
-
-  const onServiceElementClick = () => {
-    setIsActiveServiceSearch(true);
-  };
-
   return (
-    <div className='rounded-lg border border-gray-200'>
-      <div className='bg-primary-50 px-4 p-2 h-14 rounded-t-lg flex items-center justify-between'>
-        <h3 className='font-medium'>{selectedService?.name ?? t('selectService')}</h3>
-        {remove && (
-          <IconButton
-            className='group'
-            icon={
-              <DeleteIcon className='w-5 h-5 transition-colors group-hover:fill-primary-500 group-focus:fill-primary-500' />
-            }
-            onClick={remove}
-          />
-        )}
-      </div>
-      <div className='grid md:grid-cols-2 gap-4 p-4'>
-        <div className=''>
-          <SearchField
-            label={t('service')}
-            value={order.serviceId ? { id: order.serviceId } : null}
-            onChange={selectService}
+    <div className='py-4'>
+      <div className='flex flex-col gap-4'>
+        <div className='flex flex-col gap-4'>
+          <PublicServiceSearch
+            setCategory={setCategory}
             items={services}
+            onChange={selectService}
+            value={order.serviceId ?? null}
             search={params.search ?? ''}
             setSearch={setSearchQuery}
-            ItemElement={ServiceElementWrapped}
-            searchMode={!order.serviceId}
-            placeholder={t('searchServiceName')}
-            error={errors?.serviceId?.message}
             hasMore={hasMoreServices}
             fetchNextPage={fetchNextServicesPage}
-            isActive={isActiveServiceSearch}
-            setIsActive={setIsActiveServiceSearch}
-          >
-            {selectedService && (
-              <ServiceElement item={selectedService} isCard onClick={onServiceElementClick} />
-            )}
-          </SearchField>
-        </div>
-        <div className=''>
-          <SearchField
-            label={t('master')}
-            value={order.masterId ? { id: order.masterId } : null}
-            onChange={selectMaster}
-            items={masters}
-            search={masterSearch}
-            setSearch={setMasterSearch}
-            ItemElement={MasterElement}
-            searchMode={!order.masterId}
-            error={errors?.masterId?.message}
-            hasMore={hasMoreMasters}
-            fetchNextPage={fetchNextMastersPage}
-            isActive={isActiveMasterSearch}
-            setIsActive={setIsActiveMasterSearch}
-          >
-            {selectedMasters[index] && (
-              <MasterElement item={selectedMasters[index]} isCard onClick={onMasterElementClick} />
-            )}
-          </SearchField>
-        </div>
-        <div className=''>
-          <label className='block mb-2 font-medium'>{t('date')}</label>
-          <FormDatePicker
-            date={order.date}
-            onChange={onDateChange}
-            format={DATE_TIME_PICKER_FORMAT}
+            setStep={setStep}
+            isActive={step === 1}
+            selectedService={selectedService}
+            ref={serviceSelectionRef}
           />
-
-          {errors?.date?.message && (
-            <div className='mt-1 text-sm text-red-500 col-span-3'>{errors?.date?.message}</div>
-          )}
-        </div>
-        <TimeSlotField
-          selectedSlot={selectedSlot}
-          setSelectedSlot={setSelectedSlot}
-          selectedService={selectedService}
-          calendar={calendar}
-          calendarParams={calendarParams}
-          userId={userId}
-          isError={!!errors?.date?.message && !selectedSlot}
-        />
-        <div className=''>
           <FormTextArea
             id={`notes-${index}`}
             name={`notes-${index}`}
@@ -317,12 +249,45 @@ export default function PublicServiceFormItem(props: Props) {
             maxLength={200}
             error={errors?.notes?.message}
             classNames={{
-              label: 'block font-medium',
+              label: 'block text-black font-medium',
               textarea:
-                'block w-full text-sm text-black border border-gray-200 p-3 rounded-lg min-h-[70px] focus:outline-none focus:ring-1 focus:ring-purple-800',
+                'block w-full text-sm text-black border border-gray-200 p-3 rounded-lg min-h-[70px] focus:outline-none focus:ring-1 focus:ring-black',
             }}
           />
         </div>
+        {maxStep > 1 && (
+          <PublicMasterSearch
+            selectedMaster={selectedMasters[index]}
+            isActive={step === 2}
+            items={masters}
+            onChange={selectMaster}
+            value={order.masterId ?? null}
+            search={masterSearch}
+            setSearch={setMasterSearch}
+            hasMore={hasMoreMasters}
+            fetchNextPage={fetchNextMastersPage}
+            setStep={setStep}
+            selectAnyMaster={selectAnyMaster}
+            setSelectAnyMaster={setSelectAnyMaster}
+            ref={masterSelectionRef}
+          />
+        )}
+        {maxStep > 2 && (
+          <PublicDateTimeSelection
+            ref={DateTimeSelectionRef}
+            isActive={step === 3}
+            date={order.date}
+            onChange={onDateChange}
+            error={errors?.date?.message}
+            selectedSlot={selectedSlot}
+            setSelectedSlot={setSelectedSlot}
+            selectedService={selectedService}
+            calendar={calendar}
+            calendarParams={calendarParams}
+            userId={userId}
+            setStep={setStep}
+          />
+        )}
       </div>
     </div>
   );

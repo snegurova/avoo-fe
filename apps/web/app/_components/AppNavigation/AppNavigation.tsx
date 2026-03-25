@@ -13,6 +13,7 @@ import ArrowUpIcon from '@/_icons/ArrowUpIcon';
 import BookIcon from '@/_icons/BookIcon';
 import CalendarIcon from '@/_icons/CalendarIcon';
 import CoPresentIcon from '@/_icons/CoPresentIcon';
+import GroupIcon from '@/_icons/GroupIcon';
 import GroupsIcon from '@/_icons/GroupsIcon';
 import HomeIcon from '@/_icons/HomeIcon';
 import MosaicIcon from '@/_icons/MosaicIcon';
@@ -87,6 +88,11 @@ export default function AppNavigation({ menuOpen, setMenuOpen }: Props) {
       icon: <MosaicIcon />,
       label: t('posts'),
     },
+    {
+      href: localizationHooks.useWithLocale(AppRoutes.Orders),
+      icon: <GroupIcon />,
+      label: t('orders'),
+    },
   ];
 
   const calendarSubMenuItems = [
@@ -100,7 +106,7 @@ export default function AppNavigation({ menuOpen, setMenuOpen }: Props) {
     },
     {
       href: localizationHooks.useWithLocale(AppRoutes.ComboServiceTime),
-      label: 'Combo service time',
+      label: t('comboServiceTime'),
     },
   ];
 

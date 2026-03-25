@@ -10,18 +10,18 @@ export const scheduleUpdateSchema = yup.object({
     .string()
     .nullable()
     .matches(/^\d{4}-\d{2}-\d{2}$/, 'endAt must be a valid ISO date')
-    .test('end-after-now', 'End date must be after start date', function (value) {
+    .test('end-after-now', 'End date must be after current time', function (value) {
       if (!value) return true;
       const start = timeUtils.toLocalDateISO(new Date());
 
       return value > start;
     })
-    .test('end-after-start', 'End date must be after start date', function (value) {
+    .test('end-after-start', 'End date must be after or equal start date', function (value) {
       if (!value) return true;
       const startAt = this.options.context?.startAt;
       if (!startAt) return true;
       const formattedStartAt = timeUtils.toLocalDateISO(new Date(startAt));
-      return value > formattedStartAt;
+      return value >= formattedStartAt;
     }),
 
   workingHours: yup
@@ -76,18 +76,24 @@ export const scheduleCreateSchema = yup.object({
     .string()
     .required('startAt is required')
     .matches(/^\d{4}-\d{2}-\d{2}$/, 'startAt must be a valid ISO date')
-    .test('start-before-end', 'Start date must be before end date', function (value) {
+    .test('start-before-end', 'Start date must be before or equal end date', function (value) {
       const endAt = this.parent.endAt;
       if (!value || !endAt) return true;
-      return value < endAt;
+      return value <= endAt;
     }),
   endAt: yup
     .string()
     .nullable()
     .matches(/^\d{4}-\d{2}-\d{2}$/, 'endAt must be a valid ISO date')
-    .test('end-after-start', 'End date must be after start date', function (value) {
+    .test('end-after-start', 'End date must be after or equal start date', function (value) {
       const start = this.parent.startAt;
       if (!value || !start) return true;
+      return value >= start;
+    })
+    .test('end-after-now', 'End date must be after current time', function (value) {
+      if (!value) return true;
+      const start = timeUtils.toLocalDateISO(new Date());
+
       return value > start;
     }),
 

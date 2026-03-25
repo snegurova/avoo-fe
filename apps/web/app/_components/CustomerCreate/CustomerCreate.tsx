@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { FieldErrors } from 'react-hook-form';
 import { useTranslations } from 'next-intl';
 
@@ -19,14 +19,25 @@ type Props = {
   value: CreateCustomerRequest | CreatePublicCustomerRequest | object;
   onChange: (customer: CreateCustomerRequest | CreatePublicCustomerRequest) => void;
   error?: FieldErrors<CreatePublicOrdersData>['customerData'] | undefined;
-  isFullWidth?: boolean;
+  isPublic?: boolean;
+  setCustomerDataFilled?: (filled: boolean) => void;
 };
 
 const wrapper = tv({
-  base: 'grid gap-3',
+  base: 'grid',
   variants: {
-    isFullWidth: {
-      true: 'md:grid-cols-2',
+    isPublic: {
+      true: 'md:grid-cols-2 gap-6',
+      false: 'gap-3',
+    },
+  },
+});
+
+const label = tv({
+  base: 'block mb-1 text-sm font-medium',
+  variants: {
+    isPublic: {
+      true: 'text-black',
       false: '',
     },
   },
@@ -35,7 +46,18 @@ const wrapper = tv({
 export default function CustomerCreate(props: Props) {
   const tCommon = useTranslations('private.components.CustomerCreate.CustomerCreate');
   const t = useTranslations('private.orders.create');
-  const { setPhone, value, onChange, error, isFullWidth = false } = props;
+  const { setPhone, value, onChange, error, isPublic = false, setCustomerDataFilled } = props;
+  const [isNameFilled, setIsNameFilled] = React.useState(false);
+  const [isEmailFilled, setIsEmailFilled] = React.useState(false);
+  const [isPhoneFilled, setIsPhoneFilled] = React.useState(false);
+
+  useEffect(() => {
+    if (isNameFilled && isEmailFilled && isPhoneFilled) {
+      setCustomerDataFilled?.(true);
+    } else {
+      setCustomerDataFilled?.(false);
+    }
+  }, [isNameFilled, isEmailFilled, isPhoneFilled]);
 
   const { countryCode, phoneNumber, setCountryCode, setPhoneNumber } = phoneHooks.usePhoneField({
     value: isCustomerValues(value) ? value.phone : '',
@@ -52,7 +74,10 @@ export default function CustomerCreate(props: Props) {
   );
 
   const handlePhoneNumberChange = useCallback(
-    (evt: React.ChangeEvent<HTMLInputElement>) => setPhoneNumber(evt.target.value),
+    (evt: React.ChangeEvent<HTMLInputElement>) => {
+      setPhoneNumber(evt.target.value);
+      setIsPhoneFilled(!!evt.target.value);
+    },
     [setPhoneNumber],
   );
 
@@ -60,6 +85,7 @@ export default function CustomerCreate(props: Props) {
     (evt: React.ChangeEvent<HTMLInputElement>) => {
       if (isCustomerValues(value)) {
         onChange({ ...value, name: evt.target.value });
+        setIsNameFilled(!!evt.target.value);
       }
     },
     [onChange, value],
@@ -69,6 +95,7 @@ export default function CustomerCreate(props: Props) {
     (evt: React.ChangeEvent<HTMLInputElement>) => {
       if (isCustomerValues(value)) {
         onChange({ ...value, email: evt.target.value });
+        setIsEmailFilled(!!evt.target.value);
       }
     },
     [onChange, value],
@@ -85,9 +112,9 @@ export default function CustomerCreate(props: Props) {
 
   return (
     <>
-      <div className={wrapper({ isFullWidth })}>
+      <div className={wrapper({ isPublic })}>
         <div className=''>
-          <label className='block mb-1 text-sm font-medium' htmlFor='name'>
+          <label className={label({ isPublic })} htmlFor='name'>
             {t('name')}
           </label>
           <FormInput
@@ -100,7 +127,7 @@ export default function CustomerCreate(props: Props) {
           />
         </div>
         <div className=''>
-          <label className='block mb-1 text-sm font-medium' htmlFor='email'>
+          <label className={label({ isPublic })} htmlFor='email'>
             {t('email')}
           </label>
           <FormInput
@@ -113,7 +140,7 @@ export default function CustomerCreate(props: Props) {
           />
         </div>
         <div className=''>
-          <label className='block mb-1 text-sm font-medium' htmlFor='phone'>
+          <label className={label({ isPublic })} htmlFor='phone'>
             {t('phone')}
           </label>
           <div className='flex items-stretch gap-2 lg:gap-3'>

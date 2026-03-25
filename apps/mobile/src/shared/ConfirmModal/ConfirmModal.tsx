@@ -43,7 +43,7 @@ export const ConfirmModal = (props: Props) => {
         className='flex-1 bg-black/50 justify-center items-center p-xl'
         onPress={handleCancel}
       >
-        <View className='bg-white rounded-xl px-11 py-14 w-full max-w-[400px]'>
+        <View className='bg-white rounded-xl px-6 py-8 w-full max-w-[400px]'>
           <Pressable className='absolute top-md right-md z-10' onPress={handleCancel} hitSlop={12}>
             <MaterialIcons name='close' size={24} color={colors.black} />
           </Pressable>

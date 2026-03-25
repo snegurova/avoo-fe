@@ -102,7 +102,7 @@ export const timeUtils = {
     const dateValue = new Date(date);
     const monday = this.getNextMonday(dateValue);
     const shift = dateValue.getDay() - new Date(monday).getDay();
-    return shift;
+    return ((shift % 7) + 7) % 7;
   },
   convertDuration(duration: number): string {
     const hours = Math.floor(duration / 60);

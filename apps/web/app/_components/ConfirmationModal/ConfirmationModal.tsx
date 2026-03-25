@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslations } from 'next-intl';
 
 import { Modal, ModalVariant } from '@/_components/Modal/Modal';
 
@@ -24,15 +25,16 @@ export default function ConfirmationModal({
   onCancel,
   onDiscard,
   onConfirm,
-  title = 'Are you sure?',
+  title,
   description = '',
-  confirmText = 'Confirm',
-  cancelText = 'Cancel',
+  confirmText,
+  cancelText,
   submitType = 'button',
   submitDisabled = false,
   contentStyle,
   children,
 }: Props) {
+  const t = useTranslations('private.components.ConfirmationModal.ConfirmationModal');
   const handleConfirm = React.useCallback(() => {
     if (onDiscard) onDiscard();
     if (onConfirm) onConfirm();
@@ -51,7 +53,7 @@ export default function ConfirmationModal({
     >
       {children || (
         <>
-          <h3 className='text-lg font-semibold mb-6'>{title}</h3>
+          <h3 className='text-lg font-semibold mb-6'>{title ?? t('title')}</h3>
           {description ? <p className='text-sm text-gray-600 mb-7'>{description}</p> : null}
         </>
       )}
@@ -59,8 +61,8 @@ export default function ConfirmationModal({
       <ModalActions
         onCancel={handleCancel}
         onSubmit={handleConfirm}
-        cancelText={cancelText}
-        submitText={confirmText}
+        cancelText={cancelText ?? t('cancel')}
+        submitText={confirmText ?? t('confirm')}
         submitType={submitType}
         submitDisabled={submitDisabled}
         sticky={false}

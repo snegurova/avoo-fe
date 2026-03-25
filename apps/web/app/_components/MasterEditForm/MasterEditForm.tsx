@@ -173,7 +173,7 @@ export default function MasterEditForm({
           <div className='flex flex-col gap-6 md:gap-8'>
             <div>
               <label htmlFor='email' className='text-sm block mb-1'>
-                Email *
+                {t('email')}
               </label>
               <FormInput
                 id='email'

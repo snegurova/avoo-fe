@@ -1,4 +1,5 @@
 import React from 'react';
+import { useLocale, useTranslations } from 'next-intl';
 
 import { tv } from 'tailwind-variants';
 
@@ -6,6 +7,7 @@ import { Customer } from '@avoo/axios/types/apiTypes';
 import { colors } from '@avoo/design-tokens';
 
 import Avatar, { AvatarSize } from '@/_components/Avatar/Avatar';
+import { formatLocalizedDate } from '@/_utils/intlFormatters';
 
 type Props = {
   item: Customer;
@@ -39,6 +41,8 @@ const secondaryText = tv({
 
 export default function CustomerElement(props: Props) {
   const { item, onClick, isCard } = props;
+  const locale = useLocale();
+  const t = useTranslations('private.components.CustomerElement.CustomerElement');
 
   const isButton = Boolean(onClick);
 
@@ -67,8 +71,8 @@ export default function CustomerElement(props: Props) {
         <span className={secondaryText({ isCard })}>{item.phone}</span>
         {isCard && item.lastVisit && (
           <div className='mt-2 pt-2 border-t border-primary-100 flex gap-1'>
-            <span className='text-xs text-gray-500'>last visit</span>
-            <span className='text-xs'>{new Date(item.lastVisit).toLocaleDateString()}</span>
+            <span className='text-xs text-gray-500'>{t('lastVisit')}</span>
+            <span className='text-xs'>{formatLocalizedDate(item.lastVisit, locale)}</span>
           </div>
         )}
       </div>

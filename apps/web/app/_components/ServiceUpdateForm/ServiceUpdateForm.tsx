@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Controller } from 'react-hook-form';
 import { useTranslations } from 'next-intl';
 
@@ -28,11 +28,13 @@ import { getAllErrorMessages } from '@/_utils/formError';
 type Props = {
   service: Service;
   onCancel: () => void;
+  onDirtyChange: (isDirty: boolean) => void;
+  onClose: () => void;
 };
 
 export default function ServiceUpdateForm(props: Props) {
   const t = useTranslations('private.components.ServiceUpdateForm.ServiceUpdateForm');
-  const { service, onCancel } = props;
+  const { service, onCancel, onDirtyChange, onClose } = props;
   const toast = useToast();
   const categories = categoriesHooks.useGetPublicCategories();
 
@@ -56,18 +58,17 @@ export default function ServiceUpdateForm(props: Props) {
     ...persistedMedias.filter((m) => !removedMediaIds.includes(m.id)),
   ];
 
-  const { control, setValue, getValues, handleSubmit, errors } = servicesHooks.useUpdateServiceForm(
-    {
+  const { control, setValue, getValues, handleSubmit, errors, isDirty } =
+    servicesHooks.useUpdateServiceForm({
       service,
       onSuccess: () => {
         toast.success(t('updateSuccess'));
-        onCancel();
+        onClose();
       },
       onError: (error) => {
         toast.error(t('updateError', { error: error.message }));
       },
-    },
-  );
+    });
 
   const { uploadMedia, isUploading } = mediaHooks.useUploadMedia({
     onSuccess: (data) => {
@@ -120,6 +121,10 @@ export default function ServiceUpdateForm(props: Props) {
     });
   };
   const errorsList = getAllErrorMessages(errors);
+
+  useEffect(() => {
+    onDirtyChange(isDirty);
+  }, [isDirty, onDirtyChange]);
 
   return (
     <>
@@ -300,7 +305,13 @@ export default function ServiceUpdateForm(props: Props) {
         <Button color='secondary' variant='outlined' onClick={onCancel}>
           {t('cancel')}
         </Button>
-        <Button form='update-service' type='submit' color='secondary' variant='contained'>
+        <Button
+          form='update-service'
+          type='submit'
+          color='secondary'
+          variant='contained'
+          disabled={!isDirty}
+        >
           {t('edit')}
         </Button>
       </div>

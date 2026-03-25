@@ -34,21 +34,25 @@ export const UpdateWorkingDayRow = (props: Props) => {
   if (!dayData) return null;
 
   const handleEnabledChange = (enabled: boolean) => {
-    setValue(`workingHours.${index}.enabled`, enabled);
+    setValue(`workingHours.${index}.enabled`, enabled, { shouldDirty: true });
     if (!enabled) {
-      setValue(`workingHours.${index}.startTimeMinutes`, 0);
-      setValue(`workingHours.${index}.endTimeMinutes`, 0);
-      setValue(`workingHours.${index}.breaks`, []);
+      setValue(`workingHours.${index}.startTimeMinutes`, 0, { shouldDirty: true });
+      setValue(`workingHours.${index}.endTimeMinutes`, 0, { shouldDirty: true });
+      setValue(`workingHours.${index}.breaks`, [], { shouldDirty: true });
     } else {
-      setValue(`workingHours.${index}.startTimeMinutes`, START_MINUTE);
-      setValue(`workingHours.${index}.endTimeMinutes`, END_MINUTE);
-      setValue(`workingHours.${index}.breaks`, [
-        {
-          id: null,
-          breakStartTimeMinutes: BREAK_START_MINUTES,
-          breakEndTimeMinutes: BREAK_END_MINUTES,
-        },
-      ]);
+      setValue(`workingHours.${index}.startTimeMinutes`, START_MINUTE, { shouldDirty: true });
+      setValue(`workingHours.${index}.endTimeMinutes`, END_MINUTE, { shouldDirty: true });
+      setValue(
+        `workingHours.${index}.breaks`,
+        [
+          {
+            id: null,
+            breakStartTimeMinutes: BREAK_START_MINUTES,
+            breakEndTimeMinutes: BREAK_END_MINUTES,
+          },
+        ],
+        { shouldDirty: true },
+      );
     }
   };
 
@@ -67,6 +71,7 @@ export const UpdateWorkingDayRow = (props: Props) => {
         setValue(
           `workingHours.${index}.${field === 'start' ? 'startTimeMinutes' : 'endTimeMinutes'}`,
           val,
+          { shouldDirty: true },
         )
       }
       onAddBreak={(br) => append(br)}

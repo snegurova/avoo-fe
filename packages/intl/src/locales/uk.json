@@ -1,5 +1,17 @@
 {
   "private": {
+    "common": {
+      "areYouSureYouWantToLeaveThisPage": "Ви впевнені, що хочете покинути цю сторінку?",
+      "youHaveUnsavedChanges": "У вас є незбережені зміни. Ви впевнені, що хочете покинути цю сторінку?",
+      "leave": "Покинути",
+      "cancel": "Скасувати",
+      "delete": "Видалити",
+      "areYouSureYouWantToLeaveThisWindow": "Ви впевнені, що хочете закрити вікно?",
+      "youHaveUnsavedChangesInThisWindow": "У вас є незбережені зміни. Ви впевнені, що хочете закрити вікно?",
+      "leaveWindow": "Закрити",
+      "defaultFailError": "Сталося щось дивне. Спробуйте пізніше.",
+      "ok": "Ок"
+    },
     "profile": {
       "changePassword": {
         "oldPasswordLabel": "Поточний пароль *",
@@ -40,6 +52,7 @@
         "newBooking": "Нове бронювання",
         "newPost": "Новий пост",
         "newNotifications": "Нові сповіщення",
+        "newOrders": "Нові бронювання",
         "nextAppointments": "Наступні записи",
         "add": "Додати",
         "home": "Головна",
@@ -48,10 +61,12 @@
         "services": "Послуги",
         "masters": "Майстри",
         "posts": "Пости",
+        "orders": "Візити",
         "workingSchedule": "Графік роботи",
         "scheduleException": "Виняток у графіку",
         "billingNotification": "Платіжні або маркетингові сповіщення",
-        "notifications": "Сповіщення"
+        "notifications": "Сповіщення",
+        "comboServiceTime": "Час комбо-послуг"
       }
     },
     "calendar": {
@@ -85,22 +100,35 @@
         "noSchedulesDescription": "Наразі немає розкладів для відображення. Виберіть майстрів, щоб побачити їх розклади тут."
       },
       "comboServiceTime": {
+        "loading": "Завантаження...",
+        "setupFirstCombo": "Налаштуйте свою першу комбо-послугу",
+        "createComboService": "Створити комбо-послугу",
+        "detailedMultipleServicesDescription": "<link>Створити комбо-послугу</link>, щоб вашим клієнтам було легше бронювати кілька послуг одночасно.",
         "create": {
           "setupNewCombo": "Налаштувати новий час комбо-послуг"
-        },
-        "createComboService": "Створити комбо-послугу"
+        }
       },
       "workingHours": {
+        "loading": "Завантаження...",
+        "noSchedules": "Графіки роботи відсутні",
+        "setupFirstSchedule": "Налаштуйте свій перший робочий графік",
+        "setupScheduleDescription": "Почніть з <link>налаштування вашого першого графіка</link>, щоб керувати робочим часом.",
+        "detailedNoSchedulesDescription": "<link>Створити робочий графік</link>, щоб визначити, коли ваші майстри доступні для бронювань.",
         "create": {
           "setupNewSchedule": "Налаштувати новий графік"
         },
-        "createWorkingSchedule": "Створити робочий графік",
-        "loading": "Завантаження...",
-        "setupFirstSchedule": "Налаштуйте свій перший робочий графік",
-        "setupScheduleDescription": "<link>Створити робочий графік</link>, щоб визначити, коли ваші майстри доступні для бронювань."
+        "createWorkingSchedule": "Створити робочий графік"
       }
     },
     "orders": {
+      "orders": "Візити",
+      "loading": "Завантаження...",
+      "noOrdersFound": "Візитів не знайдено",
+      "hereYouCanSeeAllYourOrdersOrYouCan": "Тут ви можете побачити всі ваші візити або можете",
+      "orYou": "або ви",
+      "canCreate": "можете створити",
+      "taNewOrderOrUseCalendarToBookServiceForClient": "новий візит або використати календар для бронювання послуги для клієнта",
+      "detailedNoOrdersDescription": "<link>Створити новий візит</link> для керування бронюваннями клієнтів.",
       "order": {
         "pending": "В очікуванні",
         "completed": "Завершено",
@@ -113,6 +141,8 @@
         "addService": "Додати ще послугу",
         "cancel": "Скасувати",
         "create": "Забронювати",
+        "noAvailableDateAndTime": "Немає доступної дати та часу",
+        "selectedMasterDoesNotProvideService": "Вибраний майстер не надає вибрану послугу",
         "addNew": "Додати нового {label}",
         "noResults": "Не знайдено {label}",
         "client": "клієнт",
@@ -135,6 +165,7 @@
         "phonePlaceholder": "Введіть номер телефону",
         "notes": "Нотатки",
         "helperText": "Додаткова інформація про клієнта",
+        "searchPlaceholder": "Пошук за ім'ям, поштою, телефоном",
         "selectServiceLabel": "Виберіть послугу",
         "time": "Час",
         "date": "Дата",
@@ -166,14 +197,27 @@
     "services": {
       "create": {
         "addService": "Додати послугу"
-      }
+      },
+      "loading": "Завантаження...",
+      "noServicesAdded": "Послуг не додано",
+      "detailedNoServicesDescription": "Почніть зі <link>створення вашої першої послуги</link>, щоб зробити її доступною для бронювання"
     },
     "timeOff": {
       "scheduleException": "Виняток графіку",
       "addTimeOff": "Додати вихідний",
       "searchByMasterName": "Пошук за іменем майстра",
       "noTimeOffAdded": "Ще не додано жодного вихідного",
-      "noTimeOffDescription": "<link>Додати вихідний</link>, відпустки, перерви або недоступні години, щоб графік був точним."
+      "noTimeOffDescription": "<link>Додати вихідний</link>, відпустки, перерви або недоступні години, щоб графік був точним.",
+      "loading": "Завантаження...",
+      "noTimeOff": "Винятки часу відпусток відсутні",
+      "detailedNoTimeOffDescription": "Додайте <link>відпустку</link> або додаткові робочі години, щоб графік був актуальним.",
+      "types": {
+        "personal": "Особиста перерва",
+        "holiday": "Свято (салон)",
+        "vacation": "Відпустка",
+        "sick": "Лікарняний",
+        "other": "Інше"
+      }
     },
     "forgotPassword": {
       "recoveryPassword": "Відновлення паролю",
@@ -206,11 +250,22 @@
           "avooCaps": "AVOO"
         }
       },
+      "AutoComplete": {
+        "SearchAutocomplete": {
+          "applyToAll": "Застосувати до всіх",
+          "selected": "вибрано"
+        }
+      },
       "AvatarUpload": {
         "AvatarUpload": {
           "avatarImage": "Зображення аватару",
           "saveAvatar": "Зберегти аватар",
-          "editAvatar": "Редагувати аватар"
+          "editAvatar": "Редагувати аватар",
+          "uploadNewAvatar": "Завантажити новий аватар",
+          "uploadSuccess": "Аватар завантажено. Натисніть Зберегти, щоб застосувати зміни.",
+          "uploadError": "Не вдалося завантажити аватар: {error}",
+          "saveSuccess": "Аватар збережено!",
+          "noNewAvatar": "Немає нового аватара для збереження"
         }
       },
       "Button": {
@@ -256,7 +311,11 @@
           "invalidDateFormat": "Невірний формат дати",
           "dateNotInFuture": "Дата не може бути в майбутньому",
           "salon": "Салон",
-          "selectOrDrag": "Виберіть файл або перетягніть сюди"
+          "selectOrDrag": "Виберіть файл або перетягніть сюди",
+          "chooseMasterError": "Будь ласка, виберіть майстра",
+          "uploadFileError": "Будь ласка, завантажте файл",
+          "unsupportedFileType": "Непідтримуваний тип файлу. Використовуйте: {types}.",
+          "fileTooLarge": "Файл занадто великий. Максимум {maxSizeMb} МБ."
         }
       },
       "ChangePasswordForm": {
@@ -264,7 +323,8 @@
           "changePassword": "Змінити пароль",
           "currentPassword": "Поточний пароль",
           "newPassword": "Новий пароль",
-          "confirmPassword": "Підтвердіть пароль"
+          "confirmPassword": "Підтвердіть пароль",
+          "success": "Пароль успішно змінено"
         }
       },
       "CheckboxesButton": {
@@ -302,6 +362,22 @@
           "priceInEuro": "{price} євро"
         }
       },
+      "NewOrdersWidget": {
+        "NewOrdersWidget": {
+          "seeAll": "Переглянути всі",
+          "noOrders": "Всі бронювання підтверджено",
+          "noOrdersHint": "Нові бронювання з'являться тут коли будуть створені."
+        }
+      },
+      "NextAppointmentsWidget": {
+        "NextAppointmentsWidget": {
+          "back": "Назад",
+          "next": "Далі",
+          "todayDate": "Сьогодні, {date}",
+          "tomorrowDate": "Завтра, {date}",
+          "outOfSchedule": "Поза графіком"
+        }
+      },
       "ClientsList": {
         "ClientsList": {
           "noClientsYet": "Ще немає клієнтів",
@@ -318,7 +394,8 @@
           "noName": "Без імені",
           "noPhone": "Без телефону",
           "noEmail": "Без пошти",
-          "lastVisit": "останній візит {date}"
+          "lastVisit": "останній візит {date}",
+          "openDetails": "Відкрити деталі {name}"
         }
       },
       "CombinationForm": {
@@ -360,7 +437,12 @@
           "deleteComboService": "Видалити комбо-послугу",
           "comboServiceTime": "Час комбо-послуги",
           "shareSm": "Поділитися",
-          "deleteSm": "Видалити"
+          "deleteSm": "Видалити",
+          "deleteSuccess": "Комбо-послугу видалено",
+          "deleteError": "Не вдалося видалити комбо-послугу",
+          "deleteConfirmContent": "Ви впевнені, що хочете видалити цю комбо-послугу?",
+          "cancel": "Скасувати",
+          "delete": "Видалити"
         }
       },
       "ComboServiceSelector": {
@@ -390,9 +472,23 @@
           "enterPhone": "Введіть телефон"
         }
       },
+      "CustomerElement": {
+        "CustomerElement": {
+          "lastVisit": "Останній візит"
+        }
+      },
       "CustomerSelect": {
         "CustomerSelect": {
           "client": "Клієнт"
+        }
+      },
+      "DateRangePicker": {
+        "DateRangePicker": {
+          "from": "З",
+          "to": "По",
+          "selectStartDate": "Виберіть дату початку",
+          "selectEndDate": "Виберіть дату завершення",
+          "selectTheStartAndEndDate": "Виберіть дату початку та завершення"
         }
       },
       "DragAndDropZone": {
@@ -428,6 +524,7 @@
           "personalInfo": "Особиста інформація",
           "displayName": "Відображуване ім'я",
           "headline": "Заголовок",
+          "email": "Електронна пошта *",
           "phone": "Телефон",
           "about": "Про",
           "languages": "Мови",
@@ -537,7 +634,44 @@
           "outOfSchedule": "Поза графіком",
           "service": "Послуга",
           "client": "Клієнт",
-          "edit": "Редагувати"
+          "edit": "Редагувати",
+          "noteWithValue": "Примітка: {note}"
+        }
+      },
+      "OrderControls": {
+        "OrderControls": {
+          "orders": "Візити",
+          "createOrder": "Створити візит",
+          "allStatuses": "Всі статуси"
+        }
+      },
+      "OrderStatusChip": {
+        "OrderStatusChip": {
+          "pending": "В очікуванні",
+          "completed": "Завершено",
+          "cancelled": "Скасовано",
+          "confirmed": "Підтверджено",
+          "expired": "Прострочено",
+          "outOfSchedule": "Поза графіком"
+        }
+      },
+      "OrderListItem": {
+        "OrderListItem": {
+          "client": "Клієнт"
+        }
+      },
+      "ConfirmationModal": {
+        "ConfirmationModal": {
+          "title": "Ви впевнені?",
+          "confirm": "Підтвердити",
+          "cancel": "Скасувати"
+        }
+      },
+      "ModalActions": {
+        "ModalActions": {
+          "close": "Закрити",
+          "save": "Зберегти",
+          "saving": "Збереження..."
         }
       },
       "PhoneCodeSelect": {
@@ -566,7 +700,7 @@
           "saving": "Збереження...",
           "save": "Зберегти",
           "profilePreview": "Прев'ю профілю",
-          "businessProfile": "Профіль бізнесу",
+          "businessProfile": "Бізнес-профіль",
           "businessName": "Назва бізнесу",
           "headline": "Заголовок",
           "emailAddress": "Електронна пошта",
@@ -606,25 +740,6 @@
           "masterFallback": "Майстер"
         }
       },
-      "PublicCombinationForm": {
-        "PublicCombinationForm": {
-          "master": "Майстер",
-          "date": "Дата",
-          "notes": "Нотатки",
-          "notesHelper": "Додаткова інформація для майстра"
-        }
-      },
-      "PublicServiceFormItem": {
-        "PublicServiceFormItem": {
-          "service": "Послуга",
-          "searchServiceName": "Пошук за назвою послуги",
-          "master": "Майстер",
-          "date": "Дата",
-          "notes": "Нотатки",
-          "notesHelper": "Додаткова інформація для майстра",
-          "selectService": "Виберіть послугу"
-        }
-      },
       "ResetPasswordForm": {
         "ResetPasswordForm": {
           "password": "Пароль",
@@ -645,7 +760,37 @@
           "save": "Зберегти",
           "addSuccess": "Розклад успішно додано",
           "addError": "Помилка додавання розкладу: {error}",
-          "applyToAll": "Застосувати до всіх"
+          "applyToAll": "Застосувати до всіх",
+          "scheduleTypes": {
+            "weekly": "Щотижневий",
+            "2x2": "2 через 2",
+            "3x2": "3 через 2",
+            "custom": "Гнучкий"
+          },
+          "defaultScheduleName": "Робочий графік"
+        },
+        "ConflictScheduleDialog": {
+          "scheduleConflictDetected": "Виявлено конфлікт розкладу",
+          "loadingConflictDetails": "Завантаження деталей конфлікту...",
+          "youAlreadyHaveASchedule": "У вас вже є розклад, який конфліктує з датою початку",
+          "wouldYouLikeToUpdateTheNewSchedulesStartDate": "Бажаєте оновити дату початку нового розкладу на",
+          "soItCanStartAfterTheCurrentOneEnds": "щоб він почався після завершення поточного?",
+          "existingSchedule": "Існуючий розклад",
+          "youAlreadyHaveAScheduleThatConflictsWithTheStartDate": "У вас вже є розклад, який конфліктує з датою початку",
+          "wouldYouLikeToUpdateTheNewSchedulesStartDateQuestion": "Бажаєте оновити дату початку нового розкладу на",
+          "soItCanStartAfterTheCurrentOneEndsQuestion": "щоб він почався після завершення поточного?",
+          "thisNewScheduleStartsOn": "Цей новий розклад починається",
+          "butYourCurrentScheduleEndsOn": "але ваш поточний розклад закінчується",
+          "wouldYouLikeToEndTheCurrentScheduleEarly": "Бажаєте завершити поточний розклад раніше",
+          "soTheNewOneCanBegin": "щоб новий міг початися?",
+          "name": "Назва",
+          "startDate": "Дата початку",
+          "endDate": "Дата завершення",
+          "newSchedule": "Новий розклад",
+          "updateNewStartDateAndSave": "Оновити дату розкладу та зберегти",
+          "updatePreviousScheduleAndSave": "Оновити розклад та зберегти",
+          "editDatesManually": "Редагувати дати вручну",
+          "ongoing": "не має дати завершення"
         }
       },
       "ScheduleList": {
@@ -663,8 +808,7 @@
           "deleteSuccess": "Розклад успішно видалено",
           "deleteError": "Не вдалося видалити розклад",
           "deleteContent": "Це назавжди видалить розклад і вилучить його з усіх призначених майстрів. Цю дію неможливо скасувати.",
-          "cancel": "Скасувати",
-          "delete": "Видалити"
+          "cancel": "Скасувати"
         }
       },
       "ScheduleListItem": {
@@ -698,7 +842,12 @@
           "searchScheduleNameMaster": "Пошук за назвою графіку або майстром",
           "sortByName": "Сортувати за назвою",
           "sortByStartDate": "Сортувати за датою початку",
-          "sortByEndDate": "Сортувати за датою закінчення"
+          "sortByEndDate": "Сортувати за датою закінчення",
+          "scheduleName": "Назва графіку",
+          "appliesTo": "Застосовується до",
+          "startDate": "Дата початку",
+          "endDate": "Дата завершення",
+          "actions": "Дії"
         }
       },
       "ServiceAddForm": {
@@ -750,7 +899,20 @@
         "ServiceGalleryUpload": {
           "addPhoto": "Додати фото",
           "selectFile": "Вибрати файл",
-          "selectOrDrag": "Виберіть файл або перетягніть сюди"
+          "uploadDescription": "Завантажте до 5 зображень (тільки JPG, PNG, максимум 10 МБ кожне)",
+          "selectOrDrag": "Виберіть файл або перетягніть сюди",
+          "uploadHint": "Завантажте до 5 зображень (лише JPG і PNG, до 10 МБ кожне)",
+          "mediaAlt": "Медіа послуги"
+        }
+      },
+      "SortIconButton": {
+        "SortIconButton": {
+          "sort": "Сортувати"
+        }
+      },
+      "SortOptions": {
+        "SortOptions": {
+          "sortBy": "Сортувати за:"
         }
       },
       "ServiceList": {
@@ -794,12 +956,18 @@
           "mediaRemoved": "Медіафайл вилучено!"
         }
       },
+      "SingleMasterSelect": {
+        "SingleMasterSelect": {
+          "allMasters": "Усі майстри"
+        }
+      },
       "TimeOffAddForm": {
         "TimeOffAddForm": {
           "scheduleException": "Виняток графіку",
           "addTimeOffExtraHours": "Додайте вихідний або додаткові робочі години",
           "note": "Примітка",
           "wholeDay": "Цілий день",
+          "wholeDayAriaLabel": "Цілий день",
           "cancel": "Скасувати",
           "save": "Зберегти",
           "allStaff": "Весь персонал",
@@ -820,6 +988,7 @@
           "delete": "Видалити",
           "note": "Примітка",
           "wholeDay": "Цілий день",
+          "wholeDayAriaLabel": "Цілий день",
           "deleteTimeOff": "Видалити вихідний",
           "allStaff": "Весь персонал",
           "master": "Майстер *",
@@ -833,6 +1002,12 @@
           "deleteInfo": "Виняток із графіка видалено!",
           "deleteConfirmDescription": "Ви впевнені, що хочете остаточно видалити цей виняток із графіка? Цю дію неможливо скасувати.",
           "confirmDeleteTimeOff": "Видалити вихідний"
+        }
+      },
+      "TimeOffConflictsSection": {
+        "TimeOffConflictsSection": {
+          "affectedBookings": "Затронуті бронювання",
+          "bookingFallback": "Бронювання"
         }
       },
       "TimeOffEditModal": {
@@ -863,7 +1038,8 @@
           "workingTime": "Робочий час",
           "from": "з",
           "to": "по",
-          "deleteConfirmDescription": "Ви впевнені, що хочете остаточно видалити цей виняток із графіка? Цю дію неможливо скасувати."
+          "deleteConfirmDescription": "Ви впевнені, що хочете остаточно видалити цей виняток із графіка? Цю дію неможливо скасувати.",
+          "openDetails": "Відкрити деталі {name}"
         }
       },
       "TimeSlotField": {
@@ -896,6 +1072,11 @@
     }
   },
   "public": {
+    "metadata": {
+      "root": {
+        "description": "Професійна платформа AVOO"
+      }
+    },
     "home": {
       "topSection": {
         "ctaButton": "Перейти до додатку бронювання",
@@ -927,14 +1108,66 @@
         "gallery": "Галерея",
         "certificates": "Сертифікати",
         "team": "Команда",
+        "avatarAlt": "Аватар салону",
         "termsPrivacy": "Умови та конфіденційність",
-        "allRightsReserved": "Всі права захищені."
+        "allRightsReserved": "Всі права захищені.",
+        "book": "Забронювати",
+        "select": "Вибрати",
+        "change": "Змінити",
+        "selected": "Вибрано",
+        "search": "Пошук"
       },
       "createOrder": {
         "bookingForm": "Форма бронювання",
         "addMoreService": "Додати більше послуг",
         "cancel": "Скасувати",
-        "book": "Забронювати"
+        "book": "Забронювати",
+        "service": "Послуга",
+        "searchServiceName": "Пошук за назвою послуги",
+        "master": "Майстер",
+        "date": "Дата",
+        "notes": "Нотатки",
+        "notesHelper": "Додаткова інформація для майстра",
+        "selectService": "Виберіть послугу",
+        "select": "Вибрати",
+        "change": "Змінити",
+        "selectMaster": "Виберіть майстра",
+        "selectDate": "Виберіть дату",
+        "selectTime": "Виберіть час",
+        "morning": "Ранок",
+        "afternoon": "Після обіду",
+        "evening": "Вечір",
+        "anyMaster": "Будь-який майстер",
+        "yourBookingDetails": "Деталі вашого бронювання",
+        "addExtraService": "Додати додаткову послугу",
+        "total": "Всього",
+        "selected": "Обрано",
+        "confirmBooking": "Підтвердити бронювання",
+        "dateNotSelected": "Дату не вибрано",
+        "timeNotSelected": "Час не вибрано",
+        "masterNotSelected": "Майстра не вибрано",
+        "serviceNotSelected": "Послугу не вибрано",
+        "canBeCombined": "можна поєднати з",
+        "totalDurationMessage": "Загальна тривалість запису складе",
+        "minutes": "хвилин",
+        "bookSeparately": "Бронювати окремо",
+        "applyCombination": "Застосувати комбінацію",
+        "bookingConfirmed": "Бронювання підтверджено",
+        "confirmationMessage": "Ваш запис успішно заброньовано. Підтвердження надіслано на вашу електронну пошту з усіма деталями.",
+        "bookingCancel": "Ваше бронювання не підтверджено",
+        "cancelMessage": "Ви збираєтеся вийти, не підтвердивши запис. Обрані послуги та час можуть бути втрачені.",
+        "searchServices": "Пошук послуг",
+        "searchMasters": "Пошук майстрів",
+        "anyMasterHeadline": "для максимальної доступності",
+        "euro": "Євро",
+        "selectDateTime": "Виберіть дату та час",
+        "selectValidTimeSlot": "Будь ласка, виберіть дійсний часовий слот",
+        "noAvailableSlots": "Немає доступних часових слотів на вибрану дату. Будь ласка, виберіть іншу дату або оберіть 'Будь-який майстер' для додаткових варіантів.",
+        "search": "Пошук",
+        "remove": "Видалити",
+        "clear": "Очистити",
+        "splitBooking": "Розділити бронювання",
+        "selectedServices": "Вибрані послуги"
       }
     },
     "forgotPassword": {
@@ -946,7 +1179,8 @@
         "button": "Відправити код",
         "emailLabel": "Електронна пошта *",
         "emailPlaceholder": "Електронна пошта",
-        "linkText": "Повернутися до входу"
+        "linkText": "Повернутися до входу",
+        "sendCodeSuccess": "Код підтвердження надіслано на вашу електронну пошту"
       }
     },
     "login": {
@@ -971,6 +1205,7 @@
         "metaTitle": "Реєстрація - AVOO App",
         "description": "Налаштуйте профіль для керування послугами та бронюваннями.",
         "havingAccount": "Вже маєте акаунт?",
+        "accountPrompt": "Вже маєте акаунт? <link>Увійти</link>",
         "login": "Увійти"
       },
       "form": {
@@ -992,10 +1227,18 @@
         "slogan": "Більше клієнтів. Один календар. Жодного хаосу."
       }
     },
+    "verifyCode": {
+      "page": {
+        "metaTitle": "Перевірка коду - AVOO App",
+        "metaDescription": "Перевірте код, надісланий на електронну пошту"
+      }
+    },
     "resetPassword": {
       "page": {
         "title": "Створіть новий пароль",
         "description": "Виберіть надійний пароль, щоб захистити свій акаунт.",
+        "metaTitle": "Скидання паролю - AVOO App",
+        "metaDescription": "Скиньте свій пароль",
         "newPasswordLabel": "Новий пароль *",
         "confirmPasswordLabel": "Підтвердіть пароль *",
         "saveButton": "Зберегти новий пароль",
