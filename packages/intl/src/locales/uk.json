@@ -467,6 +467,9 @@
         }
       },
       "MasterListItem": {
+        "editMaster": "Редагувати майстра",
+        "share": "Поділитися",
+        "delete": "Видалити",
         "MasterListItem": {
           "editMaster": "Редагувати майстра",
           "share": "Поділитися",
@@ -551,7 +554,7 @@
         }
       },
       "ProfileEdit": {
-        "EditProfileForm": {
+        "ProfileEditForm": {
           "displayName": "Відображуване ім'я",
           "phone": "Телефон",
           "address": "Адреса",
@@ -562,7 +565,8 @@
           "search": "Пошук",
           "saving": "Збереження...",
           "save": "Зберегти",
-          "profilePreview": "Попередній перегляд профілю",
+          "profilePreview": "Прев'ю профілю",
+          "businessProfile": "Профіль бізнесу",
           "businessName": "Назва бізнесу",
           "headline": "Заголовок",
           "emailAddress": "Електронна пошта",
@@ -572,15 +576,27 @@
       },
       "ProfileGallery": {
         "ProfileGallery": {
+          "seeMore": "Показати більше",
+          "seeLess": "Показати менше",
           "gallery": "Галерея",
           "galleryEmpty": "Ваша галерея порожня",
           "addPhotos": "Додати фотографії",
-          "addPhotosRich": "<a>Додайте фотографії</a>, щоб підкреслити свою професійну кваліфікацію та атмосферу салону."
+          "addPhotosDescription": "щоб підкреслити свою професійну кваліфікацію та атмосферу салону.",
+          "addPhotosRich": "<a>Додайте фотографії</a>, щоб підкреслити свою професійну кваліфікацію та атмосферу салону.",
+          "close": "Закрити",
+          "save": "Зберегти",
+          "mediaUploaded": "Медіафайли завантажено!",
+          "mediaUploadError": "Не вдалося завантажити медіа: {error}",
+          "mediaDeleted": "Медіафайл видалено!",
+          "mediaDeleteError": "Не вдалося видалити медіафайл: {error}",
+          "unsavedChanges": "Незбережені зміни",
+          "unsavedChangesDescription": "У вас є незбережені зміни. Ви впевнені, що хочете вийти?",
+          "discardChanges": "Відхилити зміни"
         }
       },
       "ProfileInfo": {
         "ProfileInfo": {
-          "profilePreview": "Попередній перегляд профілю",
+          "profilePreview": "Прев'ю профілю",
           "about": "Про"
         }
       },

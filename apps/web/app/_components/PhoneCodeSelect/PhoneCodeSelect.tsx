@@ -45,7 +45,7 @@ export default function PhoneCodeSelect({ value, onChange, id, className }: Read
         onFocus={handleFocus}
         onBlur={handleBlur}
         onMouseDown={handleMouseDown}
-        className={`p-3 w-full h-11 rounded-lg border border-gray-200 bg-transparent focus:outline-none focus:ring-1 focus:ring-purple-800 text-sm appearance-none pr-10 box-border leading-none py-0 ${className ?? ''}`}
+        className={`p-3 w-full h-11 rounded-lg border border-gray-200 bg-transparent focus:outline-none focus:ring-1 focus:ring-inset focus:ring-purple-800 text-sm appearance-none pr-10 box-border leading-none py-0 ${className ?? ''}`}
         aria-label={t('countryCode')}
       >
         {options}

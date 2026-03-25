@@ -467,6 +467,9 @@
         }
       },
       "MasterListItem": {
+        "editMaster": "Edit master",
+        "share": "Share",
+        "delete": "Delete",
         "MasterListItem": {
           "editMaster": "Edit master",
           "share": "Share",
@@ -551,7 +554,7 @@
         }
       },
       "ProfileEdit": {
-        "EditProfileForm": {
+        "ProfileEditForm": {
           "displayName": "Display Name",
           "phone": "Phone",
           "address": "Address",
@@ -563,6 +566,7 @@
           "saving": "Saving...",
           "save": "Save",
           "profilePreview": "Profile Preview",
+          "businessProfile": "Business Profile",
           "businessName": "Business name",
           "headline": "Headline",
           "emailAddress": "Email address",
@@ -572,10 +576,22 @@
       },
       "ProfileGallery": {
         "ProfileGallery": {
+          "seeMore": "See more",
+          "seeLess": "See less",
           "gallery": "Gallery",
           "galleryEmpty": "Your gallery is empty",
           "addPhotos": "Add photos",
-          "addPhotosRich": "<a>Add photos</a> to highlight your professional qualifications and salon atmosphere."
+          "addPhotosDescription": "to highlight your professional qualifications and salon atmosphere.",
+          "addPhotosRich": "<a>Add photos</a> to highlight your professional qualifications and salon atmosphere.",
+          "close": "Close",
+          "save": "Save",
+          "mediaUploaded": "Media has been uploaded!",
+          "mediaUploadError": "Failed to upload media: {error}",
+          "mediaDeleted": "Media has been deleted!",
+          "mediaDeleteError": "Failed to delete media: {error}",
+          "unsavedChanges": "Unsaved changes",
+          "unsavedChangesDescription": "You have unsaved changes. Are you sure you want to leave?",
+          "discardChanges": "Discard changes"
         }
       },
       "ProfileInfo": {

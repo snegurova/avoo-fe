@@ -467,6 +467,9 @@
         }
       },
       "MasterListItem": {
+        "editMaster": "Edytuj mistrza",
+        "share": "Udostępnij",
+        "delete": "Usuń",
         "MasterListItem": {
           "editMaster": "Edytuj mistrza",
           "share": "Udostępnij",
@@ -551,7 +554,7 @@
         }
       },
       "ProfileEdit": {
-        "EditProfileForm": {
+        "ProfileEditForm": {
           "displayName": "Wyświetlana nazwa",
           "phone": "Telefon",
           "address": "Adres",
@@ -563,6 +566,7 @@
           "saving": "Zapisywanie...",
           "save": "Zapisz",
           "profilePreview": "Podgląd profilu",
+          "businessProfile": "Profil biznesowy",
           "businessName": "Nazwa firmy",
           "headline": "Nagłówek",
           "emailAddress": "Adres e-mail",
@@ -572,10 +576,22 @@
       },
       "ProfileGallery": {
         "ProfileGallery": {
+          "seeMore": "Pokaż więcej",
+          "seeLess": "Pokaż mniej",
           "gallery": "Galeria",
           "galleryEmpty": "Twoja galeria jest pusta",
           "addPhotos": "Dodaj zdjęcia",
-          "addPhotosRich": "<a>Dodaj zdjęcia</a>, aby wyróżnić swoje kwalifikacje zawodowe i atmosferę salonu."
+          "addPhotosDescription": "aby wyróżnić swoje kwalifikacje zawodowe i atmosferę salonu.",
+          "addPhotosRich": "<a>Dodaj zdjęcia</a>, aby wyróżnić swoje kwalifikacje zawodowe i atmosferę salonu.",
+          "close": "Zamknij",
+          "save": "Zapisz",
+          "mediaUploaded": "Multimedia zostały przesłane!",
+          "mediaUploadError": "Nie udało się przesłać multimediów: {error}",
+          "mediaDeleted": "Multimedia zostały usunięte!",
+          "mediaDeleteError": "Nie udało się usunąć multimediów: {error}",
+          "unsavedChanges": "Niezapisane zmiany",
+          "unsavedChangesDescription": "Masz niezapisane zmiany. Czy na pewno chcesz wyjść?",
+          "discardChanges": "Odrzuć zmiany"
         }
       },
       "ProfileInfo": {

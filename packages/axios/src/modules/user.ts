@@ -22,9 +22,9 @@ export const userApi = {
     const response = await apiClient.get<BaseResponse<UserProfileResponse>>(PROFILE_ENDPOINT);
     return response.data;
   },
-  async getUserMedia(type: MediaType, typeEntityId: number) {
+  async getUserMedia(type: MediaType, typeEntityId: number, page?: number, limit?: number) {
     const response = await apiClient.get<BaseResponse<UserMediaResponse>>(GET_USER_MEDIA_ENDPOINT, {
-      params: { type, typeEntityId },
+      params: { type, typeEntityId, ...(page ? { page } : {}), ...(limit ? { limit } : {}) },
     });
     return response.data;
   },

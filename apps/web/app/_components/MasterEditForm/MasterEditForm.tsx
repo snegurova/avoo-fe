@@ -124,123 +124,119 @@ export default function MasterEditForm({
   });
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className='flex-1 flex flex-col md:flex-row md:flex-wrap gap-6 md:gap-8 min-h-0'
-    >
-      <div className='flex-1 max-w-4xl space-y-6 md:space-y-8 xl:mx-auto'>
-        <div className='flex justify-between'>
-          <h2 className='text-2xl'>{t('masters')}</h2>
-          <div className='flex items-center gap-2'>
-            <IconButton
-              ariaLabel={t('share')}
-              icon={<ShareIcon className='fill-current' />}
-              className='inline-flex items-center justify-center bg-primary-50 p-2.5 rounded-[8px] hover:bg-primary-100 focus:bg-primary-100 transition-colors'
-            />
-            <IconButton
-              ariaLabel={t('delete')}
-              icon={<DeleteIcon className='fill-current' />}
-              onClick={handleDeleteClick}
-              className='inline-flex items-center justify-center bg-primary-50 p-2.5 rounded-[8px] hover:bg-red-100 focus:bg-red-100 hover:text-red-900 focus:text-red-900 transition-colors'
-            />
+    <form onSubmit={handleSubmit} className='flex h-full min-h-0 flex-col'>
+      <div className='flex-1 min-h-0 overflow-y-auto overflow-x-hidden pr-4 -mr-4'>
+        <div className='max-w-4xl space-y-6 md:space-y-8 xl:mx-auto'>
+          <div className='flex justify-between'>
+            <h2 className='text-2xl'>{t('masters')}</h2>
+            <div className='flex items-center gap-2'>
+              <IconButton
+                ariaLabel={t('share')}
+                icon={<ShareIcon className='fill-current' />}
+                className='inline-flex items-center justify-center bg-primary-50 p-2.5 rounded-[8px] hover:bg-primary-100 focus:bg-primary-100 transition-colors'
+              />
+              <IconButton
+                ariaLabel={t('delete')}
+                icon={<DeleteIcon className='fill-current' />}
+                onClick={handleDeleteClick}
+                className='inline-flex items-center justify-center bg-primary-50 p-2.5 rounded-[8px] hover:bg-red-100 focus:bg-red-100 hover:text-red-900 focus:text-red-900 transition-colors'
+              />
+            </div>
           </div>
-        </div>
-        <h3 className='text-base md:text-xl mb-0'>{t('personalInfo')}</h3>
-        <div className='flex items-center gap-4 py-6 mb-0'>
-          <AvatarUpload
-            imageUri={avatarUrlField.value}
-            onAvatarSave={onAvatarSave}
-            isLoading={false}
-            size={AvatarSize.XLARGE}
-            showEditIcon
-          />
-        </div>
-
-        <div className='flex flex-col gap-6 md:gap-8'>
-          <div>
-            <label htmlFor='name' className='text-sm block mb-1'>
-              {t('displayName')}
-            </label>
-            <FormInput id='name' {...nameField} value={nameField.value ?? ''} />
-          </div>
-
-          <div>
-            <label htmlFor='headline' className='text-sm block mb-1'>
-              {t('headline')}
-            </label>
-            <FormInput id='headline' {...headlineField} value={headlineField.value ?? ''} />
-          </div>
-        </div>
-
-        <div className='flex flex-col gap-6 md:gap-8'>
-          <div>
-            <label htmlFor='email' className='text-sm block mb-1'>
-              Email *
-            </label>
-            <FormInput
-              id='email'
-              type='email'
-              {...emailField}
-              value={emailField.value ?? ''}
-              required
+          <h3 className='text-base md:text-xl mb-0'>{t('personalInfo')}</h3>
+          <div className='flex items-center gap-4 py-6 mb-0'>
+            <AvatarUpload
+              imageUri={avatarPreviewUrlField.value ?? avatarUrlField.value}
+              onAvatarSave={onAvatarSave}
+              isLoading={false}
+              size={AvatarSize.XLARGE}
+              showEditIcon
             />
           </div>
 
-          <div>
-            <label htmlFor='phone' className='text-sm block mb-1'>
-              {t('phone')}
-            </label>
-            <div className='flex items-stretch gap-3'>
-              <div className='w-[84px] flex-shrink-0'>
-                <PhoneCodeSelect
-                  id='phone-code'
-                  value={countryCode}
-                  onChange={handlePhoneCodeChange}
-                />
-              </div>
+          <div className='flex flex-col gap-6 md:gap-8'>
+            <div>
+              <label htmlFor='name' className='text-sm block mb-1'>
+                {t('displayName')}
+              </label>
+              <FormInput id='name' {...nameField} value={nameField.value ?? ''} />
+            </div>
 
-              <div className='flex-1'>
-                <FormInput
-                  id='phone'
-                  type='tel'
-                  value={phoneNumber}
-                  onChange={handlePhoneNumberChange}
-                  onBlur={phoneField.onBlur}
-                />
+            <div>
+              <label htmlFor='headline' className='text-sm block mb-1'>
+                {t('headline')}
+              </label>
+              <FormInput id='headline' {...headlineField} value={headlineField.value ?? ''} />
+            </div>
+          </div>
+
+          <div className='flex flex-col gap-6 md:gap-8'>
+            <div>
+              <label htmlFor='email' className='text-sm block mb-1'>
+                Email *
+              </label>
+              <FormInput
+                id='email'
+                type='email'
+                {...emailField}
+                value={emailField.value ?? ''}
+                required
+              />
+            </div>
+
+            <div>
+              <label htmlFor='phone' className='text-sm block mb-1'>
+                {t('phone')}
+              </label>
+              <div className='flex items-stretch gap-3'>
+                <div className='w-[84px] flex-shrink-0'>
+                  <PhoneCodeSelect
+                    id='phone-code'
+                    value={countryCode}
+                    onChange={handlePhoneCodeChange}
+                  />
+                </div>
+
+                <div className='flex-1'>
+                  <FormInput
+                    id='phone'
+                    type='tel'
+                    value={phoneNumber}
+                    onChange={handlePhoneNumberChange}
+                    onBlur={phoneField.onBlur}
+                  />
+                </div>
               </div>
             </div>
           </div>
-        </div>
 
-        <div>
-          <FormTextarea
-            id='bio'
-            name={bioField.name}
-            value={bioField.value ?? ''}
-            onChange={bioField.onChange}
-            onBlur={bioField.onBlur}
-            ref={bioField.ref}
-            label={t('about')}
-            helperText={t('infoDisplayPlatform')}
-            maxLength={200}
-            classNames={{
-              textarea:
-                'block w-full text-sm text-gray-600 border border-gray-200 p-3 rounded-lg min-h-[70px] focus:outline-none focus:ring-1 focus:ring-purple-800',
-            }}
+          <div>
+            <FormTextarea
+              id='bio'
+              name={bioField.name}
+              value={bioField.value ?? ''}
+              onChange={bioField.onChange}
+              onBlur={bioField.onBlur}
+              ref={bioField.ref}
+              label={t('about')}
+              helperText={t('infoDisplayPlatform')}
+              maxLength={200}
+              textareaClassAppend='text-gray-600 p-3 min-h-[70px]'
+            />
+          </div>
+
+          <label htmlFor='languages' className='text-sm block mb-1'>
+            {t('languages')}
+          </label>
+          <p className='text-xs text-gray-500'>{t('addLanguagesOffer')}</p>
+          <FormLanguageSearch
+            name={languagesField.name}
+            control={control}
+            className='w-full'
+            error={languagesFieldState.error?.message}
+            splitOnDesktop={false}
           />
         </div>
-
-        <label htmlFor='languages' className='text-sm block mb-1'>
-          {t('languages')}
-        </label>
-        <p className='text-xs text-gray-500'>{t('addLanguagesOffer')}</p>
-        <FormLanguageSearch
-          name={languagesField.name}
-          control={control}
-          className='w-full'
-          error={languagesFieldState.error?.message}
-          splitOnDesktop={false}
-        />
       </div>
 
       <ModalActions
@@ -248,6 +244,7 @@ export default function MasterEditForm({
         submitType='submit'
         loading={isPending}
         submitDisabled={!hasChanges}
+        className='justify-end'
       />
 
       <ConfirmationModal

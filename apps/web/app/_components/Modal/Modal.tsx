@@ -50,7 +50,7 @@ const panelStyle = {
   pt: '60px',
   pb: '44px',
   px: { xs: '20px', md: '48px' },
-  overflow: 'auto',
+  overflow: 'hidden',
   boxSizing: 'border-box',
   transition: 'background-color 200ms ease-in-out, border-color 300ms ease-in-out',
 };
@@ -78,7 +78,7 @@ export const Modal = (props: Props) => {
         </IconButton>
       )}
 
-      <Box sx={{ width: '100%' }}>{children}</Box>
+      <Box sx={{ width: '100%', height: isPanel ? '100%' : 'auto' }}>{children}</Box>
     </Box>
   );
 

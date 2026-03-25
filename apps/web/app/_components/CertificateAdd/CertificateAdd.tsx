@@ -1,12 +1,13 @@
 'use client';
 
-import React, { useRef } from 'react';
+import React from 'react';
 import { useTranslations } from 'next-intl';
 
 import { Button } from '@mui/material';
 
 import { useApiStatusStore } from '@avoo/store';
 
+import FileUploadDropzone from '@/_components/FileUploadDropzone/FileUploadDropzone';
 import FormInput from '@/_components/FormInput/FormInput';
 import SelectButton from '@/_components/SelectButton/SelectButton';
 import { useCertificateForm } from '@/_hooks/useCertificateForm';
@@ -23,8 +24,6 @@ export const CertificateAdd = () => {
     hook;
 
   const isPending = useApiStatusStore((state) => state.isPending);
-
-  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const masterId = watch('masterId');
   const {
@@ -120,34 +119,16 @@ export const CertificateAdd = () => {
       </div>
 
       <div className='mb-4'>
-        <button
-          type='button'
-          aria-label={t('uploadCertFile')}
-          className='w-full text-center border-2 border-dashed border-gray-300 rounded-lg p-6 text-center cursor-pointer'
-          onDragOver={(e) => e.preventDefault()}
-          onDrop={(e) => {
-            e.preventDefault();
-            const dropped = e.dataTransfer?.files?.[0] ?? null;
-            onFilePicked(dropped);
-          }}
-          onClick={() => fileInputRef.current?.click()}
-        >
-          <p className='mb-2 font-semibold'>{file ? file.name : t('selectOrDrag')}</p>
-          <p className='text-sm text-gray-500 mb-4'>{t('fileUploadHint')}</p>
-          <span className='px-4 py-2 border border-blue-300 text-blue-600 rounded-md inline-block'>
-            {t('selectFileCaps')}
-          </span>
-          <input
-            id='certificateFileInput'
-            ref={fileInputRef}
-            name='certificateFile'
-            type='file'
-            accept='.jpg,.png'
-            className='hidden'
-            onChange={(e) => onFilePicked(e.target.files?.[0] ?? null)}
-          />
-          {fileError && <p className='text-sm text-red-500 mt-2'>{fileError}</p>}
-        </button>
+        <FileUploadDropzone
+          title={file ? file.name : t('selectOrDrag')}
+          description={t('fileUploadHint')}
+          buttonTitle={t('selectFileCaps')}
+          accept='.jpg,.png'
+          onFilePicked={onFilePicked}
+          isUploading={isPending}
+          fileError={fileError}
+          className='w-full'
+        />
       </div>
       <div className='flex justify-center gap-3'>
         <Button

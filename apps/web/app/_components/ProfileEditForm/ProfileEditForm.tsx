@@ -16,6 +16,7 @@ import {
 import type { NominatimPlace, VisualProfileInfo } from '@avoo/shared';
 import { buildShortAddress, getCondensedAddress } from '@avoo/shared';
 
+import AddressResults from '@/_components/AddressResults/AddressResults';
 import { AvatarSize, AvatarUpload } from '@/_components/AvatarUpload/AvatarUpload';
 import { Button, ButtonFit, ButtonRadius, ButtonSize } from '@/_components/Button/Button';
 import FormInput, { AccessoryPosition } from '@/_components/FormInput/FormInput';
@@ -24,8 +25,6 @@ import PhoneCodeSelect from '@/_components/PhoneCodeSelect/PhoneCodeSelect';
 import AddPhotoIcon from '@/_icons/AddPhotoIcon';
 import LockIcon from '@/_icons/LockIcon';
 import PinDropIcon from '@/_icons/PinDropIcon';
-
-import AddressResults from './AddressResults';
 
 type Props = {
   initial?: VisualProfileInfo | null;
@@ -48,7 +47,7 @@ export default function ProfileEditForm({
   onPreview,
   previewDisabled,
 }: Readonly<Props>) {
-  const t = useTranslations('private.components.ProfileEdit.EditProfileForm');
+  const t = useTranslations('private.components.ProfileEdit.ProfileEditForm');
   const { search, searchResults, clear, getMyLocation } = useAddressSearch();
 
   type FormValues = {
@@ -63,6 +62,7 @@ export default function ProfileEditForm({
     description: string;
     avatarUrl?: string;
     avatarPreviewUrl?: string;
+    mediaIds?: number[];
   };
 
   const form = useForm<FormValues>({
@@ -76,7 +76,7 @@ export default function ProfileEditForm({
     setValue,
     setError,
     watch,
-    formState: { isDirty: hasChanges, errors },
+    formState: { isDirty: hasChanges, errors, dirtyFields },
   } = form;
   const applyServerFormErrors = useServerFormErrors(setError);
   const searchDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -96,7 +96,14 @@ export default function ProfileEditForm({
   }, [onCancel, onRequestClose]);
 
   const onSubmitInternal = async (values: FormValues) => {
-    const payload = buildUpdateProfilePayload(values);
+    const changed: Record<string, unknown> = {};
+    for (const key of Object.keys(dirtyFields) as (keyof FormValues)[]) {
+      changed[key] = values[key];
+    }
+    if ('mediaIds' in dirtyFields && values.mediaIds) {
+      changed.mediaIds = values.mediaIds;
+    }
+    const payload = buildUpdateProfilePayload(changed);
 
     try {
       await onSubmit(payload);
@@ -107,8 +114,8 @@ export default function ProfileEditForm({
 
   const onAvatarSave = useCallback(
     (file: FileEntity) => {
-      setValue('avatarUrl', file.url);
-      setValue('avatarPreviewUrl', file.previewUrl);
+      setValue('avatarUrl', file.url, { shouldDirty: true });
+      setValue('avatarPreviewUrl', file.previewUrl, { shouldDirty: true });
     },
 
     [setValue],
@@ -173,133 +180,137 @@ export default function ProfileEditForm({
   );
 
   return (
-    <form className='flex min-h-full flex-col gap-6' onSubmit={handleSubmit(onSubmitInternal)}>
-      <h2 className='text-2xl mb-6'>Business profile</h2>
+    <form className='flex h-full min-h-0 flex-col' onSubmit={handleSubmit(onSubmitInternal)}>
+      <div className='flex-1 min-h-0 overflow-y-auto overflow-x-hidden pr-4 -mr-4'>
+        <div className='space-y-6'>
+          <h2 className='text-2xl mb-6'>{t('businessProfile')}</h2>
 
-      <div className='mt-6 md:mt-0 mb-8 md:mb-0 flex flex-col items-center gap-4 relative md:shrink-0'>
-        <AvatarUpload
-          imageUri={watch('avatarUrl')}
-          isLoading={!!isPending}
-          onAvatarSave={onAvatarSave}
-          size={AvatarSize.PROFILE}
-          framed
-          showEditIcon
-          placeholderIcon={<AddPhotoIcon width={56} height={56} />}
-          confirmSave
-        />
-
-        <Button
-          fit={ButtonFit.Inline}
-          radius={ButtonRadius.Full}
-          size={ButtonSize.Small}
-          onClick={onPreview}
-          disabled={previewDisabled}
-          className='w-[168px] h-9 min-w-[168px] px-0 py-0 border-0 bg-primary-100 text-[16px] font-medium text-primary-800 shadow-none hover:bg-primary-200 hover:shadow-none focus:bg-primary-200 focus:ring-0 focus:ring-offset-0 focus:shadow-none active:bg-primary-200'
-        >
-          {t('profilePreview')}
-        </Button>
-      </div>
-
-      <div className='space-y-6'>
-        <div>
-          <label htmlFor='name' className='text-sm text-gray-600'>
-            {t('businessName')}
-          </label>
-          <FormInput
-            id='name'
-            {...register('name', {
-              required: t('nameRequired'),
-              validate: (value) => (value?.trim()?.length ? true : t('nameRequired')),
-            })}
-            error={errors.name?.message}
-          />
-        </div>
-
-        <div>
-          <label htmlFor='headline' className='text-sm text-gray-600'>
-            {t('headline')}
-          </label>
-          <FormInput id='headline' {...register('headline')} />
-        </div>
-
-        <div>
-          <label htmlFor='email' className='text-sm text-gray-600'>
-            {t('emailAddress')} *
-          </label>
-          <FormInput
-            id='email'
-            type='email'
-            readOnly
-            {...register('email')}
-            accessory={<LockIcon className='text-gray-400' />}
-            accessoryPosition={AccessoryPosition.Right}
-          />
-        </div>
-
-        <div>
-          <label htmlFor='address' className='text-sm text-gray-600'>
-            {t('address')}
-          </label>
-          <div className='relative'>
-            <FormInput
-              id='address'
-              {...register('address')}
-              value={watch('address') ?? ''}
-              onChange={handleAddressChange}
-              accessory={
-                <button
-                  type='button'
-                  onClick={handleUseMyLocation}
-                  className='cursor-pointer text-gray-400 hover:text-gray-600 transition-colors'
-                >
-                  <PinDropIcon />
-                </button>
-              }
-              accessoryPosition={AccessoryPosition.Right}
+          <div className='mt-6 md:mt-0 mb-8 md:mb-0 flex flex-col items-center gap-4 relative md:shrink-0'>
+            <AvatarUpload
+              imageUri={watch('avatarPreviewUrl') ?? watch('avatarUrl')}
+              isLoading={!!isPending}
+              onAvatarSave={onAvatarSave}
+              size={AvatarSize.PROFILE}
+              framed
+              showEditIcon
+              placeholderIcon={<AddPhotoIcon width={56} height={56} />}
+              confirmSave
             />
-            {searchResults && searchResults.length > 0 && (
-              <div className='absolute z-10 left-0 right-0 top-full mt-1'>
-                <AddressResults results={searchResults} onSelect={handleSelectResult} />
-              </div>
-            )}
+
+            <Button
+              fit={ButtonFit.Inline}
+              radius={ButtonRadius.Full}
+              size={ButtonSize.Small}
+              onClick={onPreview}
+              disabled={previewDisabled}
+              className='w-[168px] h-9 min-w-[168px] px-0 py-0 border-0 bg-primary-100 text-[16px] font-medium text-primary-800 shadow-none hover:bg-primary-200 hover:shadow-none focus:bg-primary-200 focus:ring-0 focus:ring-offset-0 focus:shadow-none active:bg-primary-200'
+            >
+              {t('profilePreview')}
+            </Button>
           </div>
-        </div>
 
-        <div>
-          <label htmlFor='phone' className='text-sm block mb-1'>
-            {t('phoneNumber')}
-          </label>
-          <div className='flex items-stretch gap-3'>
-            <div className='w-[84px] flex-shrink-0'>
-              <PhoneCodeSelect
-                id='phone-code'
-                value={countryCode}
-                onChange={handlePhoneCodeChange}
-              />
-            </div>
-
-            <div className='flex-1'>
+          <div className='space-y-6'>
+            <div>
+              <label htmlFor='name' className='text-sm text-gray-600'>
+                {t('businessName')}
+              </label>
               <FormInput
-                id='phone'
-                type='tel'
-                value={phoneNumber}
-                onChange={handlePhoneNumberChange}
+                id='name'
+                {...register('name', {
+                  required: t('nameRequired'),
+                  validate: (value) => (value?.trim()?.length ? true : t('nameRequired')),
+                })}
+                error={errors.name?.message}
               />
             </div>
+
+            <div>
+              <label htmlFor='headline' className='text-sm text-gray-600'>
+                {t('headline')}
+              </label>
+              <FormInput id='headline' {...register('headline')} />
+            </div>
+
+            <div>
+              <label htmlFor='email' className='text-sm text-gray-600'>
+                {t('emailAddress')} *
+              </label>
+              <FormInput
+                id='email'
+                type='email'
+                readOnly
+                {...register('email')}
+                accessory={<LockIcon className='text-gray-400' />}
+                accessoryPosition={AccessoryPosition.Right}
+              />
+            </div>
+
+            <div>
+              <label htmlFor='address' className='text-sm text-gray-600'>
+                {t('address')}
+              </label>
+              <div className='relative'>
+                <FormInput
+                  id='address'
+                  {...register('address')}
+                  value={watch('address') ?? ''}
+                  onChange={handleAddressChange}
+                  accessory={
+                    <button
+                      type='button'
+                      onClick={handleUseMyLocation}
+                      className='cursor-pointer text-gray-400 hover:text-gray-600 transition-colors'
+                    >
+                      <PinDropIcon />
+                    </button>
+                  }
+                  accessoryPosition={AccessoryPosition.Right}
+                />
+                {searchResults && searchResults.length > 0 && (
+                  <div className='absolute z-10 left-0 right-0 top-full mt-1'>
+                    <AddressResults results={searchResults} onSelect={handleSelectResult} />
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <div>
+              <label htmlFor='phone' className='text-sm block mb-1'>
+                {t('phoneNumber')}
+              </label>
+              <div className='flex items-stretch gap-3'>
+                <div className='w-[84px] flex-shrink-0'>
+                  <PhoneCodeSelect
+                    id='phone-code'
+                    value={countryCode}
+                    onChange={handlePhoneCodeChange}
+                  />
+                </div>
+
+                <div className='flex-1'>
+                  <FormInput
+                    id='phone'
+                    type='tel'
+                    value={phoneNumber}
+                    onChange={handlePhoneNumberChange}
+                  />
+                </div>
+              </div>
+            </div>
+
+            <FormTextarea
+              id='description'
+              label={t('about')}
+              maxLength={200}
+              name='description'
+              value={watch('description') ?? ''}
+              onChange={(evt) => setValue('description', evt.target.value, { shouldDirty: true })}
+            />
           </div>
         </div>
-
-        <FormTextarea
-          id='description'
-          label={t('about')}
-          maxLength={200}
-          name='description'
-          value={watch('description') ?? ''}
-          onChange={(evt) => setValue('description', evt.target.value, { shouldDirty: true })}
-        />
       </div>
 
-      <div className='flex justify-between gap-3 mt-auto pt-8'>
+      <div className='flex justify-between gap-3 pt-8'>
         <MuiButton
           type='button'
           onClick={handleClose}
