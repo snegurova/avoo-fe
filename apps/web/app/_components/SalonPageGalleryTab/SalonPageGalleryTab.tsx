@@ -1,9 +1,10 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useRef } from 'react';
 import { useTranslations } from 'next-intl';
 
 import { MEDIA_TYPE_ENUM } from '@avoo/axios/types/apiEnums';
 import { MediaEntity } from '@avoo/axios/types/apiTypes';
 import { mediaHooks } from '@avoo/hooks';
+import { useApiStatusStore } from '@avoo/store';
 
 type Props = {
   userId: number;
@@ -11,10 +12,12 @@ type Props = {
 
 export default function SalonPageGalleryTab(props: Props) {
   const { userId } = props;
+  const listRef = useRef<HTMLDivElement>(null);
   const t = useTranslations('public.salon.page');
+  const isPending = useApiStatusStore((state) => state.isPending);
 
-  const { data } = mediaHooks.useGetPublicMedia({
-    limit: 9,
+  const { data, fetchNextPage, hasNextPage } = mediaHooks.useGetPublicMedia({
+    limit: 7,
     type: MEDIA_TYPE_ENUM.USER,
     typeEntityId: userId,
     createdBy: userId,
@@ -28,10 +31,45 @@ export default function SalonPageGalleryTab(props: Props) {
     [data],
   );
 
+  React.useEffect(() => {
+    const handleWindowScroll = () => {
+      if (!hasNextPage || !fetchNextPage || isPending) return;
+      const scrollPosition = window.innerHeight + window.scrollY;
+      const threshold = 200;
+      const pageHeight = document.body.offsetHeight;
+      if (pageHeight - scrollPosition < threshold) {
+        fetchNextPage();
+      }
+    };
+    window.addEventListener('scroll', handleWindowScroll);
+    return () => {
+      window.removeEventListener('scroll', handleWindowScroll);
+    };
+  }, [hasNextPage, fetchNextPage, isPending]);
+
   return (
     <div className='flex justify-center items-center py-4 xl:py-8 flex-1 '>
       {pictures.length < 1 && (
         <p className='max-w-160 px-5 text-center'>{t('galleryPlaceholder')}</p>
+      )}
+      {pictures.length > 1 && (
+        <div
+          className='grid grid-cols-3 md:grid-cols-4 xl:grid-cols-10 gap-y-1 gap-x-0.5 md:gap-x-3 md:gap-y-4 px-5 md:px-11 lg:px-0'
+          ref={listRef}
+        >
+          {pictures.map((picture) => (
+            <div
+              key={picture.id}
+              className='h-41 md:h-78 overflow-hidden rounded-lg nth-[5n+4]:col-span-2 md:nth-[5n+4]:col-span-1 md:nth-[6n+2]:col-span-2 md:nth-[6n+6]:col-span-2 xl:nth-[6n+2]:col-span-1 xl:nth-[6n+6]:col-span-1 xl:nth-[7n+1]:col-span-2 xl:nth-[7n+2]:col-span-2 xl:nth-[7n+3]:col-span-2 xl:nth-[7n+4]:col-span-4 xl:nth-[7n+7]:col-span-4 xl:nth-[7n+5]:col-span-3 xl:nth-[7n+6]:col-span-3'
+            >
+              <img
+                src={picture.url}
+                alt={'Gallery image'}
+                className='object-cover object-center h-full w-full'
+              />
+            </div>
+          ))}
+        </div>
       )}
     </div>
   );
