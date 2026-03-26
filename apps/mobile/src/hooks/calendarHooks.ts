@@ -98,7 +98,6 @@ export const calendarMobileHooks = {
 
         let rangeFrom: Date;
         if (isToday) {
-          // Начинаем с текущего момента, округлённого вверх до 15 мин
           const mins = now.getUTCMinutes();
           const roundedMins = Math.ceil(mins / 15) * 15;
           rangeFrom = new Date(now);
@@ -108,7 +107,6 @@ export const calendarMobileHooks = {
             rangeFrom.setUTCMinutes(roundedMins, 0, 0);
           }
         } else {
-          // Начинаем с UTC-полуночи выбранного дня
           rangeFrom = selectedDayUTC;
         }
 
@@ -135,7 +133,6 @@ export const calendarMobileHooks = {
           const windowStartDate = new Date(windowStart);
           const windowEndDate = new Date(windowEnd);
 
-          // Окно началось в другой UTC-день — стоп
           if (!isSameDayUTC(windowStartDate, selectedDayUTC)) break;
 
           const durationMs = params.duration * 60000;
@@ -144,7 +141,6 @@ export const calendarMobileHooks = {
 
           while (chip + durationMs <= endMs) {
             const chipDate = new Date(chip);
-            // Чип вышел за пределы UTC-дня — стоп
             if (!isSameDayUTC(chipDate, selectedDayUTC)) break;
             slots.push(timeUtils.convertDateToString(chipDate));
             chip += 15 * 60000;
