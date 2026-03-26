@@ -82,6 +82,29 @@ type UseUpdateOrderParams = {
 const DEFAULT_LIMIT = 10;
 
 export const orderHooks = {
+  useCreateOrderMutation: ({ onSuccess }: { onSuccess?: () => void } = {}) => {
+    const queryClient = useQueryClient();
+    const { mutate, mutateAsync, isPending } = useMutation<
+      BaseResponse<Order[]>,
+      Error,
+      CreatePrivateOrdersRequest
+    >({
+      mutationFn: (data) => {
+        const dataWithUTC = convertOrdersDataDatesToUTC(data);
+        return orderApi.createOrder(dataWithUTC);
+      },
+      onSuccess: async () => {
+        await Promise.all([
+          queryClient.invalidateQueries({ queryKey: queryKeys.calendar.all }),
+          queryClient.invalidateQueries({ queryKey: queryKeys.monthCalendar.all }),
+          queryClient.invalidateQueries({ queryKey: queryKeys.orders.all }),
+          queryClient.invalidateQueries({ queryKey: queryKeys.customers.all }),
+        ]);
+        onSuccess?.();
+      },
+    });
+    return { mutate, mutateAsync, isPending };
+  },
   useGetOrders: (params: PrivateOrderQueryParams) => {
     const memoParams = useMemo<PrivateOrderQueryParams>(
       () => ({
