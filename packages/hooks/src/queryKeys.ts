@@ -3,6 +3,7 @@ import {
   GetCustomersQueryParams,
   GetExceptionsQueryParams,
   GetMastersQueryParams,
+  GetPublicCertificatesQueryParams,
   PrivateCalendarQueryParams,
   PrivateGetAvailabilityQueryParams,
   PrivateOrderQueryParams,
@@ -47,6 +48,9 @@ export const queryKeys = {
     profile: () => [...queryKeys.user.all, 'profile'] as const,
     certificates: () => [...queryKeys.user.all, 'certificates'] as const,
     media: () => [...queryKeys.user.all, 'media'] as const,
+
+    publicCertificates: (params: GetPublicCertificatesQueryParams) =>
+      [...queryKeys.user.all, 'publicCertificates', params] as const,
   },
   calendar: {
     all: ['calendar'] as const,

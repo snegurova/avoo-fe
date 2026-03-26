@@ -5,6 +5,8 @@ import {
   ApiStatus,
   GetCategoriesResponse,
   GetPrivateCategoriesResponse,
+  GetPublicServicesGroupedByCategoriesParams,
+  GetPublicServicesGroupedByCategoriesResponse,
 } from '@avoo/axios/types/apiTypes';
 import { BaseResponse } from '@avoo/axios/types/apiTypes';
 import { utils } from '@avoo/hooks/utils/utils';
@@ -37,6 +39,24 @@ export const categoriesHooks = {
     >({
       queryKey: ['categories', searchQuery],
       queryFn: () => categoriesApi.getPrivateAll(searchQuery),
+      staleTime: 30_000,
+    });
+
+    utils.useSetPendingApi(isPending);
+
+    if (categoriesData?.status === ApiStatus.SUCCESS && categoriesData.data) {
+      return categoriesData.data;
+    }
+
+    return null;
+  },
+  useGetPublicCategoriesForUser: (params: GetPublicServicesGroupedByCategoriesParams) => {
+    const { data: categoriesData, isPending } = useQuery<
+      BaseResponse<GetPublicServicesGroupedByCategoriesResponse>,
+      Error
+    >({
+      queryKey: ['categories', 'public', params],
+      queryFn: () => categoriesApi.getPublicForUser(params),
       staleTime: 30_000,
     });
 

@@ -238,6 +238,7 @@ export default function PublicServiceFormItem(props: Props) {
             isActive={step === 1}
             selectedService={selectedService}
             ref={serviceSelectionRef}
+            userId={userId}
           />
           <FormTextArea
             id={`notes-${index}`}
