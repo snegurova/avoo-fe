@@ -1,6 +1,7 @@
 import React, { useRef } from 'react';
 import { useTranslations } from 'next-intl';
 
+import { twMerge } from 'tailwind-merge';
 import { tv } from 'tailwind-variants';
 
 type Props = {
@@ -17,6 +18,8 @@ type Props = {
   file?: File | null;
   icon?: React.ReactNode;
   className?: string;
+  titleClassName?: string;
+  descriptionClassName?: string;
 };
 
 export default function DragAndDropZone(props: Props) {
@@ -34,6 +37,8 @@ export default function DragAndDropZone(props: Props) {
     variant = 'base',
     displayButton = true,
     className,
+    titleClassName,
+    descriptionClassName,
   } = props;
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
@@ -84,12 +89,12 @@ export default function DragAndDropZone(props: Props) {
           <div className={iconVariants({ isUploading, variant, isSmall })}>{icon}</div>
         ) : null}
 
-        <p className='lg:mb-2 text-xs lg:text-sm font-semibold '>
+        <p className={twMerge('lg:mb-2 text-xs lg:text-sm font-semibold', titleClassName)}>
           {isUploading ? t('uploading') : title}
         </p>
 
         {description && (
-          <p className='text-xs lg:text-sm text-gray-500 lg:mb-4'>
+          <p className={twMerge('text-xs lg:text-sm text-gray-500 lg:mb-4', descriptionClassName)}>
             {isUploading ? t('uploadingDescription') : description}
           </p>
         )}

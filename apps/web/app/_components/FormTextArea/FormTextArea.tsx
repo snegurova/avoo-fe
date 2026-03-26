@@ -3,7 +3,7 @@ import React, { forwardRef, TextareaHTMLAttributes } from 'react';
 import { tv } from 'tailwind-variants';
 
 const textarea = tv({
-  base: 'block w-full rounded-lg border p-2 text-gray-900 focus:outline-none focus:ring-1 focus:ring-purple-800 text-sm',
+  base: 'block w-full rounded-lg border p-2 text-gray-900 focus:outline-none focus:ring-1 focus:ring-inset focus:ring-purple-800 text-sm',
   variants: {
     error: {
       true: 'border-red-500',

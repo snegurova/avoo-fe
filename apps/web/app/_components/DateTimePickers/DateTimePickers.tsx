@@ -101,7 +101,16 @@ export default function DateTimePickers({
   };
 
   return (
-    <Box sx={{ display: 'flex', gap: 1.5, justifyContent: 'center', alignItems: 'center' }}>
+    <Box
+      sx={{
+        display: 'flex',
+        gap: wholeDay ? 0 : 1.5,
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: '100%',
+        overflowX: 'hidden',
+      }}
+    >
       <DatePicker
         format={DATE_DISPLAY_FORMAT}
         value={selectedDate}

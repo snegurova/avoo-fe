@@ -25,7 +25,7 @@ export const MasterLanguageList = ({
   const t = useTranslations('private.components.MasterLanguageList.MasterLanguageList');
   if (!languages || languages.length === 0) {
     return (
-      <div style={{ fontSize: typography.fontSize.xs, color: colors.gray[700] }}>
+      <div style={{ fontSize: typography.fontSize.xs, color: colors.gray['500'] }}>
         {t('noLanguages')}
       </div>
     );
@@ -44,12 +44,12 @@ export const MasterLanguageList = ({
 
   const defaultLabelStyle: React.CSSProperties = {
     fontWeight: typography.fontWeight.medium,
-    color: colors.gray[700],
+    color: colors.gray['700'],
   };
 
   const defaultTextStyle: React.CSSProperties = {
     fontSize: '12px',
-    color: colors.gray[500],
+    color: colors.gray['500'],
     fontFamily: `Roboto, ${typography.fontFamily.sans}`,
   };
 

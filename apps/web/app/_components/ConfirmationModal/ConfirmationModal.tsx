@@ -65,6 +65,7 @@ export default function ConfirmationModal({
         submitText={confirmText ?? t('confirm')}
         submitType={submitType}
         submitDisabled={submitDisabled}
+        sticky={false}
         className='confirmation-modal'
       />
     </Modal>

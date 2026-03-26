@@ -43,11 +43,7 @@ export const userHooks = {
       email: profileInfo?.email ?? null,
       phone: profileInfo?.businessInfo?.phone ?? null,
       policy: profileInfo?.businessInfo?.policy ?? null,
-      avatarUrl:
-        profileInfo?.avatarUrl ??
-        profileInfo?.businessInfo?.avatarUrl ??
-        profileInfo?.avatarPreviewUrl ??
-        null,
+      avatarUrl: profileInfo?.avatarPreviewUrl ?? profileInfo?.avatarUrl ?? null,
       avatarPreviewUrl: profileInfo?.avatarPreviewUrl ?? null,
       languages: profileInfo?.businessInfo?.languages ?? null,
       location_lat: profileInfo?.businessInfo?.location_lat ?? null,
@@ -62,14 +58,14 @@ export const userHooks = {
       userId: profileInfo?.id ?? null,
     };
   },
-  useGetUserMedia: () => {
+  useGetUserMedia: (page?: number, limit?: number) => {
     const { userId } = userHooks.useGetUserProfile();
 
     const { data: userMediaData, isPending } = useQuery<BaseResponse<UserMediaResponse>, Error>({
-      queryKey: queryKeys.user.media(),
+      queryKey: [queryKeys.user.media(), page, limit],
       queryFn: () => {
         if (!userId) throw new Error('userId is required');
-        return userApi.getUserMedia(MediaType.USER, userId);
+        return userApi.getUserMedia(MediaType.USER, userId, page, limit);
       },
       enabled: !!userId,
     });

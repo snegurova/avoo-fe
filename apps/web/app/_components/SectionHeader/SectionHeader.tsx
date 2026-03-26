@@ -21,6 +21,7 @@ export const SectionHeader = (props: Props) => {
           variant={IconButtonVariant.Secondary}
           onClick={onEdit}
           ariaLabel={`Edit ${title}`}
+          className='flex items-center justify-center p-2.5 cursor-pointer hover:bg-primary-50'
         />
       )}
     </div>

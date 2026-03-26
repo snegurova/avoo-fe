@@ -12,7 +12,7 @@ import { localizationHooks } from '@/_hooks/localizationHooks';
 import { AppRoutes } from '@/_routes/routes';
 
 import ConfirmationModal from '../ConfirmationModal/ConfirmationModal';
-import ProfileEditForm from '../ProfileEdit/ProfileEditForm';
+import ProfileEditForm from '../ProfileEditForm/ProfileEditForm';
 
 type Props = {
   open: boolean;
