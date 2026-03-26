@@ -86,9 +86,6 @@ export const calendarMobileHooks = {
       queryFn: async (): Promise<string[]> => {
         if (!params.date || !params.serviceId) return [];
 
-        // Используем UTC для сравнения дат — расписание хранится в серверном (европейском)
-        // времени, которое ближе к UTC. Локальный часовой пояс клиента не должен влиять
-        // на то, какой «день» мы запрашиваем.
         const selectedDayUTC = new Date(`${params.date}T00:00:00Z`);
 
         const isSameDayUTC = (a: Date, b: Date): boolean =>
