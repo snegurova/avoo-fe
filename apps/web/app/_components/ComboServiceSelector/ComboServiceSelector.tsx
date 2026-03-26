@@ -16,7 +16,7 @@ import SearchIcon from '@/_icons/SearchIcon';
 type Props = {
   items: Service[] | null;
   value: number[];
-  onChange: (ids: number[]) => void | boolean | Promise<boolean>; // <-- Changed
+  onChange: (ids: number[]) => void;
   currentComboName?: string;
   onGenerateName?: (newName: string) => void;
   variant?: 'default' | 'modal';
