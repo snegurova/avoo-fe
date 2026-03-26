@@ -5,11 +5,10 @@ import { orderHooks } from '@avoo/hooks';
 import { OrderStatus } from '@avoo/hooks/types/orderStatus';
 import { timeUtils } from '@avoo/shared';
 
+import { OrderConfirmationContent } from '@/components/OrderConfirmationContent/OrderConfirmationContent';
+import { OrderEditContent } from '@/components/OrderEditContent/OrderEditContent';
+import { OrderViewContent } from '@/components/OrderViewContent/OrderViewContent';
 import { CustomBottomSheet } from '@/shared/CustomBottomSheet/CustomBottomSheet';
-
-import { OrderConfirmationContent } from './OrderConfirmationContent';
-import { OrderEditContent } from './OrderEditContent';
-import { OrderViewContent } from './OrderViewContent';
 
 enum Mode {
   View = 'View',
