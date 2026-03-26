@@ -1059,9 +1059,198 @@
       }
     },
     "home": {
-      "topSection": {
-        "title": "Strona główna AVOO",
-        "ctaButton": "Przejdź do aplikacji rezerwacyjnej"
+      "meta": {
+        "title": "Avoo | CRM, kalendarz i portfolio dla branży beauty",
+        "description": "Nowi klienci, łatwe rezerwacje i mniej chaosu dla specjalistów beauty."
+      },
+      "navigation": {
+        "features": "Funkcje",
+        "reviews": "Opinie",
+        "createProfile": "Utwórz profil",
+        "faq": "FAQ",
+        "login": "Logowanie",
+        "joinForFree": "Dołącz za darmo",
+        "openMenu": "Otwórz menu nawigacji",
+        "closeMenu": "Zamknij menu nawigacji"
+      },
+      "hero": {
+        "title": "Łatwe rezerwacje. Mniej chaosu.",
+        "subtitle": "Inteligentny grafik i zarządzanie klientami",
+        "primaryCta": "Dołącz za darmo",
+        "secondaryCta": "Umów konsultację",
+        "preview": {
+          "calendar": "Kalendarz",
+          "clients": "Klienci",
+          "reminders": "Przypomnienia",
+          "portfolio": "Portfolio",
+          "workspace": "Panel Avoo",
+          "newClient": "Nowy klient z Instagrama",
+          "confirmBooking": "Rezerwacja potwierdzona na jutro",
+          "appointments": "Wizyty",
+          "today": "Dzisiaj",
+          "bookedSlots": "Zajęte",
+          "cancellations": "2 anulacje",
+          "phonePrimary": "Kolor i strzyżenie",
+          "phoneSecondary": "Blok wizyty"
+        }
+      },
+      "featureSection": {
+        "eyebrow": "System rezerwacji, który zwraca się sam",
+        "title": "Zobacz swój dzień wyraźnie i utrzymaj każdą wizytę w ruchu.",
+        "description": "",
+        "items": {
+          "scheduling": {
+            "title": "Kontroluj każdą rezerwację",
+            "description": "Przeciągaj, przekładaj i układaj dzień bez utraty kontekstu i bez podwójnych rezerwacji.",
+            "stat": "Oszczędzaj do 6 godzin tygodniowo"
+          },
+          "reminders": {
+            "title": "Automatyzuj przypomnienia i follow-up",
+            "description": "Ogranicz puste okienka dzięki wiadomościom, potwierdzeniom i ochronie przed nieobecnościami.",
+            "stat": "Zmniejsz liczbę nieodwołanych wizyt nawet o 35%"
+          },
+          "portfolio": {
+            "title": "Zmieniaj portfolio w realny przychód",
+            "description": "Trzymaj usługi, zdjęcia przed i po oraz oferty w jednym miejscu, któremu klienci od razu ufają.",
+            "stat": "Szybciej zwiększaj liczbę powrotów"
+          }
+        },
+        "calculator": {
+          "label": "Kalkulator wartości",
+          "title": "Przychód odzyskany w 90 dni",
+          "description": "Małe poprawki w procesie szybko się sumują, gdy kalendarz, historia klienta i portfolio działają razem.",
+          "valueLabel": "Wyliczona wartość",
+          "amount": "7 062 €",
+          "caption": "Szacowany zysk dla studia dwuosobowego po odejściu od arkuszy i wiadomości prywatnych.",
+          "stats": {
+            "hours": {
+              "label": "Zaoszczędzony czas administracyjny",
+              "value": "46 godzin"
+            },
+            "noShows": {
+              "label": "Spadek liczby nieobecności",
+              "value": "32%"
+            },
+            "repeat": {
+              "label": "Wzrost powracających rezerwacji",
+              "value": "+18%"
+            }
+          }
+        }
+      },
+      "testimonial": {
+        "badge": "Opinia o Avoo",
+        "quote": "\"Avoo dało nam jedno spokojne miejsce do planowania, przypomnień i aktualizacji portfolio. Klienci rezerwują szybciej, a mój zespół wreszcie widzi ten sam dzień.\"",
+        "author": "Michael Chen",
+        "role": "Właściciel salonu, Warszawa",
+        "location": "Warszawa",
+        "company": "Zaufane przez nowoczesne zespoły beauty",
+        "second": {
+          "quote": "\"AVOO całkowicie zmieniło sposób, w jaki prowadzę mój salon. Koniec z podwójnymi rezerwacjami, koniec z chaosem — każdego dnia mam czysty i uporządkowany grafik.\"",
+          "author": "Emma Ponsko",
+          "role": "Stylistka paznokci, Kraków",
+          "location": "Kraków"
+        }
+      },
+      "pricing": {
+        "badge": "Pierwsze 10 rezerwacji za darmo",
+        "title": "Plan cenowy",
+        "description": "Zacznij bez kosztów, sprawdź workflow i przejdź wyżej dopiero wtedy, gdy zespół naprawdę tego potrzebuje.",
+        "planSuffix": "mies.",
+        "cta": "Zacznij teraz",
+        "free": {
+          "title": "Plan Free",
+          "subtitle": "Do przetestowania Avoo w lekkim, jednoosobowym workflow",
+          "price": "€0,00",
+          "feature1": "Do 10 rezerwacji miesięcznie",
+          "feature2": "1 specjalista",
+          "feature3": "Kalendarz i CRM w jednym miejscu",
+          "feature4": "Strona portfolio",
+          "feature5": "Automatyczne przypomnienia",
+          "feature6": "Bezpłatna checklista wdrożeniowa"
+        },
+        "basic": {
+          "title": "Plan Basic",
+          "subtitle": "Dla samodzielnych specjalistów, którzy przechodzą na rezerwacje online",
+          "price": "€9,99",
+          "feature1": "Do 99 rezerwacji miesięcznie",
+          "feature2": "Do 3 specjalistów",
+          "feature3": "Kalendarz i CRM w jednym miejscu",
+          "feature4": "Strona portfolio",
+          "feature5": "Automatyczne przypomnienia",
+          "feature6": "Podstawowa analityka",
+          "feature7": "Nielimitowane usługi"
+        },
+        "business": {
+          "title": "Plan Business",
+          "subtitle": "Dla rosnących salonów i zespołów wielu specjalistów",
+          "price": "€24,99",
+          "feature1": "Ponad 100 rezerwacji miesięcznie",
+          "feature2": "4+ specjalistów",
+          "feature3": "Portfolio i katalog usług",
+          "feature4": "Automatyczne przypomnienia i follow-up",
+          "feature5": "Notatki i historia klienta",
+          "feature6": "Analityka przychodów i obłożenia",
+          "feature7": "Priorytetowe wsparcie",
+          "feature9": "Role i uprawnienia zespołu",
+          "feature10": "Gotowość na wiele lokalizacji"
+        }
+      },
+      "signup": {
+        "title": "Rozwijaj swój beauty biznes z Avoo",
+        "description": "",
+        "fullName": "Imię i nazwisko",
+        "firstName": "Imię",
+        "lastName": "Nazwisko",
+        "email": "Email",
+        "phone": "Telefon (opcjonalnie)",
+        "password": "Hasło",
+        "confirmPassword": "Potwierdź hasło",
+        "role": "Rola",
+        "rolePlaceholder": "Wybierz jedną opcję...",
+        "terms": "Akceptuję regulamin i politykę prywatności",
+        "cta": "Zacznij rosnąć",
+        "roles": {
+          "solo": "Samodzielny specjalista",
+          "salon": "Właściciel salonu",
+          "team": "Manager zespołu"
+        }
+      },
+      "decor": {
+        "eyebrow": "Więcej klientów. Jeden kalendarz. Zero chaosu.",
+        "title": "Lekki workflow dla branży beauty, która chce rosnąć bez przeciążenia.",
+        "description": "Stworzone dla specjalistów, którzy potrzebują systemu rezerwacji szybszego, lżejszego i bardziej godnego zaufania."
+      },
+      "faq": {
+        "title": "FAQ",
+        "description": "Najczęstsze pytania o Avoo i o to, jak pomaga rozwijać biznes beauty",
+        "items": {
+          "free": {
+            "question": "Czy Avoo jest darmowe?",
+            "answer": "Avoo oferuje bezpłatny start z opcjonalnymi funkcjami premium. Możesz przetestować kluczowy workflow bez kosztów i przejść na wyższy plan, gdy biznes będzie gotowy."
+          },
+          "size": {
+            "question": "Czy Avoo wspiera firmy różnej wielkości?",
+            "answer": "Tak. Avoo działa dla niezależnych specjalistów, rozwijających się salonów i rozproszonych zespołów. Konfiguracja skaluje się od jednego stanowiska po wiele lokalizacji."
+          },
+          "skills": {
+            "question": "Czy potrzebuję umiejętności technicznych?",
+            "answer": "Nie. Platforma została zaprojektowana tak, aby była intuicyjna od pierwszego dnia, więc możesz zarządzać rezerwacjami, przypomnieniami i portfolio bez technicznego wdrożenia."
+          },
+          "setup": {
+            "question": "Jak szybko mogę się uruchomić?",
+            "answer": "Większość specjalistów kończy konfigurację profilu i zaczyna przyjmować rezerwacje w mniej niż 15 minut."
+          }
+        },
+        "contactTitle": "Masz jeszcze pytania?",
+        "contactText": "Nasz zespół pomoże Ci wybrać najlepszy sposób startu.",
+        "contactCta": "Umów konsultację"
+      },
+      "footer": {
+        "privacy": "Polityka prywatności",
+        "terms": "Warunki korzystania",
+        "cookies": "Ustawienia cookies",
+        "rights": "Wszelkie prawa zastrzeżone."
       }
     },
     "salon": {

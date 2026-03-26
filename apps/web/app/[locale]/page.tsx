@@ -1,21 +1,22 @@
-'use client';
+import { Metadata } from 'next/types';
+import { getTranslations } from 'next-intl/server';
 
-import { useTranslations } from 'next-intl';
+import LandingPage from '@/_components/LandingPage';
 
-import { LocalizedLink } from '@/_components/LocalizedLink/LocalizedLink';
-import { AppRoutes } from '@/_routes/routes';
+type Props = {
+  params: Promise<{ locale: string }>;
+};
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: 'public.home.meta' });
+
+  return {
+    title: t('title'),
+    description: t('description'),
+  };
+}
 
 export default function HomePage() {
-  const t = useTranslations('public.home.topSection');
-  return (
-    <div className='container flex flex-col items-center gap-10'>
-      {t('title')}
-      <LocalizedLink
-        href={AppRoutes.Home}
-        className='bg-primary-500 text-white py-2.5 px-4 rounded-2xl'
-      >
-        {t('ctaButton')}
-      </LocalizedLink>
-    </div>
-  );
+  return <LandingPage />;
 }

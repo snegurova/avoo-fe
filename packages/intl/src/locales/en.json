@@ -1058,9 +1058,198 @@
       }
     },
     "home": {
-      "topSection": {
-        "ctaButton": "Go to booking app",
-        "title": "Home Public Page"
+      "meta": {
+        "title": "Avoo | CRM, calendar and portfolio for beauty professionals",
+        "description": "New clients, easy booking and less chaos for beauty professionals."
+      },
+      "navigation": {
+        "features": "Features",
+        "reviews": "Reviews",
+        "createProfile": "Create profile",
+        "faq": "FAQ",
+        "login": "Login",
+        "joinForFree": "Join for free",
+        "openMenu": "Open navigation menu",
+        "closeMenu": "Close navigation menu"
+      },
+      "hero": {
+        "title": "Easy booking. Less chaos.",
+        "subtitle": "Smart scheduling & client management",
+        "primaryCta": "Join for free",
+        "secondaryCta": "Request consultation",
+        "preview": {
+          "calendar": "Calendar",
+          "clients": "Clients",
+          "reminders": "Reminders",
+          "portfolio": "Portfolio",
+          "workspace": "Avoo workspace",
+          "newClient": "New client from Instagram",
+          "confirmBooking": "Booking confirmed for tomorrow",
+          "appointments": "Appointments",
+          "today": "Today",
+          "bookedSlots": "Booked",
+          "cancellations": "2 cancellations",
+          "phonePrimary": "Color & haircut",
+          "phoneSecondary": "Appointment block"
+        }
+      },
+      "featureSection": {
+        "eyebrow": "Booking software that pays for itself",
+        "title": "See your day clearly and keep every client in motion.",
+        "description": "",
+        "items": {
+          "scheduling": {
+            "title": "Stay on top of every booking",
+            "description": "Drag, reschedule and balance your day without losing context or double-booking.",
+            "stat": "Save up to 6 hours every week"
+          },
+          "reminders": {
+            "title": "Automate reminders and follow-ups",
+            "description": "Reduce empty slots with timed messages, confirmations and no-show protection.",
+            "stat": "Cut missed appointments by up to 35%"
+          },
+          "portfolio": {
+            "title": "Turn portfolio views into revenue",
+            "description": "Keep services, before and after photos, and offers in one place clients can trust instantly.",
+            "stat": "Increase repeat bookings faster"
+          }
+        },
+        "calculator": {
+          "label": "Value calculator",
+          "title": "Revenue recovered in 90 days",
+          "description": "Small workflow fixes compound quickly when your calendar, client history and portfolio live together.",
+          "valueLabel": "Calculated value",
+          "amount": "€7,062",
+          "caption": "Estimated gain for a two-person studio switching from spreadsheets and direct messages.",
+          "stats": {
+            "hours": {
+              "label": "Admin time saved",
+              "value": "46 hours"
+            },
+            "noShows": {
+              "label": "No-show reduction",
+              "value": "32%"
+            },
+            "repeat": {
+              "label": "Repeat booking lift",
+              "value": "+18%"
+            }
+          }
+        }
+      },
+      "testimonial": {
+        "badge": "Avoo review",
+        "quote": "\"Avoo gave us one calm place for scheduling, reminders and portfolio updates. Clients book faster and my team finally sees the same day.\"",
+        "author": "Michael Chen",
+        "role": "Salon owner, Warsaw",
+        "location": "Warsaw",
+        "company": "Trusted by modern beauty teams",
+        "second": {
+          "quote": "\"AVOO completely transformed how I manage my salon. No more double bookings, no more chaos — just a clean, organized schedule every day.\"",
+          "author": "Emma Ponsko",
+          "role": "Nail stylist, Krakow",
+          "location": "Krakow"
+        }
+      },
+      "pricing": {
+        "badge": "First 10 bookings free",
+        "title": "Pricing plan",
+        "description": "Start free, validate your workflow and upgrade only when your team needs more scale.",
+        "planSuffix": "mo",
+        "cta": "Get started",
+        "free": {
+          "title": "Free plan",
+          "subtitle": "For trying Avoo with a light solo workflow",
+          "price": "€0.00",
+          "feature1": "Up to 10 bookings per month",
+          "feature2": "1 master",
+          "feature3": "Calendar and CRM in one place",
+          "feature4": "Portfolio page",
+          "feature5": "Automated reminders",
+          "feature6": "Free onboarding checklist"
+        },
+        "basic": {
+          "title": "Basic plan",
+          "subtitle": "For solo masters starting digital booking",
+          "price": "€9.99",
+          "feature1": "Up to 99 bookings per month",
+          "feature2": "Up to 3 masters",
+          "feature3": "Calendar and CRM in one place",
+          "feature4": "Portfolio page",
+          "feature5": "Automated reminders",
+          "feature6": "Basic analytics",
+          "feature7": "Unlimited services"
+        },
+        "business": {
+          "title": "Business plan",
+          "subtitle": "For growing salons and multi-master teams",
+          "price": "€24.99",
+          "feature1": "100+ bookings per month",
+          "feature2": "4+ masters",
+          "feature3": "Portfolio and service catalog",
+          "feature4": "Automated reminders and follow-ups",
+          "feature5": "Client notes and history",
+          "feature6": "Revenue and occupancy analytics",
+          "feature7": "Priority support",
+          "feature9": "Team roles and permissions",
+          "feature10": "Multi-location ready"
+        }
+      },
+      "signup": {
+        "title": "Grow your beauty business with Avoo",
+        "description": "",
+        "fullName": "Full Name",
+        "firstName": "First name",
+        "lastName": "Last name",
+        "email": "Email",
+        "phone": "Phone (optional)",
+        "password": "Password",
+        "confirmPassword": "Confirm password",
+        "role": "Role",
+        "rolePlaceholder": "Select one...",
+        "terms": "I accept the terms and privacy policy",
+        "cta": "Start growing",
+        "roles": {
+          "solo": "Solo master",
+          "salon": "Salon owner",
+          "team": "Team manager"
+        }
+      },
+      "decor": {
+        "eyebrow": "More clients. One calendar. Zero chaos.",
+        "title": "A lightweight workflow for beauty professionals who want room to grow.",
+        "description": "Built for specialists who need a booking system that feels lighter, faster and easier to trust."
+      },
+      "faq": {
+        "title": "FAQs",
+        "description": "Common questions about Avoo and how it can help your beauty business",
+        "items": {
+          "free": {
+            "question": "Is Avoo free to use?",
+            "answer": "Avoo offers a free starting flow with optional premium features. You can test the core workflow at no cost and upgrade when your business is ready."
+          },
+          "size": {
+            "question": "Does Avoo support businesses of all sizes?",
+            "answer": "Yes. Avoo works for independent professionals, growing salons and distributed teams. The setup scales from one chair to multiple locations."
+          },
+          "skills": {
+            "question": "Do I need technical skills?",
+            "answer": "No. The platform is designed to be straightforward from day one, so you can manage bookings, reminders and your portfolio without technical training."
+          },
+          "setup": {
+            "question": "How quickly can I set up?",
+            "answer": "Most professionals complete their profile and start accepting bookings in under 15 minutes."
+          }
+        },
+        "contactTitle": "Still have questions?",
+        "contactText": "Our team is ready to help you choose the right setup.",
+        "contactCta": "Request consultation"
+      },
+      "footer": {
+        "privacy": "Privacy Policy",
+        "terms": "Terms of Service",
+        "cookies": "Cookies Settings",
+        "rights": "All rights reserved."
       }
     },
     "salon": {
