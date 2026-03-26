@@ -1,3 +1,5 @@
+'use client';
+
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslations } from 'next-intl';
 
@@ -14,7 +16,7 @@ import SearchIcon from '@/_icons/SearchIcon';
 type Props = {
   items: Service[] | null;
   value: number[];
-  onChange: (ids: number[]) => void;
+  onChange: (ids: number[]) => void | boolean | Promise<boolean>; // <-- Changed
   currentComboName?: string;
   onGenerateName?: (newName: string) => void;
   variant?: 'default' | 'modal';
@@ -51,10 +53,8 @@ export default function ComboServiceSelector(props: Props) {
   );
 
   useEffect(() => {
-    if (masterIds.length > 0) {
-      setMasterIds(masterIds);
-    }
-  }, [masterIds]);
+    setMasterIds(masterIds);
+  }, [masterIds, setMasterIds]);
 
   const handleSelect = (newValue: Service) => {
     const isAlreadySelected = value.includes(newValue.id);

@@ -91,13 +91,15 @@ export const masterHooks = {
 
     return query;
   },
-  useMasterQuery() {
+  useMasterQuery(firstServiceId?: number) {
     const [searchTerm, setSearchTerm] = useState('');
     const debouncedSearch = useDebounce(searchTerm);
-    const masterQuery = masterHooks.useGetMastersInfinite({ search: debouncedSearch });
+    const masterQuery = masterHooks.useGetMastersInfinite({
+      search: debouncedSearch,
+      serviceId: firstServiceId,
+    });
 
     const masters = masterQuery.data?.pages.flatMap((page) => page.data?.items ?? []) ?? [];
-
     return {
       masters,
       searchTerm,

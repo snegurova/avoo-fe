@@ -409,7 +409,8 @@
           "cancel": "Cancel",
           "add": "Add",
           "masters": "Masters *",
-          "serviceCreated": "Service has been created!",
+          "combinationCreated": "Combo service has been created!",
+          "combinationAlreadyExists": "Combo service already exists!",
           "serviceCreateError": "Failed to create service: {error}"
         }
       },
