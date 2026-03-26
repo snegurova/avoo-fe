@@ -1,4 +1,4 @@
-import React, { useMemo, useRef } from 'react';
+import React, { useEffect, useMemo, useRef } from 'react';
 import { useTranslations } from 'next-intl';
 
 import { MEDIA_TYPE_ENUM } from '@avoo/axios/types/apiEnums';
@@ -31,7 +31,7 @@ export default function SalonPageGalleryTab(props: Props) {
     [data],
   );
 
-  React.useEffect(() => {
+  useEffect(() => {
     const handleWindowScroll = () => {
       if (!hasNextPage || !fetchNextPage || isPending) return;
       const scrollPosition = window.innerHeight + window.scrollY;
@@ -48,13 +48,13 @@ export default function SalonPageGalleryTab(props: Props) {
   }, [hasNextPage, fetchNextPage, isPending]);
 
   return (
-    <div className='flex justify-center items-center py-4 xl:py-8 flex-1 '>
+    <div className='flex justify-center py-4 xl:py-8 flex-1 '>
       {pictures.length < 1 && (
         <p className='max-w-160 px-5 text-center'>{t('galleryPlaceholder')}</p>
       )}
       {pictures.length > 1 && (
         <div
-          className='grid grid-cols-3 md:grid-cols-4 xl:grid-cols-10 gap-y-1 gap-x-0.5 md:gap-x-3 md:gap-y-4 px-5 md:px-11 lg:px-0'
+          className='grid grid-cols-3 md:grid-cols-4 xl:grid-cols-10 gap-y-1 gap-x-0.5 md:gap-x-3 md:gap-y-4 px-5 md:px-11 lg:px-0 w-full'
           ref={listRef}
         >
           {pictures.map((picture) => (

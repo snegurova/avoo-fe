@@ -1,4 +1,4 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 import { userApi } from '@avoo/axios';
 import {
@@ -6,6 +6,8 @@ import {
   BaseResponse,
   CertificateResponse,
   FileEntity,
+  GetPublicCertificatesQueryParams,
+  GetPublicCertificatesResponse,
   GetPublicUserProfileResponse,
   GetPublicUsersResponse,
   UpdateProfile,
@@ -20,6 +22,8 @@ import { FileInput } from '@avoo/shared';
 import { utils } from './../utils/utils';
 import { appendFileToForm, buildCertificateForm } from './utils/formDataHelpers';
 import { queryKeys } from './queryKeys';
+
+const DEFAULT_CERTIFICATES_LIMIT = 6;
 
 export const userHooks = {
   useGetUserProfile: () => {
@@ -236,5 +240,25 @@ export const userHooks = {
     }
 
     return null;
+  },
+  useGetPublicCertificatesInfinite: (params: GetPublicCertificatesQueryParams) => {
+    const query = useInfiniteQuery<BaseResponse<GetPublicCertificatesResponse>, Error>({
+      queryKey: queryKeys.user.publicCertificates(params),
+      queryFn: ({ pageParam = 1 }) =>
+        userApi.getPublicCertificates({ ...params, page: pageParam as number }),
+      initialPageParam: 1,
+      getNextPageParam: (lastPage) => {
+        const { currentPage, total } = lastPage.data?.pagination || { currentPage: 0, total: 0 };
+        return currentPage * (params?.limit || DEFAULT_CERTIFICATES_LIMIT) < total
+          ? currentPage + 1
+          : undefined;
+      },
+    });
+
+    const isPending = query.isFetching;
+
+    utils.useSetPendingApi(isPending);
+
+    return query;
   },
 };
