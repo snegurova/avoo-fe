@@ -1,5 +1,5 @@
 'use client';
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { Controller } from 'react-hook-form';
 import { useTranslations } from 'next-intl';
 
@@ -36,9 +36,7 @@ export default function ComboServiceUpdateForm(props: Props) {
   const { combination, onCancel, onDirtyChange, onClose } = props;
   const toast = useToast();
 
-  const { masters, searchTerm, setSearchTerm } = masterHooks.useMasterQuery();
-
-  const { control, setValue, handleSubmit, errors, isDirty } =
+  const { control, watch, setValue, handleSubmit, errors, isDirty } =
     combinationHooks.useUpdateCombinationForm({
       defaultValue: combination,
       onSuccess: () => {
@@ -53,6 +51,20 @@ export default function ComboServiceUpdateForm(props: Props) {
   useEffect(() => {
     onDirtyChange(isDirty);
   }, [isDirty, onDirtyChange]);
+
+  const selectedServices = watch('serviceIds');
+  const masterIds = watch('masterIds');
+  const { masters, searchTerm, setSearchTerm } = masterHooks.useMasterQuery(selectedServices?.[0]);
+
+  const activeMasterIdsForFilter = useMemo(() => {
+    if (masterIds.length > 0) {
+      return masterIds;
+    }
+    if (selectedServices.length > 0 && masters.length > 0) {
+      return masters.map((m) => m.id);
+    }
+    return [];
+  }, [masterIds, selectedServices.length, masters]);
 
   const errorsList = getAllErrorMessages(errors);
 
@@ -121,6 +133,7 @@ export default function ComboServiceUpdateForm(props: Props) {
                 control={control}
                 render={({ field }) => (
                   <ComboServiceSelector
+                    masterIds={activeMasterIdsForFilter}
                     items={combination.services}
                     value={field.value}
                     variant='modal'
@@ -129,8 +142,8 @@ export default function ComboServiceUpdateForm(props: Props) {
                   />
                 )}
               />
-              {errors.masterIds?.message && (
-                <FormHelperText>{errors.masterIds?.message}</FormHelperText>
+              {errors.serviceIds?.message && (
+                <FormHelperText>{errors.serviceIds?.message}</FormHelperText>
               )}
             </FormControl>
           </div>

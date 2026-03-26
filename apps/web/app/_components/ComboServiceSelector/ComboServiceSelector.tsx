@@ -1,3 +1,5 @@
+'use client';
+
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslations } from 'next-intl';
 
@@ -51,10 +53,8 @@ export default function ComboServiceSelector(props: Props) {
   );
 
   useEffect(() => {
-    if (masterIds.length > 0) {
-      setMasterIds(masterIds);
-    }
-  }, [masterIds]);
+    setMasterIds(masterIds);
+  }, [masterIds, setMasterIds]);
 
   const handleSelect = (newValue: Service) => {
     const isAlreadySelected = value.includes(newValue.id);

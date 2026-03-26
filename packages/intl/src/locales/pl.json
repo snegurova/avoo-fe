@@ -409,7 +409,8 @@
           "cancel": "Anuluj",
           "add": "Dodaj",
           "masters": "Pracownicy *",
-          "serviceCreated": "Usługa została utworzona!",
+          "combinationCreated": "Pakiet został utworzony!",
+          "combinationAlreadyExists": "Pakiet już istnieje!",
           "serviceCreateError": "Nie udało się utworzyć usługi: {error}"
         }
       },

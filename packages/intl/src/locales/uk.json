@@ -413,7 +413,8 @@
           "cancel": "Скасувати",
           "add": "Додати",
           "masters": "Майстри *",
-          "serviceCreated": "Послугу створено!",
+          "combinationCreated": "Комбо-послугу створено!",
+          "combinationAlreadyExists": "Комбо-послуга вже існує!",
           "serviceCreateError": "Не вдалося створити послугу: {error}"
         }
       },
