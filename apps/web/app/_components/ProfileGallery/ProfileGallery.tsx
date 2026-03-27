@@ -12,7 +12,7 @@ import { AddPhotosTrigger } from '@/_components/AddPhotosTrigger/AddPhotosTrigge
 import { GalleryPagination } from '@/_components/GalleryPagination/GalleryPagination';
 import ProfileGalleryAdd from '@/_components/ProfileGalleryAdd/ProfileGalleryAdd';
 import { SectionHeader } from '@/_components/SectionHeader/SectionHeader';
-import { fillRow, fillSimpleRow, getRowPattern } from '@/utils/galleryGrid';
+import { fillRow, fillSimpleRow, getRowPattern } from '@/_utils/galleryGrid';
 
 export const ProfileGallery = () => {
   const t = useTranslations('private.components.ProfileGallery.ProfileGallery');
