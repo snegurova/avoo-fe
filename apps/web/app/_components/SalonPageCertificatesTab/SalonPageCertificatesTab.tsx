@@ -61,7 +61,23 @@ export default function SalonPageCertificatesTab(props: Props) {
           onClose={() => setModalOpen(false)}
           onIndexChange={handleModalIndexChange}
           fullImages
-        />
+        >
+          {certificates[modalIndex] && (
+            <div className='flex flex-col items-center gap-4'>
+              <h3 className='text-base text-black font-bold text-center'>
+                {certificates[modalIndex].title}
+              </h3>
+              <span className='text-xs text-gray-600 text-center'>
+                {timeUtils.formatDateToIssuedDate(certificates[modalIndex].issueDate)}
+              </span>
+              {certificates[modalIndex].description && (
+                <p className='text-sm text-gray-600 text-center'>
+                  {String(certificates[modalIndex].description)}
+                </p>
+              )}
+            </div>
+          )}
+        </GalleryModal>
       )}
       {certificates?.length === 0 && (
         <p className='max-w-160 px-5 text-center'>{t('sertificatesPlaceholder')}</p>
