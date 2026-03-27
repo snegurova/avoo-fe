@@ -1299,7 +1299,9 @@
         "book": "Book",
         "select": "Select",
         "change": "Change",
-        "selected": "Selected"
+        "selected": "Selected",
+        "master": "master",
+        "masters": "masters"
       },
       "createOrder": {
         "bookingForm": "Booking form",

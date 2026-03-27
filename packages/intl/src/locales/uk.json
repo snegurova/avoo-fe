@@ -1305,7 +1305,9 @@
         "select": "Вибрати",
         "change": "Змінити",
         "selected": "Вибрано",
-        "search": "Пошук"
+        "search": "Пошук",
+        "master": "майстер",
+        "masters": "майстри"
       },
       "createOrder": {
         "bookingForm": "Форма бронювання",
