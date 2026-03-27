@@ -13,26 +13,41 @@ type Props = {
   isSelected?: boolean;
   type?: 'change' | 'select';
   onClear?: () => void;
+  onCardClick?: () => void;
 };
 
 const card = tv({
-  base: 'p-6 border rounded-lg flex flex-col gap-5 transition-colors',
+  base: 'p-6 border rounded-lg flex flex-col gap-5 transition-colors text-start',
   variants: {
     selected: {
       true: 'border-black',
       false: 'border-gray-200',
     },
+    isButton: {
+      true: 'cursor-pointer hover:bg-gray-100 focus:bg-gray-100',
+      false: '',
+    },
   },
 });
 
 export default function PublicServiceCard(props: Props) {
-  const { service, onClick, isSelected, type = 'select', onClear } = props;
+  const { service, onClick, isSelected, type = 'select', onClear, onCardClick } = props;
   const t = useTranslations('public.salon.createOrder');
 
   const isClickable = Boolean(onClick);
 
+  const isButton = Boolean(onCardClick);
+
+  const Wrapper = isButton ? 'button' : 'div';
+
   return (
-    <div className={card({ selected: isSelected })}>
+    <Wrapper
+      className={card({ selected: isSelected, isButton })}
+      {...(isButton && {
+        type: 'button',
+        onClick: onCardClick,
+      })}
+    >
       {service.medias && service.medias.length > 0 && (
         <div className='flex gap-2'>
           {service.medias.slice(0, 4).map((media) => (
@@ -99,6 +114,6 @@ export default function PublicServiceCard(props: Props) {
           </button>
         )}
       </div>
-    </div>
+    </Wrapper>
   );
 }

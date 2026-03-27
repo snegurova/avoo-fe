@@ -1300,7 +1300,9 @@
         "book": "Rezerwuj",
         "select": "Wybierz",
         "change": "Zmień",
-        "selected": "Wybrane"
+        "selected": "Wybrane",
+        "master": "mistrz",
+        "masters": "mistrzowie"
       },
       "createOrder": {
         "bookingForm": "Formularz rezerwacji",
