@@ -36,7 +36,7 @@ export default function PublicDateCard(props: Props) {
       <button
         type='button'
         onClick={onClick}
-        className='font-semibold bg-black rounded-lg py-3.5 px-5 justify-center text-white border-black transition-colors hover:bg-white focus:bg-white hover:text-black focus:text-black border cursor-pointer leading-none'
+        className='cursor-pointer transition-colors text-gray-600 font-medium text-sm leading-base hover:text-black focus:text-black underline'
       >
         {t('change')}
       </button>

@@ -30,6 +30,18 @@ const card = tv({
   },
 });
 
+const button = tv({
+  base: 'cursor-pointer transition-colors',
+  variants: {
+    type: {
+      select:
+        'font-semibold bg-black rounded-lg py-3.5 px-5 justify-center text-white border-black hover:bg-white focus:bg-white hover:text-black focus:text-black border leading-none',
+      change:
+        'text-gray-600 font-medium text-sm leading-base hover:text-black focus:text-black underline',
+    },
+  },
+});
+
 export default function PublicServiceCard(props: Props) {
   const { service, onClick, isSelected, type = 'select', onClear, onCardClick } = props;
   const t = useTranslations('public.salon.createOrder');
@@ -86,19 +98,11 @@ export default function PublicServiceCard(props: Props) {
         {isClickable && !isSelected && (
           <div className='flex items-center gap-4'>
             {type === 'change' && (
-              <button
-                type='button'
-                onClick={onClear}
-                className='font-semibold bg-white rounded-lg py-3.5 px-5 justify-center text-black border-black border leading-none cursor-pointer transition-colors hover:bg-gray-100 focus:bg-gray-100'
-              >
+              <button type='button' onClick={onClear} className={button({ type })}>
                 {t('clear')}
               </button>
             )}
-            <button
-              type='button'
-              onClick={onClick}
-              className='font-semibold bg-black rounded-lg py-3.5 px-5 justify-center text-white border-black transition-colors hover:bg-white focus:bg-white hover:text-black focus:text-black border cursor-pointer leading-none'
-            >
+            <button type='button' onClick={onClick} className={button({ type })}>
               {type === 'select' ? t('select') : t('change')}
             </button>
           </div>

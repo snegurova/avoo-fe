@@ -21,9 +21,9 @@ export default function PublicSearch(props: Props) {
         placeholder={t(placeholder)}
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className='pl-11 pr-4 py-2 rounded-full border transition-colors text-sm leading-none text-black border-gray-200 hover:border-black focus:border-black w-full outline-0 min-w-55'
+        className='pl-11 pr-4 py-2 rounded-full border transition-colors text-sm leading-none text-black border-gray-600 hover:border-black focus:border-black w-full outline-0 min-w-55 placeholder:text-gray-600'
       />
-      <SearchIcon className='absolute left-3 top-1/2 -translate-y-1/2 text-gray-400' />
+      <SearchIcon className='absolute left-3 top-1/2 -translate-y-1/2 text-gray-600' />
     </div>
   );
 }
