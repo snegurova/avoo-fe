@@ -42,7 +42,7 @@ export default function ComboServiceAddForm() {
         router.replace(comboServicePath);
       },
       onError: (error) => {
-        if (error.errorCode === 16) {
+        if (error.errorCode === 18) {
           toast.error(t('combinationAlreadyExists'));
           return;
         }

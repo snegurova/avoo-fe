@@ -654,7 +654,8 @@
       },
       "OrderListItem": {
         "OrderListItem": {
-          "client": "Client"
+          "client": "Client",
+          "master": "Master"
         }
       },
       "ConfirmationModal": {

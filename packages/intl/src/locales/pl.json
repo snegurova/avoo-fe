@@ -10,7 +10,8 @@
       "leaveWindow": "Zamknij",
       "cancel": "Anuluj",
       "defaultFailError": "Coś poszło nie tak. Spróbuj ponownie później.",
-      "ok": "Ok"
+      "ok": "Ok",
+      "master": "Pracownic"
     },
     "profile": {
       "changePassword": {
@@ -654,7 +655,8 @@
       },
       "OrderListItem": {
         "OrderListItem": {
-          "client": "Klient"
+          "client": "Klient",
+          "master": "Master"
         }
       },
       "ConfirmationModal": {

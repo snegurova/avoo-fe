@@ -5,6 +5,7 @@ import { Autocomplete, CircularProgress, InputAdornment, TextField } from '@mui/
 
 import { colors } from '@avoo/design-tokens';
 import { masterHooks } from '@avoo/hooks';
+import { useApiStatusStore } from '@avoo/store';
 
 import SearchIcon from '@/_icons/SearchIcon';
 
@@ -18,6 +19,7 @@ type Props = {
 export const SingleMasterSelect = (props: Props) => {
   const { selectedId, setSelectedId, withSearchIcon = true, fullWidth = false } = props;
   const t = useTranslations('private.components.SingleMasterSelect.SingleMasterSelect');
+  const isPending = useApiStatusStore((state) => state.isPending);
   const [inputValue, setInputValue] = useState('');
   const { data, hasNextPage, fetchNextPage } = masterHooks.useGetMastersInfinite({
     search: inputValue,
@@ -52,7 +54,7 @@ export const SingleMasterSelect = (props: Props) => {
       inputValue={inputValue}
       onInputChange={(_, newInput) => setInputValue(newInput)}
       isOptionEqualToValue={(option, value) => option.id === value.id}
-      loading={masters?.length === 0}
+      loading={isPending}
       clearOnEscape
       slotProps={{
         listbox: {
@@ -90,7 +92,7 @@ export const SingleMasterSelect = (props: Props) => {
 
                 endAdornment: (
                   <>
-                    {masters?.length === 0 && <CircularProgress color='inherit' size={20} />}
+                    {isPending && <CircularProgress color='inherit' size={20} />}
                     {InputProps?.endAdornment}
                   </>
                 ),
