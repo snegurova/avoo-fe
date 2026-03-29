@@ -293,7 +293,7 @@ export default function CalendarColumn(props: Props) {
               />
             ))}
           {calendarType === CalendarType.SELECTOR && <CalendarSlots masterId={master.id} />}
-          {timeUtils.isSameDay(date, new Date()) && (
+          {timeUtils.isSameDay(new Date(data?.days[0].date || date), new Date()) && (
             <CalendarCurrentTime time={time} setTime={setTime} isSingleWeek={isSingleWeek} />
           )}
         </div>

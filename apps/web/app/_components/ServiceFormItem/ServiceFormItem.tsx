@@ -46,6 +46,7 @@ type Props = {
   setActiveOrder?: (index: number) => void;
   activeOrder?: number;
   setStartDate?: (date: string | null) => void;
+  selectedServices: (Service | null)[];
 };
 
 const root = tv({
@@ -86,6 +87,7 @@ export default function ServiceFormItem(props: Props) {
     setActiveOrder,
     activeOrder,
     setStartDate,
+    selectedServices,
   } = props;
 
   const [masterSearch, setMasterSearch] = useState('');
@@ -130,13 +132,14 @@ export default function ServiceFormItem(props: Props) {
     isActive: true,
   });
 
-  const services = useMemo(
-    () =>
-      (data?.pages.flatMap((page) => page?.data?.items) || []).filter(
-        (item): item is Service => item !== undefined,
-      ),
-    [data],
-  );
+  const services = useMemo(() => {
+    const allServices = (data?.pages.flatMap((page) => page?.data?.items) || []).filter(
+      (item): item is Service => item !== undefined,
+    );
+    // Exclude services already selected, except the current one
+    const selectedIds = selectedServices.filter((s, i) => s && i !== index).map((s) => s!.id);
+    return allServices.filter((service) => !selectedIds.includes(service.id));
+  }, [data, selectedServices, index]);
 
   const {
     data: mastersData,
