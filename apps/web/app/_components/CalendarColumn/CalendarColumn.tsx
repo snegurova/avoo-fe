@@ -120,7 +120,7 @@ export default function CalendarColumn(props: Props) {
   const date = useCalendarStore((state) => state.date);
   const setDate = useCalendarStore((state) => state.setDate);
   const setToDate = useCalendarStore((state) => state.setToDate);
-  const type = useCalendarStore((state) => state.type);
+  const type = isSingleWeek ? CalendarViewType.DAY : useCalendarStore((state) => state.type);
   const setType = useCalendarStore((state) => state.setType);
   const setMasterIds = useCalendarStore((state) => state.setMasterIds);
   const ref = useRef<HTMLDivElement | null>(null);
