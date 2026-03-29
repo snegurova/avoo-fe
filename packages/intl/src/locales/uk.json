@@ -10,7 +10,8 @@
       "youHaveUnsavedChangesInThisWindow": "У вас є незбережені зміни. Ви впевнені, що хочете закрити вікно?",
       "leaveWindow": "Закрити",
       "defaultFailError": "Сталося щось дивне. Спробуйте пізніше.",
-      "ok": "Ок"
+      "ok": "Ок",
+      "master": "Майстер"
     },
     "profile": {
       "changePassword": {
@@ -658,7 +659,8 @@
       },
       "OrderListItem": {
         "OrderListItem": {
-          "client": "Клієнт"
+          "client": "Клієнт",
+          "master": "Майстер"
         }
       },
       "ConfirmationModal": {
