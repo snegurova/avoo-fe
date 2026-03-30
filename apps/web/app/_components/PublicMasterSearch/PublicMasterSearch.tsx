@@ -71,7 +71,7 @@ export default function PublicMasterSearch(props: Props) {
     <div ref={ref}>
       <PublicOrderTitle
         isActive={isActive}
-        title='selectMaster'
+        title='master'
         search={search}
         setSearch={setSearch}
         placeholder='searchMasters'

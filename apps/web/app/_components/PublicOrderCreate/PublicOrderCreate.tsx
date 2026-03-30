@@ -8,8 +8,8 @@ import { useTranslations } from 'next-intl';
 import { CreateOrder, MasterWithRelationsEntity } from '@avoo/axios/types/apiTypes';
 import { combinationHooks, orderHooks } from '@avoo/hooks';
 import { OrderType } from '@avoo/hooks/types/orderType';
-import { timeUtils } from '@avoo/shared';
-import { useApiStatusStore } from '@avoo/store';
+import { CalendarSlot, timeUtils } from '@avoo/shared';
+import { useApiStatusStore, useCalendarStore } from '@avoo/store';
 
 import { Button, ButtonFit, ButtonIntent, ButtonType } from '@/_components/Button/Button';
 import CombinationProposition from '@/_components/CombinationProposition/CombinationProposition';
@@ -39,6 +39,8 @@ export default function PublicOrderCreate() {
   const [selectedMasters, setSelectedMasters] = useState<(MasterWithRelationsEntity | null)[]>([
     null,
   ]);
+  const slots = useCalendarStore((state) => state.slots);
+  const setSlots = useCalendarStore((state) => state.setSlots);
   const [ordersDataFilled, setOrdersDataFilled] = useState(false);
   const [customerDataFilled, setCustomerDataFilled] = useState(false);
 
@@ -107,6 +109,19 @@ export default function PublicOrderCreate() {
     });
 
     setSelectedServices((prev) => [...prev, null]);
+
+    setSlots([
+      ...(slots ? [...slots] : []),
+      {
+        index: fields.length,
+        title: null,
+        masterId: null,
+        date: timeUtils.convertDateToString(nextDate),
+        duration: 15,
+        serviceId: null,
+        combinationId: null,
+      },
+    ]);
   };
 
   const combinations = combinationHooks.useGetPublicCombinations({
@@ -161,17 +176,27 @@ export default function PublicOrderCreate() {
   const onSplitCombination = () => {
     let countDuration = 0;
     const ordersData: CreateOrder[] = [];
+    const newSlots: CalendarSlot[] = [];
     selectedServices.forEach((service, index) => {
+      const selectedDate = fields[0].date ? new Date(fields[0].date) : new Date();
+      const orderDate = timeUtils.convertDateToString(
+        timeUtils.addMinutesToDate(selectedDate, countDuration),
+      );
       ordersData.push({
         type: OrderType.Service,
         serviceId: service?.id,
         masterId: selectedMasters[index]?.id ?? fields[0].masterId,
-        date: fields[0].date
-          ? timeUtils.convertDateToString(
-              timeUtils.addMinutesToDate(new Date(fields[0].date), countDuration),
-            )
-          : '',
+        date: orderDate,
         notes: '',
+      });
+      newSlots.push({
+        index,
+        title: service?.name || null,
+        masterId: selectedMasters[index]?.id || null,
+        date: orderDate,
+        duration: service?.durationMinutes || 15,
+        serviceId: service?.id || null,
+        combinationId: null,
       });
       if (service) {
         countDuration += service.durationMinutes;
@@ -184,7 +209,25 @@ export default function PublicOrderCreate() {
     ordersData.forEach((order) => {
       append(order);
     });
+    setSlots(newSlots);
   };
+
+  useEffect(() => {
+    if (!fields.length || fields[0]?.type !== OrderType.Service) return;
+    const newSlots: CalendarSlot[] = fields.map((order, idx) => {
+      const service = selectedServices[idx];
+      return {
+        index: idx,
+        title: service?.name || null,
+        masterId: selectedMasters[idx]?.id || null,
+        date: order.date,
+        duration: service?.durationMinutes || 15,
+        serviceId: service?.id || null,
+        combinationId: null,
+      };
+    });
+    setSlots(newSlots);
+  }, [fields, selectedServices, selectedMasters]);
 
   return (
     <form className='flex flex-col gap-6 pt-4 pb-35' onSubmit={handleSubmit}>
@@ -250,7 +293,7 @@ export default function PublicOrderCreate() {
           control={control}
           render={({ field }) => (
             <div className='flex flex-col gap-6' ref={customerDataRef}>
-              <PublicOrderTitle title='yourBookingDetails' isActive={ordersDataFilled} />
+              <PublicOrderTitle title='yourBookingDetails' isActive={ordersDataFilled} noSelect />
               <CustomerCreate
                 value={field.value ?? {}}
                 onChange={field.onChange}

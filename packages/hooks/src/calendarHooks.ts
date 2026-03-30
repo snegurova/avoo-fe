@@ -250,7 +250,7 @@ export const calendarHooks = {
       getAvailableDate,
     };
   },
-  useGetPublicAvailability: () => {
+  useGetPublicAvailability: (userId: number) => {
     const mutation = useMutation<
       BaseResponse<GetAvailabilityResponse>,
       Error,
@@ -262,18 +262,111 @@ export const calendarHooks = {
 
     utils.useSetPendingApi(mutation.isPending);
 
+    const slots = useCalendarStore((state) => state.slots);
+
+    const getAvailableDate = async ({
+      rangeFromTime,
+      masterIds,
+      serviceId,
+      combinationId,
+      index,
+    }: {
+      rangeFromTime: string;
+      masterIds?: number[];
+      serviceId?: number;
+      combinationId?: number;
+      index: number;
+    }) => {
+      let checkedDate = rangeFromTime;
+      const now = new Date();
+
+      const minutes = now.getMinutes();
+      const roundedMinutes = Math.ceil(minutes / 15) * 15;
+      if (roundedMinutes === 60) {
+        now.setHours(now.getHours() + 1);
+        now.setMinutes(0, 0, 0);
+      } else {
+        now.setMinutes(roundedMinutes, 0, 0);
+      }
+      const inputDate = new Date(rangeFromTime);
+      if (inputDate < now) {
+        checkedDate = timeUtils.convertDateToString(now);
+      }
+
+      let tryCount = 0;
+      while (true) {
+        const params: PublicGetAvailabilityQueryParams = {
+          rangeFromTime: timeUtils.convertLocalToUTC(checkedDate),
+          userId,
+        };
+
+        if (masterIds) {
+          params.masterIds = masterIds;
+        }
+        if (serviceId) {
+          params.serviceId = serviceId;
+        }
+        if (combinationId) {
+          params.combinationId = combinationId;
+        }
+
+        const res = await mutation.mutateAsync(params);
+        let availableDate = res?.data?.availability?.start;
+        if (!availableDate) {
+          return null;
+        }
+
+        const currDuration = slots?.[index]?.duration || 15;
+
+        let overlapped = false;
+        let nextCheckedDate = null;
+
+        if (slots) {
+          const availableStart = new Date(availableDate);
+          const availableEnd = new Date(availableStart.getTime() + currDuration * 60000);
+
+          for (let i = 0; i < slots.length; i++) {
+            if (i === index) continue;
+            const slot = slots[i];
+            if (slot.masterId && masterIds && !masterIds.includes(slot.masterId)) {
+              continue;
+            }
+
+            const slotStart = new Date(slot.date);
+            const slotEnd = new Date(slotStart.getTime() + (slot.duration || 15) * 60000);
+            if (slotStart < availableEnd && slotEnd > availableStart) {
+              overlapped = true;
+              if (!nextCheckedDate || slotEnd > new Date(nextCheckedDate)) {
+                nextCheckedDate = slotEnd;
+              }
+            }
+          }
+        }
+
+        if (!overlapped) {
+          return availableDate;
+        }
+        if (nextCheckedDate) {
+          checkedDate = timeUtils.convertDateToString(nextCheckedDate);
+        } else {
+          return null;
+        }
+
+        tryCount++;
+        if (tryCount > (slots?.length || 0)) {
+          return null;
+        }
+      }
+    };
+
     if (mutation.data?.status === ApiStatus.SUCCESS && mutation.data.data) {
       return {
-        data: mutation.data.data,
-        fetchAvailability: mutation.mutateAsync,
-        isPending: mutation.isPending,
+        getAvailableDate,
       };
     }
 
     return {
-      data: null,
-      fetchAvailability: mutation.mutateAsync,
-      isPending: mutation.isPending,
+      getAvailableDate,
     };
   },
 };

@@ -1317,10 +1317,10 @@
         "date": "Data",
         "notes": "Notatki",
         "notesHelper": "Dodatkowe informacje dla mistrza",
-        "selectService": "Wybierz usługę",
+        "selectservice": "Wybierz usługę",
         "select": "Wybierz",
         "change": "Zmień",
-        "selectMaster": "Wybierz mistrza",
+        "selectmaster": "Wybierz mistrza",
         "selectDate": "Wybierz datę",
         "selectTime": "Wybierz godzinę",
         "morning": "Rano",
@@ -1349,14 +1349,16 @@
         "searchMasters": "Szukaj mistrzów",
         "anyMasterHeadline": "dla maksymalnej dostępności",
         "euro": "Euro",
-        "selectDateTime": "Wybierz datę i godzinę",
+        "selectdateTime": "Wybierz datę i godzinę",
         "selectValidTimeSlot": "Wybierz prawidłowy przedział czasu",
         "noAvailableSlots": "Brak dostępnych przedziałów czasowych na wybrany dzień. Wybierz inny dzień lub 'Dowolny mistrz', aby uzyskać więcej opcji.",
         "search": "Szukaj",
         "remove": "Usuń",
         "clear": "Wyczyść",
         "splitBooking": "Podziel rezerwację",
-        "selectedServices": "Wybrane usługi"
+        "selectedServices": "Wybrane usługi",
+        "noAvailableDates": "Brak dostępnych terminów dla wybranej usługi i mistrza. Wybierz inną usługę, mistrza lub datę.",
+        "dateTime": "Data i godzina"
       }
     },
     "forgotPassword": {

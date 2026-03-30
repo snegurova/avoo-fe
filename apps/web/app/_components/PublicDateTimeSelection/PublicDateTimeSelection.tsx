@@ -46,7 +46,7 @@ export default function PublicDateTimeSelection(props: Props) {
 
   return (
     <div ref={ref}>
-      <PublicOrderTitle isActive={isActive} title='selectDateTime' />
+      <PublicOrderTitle isActive={isActive} title='dateTime' />
 
       {isActive && (
         <div className='flex gap-6 mt-6'>

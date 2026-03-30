@@ -1315,10 +1315,10 @@
         "date": "Date",
         "notes": "Notes",
         "notesHelper": "Additional information for the master",
-        "selectService": "Select a service",
+        "selectservice": "Select a service",
         "select": "Select",
         "change": "Change",
-        "selectMaster": "Select a master",
+        "selectmaster": "Select a master",
         "selectDate": "Select a date",
         "selectTime": "Select a time",
         "morning": "Morning",
@@ -1347,14 +1347,16 @@
         "searchMasters": "Search for masters",
         "anyMasterHeadline": "for maximum availability",
         "euro": "Euro",
-        "selectDateTime": "Select date and time",
+        "selectdateTime": "Select date and time",
         "selectValidTimeSlot": "Please select a valid time slot",
         "noAvailableSlots": "No available time slots for the selected date. Please choose another date or select 'Any master' for more options.",
         "search": "Search",
         "remove": "Remove",
         "clear": "Clear",
         "splitBooking": "Split booking",
-        "selectedServices": "Selected services"
+        "selectedServices": "Selected services",
+        "noAvailableDates": "No available dates for the selected service and master. Please choose another service, master or date.",
+        "dateTime": "Date and time"
       }
     },
     "forgotPassword": {

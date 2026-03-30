@@ -2,6 +2,8 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 
+import { tv } from 'tailwind-variants';
+
 import {
   CreateOrder,
   GetMastersQueryParams,
@@ -10,12 +12,13 @@ import {
   Service,
 } from '@avoo/axios/types/apiTypes';
 import { calendarHooks, masterHooks, servicesHooks } from '@avoo/hooks';
-import { isEmptyObject } from '@avoo/shared';
-import { timeUtils } from '@avoo/shared';
+import { isEmptyObject, timeUtils } from '@avoo/shared';
+import { useCalendarStore } from '@avoo/store';
 
 import FormTextArea from '@/_components/FormTextArea/FormTextArea';
 import PublicMasterSearch from '@/_components/PublicMasterSearch/PublicMasterSearch';
 import PublicServiceSearch from '@/_components/PublicServiceSearch/PublicServiceSearch';
+import { useToast } from '@/_hooks/useToast';
 
 import PublicDateTimeSelection from '../PublicDateTimeSelection/PublicDateTimeSelection';
 
@@ -40,8 +43,29 @@ type Props = {
   ) => void;
 };
 
+const itemWrapper = tv({
+  base: 'pb-4 border border-gray-300 rounded-lg overflow-hidden transition-colors',
+  variants: {
+    active: {
+      true: 'border-primary-200',
+      false: 'border-gray-300',
+    },
+  },
+});
+
+const itemTitleWrapper = tv({
+  base: 'p-4 border-b mb-4 transition-colors',
+  variants: {
+    active: {
+      true: 'border-primary-200 bg-primary-100',
+      false: 'border-gray-200 bg-gray-50',
+    },
+  },
+});
+
 export default function PublicServiceFormItem(props: Props) {
   const t = useTranslations('public.salon.createOrder');
+  const toast = useToast();
   const {
     order,
     onChange,
@@ -60,6 +84,9 @@ export default function PublicServiceFormItem(props: Props) {
   const DateTimeSelectionRef = useRef<HTMLDivElement>(null);
   const searchParams = useParams();
   const userId = Number(searchParams.userId);
+  const setSlots = useCalendarStore((state) => state.setSlots);
+  const slots = useCalendarStore((state) => state.slots);
+  const { getAvailableDate } = calendarHooks.useGetPublicAvailability(userId);
   const [masterSearch, setMasterSearch] = useState('');
   const [masterParams, setMasterParams] = useState<GetMastersQueryParams>({ limit: 10 });
   const [calendarParams, setCalendarParams] = useState<PublicCalendarQueryParams>({
@@ -87,12 +114,21 @@ export default function PublicServiceFormItem(props: Props) {
   }, [step]);
 
   useEffect(() => {
+    let target: HTMLDivElement | null = null;
     if (step === 1 && serviceSelectionRef.current) {
-      serviceSelectionRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      target = serviceSelectionRef.current;
     } else if (step === 2 && masterSelectionRef.current) {
-      masterSelectionRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      target = masterSelectionRef.current;
     } else if (step === 3 && DateTimeSelectionRef.current) {
-      DateTimeSelectionRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      target = DateTimeSelectionRef.current;
+    }
+    if (target) {
+      const rect = target.getBoundingClientRect();
+      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+      window.scrollTo({
+        top: rect.top + scrollTop - 16,
+        behavior: 'smooth',
+      });
     }
   }, [serviceSelectionRef.current, masterSelectionRef.current, DateTimeSelectionRef.current, step]);
 
@@ -166,27 +202,83 @@ export default function PublicServiceFormItem(props: Props) {
     }
   }, [masters]);
 
-  const selectService = (val: { id: number } | null) => {
+  const selectService = async (val: { id: number } | null) => {
     if (!val) return;
     const newOrders = [...value];
-    newOrders[index] = { ...newOrders[index], serviceId: val.id };
+
+    const availabilityParams: {
+      rangeFromTime: string;
+      masterIds?: number[];
+      serviceId?: number;
+      combinationId?: number;
+      index: number;
+    } = {
+      index,
+      rangeFromTime: newOrders[index].date,
+    };
+    if (selectedMasters[index]) {
+      availabilityParams.masterIds = [selectedMasters[index]?.id];
+    }
+    if (val.id) {
+      availabilityParams.serviceId = val.id;
+    }
+    const availableDate = await getAvailableDate(availabilityParams);
+    if (!availableDate) {
+      toast.error(t('noAvailableDates'));
+      return;
+    }
+    newOrders[index] = { ...newOrders[index], serviceId: val.id, date: availableDate };
     onChange(newOrders);
 
     const newService = services?.find((service) => service?.id === val.id) || null;
-
     setSelectedService(newService);
     setMasterParams((prev) => ({
       ...prev,
       serviceId: newService?.id || undefined,
     }));
+
+    if (slots && slots[index]) {
+      const newSlot = {
+        ...slots[index],
+        title: newService?.name || null,
+        duration: newService?.durationMinutes || 15,
+        date: availableDate,
+        serviceId: newService?.id || null,
+      };
+      const newSlots = [...slots];
+      newSlots[index] = newSlot;
+      setSlots(newSlots);
+    }
   };
 
-  const selectMaster = (val: { id: number } | null) => {
+  const selectMaster = async (val: { id: number } | null) => {
     if (!val) {
       return;
     }
     const newOrders = [...value];
-    newOrders[index] = { ...newOrders[index], masterId: val.id };
+
+    const availabilityParams: {
+      rangeFromTime: string;
+      masterIds?: number[];
+      serviceId?: number;
+      combinationId?: number;
+      index: number;
+    } = {
+      index,
+      rangeFromTime: newOrders[index].date,
+    };
+    if (val.id) {
+      availabilityParams.masterIds = [val.id];
+    }
+    if (selectedService) {
+      availabilityParams.serviceId = selectedService.id;
+    }
+    const availableDate = await getAvailableDate(availabilityParams);
+    if (!availableDate) {
+      toast.error(t('noAvailableDates'));
+      return;
+    }
+    newOrders[index] = { ...newOrders[index], masterId: val.id, date: availableDate };
     onChange(newOrders);
 
     setSelectedMasters((prev) => {
@@ -199,20 +291,62 @@ export default function PublicServiceFormItem(props: Props) {
       ...prev,
       masterIds: val.id ? [val.id] : undefined,
     }));
+
+    if (slots && slots[index]) {
+      const newSlot = {
+        ...slots[index],
+        masterId: val.id,
+        date: availableDate,
+      };
+      const newSlots = [...slots];
+      newSlots[index] = newSlot;
+      setSlots(newSlots);
+    }
   };
 
-  const onDateChange = (newDate: string) => {
+  const onDateChange = async (newDate: string) => {
+    const availabilityParams: {
+      rangeFromTime: string;
+      masterIds?: number[];
+      serviceId?: number;
+      combinationId?: number;
+      index: number;
+    } = {
+      rangeFromTime: newDate,
+      index,
+    };
+    if (selectedMasters[index]) {
+      availabilityParams.masterIds = [selectedMasters[index]?.id];
+    }
+    if (selectedService) {
+      availabilityParams.serviceId = selectedService.id;
+    }
+    const availableDate = await getAvailableDate(availabilityParams);
+    if (!availableDate) {
+      toast.error(t('noAvailableDates'));
+      return;
+    }
     const newOrders = [...value];
     newOrders[index] = {
       ...newOrders[index],
-      date: newDate,
+      date: availableDate,
     };
     onChange(newOrders);
     setCalendarParams((prev) => ({
       ...prev,
-      rangeFromDate: timeUtils.formatDate(timeUtils.toDayBegin(new Date(newDate))),
-      rangeToDate: timeUtils.formatDate(timeUtils.toDayEnd(new Date(newDate))),
+      rangeFromDate: timeUtils.formatDate(timeUtils.toDayBegin(new Date(availableDate))),
+      rangeToDate: timeUtils.formatDate(timeUtils.toDayEnd(new Date(availableDate))),
     }));
+
+    if (slots && slots[index]) {
+      const newSlot = {
+        ...slots[index],
+        date: availableDate,
+      };
+      const newSlots = [...slots];
+      newSlots[index] = newSlot;
+      setSlots(newSlots);
+    }
   };
 
   const onNotesChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -222,8 +356,13 @@ export default function PublicServiceFormItem(props: Props) {
   };
 
   return (
-    <div className='py-4'>
-      <div className='flex flex-col gap-4'>
+    <div className={itemWrapper({ active: step < 4 })}>
+      <div className={itemTitleWrapper({ active: step < 4 })}>
+        <h2 className='text-xl font-medium text-black'>
+          {selectedService ? selectedService.name : t('service') + ' #' + (index + 1)}
+        </h2>
+      </div>
+      <div className='flex flex-col gap-4 px-4'>
         <div className='flex flex-col gap-4'>
           <PublicServiceSearch
             setCategory={setCategory}
@@ -250,7 +389,7 @@ export default function PublicServiceFormItem(props: Props) {
             maxLength={200}
             error={errors?.notes?.message}
             classNames={{
-              label: 'block text-black font-medium',
+              label: 'block font-medium text-base leading-loose text-black py-1',
               textarea:
                 'block w-full text-sm text-black border border-gray-200 p-3 rounded-lg min-h-[70px] focus:outline-none focus:ring-1 focus:ring-black',
             }}

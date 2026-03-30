@@ -88,7 +88,7 @@ export default function PublicServiceSearch(props: Props) {
     <div ref={ref}>
       <PublicOrderTitle
         isActive={isActive}
-        title='selectService'
+        title='service'
         search={search}
         setSearch={setSearch}
         placeholder='searchServices'
