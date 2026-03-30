@@ -71,6 +71,7 @@ const top = tv({
 
 export default function ServiceFormItem(props: Props) {
   const tCommon = useTranslations('private.components.ServiceFormItem.ServiceFormItem');
+  const tCalendar = useTranslations('private.calendar.calendar');
   const t = useTranslations('private.orders.create');
   const {
     order,
@@ -181,6 +182,18 @@ export default function ServiceFormItem(props: Props) {
     if (!val) return;
 
     const newOrders = [...value];
+    const newService = services?.find((service) => service?.id === val.id) || null;
+
+    if (slots && slots[index]) {
+      const newSlot = {
+        ...slots[index],
+        title: newService?.name || null,
+        duration: newService?.durationMinutes || 15,
+      };
+      const newSlots = [...slots];
+      newSlots[index] = newSlot;
+      setSlots(newSlots);
+    }
 
     const availabilityParams: {
       rangeFromTime: string;
@@ -208,12 +221,16 @@ export default function ServiceFormItem(props: Props) {
       return;
     }
 
+    if (
+      new Date(availableDate).getTime() !== new Date(availabilityParams.rangeFromTime).getTime()
+    ) {
+      toast.info(tCalendar('dateNotAvailable'));
+    }
+
     setDate(timeUtils.toDayBegin(new Date(availableDate)));
 
     newOrders[index] = { ...newOrders[index], serviceId: val.id, date: availableDate };
     onChange(newOrders);
-
-    const newService = services?.find((service) => service?.id === val.id) || null;
 
     setSelectedService(newService);
     setMasterParams((prev) => ({
@@ -268,6 +285,12 @@ export default function ServiceFormItem(props: Props) {
     if (!availableDate) {
       toast.error(tCommon('noAvailableTime'));
       return;
+    }
+
+    if (
+      new Date(availableDate).getTime() !== new Date(availabilityParams.rangeFromTime).getTime()
+    ) {
+      toast.info(tCalendar('dateNotAvailable'));
     }
 
     setDate(timeUtils.toDayBegin(new Date(availableDate)));
@@ -335,6 +358,12 @@ export default function ServiceFormItem(props: Props) {
     if (!availableDate) {
       toast.error(tCommon('noAvailableTime'));
       return;
+    }
+
+    if (
+      new Date(availableDate).getTime() !== new Date(availabilityParams.rangeFromTime).getTime()
+    ) {
+      toast.info(tCalendar('dateNotAvailable'));
     }
 
     setDate(timeUtils.toDayBegin(new Date(availableDate)));

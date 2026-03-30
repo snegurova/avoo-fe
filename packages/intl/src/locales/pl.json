@@ -98,7 +98,8 @@
         "Sat": "Sob",
         "Sun": "Nie",
         "noSchedules": "Brak grafików",
-        "noSchedulesDescription": "Aktualnie nie ma grafików do wyświetlenia. Wybierz pracowników, aby zobaczyć ich grafiki tutaj."
+        "noSchedulesDescription": "Aktualnie nie ma grafików do wyświetlenia. Wybierz pracowników, aby zobaczyć ich grafiki tutaj.",
+        "dateNotAvailable": "Data jest niedostępna, wybierana jest najbliższa dostępna data."
       },
       "comboServiceTime": {
         "loading": "Wczytywanie...",

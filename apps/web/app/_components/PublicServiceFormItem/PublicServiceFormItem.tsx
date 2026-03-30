@@ -65,6 +65,7 @@ const itemTitleWrapper = tv({
 
 export default function PublicServiceFormItem(props: Props) {
   const t = useTranslations('public.salon.createOrder');
+  const tCalendar = useTranslations('private.calendar.calendar');
   const toast = useToast();
   const {
     order,
@@ -227,6 +228,13 @@ export default function PublicServiceFormItem(props: Props) {
       toast.error(t('noAvailableDates'));
       return;
     }
+
+    if (
+      new Date(availableDate).getTime() !== new Date(availabilityParams.rangeFromTime).getTime()
+    ) {
+      toast.info(tCalendar('dateNotAvailable'));
+    }
+
     newOrders[index] = { ...newOrders[index], serviceId: val.id, date: availableDate };
     onChange(newOrders);
 
@@ -278,6 +286,13 @@ export default function PublicServiceFormItem(props: Props) {
       toast.error(t('noAvailableDates'));
       return;
     }
+
+    if (
+      new Date(availableDate).getTime() !== new Date(availabilityParams.rangeFromTime).getTime()
+    ) {
+      toast.info(tCalendar('dateNotAvailable'));
+    }
+
     newOrders[index] = { ...newOrders[index], masterId: val.id, date: availableDate };
     onChange(newOrders);
 
@@ -326,6 +341,13 @@ export default function PublicServiceFormItem(props: Props) {
       toast.error(t('noAvailableDates'));
       return;
     }
+
+    if (
+      new Date(availableDate).getTime() !== new Date(availabilityParams.rangeFromTime).getTime()
+    ) {
+      toast.info(tCalendar('dateNotAvailable'));
+    }
+
     const newOrders = [...value];
     newOrders[index] = {
       ...newOrders[index],

@@ -97,7 +97,8 @@
         "Sat": "Sat",
         "Sun": "Sun",
         "noSchedules": "No schedules",
-        "noSchedulesDescription": "There are currently no schedules to display. Choose masters to see their schedules here."
+        "noSchedulesDescription": "There are currently no schedules to display. Choose masters to see their schedules here.",
+        "dateNotAvailable": "Date is not available, choosing the closest available date."
       },
       "comboServiceTime": {
         "loading": "Loading...",

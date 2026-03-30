@@ -31,6 +31,7 @@ const WRAPPER_HEADER_HEIGHT = '62px';
 
 export default function OrderCreate() {
   const t = useTranslations('private.orders.create');
+  const tCalendar = useTranslations('private.calendar.calendar');
   const isPending = useApiStatusStore((state) => state.isPending);
   const errorMessage = useApiStatusStore((s) => s.errorMessage);
   const isError = useApiStatusStore((s) => s.isError);
@@ -312,6 +313,10 @@ export default function OrderCreate() {
     if (!availableDate) {
       toast.error(t('noAvailableDateAndTime'));
       return;
+    }
+
+    if (new Date(availableDate).getTime() !== new Date(params.rangeFromTime).getTime()) {
+      toast.info(tCalendar('dateNotAvailable'));
     }
 
     setMasterIds([master.id]);
