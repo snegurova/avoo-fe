@@ -21,7 +21,7 @@ export default function PublicDateCard(props: Props) {
   const locale = localizationHooks.useGetLocale();
 
   return (
-    <div className='p-6 border rounded-lg border-gray-200 text-gray-600 flex justify-between items-center'>
+    <div className='p-6 border rounded-lg border-gray-200 text-gray-600 flex justify-between flex-col md:flex-row md:items-center'>
       <div className='flex flex-col gap-2 '>
         <div className='flex items-center gap-1'>
           <CalendarIcon className='fill-current' />
@@ -38,7 +38,7 @@ export default function PublicDateCard(props: Props) {
       <button
         type='button'
         onClick={onClick}
-        className='cursor-pointer transition-colors text-gray-600 font-medium text-sm leading-base hover:text-black focus:text-black underline'
+        className='cursor-pointer transition-colors text-gray-600 font-medium text-sm leading-base hover:text-black focus:text-black underline self-end md:self-auto'
       >
         {t('change')}
       </button>

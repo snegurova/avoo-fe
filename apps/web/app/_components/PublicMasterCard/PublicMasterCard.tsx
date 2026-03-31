@@ -17,7 +17,7 @@ type Props = {
 };
 
 const card = tv({
-  base: 'flex items-center justify-between gap-3 p-6 rounded-lg border transition-colors',
+  base: 'flex flex-col md:flex-row md:items-center md:justify-between gap-3 p-6 rounded-lg border transition-colors',
   variants: {
     selected: {
       true: 'border-black',
@@ -83,7 +83,7 @@ export default function PublicMasterCard(props: Props) {
         </div>
       </div>
       {isClickable && !isSelected && (
-        <div className='flex items-center gap-4'>
+        <div className='flex items-center gap-4 self-end md:self-auto'>
           {type === 'change' && (
             <button type='button' onClick={onClear} className={button({ type })}>
               {t('clear')}
@@ -98,7 +98,7 @@ export default function PublicMasterCard(props: Props) {
         <button
           type='button'
           onClick={onClick}
-          className='font-semibold bg-white rounded-lg py-3.5 px-5 justify-center text-black border-black border leading-none cursor-pointer transition-colors hover:bg-gray-100 focus:bg-gray-100'
+          className='font-semibold bg-white rounded-lg py-3.5 px-5 justify-center text-black border-black border leading-none cursor-pointer transition-colors hover:bg-gray-100 focus:bg-gray-100 self-end md:self-auto'
         >
           {t('selected')}
         </button>

@@ -35,7 +35,7 @@ export default function PublicOrderTotal(props: Props) {
             const duration = service?.durationMinutes || 0;
             return (
               <div key={idx} className='grid grid-cols-2 md:grid-cols-4 gap-2 '>
-                <span className='text-gray-600'>
+                <span className='text-gray-600 row-span-3 md:row-span-1'>
                   {t('service')} {idx + 1}:
                 </span>
                 <span className='font-semibold'>
@@ -58,7 +58,7 @@ export default function PublicOrderTotal(props: Props) {
             const duration = service?.durationMinutes || 0;
             return (
               <div key={idx} className='grid grid-cols-2 md:grid-cols-4 gap-2 '>
-                <span className='text-gray-600'>
+                <span className='text-gray-600 row-span-3 md:row-span-1'>
                   {t('service')} {idx + 1}:
                 </span>
                 <span className='font-semibold'>

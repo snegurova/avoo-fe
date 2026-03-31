@@ -16,9 +16,11 @@ import { isEmptyObject, timeUtils } from '@avoo/shared';
 import { useCalendarStore } from '@avoo/store';
 
 import FormTextArea from '@/_components/FormTextArea/FormTextArea';
+import { IconButton } from '@/_components/IconButton/IconButton';
 import PublicMasterSearch from '@/_components/PublicMasterSearch/PublicMasterSearch';
 import PublicServiceSearch from '@/_components/PublicServiceSearch/PublicServiceSearch';
 import { useToast } from '@/_hooks/useToast';
+import DeleteIcon from '@/_icons/DeleteIcon';
 
 import PublicDateTimeSelection from '../PublicDateTimeSelection/PublicDateTimeSelection';
 
@@ -54,7 +56,7 @@ const itemWrapper = tv({
 });
 
 const itemTitleWrapper = tv({
-  base: 'p-4 border-b mb-4 transition-colors',
+  base: 'p-4 border-b mb-4 transition-colors flex justify-between items-center',
   variants: {
     active: {
       true: 'border-primary-200 bg-primary-100',
@@ -79,6 +81,7 @@ export default function PublicServiceFormItem(props: Props) {
     errors,
     selectedMasters,
     setSelectedMasters,
+    remove,
   } = props;
 
   const serviceSelectionRef = useRef<HTMLDivElement>(null);
@@ -564,12 +567,26 @@ export default function PublicServiceFormItem(props: Props) {
     onChange(newOrders);
   };
 
+  const handleRemove = () => {
+    remove?.();
+  };
+
   return (
     <div className={itemWrapper({ active: step < 4 })}>
       <div className={itemTitleWrapper({ active: step < 4 })}>
         <h2 className='text-xl font-medium text-black'>
           {selectedService ? selectedService.name : t('service') + ' #' + (index + 1)}
         </h2>
+
+        {remove && (
+          <IconButton
+            className='group'
+            icon={
+              <DeleteIcon className='w-5 h-5 transition-colors fill-gray-600 group-hover:fill-black group-focus:fill-black' />
+            }
+            onClick={handleRemove}
+          />
+        )}
       </div>
       <div className='flex flex-col gap-4 px-4'>
         <div className='flex flex-col gap-4'>
