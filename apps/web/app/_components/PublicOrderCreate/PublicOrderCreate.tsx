@@ -9,7 +9,7 @@ import { CreateOrder, MasterWithRelationsEntity } from '@avoo/axios/types/apiTyp
 import { combinationHooks, orderHooks } from '@avoo/hooks';
 import { OrderType } from '@avoo/hooks/types/orderType';
 import { CalendarSlot, timeUtils } from '@avoo/shared';
-import { useApiStatusStore, useCalendarStore } from '@avoo/store';
+import { useApiStatusStore, useCalendarStore, useReferralStore } from '@avoo/store';
 
 import { Button, ButtonFit, ButtonIntent, ButtonType } from '@/_components/Button/Button';
 import CombinationProposition from '@/_components/CombinationProposition/CombinationProposition';
@@ -26,6 +26,8 @@ import AddIcon from '@/_icons/AddIcon';
 const SERVICES_KEY_IN_ORDER_CREATE = 'ordersData';
 
 export default function PublicOrderCreate() {
+  const referralCode = useReferralStore((s) => s.referralCode);
+  const clearReferralCode = useReferralStore((s) => s.clearReferralCode);
   const t = useTranslations('public.salon.createOrder');
   const customerDataRef = useRef<HTMLDivElement>(null);
   const params = useParams();
@@ -62,8 +64,12 @@ export default function PublicOrderCreate() {
   } = orderHooks.useCreatePublicOrder({
     onSuccess: () => {
       setShowConfirmation(true);
+      if (referralCode) {
+        clearReferralCode();
+      }
     },
     userId: userId,
+    referralCode,
   });
 
   const { fields, append, remove } = useFieldArray({

@@ -1,9 +1,11 @@
 'use client';
 import React from 'react';
+import { useEffect } from 'react';
 import Link from 'next/link';
-import { useParams } from 'next/navigation';
+import { useParams, useSearchParams } from 'next/navigation';
 
 import { userHooks } from '@avoo/hooks';
+import { useReferralStore } from '@avoo/store';
 
 import PublicOrderCreate from '@/_components/PublicOrderCreate/PublicOrderCreate';
 import PublicWrapper from '@/_components/PublicWrapper/PublicWrapper';
@@ -12,7 +14,16 @@ import { AppRoutes } from '@/_routes/routes';
 
 export default function PublicOrderCreatePage() {
   const params = useParams();
+  const searchParams = useSearchParams();
   const userId = Number(params.userId);
+  const setReferralCode = useReferralStore((s) => s.setReferralCode);
+
+  useEffect(() => {
+    const code = searchParams.get('referralCode');
+    if (code) {
+      setReferralCode(code);
+    }
+  }, [searchParams, setReferralCode]);
 
   const data = userHooks.useGetPublicUser(userId);
 
