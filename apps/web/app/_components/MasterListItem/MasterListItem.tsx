@@ -7,15 +7,17 @@ import { Typography } from '@mui/material';
 
 import { MasterWithRelationsEntityResponse } from '@avoo/axios/types/apiTypes';
 import { colors, typography } from '@avoo/design-tokens';
-import { masterHooks } from '@avoo/hooks';
+import { masterHooks, userHooks } from '@avoo/hooks';
 
 import Avatar, { AvatarSize } from '@/_components/Avatar/Avatar';
 import { IconButton } from '@/_components/IconButton/IconButton';
 import MasterLanguageList from '@/_components/MasterLanguageList/MasterLanguageList';
+import { localizationHooks } from '@/_hooks/localizationHooks';
 import { useToast } from '@/_hooks/useToast';
 import DeleteIcon from '@/_icons/DeleteIcon';
 import EditSquareIcon from '@/_icons/EditSquareIcon';
 import ShareIcon from '@/_icons/ShareIcon';
+import { AppRoutes } from '@/_routes/routes';
 
 import ConfirmationModal from '../ConfirmationModal/ConfirmationModal';
 
@@ -27,11 +29,15 @@ type Props = {
 
 export const MasterListItem = ({ master, onEdit, isSelected }: Props) => {
   const t = useTranslations('private.components.MasterListItem.MasterListItem');
+  const tCard = useTranslations('private.components.ServiceCard.ServiceCard');
   const toast = useToast();
   const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = React.useState(false);
   const displayName = master.name || t('noName');
   const phone = master.phone || t('noPhone');
   const languagesArr = master.languages || [];
+  const { userId } = userHooks.useGetUserProfile();
+  const baseUrl = typeof window !== 'undefined' ? window.location.origin : '';
+  const link = `${baseUrl}${localizationHooks.useWithLocale(AppRoutes.PublicSalon)}/${userId}${AppRoutes.PublicOrderCreate}?masterId=${master.id}`;
 
   const { deleteMaster, isPending: isDeletePending } = masterHooks.useDeleteMaster({
     onSuccess: () => {
@@ -52,6 +58,11 @@ export const MasterListItem = ({ master, onEdit, isSelected }: Props) => {
   const handleConfirmDelete = React.useCallback(() => {
     deleteMaster(master.id);
   }, [deleteMaster, master.id]);
+
+  const onShareClick = () => {
+    navigator.clipboard.writeText(link);
+    toast.info(tCard('copiedToClipboard'));
+  };
   return (
     <div
       className={`rounded-lg lg:rounded-none p-4 lg:py-6 lg:px-8 border lg:border-l-0 lg:border-r-0 transition-colors duration-300 ease-in-out ${
@@ -134,6 +145,7 @@ export const MasterListItem = ({ master, onEdit, isSelected }: Props) => {
             icon={<ShareIcon />}
             ariaLabel={t('share')}
             className='flex items-center justify-center p-2.5'
+            onClick={onShareClick}
           />
           <IconButton
             icon={<DeleteIcon />}

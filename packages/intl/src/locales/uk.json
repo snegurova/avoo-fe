@@ -879,7 +879,8 @@
         "ServiceCard": {
           "editSm": "Редагувати",
           "shareService": "Поділитися послугою",
-          "deleteSm": "Видалити"
+          "deleteSm": "Видалити",
+          "copiedToClipboard": "Скопійовано в буфер обміну"
         }
       },
       "ServiceControls": {

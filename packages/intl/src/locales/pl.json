@@ -875,7 +875,8 @@
         "ServiceCard": {
           "editSm": "Edytuj",
           "shareService": "Udostępnij usługę",
-          "deleteSm": "Usuń"
+          "deleteSm": "Usuń",
+          "copiedToClipboard": "Skopiowano do schowka!"
         }
       },
       "ServiceControls": {

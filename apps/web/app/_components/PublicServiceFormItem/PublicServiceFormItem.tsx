@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { useParams } from 'next/navigation';
+import { useParams, useSearchParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 
 import { tv } from 'tailwind-variants';
@@ -64,6 +64,7 @@ const itemTitleWrapper = tv({
 });
 
 export default function PublicServiceFormItem(props: Props) {
+  const didInitRef = useRef(false);
   const t = useTranslations('public.salon.createOrder');
   const tCalendar = useTranslations('private.calendar.calendar');
   const toast = useToast();
@@ -83,8 +84,9 @@ export default function PublicServiceFormItem(props: Props) {
   const serviceSelectionRef = useRef<HTMLDivElement>(null);
   const masterSelectionRef = useRef<HTMLDivElement>(null);
   const DateTimeSelectionRef = useRef<HTMLDivElement>(null);
-  const searchParams = useParams();
-  const userId = Number(searchParams.userId);
+  const urlParams = useParams();
+  const searchParams = useSearchParams();
+  const userId = Number(urlParams.userId);
   const setSlots = useCalendarStore((state) => state.setSlots);
   const slots = useCalendarStore((state) => state.slots);
   const { getAvailableDate } = calendarHooks.useGetPublicAvailability(userId);
@@ -100,7 +102,7 @@ export default function PublicServiceFormItem(props: Props) {
     ),
   });
   const [selectedSlot, setSelectedSlot] = useState<Date | null>(null);
-  const [step, setStep] = useState(selectedService ? 4 : 1);
+  const [step, setStep] = useState(1);
   const [selectAnyMaster, setSelectAnyMaster] = useState(false);
   const [maxStep, setMaxStep] = useState(selectedService ? 4 : 1);
 
@@ -233,6 +235,61 @@ export default function PublicServiceFormItem(props: Props) {
   );
 
   useEffect(() => {
+    if (index !== 0) return;
+    if (didInitRef.current) return;
+    if (!services.length && !masters.length) return;
+    didInitRef.current = true;
+    const serviceIdParam = searchParams.get('serviceId');
+    const masterIdParam = searchParams.get('masterId');
+    let initialStep = 1;
+    let foundService: Service | null = null;
+    let foundMaster: MasterWithRelationsEntity | null = null;
+
+    if (serviceIdParam && !selectedService) {
+      foundService = services.find((s) => s.id === Number(serviceIdParam)) || null;
+      if (foundService) {
+        setSelectedService(foundService);
+        initialStep = 2;
+      }
+    } else if (selectedService) {
+      foundService = selectedService;
+      initialStep = 2;
+    }
+    if (masterIdParam && !selectedMasters[0]) {
+      foundMaster = masters.find((m) => m.id === Number(masterIdParam)) || null;
+      if (foundMaster) {
+        setSelectedMasters((prev) => {
+          const newMasters = [...prev];
+          newMasters[0] = foundMaster;
+          return newMasters;
+        });
+
+        if (foundService) {
+          initialStep = 3;
+        } else {
+          initialStep = 1;
+        }
+      }
+    } else if (selectedMasters[0]) {
+      foundMaster = selectedMasters[0];
+    }
+
+    if (foundService && foundMaster) {
+      initialStep = 3;
+    }
+    setStep(initialStep);
+  }, [
+    services,
+    masters,
+    index,
+    setSelectedService,
+    setSelectedMasters,
+    searchParams,
+    selectedService,
+    selectedMasters,
+  ]);
+
+  useEffect(() => {
     setMasterParams((prev) => ({
       ...prev,
       search: masterSearch.trim() || undefined,
@@ -258,8 +315,18 @@ export default function PublicServiceFormItem(props: Props) {
     }
   }, [masters]);
 
+  const masterIdParam = searchParams.get('masterId');
   const selectService = async (val: { id: number } | null) => {
     if (!val) return;
+
+    if (val.id === 0) {
+      const newOrders = [...value];
+      newOrders[index] = { ...newOrders[index], serviceId: undefined };
+      onChange(newOrders);
+      setSelectedService(null);
+      setStep(1);
+      return;
+    }
     const newOrders = [...value];
 
     const availabilityParams: {
@@ -325,6 +392,8 @@ export default function PublicServiceFormItem(props: Props) {
       userSelectedSlot;
     if (isAllFilled) {
       setStep(4);
+    } else if (masterIdParam) {
+      setStep(3);
     } else {
       setStep(2);
     }
@@ -332,6 +401,19 @@ export default function PublicServiceFormItem(props: Props) {
 
   const selectMaster = async (val: { id: number } | null) => {
     if (!val) {
+      return;
+    }
+
+    if (val.id === 0 && !selectAnyMaster) {
+      const newOrders = [...value];
+      newOrders[index] = { ...newOrders[index], masterId: 0 };
+      onChange(newOrders);
+      setSelectedMasters((prev) => {
+        const newMasters = [...prev];
+        newMasters[index] = null;
+        return newMasters;
+      });
+      setStep(2);
       return;
     }
     const newOrders = [...value];
@@ -346,7 +428,10 @@ export default function PublicServiceFormItem(props: Props) {
       index,
       rangeFromTime: newOrders[index].date,
     };
-    if (val.id) {
+
+    if (val.id === 0 && selectedService) {
+      availabilityParams.masterIds = selectedService.masters?.map((m) => m.id) || [];
+    } else if (val.id) {
       availabilityParams.masterIds = [val.id];
     }
     if (selectedService) {
@@ -364,19 +449,33 @@ export default function PublicServiceFormItem(props: Props) {
       toast.info(tCalendar('dateNotAvailable'));
     }
 
-    newOrders[index] = { ...newOrders[index], masterId: val.id, date: availableDate };
-    onChange(newOrders);
-
-    setSelectedMasters((prev) => {
-      const newMasters = [...prev];
-      newMasters[index] = masters?.find((master) => master.id === val.id) || null;
-      return newMasters;
-    });
-    setMasterIds(val.id ? [val.id] : []);
-    setCalendarParams((prev) => ({
-      ...prev,
-      masterIds: val.id ? [val.id] : undefined,
-    }));
+    if (val.id === 0) {
+      newOrders[index] = { ...newOrders[index], masterId: 0, date: availableDate };
+      onChange(newOrders);
+      setSelectedMasters((prev) => {
+        const newMasters = [...prev];
+        newMasters[index] = null;
+        return newMasters;
+      });
+      setMasterIds(selectedService?.masters?.map((m) => m.id) || []);
+      setCalendarParams((prev) => ({
+        ...prev,
+        masterIds: selectedService?.masters?.map((m) => m.id) || undefined,
+      }));
+    } else {
+      newOrders[index] = { ...newOrders[index], masterId: val.id, date: availableDate };
+      onChange(newOrders);
+      setSelectedMasters((prev) => {
+        const newMasters = [...prev];
+        newMasters[index] = masters?.find((master) => master.id === val.id) || null;
+        return newMasters;
+      });
+      setMasterIds(val.id ? [val.id] : []);
+      setCalendarParams((prev) => ({
+        ...prev,
+        masterIds: val.id ? [val.id] : undefined,
+      }));
+    }
 
     if (slots && slots[index]) {
       const newSlot = {

@@ -873,7 +873,8 @@
         "ServiceCard": {
           "editSm": "Edit",
           "shareService": "Share Service",
-          "deleteSm": "Delete"
+          "deleteSm": "Delete",
+          "copiedToClipboard": "Link copied to clipboard!"
         }
       },
       "ServiceControls": {

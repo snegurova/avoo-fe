@@ -64,7 +64,7 @@ export default function PublicMasterSearch(props: Props) {
   const onMasterClear = () => {
     onChange({ id: 0 });
     setSelectAnyMaster(false);
-    setStep(2);
+    setStep(2); // Always show master selection step after clearing
   };
 
   return (
