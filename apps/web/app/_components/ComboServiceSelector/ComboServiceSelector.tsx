@@ -39,7 +39,7 @@ export default function ComboServiceSelector(props: Props) {
 
   const listWrapperClasses =
     variant === 'modal'
-      ? 'flex flex-col gap-4 mb-2 pt-4 pr-6'
+      ? 'flex flex-col gap-4 mb-2 pt-4 pr-3'
       : 'flex flex-col gap-4 mb-2 overflow-y-auto overflow-x-hidden max-h-[400px] pr-6 -mr-6 pt-4';
 
   const { queryParams, setSearchQuery, setMasterIds } = servicesHooks.useServicesQuery();
@@ -88,7 +88,7 @@ export default function ComboServiceSelector(props: Props) {
   };
 
   const optionStyle = tv({
-    base: 'flex items-center justify-between px-4 py-2',
+    base: 'flex items-center justify-between px-3 py-2',
     variants: {
       isSelected: {
         true: 'pointer-events-none bg-gray-50 text-bold font-bold bg-primary-50',

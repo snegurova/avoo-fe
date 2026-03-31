@@ -72,7 +72,7 @@ export default function ComboServiceUpdateForm(props: Props) {
     <>
       <form
         id='update-combo-service'
-        className='mt-8 lg:mt-0 flex flex-col flex-1 gap-4 pr-8 pb-4'
+        className='mt-8 lg:mt-0 flex flex-col flex-1 gap-3 pr-2 pb-4'
         onSubmit={handleSubmit}
       >
         {errorsList.length > 0 && (
@@ -189,7 +189,7 @@ export default function ComboServiceUpdateForm(props: Props) {
           />
         </div>
       </form>
-      <div className='sticky bottom-0 z-20 pt-4 bg-white flex items-center justify-end gap-4'>
+      <div className='sticky bottom-0 z-20 pt-4 bg-white flex items-center justify-end gap-3'>
         <Button color='secondary' variant='outlined' onClick={onCancel}>
           {t('cancel')}
         </Button>
