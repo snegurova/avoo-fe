@@ -104,9 +104,27 @@ export default function PublicServiceFormItem(props: Props) {
   const [selectAnyMaster, setSelectAnyMaster] = useState(false);
   const [maxStep, setMaxStep] = useState(selectedService ? 4 : 1);
 
-  const { data: calendar } = calendarHooks.useGetPublicCalendar(calendarParams, {
-    enabled: !!selectedService && !!selectedMasters[index],
-  });
+  const relevantMasterIds = useMemo(() => {
+    if (selectAnyMaster && selectedService) {
+      return selectedService.masters?.map((m) => m.id) || [];
+    }
+    if (selectedMasters[index]) {
+      return [selectedMasters[index].id];
+    }
+    return [];
+  }, [selectAnyMaster, selectedService, selectedMasters, index]);
+
+  const { data: calendar } = calendarHooks.useGetPublicCalendar(
+    {
+      ...calendarParams,
+      masterIds: relevantMasterIds.length > 0 ? relevantMasterIds : undefined,
+    },
+    {
+      enabled:
+        !!selectedService &&
+        (selectAnyMaster ? relevantMasterIds.length > 0 : !!selectedMasters[index]),
+    },
+  );
 
   useEffect(() => {
     if (step > maxStep) {
@@ -134,16 +152,53 @@ export default function PublicServiceFormItem(props: Props) {
   }, [serviceSelectionRef.current, masterSelectionRef.current, DateTimeSelectionRef.current, step]);
 
   useEffect(() => {
-    const newValue = timeUtils.convertDateToString(
-      selectedSlot ? selectedSlot : new Date(value[index]?.date || new Date()),
-    );
+    if (!selectedSlot) return;
+    if (selectAnyMaster && selectedService && selectedSlot) {
+      const allMasterIds = selectedService.masters?.map((m) => m.id) || [];
 
-    const newOrders = [...value];
-    newOrders[index] = {
-      ...newOrders[index],
-      date: newValue,
-    };
-    onChange(newOrders);
+      let foundMasterId: number | null = null;
+      let foundMaster: MasterWithRelationsEntity | null = null;
+      for (const masterId of allMasterIds) {
+        if (slots && Array.isArray(slots)) {
+          const slot = slots.find(
+            (s) =>
+              s.masterId === masterId &&
+              Math.abs(new Date(s.date).getTime() - selectedSlot.getTime()) < 60000,
+          );
+          if (slot) {
+            foundMasterId = masterId;
+            break;
+          }
+        }
+      }
+      if (!foundMasterId && allMasterIds.length > 0) {
+        foundMasterId = allMasterIds[0];
+      }
+      if (foundMasterId) {
+        foundMaster = masters?.find((m) => m.id === foundMasterId) || null;
+      }
+      const newValue = timeUtils.convertDateToString(selectedSlot);
+      const newOrders = [...value];
+      newOrders[index] = {
+        ...newOrders[index],
+        date: newValue,
+        masterId: foundMasterId || 0,
+      };
+      onChange(newOrders);
+      setSelectedMasters((prev) => {
+        const newMasters = [...prev];
+        newMasters[index] = foundMaster;
+        return newMasters;
+      });
+    } else {
+      const newValue = timeUtils.convertDateToString(selectedSlot);
+      const newOrders = [...value];
+      newOrders[index] = {
+        ...newOrders[index],
+        date: newValue,
+      };
+      onChange(newOrders);
+    }
   }, [selectedSlot]);
 
   const { params, queryParams, setSearchQuery, setMasterIds, setCategory } =
@@ -217,7 +272,10 @@ export default function PublicServiceFormItem(props: Props) {
       index,
       rangeFromTime: newOrders[index].date,
     };
-    if (selectedMasters[index]) {
+    if (selectAnyMaster && val.id) {
+      const allMasterIds = services?.find((s) => s.id === val.id)?.masters?.map((m) => m.id) || [];
+      availabilityParams.masterIds = allMasterIds;
+    } else if (selectedMasters[index]) {
       availabilityParams.masterIds = [selectedMasters[index]?.id];
     }
     if (val.id) {
@@ -330,7 +388,9 @@ export default function PublicServiceFormItem(props: Props) {
       rangeFromTime: newDate,
       index,
     };
-    if (selectedMasters[index]) {
+    if (selectAnyMaster && selectedService) {
+      availabilityParams.masterIds = selectedService.masters?.map((m) => m.id) || [];
+    } else if (selectedMasters[index]) {
       availabilityParams.masterIds = [selectedMasters[index]?.id];
     }
     if (selectedService) {
@@ -358,6 +418,10 @@ export default function PublicServiceFormItem(props: Props) {
       ...prev,
       rangeFromDate: timeUtils.formatDate(timeUtils.toDayBegin(new Date(availableDate))),
       rangeToDate: timeUtils.formatDate(timeUtils.toDayEnd(new Date(availableDate))),
+      masterIds:
+        selectAnyMaster && selectedService
+          ? selectedService.masters?.map((m) => m.id) || undefined
+          : prev.masterIds,
     }));
 
     if (slots && slots[index]) {
