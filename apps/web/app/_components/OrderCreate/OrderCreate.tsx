@@ -73,10 +73,28 @@ export default function OrderCreate() {
   }, [searchParams]);
 
   useEffect(() => {
-    if (initialParams.date) {
-      setStartDate(initialParams.date);
-    }
-  }, [initialParams.date]);
+    const checkAndSetDate = async () => {
+      if (initialParams.date && initialParams.masterId) {
+        const availableDate = await getAvailableDate({
+          rangeFromTime: initialParams.date,
+          masterIds: [initialParams.masterId],
+          index: 0,
+        });
+        if (availableDate) {
+          setStartDate(availableDate);
+
+          if (new Date(availableDate).getTime() !== new Date(initialParams.date).getTime()) {
+            toast.info(tCalendar('dateNotAvailable'));
+          }
+        } else {
+          setStartDate(initialParams.date);
+        }
+      } else if (initialParams.date) {
+        setStartDate(initialParams.date);
+      }
+    };
+    checkAndSetDate();
+  }, [initialParams.date, initialParams.masterId]);
 
   useEffect(() => {
     if (searchParams.toString()) {
