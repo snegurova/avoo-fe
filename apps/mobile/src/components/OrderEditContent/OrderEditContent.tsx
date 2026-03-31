@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ActivityIndicator, Pressable, ScrollView, Text, View } from 'react-native';
+import { ActivityIndicator, ScrollView, Text, View } from 'react-native';
 
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
@@ -21,8 +21,10 @@ import { TimeSlotChips } from '@/components/TimeSlotChips/TimeSlotChips';
 import { calendarMobileHooks } from '@/hooks/calendarHooks';
 import { masterMobileHooks } from '@/hooks/masterHooks';
 import { uiHooks } from '@/hooks/uiHooks';
+import { BottomSheetHeader } from '@/shared/BottomSheetHeader/BottomSheetHeader';
 import { FormField } from '@/shared/FormField';
 import { NotesInput } from '@/shared/NotesInput';
+import { invalidateOrderQueries } from '@/utils/invalidateOrderQueries';
 
 type Props = {
   order: Order;
@@ -69,9 +71,7 @@ export const OrderEditContent = ({ order, onClose, refetch }: Props) => {
   const { mutate, isPending } = useMutation<BaseResponse<Order>, Error, UpdateOrderRequest>({
     mutationFn: (data) => orderApi.updateOrder(order.id, data),
     onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: ['calendar'] });
-      await queryClient.invalidateQueries({ queryKey: ['monthCalendar'] });
-      await queryClient.invalidateQueries({ queryKey: ['orders'] });
+      await invalidateOrderQueries(queryClient);
       refetch();
       onClose();
     },
@@ -106,6 +106,7 @@ export const OrderEditContent = ({ order, onClose, refetch }: Props) => {
         masters={masters}
         selectedMasterIds={[selectedMaster.id]}
         onSelect={handleMasterSelect}
+        hideAllMasters
       />
 
       {isDatePickerVisible && (
@@ -119,7 +120,11 @@ export const OrderEditContent = ({ order, onClose, refetch }: Props) => {
         />
       )}
 
-      <View className='flex-1'>
+      <BottomSheetHeader
+        handleClose={onClose}
+        handleConfirm={selectedSlot && !isPending ? handleSave : undefined}
+      />
+      <View className='flex-1 px-5'>
         <ScrollView
           className='flex-1'
           contentContainerStyle={{ paddingBottom: 16 }}
@@ -128,16 +133,9 @@ export const OrderEditContent = ({ order, onClose, refetch }: Props) => {
         >
           <Text className='text-2xl font-semibold text-gray-900 mb-6'>Edit booking</Text>
 
-          <View className='mb-4'>
-            <Text className='text-xs font-medium text-gray-500 uppercase tracking-wide mb-2'>
-              Service
-            </Text>
-            <View className='rounded-lg border border-gray-200 bg-gray-50 px-4 py-3'>
-              <Text className='text-sm font-medium text-gray-900'>
-                {order.service?.name ?? order.combination?.name ?? '—'}
-              </Text>
-            </View>
-          </View>
+          <FormField label='Service'>
+            <LockedField value={order.service?.name ?? order.combination?.name ?? '—'} disabled />
+          </FormField>
 
           <FormField label='Notes'>
             <NotesInput value={notes} onChangeText={setNotes} maxLength={200} />
@@ -169,32 +167,11 @@ export const OrderEditContent = ({ order, onClose, refetch }: Props) => {
           </FormField>
         </ScrollView>
 
-        <View className='pb-6 pt-3 flex-row' style={{ gap: 12 }}>
-          <Pressable
-            className='flex-1 rounded-xl py-4 items-center border border-gray-200'
-            onPress={onClose}
-            disabled={isPending}
-          >
-            <Text className='text-base font-medium text-gray-700'>Cancel</Text>
-          </Pressable>
-          <Pressable
-            className='flex-1 rounded-xl py-4 items-center'
-            style={{ backgroundColor: selectedSlot ? colors.primary[700] : colors.gray[200] }}
-            onPress={handleSave}
-            disabled={!selectedSlot || isPending}
-          >
-            {isPending ? (
-              <ActivityIndicator color={colors.white} />
-            ) : (
-              <Text
-                className='text-base font-semibold'
-                style={{ color: selectedSlot ? colors.white : colors.gray[400] }}
-              >
-                Save
-              </Text>
-            )}
-          </Pressable>
-        </View>
+        {isPending && (
+          <View className='pb-6 items-center'>
+            <ActivityIndicator color={colors.primary[700]} />
+          </View>
+        )}
       </View>
     </>
   );

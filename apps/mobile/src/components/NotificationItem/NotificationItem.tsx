@@ -28,11 +28,11 @@ export const NotificationItem = (props: Props) => {
       onPress={() => onPress(notification.id)}
       className='rounded-md p-3 border border-gray-200 w-full flex-col justify-between items-start gap-2'
     >
-      <View className='w-full flex-row items-center justify-between'>
-        <Text variant='labelMedium'>
+      <View className='w-full flex-row items-center justify-between gap-2'>
+        <Text variant='labelMedium' numberOfLines={1} style={{ flex: 1 }}>
           {notification.time} {notification.date} | {notification.service}
         </Text>
-        <Text variant='bodySmall' style={{ color: colors.gray[500] }}>
+        <Text variant='bodySmall' style={{ color: colors.gray[500], flexShrink: 0 }}>
           {notification.timeAgo}
         </Text>
       </View>

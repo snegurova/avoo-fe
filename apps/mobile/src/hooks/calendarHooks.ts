@@ -78,6 +78,7 @@ export const calendarMobileHooks = {
       masterIds?: number[];
       date: string | null;
       duration: number;
+      rangeFromTime?: string;
     },
     options?: { enabled?: boolean },
   ) => {
@@ -97,7 +98,9 @@ export const calendarMobileHooks = {
         const isToday = isSameDayUTC(selectedDayUTC, now);
 
         let rangeFrom: Date;
-        if (isToday) {
+        if (params.rangeFromTime) {
+          rangeFrom = new Date(params.rangeFromTime);
+        } else if (isToday) {
           const mins = now.getUTCMinutes();
           const roundedMins = Math.ceil(mins / 15) * 15;
           rangeFrom = new Date(now);

@@ -1,6 +1,7 @@
-import { useEffect, useState } from 'react';
-import { StyleSheet } from 'react-native';
-import { Snackbar as PaperSnackbar, Text } from 'react-native-paper';
+import { useEffect, useRef, useState } from 'react';
+import { Animated, Pressable, StyleSheet, Text, View } from 'react-native';
+import { Portal } from 'react-native-paper';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { colors } from '@avoo/design-tokens';
 import { useApiStatusStore } from '@avoo/store';
@@ -11,6 +12,8 @@ enum NotificationPopUpVariant {
   ERROR = 'error',
   SUCCESS = 'success',
 }
+
+const DURATION = 4000;
 
 export function NotificationPopUp() {
   const errorMessage = useApiStatusStore((s) => s.errorMessage);
@@ -23,8 +26,22 @@ export function NotificationPopUp() {
   const visible = hasError || hasSuccess;
 
   const [variant, setVariant] = useState<NotificationPopUpVariant | null>(null);
+  const opacity = useRef(new Animated.Value(0)).current;
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const { bottom } = useSafeAreaInsets();
 
   const message = variant === NotificationPopUpVariant.ERROR ? errorMessage : successMessage;
+
+  const dismiss = () => {
+    Animated.timing(opacity, { toValue: 0, duration: 200, useNativeDriver: true }).start(() => {
+      if (variant === NotificationPopUpVariant.ERROR) {
+        useApiStatusStore.getState().clearError();
+      } else if (variant === NotificationPopUpVariant.SUCCESS) {
+        useApiStatusStore.getState().clearSuccess();
+      }
+      setVariant(null);
+    });
+  };
 
   useEffect(() => {
     if (hasError) {
@@ -34,13 +51,16 @@ export function NotificationPopUp() {
     }
   }, [hasError, hasSuccess]);
 
-  const handleDismiss = () => {
-    if (variant === NotificationPopUpVariant.ERROR) {
-      useApiStatusStore.getState().clearError();
-    } else if (variant === NotificationPopUpVariant.SUCCESS) {
-      useApiStatusStore.getState().clearSuccess();
+  useEffect(() => {
+    if (visible) {
+      if (timerRef.current) clearTimeout(timerRef.current);
+      Animated.timing(opacity, { toValue: 1, duration: 200, useNativeDriver: true }).start();
+      timerRef.current = setTimeout(dismiss, DURATION);
     }
-  };
+    return () => {
+      if (timerRef.current) clearTimeout(timerRef.current);
+    };
+  }, [visible]);
 
   if (!variant) return null;
 
@@ -49,23 +69,44 @@ export function NotificationPopUp() {
   const iconName = variant === NotificationPopUpVariant.ERROR ? 'close' : 'check-circle';
 
   return (
-    <PaperSnackbar
-      visible={visible}
-      onDismiss={handleDismiss}
-      duration={4000}
-      style={{ backgroundColor }}
-      icon={({ size, color }) => <MaterialIcons name={iconName} size={size} color={color} />}
-      onIconPress={handleDismiss}
-    >
-      <Text variant='titleMedium' style={styles.notificationText}>
-        {message}
-      </Text>
-    </PaperSnackbar>
+    <Portal>
+      <View
+        style={[StyleSheet.absoluteFill, { zIndex: 9999, elevation: 9999 }]}
+        pointerEvents='box-none'
+      >
+        <Animated.View style={[styles.snackbar, { backgroundColor, bottom: bottom + 16, opacity }]}>
+          <Text style={styles.message}>{message}</Text>
+          <Pressable onPress={dismiss} hitSlop={12}>
+            <MaterialIcons name={iconName} size={20} color={colors.white} />
+          </Pressable>
+        </Animated.View>
+      </View>
+    </Portal>
   );
 }
 
 const styles = StyleSheet.create({
-  notificationText: {
-    color: colors.white,
+  snackbar: {
+    position: 'absolute',
+    left: 16,
+    right: 16,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    borderRadius: 8,
+    paddingHorizontal: 16,
+    paddingVertical: 14,
+    elevation: 6,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+  },
+  message: {
+    color: '#fff',
+    fontSize: 14,
+    fontWeight: '500',
+    flex: 1,
+    marginRight: 12,
   },
 });

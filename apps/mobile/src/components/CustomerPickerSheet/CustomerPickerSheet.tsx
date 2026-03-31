@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { ActivityIndicator, FlatList, Pressable, Text, TextInput, View } from 'react-native';
 
+import { MaterialIcons } from '@expo/vector-icons';
+
 import { CustomerInfoResponse } from '@avoo/axios/types/apiTypes';
 import { colors } from '@avoo/design-tokens';
 import { customerHooks } from '@avoo/hooks';
@@ -113,18 +115,21 @@ export const CustomerPickerSheet = (props: Props) => {
           </View>
         ) : (
           <>
-            <SearchInput
-              value={search}
-              onChangeText={setSearch}
-              placeholder='Search client...'
-              className='mb-3'
-            />
-            <Pressable
-              className='flex-row items-center gap-3 rounded-lg border border-dashed border-primary-300 px-4 py-3 mb-2'
-              onPress={() => setIsNewClientMode(true)}
-            >
-              <Text className='text-sm font-medium text-primary-700'>+ Add new client</Text>
-            </Pressable>
+            <View className='flex-row items-center gap-3 mb-3'>
+              <View className='flex-1'>
+                <SearchInput
+                  value={search}
+                  onChangeText={setSearch}
+                  placeholder='Search client...'
+                />
+              </View>
+              <Pressable
+                className='w-11 h-11 rounded-full bg-primary-400 items-center justify-center'
+                onPress={() => setIsNewClientMode(true)}
+              >
+                <MaterialIcons name='add' size={24} color={colors.white} />
+              </Pressable>
+            </View>
             {isFetching && clients.length === 0 ? (
               <View className='py-8 items-center'>
                 <ActivityIndicator />
