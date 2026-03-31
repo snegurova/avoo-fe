@@ -1361,6 +1361,12 @@
         "selectedServices": "Wybrane usługi",
         "noAvailableDates": "Brak dostępnych terminów dla wybranej usługi i mistrza. Wybierz inną usługę, mistrza lub datę.",
         "dateTime": "Data i godzina"
+      },
+      "confirmation": {
+        "successTitle": "Rezerwacja potwierdzona!",
+        "successMessage": "Twoja rezerwacja została pomyślnie złożona. Czekamy na Ciebie!",
+        "bookMore": "Zarezerwuj więcej",
+        "returnToSalon": "Wróć do salonu"
       }
     },
     "forgotPassword": {

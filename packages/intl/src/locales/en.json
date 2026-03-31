@@ -1359,6 +1359,12 @@
         "selectedServices": "Selected services",
         "noAvailableDates": "No available dates for the selected service and master. Please choose another service, master or date.",
         "dateTime": "Date and time"
+      },
+      "confirmation": {
+        "successTitle": "Booking Confirmed!",
+        "successMessage": "Your booking was successful. We look forward to seeing you!",
+        "bookMore": "Book More",
+        "returnToSalon": "Return to Salon"
       }
     },
     "forgotPassword": {

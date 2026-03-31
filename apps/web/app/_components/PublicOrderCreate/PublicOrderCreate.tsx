@@ -15,6 +15,7 @@ import { Button, ButtonFit, ButtonIntent, ButtonType } from '@/_components/Butto
 import CombinationProposition from '@/_components/CombinationProposition/CombinationProposition';
 import CustomerCreate from '@/_components/CustomerCreate/CustomerCreate';
 import PublicCombinationForm from '@/_components/PublicCombinationForm/PublicCombinationForm';
+import PublicOrderConfirmation from '@/_components/PublicOrderConfirmation/PublicOrderConfirmation';
 import PublicOrderTitle from '@/_components/PublicOrderTitle/PublicOrderTitle';
 import PublicOrderTotal from '@/_components/PublicOrderTotal/PublicOrderTotal';
 import PublicServiceFormItem from '@/_components/PublicServiceFormItem/PublicServiceFormItem';
@@ -43,6 +44,7 @@ export default function PublicOrderCreate() {
   const setSlots = useCalendarStore((state) => state.setSlots);
   const [ordersDataFilled, setOrdersDataFilled] = useState(false);
   const [customerDataFilled, setCustomerDataFilled] = useState(false);
+  const [showConfirmation, setShowConfirmation] = useState(false);
 
   const initialParams = {};
 
@@ -59,7 +61,7 @@ export default function PublicOrderCreate() {
     setValue,
   } = orderHooks.useCreatePublicOrder({
     onSuccess: () => {
-      router.back();
+      setShowConfirmation(true);
     },
     userId: userId,
   });
@@ -228,6 +230,10 @@ export default function PublicOrderCreate() {
     });
     setSlots(newSlots);
   }, [fields, selectedServices, selectedMasters]);
+
+  if (showConfirmation) {
+    return <PublicOrderConfirmation userId={userId} />;
+  }
 
   return (
     <form className='flex flex-col gap-6 pt-4 pb-35' onSubmit={handleSubmit}>
