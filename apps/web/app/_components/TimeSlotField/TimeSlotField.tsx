@@ -90,6 +90,9 @@ export default function TimeSlotField(props: Props) {
       return slotStart < otherEnd && slotEnd > otherStart;
     }
 
+    const now = new Date();
+    const minAllowedTime = new Date(now.getTime() + 2 * 60 * MS_IN_MINUTE);
+
     availability.forEach((period) => {
       const start = timeUtils.getMinutesInDay(period.start);
       const end = timeUtils.getMinutesInDay(period.end);
@@ -100,6 +103,8 @@ export default function TimeSlotField(props: Props) {
 
       for (let time = start; time <= end - serviceDuration; time += step) {
         const slotDate = timeUtils.addMinutesToDate(new Date(calendarParams.rangeFromDate), time);
+
+        if (slotDate < minAllowedTime) continue;
 
         const overlaps = slots.some(
           (slot, idx) => idx !== currentIndex && isOverlapping(slotDate, serviceDuration, slot),

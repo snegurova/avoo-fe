@@ -1360,7 +1360,10 @@
         "splitBooking": "Podziel rezerwację",
         "selectedServices": "Wybrane usługi",
         "noAvailableDates": "Brak dostępnych terminów dla wybranej usługi i mistrza. Wybierz inną usługę, mistrza lub datę.",
-        "dateTime": "Data i godzina"
+        "dateTime": "Data i godzina",
+        "combineProposition": "Czy chcesz zarezerwować usługi na jedną wizytę?",
+        "yes": "Tak",
+        "no": "Nie, rezerwuj osobno"
       },
       "confirmation": {
         "successTitle": "Rezerwacja potwierdzona!",

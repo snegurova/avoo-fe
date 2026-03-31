@@ -1358,7 +1358,10 @@
         "splitBooking": "Split booking",
         "selectedServices": "Selected services",
         "noAvailableDates": "No available dates for the selected service and master. Please choose another service, master or date.",
-        "dateTime": "Date and time"
+        "dateTime": "Date and time",
+        "combineProposition": "Would you like to book services for a one-time visit?",
+        "yes": "Yes",
+        "no": "No, book separately"
       },
       "confirmation": {
         "successTitle": "Booking Confirmed!",

@@ -11,6 +11,8 @@ import {
 } from '@avoo/axios/types/apiTypes';
 import { LONG_DATE_TIME_FORMAT } from '@avoo/constants';
 
+import { localizationHooks } from '@/_hooks/localizationHooks';
+
 type Props = {
   fields: CreateOrder[];
   selectedServices: (Service | null)[];
@@ -22,6 +24,7 @@ export default function PublicOrderTotal(props: Props) {
   const { fields, selectedServices, selectedMasters, selectedCombinations } = props;
   const t = useTranslations('public.salon.createOrder');
   const isCombination = useMemo(() => !!selectedCombinations?.[0], [selectedCombinations]);
+  const locale = localizationHooks.useGetLocale();
 
   return (
     <div className='py-3 text-sm'>
@@ -47,7 +50,7 @@ export default function PublicOrderTotal(props: Props) {
                 </span>
                 <span className='font-semibold'>{master?.name}</span>
                 <span className='font-semibold'>
-                  {dayjs(order.date).format(LONG_DATE_TIME_FORMAT)}
+                  {dayjs(order.date).locale(locale).format(LONG_DATE_TIME_FORMAT)}
                 </span>
               </div>
             );
@@ -74,7 +77,9 @@ export default function PublicOrderTotal(props: Props) {
             );
           })}
         <div className='grid grid-cols-2 md:grid-cols-4 gap-2'>
-          <span className='text-gray-600'>{t('total')}:</span>
+          <span className={`text-gray-600 ${isCombination ? 'row-span-2 md:row-span-auto' : ''}`}>
+            {t('total')}:
+          </span>
 
           <span className='font-bold text-base'>
             {selectedServices
@@ -92,6 +97,11 @@ export default function PublicOrderTotal(props: Props) {
               {t('minutes')})
             </span>
           </span>
+          {isCombination && (
+            <span className='font-bold text-base'>
+              {dayjs(fields[0]?.date).locale(locale).format(LONG_DATE_TIME_FORMAT)}
+            </span>
+          )}
         </div>
       </div>
     </div>
