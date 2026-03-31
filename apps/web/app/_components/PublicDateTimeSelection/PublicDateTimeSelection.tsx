@@ -49,7 +49,7 @@ export default function PublicDateTimeSelection(props: Props) {
       <PublicOrderTitle isActive={isActive} title='dateTime' />
 
       {isActive && (
-        <div className='flex gap-6 mt-6'>
+        <div className='flex flex-col md:flex-row items-center md:items-start gap-6 mt-6'>
           <div className=' flex-1 max-w-120'>
             <PublicCalendar date={date} onChange={onChange} />
           </div>

@@ -150,7 +150,7 @@ export default function TimeSlotField(props: Props) {
   };
 
   return (
-    <div className='flex-1 flex flex-col items-center pt-5'>
+    <div className='flex-1 flex flex-col items-center pt-5 w-full'>
       <div className='flex gap-4 mb-6'>
         {Object.values(TimeOfDay).map((timeOfDay) => (
           <button
