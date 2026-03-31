@@ -390,11 +390,17 @@ export const orderHooks = {
     return {
       control,
       handleSubmit: handleSubmit((data) => {
-        const cleanedData: UpdateOrderRequest = {
+        let cleanedData: UpdateOrderRequest = {
           ...data,
           masterId: data.masterId ?? undefined,
         };
 
+        if (data.date && data.date !== order.date) {
+          cleanedData = {
+            ...cleanedData,
+            date: timeUtils.convertLocalToUTC(data.date),
+          };
+        }
         mutate(cleanedData);
       }),
       errors,
