@@ -315,6 +315,19 @@ export default function PublicServiceFormItem(props: Props) {
       newSlots[index] = newSlot;
       setSlots(newSlots);
     }
+
+    const userSelectedSlot =
+      !!selectedSlot && timeUtils.convertDateToString(selectedSlot) === newOrders[index].date;
+    const isAllFilled =
+      newOrders[index].serviceId &&
+      newOrders[index].masterId &&
+      newOrders[index].date &&
+      userSelectedSlot;
+    if (isAllFilled) {
+      setStep(4);
+    } else {
+      setStep(2);
+    }
   };
 
   const selectMaster = async (val: { id: number } | null) => {
@@ -374,6 +387,19 @@ export default function PublicServiceFormItem(props: Props) {
       const newSlots = [...slots];
       newSlots[index] = newSlot;
       setSlots(newSlots);
+    }
+
+    const userSelectedSlot =
+      !!selectedSlot && timeUtils.convertDateToString(selectedSlot) === newOrders[index].date;
+    const isAllFilled =
+      newOrders[index].serviceId &&
+      newOrders[index].masterId &&
+      newOrders[index].date &&
+      userSelectedSlot;
+    if (isAllFilled) {
+      setStep(4);
+    } else {
+      setStep(3);
     }
   };
 
