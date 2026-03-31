@@ -1,6 +1,8 @@
 import { DAYS_NAME } from '@avoo/constants';
 import { DateStatus } from '@avoo/hooks/types/dateStatus';
 
+const MS_IN_MINUTE = 60000;
+
 export const timeUtils = {
   toDayBegin(date: Date): Date {
     const d = new Date(date);
@@ -222,11 +224,11 @@ export const timeUtils = {
   getMinutesDifference(start: string, end: string): number {
     const startDate = new Date(start);
     const endDate = new Date(end);
-    return Math.floor((endDate.getTime() - startDate.getTime()) / 60000);
+    return Math.floor((endDate.getTime() - startDate.getTime()) / MS_IN_MINUTE);
   },
   getEndTime(start: string, durationMinutes: number): string {
     const startDate = new Date(start);
-    const endDate = new Date(startDate.getTime() + durationMinutes * 60000);
+    const endDate = new Date(startDate.getTime() + durationMinutes * MS_IN_MINUTE);
 
     const hours = endDate.getHours().toString().padStart(2, '0');
     const minutes = endDate.getMinutes().toString().padStart(2, '0');
@@ -247,7 +249,7 @@ export const timeUtils = {
     return `${year}-${month}-${day}`;
   },
   addMinutesToDate(date: Date, minutes: number): Date {
-    return new Date(date.getTime() + minutes * 60000);
+    return new Date(date.getTime() + minutes * MS_IN_MINUTE);
   },
   convertDateToTimeString(date: Date | string): string {
     const d = typeof date === 'string' ? new Date(date) : date;

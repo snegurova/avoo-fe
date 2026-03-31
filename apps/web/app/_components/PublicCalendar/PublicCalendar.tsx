@@ -5,7 +5,7 @@ import { DateCalendar } from '@mui/x-date-pickers/DateCalendar';
 import { PickersCalendarHeaderProps } from '@mui/x-date-pickers/PickersCalendarHeader';
 import dayjs from 'dayjs';
 
-import { CALENDAR_DATE_FORMAT, DATE_TIME_PICKER_FORMAT } from '@avoo/constants';
+import { CALENDAR_DATE_FORMAT } from '@avoo/constants';
 
 import { localizationHooks } from '@/_hooks/localizationHooks';
 import ArrowBackIcon from '@/_icons/ArrowBackIcon';
@@ -48,7 +48,7 @@ export default function PublicCalendar(props: Props) {
   const locale = localizationHooks.useGetLocale();
 
   const onValueChange = (newDate: dayjs.Dayjs | null) => {
-    const convertedDate = newDate ? newDate.format(DATE_TIME_PICKER_FORMAT) : '';
+    const convertedDate = newDate ? newDate.toDate().toISOString() : '';
     onChange?.(convertedDate);
   };
 

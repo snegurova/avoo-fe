@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import {
   Combination,
@@ -44,9 +44,16 @@ export default function PublicDateTimeSelection(props: Props) {
     setStep,
   } = props;
 
+  useEffect(() => {
+    if (selectedSlot && date && !timeUtils.isSameDay(new Date(date), selectedSlot)) {
+      setSelectedSlot(null);
+    }
+  }, [date]);
+
   return (
     <div ref={ref}>
       <PublicOrderTitle isActive={isActive} title='dateTime' />
+      {error && <div className='my-1 text-sm text-red-500'>{error}</div>}
 
       {isActive && (
         <div className='flex flex-col md:flex-row items-center md:items-start gap-6 mt-6'>

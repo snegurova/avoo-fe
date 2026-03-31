@@ -44,7 +44,7 @@ type Props = {
 };
 
 const itemWrapper = tv({
-  base: 'pb-4 border border-gray-300 rounded-lg overflow-hidden transition-colors',
+  base: 'pb-6 border border-gray-300 rounded-lg overflow-hidden transition-colors',
   variants: {
     active: {
       true: 'border-primary-200',
@@ -155,6 +155,7 @@ export default function PublicServiceFormItem(props: Props) {
 
   useEffect(() => {
     if (!selectedSlot) return;
+
     if (selectAnyMaster && selectedService && selectedSlot) {
       const allMasterIds = selectedService.masters?.map((m) => m.id) || [];
 
@@ -162,11 +163,7 @@ export default function PublicServiceFormItem(props: Props) {
       let foundMaster: MasterWithRelationsEntity | null = null;
       for (const masterId of allMasterIds) {
         if (slots && Array.isArray(slots)) {
-          const slot = slots.find(
-            (s) =>
-              s.masterId === masterId &&
-              Math.abs(new Date(s.date).getTime() - selectedSlot.getTime()) < 60000,
-          );
+          const slot = slots.find((s) => s.masterId === masterId);
           if (slot) {
             foundMasterId = masterId;
             break;
@@ -174,7 +171,8 @@ export default function PublicServiceFormItem(props: Props) {
         }
       }
       if (!foundMasterId && allMasterIds.length > 0) {
-        foundMasterId = allMasterIds[0];
+        const randomIdx = Math.floor(Math.random() * allMasterIds.length);
+        foundMasterId = allMasterIds[randomIdx];
       }
       if (foundMasterId) {
         foundMaster = masters?.find((m) => m.id === foundMasterId) || null;
@@ -589,6 +587,7 @@ export default function PublicServiceFormItem(props: Props) {
             selectedService={selectedService}
             ref={serviceSelectionRef}
             userId={userId}
+            error={errors?.serviceId?.message}
           />
           <FormTextArea
             id={`notes-${index}`}
@@ -621,6 +620,7 @@ export default function PublicServiceFormItem(props: Props) {
             selectAnyMaster={selectAnyMaster}
             setSelectAnyMaster={setSelectAnyMaster}
             ref={masterSelectionRef}
+            error={errors?.masterId?.message}
           />
         )}
         {maxStep > 2 && (

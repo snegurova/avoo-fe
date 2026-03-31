@@ -24,6 +24,8 @@ import { useCalendarStore } from '@avoo/store';
 
 import { queryKeys } from './queryKeys';
 
+const MS_IN_MINUTE = 60000;
+
 export const calendarHooks = {
   useGetCalendar: (params: PrivateCalendarQueryParams, options?: { enabled?: boolean }) => {
     const memoParams = useMemo<PrivateCalendarQueryParams>(() => params, [params]);
@@ -204,7 +206,7 @@ export const calendarHooks = {
 
         if (slots) {
           const availableStart = new Date(availableDate);
-          const availableEnd = new Date(availableStart.getTime() + currDuration * 60000);
+          const availableEnd = new Date(availableStart.getTime() + currDuration * MS_IN_MINUTE);
 
           for (let i = 0; i < slots.length; i++) {
             if (i === index) continue;
@@ -214,7 +216,7 @@ export const calendarHooks = {
             }
 
             const slotStart = new Date(slot.date);
-            const slotEnd = new Date(slotStart.getTime() + (slot.duration || 15) * 60000);
+            const slotEnd = new Date(slotStart.getTime() + (slot.duration || 15) * MS_IN_MINUTE);
             if (slotStart < availableEnd && slotEnd > availableStart) {
               overlapped = true;
               if (!nextCheckedDate || slotEnd > new Date(nextCheckedDate)) {
@@ -323,7 +325,7 @@ export const calendarHooks = {
 
         if (slots) {
           const availableStart = new Date(availableDate);
-          const availableEnd = new Date(availableStart.getTime() + currDuration * 60000);
+          const availableEnd = new Date(availableStart.getTime() + currDuration * MS_IN_MINUTE);
 
           for (let i = 0; i < slots.length; i++) {
             if (i === index) continue;
@@ -333,7 +335,7 @@ export const calendarHooks = {
             }
 
             const slotStart = new Date(slot.date);
-            const slotEnd = new Date(slotStart.getTime() + (slot.duration || 15) * 60000);
+            const slotEnd = new Date(slotStart.getTime() + (slot.duration || 15) * MS_IN_MINUTE);
             if (slotStart < availableEnd && slotEnd > availableStart) {
               overlapped = true;
               if (!nextCheckedDate || slotEnd > new Date(nextCheckedDate)) {

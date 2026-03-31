@@ -10,7 +10,6 @@ import {
   Service,
 } from '@avoo/axios/types/apiTypes';
 import { LONG_DATE_TIME_FORMAT } from '@avoo/constants';
-import { OrderType } from '@avoo/hooks/types/orderType';
 
 type Props = {
   fields: CreateOrder[];
@@ -22,13 +21,13 @@ type Props = {
 export default function PublicOrderTotal(props: Props) {
   const { fields, selectedServices, selectedMasters, selectedCombinations } = props;
   const t = useTranslations('public.salon.createOrder');
-
   const isCombination = useMemo(() => !!selectedCombinations?.[0], [selectedCombinations]);
+
   return (
     <div className='py-3 text-sm'>
       <div className='flex flex-col gap-4 text-black py-4 border-t border-black'>
         {fields.length > 0 &&
-          fields[0]?.type === OrderType.Service &&
+          !isCombination &&
           fields.map((order, idx) => {
             const service = selectedServices[idx];
             const master = selectedMasters[idx];
@@ -53,9 +52,27 @@ export default function PublicOrderTotal(props: Props) {
               </div>
             );
           })}
-        {fields.length > 0 && fields[0]?.type === OrderType.Combination && (
-          <div className='flex flex-col gap-2'></div>
-        )}
+        {fields.length > 0 &&
+          isCombination &&
+          selectedServices.map((service, idx) => {
+            const duration = service?.durationMinutes || 0;
+            return (
+              <div key={idx} className='grid grid-cols-2 md:grid-cols-4 gap-2 '>
+                <span className='text-gray-600'>
+                  {t('service')} {idx + 1}:
+                </span>
+                <span className='font-semibold'>
+                  {service?.name} (
+                  <span className={isCombination ? 'line-through text-gray-600 font-base' : ''}>
+                    {duration} {t('minutes')}
+                  </span>
+                  )
+                </span>
+                <span className='font-semibold'>{selectedMasters[0]?.name}</span>
+                <span className='font-semibold'></span>
+              </div>
+            );
+          })}
         <div className='grid grid-cols-2 md:grid-cols-4 gap-2'>
           <span className='text-gray-600'>{t('total')}:</span>
 
