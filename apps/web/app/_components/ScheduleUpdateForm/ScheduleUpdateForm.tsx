@@ -132,7 +132,7 @@ export default function ScheduleUpdateForm(props: Props) {
           />
         ))}
       </form>
-      <div className='sticky bottom-0 z-20 pt-4 bg-white flex items-center justify-end gap-4'>
+      <div className='sticky bottom-0 z-20 pt-4 bg-white flex items-center justify-end gap-3'>
         <Button color='secondary' variant='outlined' onClick={onCancel}>
           {t('cancel')}
         </Button>
