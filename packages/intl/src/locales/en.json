@@ -420,7 +420,8 @@
           "cancel": "Cancel",
           "add": "Add",
           "masters": "Masters *",
-          "serviceCreated": "Service has been created!",
+          "combinationCreated": "Combo service has been created!",
+          "combinationAlreadyExists": "Combo service already exists!",
           "serviceCreateError": "Failed to create service: {error}"
         }
       },
@@ -664,7 +665,8 @@
       },
       "OrderListItem": {
         "OrderListItem": {
-          "client": "Client"
+          "client": "Client",
+          "master": "Master"
         }
       },
       "ConfirmationModal": {
@@ -1312,7 +1314,9 @@
         "book": "Book",
         "select": "Select",
         "change": "Change",
-        "selected": "Selected"
+        "selected": "Selected",
+        "master": "master",
+        "masters": "masters"
       },
       "createOrder": {
         "bookingForm": "Booking form",

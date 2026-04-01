@@ -10,7 +10,8 @@
       "leaveWindow": "Zamknij",
       "cancel": "Anuluj",
       "defaultFailError": "Coś poszło nie tak. Spróbuj ponownie później.",
-      "ok": "Ok"
+      "ok": "Ok",
+      "master": "Pracownic"
     },
     "profile": {
       "changePassword": {
@@ -420,7 +421,8 @@
           "cancel": "Anuluj",
           "add": "Dodaj",
           "masters": "Pracownicy *",
-          "serviceCreated": "Usługa została utworzona!",
+          "combinationCreated": "Pakiet został utworzony!",
+          "combinationAlreadyExists": "Pakiet już istnieje!",
           "serviceCreateError": "Nie udało się utworzyć usługi: {error}"
         }
       },
@@ -664,7 +666,8 @@
       },
       "OrderListItem": {
         "OrderListItem": {
-          "client": "Klient"
+          "client": "Klient",
+          "master": "Master"
         }
       },
       "ConfirmationModal": {
@@ -922,7 +925,7 @@
       },
       "SortOptions": {
         "SortOptions": {
-          "sortBy": "Sortuj według:"
+          "sortBy": "Sortuj:"
         }
       },
       "ServiceList": {
@@ -1313,7 +1316,9 @@
         "book": "Rezerwuj",
         "select": "Wybierz",
         "change": "Zmień",
-        "selected": "Wybrane"
+        "selected": "Wybrane",
+        "master": "mistrz",
+        "masters": "mistrzowie"
       },
       "createOrder": {
         "bookingForm": "Formularz rezerwacji",

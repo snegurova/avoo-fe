@@ -16,6 +16,7 @@ import {
   BaseResponse,
   Combination,
   CreateCombinationRequest,
+  ErrorResponse,
   GetCombinationsQueryParams,
   GetCombinationsResponse,
   UpdateCombinationRequest,
@@ -33,7 +34,7 @@ import { useDebounce } from './useDebounce';
 
 type UseCreateCombinationFormParams = {
   onSuccess?: () => void;
-  onError?: (error: Error) => void;
+  onError?: (error: ErrorResponse) => void;
 };
 
 type UseUpdateCombinationFormParams = UseCreateCombinationFormParams & {
@@ -245,7 +246,7 @@ export const combinationHooks = {
 
     const { mutate: createCombination, isPending } = useMutation<
       BaseResponse<Combination>,
-      Error,
+      ErrorResponse,
       CreateCombinationRequest
     >({
       mutationFn: combinationApi.createCombination,
@@ -305,7 +306,7 @@ export const combinationHooks = {
 
     const { mutate: updateCombination, isPending } = useMutation<
       BaseResponse<Combination>,
-      Error,
+      ErrorResponse,
       UpdateCombinationRequest
     >({
       mutationFn: (data) => combinationApi.updateCombination(defaultValue.id, data),

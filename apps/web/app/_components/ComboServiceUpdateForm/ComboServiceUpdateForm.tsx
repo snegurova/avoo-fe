@@ -1,5 +1,5 @@
 'use client';
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { Controller } from 'react-hook-form';
 import { useTranslations } from 'next-intl';
 
@@ -36,9 +36,7 @@ export default function ComboServiceUpdateForm(props: Props) {
   const { combination, onCancel, onDirtyChange, onClose } = props;
   const toast = useToast();
 
-  const { masters, searchTerm, setSearchTerm } = masterHooks.useMasterQuery();
-
-  const { control, setValue, handleSubmit, errors, isDirty } =
+  const { control, watch, setValue, handleSubmit, errors, isDirty } =
     combinationHooks.useUpdateCombinationForm({
       defaultValue: combination,
       onSuccess: () => {
@@ -54,13 +52,27 @@ export default function ComboServiceUpdateForm(props: Props) {
     onDirtyChange(isDirty);
   }, [isDirty, onDirtyChange]);
 
+  const selectedServices = watch('serviceIds');
+  const masterIds = watch('masterIds');
+  const { masters, searchTerm, setSearchTerm } = masterHooks.useMasterQuery(selectedServices?.[0]);
+
+  const activeMasterIdsForFilter = useMemo(() => {
+    if (masterIds.length > 0) {
+      return masterIds;
+    }
+    if (selectedServices.length > 0 && masters.length > 0) {
+      return masters.map((m) => m.id);
+    }
+    return [];
+  }, [masterIds, selectedServices.length, masters]);
+
   const errorsList = getAllErrorMessages(errors);
 
   return (
     <>
       <form
         id='update-combo-service'
-        className='mt-8 lg:mt-0 flex flex-col flex-1 gap-4 pr-8 pb-4'
+        className='mt-8 lg:mt-0 flex flex-col flex-1 gap-3 pr-2 pb-4'
         onSubmit={handleSubmit}
       >
         {errorsList.length > 0 && (
@@ -121,6 +133,7 @@ export default function ComboServiceUpdateForm(props: Props) {
                 control={control}
                 render={({ field }) => (
                   <ComboServiceSelector
+                    masterIds={activeMasterIdsForFilter}
                     items={combination.services}
                     value={field.value}
                     variant='modal'
@@ -129,8 +142,8 @@ export default function ComboServiceUpdateForm(props: Props) {
                   />
                 )}
               />
-              {errors.masterIds?.message && (
-                <FormHelperText>{errors.masterIds?.message}</FormHelperText>
+              {errors.serviceIds?.message && (
+                <FormHelperText>{errors.serviceIds?.message}</FormHelperText>
               )}
             </FormControl>
           </div>
@@ -176,7 +189,7 @@ export default function ComboServiceUpdateForm(props: Props) {
           />
         </div>
       </form>
-      <div className='sticky bottom-0 z-20 pt-4 bg-white flex items-center justify-end gap-4'>
+      <div className='sticky bottom-0 z-20 pt-4 bg-white flex items-center justify-end gap-3'>
         <Button color='secondary' variant='outlined' onClick={onCancel}>
           {t('cancel')}
         </Button>

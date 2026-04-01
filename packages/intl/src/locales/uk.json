@@ -10,7 +10,8 @@
       "youHaveUnsavedChangesInThisWindow": "У вас є незбережені зміни. Ви впевнені, що хочете закрити вікно?",
       "leaveWindow": "Закрити",
       "defaultFailError": "Сталося щось дивне. Спробуйте пізніше.",
-      "ok": "Ок"
+      "ok": "Ок",
+      "master": "Майстер"
     },
     "profile": {
       "changePassword": {
@@ -424,7 +425,8 @@
           "cancel": "Скасувати",
           "add": "Додати",
           "masters": "Майстри *",
-          "serviceCreated": "Послугу створено!",
+          "combinationCreated": "Комбо-послугу створено!",
+          "combinationAlreadyExists": "Комбо-послуга вже існує!",
           "serviceCreateError": "Не вдалося створити послугу: {error}"
         }
       },
@@ -668,7 +670,8 @@
       },
       "OrderListItem": {
         "OrderListItem": {
-          "client": "Клієнт"
+          "client": "Клієнт",
+          "master": "Майстер"
         }
       },
       "ConfirmationModal": {
@@ -926,7 +929,7 @@
       },
       "SortOptions": {
         "SortOptions": {
-          "sortBy": "Сортувати за:"
+          "sortBy": "Сортування:"
         }
       },
       "ServiceList": {
@@ -1318,7 +1321,9 @@
         "select": "Вибрати",
         "change": "Змінити",
         "selected": "Вибрано",
-        "search": "Пошук"
+        "search": "Пошук",
+        "master": "майстер",
+        "masters": "майстри"
       },
       "createOrder": {
         "bookingForm": "Форма бронювання",

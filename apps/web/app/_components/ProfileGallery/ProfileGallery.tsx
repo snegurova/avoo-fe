@@ -11,7 +11,7 @@ import { AddPhotosTrigger } from '@/_components/AddPhotosTrigger/AddPhotosTrigge
 import { GalleryPagination } from '@/_components/GalleryPagination/GalleryPagination';
 import ProfileGalleryAdd from '@/_components/ProfileGalleryAdd/ProfileGalleryAdd';
 import { SectionHeader } from '@/_components/SectionHeader/SectionHeader';
-import { getWideIndexes } from '@/utils/galleryGrid';
+import { getWideIndexes } from '@/_utils/galleryGrid';
 
 export const ProfileGallery = () => {
   const t = useTranslations('private.components.ProfileGallery.ProfileGallery');

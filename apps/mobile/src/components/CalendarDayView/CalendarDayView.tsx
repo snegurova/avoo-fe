@@ -11,6 +11,7 @@ import { CalendarDayViewHeader } from '../CalendarDayViewHeader/CalendarDayViewH
 import { CALENDAR_ORDER_VARIANT, CalendarOrder } from '../CalendarOrder/CalendarOrder';
 import { calendarConfig } from '../CalendarSection/calendarConfig';
 import { CurrentTimeLine } from '../CurrentTimeLine/CurrentTimeLine';
+import { OrderBottomSheet } from '../OrderBottomSheet/OrderBottomSheet';
 import { TimelineColumn } from '../TimelineColumn/TimelineColumn';
 import { TimelineGridLayout } from '../TimelineGridLayout/TimelineGridLayout';
 
@@ -21,6 +22,7 @@ type Props = {
 
 export const CalendarDayView = ({ masters, appointments }: Props) => {
   const [containerWidth, setContainerWidth] = useState(0);
+  const [selectedOrderId, setSelectedOrderId] = useState<number | null>(null);
 
   const availableWidth = Math.max(0, containerWidth - calendarConfig.timeline.timeScaleWidth);
 
@@ -49,6 +51,12 @@ export const CalendarDayView = ({ masters, appointments }: Props) => {
 
   return (
     <View className='flex-1' onLayout={(e) => setContainerWidth(e.nativeEvent.layout.width)}>
+      <OrderBottomSheet
+        visible={selectedOrderId !== null}
+        onClose={() => setSelectedOrderId(null)}
+        orderId={selectedOrderId}
+      />
+
       <TimelineGridLayout
         headerHeight={calendarConfig.dayView.headerHeight}
         stickyHeader={
@@ -84,7 +92,7 @@ export const CalendarDayView = ({ masters, appointments }: Props) => {
                         apt.endTime,
                         calendarConfig.timeline.slotHeight,
                       )}
-                      onPress={() => {}}
+                      onPress={() => setSelectedOrderId(parseInt(apt.id, 10))}
                     />
                   ))}
                   <CurrentTimeLine />

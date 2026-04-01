@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -110,12 +110,18 @@ export const servicesHooks = {
       setSelectedCategoryName(name);
     };
 
-    const setMasterIds = (masterIds: number[]) => {
-      setParams((prev) => ({
-        ...prev,
-        masterIds,
-      }));
-    };
+    const setMasterIds = useCallback((newMasterIds: number[]) => {
+      setParams((prev) => {
+        if (JSON.stringify(prev.masterIds) === JSON.stringify(newMasterIds)) {
+          return prev;
+        }
+
+        return {
+          ...prev,
+          masterIds: newMasterIds,
+        };
+      });
+    }, []);
 
     const debouncedSearch = useDebounce(params.search, 400);
 
