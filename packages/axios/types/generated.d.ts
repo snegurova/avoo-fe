@@ -982,7 +982,7 @@ export interface components {
       /** @example Email is not valid */
       message: string;
       /** @enum {number} */
-      code?: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16;
+      code?: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18;
       /** @example 1 */
       value: number;
     };
@@ -995,7 +995,7 @@ export interface components {
       /** @example Bad request */
       errorMessage: string;
       /** @enum {number} */
-      errorCode: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16;
+      errorCode: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18;
       /** @example null */
       data: Record<string, never> | null;
       /** @example [] */

@@ -13,7 +13,7 @@ type UseUploadFileParams = {
 
 export const filesHooks = {
   useUploadFile: ({ onSuccess, onError }: UseUploadFileParams = {}) => {
-    const { mutate, isPending } = useMutation<
+    const { mutate, mutateAsync, isPending } = useMutation<
       BaseResponse<FileUploadResponse>,
       Error,
       UploadFileRequest
@@ -27,10 +27,19 @@ export const filesHooks = {
       },
     });
 
+    const uploadFileAsync = async (payload: UploadFileRequest) => {
+      const response = await mutateAsync(payload);
+      if (response.status !== ApiStatus.SUCCESS) {
+        throw new Error('Upload failed');
+      }
+      return response.data;
+    };
+
     utils.useSetPendingApi(isPending);
 
     return {
       uploadFile: mutate,
+      uploadFileAsync,
       isPending,
     };
   },

@@ -11,6 +11,7 @@ type Props = {
   title: string;
   duration: string;
   master: string;
+  masterAvatarUrl?: string | null;
   price: string;
   note?: string;
 };
@@ -22,6 +23,7 @@ export default function HistoryCard({
   title,
   duration,
   master,
+  masterAvatarUrl,
   price,
   note,
 }: Readonly<Props>) {
@@ -51,7 +53,12 @@ export default function HistoryCard({
                 |
               </span>
               <div className='flex min-w-0 flex-1 items-center gap-1 overflow-hidden'>
-                <Avatar name={master} size={AvatarSize.Small} bgColor={colors.primary[200]} />
+                <Avatar
+                  name={master}
+                  src={masterAvatarUrl}
+                  size={AvatarSize.Small}
+                  bgColor={colors.primary[200]}
+                />
                 <span className='text-xs truncate leading-4' title={master}>
                   {master}
                 </span>

@@ -293,20 +293,26 @@
       "CertificateAdd": {
         "CertificateAdd": {
           "addCertificate": "Додати сертифікат",
+          "addNewCertificate": "Додати новий сертифікат",
+          "fileDropzoneButton": "Вибрати файл або перетягнути сюди",
           "title": "Назва",
+          "titlePlaceholder": "Назва сертифіката",
           "enterCertTitle": "Введіть назву сертифіката",
           "description": "Опис",
+          "descriptionPlaceholder": "Додайте деталі сертифіката",
           "enterCertDesc": "Введіть опис сертифіката",
           "issueDate": "Дата видачі",
+          "issuedDate": "Дата видачі",
           "master": "Майстер",
+          "selectMaster": "Виберіть майстра",
           "uploadCertFile": "Завантажити файл сертифіката",
           "fileUploadHint": "Тільки JPG, PNG, розмір файлу не більше 10МБ",
           "selectFileCaps": "ВИБРАТИ ФАЙЛ",
-          "cancel": "Скасувати",
+          "close": "Закрити",
           "save": "Зберегти",
           "titleRequired": "Назва обов'язкова",
           "titleTooShort": "Назва занадто коротка",
-          "maxLength500": "Максимальна довжина — 500",
+          "maxLength200": "Максимальна довжина — 200",
           "issueDateRequired": "Дата видачі обов'язкова",
           "invalidDateFormat": "Невірний формат дати",
           "dateNotInFuture": "Дата не може бути в майбутньому",
@@ -315,7 +321,12 @@
           "chooseMasterError": "Будь ласка, виберіть майстра",
           "uploadFileError": "Будь ласка, завантажте файл",
           "unsupportedFileType": "Непідтримуваний тип файлу. Використовуйте: {types}.",
-          "fileTooLarge": "Файл занадто великий. Максимум {maxSizeMb} МБ."
+          "fileTooLarge": "Файл занадто великий. Максимум {maxSizeMb} МБ.",
+          "fileDropzoneTitle": "Виберіть файл або перетягніть сюди",
+          "fileDropzoneDescription": "Завантажте до 5 зображень (JPG, PNG, макс. 10 МБ кожне)",
+          "unsavedChanges": "Незбережені зміни",
+          "unsavedChangesDescription": "У вас є незбережені зміни. Ви впевнені, що хочете закрити?",
+          "discardChanges": "Скасувати зміни"
         }
       },
       "ChangePasswordForm": {
@@ -684,7 +695,10 @@
           "certificates": "Сертифікати",
           "noCertificates": "Сертифікати не додано",
           "addCertificates": "Додати сертифікати",
-          "addCertificatesRich": "<a>Додайте сертифікати</a>, щоб підкреслити свою професійну кваліфікацію."
+          "addCertificatesDescription": "щоб підкреслити свою професійну кваліфікацію.",
+          "addCertificatesRich": "<a>Додайте сертифікати</a>, щоб підкреслити свою професійну кваліфікацію.",
+          "seeMore": "Показати більше",
+          "seeLess": "Показати менше"
         }
       },
       "ProfileEdit": {

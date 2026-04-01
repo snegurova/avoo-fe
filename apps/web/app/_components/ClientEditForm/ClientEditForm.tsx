@@ -144,7 +144,7 @@ export default function ClientEditForm(props: Readonly<ClientFormProps>) {
         submitType='submit'
         loading={loading}
         submitDisabled={!hasChanges}
-        className='justify-end'
+        className='justify-center'
       />
     </form>
   );

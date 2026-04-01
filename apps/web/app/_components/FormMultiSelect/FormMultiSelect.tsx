@@ -9,6 +9,8 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 
 import { Option } from '@avoo/shared';
 
+import SearchIcon from '@/_icons/SearchIcon';
+
 export type Props = {
   id?: string;
   name: string;
@@ -31,6 +33,7 @@ export const FormMultiSelect = (props: Props) => {
     id,
     name,
     label,
+    placeholder,
     options,
     size = 'small',
     selected,
@@ -57,17 +60,30 @@ export const FormMultiSelect = (props: Props) => {
   return (
     <div className={className}>
       <FormControl size={size} fullWidth disabled={disabled} error={Boolean(error)}>
-        <InputLabel id={`multiple-${name}-label`} required={required}>
-          {label}
-        </InputLabel>
+        {label && (
+          <InputLabel id={`multiple-${name}-label`} required={required}>
+            {label}
+          </InputLabel>
+        )}
         <Select
           labelId={`multiple-${name}-label`}
           id={id ?? `multiple-${name}`}
           multiple
+          displayEmpty
           value={selected}
           onChange={handleChange}
           input={<OutlinedInput label={label} error={Boolean(error)} />}
-          renderValue={() => selectLabelsValue}
+          renderValue={() => {
+            if (!selected.length) {
+              return (
+                <span className='inline-flex items-center gap-2 text-gray-500'>
+                  <SearchIcon className='w-5 h-5 text-gray-500' />
+                  <span>{placeholder ?? ''}</span>
+                </span>
+              );
+            }
+            return selectLabelsValue;
+          }}
         >
           {options.map((option) => (
             <MenuItem key={option.value} value={option.value}>

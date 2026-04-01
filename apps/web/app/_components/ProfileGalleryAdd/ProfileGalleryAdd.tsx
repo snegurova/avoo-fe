@@ -21,10 +21,19 @@ type Props = {
   open: boolean;
   onClose: () => void;
   medias: UploadMediaResponse[];
+  totalMedias: number | null;
   userId: number | null;
+  onChange?: () => void;
 };
 
-export const ProfileGalleryAdd = ({ open, onClose, medias: initialMedias, userId }: Props) => {
+export const ProfileGalleryAdd = ({
+  open,
+  onClose,
+  medias: initialMedias,
+  totalMedias,
+  userId,
+  onChange,
+}: Props) => {
   const t = useTranslations('private.components.ProfileGallery.ProfileGallery');
   const tUpload = useTranslations('private.components.ServiceGalleryUpload.ServiceGalleryUpload');
   const toast = useToast();
@@ -32,8 +41,23 @@ export const ProfileGalleryAdd = ({ open, onClose, medias: initialMedias, userId
   const [addedMedias, setAddedMedias] = React.useState<UploadMediaResponse[]>([]);
   const [removedMediaIds, setRemovedMediaIds] = React.useState<number[]>([]);
   const [isDiscardConfirmOpen, setIsDiscardConfirmOpen] = React.useState(false);
+  const shouldLoadAll =
+    open &&
+    !!userId &&
+    typeof totalMedias === 'number' &&
+    totalMedias > initialMedias.length &&
+    totalMedias > 0;
+
+  const { allUserMedias } = userHooks.useGetAllUserMedia(userId, totalMedias, shouldLoadAll);
 
   const hasChanges = addedMedias.length > 0 || removedMediaIds.length > 0;
+
+  const allMedias = React.useMemo(
+    () => (allUserMedias ?? []).filter((item): item is UploadMediaResponse => !!item && !!item.id),
+    [allUserMedias],
+  );
+
+  const baseMedias = allMedias.length > 0 ? allMedias : initialMedias;
 
   React.useEffect(() => {
     if (open) {
@@ -47,11 +71,11 @@ export const ProfileGalleryAdd = ({ open, onClose, medias: initialMedias, userId
   const visibleMedias = React.useMemo(
     () => [
       ...addedMedias,
-      ...initialMedias.filter(
+      ...baseMedias.filter(
         (media) => !removedMediaIds.includes(media.id) && !addedMediaIds.has(media.id),
       ),
     ],
-    [addedMedias, addedMediaIds, initialMedias, removedMediaIds],
+    [addedMedias, addedMediaIds, baseMedias, removedMediaIds],
   );
   const wideIndexes = React.useMemo(() => {
     const indexes = new Set<number>();
@@ -68,8 +92,8 @@ export const ProfileGalleryAdd = ({ open, onClose, medias: initialMedias, userId
   }, [visibleMedias.length]);
 
   const invalidateGalleryQueries = React.useCallback(() => {
-    queryClient.invalidateQueries({ queryKey: ['user', 'media'] });
-    queryClient.invalidateQueries({ queryKey: ['medias'] });
+    queryClient.invalidateQueries({ queryKey: ['user', 'media'], exact: false });
+    queryClient.invalidateQueries({ queryKey: ['medias'], exact: false });
   }, [queryClient]);
 
   const { uploadMedia, isUploading } = mediaHooks.useUploadMedia({
@@ -118,19 +142,22 @@ export const ProfileGalleryAdd = ({ open, onClose, medias: initialMedias, userId
       const hasAddedMedias = addedMedias.length > 0;
 
       if (userId && removedMediaIds.length > 0) {
-        await Promise.all(
-          removedMediaIds.map((mediaId) =>
-            deleteMediaAsync({
-              mediaId,
-              params: {
-                type: MEDIA_TYPE_ENUM.USER,
-                typeEntityId: userId,
-              },
-            }),
-          ),
-        );
-
-        toast.info(t('mediaDeleted'));
+        const initialMediaIds = new Set(baseMedias.map((media) => media.id));
+        const toDelete = removedMediaIds.filter((id) => initialMediaIds.has(id));
+        if (toDelete.length > 0) {
+          await Promise.all(
+            toDelete.map((mediaId) =>
+              deleteMediaAsync({
+                mediaId,
+                params: {
+                  type: MEDIA_TYPE_ENUM.USER,
+                  typeEntityId: userId,
+                },
+              }),
+            ),
+          );
+          toast.info(t('mediaDeleted'));
+        }
       }
 
       await handleUpdateProfileAsync({ mediaIds: visibleMedias.map((media) => media.id) });
@@ -140,12 +167,14 @@ export const ProfileGalleryAdd = ({ open, onClose, medias: initialMedias, userId
       }
 
       invalidateGalleryQueries();
+      if (onChange) onChange();
       onClose();
     },
     [
       addedMedias,
       userId,
       removedMediaIds,
+      baseMedias,
       deleteMediaAsync,
       t,
       toast,
@@ -153,6 +182,7 @@ export const ProfileGalleryAdd = ({ open, onClose, medias: initialMedias, userId
       visibleMedias,
       invalidateGalleryQueries,
       onClose,
+      onChange,
     ],
   );
 
@@ -160,6 +190,29 @@ export const ProfileGalleryAdd = ({ open, onClose, medias: initialMedias, userId
     if (hasChanges) setIsDiscardConfirmOpen(true);
     else onClose();
   }, [hasChanges, onClose]);
+
+  const handleFilesPicked = React.useCallback(
+    (files: File[]) => {
+      files.forEach(handleFilePicked);
+    },
+    [handleFilePicked],
+  );
+
+  const createRemoveHandler = React.useCallback(
+    (mediaId: number) => () => {
+      handleRemove(mediaId);
+    },
+    [handleRemove],
+  );
+
+  const handleDiscardCancel = React.useCallback(() => {
+    setIsDiscardConfirmOpen(false);
+  }, []);
+
+  const handleDiscardConfirm = React.useCallback(() => {
+    setIsDiscardConfirmOpen(false);
+    onClose();
+  }, [onClose]);
 
   return (
     <>
@@ -181,7 +234,7 @@ export const ProfileGalleryAdd = ({ open, onClose, medias: initialMedias, userId
                       <img src={media.url} alt='media' className='w-full h-full object-cover' />
 
                       <button
-                        onClick={() => handleRemove(media.id)}
+                        onClick={createRemoveHandler(media.id)}
                         className='gallery-remove-button'
                         type='button'
                       >
@@ -197,7 +250,7 @@ export const ProfileGalleryAdd = ({ open, onClose, medias: initialMedias, userId
                 description='Upload up to 5 images (JPG, PNG, max 10MB each)'
                 buttonTitle={tUpload('selectFile')}
                 accept='.jpg,.png'
-                onFilePicked={handleFilePicked}
+                onFilesPicked={handleFilesPicked}
                 isUploading={isBusy}
                 className='w-full'
               />
@@ -210,18 +263,15 @@ export const ProfileGalleryAdd = ({ open, onClose, medias: initialMedias, userId
             submitText={t('save')}
             loading={isBusy}
             submitDisabled={!hasChanges}
-            className='justify-end'
+            className='justify-center'
           />
         </form>
       </Modal>
 
       <ConfirmationModal
         isOpen={isDiscardConfirmOpen}
-        onCancel={() => setIsDiscardConfirmOpen(false)}
-        onDiscard={() => {
-          setIsDiscardConfirmOpen(false);
-          onClose();
-        }}
+        onCancel={handleDiscardCancel}
+        onDiscard={handleDiscardConfirm}
         title={t('unsavedChanges')}
         description={t('unsavedChangesDescription')}
         confirmText={t('discardChanges')}
