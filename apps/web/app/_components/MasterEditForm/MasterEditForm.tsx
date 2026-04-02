@@ -244,7 +244,7 @@ export default function MasterEditForm({
         submitType='submit'
         loading={isPending}
         submitDisabled={!hasChanges}
-        className='justify-end'
+        className='justify-center'
       />
 
       <ConfirmationModal

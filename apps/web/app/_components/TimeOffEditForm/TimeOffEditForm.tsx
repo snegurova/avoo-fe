@@ -463,7 +463,7 @@ export default function TimeOffEditForm({
           submitType='submit'
           loading={isUpdatePending}
           submitDisabled={!hasChanges || hasConflict || isConflictsLoading}
-          className='justify-end'
+          className='justify-center'
         />
       </form>
 

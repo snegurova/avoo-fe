@@ -291,20 +291,26 @@
       "CertificateAdd": {
         "CertificateAdd": {
           "addCertificate": "Dodaj certyfikat",
+          "addNewCertificate": "Dodaj nowy certyfikat",
+          "fileDropzoneButton": "Wybierz plik lub przeciągnij tutaj",
           "title": "Tytuł",
+          "titlePlaceholder": "Tytuł certyfikatu",
           "enterCertTitle": "Wprowadź tytuł certyfikatu",
           "description": "Opis",
+          "descriptionPlaceholder": "Dodaj szczegóły certyfikatu",
           "enterCertDesc": "Wprowadź opis certyfikatu",
           "issueDate": "Data wydania",
+          "issuedDate": "Data wydania",
           "master": "Mistrz",
+          "selectMaster": "Wybierz mistrza",
           "uploadCertFile": "Prześlij plik certyfikatu",
           "fileUploadHint": "Tylko JPG, PNG, rozmiar pliku nie większy niż 10 MB",
           "selectFileCaps": "WYBIERZ PLIK",
-          "cancel": "Anuluj",
+          "close": "Zamknij",
           "save": "Zapisz",
           "titleRequired": "Tytuł jest wymagany",
           "titleTooShort": "Tytuł jest za krótki",
-          "maxLength500": "Maksymalna długość to 500",
+          "maxLength200": "Maksymalna długość to 200",
           "issueDateRequired": "Data wydania jest wymagana",
           "invalidDateFormat": "Nieprawidłowy format daty",
           "dateNotInFuture": "Data nie może być w przyszłości",
@@ -313,7 +319,12 @@
           "chooseMasterError": "Wybierz pracownika",
           "uploadFileError": "Prześlij plik",
           "unsupportedFileType": "Nieobsługiwany typ pliku. Użyj: {types}.",
-          "fileTooLarge": "Plik jest za duży. Maksymalny rozmiar: {maxSizeMb} MB."
+          "fileTooLarge": "Plik jest za duży. Maksymalny rozmiar: {maxSizeMb} MB.",
+          "fileDropzoneTitle": "Wybierz plik lub przeciągnij i upuść tutaj",
+          "fileDropzoneDescription": "Prześlij do 5 zdjęć (JPG, PNG, maks. 10 MB każde)",
+          "unsavedChanges": "Niezapisane zmiany",
+          "unsavedChangesDescription": "Masz niezapisane zmiany. Czy na pewno chcesz zamknąć?",
+          "discardChanges": "Odrzuć zmiany"
         }
       },
       "ChangePasswordForm": {
@@ -684,7 +695,10 @@
           "certificates": "Certyfikaty",
           "noCertificates": "Brak dodanych certyfikatów",
           "addCertificates": "Dodaj certyfikaty",
-          "addCertificatesRich": "<a>Dodaj certyfikaty</a>, aby wyróżnić swoje kwalifikacje zawodowe."
+          "addCertificatesDescription": "aby wyróżnić swoje kwalifikacje zawodowe.",
+          "addCertificatesRich": "<a>Dodaj certyfikaty</a>, aby wyróżnić swoje kwalifikacje zawodowe.",
+          "seeMore": "Zobacz więcej",
+          "seeLess": "Pokaż mniej"
         }
       },
       "ProfileEdit": {

@@ -290,20 +290,26 @@
       "CertificateAdd": {
         "CertificateAdd": {
           "addCertificate": "Add Certificate",
+          "addNewCertificate": "Add new certificate",
+          "fileDropzoneButton": "Select file or drag here",
           "title": "Title",
+          "titlePlaceholder": "Title of certificate",
           "enterCertTitle": "Enter certificate title",
           "description": "Description",
+          "descriptionPlaceholder": "Add certificate details",
           "enterCertDesc": "Enter certificate description",
           "issueDate": "Issue Date",
+          "issuedDate": "Issued date",
           "master": "Master",
+          "selectMaster": "Select master",
           "uploadCertFile": "Upload certificate file",
           "fileUploadHint": "JPG, PNG only, file size no more than 10MB",
           "selectFileCaps": "SELECT FILE",
-          "cancel": "Cancel",
+          "close": "Close",
           "save": "Save",
           "titleRequired": "Title is required",
           "titleTooShort": "Title is too short",
-          "maxLength500": "Max length is 500",
+          "maxLength200": "Max length is 200",
           "issueDateRequired": "Issue date is required",
           "invalidDateFormat": "Invalid date format",
           "dateNotInFuture": "Date cannot be in the future",
@@ -312,7 +318,12 @@
           "chooseMasterError": "Please choose a master",
           "uploadFileError": "Please upload a file",
           "unsupportedFileType": "Unsupported file type. Use: {types}.",
-          "fileTooLarge": "File is too large. Max {maxSizeMb}MB."
+          "fileTooLarge": "File is too large. Max {maxSizeMb}MB.",
+          "fileDropzoneTitle": "Select a file or drag and drop here",
+          "fileDropzoneDescription": "Upload up to 5 images (JPG, PNG, max 10MB each)",
+          "unsavedChanges": "Unsaved changes",
+          "unsavedChangesDescription": "You have unsaved changes. Are you sure you want to close?",
+          "discardChanges": "Discard changes"
         }
       },
       "ChangePasswordForm": {
@@ -683,7 +694,10 @@
           "certificates": "Certificates",
           "noCertificates": "No certificates added",
           "addCertificates": "Add certificates",
-          "addCertificatesRich": "<a>Add certificates</a> to highlight your professional qualifications."
+          "addCertificatesDescription": "to highlight your professional qualifications.",
+          "addCertificatesRich": "<a>Add certificates</a> to highlight your professional qualifications.",
+          "seeMore": "See more",
+          "seeLess": "See less"
         }
       },
       "ProfileEdit": {

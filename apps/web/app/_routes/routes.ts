@@ -7,7 +7,6 @@ export enum AppRoutes {
   ResetPassword = '/app/reset-password',
   Masters = '/app/masters',
   AddMaster = '/app/masters/add-master',
-  Certificates = '/app/profile/certificates',
   WorkingHours = '/app/calendar/working-hours',
   WorkingHoursCreate = '/app/calendar/working-hours/create',
   Posts = '/app/profile/posts',

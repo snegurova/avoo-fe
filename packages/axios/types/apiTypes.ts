@@ -76,6 +76,7 @@ export type UserMediaResponse = {
 export type UserUpdateAvatarResponse = components['schemas']['UserEntity'];
 
 export type CertificateResponse = components['schemas']['CertificateEntity'];
+export type UploadCertificateRequest = components['schemas']['UploadCertificateDto'];
 
 export type GetPublicCertificatesQueryParams =
   operations['CertificatesPublicController_getAll']['parameters']['query'];

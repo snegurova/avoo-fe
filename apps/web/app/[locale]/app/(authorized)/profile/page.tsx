@@ -16,9 +16,9 @@ export default function ProfilePage() {
 
   return (
     <AppWrapper>
-      <div className='py-7 lg:py-14 flex flex-col overflow-auto hide-scrollbar'>
+      <div className='pt-7 pb-20 lg:pt-14 lg:pb-11 flex flex-col overflow-auto hide-scrollbar'>
         <h1 className='sr-only'>{t('profile')}</h1>
-        <div className='px-5 md:px-8 lg:px-11 overflow-auto flex flex-col gap-8'>
+        <div className='px-5 md:px-5 lg:px-11 overflow-auto flex flex-col gap-8'>
           <section className='md:rounded-2xl md:border md:border-gray-100 md:p-6 lg:p-8'>
             <ProfileInfo />
           </section>

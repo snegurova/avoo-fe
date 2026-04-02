@@ -11,6 +11,7 @@ import {
   UserProfileResponse,
   UserUpdateAvatarResponse,
 } from '@avoo/axios/types/apiTypes';
+import { CreateCertificatePayload } from '@avoo/axios/types/certificate';
 import { MediaType } from '@avoo/hooks/types/mediaType';
 
 const UPDATE_AVATAR_ENDPOINT = '/update-avatar';
@@ -43,15 +44,10 @@ export const userApi = {
     );
     return response.data;
   },
-  async createCertificate(body: FormData) {
+  async createCertificate(body: CreateCertificatePayload) {
     const response = await apiClient.post<BaseResponse<CertificateResponse>>(
       CERTIFICATES_ENDPOINT,
       body,
-      {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      },
     );
 
     return response.data;

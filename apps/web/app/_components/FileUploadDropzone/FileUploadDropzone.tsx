@@ -10,7 +10,8 @@ import BackupIcon from '@/_icons/BackupIcon';
 type Props = {
   title: string;
   buttonTitle: string;
-  onFilePicked: (file: File | null) => void;
+  onFilePicked?: (file: File | null) => void;
+  onFilesPicked?: (files: File[]) => void;
   isUploading: boolean;
   description?: string;
   accept?: string;
@@ -23,6 +24,7 @@ export default function FileUploadDropzone({
   title,
   buttonTitle,
   onFilePicked,
+  onFilesPicked,
   isUploading,
   description,
   accept = '.jpg,.png',
@@ -36,6 +38,7 @@ export default function FileUploadDropzone({
       description={description}
       buttonTitle={buttonTitle}
       accept={accept}
+      onFilesPicked={onFilesPicked}
       onFilePicked={onFilePicked}
       isUploading={isUploading}
       fileError={fileError ?? undefined}

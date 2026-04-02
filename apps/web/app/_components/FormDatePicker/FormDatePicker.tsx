@@ -13,6 +13,7 @@ type Props = {
   size?: 'small' | 'medium';
   date?: string | null;
   valueFormat?: string;
+  disablePast?: boolean;
   required?: boolean;
   disabled?: boolean;
   onChange?: (newDate: string) => void;
@@ -28,6 +29,7 @@ export default function FormDatePicker(props: Props) {
     onChange,
     error,
     valueFormat,
+    disablePast = true,
     size = 'small',
     format = DATE_PICKER_FORMAT,
     disabled = false,
@@ -46,7 +48,7 @@ export default function FormDatePicker(props: Props) {
         label={label}
         value={date ? dayjs(date) : null}
         format={format}
-        disablePast={true}
+        disablePast={disablePast}
         disabled={disabled}
         slots={{
           openPickerIcon: () => <CalendarIcon className='fill-black w-6 h-6' />,

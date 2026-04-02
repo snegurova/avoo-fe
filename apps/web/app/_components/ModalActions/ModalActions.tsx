@@ -33,7 +33,7 @@ export default function ModalActions(props: Readonly<Props>) {
   } = props;
 
   const baseClassName = sticky
-    ? `sticky bottom-0 z-20 mt-auto flex shrink-0 justify-end bg-white pt-4 gap-${gap}`
+    ? `sticky bottom-0 z-20 mt-auto flex shrink-0 bg-white pt-4 gap-${gap}`
     : `flex justify-center gap-${gap}`;
 
   return (

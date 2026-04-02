@@ -13,7 +13,8 @@ type Props = {
   displayButton?: boolean;
   variant?: 'outline' | 'base';
   accept?: string;
-  onFilePicked: (file: File | null) => void;
+  onFilePicked?: (file: File | null) => void;
+  onFilesPicked?: (files: File[]) => void;
   fileError?: string;
   file?: File | null;
   icon?: React.ReactNode;
@@ -30,6 +31,7 @@ export default function DragAndDropZone(props: Props) {
     buttonTitle = t('defaultButtonTitle'),
     accept = '.jpg,.png',
     onFilePicked,
+    onFilesPicked,
     fileError,
     icon,
     isUploading,
@@ -41,6 +43,12 @@ export default function DragAndDropZone(props: Props) {
     descriptionClassName,
   } = props;
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+
+  const handleFiles = (files: FileList | null) => {
+    const arr = Array.from(files ?? []);
+    if (onFilesPicked) onFilesPicked(arr);
+    if (onFilePicked) onFilePicked(arr[0] ?? null);
+  };
 
   const buttonVariants = tv({
     base: 'drag-and-drop-zone',
@@ -78,8 +86,7 @@ export default function DragAndDropZone(props: Props) {
         onDragOver={(e) => e.preventDefault()}
         onDrop={(e) => {
           e.preventDefault();
-          const dropped = e.dataTransfer?.files?.[0] ?? null;
-          onFilePicked(dropped);
+          handleFiles(e.dataTransfer?.files ?? null);
         }}
         onClick={() => fileInputRef.current?.click()}
         disabled={isUploading}
@@ -107,8 +114,9 @@ export default function DragAndDropZone(props: Props) {
           name='dndFile'
           type='file'
           accept={accept}
+          multiple={!!onFilesPicked}
           className='hidden'
-          onChange={(e) => onFilePicked(e.target.files?.[0] ?? null)}
+          onChange={(e) => handleFiles(e.target.files)}
           disabled={isUploading}
         />
         {fileError && <p className='text-sm text-red-500 mt-2'>{fileError}</p>}
