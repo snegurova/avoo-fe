@@ -3,12 +3,15 @@ import { useLocale, useTranslations } from 'next-intl';
 import { IconButton } from '@mui/material';
 import { tv } from 'tailwind-variants';
 
+import { userHooks } from '@avoo/hooks';
 import { useApiStatusStore } from '@avoo/store';
 
-import IconLink from '@/_components/IconLink/IconLink';
+import { localizationHooks } from '@/_hooks/localizationHooks';
+import { useToast } from '@/_hooks/useToast';
 import DeleteIcon from '@/_icons/DeleteIcon';
 import EditSquareIcon from '@/_icons/EditSquareIcon';
 import ShareIcon from '@/_icons/ShareIcon';
+import { AppRoutes } from '@/_routes/routes';
 import { formatLocalizedCurrency, formatLocalizedDuration } from '@/_utils/intlFormatters';
 
 type Props = {
@@ -23,37 +26,46 @@ type Props = {
   onEdit: (id: number) => void;
 };
 
+const wrapper = tv({
+  base: 'relative border border-gray-200 rounded-lg overflow-hidden',
+  variants: {
+    isActive: {
+      true: '',
+      false: 'bg-gray-100',
+    },
+    isSelected: {
+      true: 'bg-primary-50',
+      false: '',
+    },
+  },
+});
+
+const statusIndicator = tv({
+  base: 'absolute left-0 top-0 h-full w-2 rounded-l-lg',
+  variants: {
+    isActive: {
+      true: 'bg-primary-200',
+      false: 'bg-gray-300',
+    },
+  },
+});
+
 export default function ServiceCard(props: Props) {
   const t = useTranslations('private.components.ServiceCard.ServiceCard');
   const locale = useLocale();
   const { id, name, durationMinutes, price, currency, isActive, isSelected, onDelete, onEdit } =
     props;
+  const toast = useToast();
+  const { userId } = userHooks.useGetUserProfile();
+  const baseUrl = typeof window !== 'undefined' ? window.location.origin : '';
+  const link = `${baseUrl}${localizationHooks.useWithLocale(AppRoutes.PublicSalon)}/${userId}${AppRoutes.PublicOrderCreate}?serviceId=${id}`;
 
   const isPending = useApiStatusStore((state) => state.isPending);
 
-  const wrapper = tv({
-    base: 'relative border border-gray-200 rounded-lg overflow-hidden',
-    variants: {
-      isActive: {
-        true: '',
-        false: 'bg-gray-100',
-      },
-      isSelected: {
-        true: 'bg-primary-50',
-        false: '',
-      },
-    },
-  });
-
-  const statusIndicator = tv({
-    base: 'absolute left-0 top-0 h-full w-2 rounded-l-lg',
-    variants: {
-      isActive: {
-        true: 'bg-primary-200',
-        false: 'bg-gray-300',
-      },
-    },
-  });
+  const onShareClick = () => {
+    navigator.clipboard.writeText(link);
+    toast.info(t('copiedToClipboard'));
+  };
 
   return (
     <div className={wrapper({ isActive, isSelected })}>
@@ -83,11 +95,15 @@ export default function ServiceCard(props: Props) {
             >
               <EditSquareIcon className='transition-colors' />
             </IconButton>
-            <IconLink
-              href={'#'}
-              icon={<ShareIcon className='transition-colors' />}
-              label={t('shareService')}
-            />
+
+            <IconButton
+              aria-label={t('shareService')}
+              onClick={onShareClick}
+              disabled={isPending}
+              loading={isPending}
+            >
+              <ShareIcon className='transition-colors' />
+            </IconButton>
             <IconButton
               aria-label={t('deleteSm')}
               onClick={() => {

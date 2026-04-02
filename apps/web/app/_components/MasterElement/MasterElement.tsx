@@ -45,7 +45,7 @@ export default function MasterElement(props: Props) {
       <div className='shrink-0 flex items-center gap-3'>
         <Avatar
           name={item.name || ''}
-          src={undefined}
+          src={item.avatarUrl || undefined}
           size={AvatarSize.Large}
           bgColor={colors.primary[100]}
           className='group-hover:bg-primary-200! group-focus:bg-primary-200! transition-colors shrink-0'

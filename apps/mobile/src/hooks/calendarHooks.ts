@@ -23,6 +23,8 @@ export type Appointment = {
   master: ShortMasterInfo;
 };
 
+const MS_IN_MINUTE = 60000;
+
 export const calendarMobileHooks = {
   useCalendarMasters(calendarData: GetCalendarResponse | null | undefined): ShortMasterInfo[] {
     return useMemo(() => {
@@ -138,7 +140,7 @@ export const calendarMobileHooks = {
 
           if (!isSameDayUTC(windowStartDate, selectedDayUTC)) break;
 
-          const durationMs = params.duration * 60000;
+          const durationMs = params.duration * MS_IN_MINUTE;
           let chip = windowStartDate.getTime();
           const endMs = windowEndDate.getTime();
 
@@ -146,7 +148,7 @@ export const calendarMobileHooks = {
             const chipDate = new Date(chip);
             if (!isSameDayUTC(chipDate, selectedDayUTC)) break;
             slots.push(timeUtils.convertDateToString(chipDate));
-            chip += 15 * 60000;
+            chip += 15 * MS_IN_MINUTE;
           }
 
           rangeFrom = windowEndDate;

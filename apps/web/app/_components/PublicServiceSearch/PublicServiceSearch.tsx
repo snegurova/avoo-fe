@@ -25,6 +25,7 @@ type Props = {
   selectedService: Service | null;
   ref: React.Ref<HTMLDivElement>;
   userId: number;
+  error?: string;
 };
 
 const button = tv({
@@ -51,6 +52,7 @@ export default function PublicServiceSearch(props: Props) {
     hasMore,
     ref,
     userId,
+    error,
   } = props;
   const t = useTranslations('public.salon.page');
   const listRef = useRef<HTMLDivElement>(null);
@@ -88,11 +90,12 @@ export default function PublicServiceSearch(props: Props) {
     <div ref={ref}>
       <PublicOrderTitle
         isActive={isActive}
-        title='selectService'
+        title='service'
         search={search}
         setSearch={setSearch}
         placeholder='searchServices'
       />
+      {error && <div className='my-1 text-sm text-red-500'>{error}</div>}
       {isActive && (
         <div className='flex flex-col'>
           <div className='sticky lg:static top-0 flex gap-y-2 gap-x-3 py-4 overflow-x-auto lg:overflow-visible whitespace-nowrap lg:flex-wrap'>

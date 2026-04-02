@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 
 import { MasterWithRelationsEntity } from '@avoo/axios/types/apiTypes';
 import { useApiStatusStore } from '@avoo/store';
@@ -20,6 +20,7 @@ type Props = {
   selectAnyMaster: boolean;
   setSelectAnyMaster: (value: boolean) => void;
   ref: React.Ref<HTMLDivElement>;
+  error?: string;
 };
 
 export default function PublicMasterSearch(props: Props) {
@@ -36,9 +37,16 @@ export default function PublicMasterSearch(props: Props) {
     selectAnyMaster,
     setSelectAnyMaster,
     ref,
+    error,
   } = props;
   const listRef = useRef<HTMLDivElement>(null);
   const isPending = useApiStatusStore((state) => state.isPending);
+
+  useEffect(() => {
+    if (selectAnyMaster && isActive) {
+      setStep(3);
+    }
+  }, [selectAnyMaster, isActive, setStep]);
 
   const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
     if (!listRef.current || !hasMore || !fetchNextPage || isPending) return;
@@ -57,7 +65,6 @@ export default function PublicMasterSearch(props: Props) {
 
   const onAnyMasterClick = () => {
     setSelectAnyMaster(true);
-    setStep(3);
     onChange({ id: 0 });
   };
 
@@ -71,11 +78,12 @@ export default function PublicMasterSearch(props: Props) {
     <div ref={ref}>
       <PublicOrderTitle
         isActive={isActive}
-        title='selectMaster'
+        title='master'
         search={search}
         setSearch={setSearch}
         placeholder='searchMasters'
       />
+      {error && <div className='my-1 text-sm text-red-500'>{error}</div>}
       {isActive && (
         <div
           className='flex flex-col gap-3 max-h-[calc(100vh-100px)] overflow-y-auto mt-4'

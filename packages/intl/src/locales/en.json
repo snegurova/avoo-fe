@@ -97,7 +97,8 @@
         "Sat": "Sat",
         "Sun": "Sun",
         "noSchedules": "No schedules",
-        "noSchedulesDescription": "There are currently no schedules to display. Choose masters to see their schedules here."
+        "noSchedulesDescription": "There are currently no schedules to display. Choose masters to see their schedules here.",
+        "dateNotAvailable": "Date is not available, choosing the closest available date."
       },
       "comboServiceTime": {
         "loading": "Loading...",
@@ -872,7 +873,8 @@
         "ServiceCard": {
           "editSm": "Edit",
           "shareService": "Share Service",
-          "deleteSm": "Delete"
+          "deleteSm": "Delete",
+          "copiedToClipboard": "Link copied to clipboard!"
         }
       },
       "ServiceControls": {
@@ -1315,10 +1317,10 @@
         "date": "Date",
         "notes": "Notes",
         "notesHelper": "Additional information for the master",
-        "selectService": "Select a service",
+        "selectservice": "Select a service",
         "select": "Select",
         "change": "Change",
-        "selectMaster": "Select a master",
+        "selectmaster": "Select a master",
         "selectDate": "Select a date",
         "selectTime": "Select a time",
         "morning": "Morning",
@@ -1347,14 +1349,25 @@
         "searchMasters": "Search for masters",
         "anyMasterHeadline": "for maximum availability",
         "euro": "Euro",
-        "selectDateTime": "Select date and time",
+        "selectdateTime": "Select date and time",
         "selectValidTimeSlot": "Please select a valid time slot",
         "noAvailableSlots": "No available time slots for the selected date. Please choose another date or select 'Any master' for more options.",
         "search": "Search",
         "remove": "Remove",
         "clear": "Clear",
         "splitBooking": "Split booking",
-        "selectedServices": "Selected services"
+        "selectedServices": "Selected services",
+        "noAvailableDates": "No available dates for the selected service and master. Please choose another service, master or date.",
+        "dateTime": "Date and time",
+        "combineProposition": "Would you like to book services for a one-time visit?",
+        "yes": "Yes",
+        "no": "No, book separately"
+      },
+      "confirmation": {
+        "successTitle": "Booking Confirmed!",
+        "successMessage": "Your booking was successful. We look forward to seeing you!",
+        "bookMore": "Book More",
+        "returnToSalon": "Return to Salon"
       }
     },
     "forgotPassword": {

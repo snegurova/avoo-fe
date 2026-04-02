@@ -76,7 +76,7 @@ export default function SalonPageTop(props: Props) {
               </a>
             </li>
           )}
-          {data?.businessInfo?.languages && (
+          {data?.businessInfo?.languages && data.businessInfo.languages.length > 1 && (
             <li className='flex gap-2 items-center'>
               <LanguageIcon className='h-4 w-4 fill-current transition-colors' />
               <span>

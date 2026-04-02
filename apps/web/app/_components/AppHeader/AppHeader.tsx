@@ -6,12 +6,15 @@ import { useTranslations } from 'next-intl';
 
 import useMediaQuery from '@mui/material/useMediaQuery';
 
+import { userHooks } from '@avoo/hooks';
+
 import AppProfileSelect from '@/_components/AppProfileSelect/AppProfileSelect';
 import { IconButton } from '@/_components/IconButton/IconButton';
 import IconLink from '@/_components/IconLink/IconLink';
 import { LocalizedLink } from '@/_components/LocalizedLink/LocalizedLink';
 import SelectButton from '@/_components/SelectButton/SelectButton';
 import { localizationHooks } from '@/_hooks/localizationHooks';
+import { useToast } from '@/_hooks/useToast';
 import AddIcon from '@/_icons/AddIcon';
 import MenuIcon from '@/_icons/MenuIcon';
 import NotificationsIcon from '@/_icons/NotificationsIcon';
@@ -24,10 +27,17 @@ type Props = {
 
 export default function AppHeader({ setMenuOpen }: Props) {
   const t = useTranslations('private.navigation.navigation');
+  const tCard = useTranslations('private.components.ServiceCard.ServiceCard');
   const router = useRouter();
+
+  const toast = useToast();
   const tabletUp = useMediaQuery('(min-width:768px)');
   const orderCreatePath = localizationHooks.useWithLocale(AppRoutes.OrderCreate);
   const orderAddPostPath = localizationHooks.useWithLocale(AppRoutes.AddPost);
+
+  const { userId } = userHooks.useGetUserProfile();
+  const baseUrl = typeof window !== 'undefined' ? window.location.origin : '';
+  const shareLink = `${baseUrl}${localizationHooks.useWithLocale(AppRoutes.PublicSalon)}/${userId}${AppRoutes.PublicOrderCreate}`;
 
   const options = [
     {
@@ -51,6 +61,11 @@ export default function AppHeader({ setMenuOpen }: Props) {
     [],
   );
 
+  const onShareClick = () => {
+    navigator.clipboard.writeText(shareLink);
+    toast.info(tCard('copiedToClipboard'));
+  };
+
   return (
     <header className='px-4 md:px-0 flex flex-col gap-3 md:gap-0'>
       <div className='flex items-center justify-between gap-23'>
@@ -73,7 +88,8 @@ export default function AppHeader({ setMenuOpen }: Props) {
             <AddIcon className='w-8 h-8 fill-primary-900' />
           </LocalizedLink>
           <div className='flex items-center gap-2'>
-            <ShareIcon className='transition-colors' />
+            <IconButton icon={<ShareIcon className='transition-colors' />} onClick={onShareClick} />
+
             <IconLink
               href={localizationHooks.useWithLocale(AppRoutes.Notifications)}
               icon={<NotificationsIcon className='transition-colors' />}

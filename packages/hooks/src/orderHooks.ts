@@ -71,6 +71,7 @@ type UseCreateOrderFormParams = {
     date?: string;
   };
   onSuccess?: () => void;
+  referralCode?: string | null;
 };
 
 type UseUpdateOrderParams = {
@@ -292,7 +293,15 @@ export const orderHooks = {
       setValue,
     };
   },
-  useCreatePublicOrder: ({ onSuccess, userId }: { onSuccess?: () => void; userId: number }) => {
+  useCreatePublicOrder: ({
+    onSuccess,
+    userId,
+    referralCode,
+  }: {
+    onSuccess?: () => void;
+    userId: number;
+    referralCode?: string | null;
+  }) => {
     const [selectedServices, setSelectedServices] = useState<(Service | null)[]>([null]);
     const [selectedCombinations, setSelectedCombinations] = useState<Combination[]>([]);
     const {
@@ -321,6 +330,7 @@ export const orderHooks = {
           email: '',
         },
         userId,
+        referralCode: referralCode || undefined,
       },
     });
 
@@ -349,7 +359,10 @@ export const orderHooks = {
     return {
       control,
       handleSubmit: handleSubmit((formData) => {
-        const dataWithUTC = convertOrdersDataDatesToUTC(formData);
+        const dataWithUTC = convertOrdersDataDatesToUTC({
+          ...formData,
+          referralCode: referralCode || formData.referralCode || undefined,
+        });
         utils.submitAdapter<CreatePublicOrdersRequest, CreatePublicOrdersData>(mutate)(dataWithUTC);
       }),
       getValues,
@@ -390,11 +403,17 @@ export const orderHooks = {
     return {
       control,
       handleSubmit: handleSubmit((data) => {
-        const cleanedData: UpdateOrderRequest = {
+        let cleanedData: UpdateOrderRequest = {
           ...data,
           masterId: data.masterId ?? undefined,
         };
 
+        if (data.date && data.date !== order.date) {
+          cleanedData = {
+            ...cleanedData,
+            date: timeUtils.convertLocalToUTC(data.date),
+          };
+        }
         mutate(cleanedData);
       }),
       errors,
