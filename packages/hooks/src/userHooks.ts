@@ -65,8 +65,12 @@ export const userHooks = {
   useGetUserMedia: (page?: number, limit?: number) => {
     const { userId } = userHooks.useGetUserProfile();
 
-    const { data: userMediaData, isPending } = useQuery<BaseResponse<UserMediaResponse>, Error>({
-      queryKey: [queryKeys.user.media(), page, limit],
+    const {
+      data: userMediaData,
+      isPending,
+      isFetching,
+    } = useQuery<BaseResponse<UserMediaResponse>, Error>({
+      queryKey: [...queryKeys.user.media(), page, limit],
       queryFn: () => {
         if (!userId) throw new Error('userId is required');
         return userApi.getUserMedia(MediaType.USER, userId, page, limit);
@@ -77,7 +81,7 @@ export const userHooks = {
     utils.useSetPendingApi(isPending);
 
     if (userMediaData?.status === ApiStatus.SUCCESS) {
-      return userMediaData.data;
+      return { ...userMediaData.data, isFetching };
     }
 
     return null;

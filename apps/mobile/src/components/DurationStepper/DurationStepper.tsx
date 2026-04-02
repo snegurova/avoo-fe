@@ -8,7 +8,10 @@ type Props = {
 };
 
 export const DurationStepper = ({ value, onChange }: Props) => (
-  <View className='flex-row items-center justify-between rounded-lg border border-gray-200 bg-white px-4 py-3'>
+  <View
+    className='flex-row items-center justify-between rounded-lg bg-white px-4'
+    style={{ height: 54, borderWidth: 1, borderColor: '#e5e7eb' }}
+  >
     <Pressable
       hitSlop={8}
       className='w-8 h-8 items-center justify-center'

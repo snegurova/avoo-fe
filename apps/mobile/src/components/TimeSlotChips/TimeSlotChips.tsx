@@ -51,7 +51,7 @@ export const TimeSlotChips = (props: Props) => {
             className='rounded-full py-2 border items-center justify-center'
             style={{
               flexBasis: '22%',
-              flexGrow: 1,
+              flexGrow: 0,
               backgroundColor: isSelected ? colors.primary[700] : colors.white,
               borderColor: isSelected ? colors.primary[700] : colors.gray[200],
             }}

@@ -1,26 +1,21 @@
 import { useState } from 'react';
-import { ActivityIndicator, Pressable, Text, View } from 'react-native';
+import { ActivityIndicator, Pressable, ScrollView, View } from 'react-native';
+import { Text } from 'react-native-paper';
 
-import {
-  CustomerInfoResponse,
-  MasterWithRelationsEntity,
-  Service,
-} from '@avoo/axios/types/apiTypes';
+import { CustomerInfoResponse } from '@avoo/axios/types/apiTypes';
 import { colors } from '@avoo/design-tokens';
 import { orderHooks, utils } from '@avoo/hooks';
 import { OrderType } from '@avoo/hooks/types/orderType';
+import { timeUtils } from '@avoo/shared';
+import { useApiStatusStore } from '@avoo/store';
 
 import { CustomerPickerSheet } from '@/components/CustomerPickerSheet/CustomerPickerSheet';
-import { DatePickerSheet } from '@/components/DatePickerSheet/DatePickerSheet';
 import { LockedField } from '@/components/LockedField/LockedField';
-import { MastersSheet } from '@/components/MastersSheet/MastersSheet';
-import { ServicePickerSheet } from '@/components/ServicePickerSheet/ServicePickerSheet';
-import { TimeSlotChips } from '@/components/TimeSlotChips/TimeSlotChips';
-import { calendarMobileHooks } from '@/hooks/calendarHooks';
-import { masterMobileHooks } from '@/hooks/masterHooks';
-import { uiHooks } from '@/hooks/uiHooks';
+import {
+  ServiceEntryItem,
+  ServiceEntryState,
+} from '@/components/ServiceEntryItem/ServiceEntryItem';
 import { FormField } from '@/shared/FormField';
-import { NotesInput } from '@/shared/NotesInput';
 import { RootScreens, RootStackScreenProps } from '@/types/navigation';
 
 type NewClientData = { name: string; phone?: string; email?: string };
@@ -29,15 +24,20 @@ type Props = {
   navigation: RootStackScreenProps<RootScreens.AddBookingScreen>['navigation'];
 };
 
+const createDefaultEntry = (): ServiceEntryState => ({
+  service: null,
+  master: null,
+  slot: null,
+  notes: '',
+  date: timeUtils.formatDate(new Date()),
+});
+
 export const CreateOrderForm = (props: Props) => {
   const { navigation } = props;
 
   const [selectedCustomer, setSelectedCustomer] = useState<CustomerInfoResponse | null>(null);
   const [newClientData, setNewClientData] = useState<NewClientData | null>(null);
-  const [selectedService, setSelectedService] = useState<Service | null>(null);
-  const [selectedMaster, setSelectedMaster] = useState<MasterWithRelationsEntity | null>(null);
-  const [selectedSlot, setSelectedSlot] = useState<string | null>(null);
-  const [notes, setNotes] = useState('');
+  const [serviceEntries, setServiceEntries] = useState<ServiceEntryState[]>([createDefaultEntry()]);
 
   const {
     value: isCustomerPickerVisible,
@@ -45,90 +45,103 @@ export const CreateOrderForm = (props: Props) => {
     disable: closeCustomerPicker,
   } = utils.useBooleanState(false);
 
-  const {
-    value: isServicePickerVisible,
-    enable: openServicePicker,
-    disable: closeServicePicker,
-  } = utils.useBooleanState(false);
-
-  const {
-    value: isMasterPickerVisible,
-    enable: openMasterPicker,
-    disable: closeMasterPicker,
-  } = utils.useBooleanState(false);
-
-  const {
-    tempDate,
-    setTempDate,
-    isVisible: isDatePickerVisible,
-    open: openDatePicker,
-    close: closeDatePicker,
-    confirm: confirmDate,
-    dateStr,
-    dateLabel,
-  } = uiHooks.useDatePicker(new Date(), () => setSelectedSlot(null));
-
-  const { masters } = masterMobileHooks.useGetMastersFlattened({
-    serviceId: selectedService?.id,
-    limit: 50,
-  });
-
-  const { slots, isLoading: isSlotsLoading } = calendarMobileHooks.useGetAvailableSlots(
-    {
-      serviceId: selectedService?.id,
-      masterIds: selectedMaster ? [selectedMaster.id] : undefined,
-      date: dateStr,
-      duration: selectedService?.durationMinutes ?? 0,
-    },
-    { enabled: !!selectedService },
-  );
-
   const { mutate, isPending } = orderHooks.useCreateOrderMutation({
     onSuccess: () => navigation.goBack(),
   });
 
-  const handleServiceSelect = (service: Service) => {
-    setSelectedService(service);
-    setSelectedMaster(null);
-    setSelectedSlot(null);
+  const existingOrders = orderHooks.useGetCustomerOrderHistory(selectedCustomer?.id ?? null, 200);
+
+  const updateEntry = (index: number, patch: Partial<ServiceEntryState>) => {
+    setServiceEntries((prev) =>
+      prev.map((entry, i) => {
+        if (i === index) return { ...entry, ...patch };
+        if (i > index && (patch.slot !== undefined || patch.service !== undefined)) {
+          return { ...entry, slot: null };
+        }
+        return entry;
+      }),
+    );
   };
 
-  const handleMasterSelect = (ids: number[]) => {
-    if (ids.length === 0) {
-      setSelectedMaster(null);
-      setSelectedSlot(null);
-      return;
-    }
-    const currentId = selectedMaster?.id;
-    const newId = ids.find((id) => id !== currentId) ?? ids[0];
-    const master = masters.find((m) => m.id === newId) ?? null;
-    setSelectedMaster(master);
-    setSelectedSlot(null);
+  const removeEntry = (index: number) => {
+    setServiceEntries((prev) => prev.filter((_, i) => i !== index));
   };
+
+  const addService = () => {
+    const last = serviceEntries[serviceEntries.length - 1];
+    setServiceEntries((prev) => [...prev, { ...createDefaultEntry(), date: last.date }]);
+  };
+
+  const getBusyRanges = (index: number): Array<{ slot: string; durationMinutes: number }> => {
+    const formBusy = serviceEntries
+      .filter((e, i) => i !== index && e.slot !== null && e.service !== null)
+      .map((e) => ({ slot: e.slot!, durationMinutes: e.service!.durationMinutes ?? 0 }));
+
+    const date = serviceEntries[index]?.date;
+    const existingBusy =
+      date && existingOrders?.length
+        ? existingOrders
+            .filter((order) => {
+              if (!['PENDING', 'CONFIRMED'].includes(order.status)) return false;
+              return order.date.slice(0, 10) === date;
+            })
+            .map((order) => ({ slot: order.date, durationMinutes: order.duration }))
+        : [];
+
+    return [...formBusy, ...existingBusy];
+  };
+
+  const getRangeFromTime = (index: number): string | undefined => {
+    if (index === 0) return undefined;
+    const prev = serviceEntries[index - 1];
+    const current = serviceEntries[index];
+    if (!prev.slot || !prev.service) return undefined;
+    if (!prev.master || !current.master || prev.master.id !== current.master.id) return undefined;
+    const prevEnd = new Date(prev.slot);
+    prevEnd.setMinutes(prevEnd.getMinutes() + (prev.service.durationMinutes ?? 0));
+    return prevEnd.toISOString();
+  };
+
+  const lastEntry = serviceEntries[serviceEntries.length - 1];
+  const canAddService = !!lastEntry?.service && !!lastEntry?.slot;
+
+  const canCreate =
+    serviceEntries.every((e) => e.service && e.master && e.slot) &&
+    (!!selectedCustomer || !!newClientData?.name);
 
   const handleSubmit = () => {
-    if (!selectedService || !selectedSlot) return;
-    const hasCustomer = !!selectedCustomer || !!newClientData?.name;
-    if (!hasCustomer) return;
+    if (!canCreate) return;
 
-    mutate({
-      ordersData: [
-        {
+    mutate(
+      {
+        ordersData: serviceEntries.map((e) => ({
           type: OrderType.Service,
-          serviceId: selectedService.id,
-          masterId: selectedMaster?.id ?? 0,
-          date: selectedSlot,
-          notes: notes.trim() || undefined,
+          serviceId: e.service!.id,
+          masterId: e.master!.id,
+          date: e.slot!,
+          notes: e.notes.trim() || undefined,
+        })),
+        customerData: selectedCustomer
+          ? { id: selectedCustomer.id }
+          : {
+              name: newClientData!.name,
+              phone: newClientData!.phone ?? '',
+              email: newClientData!.email,
+            },
+      },
+      {
+        onError: (error: unknown) => {
+          const errRecord = error && typeof error === 'object' ? error : null;
+          const apiMessage =
+            errRecord && 'errorMessage' in errRecord ? String(errRecord.errorMessage) : '';
+          if (apiMessage.toLowerCase().includes('not found')) {
+            useApiStatusStore
+              .getState()
+              .setError(true, 'Cannot add two identical services in a row');
+          }
         },
-      ],
-      customerData: selectedCustomer
-        ? { id: selectedCustomer.id as number }
-        : {
-            name: newClientData!.name,
-            phone: newClientData!.phone ?? '',
-            email: newClientData!.email,
-          },
-    });
+      },
+    );
   };
 
   const customerLabel = selectedCustomer
@@ -136,20 +149,6 @@ export const CreateOrderForm = (props: Props) => {
     : newClientData
       ? newClientData.name
       : undefined;
-
-  const masterLabel = selectedMaster
-    ? selectedMaster.name
-    : masters.length === 1
-      ? masters[0]?.name
-      : selectedService
-        ? 'All masters'
-        : undefined;
-
-  const canCreate =
-    !!selectedService &&
-    !!selectedSlot &&
-    (!!selectedCustomer || !!newClientData?.name) &&
-    (!!selectedMaster || masters.length > 0);
 
   return (
     <>
@@ -166,93 +165,63 @@ export const CreateOrderForm = (props: Props) => {
         }}
       />
 
-      <ServicePickerSheet
-        visible={isServicePickerVisible}
-        onClose={closeServicePicker}
-        onSelect={handleServiceSelect}
-      />
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: 32 }}
+        keyboardShouldPersistTaps='handled'
+      >
+        <FormField label='Client'>
+          <LockedField
+            value={customerLabel ?? 'Select client'}
+            onPress={openCustomerPicker}
+            isPlaceholder={!customerLabel}
+          />
+        </FormField>
 
-      <MastersSheet
-        visible={isMasterPickerVisible}
-        onClose={closeMasterPicker}
-        masters={masters}
-        selectedMasterIds={selectedMaster ? [selectedMaster.id] : []}
-        onSelect={handleMasterSelect}
-      />
+        {serviceEntries.map((entry, index) => (
+          <ServiceEntryItem
+            key={index}
+            entry={entry}
+            index={index}
+            canRemove={serviceEntries.length > 1}
+            onChange={(patch) => updateEntry(index, patch)}
+            onRemove={() => removeEntry(index)}
+            rangeFromTime={getRangeFromTime(index)}
+            busyRanges={getBusyRanges(index)}
+          />
+        ))}
 
-      {isDatePickerVisible && (
-        <DatePickerSheet
-          value={tempDate}
-          onClose={closeDatePicker}
-          onConfirm={confirmDate}
-          onChange={(_, date) => {
-            if (date) setTempDate(date);
-          }}
-        />
-      )}
-
-      <FormField label='Client'>
-        <LockedField
-          value={customerLabel ?? 'Select client'}
-          onPress={openCustomerPicker}
-          isPlaceholder={!customerLabel}
-        />
-      </FormField>
-
-      <FormField label='Service'>
-        <LockedField
-          value={selectedService?.name ?? 'Select service'}
-          onPress={openServicePicker}
-          isPlaceholder={!selectedService}
-        />
-      </FormField>
-
-      <FormField label='Master'>
-        <LockedField
-          value={masterLabel ?? (selectedService ? 'Select master' : 'Select service first')}
-          onPress={selectedService ? openMasterPicker : undefined}
-          isPlaceholder={!masterLabel}
-          disabled={!selectedService}
-        />
-      </FormField>
-
-      <FormField label='Date'>
-        <LockedField value={dateLabel} onPress={openDatePicker} />
-      </FormField>
-
-      <FormField label='Available time'>
-        <TimeSlotChips
-          slots={slots}
-          selected={selectedSlot}
-          onSelect={setSelectedSlot}
-          isLoading={isSlotsLoading}
-          enabled={!!selectedService}
-        />
-      </FormField>
-
-      <FormField label='Note (optional)'>
-        <NotesInput value={notes} onChangeText={setNotes} />
-      </FormField>
-
-      <View className='mt-2'>
-        <Pressable
-          className='rounded-xl py-4 items-center'
-          style={{ backgroundColor: canCreate ? colors.primary[700] : colors.gray[200] }}
-          onPress={handleSubmit}
-          disabled={!canCreate || isPending}
-        >
-          {isPending ? (
-            <ActivityIndicator color={colors.white} />
-          ) : (
-            <Text
-              className='text-base font-semibold'
-              style={{ color: canCreate ? colors.white : colors.gray[400] }}
-            >
-              Create booking
+        {canAddService && (
+          <Pressable
+            className='flex-row items-center justify-center rounded-xl border border-dashed border-primary-400 py-3 mb-4'
+            onPress={addService}
+          >
+            <Text variant='labelLarge' style={{ color: colors.primary[700] }}>
+              + Add service
             </Text>
-          )}
-        </Pressable>
-      </View>
+          </Pressable>
+        )}
+
+        <View className='mt-2'>
+          <Pressable
+            className='rounded-xl py-4 items-center'
+            style={{ backgroundColor: canCreate ? colors.primary[700] : colors.gray[200] }}
+            onPress={handleSubmit}
+            disabled={!canCreate || isPending}
+          >
+            {isPending ? (
+              <ActivityIndicator color={colors.white} />
+            ) : (
+              <Text
+                variant='labelLarge'
+                style={{ color: canCreate ? colors.white : colors.gray[400] }}
+              >
+                Create booking
+              </Text>
+            )}
+          </Pressable>
+        </View>
+      </ScrollView>
     </>
   );
 };

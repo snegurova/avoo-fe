@@ -1,7 +1,10 @@
-import { View } from 'react-native';
+import { ActivityIndicator, View } from 'react-native';
 import { Text } from 'react-native-paper';
 
-import { OrderStatusEnum, OrderStatusType } from '@avoo/axios/types/apiEnums';
+import { Order } from '@avoo/axios/types/apiTypes';
+import { colors } from '@avoo/design-tokens';
+import { orderHooks } from '@avoo/hooks';
+import { timeUtils } from '@avoo/shared';
 
 import { Carousel } from '@/shared/Carousel/Carousel';
 import { PillText } from '@/shared/PillText/PillText';
@@ -19,78 +22,56 @@ export type Appointment = {
   clientName: string;
   clientPhone: string;
   note: string;
-  status?: OrderStatusType;
+  status?: string;
 };
 
-const mockAppointments: Appointment[] = [
-  {
-    id: '1',
-    dateLabel: 'Today, 12 Sep',
-    timeRange: '09:15–10:15',
-    service: 'Haircut',
-    duration: '1h 30min',
-    masterName: 'Master Anna',
-    price: '65 Euro',
-    clientName: 'Client Name',
-    clientPhone: '0122-23-23-232',
-    note: 'Lorem ipsum dolor sit amet consectetur. Turpis lorem lectus egestas quam integer. Ac urna…',
-    status: OrderStatusEnum.EXPIRED,
-  },
-  {
-    id: '2',
-    dateLabel: 'Today, 12 Sep',
-    timeRange: '11:00–11:45',
-    service: 'Manicure',
-    duration: '45min',
-    masterName: 'Master Pubert',
-    price: '40 Euro',
-    clientName: 'Maria',
-    clientPhone: '066-234-34-34',
-    note: 'Confirm the color palette before start.',
-    status: OrderStatusEnum.CONFIRMED,
-  },
-  {
-    id: '3',
-    dateLabel: 'Tomorrow, 13 Sep',
-    timeRange: '08:30–09:30',
-    service: 'Brow shaping',
-    duration: '1h',
-    masterName: 'Master Anna',
-    price: '25 Euro',
-    clientName: 'Olena',
-    clientPhone: '050-101-01-01',
-    note: 'Sensitive skin — use gentle wax.',
-    status: OrderStatusEnum.PENDING,
-  },
-  {
-    id: '4',
-    dateLabel: 'Tomorrow, 13 Sep',
-    timeRange: '12:15–13:15',
-    service: 'Massage',
-    duration: '1h',
-    masterName: 'Master Igor',
-    price: '70 Euro',
-    clientName: 'Alex',
-    clientPhone: '093-777-77-77',
-    note: 'Focus on upper back/neck.',
-    status: OrderStatusEnum.CANCELED,
-  },
-  {
-    id: '5',
-    dateLabel: 'Mon, 16 Sep',
-    timeRange: '18:00–19:30',
-    service: 'Hair coloring',
-    duration: '1h 30min',
-    masterName: 'Master Anna',
-    price: '120 Euro',
-    clientName: 'Katya',
-    clientPhone: '098-222-22-22',
-    note: 'Bring reference photo; prefers colder tones.',
-    status: OrderStatusEnum.COMPLETED,
-  },
-];
+const mapOrderToAppointment = (order: Order): Appointment => {
+  const endTime = timeUtils.getEndTime(order.date, order.duration);
+  return {
+    id: String(order.id),
+    dateLabel: timeUtils.getHumanDate(order.date),
+    timeRange: `${timeUtils.getTime(order.date)}–${endTime}`,
+    service: order.service?.name ?? order.combination?.name ?? '—',
+    duration: timeUtils.getHumanDuration(order.duration),
+    masterName: order.master?.name ?? '—',
+    price: `${order.price} Euro`,
+    clientName: order.customer?.name ?? order.customer?.email ?? '—',
+    clientPhone: order.customer?.phone ?? '',
+    note: typeof order.notes === 'string' ? order.notes : '',
+    status: order.status,
+  };
+};
 
 export const AppointmentsSection = () => {
+  const appointments = orderHooks.useUpcomingAppointmentsByMaster(20);
+
+  if (!appointments) {
+    return (
+      <View className='bg-white rounded-2xl p-5 border border-gray-200 items-center py-8'>
+        <ActivityIndicator color={colors.primary[700]} />
+      </View>
+    );
+  }
+
+  if (appointments.length === 0) {
+    return (
+      <View className='bg-white rounded-2xl p-5 border border-gray-200'>
+        <View className='flex-row items-center justify-between mb-4'>
+          <Text variant='titleLarge'>Next appointments</Text>
+          <PillText>Starting next</PillText>
+        </View>
+        <View className='rounded-lg border border-gray-200 px-6 py-10 items-center justify-center'>
+          <Text variant='titleMedium' style={{ textAlign: 'center', marginBottom: 8 }}>
+            No upcoming appointments
+          </Text>
+          <Text variant='bodySmall' style={{ color: colors.gray[500], textAlign: 'center' }}>
+            Upcoming appointments will appear here.
+          </Text>
+        </View>
+      </View>
+    );
+  }
+
   return (
     <View className='bg-white rounded-2xl p-5 border border-gray-200'>
       <View className='flex-row items-center justify-between mb-4'>
@@ -99,7 +80,7 @@ export const AppointmentsSection = () => {
       </View>
 
       <Carousel
-        data={mockAppointments}
+        data={appointments.map(mapOrderToAppointment)}
         renderItem={(appointment) => <AppointmentCard appointment={appointment} />}
       />
     </View>
