@@ -142,7 +142,7 @@ export default function AppNavigation({ menuOpen, setMenuOpen }: Props) {
           <div className='px-8 shrink-0'>
             <Link
               href={localizationHooks.useWithLocale(AppRoutes.Home)}
-              className='font-inter font-semibold text-4xl text-gray-600'
+              className='font-semibold text-4xl text-gray-600 inline-flex items-center font-advent-pro text-center'
               onClick={handleCloseMenu}
             >
               {tCommon('avoo')}
