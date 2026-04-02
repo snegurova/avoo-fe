@@ -89,15 +89,17 @@ export default function SalonPageServicesTab(props: Props) {
     <div className='pb-8 xl:pb-11 pt-4 xl:pt-8 lg:grid lg:grid-cols-4'>
       <div className='sticky lg:static top-0 '>
         <div className='lg:sticky lg:top-4 xl:top-6 flex lg:flex-col gap-3 py-2 lg:py-0 overflow-x-auto whitespace-nowrap lg:whitespace-normal bg-gray-50 lg:bg-transparent px-5 lg:px-0'>
-          <button
-            className={button({ active: selectedCategory === undefined })}
-            onClick={() => handleCategoryClick(undefined)}
-          >
-            <span>{t('allCategories')}</span>
-            <span className='w-5 h-5 rounded-full border border-gray-100 flex items-center justify-center text-xs text-black shrink-0'>
-              {categories?.total}
-            </span>
-          </button>
+          {categories?.categories.some((cat) => cat.totalServices) && (
+            <button
+              className={button({ active: selectedCategory === undefined })}
+              onClick={() => handleCategoryClick(undefined)}
+            >
+              <span>{t('allCategories')}</span>
+              <span className='w-5 h-5 rounded-full border border-gray-100 flex items-center justify-center text-xs text-black shrink-0'>
+                {categories?.total}
+              </span>
+            </button>
+          )}
           {categories?.categories.map((cat) =>
             cat.totalServices ? (
               <button

@@ -32,26 +32,33 @@ const wrapper = tv({
 
 export default function CombinationProposition(props: Props) {
   const t = useTranslations('private.orders.create');
+  const tPublic = useTranslations('public.salon.createOrder');
   const { data, onCancel, onApply, isPublic = false } = props;
 
   return (
     <div className={wrapper({ isPublic })}>
       <div className=''>
-        <p>
-          {data.services[0].name} {t('canBeCombined')}{' '}
-          {data.services
-            .slice(1)
-            .map((service) => service.name)
-            .join(', ')}
-          .
-        </p>
-        <p>
-          {t('totalDurationMessage')}{' '}
-          <span className='font-medium'>
-            {data.durationMinutes} {t('minutes')}
-          </span>
-          .
-        </p>
+        {isPublic ? (
+          <p>{tPublic('combineProposition')}</p>
+        ) : (
+          <>
+            <p>
+              {data.services[0].name} {t('canBeCombined')}{' '}
+              {data.services
+                .slice(1)
+                .map((service) => service.name)
+                .join(', ')}
+              .
+            </p>
+            <p>
+              {t('totalDurationMessage')}{' '}
+              <span className='font-medium'>
+                {data.durationMinutes} {t('minutes')}
+              </span>
+              .
+            </p>
+          </>
+        )}
       </div>
       <div className='flex gap-6 justify-center'>
         <Button
@@ -61,7 +68,7 @@ export default function CombinationProposition(props: Props) {
           size={ButtonSize.Small}
           onClick={onCancel}
         >
-          {t('bookSeparately')}
+          {isPublic ? tPublic('no') : t('bookSeparately')}
         </Button>
         <Button
           fit={ButtonFit.Inline}
@@ -70,7 +77,7 @@ export default function CombinationProposition(props: Props) {
           size={ButtonSize.Small}
           onClick={onApply}
         >
-          {t('applyCombination')}
+          {isPublic ? tPublic('yes') : t('applyCombination')}
         </Button>
       </div>
     </div>

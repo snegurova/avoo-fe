@@ -37,13 +37,13 @@ export const OrderBottomSheet = ({ visible, onClose, orderId }: Props) => {
   );
 
   return (
-    <CustomBottomSheet visible={visible} onClose={onClose}>
+    <CustomBottomSheet visible={visible} onClose={onClose} disableSwipeToClose={mode === Mode.Edit}>
       {!order ? (
         <View className='py-10 items-center'>
           <ActivityIndicator />
         </View>
       ) : (
-        <View className='flex-1 px-5'>
+        <View className='flex-1'>
           {mode === Mode.View && (
             <OrderViewContent
               order={order}

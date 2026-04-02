@@ -73,16 +73,45 @@ export default function PublicCombinationForm(props: Props) {
   });
 
   useEffect(() => {
-    const newValue = timeUtils.convertDateToString(
-      selectedSlot ? selectedSlot : new Date(value[0]?.date || new Date()),
-    );
+    if (!selectedSlot) return;
 
-    const newOrders = [...value];
-    newOrders[0] = {
-      ...newOrders[0],
-      date: newValue,
-    };
-    onChange(newOrders);
+    if (selectAnyMaster && selectedCombination && selectedSlot) {
+      const allMasterIds = selectedCombination.masters?.map((m) => m.id) || [];
+
+      let foundMasterId: number | null = null;
+      let foundMaster: MasterWithRelationsEntity | null = null;
+
+      if (!foundMasterId && allMasterIds.length > 0) {
+        const randomIdx = Math.floor(Math.random() * allMasterIds.length);
+        foundMasterId = allMasterIds[randomIdx];
+      }
+      if (foundMasterId) {
+        foundMaster = masters?.find((m) => m.id === foundMasterId) || null;
+      }
+      const newValue = timeUtils.convertDateToString(selectedSlot);
+      const newOrders = [...value];
+      newOrders[0] = {
+        ...newOrders[0],
+        date: newValue,
+        masterId: foundMasterId || 0,
+      };
+      onChange(newOrders);
+      setSelectedMasters((prev) => {
+        const newMasters = [...prev];
+        newMasters[0] = foundMaster;
+        return newMasters;
+      });
+    } else {
+      const newValue = timeUtils.convertDateToString(
+        selectedSlot ? selectedSlot : new Date(value[0]?.date || new Date()),
+      );
+      const newOrders = [...value];
+      newOrders[0] = {
+        ...newOrders[0],
+        date: newValue,
+      };
+      onChange(newOrders);
+    }
   }, [selectedSlot]);
 
   const {
@@ -110,19 +139,46 @@ export default function PublicCombinationForm(props: Props) {
     if (!val) {
       return;
     }
+    if (val.id === 0 && !selectAnyMaster) {
+      const newOrders = [...value];
+      newOrders[0] = { ...newOrders[0], masterId: 0 };
+      onChange(newOrders);
+      setSelectedMasters((prev) => {
+        const newMasters = [...prev];
+        newMasters[0] = null;
+        return newMasters;
+      });
+      setStep(2);
+      return;
+    }
     const newOrders = [...value];
-    newOrders[0] = { ...newOrders[0], masterId: val.id };
-    onChange(newOrders);
+    if (val.id === 0 && selectedCombination) {
+      const allMasterIds = selectedCombination.masters?.map((m) => m.id) || [];
 
-    setSelectedMasters((prev) => {
-      const newMaster = masters?.find((master) => master.id === val.id) || null;
-      return prev.map(() => newMaster);
-    });
-
-    setCalendarParams((prev) => ({
-      ...prev,
-      masterIds: val.id ? [val.id] : undefined,
-    }));
+      newOrders[0] = { ...newOrders[0], masterId: 0 };
+      onChange(newOrders);
+      setSelectedMasters((prev) => {
+        const newMasters = [...prev];
+        newMasters[0] = null;
+        return newMasters;
+      });
+      setStep(2);
+      setCalendarParams((prev) => ({
+        ...prev,
+        masterIds: allMasterIds,
+      }));
+    } else {
+      newOrders[0] = { ...newOrders[0], masterId: val.id };
+      onChange(newOrders);
+      setSelectedMasters((prev) => {
+        const newMaster = masters?.find((master) => master.id === val.id) || null;
+        return prev.map(() => newMaster);
+      });
+      setCalendarParams((prev) => ({
+        ...prev,
+        masterIds: val.id ? [val.id] : undefined,
+      }));
+    }
   };
 
   const onDateChange = (newDate: string) => {
@@ -149,10 +205,12 @@ export default function PublicCombinationForm(props: Props) {
     <div className=''>
       <div className='flex flex-col gap-4 py-4'>
         <div className='flex flex-col gap-4'>
-          <PublicOrderTitle isActive={false} title='selectedServices' />
-          {selectedCombination && (
-            <PublicCombinationCard item={selectedCombination} onClick={splitCombination} />
-          )}
+          <div className=''>
+            <PublicOrderTitle isActive={false} title='selectedServices' />
+            {selectedCombination && (
+              <PublicCombinationCard item={selectedCombination} onClick={splitCombination} />
+            )}
+          </div>
           <FormTextArea
             id={`combination-notes`}
             name={`combination-notes`}
@@ -163,7 +221,7 @@ export default function PublicCombinationForm(props: Props) {
             maxLength={200}
             error={errors?.notes?.message}
             classNames={{
-              label: 'block text-black font-medium',
+              label: 'block font-medium text-base leading-loose text-black py-1',
               textarea:
                 'block w-full text-sm text-black border border-gray-200 p-3 rounded-lg min-h-[70px] focus:outline-none focus:ring-1 focus:ring-black',
             }}
@@ -184,6 +242,7 @@ export default function PublicCombinationForm(props: Props) {
           selectAnyMaster={selectAnyMaster}
           setSelectAnyMaster={setSelectAnyMaster}
           ref={masterSelectionRef}
+          error={errors?.masterId?.message}
         />
 
         <PublicDateTimeSelection

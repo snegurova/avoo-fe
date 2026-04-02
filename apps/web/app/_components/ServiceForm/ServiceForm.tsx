@@ -48,6 +48,7 @@ type Props = {
     setActiveOrder?: (index: number) => void;
     activeOrder?: number;
     setStartDate?: (date: string | null) => void;
+    selectedServices: (Service | null)[];
   }>;
 };
 
@@ -102,7 +103,7 @@ export default function ServiceForm(props: Props) {
       setMasterIds(undefined);
     }
 
-    setSlots([...(slots ? [...slots] : []).splice(index, 1)]);
+    setSlots([...(slots ? [...slots] : []).filter((_, idx) => idx !== index)]);
   };
 
   return (
@@ -128,6 +129,7 @@ export default function ServiceForm(props: Props) {
           setActiveOrder={setActiveOrder}
           activeOrder={activeOrder}
           setStartDate={setStartDate}
+          selectedServices={selectedServices}
         />
       ))}
     </div>

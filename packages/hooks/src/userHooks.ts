@@ -62,7 +62,31 @@ export const userHooks = {
       userId: profileInfo?.id ?? null,
     };
   },
-  useGetUserMedia: (limit: number = 10) => {
+  useGetUserMedia: (page?: number, limit?: number) => {
+    const { userId } = userHooks.useGetUserProfile();
+
+    const {
+      data: userMediaData,
+      isPending,
+      isFetching,
+    } = useQuery<BaseResponse<UserMediaResponse>, Error>({
+      queryKey: [...queryKeys.user.media(), userId, page, limit],
+      queryFn: () => {
+        if (!userId) throw new Error('userId is required');
+        return userApi.getUserMedia(MediaType.USER, userId, page, limit);
+      },
+      enabled: !!userId,
+    });
+
+    utils.useSetPendingApi(isPending);
+
+    if (userMediaData?.status === ApiStatus.SUCCESS) {
+      return { ...userMediaData.data, isFetching };
+    }
+
+    return null;
+  },
+  useGetUserMediaList: (limit?: number) => {
     const { userId } = userHooks.useGetUserProfile();
 
     const query = useInfiniteQuery<BaseResponse<UserMediaResponse>, Error>({
@@ -74,7 +98,7 @@ export const userHooks = {
       initialPageParam: 1,
       getNextPageParam: (lastPage) => {
         const { currentPage, total } = lastPage.data?.pagination || { currentPage: 0, total: 0 };
-        return currentPage * limit < total ? currentPage + 1 : undefined;
+        return currentPage * (limit ?? 0) < total ? currentPage + 1 : undefined;
       },
       enabled: !!userId,
     });

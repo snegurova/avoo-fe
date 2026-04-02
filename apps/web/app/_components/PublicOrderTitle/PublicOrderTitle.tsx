@@ -11,20 +11,21 @@ type Props = {
   search?: string;
   setSearch?: (value: string) => void;
   placeholder?: string;
+  noSelect?: boolean;
 };
 
 const titleWrapper = tv({
-  base: 'py-3 transition-colors flex gap-10 items-center pr-4',
+  base: 'py-2 transition-colors flex gap-10 items-center pr-4 rounded-lg',
   variants: {
     active: {
-      true: 'bg-gray-100',
+      true: 'bg-gray-200 ',
       false: '',
     },
   },
 });
 
 const titleStyle = tv({
-  base: 'font-medium text-2xl leading-normal text-black transition-transform',
+  base: 'font-medium text-base leading-loose text-black transition-transform',
   variants: {
     active: {
       true: 'translate-x-6',
@@ -34,13 +35,15 @@ const titleStyle = tv({
 });
 
 export default function PublicOrderTitle(props: Props) {
-  const { isActive, title, search, setSearch, placeholder } = props;
+  const { isActive, title, search, setSearch, placeholder, noSelect = false } = props;
 
   const t = useTranslations('public.salon.createOrder');
 
   return (
     <div className={titleWrapper({ active: isActive })}>
-      <h3 className={titleStyle({ active: isActive })}>{t(title)}</h3>
+      <h3 className={titleStyle({ active: isActive })}>
+        {t(isActive && !noSelect ? 'select' + title : title)}
+      </h3>
       {isActive && search !== undefined && setSearch !== undefined && (
         <PublicSearch
           placeholder={placeholder ?? t('search')}

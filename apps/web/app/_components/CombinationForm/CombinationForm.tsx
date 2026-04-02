@@ -39,6 +39,7 @@ type Props = {
 export default function CombinationForm(props: Props) {
   const tCommon = useTranslations('private.components.CombinationForm.CombinationForm');
   const t = useTranslations('private.orders.create');
+  const tCalendar = useTranslations('private.calendar.calendar');
   const {
     value,
     onChange,
@@ -113,6 +114,12 @@ export default function CombinationForm(props: Props) {
       return;
     }
 
+    if (
+      new Date(availableDate).getTime() !== new Date(availabilityParams.rangeFromTime).getTime()
+    ) {
+      toast.info(tCalendar('dateNotAvailable'));
+    }
+
     setDate(timeUtils.toDayBegin(new Date(availableDate)));
 
     newOrders[0] = { ...newOrders[0], masterId: val.id, date: availableDate };
@@ -157,6 +164,12 @@ export default function CombinationForm(props: Props) {
     if (!availableDate) {
       toast.error(tCommon('noAvailableTime'));
       return;
+    }
+
+    if (
+      new Date(availableDate).getTime() !== new Date(availabilityParams.rangeFromTime).getTime()
+    ) {
+      toast.info(tCalendar('dateNotAvailable'));
     }
 
     setDate(timeUtils.toDayBegin(new Date(availableDate)));

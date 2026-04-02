@@ -43,7 +43,7 @@ export const AvatarUpload = (props: Props) => {
     >
       <View style={{ width: size, height: size }}>
         <View
-          className='bg-primary-50 items-center justify-center overflow-hidden'
+          className='bg-white items-center justify-center overflow-hidden'
           style={{ width: size, height: size, borderRadius: size / 2 }}
         >
           {isUploading ? (

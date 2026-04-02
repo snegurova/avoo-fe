@@ -1,5 +1,7 @@
 import React, { forwardRef } from 'react';
 
+import { tv } from 'tailwind-variants';
+
 import { timeUtils } from '@avoo/shared';
 
 import { PX_IN_MINUTE } from '@/_constants/time';
@@ -11,6 +13,16 @@ type Props = {
   date: string;
   duration: number;
 };
+
+const slot = tv({
+  base: 'flex  gap-1 pointer-events-none border rounded-[3px] overflow-hidden h-full relative w-full cursor-pointer transition-colors border-green-800 bg-green-200 text-green-800 p-1 font-medium order-item',
+  variants: {
+    small: {
+      true: '',
+      false: 'flex-col',
+    },
+  },
+});
 
 const CalendarSlot = forwardRef<HTMLDivElement, Props>(function CalendarSlot(props, ref) {
   const { index, title, date, duration } = props;
@@ -24,7 +36,7 @@ const CalendarSlot = forwardRef<HTMLDivElement, Props>(function CalendarSlot(pro
         height: `${duration * PX_IN_MINUTE}px`,
       }}
     >
-      <div className='flex flex-col gap-1 pointer-events-none border rounded-[3px] overflow-hidden h-full relative w-full cursor-pointer transition-colors border-green-800 bg-green-200 text-green-800 p-1 font-medium order-item'>
+      <div className={slot({ small: duration < 30 })}>
         <div className='flex gap-1'>
           <SearchActivity className='w-3 h-3 shrink-0 fill-green-800' />
 

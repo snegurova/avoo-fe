@@ -21,7 +21,7 @@ export const ProfileGallery = () => {
   const LIMIT = 4;
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, refetch } =
-    userHooks.useGetUserMedia(LIMIT);
+    userHooks.useGetUserMediaList(LIMIT);
   const { userId } = userHooks.useGetUserProfile();
 
   const medias = useMemo(
