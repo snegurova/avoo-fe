@@ -5,16 +5,18 @@ import { useController } from 'react-hook-form';
 import { useTranslations } from 'next-intl';
 
 import type { FileEntity, MasterWithRelationsEntityResponse } from '@avoo/axios/types/apiTypes';
-import { masterHooks, phoneHooks } from '@avoo/hooks';
+import { masterHooks, phoneHooks, userHooks } from '@avoo/hooks';
 
 import { AvatarSize, AvatarUpload } from '@/_components/AvatarUpload/AvatarUpload';
 import FormInput from '@/_components/FormInput/FormInput';
 import FormLanguageSearch from '@/_components/FormLanguageSearch/FormLanguageSearch';
 import FormTextarea from '@/_components/FormTextArea/FormTextArea';
 import PhoneCodeSelect from '@/_components/PhoneCodeSelect/PhoneCodeSelect';
+import { localizationHooks } from '@/_hooks/localizationHooks';
 import { useToast } from '@/_hooks/useToast';
 import DeleteIcon from '@/_icons/DeleteIcon';
 import ShareIcon from '@/_icons/ShareIcon';
+import { AppRoutes } from '@/_routes/routes';
 
 import ConfirmationModal from '../ConfirmationModal/ConfirmationModal';
 import { IconButton } from '../IconButton/IconButton';
@@ -34,8 +36,12 @@ export default function MasterEditForm({
   onDirtyChange,
 }: Readonly<Props>) {
   const t = useTranslations('private.components.MasterEditForm.MasterEditForm');
+  const tCard = useTranslations('private.components.ServiceCard.ServiceCard');
   const toast = useToast();
   const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
+  const { userId } = userHooks.useGetUserProfile();
+  const baseUrl = typeof window === 'undefined' ? '' : window.location.origin;
+  const link = `${baseUrl}${localizationHooks.useWithLocale(AppRoutes.PublicSalon)}/${userId}${AppRoutes.PublicOrderCreate}?masterId=${master.id}`;
 
   const {
     control,
@@ -118,6 +124,11 @@ export default function MasterEditForm({
     deleteMaster(master.id);
   }, [deleteMaster, master.id]);
 
+  const onShareClick = useCallback(() => {
+    navigator.clipboard.writeText(link);
+    toast.info(tCard('copiedToClipboard'));
+  }, [link, tCard, toast]);
+
   const { field: languagesField, fieldState: languagesFieldState } = useController({
     name: 'languages',
     control,
@@ -133,6 +144,7 @@ export default function MasterEditForm({
               <IconButton
                 ariaLabel={t('share')}
                 icon={<ShareIcon className='fill-current' />}
+                onClick={onShareClick}
                 className='inline-flex items-center justify-center bg-primary-50 p-2.5 rounded-[8px] hover:bg-primary-100 focus:bg-primary-100 transition-colors'
               />
               <IconButton

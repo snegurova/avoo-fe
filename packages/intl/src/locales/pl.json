@@ -523,6 +523,8 @@
           "close": "Zamknij",
           "add": "Dodaj",
           "addSuccess": "Nowy pracownik został pomyślnie dodany",
+          "emailAlreadyExists": "Adres e-mail już istnieje",
+          "defaultFailError": "Coś poszło nie tak. Spróbuj ponownie później.",
           "infoDisplayPlatform": "Informacje będą wyświetlane na platformie."
         }
       },

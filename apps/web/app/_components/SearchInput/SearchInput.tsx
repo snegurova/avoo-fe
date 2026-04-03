@@ -13,6 +13,7 @@ type Props = {
   value: string;
   onChange: (value: string) => void;
   onFocus?: () => void;
+  inputRef?: React.Ref<HTMLInputElement>;
   placeholder?: string;
   className?: string;
   borderRadius?: number;
@@ -33,6 +34,7 @@ export const SearchInput = ({
   value,
   onChange,
   onFocus = () => {},
+  inputRef,
   placeholder = 'Search',
   className,
   borderRadius,
@@ -65,6 +67,7 @@ export const SearchInput = ({
           style={{ marginLeft: mix.iconMarginLeft, fill: theme.palette.text.secondary }}
         />
         <input
+          ref={inputRef}
           value={value}
           onChange={(e) => onChange(e.target.value)}
           placeholder={placeholder}

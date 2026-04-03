@@ -65,6 +65,7 @@ export type AffectedBooking = {
   price: number;
   note?: string;
   masterName: string;
+  masterAvatarUrl?: string | null;
 };
 
 export const timeOffTypeLabels: Record<TimeOffType, string> = {

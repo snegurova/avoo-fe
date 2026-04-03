@@ -77,7 +77,7 @@ export default function TimeOffAddForm() {
     });
 
   const values = watch();
-  const { conflictMessage, hasConflict, isConflictsLoading, affectedBookings } =
+  const { conflictMessage, isConflictsLoading, affectedBookings } =
     timeOffConflictHooks.useTimeOffConflicts({
       values,
       masters,
@@ -329,7 +329,7 @@ export default function TimeOffAddForm() {
             color='secondary'
             variant='contained'
             sx={{ width: { xs: 130, md: 170 }, height: 45 }}
-            disabled={isPending || isConflictsLoading || hasConflict}
+            disabled={isPending || isConflictsLoading}
           >
             {t('save')}
           </Button>

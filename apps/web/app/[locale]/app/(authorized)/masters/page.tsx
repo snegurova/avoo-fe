@@ -8,7 +8,7 @@ import type { MasterWithRelationsEntityResponse } from '@avoo/axios/types/apiTyp
 import { masterHooks, useDebounce } from '@avoo/hooks';
 
 import AppWrapper from '@/_components/AppWrapper/AppWrapper';
-import Controls from '@/_components/Controls/Controls';
+import Controls, { ControlsVariant } from '@/_components/Controls/Controls';
 import MasterEditModal from '@/_components/MasterEditModal/MasterEditModal';
 import MasterList from '@/_components/MasterList/MasterList';
 import { localizationHooks } from '@/_hooks/localizationHooks';
@@ -17,15 +17,16 @@ import { AppRoutes } from '@/_routes/routes';
 export default function MastersPage() {
   const t = useTranslations('private.masters');
   const [searchQuery, setSearchQuery] = useState('');
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc' | undefined>(undefined);
   const DEFAULT_LIMIT = 10;
-  const debouncedSearch = useDebounce(searchQuery, 400);
+  const debouncedSearch = useDebounce(searchQuery);
   const [editingMaster, setEditingMaster] = useState<MasterWithRelationsEntityResponse | null>(
     null,
   );
 
   const queryParams = useMemo(
-    () => ({ limit: DEFAULT_LIMIT, search: debouncedSearch }),
-    [debouncedSearch],
+    () => ({ limit: DEFAULT_LIMIT, search: debouncedSearch || undefined, sort: sortDirection }),
+    [debouncedSearch, sortDirection],
   );
   const { data, fetchNextPage, hasNextPage } = masterHooks.useGetMastersInfinite(queryParams);
 
@@ -63,6 +64,7 @@ export default function MastersPage() {
           searchValue={searchQuery}
           onSearchChange={setSearchQuery}
           placeholder={t('searchNamePhoneEmail')}
+          variant={ControlsVariant.Default}
           className='sticky top-0 z-10 bg-white px-5 md:px-11 lg:px-11 pt-6 lg:pt-14 lg:pb-8'
         />
 
@@ -73,6 +75,8 @@ export default function MastersPage() {
             selectedId={editingMaster?.id ?? null}
             incrementPage={fetchNextPage}
             hasMore={!!hasNextPage}
+            sortDirection={sortDirection ?? null}
+            onSortChange={setSortDirection}
           />
 
           <MasterEditModal
