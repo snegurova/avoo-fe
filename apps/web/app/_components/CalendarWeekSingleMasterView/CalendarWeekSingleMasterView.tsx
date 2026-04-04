@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { PrivateEvent } from '@avoo/axios/types/apiTypes';
 import { CalendarItem } from '@avoo/axios/types/apiTypes';
 import { MasterWithRelationsEntity } from '@avoo/axios/types/apiTypes';
 import { CalendarType } from '@avoo/hooks/types/calendarType';
@@ -8,6 +9,7 @@ import { useCalendarStore } from '@avoo/store';
 
 import CalendarColumn from '@/_components/CalendarColumn/CalendarColumn';
 import CalendarTimeScale from '@/_components/CalendarTimeScale/CalendarTimeScale';
+
 type Props = {
   time: number;
   setTime: React.Dispatch<React.SetStateAction<number>>;
@@ -15,10 +17,11 @@ type Props = {
   master: MasterWithRelationsEntity;
   availableBooking: boolean;
   calendarType: CalendarType;
+  selectOrder?: (event: PrivateEvent | null) => void;
 };
 
 export default function CalendarWeekSingleMasterView(props: Props) {
-  const { time, setTime, data, master, availableBooking, calendarType } = props;
+  const { time, setTime, data, master, availableBooking, calendarType, selectOrder } = props;
   const date = useCalendarStore((state) => state.date);
   return (
     <>
@@ -47,6 +50,7 @@ export default function CalendarWeekSingleMasterView(props: Props) {
               isSingleWeek
               availableBooking={availableBooking}
               calendarType={calendarType}
+              selectOrder={selectOrder}
             />
           ))}
       </div>
