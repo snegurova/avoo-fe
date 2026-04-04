@@ -4,8 +4,6 @@ import React, { useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 
-import useMediaQuery from '@mui/material/useMediaQuery';
-
 import { userHooks } from '@avoo/hooks';
 
 import AppProfileSelect from '@/_components/AppProfileSelect/AppProfileSelect';
@@ -31,7 +29,6 @@ export default function AppHeader({ setMenuOpen }: Props) {
   const router = useRouter();
 
   const toast = useToast();
-  const tabletUp = useMediaQuery('(min-width:768px)');
   const orderCreatePath = localizationHooks.useWithLocale(AppRoutes.OrderCreate);
   const orderAddPostPath = localizationHooks.useWithLocale(AppRoutes.AddPost);
 
@@ -68,15 +65,10 @@ export default function AppHeader({ setMenuOpen }: Props) {
 
   return (
     <header className='px-4 md:px-0 flex flex-col gap-3 md:gap-0'>
-      <div className='flex items-center justify-between gap-23'>
+      <div className='flex items-center justify-between lg:justify-end gap-23'>
         <div className='block lg:hidden'>
           <IconButton icon={<MenuIcon />} onClick={onMenuClick} />
         </div>
-        {tabletUp && (
-          <div className='bg-primary-100 rounded-2xl px-4 py-3.5 font-medium grow'>
-            <p className='text-primary-800'>{t('billingNotification')}</p>
-          </div>
-        )}
         <div className='flex items-center lg:gap-6 xl:gap-10 2xl:gap-25 shrink-0'>
           <div className='hidden lg:block'>
             <SelectButton label={t('add')} options={options} />
@@ -99,11 +91,6 @@ export default function AppHeader({ setMenuOpen }: Props) {
           </div>
         </div>
       </div>
-      {!tabletUp && (
-        <div className='bg-primary-100 rounded-2xl px-4 py-3.5 font-medium grow'>
-          <p className='text-primary-800'>{t('billingNotification')}</p>
-        </div>
-      )}
     </header>
   );
 }

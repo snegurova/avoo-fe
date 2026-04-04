@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 import { tv } from 'tailwind-variants';
 
+import { PrivateEvent } from '@avoo/axios/types/apiTypes';
 import { PrivateCalendarByDatesQueryParams } from '@avoo/axios/types/apiTypes';
 import { calendarHooks } from '@avoo/hooks';
 import { CalendarViewType } from '@avoo/hooks/types/calendarViewType';
@@ -12,6 +13,7 @@ import { useCalendarStore } from '@avoo/store';
 import CalendarEvent from '../CalendarEvent/CalendarEvent';
 type Props = {
   params: PrivateCalendarByDatesQueryParams;
+  selectOrder?: (event: PrivateEvent | null) => void;
 };
 
 const dayCell = tv({
@@ -47,7 +49,7 @@ const grid = tv({
 });
 
 export default function CalendarMonthView(props: Props) {
-  const { params } = props;
+  const { params, selectOrder } = props;
   const setDate = useCalendarStore((state) => state.setDate);
   const setToDate = useCalendarStore((state) => state.setToDate);
   const setType = useCalendarStore((state) => state.setType);
@@ -87,6 +89,13 @@ export default function CalendarMonthView(props: Props) {
     setType(CalendarViewType.DAY);
   };
 
+  const handleOrderSelect = useCallback(
+    (event: PrivateEvent) => {
+      if (selectOrder) selectOrder(event);
+    },
+    [selectOrder],
+  );
+
   return (
     <div
       ref={ref}
@@ -109,7 +118,12 @@ export default function CalendarMonthView(props: Props) {
                 <div className='flex flex-col flex-1 gap-1 justify-between'>
                   <div className='flex flex-col gap-0.5'>
                     {slicedEvents.map((event, eIdx) => (
-                      <CalendarEvent key={eIdx} event={event} type={CalendarViewType.MONTH} />
+                      <CalendarEvent
+                        key={eIdx}
+                        event={event}
+                        type={CalendarViewType.MONTH}
+                        onEventSelect={handleOrderSelect}
+                      />
                     ))}
                   </div>
                   {showEvents < totalEvents && (
