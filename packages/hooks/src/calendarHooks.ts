@@ -146,6 +146,7 @@ export const calendarHooks = {
     utils.useSetPendingApi(mutation.isPending);
 
     const slots = useCalendarStore((state) => state.slots);
+    const workingTimeOnly = useCalendarStore((state) => state.workingTimeOnly);
 
     const getAvailableDate = async ({
       rangeFromTime,
@@ -180,7 +181,7 @@ export const calendarHooks = {
       while (true) {
         const params: PrivateGetAvailabilityQueryParams = {
           rangeFromTime: timeUtils.convertLocalToUTC(checkedDate),
-          workingTimeOnly: false,
+          workingTimeOnly: workingTimeOnly,
         };
 
         if (masterIds) {

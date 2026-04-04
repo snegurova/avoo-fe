@@ -171,7 +171,9 @@
         "totalDurationMessage": "Całkowity czas wizyty będzie wynosił",
         "minutes": "minut",
         "bookSeparately": "Rezerwuj osobno",
-        "applyCombination": "Zastosuj kombinację"
+        "applyCombination": "Zastosuj kombinację",
+        "workingTimeOnly": "Tylko godziny pracy",
+        "anyTime": "Dowolne godziny"
       }
     },
     "addPost": {
