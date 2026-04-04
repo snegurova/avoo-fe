@@ -252,7 +252,11 @@ export const updateOrderSchema = yup.object({
 });
 
 export const createServiceSchema = yup.object({
-  name: yup.string().min(3, 'Name must be at least 3 characters').required('Name is required'),
+  name: yup
+    .string()
+    .min(3, 'Name must be at least 3 characters')
+    .max(50, 'Name must be at most 50 characters')
+    .required('Name is required'),
   description: yup
     .string()
     .min(5, 'Description must be at least 5 characters')
@@ -271,7 +275,11 @@ export const createServiceSchema = yup.object({
 });
 
 export const updateServiceSchema = yup.object({
-  name: yup.string().min(3, 'Name must be at least 3 characters').required('Name is required'),
+  name: yup
+    .string()
+    .min(3, 'Name must be at least 3 characters')
+    .max(50, 'Name must be at most 50 characters')
+    .required('Name is required'),
   description: yup
     .string()
     .min(5, 'Description must be at least 5 characters')
@@ -290,7 +298,7 @@ export const updateServiceSchema = yup.object({
 });
 
 export const updateCombinationSchema = yup.object({
-  name: yup.string().min(3).required(),
+  name: yup.string().min(3).max(100, 'Name must be at most 100 characters').required(),
   durationMinutes: yup.number().min(1).required(),
   isActive: yup.boolean().required(),
   masterIds: yup
@@ -308,7 +316,7 @@ export const updateCombinationSchema = yup.object({
 });
 
 export const createCombinationSchema = yup.object({
-  name: yup.string().min(3).required(),
+  name: yup.string().min(3).max(100, 'Name must be at most 100 characters').required(),
   durationMinutes: yup.number().min(1).required(),
   isActive: yup.boolean().required(),
   masterIds: yup
