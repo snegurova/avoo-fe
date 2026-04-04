@@ -76,7 +76,7 @@ export default function ServiceAddForm(props: Props) {
     setMedias(medias.filter((media) => media.id !== id));
   };
 
-  const { control, setValue, getValues, handleSubmit, isDirty, errors, isValid } =
+  const { control, setValue, getValues, handleSubmit, isDirty, errors, isValid, touchedFields } =
     servicesHooks.useCreateServiceForm({
       onSuccess: () => {
         toast.success(t('serviceCreated'));
@@ -110,7 +110,7 @@ export default function ServiceAddForm(props: Props) {
             <Typography variant='h3'>{t('basicDetail')}</Typography>
             <div className='mt-4'>
               <div className='grid grid-cols-1 lg:grid-cols-2 gap-8'>
-                <FormControl fullWidth error={!!errors.name?.message}>
+                <FormControl fullWidth error={!!errors.name && touchedFields.name}>
                   <Controller
                     name='name'
                     control={control}
@@ -124,7 +124,9 @@ export default function ServiceAddForm(props: Props) {
                       />
                     )}
                   />
-                  {errors.name?.message && <FormHelperText>{errors.name?.message}</FormHelperText>}
+                  {touchedFields.name && errors.name?.message && (
+                    <FormHelperText>{errors.name?.message}</FormHelperText>
+                  )}
                 </FormControl>
                 <CategorySelect
                   categories={categories}
@@ -180,7 +182,10 @@ export default function ServiceAddForm(props: Props) {
                   )}
                 </FormControl>
 
-                <FormControl fullWidth error={!!errors.description?.message}>
+                <FormControl
+                  fullWidth
+                  error={!!errors.description?.message && touchedFields.description}
+                >
                   <Controller
                     name='description'
                     control={control}
@@ -195,7 +200,7 @@ export default function ServiceAddForm(props: Props) {
                       />
                     )}
                   />
-                  {errors.description?.message && (
+                  {touchedFields.description && errors.description?.message && (
                     <FormHelperText>{errors.description?.message}</FormHelperText>
                   )}
                   <span className='text-sm text-gray-500'>{t('infoWillDisplay')}</span>
@@ -203,30 +208,31 @@ export default function ServiceAddForm(props: Props) {
               </div>
             </div>
           </>
-          <div className='mt-8'>
+          <FormControl fullWidth required error={!!errors.masterIds?.message} sx={{ mt: 4 }}>
             <div className='bg-primary-50 p-2 rounded-lg'>
-              <Typography variant='h3'>{t('masters')}</Typography>
+              <InputLabel required sx={{ fontSize: '18px', fontWeight: '700', margin: 0 }}>
+                {t('masters')}
+              </InputLabel>
             </div>
             <div className='mt-2'>
-              <FormControl fullWidth error={!!errors.masterIds?.message}>
-                <Controller
-                  name='masterIds'
-                  control={control}
-                  render={({ field }) => (
-                    <MasterAutocompleteCardSelect
-                      masters={masters}
-                      searchTerm={searchTerm}
-                      onSearchChange={setSearchTerm}
-                      {...field}
-                    />
-                  )}
-                />
-                {errors.masterIds?.message && (
-                  <FormHelperText>{errors.masterIds?.message}</FormHelperText>
+              <Controller
+                name='masterIds'
+                control={control}
+                render={({ field }) => (
+                  <MasterAutocompleteCardSelect
+                    masters={masters}
+                    searchTerm={searchTerm}
+                    onSearchChange={setSearchTerm}
+                    {...field}
+                  />
                 )}
-              </FormControl>
+              />
+              {errors.masterIds?.message && (
+                <FormHelperText>{errors.masterIds?.message}</FormHelperText>
+              )}
             </div>
-          </div>
+          </FormControl>
+
           <div id='gallery-upload' className='mt-8'>
             <div className='bg-primary-50 p-2 rounded-lg'>
               <Typography variant='h3'>{t('gallery')}</Typography>

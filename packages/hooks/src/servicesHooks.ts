@@ -199,10 +199,11 @@ export const servicesHooks = {
       setValue,
       getValues,
       handleSubmit,
-      formState: { errors, isDirty, isValid },
+      formState: { errors, isDirty, isValid, touchedFields },
     } = useForm<CreateServiceFormData>({
       resolver: yupResolver(createServiceSchema),
-      mode: 'onSubmit',
+      mode: 'onChange',
+      reValidateMode: 'onChange',
       defaultValues: {
         categoryId: undefined,
         price: undefined,
@@ -253,6 +254,7 @@ export const servicesHooks = {
       isDirty,
       isValid,
       errors,
+      touchedFields,
     };
   },
   useGetPublicServicesInfinite: (params: PublicServiceQueryParams) => {
