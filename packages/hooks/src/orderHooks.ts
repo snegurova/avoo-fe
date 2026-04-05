@@ -104,6 +104,9 @@ export const orderHooks = {
         onSuccess?.();
       },
     });
+
+    utils.useSetPendingApi(isPending);
+
     return { mutate, mutateAsync, isPending };
   },
   useGetOrders: (params: PrivateOrderQueryParams) => {

@@ -71,7 +71,7 @@ export default function Avatar(props: Props) {
   });
 
   return (
-    <div className='text-center'>
+    <div className='text-center max-w-full'>
       <div className={avatar({ size, addName })}>
         <MuiAvatar
           src={src ?? undefined}
