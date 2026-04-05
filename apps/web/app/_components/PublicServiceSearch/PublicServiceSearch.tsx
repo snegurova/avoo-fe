@@ -100,6 +100,7 @@ export default function PublicServiceSearch(props: Props) {
         <div className='flex flex-col'>
           <div className='sticky lg:static top-0 flex gap-y-2 gap-x-3 py-4 overflow-x-auto lg:overflow-visible whitespace-nowrap lg:flex-wrap'>
             <button
+              type='button'
               className={button({ active: selectedCategory === undefined })}
               onClick={() => handleCategoryClick(undefined)}
             >
@@ -111,6 +112,7 @@ export default function PublicServiceSearch(props: Props) {
             {categories?.categories.map((cat) =>
               cat.totalServices ? (
                 <button
+                  type='button'
                   key={cat.category.id}
                   className={button({ active: selectedCategory === cat.category.id })}
                   onClick={() => handleCategoryClick(cat.category.id)}

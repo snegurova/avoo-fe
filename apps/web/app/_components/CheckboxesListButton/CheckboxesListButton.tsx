@@ -20,7 +20,7 @@ export default function CheckboxesListButton(props: Props) {
   const { option, isActive } = props;
 
   return (
-    <button className={button({ isActive })} onClick={option.handler}>
+    <button type='button' className={button({ isActive })} onClick={option.handler}>
       {option.icon && option.icon}
       {option.label}
     </button>
