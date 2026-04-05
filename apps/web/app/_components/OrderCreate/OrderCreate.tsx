@@ -30,6 +30,11 @@ const SERVICES_KEY_IN_ORDER_CREATE = 'ordersData';
 const WRAPPER_HEADER_HEIGHT = '62px';
 
 export default function OrderCreate() {
+  useEffect(() => {
+    setTimeout(() => {
+      useApiStatusStore.getState().setIsPending(false);
+    }, 0);
+  }, []);
   const t = useTranslations('private.orders.create');
   const tCalendar = useTranslations('private.calendar.calendar');
   const isPending = useApiStatusStore((state) => state.isPending);

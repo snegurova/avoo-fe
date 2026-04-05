@@ -111,7 +111,7 @@ export const calendarHooks = {
       return { data: calendarData.data, refetch };
     }
 
-    return { data: null, refetch };
+    return { data: null, refetch, isPending };
   },
   useGetPublicCalendarByDates: (params: PublicCalendarByDatesQueryParams) => {
     const memoParams = useMemo<PublicCalendarByDatesQueryParams>(() => params, [params]);

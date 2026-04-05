@@ -172,7 +172,7 @@ export type CalendarItem = Omit<components['schemas']['PrivateCalendarResponseDt
 
 export type GetCalendarResponse = CalendarItem[];
 
-type PublicWorkingDay = Omit<
+export type PublicWorkingDay = Omit<
   components['schemas']['PrivateWorkingDayDto'],
   'events' | 'exceptions'
 >;

@@ -81,7 +81,13 @@ export default function LanguageSwitcher({ type = 'private' }: Props) {
       }}
       tabIndex={-1}
     >
-      <button className={mainButton({ type })} onMouseEnter={onOpen} onFocus={onOpen} tabIndex={0}>
+      <button
+        type='button'
+        className={mainButton({ type })}
+        onMouseEnter={onOpen}
+        onFocus={onOpen}
+        tabIndex={0}
+      >
         <LanguageIcon className={icon({ type })} />
         {t(currLocale as Parameters<typeof t>[0])}
       </button>
