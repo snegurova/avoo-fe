@@ -161,6 +161,7 @@ export default function TimeSlotField(props: Props) {
       <div className='flex gap-4 mb-6'>
         {Object.values(TimeOfDay).map((timeOfDay) => (
           <button
+            type='button'
             key={timeOfDay}
             className={button({ active: activeGroup === timeOfDay })}
             onClick={() => setActiveGroup(timeOfDay)}

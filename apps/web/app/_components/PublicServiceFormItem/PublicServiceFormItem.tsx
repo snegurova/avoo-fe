@@ -109,6 +109,15 @@ export default function PublicServiceFormItem(props: Props) {
   const [selectAnyMaster, setSelectAnyMaster] = useState(false);
   const [maxStep, setMaxStep] = useState(selectedService ? 4 : 1);
 
+  useEffect(() => {
+    if (!order.date) return;
+    setCalendarParams((prev) => ({
+      ...prev,
+      rangeFromDate: timeUtils.formatDate(timeUtils.toDayBegin(new Date(order.date))),
+      rangeToDate: timeUtils.formatDate(timeUtils.toDayEnd(new Date(order.date))),
+    }));
+  }, [order.date]);
+
   const relevantMasterIds = useMemo(() => {
     if (selectAnyMaster && selectedService) {
       return selectedService.masters?.map((m) => m.id) || [];
