@@ -153,7 +153,11 @@ export default function PublicCalendar(props: Props) {
       onChange={onValueChange}
       slots={{
         calendarHeader: (props) => (
-          <CustomHeader {...props} currentMonth={currentMonth} onMonthChange={handleMonthChange} />
+          <CustomHeader
+            {...props}
+            currentMonth={currentMonth.locale(locale)}
+            onMonthChange={handleMonthChange}
+          />
         ),
       }}
       sx={{
