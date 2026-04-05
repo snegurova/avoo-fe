@@ -654,6 +654,7 @@ export default function PublicServiceFormItem(props: Props) {
             calendarParams={calendarParams}
             userId={userId}
             setStep={setStep}
+            selectedMaster={selectedMasters[index]}
           />
         )}
       </div>

@@ -45,7 +45,7 @@ const col = tv({
     },
     isSingleWeek: {
       false: '',
-      true: '2xl:min-w-55',
+      true: '',
     },
     calendarType: {
       [CalendarType.REGULAR]: '',
@@ -58,6 +58,12 @@ const col = tv({
       calendarType: CalendarType.REGULAR,
       type: CalendarViewType.DAY,
       className: 'md:min-w-55 2xl:min-w-90',
+    },
+    {
+      calendarType: CalendarType.REGULAR,
+      isSingleWeek: true,
+      type: CalendarViewType.DAY,
+      className: '2xl:min-w-55',
     },
     {
       calendarType: CalendarType.WIDGET,

@@ -144,7 +144,7 @@ export default function CustomerCreate(props: Props) {
             {t('phone')}
           </label>
           <div className='flex items-stretch gap-2 lg:gap-3'>
-            <div className='w-[84px] shrink-0'>
+            <div className='w-[84px] shrink-0 h-11'>
               <PhoneCodeSelect
                 id='phone-code'
                 value={countryCode}

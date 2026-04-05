@@ -258,6 +258,7 @@ export default function PublicCombinationForm(props: Props) {
           calendarParams={calendarParams}
           userId={userId}
           setStep={setStep}
+          selectedMaster={selectedMasters[0]}
         />
       </div>
     </div>

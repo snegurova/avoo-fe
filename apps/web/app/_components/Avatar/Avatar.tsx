@@ -96,7 +96,7 @@ export default function Avatar(props: Props) {
         </MuiAvatar>
       </div>
       {addName && name && (
-        <p className='leading-none text-xs font-semibold text-black truncate'>{name}</p>
+        <p className='leading-none text-xs font-semibold text-black truncate max-w-full'>{name}</p>
       )}
     </div>
   );
