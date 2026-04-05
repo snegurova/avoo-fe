@@ -6,9 +6,8 @@ import { useTranslations } from 'next-intl';
 
 import { FormControlLabel, Switch } from '@mui/material';
 import type { Dayjs } from 'dayjs';
-import dayjs from 'dayjs';
 
-import type { ShortMasterInfo } from '@avoo/axios/types/apiTypes';
+import type { CreateExceptionRequest, ShortMasterInfo } from '@avoo/axios/types/apiTypes';
 import { VALUE_DATE_FORMAT } from '@avoo/constants';
 import { exceptionHooks, exceptionUtils, timeOffConflictHooks } from '@avoo/hooks';
 import { TimeOffMode, TimeOffType, timeOffTypes, WholeDay } from '@avoo/hooks/types/timeOffType';
@@ -49,19 +48,43 @@ const mapTimeOffToFormValues = (timeOff: TimeOffItem): FormValues => {
     timeOffTypes.find((t) => t.api === timeOff.type)?.value || TimeOffType.Personal;
   const isWholeDay = timeOff.startTimeMinutes === 0 && timeOff.endTimeMinutes === MINUTES_IN_DAY;
   const selectedStaff = timeOff.master.id ? [String(timeOff.master.id)] : [];
-  const startDate = dayjs(timeOff.dateFrom);
-  const endDate = exceptionUtils.normalizeExceptionEndDate(timeOff.dateFrom, timeOff.dateTo);
+  const normalizedEndDate = exceptionUtils.normalizeExceptionEndDate(
+    timeOff.dateFrom,
+    timeOff.dateTo,
+  );
+  const startDateStr = exceptionUtils.getLocalDateFromUtc(timeOff.dateFrom) || '';
+  const endDateStr = normalizedEndDate.isValid() ? normalizedEndDate.format(VALUE_DATE_FORMAT) : '';
 
   return {
     type: typeMapping,
     mode: isWorkingType ? TimeOffMode.ExtraTime : TimeOffMode.TimeOff,
     staff: selectedStaff,
     wholeDay: isWholeDay ? WholeDay.Whole : WholeDay.Partial,
-    startDate: startDate.format(VALUE_DATE_FORMAT),
+    startDate: startDateStr,
     startTime: timeUtils.getTimeFromMinutes(timeOff.startTimeMinutes),
-    endDate: endDate.format(VALUE_DATE_FORMAT),
+    endDate: endDateStr,
     endTime: timeUtils.getTimeFromMinutes(timeOff.endTimeMinutes),
     note: timeOff.note || '',
+  };
+};
+
+const mapTimeOffToRollbackPayload = (
+  timeOff: TimeOffItem,
+  masterId: number,
+): CreateExceptionRequest => {
+  const normalizedEndDate = exceptionUtils.normalizeExceptionEndDate(
+    timeOff.dateFrom,
+    timeOff.dateTo,
+  );
+
+  return {
+    type: timeOff.type,
+    dateFrom: exceptionUtils.getLocalDateFromUtc(timeOff.dateFrom) ?? '',
+    dateTo: normalizedEndDate.isValid() ? normalizedEndDate.format(VALUE_DATE_FORMAT) : '',
+    startTimeMinutes: timeOff.startTimeMinutes,
+    endTimeMinutes: timeOff.endTimeMinutes,
+    masterIds: [masterId],
+    note: timeOff.note || undefined,
   };
 };
 
@@ -237,10 +260,15 @@ export default function TimeOffEditForm({
 
   const { field: noteField } = useController({ name: 'note', control });
 
+  const rollbackPayload = React.useMemo(
+    () => mapTimeOffToRollbackPayload(timeOff, fixedMaster.id),
+    [timeOff, fixedMaster.id],
+  );
+
   const onSubmit = (data: FormValues) => {
     const typeApi = timeOffTypes.find((type) => type.value === data.type)?.api || 'PERSONAL_OFF';
 
-    updateException(timeOff.id, {
+    const updatePayload: CreateExceptionRequest = {
       type: typeApi,
       dateFrom: data.startDate,
       dateTo: data.endDate,
@@ -248,7 +276,9 @@ export default function TimeOffEditForm({
       endTimeMinutes: exceptionUtils.timeToMinutes(data.endTime),
       masterIds: [fixedMaster.id],
       note: data.note || undefined,
-    });
+    };
+
+    updateException(timeOff.id, updatePayload, rollbackPayload);
   };
 
   const handleDeleteClick = useCallback(() => {

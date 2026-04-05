@@ -14,6 +14,14 @@ export const exceptionUtils = {
 
   toIsoDateString: (date: string) => dayjs(date, VALUE_DATE_FORMAT).format(VALUE_DATE_FORMAT),
 
+  getLocalDateFromUtc: (utcDateTime: string | null | undefined): string | null => {
+    if (!utcDateTime) return null;
+    const date = dayjs(utcDateTime);
+    if (!date.isValid()) return null;
+
+    return date.format(VALUE_DATE_FORMAT);
+  },
+
   normalizeExceptionEndDate: (
     dateFrom: string | null | undefined,
     dateTo: string | null | undefined,
@@ -25,7 +33,6 @@ export const exceptionUtils = {
 
     return endDate.isAfter(startDate, 'day') ? endDate.subtract(1, 'day') : endDate;
   },
-
   normalizeMasterIds: (staff: string[], availableMasters?: MasterInfo[]) => {
     if (staff.includes('all')) {
       const masterIds = availableMasters?.map((master) => master.id).filter(Number.isFinite);
