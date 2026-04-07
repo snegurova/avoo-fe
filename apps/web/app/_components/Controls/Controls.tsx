@@ -3,6 +3,7 @@
 import React from 'react';
 
 import { Button, Typography } from '@mui/material';
+import { tv } from 'tailwind-variants';
 
 import SearchInput from '@/_components/SearchInput/SearchInput';
 import SearchIcon from '@/_icons/SearchIcon';
@@ -11,6 +12,18 @@ export enum ControlsVariant {
   Default = 'default',
   StackedSearch = 'stackedSearch',
 }
+
+const controlsContainer = tv({
+  variants: {
+    variant: {
+      [ControlsVariant.Default]: 'pt-4 pb-4 lg:p-4 flex flex-wrap items-center gap-y-3',
+      [ControlsVariant.StackedSearch]: 'w-full flex flex-col gap-3 pt-8 pb-8 lg:p-4',
+    },
+  },
+  defaultVariants: {
+    variant: ControlsVariant.Default,
+  },
+});
 
 type Props = {
   title?: string;
@@ -39,29 +52,35 @@ function useMobileSearchInteractions({
   mobileSearchWrapperRef,
   mobileSearchInputRef,
 }: UseMobileSearchInteractionsParams) {
+  const handlePointerDownOutsideRef = React.useRef<
+    ((event: MouseEvent | TouchEvent) => void) | null
+  >(null);
+
   React.useEffect(() => {
-    if (!isSearchExpanded) return;
-
-    const focusTimer = window.setTimeout(() => {
-      mobileSearchInputRef.current?.focus();
-    }, 0);
-
-    const handlePointerDownOutside = (event: MouseEvent | TouchEvent) => {
+    handlePointerDownOutsideRef.current = (event: MouseEvent | TouchEvent) => {
       const target = event.target as Node | null;
       if (!target) return;
       if (mobileSearchWrapperRef.current?.contains(target)) return;
       setIsSearchExpanded(false);
     };
+  });
 
-    document.addEventListener('mousedown', handlePointerDownOutside);
-    document.addEventListener('touchstart', handlePointerDownOutside);
+  React.useEffect(() => {
+    if (!isSearchExpanded) return;
+
+    mobileSearchInputRef.current?.focus();
+
+    const handler = (event: MouseEvent | TouchEvent) =>
+      handlePointerDownOutsideRef.current?.(event);
+
+    document.addEventListener('mousedown', handler);
+    document.addEventListener('touchstart', handler);
 
     return () => {
-      window.clearTimeout(focusTimer);
-      document.removeEventListener('mousedown', handlePointerDownOutside);
-      document.removeEventListener('touchstart', handlePointerDownOutside);
+      document.removeEventListener('mousedown', handler);
+      document.removeEventListener('touchstart', handler);
     };
-  }, [isSearchExpanded, setIsSearchExpanded, mobileSearchInputRef, mobileSearchWrapperRef]);
+  }, [isSearchExpanded, mobileSearchInputRef]);
 }
 
 function StackedSearchControls({
@@ -100,7 +119,7 @@ function StackedSearchControls({
   }, []);
 
   return (
-    <div className={`w-full flex flex-col gap-3 pt-8 pb-8 lg:p-4 ${className}`}>
+    <div className={controlsContainer({ variant: ControlsVariant.StackedSearch, className })}>
       <div className='flex items-center justify-between gap-3'>
         <div className='lg:hidden flex-1 flex items-center justify-between'>
           <Typography component='h1' variant='h1' className={`${titleClassName ?? ''}`}>
@@ -111,6 +130,7 @@ function StackedSearchControls({
             {hasAddButton ? (
               <Button
                 variant='outlined'
+                color='primary'
                 onClick={onAddItem}
                 sx={(theme) => ({
                   minWidth: 'auto',
@@ -118,9 +138,6 @@ function StackedSearchControls({
                   [theme.breakpoints.up('md')]: {
                     minWidth: 'auto',
                   },
-                  color: theme.palette.primary.main,
-                  borderColor: theme.palette.primary.main,
-                  '&:hover': { backgroundColor: theme.palette.primary.light },
                 })}
               >
                 {addLabel}
@@ -177,6 +194,7 @@ function StackedSearchControls({
             {showAddButton && onAddItem ? (
               <Button
                 variant='outlined'
+                color='primary'
                 onClick={onAddItem}
                 sx={(theme) => ({
                   minWidth: 'auto',
@@ -184,9 +202,6 @@ function StackedSearchControls({
                   [theme.breakpoints.up('md')]: {
                     minWidth: 'auto',
                   },
-                  color: theme.palette.primary.main,
-                  borderColor: theme.palette.primary.main,
-                  '&:hover': { backgroundColor: theme.palette.primary.light },
                 })}
               >
                 {addLabel}
@@ -226,16 +241,7 @@ function StackedSearchControls({
 
       <div className='md:hidden w-full'>
         {hasAddButton ? (
-          <Button
-            variant='outlined'
-            fullWidth
-            onClick={onAddItem}
-            sx={(theme) => ({
-              color: theme.palette.primary.main,
-              borderColor: theme.palette.primary.main,
-              '&:hover': { backgroundColor: theme.palette.primary.light },
-            })}
-          >
+          <Button variant='outlined' color='primary' fullWidth onClick={onAddItem}>
             {addLabel}
           </Button>
         ) : null}
@@ -282,7 +288,7 @@ export default function Controls({
   }
 
   return (
-    <div className={`pt-4 pb-4 lg:p-4 flex flex-wrap items-center gap-y-3 ${className}`}>
+    <div className={controlsContainer({ variant: ControlsVariant.Default, className })}>
       <div className='flex flex-wrap md:flex-nowrap w-full items-center gap-y-4 gap-8'>
         <Typography component='h1' variant='h1' className={`order-1 ${titleClassName ?? ''}`}>
           {title}
@@ -292,6 +298,7 @@ export default function Controls({
           {showAddButton && onAddItem ? (
             <Button
               variant='outlined'
+              color='primary'
               onClick={onAddItem}
               sx={(theme) => ({
                 minWidth: 'auto',
@@ -299,9 +306,6 @@ export default function Controls({
                 [theme.breakpoints.up('md')]: {
                   minWidth: 'auto',
                 },
-                color: theme.palette.primary.main,
-                borderColor: theme.palette.primary.main,
-                '&:hover': { backgroundColor: theme.palette.primary.light },
               })}
             >
               {addLabel}

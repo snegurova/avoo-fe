@@ -33,12 +33,31 @@ export const formatLocalizedCurrency = (
   currency: string,
   locale: string,
   currencyDisplay: 'symbol' | 'narrowSymbol' | 'code' | 'name' = 'symbol',
-): string =>
-  new Intl.NumberFormat(locale, {
+  options?: {
+    withoutFractionDigits?: boolean;
+  },
+): string => {
+  const withoutFractionDigits = options?.withoutFractionDigits ?? false;
+
+  const formatted = new Intl.NumberFormat(locale, {
     style: 'currency',
     currency,
     currencyDisplay,
+    minimumFractionDigits: withoutFractionDigits ? 0 : 2,
+    maximumFractionDigits: withoutFractionDigits ? 0 : 2,
   }).format(amount);
+
+  if (currencyDisplay !== 'name' || currency !== 'EUR') {
+    return formatted;
+  }
+
+  const isEnOrPlLocale = /^(en|pl)(-|$)/i.test(locale);
+  if (!isEnOrPlLocale) {
+    return formatted;
+  }
+
+  return formatted.replace(/\beuros?\b/gi, 'Euro').replace(/\beuro\b/gi, 'Euro');
+};
 
 export const formatLocalizedDate = (value: Date | string, locale: string): string => {
   const date = toDate(value);
