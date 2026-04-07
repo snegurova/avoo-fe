@@ -266,7 +266,7 @@ export default function Calendar(props: Props) {
                   {type === CalendarViewType.MONTH &&
                     new Date(params.rangeFromDate).getTime() + 28 * 24 * 60 * 60 * 1000 <=
                       new Date(params.rangeToDate).getTime() && (
-                      <CalendarMonthView params={params} />
+                      <CalendarMonthView params={params} selectOrder={setSelectedOrder} />
                     )}
                 </div>
               </>
@@ -281,6 +281,7 @@ export default function Calendar(props: Props) {
                 master={filteredMasters[0]}
                 availableBooking={!selectedOrder}
                 calendarType={calendarType}
+                selectOrder={setSelectedOrder}
               />
             )}
             {filteredMasters.length === 0 && (

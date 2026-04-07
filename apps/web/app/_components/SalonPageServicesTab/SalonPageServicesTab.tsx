@@ -140,7 +140,10 @@ export default function SalonPageServicesTab(props: Props) {
             modalService.medias && modalService.medias.length > 0 ? modalService.medias : undefined
           }
           initialIndex={modalIndex}
-          onClose={() => setModalOpen(false)}
+          onClose={() => {
+            setModalOpen(false);
+            setModalIndex(0);
+          }}
           onIndexChange={handleModalIndexChange}
         >
           <div className='flex flex-col items-center gap-4'>

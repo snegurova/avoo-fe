@@ -50,7 +50,24 @@ const eventItem = tv({
       [CalendarViewType.WEEK]: 'items-center gap-1 py-0.5 px-1 font-normal',
       [CalendarViewType.MONTH]: 'items-center gap-1 py-0.5 px-1 font-normal',
     },
+    isOutOfSchedule: {
+      true: '',
+      false: '',
+    },
   },
+  compoundVariants: [
+    {
+      type: [CalendarViewType.WEEK, CalendarViewType.MONTH],
+      isOutOfSchedule: true,
+      className:
+        'after:content-[""] after:absolute after:h-full after:right-0 after:w-0.75 after:bg-red-800',
+    },
+    {
+      calendarType: [CalendarType.REGULAR, CalendarType.SELECTOR],
+      type: CalendarViewType.DAY,
+      className: ' lg:flex-row lg:items-center',
+    },
+  ],
 });
 
 const textWrapper = tv({
@@ -66,19 +83,19 @@ const textWrapper = tv({
       [CalendarType.REGULAR]: '',
       [CalendarType.SELECTOR]: '',
     },
-    compoundVariants: [
-      {
-        calendarType: CalendarType.WIDGET,
-        type: CalendarViewType.DAY,
-        className: 'xl:flex-row xl:items-center',
-      },
-      {
-        calendarType: [CalendarType.REGULAR, CalendarType.SELECTOR],
-        type: CalendarViewType.DAY,
-        className: ' lg:flex-row lg:items-center',
-      },
-    ],
   },
+  compoundVariants: [
+    {
+      calendarType: CalendarType.WIDGET,
+      type: CalendarViewType.DAY,
+      className: 'xl:flex-row xl:items-center',
+    },
+    {
+      calendarType: [CalendarType.REGULAR, CalendarType.SELECTOR],
+      type: CalendarViewType.DAY,
+      className: ' lg:flex-row lg:items-center',
+    },
+  ],
 });
 
 const icon = tv({
@@ -133,7 +150,11 @@ export default function CalendarEvent(props: Props) {
         >
           <button
             type='button'
-            className={eventItem({ status: event.status, type })}
+            className={eventItem({
+              status: event.status,
+              type,
+              isOutOfSchedule: event.isOutOfSchedule,
+            })}
             onClick={onEventClick}
           >
             <div className='hidden lg:flex absolute top-0.5 right-0.5 items-center gap-1 pointer-events-none'>

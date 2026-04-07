@@ -175,7 +175,9 @@
         "totalDurationMessage": "Загальна тривалість запису складе",
         "minutes": "хвилин",
         "bookSeparately": "Забронювати окремо",
-        "applyCombination": "Застосувати комбінацію"
+        "applyCombination": "Застосувати комбінацію",
+        "workingTimeOnly": "Тільки робочі години",
+        "anyTime": "Будь-який час"
       }
     },
     "addPost": {

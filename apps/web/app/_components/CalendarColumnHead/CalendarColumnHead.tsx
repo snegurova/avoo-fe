@@ -20,7 +20,7 @@ const container = tv({
     type: {
       [CalendarViewType.DAY]: 'h-19 py-2 min-w-25 md:min-w-55',
       [CalendarViewType.WEEK]:
-        'w-20 first:min-h-50 min-h-40 px-2 flex items-center justify-center  border-r border-gray-300 first:pt-10',
+        'w-20 first:min-h-50 min-h-40 px-2 flex items-center justify-center border-r border-gray-300 first:pt-10',
       [CalendarViewType.MONTH]: '',
     },
     calendarType: {

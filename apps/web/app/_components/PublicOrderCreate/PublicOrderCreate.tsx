@@ -20,8 +20,10 @@ import PublicOrderTitle from '@/_components/PublicOrderTitle/PublicOrderTitle';
 import PublicOrderTotal from '@/_components/PublicOrderTotal/PublicOrderTotal';
 import PublicServiceFormItem from '@/_components/PublicServiceFormItem/PublicServiceFormItem';
 import ServiceForm from '@/_components/ServiceForm/ServiceForm';
+import { localizationHooks } from '@/_hooks/localizationHooks';
 import { useToast } from '@/_hooks/useToast';
 import AddIcon from '@/_icons/AddIcon';
+import { AppRoutes } from '@/_routes/routes';
 
 const SERVICES_KEY_IN_ORDER_CREATE = 'ordersData';
 
@@ -47,6 +49,7 @@ export default function PublicOrderCreate() {
   const [ordersDataFilled, setOrdersDataFilled] = useState(false);
   const [customerDataFilled, setCustomerDataFilled] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
+  const publicSalonPath = localizationHooks.useWithLocale(AppRoutes.PublicSalon);
 
   const initialParams = {};
 
@@ -338,7 +341,7 @@ export default function PublicOrderCreate() {
           loading={isPending || formPending}
           fit={ButtonFit.Inline}
           intent={ButtonIntent.Cancel}
-          onClick={() => router.back()}
+          onClick={() => router.push(`${publicSalonPath}/${userId}`)}
         >
           {t('cancel')}
         </Button>

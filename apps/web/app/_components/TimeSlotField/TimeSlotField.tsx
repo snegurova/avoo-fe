@@ -101,8 +101,10 @@ export default function TimeSlotField(props: Props) {
         return;
       }
 
+      const [year, month, day] = calendarParams.rangeFromDate.split('-').map(Number);
+      const localMidnight = new Date(year, month - 1, day, 0, 0, 0, 0);
       for (let time = start; time <= end - serviceDuration; time += step) {
-        const slotDate = timeUtils.addMinutesToDate(new Date(calendarParams.rangeFromDate), time);
+        const slotDate = timeUtils.addMinutesToDate(localMidnight, time);
 
         if (slotDate < minAllowedTime) continue;
 
@@ -159,6 +161,7 @@ export default function TimeSlotField(props: Props) {
       <div className='flex gap-4 mb-6'>
         {Object.values(TimeOfDay).map((timeOfDay) => (
           <button
+            type='button'
             key={timeOfDay}
             className={button({ active: activeGroup === timeOfDay })}
             onClick={() => setActiveGroup(timeOfDay)}
