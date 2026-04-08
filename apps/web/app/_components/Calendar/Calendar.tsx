@@ -30,6 +30,8 @@ import { localizationHooks } from '@/_hooks/localizationHooks';
 import CalendarClockIcon from '@/_icons/CalendarClockIcon';
 import { AppRoutes } from '@/_routes/routes';
 
+const LOWER_MONTH_TIME_MINUS_TWO_DAYS_MS = 26 * 24 * 60 * 60 * 1000;
+
 const calendarWrapper = tv({
   base: 'flex w-full',
   variants: {
@@ -270,7 +272,7 @@ export default function Calendar(props: Props) {
                       );
                     })}
                   {type === CalendarViewType.MONTH &&
-                    new Date(params.rangeFromDate).getTime() + 28 * 24 * 60 * 60 * 1000 <=
+                    new Date(params.rangeFromDate).getTime() + LOWER_MONTH_TIME_MINUS_TWO_DAYS_MS <
                       new Date(params.rangeToDate).getTime() && (
                       <CalendarMonthView params={params} selectOrder={setSelectedOrder} />
                     )}
