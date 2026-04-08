@@ -1412,7 +1412,8 @@
         "emailPlaceholder": "Email",
         "passwordLabel": "Password *",
         "passwordPlaceholder": "Password",
-        "button": "Log in"
+        "button": "Log in",
+        "loginFailed": "Login failed. Please check your email and password and try again."
       }
     },
     "signUp": {
@@ -1434,7 +1435,9 @@
         "confirmPasswordLabel": "Confirm Password *",
         "confirmPasswordPlaceholder": "Confirm Password",
         "agreeToTerms": "I agree to the Privacy Policy, Terms of Service and Terms of Business.",
-        "button": "Create Account"
+        "button": "Create Account",
+        "registerError": "Something went wrong. Please check your data and try again.",
+        "welcomeMessage": "Welcome to AVOO! Your account has been created. Set up your profile, schedule and services to get started."
       }
     },
     "authorizationWrapper": {

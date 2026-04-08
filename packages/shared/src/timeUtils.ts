@@ -278,4 +278,7 @@ export const timeUtils = {
     if (hours < 24) return `${hours}h ago`;
     return `${Math.floor(hours / 24)}d ago`;
   },
+  getUserTimezone() {
+    return Intl.DateTimeFormat().resolvedOptions().timeZone.replace('Kiev', 'Kyiv');
+  },
 };

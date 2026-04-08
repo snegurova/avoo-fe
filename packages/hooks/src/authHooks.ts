@@ -14,11 +14,13 @@ import {
   BaseResponse,
   ChangePasswordRequest,
   ChangePasswordResponse,
+  ErrorResponse,
   LoginRequest,
   ResetPasswordRequest,
   VerifyCodeRequest,
   VerifyCodeResponse,
 } from '@avoo/axios/types/apiTypes';
+import { timeUtils } from '@avoo/shared';
 import { useAuthStore } from '@avoo/store';
 
 import {
@@ -39,10 +41,12 @@ import { utils } from './../utils/utils';
 
 type UseRegisterFormParams = {
   onSuccess?: () => void;
+  onError?: (error: ErrorResponse) => void;
 };
 
 type UseLoginFormParams = {
   onSuccess?: () => void;
+  onError?: () => void;
 };
 
 type UseForgotPasswordFormParams = {
@@ -69,7 +73,7 @@ type UseSendCodeParams = {
 };
 
 export const authHooks = {
-  useRegisterForm: ({ onSuccess }: UseRegisterFormParams = {}) => {
+  useRegisterForm: ({ onSuccess, onError }: UseRegisterFormParams = {}) => {
     const {
       register,
       control,
@@ -84,22 +88,28 @@ export const authHooks = {
         password: '',
         confirmPassword: '',
         agreeToTerms: false,
+        timezone: timeUtils.getUserTimezone(),
       },
     });
 
     const setIsAuthenticated = useAuthStore((state) => state.setIsAuthenticated);
+    const setAccessToken = useAuthStore((state) => state.setAccessToken);
 
     const { mutate: registerMutation, isPending } = useMutation<
       BaseResponse<AuthResponse>,
-      Error,
+      ErrorResponse,
       RegisterCustomRequest
     >({
       mutationFn: authApi.register,
       onSuccess: (response) => {
         if (response.status === ApiStatus.SUCCESS) {
           setIsAuthenticated(true);
+          setAccessToken(response.data?.token);
           onSuccess?.();
         }
+      },
+      onError: (error) => {
+        onError?.(error);
       },
     });
 
@@ -115,7 +125,7 @@ export const authHooks = {
     };
   },
 
-  useLoginForm: ({ onSuccess }: UseLoginFormParams = {}) => {
+  useLoginForm: ({ onSuccess, onError }: UseLoginFormParams = {}) => {
     const {
       register,
       control,
@@ -148,6 +158,9 @@ export const authHooks = {
           setAccessToken(response.data?.token);
           onSuccess?.();
         }
+      },
+      onError: () => {
+        onError?.();
       },
     });
 

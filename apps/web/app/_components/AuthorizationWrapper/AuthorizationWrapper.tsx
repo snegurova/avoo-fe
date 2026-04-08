@@ -25,9 +25,9 @@ export default function AuthorizationWrapper(props: Props) {
           <div className=''>
             <LocalizedLink
               href={AppRoutes.Home}
-              className='font-inter font-semibold text-4xl text-gray-600'
+              className='font-semibold text-4xl text-gray-600 inline-flex items-center font-advent-pro text-center'
             >
-              {tCommon('avoo')}
+              {tCommon('avooCaps')}
             </LocalizedLink>
           </div>
           <div className='flex flex-col justify-center xl:px-5 2xl:px-15 w-full'>
