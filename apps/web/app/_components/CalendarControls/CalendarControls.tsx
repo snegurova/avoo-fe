@@ -257,6 +257,14 @@ export default function CalendarControls(props: Props) {
     [],
   );
 
+  const displayDate = useMemo(() => {
+    if (!date) return null;
+    if (type === CalendarViewType.MONTH) {
+      return dayjs(date).add(15, 'day');
+    }
+    return dayjs(date);
+  }, [date, type]);
+
   const statusesOptions = useMemo(
     () => ({
       label: t('allStatusesLabel'),
@@ -374,8 +382,11 @@ export default function CalendarControls(props: Props) {
           <ArrowBackIcon className='fill-gray-800 w-3.5 h-3.5' />
         </button>
         <DatePicker
-          value={dayjs(date)}
-          format={DATE_PICKER_FORMAT}
+          value={displayDate}
+          format={type === CalendarViewType.MONTH ? 'MMMM YYYY' : DATE_PICKER_FORMAT}
+          views={type === CalendarViewType.MONTH ? ['year', 'month'] : ['day']}
+          openTo={type === CalendarViewType.MONTH ? 'month' : 'day'}
+          showDaysOutsideCurrentMonth={true}
           onChange={handleChangeDate}
           sx={{
             '& .MuiButtonBase-root': calendarButtonStyles,
