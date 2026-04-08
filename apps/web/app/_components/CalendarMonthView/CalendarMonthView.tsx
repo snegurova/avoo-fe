@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { tv } from 'tailwind-variants';
 
@@ -33,6 +33,10 @@ const dateValue = tv({
       today: 'rounded-full text-white bg-primary-800',
       past: 'text-gray-500',
       future: 'text-black',
+    },
+    isCurrentMonth: {
+      true: '',
+      false: 'opacity-30',
     },
   },
 });
@@ -96,6 +100,11 @@ export default function CalendarMonthView(props: Props) {
     [selectOrder],
   );
 
+  const currentMonth = useMemo(() => {
+    if (!calendar) return null;
+    return new Date(calendar.days[8].date).getMonth();
+  }, [calendar]);
+
   return (
     <div
       ref={ref}
@@ -106,6 +115,7 @@ export default function CalendarMonthView(props: Props) {
           const dayDate = new Date(date);
           const day: DateStatus = timeUtils.getDateStatus(dayDate);
           const slicedEvents = events.length > showEvents ? events.slice(0, showEvents) : events;
+          const isCurrentMonth = dayDate.getMonth() === currentMonth;
           return (
             <div
               key={idx}
@@ -113,7 +123,7 @@ export default function CalendarMonthView(props: Props) {
               data-date={date}
               onClick={onDayClick}
             >
-              <div className={dateValue({ day })}>{dayDate.getDate()}</div>
+              <div className={dateValue({ day, isCurrentMonth })}>{dayDate.getDate()}</div>
               {events && (
                 <div className='flex flex-col flex-1 gap-1 justify-between'>
                   <div className='flex flex-col gap-0.5'>
