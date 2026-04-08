@@ -243,7 +243,13 @@ export default function Calendar(props: Props) {
                 </div>
 
                 <div className={dataContainer({ type })}>
-                  <CalendarTimeScale type={type} date={date} time={time} setTime={setTime} />
+                  <CalendarTimeScale
+                    type={type}
+                    date={date}
+                    time={time}
+                    setTime={setTime}
+                    calendarType={calendarType}
+                  />
                   {type !== CalendarViewType.MONTH &&
                     filteredMasters.map((master) => {
                       const columnData = calendar?.find(
