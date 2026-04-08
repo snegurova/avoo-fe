@@ -1,12 +1,8 @@
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
 
 import { CalendarViewType } from '@avoo/hooks/types/calendarViewType';
 import { OrderStatus } from '@avoo/hooks/types/orderStatus';
 import { CalendarSlot, timeUtils } from '@avoo/shared';
-
-import { useHydrationStore } from './hydration.store';
-import { createZustandStorage, getPlatformStorage } from './storage';
 
 export type CalendarStore = {
   masterIds: number[] | undefined;
@@ -39,38 +35,21 @@ const initialState = {
 };
 
 export const useCalendarStore = create<CalendarStore>()(
-  persist(
-    (set) => ({
-      ...initialState,
-      slots: null,
-      setMasterIds: (masterIds) => set({ masterIds }),
-      setStatuses: (statuses) => set({ statuses }),
-      setDate: (date) => set({ date }),
-      setToDate: (toDate) => set({ toDate }),
-      setOrderIsOutOfSchedule: (orderIsOutOfSchedule) => set({ orderIsOutOfSchedule }),
-      setType: (type) => set({ type }),
-      setWorkingTimeOnly: (workingTimeOnly) => set({ workingTimeOnly }),
-      setSlots: (slots) => set({ slots }),
-      resetStorage: () =>
-        set({
-          ...initialState,
-        }),
-    }),
-    {
-      name: 'calendar-storage',
-      storage: createZustandStorage<CalendarStore>(getPlatformStorage()),
-      merge: (persistedState, currentState) => {
-        const state = persistedState as CalendarStore;
-        return {
-          ...currentState,
-          ...state,
-          date: state.date ? new Date(state.date) : currentState.date,
-          toDate: state.toDate ? new Date(state.toDate) : currentState.toDate,
-        };
-      },
-      onRehydrateStorage: () => () => {
-        useHydrationStore.getState().setHasHydrated(true);
-      },
-    },
-  ),
+  (set: (partial: Partial<CalendarStore>) => void): CalendarStore => ({
+    ...initialState,
+    slots: null,
+    setMasterIds: (masterIds: number[] | undefined) => set({ masterIds }),
+    setStatuses: (statuses: OrderStatus[] | undefined) => set({ statuses }),
+    setDate: (date: Date) => set({ date }),
+    setToDate: (toDate: Date) => set({ toDate }),
+    setOrderIsOutOfSchedule: (orderIsOutOfSchedule: boolean | undefined) =>
+      set({ orderIsOutOfSchedule }),
+    setType: (type: CalendarViewType) => set({ type }),
+    setWorkingTimeOnly: (workingTimeOnly: boolean) => set({ workingTimeOnly }),
+    setSlots: (slots: CalendarSlot[] | null) => set({ slots }),
+    resetStorage: () =>
+      set({
+        ...initialState,
+      }),
+  }),
 );

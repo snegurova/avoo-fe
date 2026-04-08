@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { tv } from 'tailwind-variants';
+
 import { PrivateEvent } from '@avoo/axios/types/apiTypes';
 import { CalendarItem } from '@avoo/axios/types/apiTypes';
 import { MasterWithRelationsEntity } from '@avoo/axios/types/apiTypes';
@@ -20,22 +22,41 @@ type Props = {
   selectOrder?: (event: PrivateEvent | null) => void;
 };
 
+const headWrapper = tv({
+  base: 'pl-10.5 shrink-0 sticky top-0 min-w-185.5  z-8 bg-white',
+  variants: {
+    calendarType: {
+      [CalendarType.REGULAR]: 'md:min-w-395.5',
+      [CalendarType.SELECTOR]: '',
+      [CalendarType.WIDGET]: 'xl:min-w-395.5',
+    },
+  },
+});
+
 export default function CalendarWeekSingleMasterView(props: Props) {
   const { time, setTime, data, master, availableBooking, calendarType, selectOrder } = props;
   const date = useCalendarStore((state) => state.date);
+
   return (
     <>
-      <div className='pl-10.5 shrink-0 sticky top-0 min-w-185.5 md:min-w-395.5 z-8 bg-white'>
+      <div className={headWrapper({ calendarType })}>
         <CalendarTimeScale
           type={CalendarViewType.WEEK}
           date={date}
           time={time}
           setTime={setTime}
           hideBorder
+          calendarType={calendarType}
         />
       </div>
       <div className='h-580 pb-4 flex min-w-min'>
-        <CalendarTimeScale type={CalendarViewType.DAY} date={date} time={time} setTime={setTime} />
+        <CalendarTimeScale
+          type={CalendarViewType.DAY}
+          date={date}
+          time={time}
+          calendarType={calendarType}
+          setTime={setTime}
+        />
         {data &&
           data.days.map((item, idx) => (
             <CalendarColumn

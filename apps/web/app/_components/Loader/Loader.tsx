@@ -13,7 +13,7 @@ export default function Loader(props: Props) {
     base: 'flex items-center justify-center',
     variants: {
       variant: {
-        global: 'top-0 left-0 w-full h-full absolute bg-black/40 z-900',
+        global: 'top-0 left-0 w-full h-full absolute bg-white/40 z-900 transition-colors',
         card: 'p-4 bg-white rounded-lg w-full',
         minimal: '',
       },
