@@ -8,14 +8,12 @@ import { userHooks } from '@avoo/hooks';
 
 import AppProfileSelect from '@/_components/AppProfileSelect/AppProfileSelect';
 import { IconButton } from '@/_components/IconButton/IconButton';
-import IconLink from '@/_components/IconLink/IconLink';
 import { LocalizedLink } from '@/_components/LocalizedLink/LocalizedLink';
 import SelectButton from '@/_components/SelectButton/SelectButton';
 import { localizationHooks } from '@/_hooks/localizationHooks';
 import { useToast } from '@/_hooks/useToast';
 import AddIcon from '@/_icons/AddIcon';
 import MenuIcon from '@/_icons/MenuIcon';
-import NotificationsIcon from '@/_icons/NotificationsIcon';
 import ShareIcon from '@/_icons/ShareIcon';
 import { AppRoutes } from '@/_routes/routes';
 
@@ -30,7 +28,6 @@ export default function AppHeader({ setMenuOpen }: Props) {
 
   const toast = useToast();
   const orderCreatePath = localizationHooks.useWithLocale(AppRoutes.OrderCreate);
-  const orderAddPostPath = localizationHooks.useWithLocale(AppRoutes.AddPost);
 
   const { userId } = userHooks.useGetUserProfile();
   const baseUrl = typeof window !== 'undefined' ? window.location.origin : '';
@@ -41,12 +38,6 @@ export default function AppHeader({ setMenuOpen }: Props) {
       label: t('newBooking'),
       handler: () => {
         router.push(orderCreatePath);
-      },
-    },
-    {
-      label: t('newPost'),
-      handler: () => {
-        router.push(orderAddPostPath);
       },
     },
   ];
@@ -81,12 +72,6 @@ export default function AppHeader({ setMenuOpen }: Props) {
           </LocalizedLink>
           <div className='flex items-center gap-2'>
             <IconButton icon={<ShareIcon className='transition-colors' />} onClick={onShareClick} />
-
-            <IconLink
-              href={localizationHooks.useWithLocale(AppRoutes.Notifications)}
-              icon={<NotificationsIcon className='transition-colors' />}
-              label={t('notifications')}
-            />
             <AppProfileSelect />
           </div>
         </div>
