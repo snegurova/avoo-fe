@@ -1466,5 +1466,17 @@
         "notation": "Użyj co najmniej 8 znaków, w tym cyfry i symbolu."
       }
     }
+  },
+  "category": {
+    "name": {
+      "all": "Wszystkie kategorie",
+      "Hair": "Włosy",
+      "Nails": "Paznokcie",
+      "Skin Care": "Opieka o skórę",
+      "Makeup": "Makeup",
+      "Massage & Spa": "Masaż i SPA",
+      "Eyebrows & Eyelashes": "Brwi i rzęsy",
+      "Body Treatments": "Procedury ciała"
+    }
   }
 }

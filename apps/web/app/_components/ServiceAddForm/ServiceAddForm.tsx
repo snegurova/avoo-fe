@@ -31,20 +31,22 @@ import { AppRoutes } from '@/_routes/routes';
 
 type Props = {
   categories: Category[];
+  className?: string;
 };
 
 export default function ServiceAddForm(props: Props) {
   const t = useTranslations('private.components.ServiceAddForm.ServiceAddForm');
   const tCommon = useTranslations('private.common');
+  const locale = localizationHooks.useGetLocale();
 
-  const { categories } = props;
+  const { categories, className } = props;
 
   const router = useRouter();
   const toast = useToast();
 
   const { masters, searchTerm, setSearchTerm } = masterHooks.useMasterQuery();
 
-  const durationOptions = timeUtils.getDurationOptionsRange(15, 300, 15);
+  const durationOptions = timeUtils.getDurationOptionsRange(15, 300, 5, locale);
 
   const [medias, setMedias] = useState<UploadMediaResponse[]>([]);
   const servicePath = localizationHooks.useWithLocale(AppRoutes.Services);
@@ -103,11 +105,11 @@ export default function ServiceAddForm(props: Props) {
   };
 
   return (
-    <>
-      <div className='overflow-y-auto'>
+    <div className={className}>
+      <div className='overflow-y-auto h-[calc(100vh-385px)]'>
         <form id='create-new-service' onSubmit={handleSubmit} className='mt-8 lg:mt-0'>
           <>
-            <Typography variant='h3'>{t('basicDetail')}</Typography>
+            <Typography variant='fromSectionTitle'>{t('basicDetail')}</Typography>
             <div className='mt-4'>
               <div className='grid grid-cols-1 lg:grid-cols-2 gap-8'>
                 <FormControl fullWidth error={!!errors.name && touchedFields.name}>
@@ -210,7 +212,10 @@ export default function ServiceAddForm(props: Props) {
           </>
           <FormControl fullWidth required error={!!errors.masterIds?.message} sx={{ mt: 4 }}>
             <div className='bg-primary-50 p-2 rounded-lg'>
-              <InputLabel required sx={{ fontSize: '18px', fontWeight: '700', margin: 0 }}>
+              <InputLabel
+                required
+                sx={{ fontSize: '20px', fontWeight: '500', margin: 0, letterSpacing: '0.04em' }}
+              >
                 {t('masters')}
               </InputLabel>
             </div>
@@ -235,7 +240,7 @@ export default function ServiceAddForm(props: Props) {
 
           <div id='gallery-upload' className='mt-8'>
             <div className='bg-primary-50 p-2 rounded-lg'>
-              <Typography variant='h3'>{t('gallery')}</Typography>
+              <Typography variant='fromSectionTitle'>{t('gallery')}</Typography>
             </div>
             <div className='mt-2'>
               <ServiceGalleryUpload
@@ -248,7 +253,7 @@ export default function ServiceAddForm(props: Props) {
               />
             </div>
           </div>
-          <div className='mt-8 flex items-center justify-between'>
+          <div className='mt-8 flex items-center'>
             <Typography variant='h5'>{t('availableOnline')}</Typography>
             <Controller
               name='isActive'
@@ -292,6 +297,6 @@ export default function ServiceAddForm(props: Props) {
         onConfirm={handleConfirmLeave}
         loading={false}
       />
-    </>
+    </div>
   );
 }

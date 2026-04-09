@@ -16,11 +16,12 @@ type Props = {
 
 export default function CategorySelect(props: Props) {
   const t = useTranslations('private.components.CategorySelect.CategorySelect');
+  const tCategory = useTranslations('category.name');
   const { categories, control, error } = props;
   const options = useMemo(() => {
     return categories.map((category) => ({
       id: category.id,
-      label: category.name,
+      label: tCategory(category.name),
     }));
   }, [categories]);
   return (
@@ -30,7 +31,6 @@ export default function CategorySelect(props: Props) {
         control={control}
         render={({ field }) => (
           <Autocomplete
-            disablePortal
             options={options}
             getOptionLabel={(option) => option.label}
             isOptionEqualToValue={(option, value) => option.id === value.id}
