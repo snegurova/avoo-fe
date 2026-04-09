@@ -1,11 +1,10 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 import { useTranslations } from 'next-intl';
 
-import { masterApi } from '@avoo/axios';
 import { MasterWithRelationsEntityResponse } from '@avoo/axios/types/apiTypes';
-import { fetchAllAndSort, SortDirection } from '@avoo/shared';
+import { SortDirection } from '@avoo/shared';
 
 import { IconButton } from '@/_components/IconButton/IconButton';
 import MasterListItem from '@/_components/MasterListItem/MasterListItem';
@@ -20,55 +19,42 @@ type Props = {
   selectedId?: number | null;
   incrementPage?: () => void;
   hasMore?: boolean;
+  sortDirection?: SortDirection;
+  onSortChange?: (direction: 'asc' | 'desc' | undefined) => void;
 };
 
-export const MasterList = ({ masters, onEdit, selectedId, incrementPage, hasMore }: Props) => {
+export const MasterList = ({
+  masters,
+  onEdit,
+  selectedId,
+  incrementPage,
+  hasMore,
+  sortDirection = null,
+  onSortChange,
+}: Props) => {
   const t = useTranslations('private.components.MasterList.MasterList');
-  const [sortDirection, setSortDirection] = useState<SortDirection>(null);
-  const [list, setList] = useState(() => masters ?? []);
-  const [error, setError] = useState<string | null>(null);
 
-  React.useEffect(() => {
-    if (!sortDirection) {
-      setList(masters ?? []);
-      setError(null);
-    }
-  }, [masters, sortDirection]);
+  const isAscActive = sortDirection === 'asc';
+  const isDescActive = sortDirection === 'desc';
 
-  React.useEffect(() => {
-    if (!sortDirection) return;
+  const handleAscSortClick = React.useCallback(() => {
+    onSortChange?.(isAscActive ? undefined : 'asc');
+  }, [isAscActive, onSortChange]);
 
-    let isComponentMounted = true;
-    const fetchAndSort = async () => {
-      setError(null);
-      const sorted = await fetchAllAndSort(
-        (params) => masterApi.getMastersInfo(params),
-        (item: MasterWithRelationsEntityResponse) => item.name ?? '',
-        sortDirection,
-      );
-
-      if (isComponentMounted) {
-        setList(sorted);
-      }
-    };
-
-    fetchAndSort();
-
-    return () => {
-      isComponentMounted = false;
-    };
-  }, [sortDirection]);
+  const handleDescSortClick = React.useCallback(() => {
+    onSortChange?.(isDescActive ? undefined : 'desc');
+  }, [isDescActive, onSortChange]);
 
   const uniqueList = React.useMemo(() => {
     const uniqueById = new Map<number, MasterWithRelationsEntityResponse>();
-    for (const item of list) {
+    for (const item of masters ?? []) {
       if (!uniqueById.has(item.id)) {
         uniqueById.set(item.id, item);
       }
     }
 
     return Array.from(uniqueById.values());
-  }, [list]);
+  }, [masters]);
 
   if (uniqueList.length === 0) {
     return <div className='py-8 text-center text-gray-500'>{t('noMastersYet')}</div>;
@@ -76,8 +62,6 @@ export const MasterList = ({ masters, onEdit, selectedId, incrementPage, hasMore
 
   return (
     <div className='h-full min-h-0 flex flex-col'>
-      {error ? <div className='px-8 py-2 text-sm'>{error}</div> : null}
-
       <InfiniteList
         className='flex flex-col overflow-y-auto h-full min-h-0 max-h-full'
         hasMore={hasMore}
@@ -90,14 +74,14 @@ export const MasterList = ({ masters, onEdit, selectedId, incrementPage, hasMore
               <div className='flex flex-col'>
                 <IconButton
                   ariaLabel={t('sortAsc')}
-                  onClick={() => setSortDirection('asc')}
-                  className='p-0 text-sm text-gray-400 hover:text-gray-700'
+                  onClick={handleAscSortClick}
+                  className={`p-0 text-sm hover:text-gray-700 ${isAscActive ? 'text-gray-700' : 'text-gray-400'}`}
                   icon={<ArrowUpIcon width={14} height={14} />}
                 />
                 <IconButton
                   ariaLabel={t('sortDesc')}
-                  onClick={() => setSortDirection('desc')}
-                  className='p-0 text-sm text-gray-400 hover:text-gray-700'
+                  onClick={handleDescSortClick}
+                  className={`p-0 text-sm hover:text-gray-700 ${isDescActive ? 'text-gray-700' : 'text-gray-400'}`}
                   icon={<ArrowDownIcon width={14} height={14} />}
                 />
               </div>
