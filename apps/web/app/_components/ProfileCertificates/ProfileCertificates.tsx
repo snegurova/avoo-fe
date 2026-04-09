@@ -7,11 +7,13 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 
 import { masterHooks, userHooks } from '@avoo/hooks';
 
+import ConfirmationModal from '@/_components/ConfirmationModal/ConfirmationModal';
 import { GalleryPagination } from '@/_components/GalleryPagination/GalleryPagination';
 import { SectionHeader } from '@/_components/SectionHeader/SectionHeader';
 
 import { ProfileCertificateAdd } from '../ProfileCertificateAdd/ProfileCertificateAdd';
 import ProfileCertificateCard from '../ProfileCertificateCard/ProfileCertificateCard';
+import ProfileCertificateEdit from '../ProfileCertificateEdit/ProfileCertificateEdit';
 
 export const ProfileCertificates = () => {
   const t = useTranslations('private.components.ProfileCertificates.ProfileCertificates');
@@ -20,6 +22,10 @@ export const ProfileCertificates = () => {
   const masters = masterHooks.useGetMastersProfileInfo()?.items;
 
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isEditDirty, setIsEditDirty] = useState(false);
+  const [showEditUnsavedConfirm, setShowEditUnsavedConfirm] = useState(false);
+  const [selectedCertificateId, setSelectedCertificateId] = useState<number | null>(null);
 
   const handleOpenModal = useCallback(() => {
     setIsModalOpen(true);
@@ -27,6 +33,35 @@ export const ProfileCertificates = () => {
   const handleCloseModal = useCallback(() => {
     setIsModalOpen(false);
   }, []);
+
+  const handleOpenEditModal = useCallback((certificateId: number) => {
+    setSelectedCertificateId(certificateId);
+    setIsEditModalOpen(true);
+  }, []);
+
+  const handleCloseEditModal = useCallback(() => {
+    setIsEditModalOpen(false);
+    setIsEditDirty(false);
+    setSelectedCertificateId(null);
+  }, []);
+
+  const handleEditRequestClose = useCallback(() => {
+    if (isEditDirty) {
+      setShowEditUnsavedConfirm(true);
+      return;
+    }
+
+    handleCloseEditModal();
+  }, [handleCloseEditModal, isEditDirty]);
+
+  const handleCloseEditUnsavedConfirm = useCallback(() => {
+    setShowEditUnsavedConfirm(false);
+  }, []);
+
+  const handleDiscardEditChanges = useCallback(() => {
+    setShowEditUnsavedConfirm(false);
+    handleCloseEditModal();
+  }, [handleCloseEditModal]);
 
   const certificatesArr = certificates?.items || [];
   const hasItems = certificatesArr.length > 0;
@@ -38,6 +73,26 @@ export const ProfileCertificates = () => {
     () => certificatesArr.slice(0, visibleCount),
     [certificatesArr, visibleCount],
   );
+
+  const selectedCertificate = useMemo(
+    () => certificatesArr.find((certificate) => certificate.id === selectedCertificateId) ?? null,
+    [certificatesArr, selectedCertificateId],
+  );
+
+  const getDescription = (description: unknown) =>
+    typeof description === 'string' ? description : '';
+
+  const selectedCertificateInitialValues = useMemo(() => {
+    if (!selectedCertificate) return null;
+
+    return {
+      title: selectedCertificate.title,
+      description: getDescription(selectedCertificate.description),
+      issueDate: selectedCertificate.issueDate.slice(0, 10),
+      masterId:
+        typeof selectedCertificate.masterId === 'number' ? selectedCertificate.masterId : null,
+    };
+  }, [selectedCertificate]);
 
   const mastersById = useMemo(
     () =>
@@ -64,9 +119,6 @@ export const ProfileCertificates = () => {
     if (typeof masterId !== 'number') return visualProfileInfo.avatarUrl ?? null;
     return mastersById.get(masterId)?.avatarUrl ?? null;
   };
-
-  const getDescription = (description: unknown) =>
-    typeof description === 'string' ? description : '';
 
   const handleSeeMore = () => {
     setVisibleCount((prev) => Math.min(prev + LIMIT, certificatesArr.length));
@@ -124,6 +176,13 @@ export const ProfileCertificates = () => {
               {visibleCertificates.map((cert, index) => {
                 const isFirst = index === 0;
                 const isLast = index === visibleCertificates.length - 1;
+                const certificateDate = cert.issueDate.slice(0, 10);
+                const certificateDescription = getDescription(cert.description);
+                const certificateMasterName = getMasterName(cert.masterId);
+                const certificateMasterAvatarUrl = getMasterAvatar(cert.masterId);
+                const handleEdit = () => {
+                  handleOpenEditModal(cert.id);
+                };
                 let cardRef: React.RefObject<HTMLDivElement | null> | undefined;
                 if (isFirst) cardRef = firstCertificateRef;
                 if (isLast) cardRef = lastCertificateRef;
@@ -133,10 +192,11 @@ export const ProfileCertificates = () => {
                     <ProfileCertificateCard
                       imageUrl={cert.url}
                       title={cert.title}
-                      date={cert.issueDate.slice(0, 10)}
-                      master={getMasterName(cert.masterId)}
-                      masterAvatarUrl={getMasterAvatar(cert.masterId)}
-                      description={getDescription(cert.description)}
+                      date={certificateDate}
+                      master={certificateMasterName}
+                      masterAvatarUrl={certificateMasterAvatarUrl}
+                      description={certificateDescription}
+                      onEdit={handleEdit}
                     />
                   </div>
                 );
@@ -146,6 +206,26 @@ export const ProfileCertificates = () => {
         )}
       </div>
       <ProfileCertificateAdd open={isModalOpen} onClose={handleCloseModal} />
+      {selectedCertificate && selectedCertificateInitialValues ? (
+        <ProfileCertificateEdit
+          certificateId={selectedCertificate.id}
+          open={isEditModalOpen}
+          onClose={handleCloseEditModal}
+          onRequestClose={handleEditRequestClose}
+          onDirtyChange={setIsEditDirty}
+          certificateImageUrl={selectedCertificate.url}
+          initialValues={selectedCertificateInitialValues}
+        />
+      ) : null}
+
+      <ConfirmationModal
+        isOpen={showEditUnsavedConfirm}
+        onCancel={handleCloseEditUnsavedConfirm}
+        onDiscard={handleDiscardEditChanges}
+        title={t('unsavedChanges')}
+        description={t('unsavedChangesDescription')}
+        confirmText={t('discardChanges')}
+      />
     </>
   );
 };

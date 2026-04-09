@@ -330,7 +330,15 @@
           "fileDropzoneDescription": "Завантажте до 5 зображень (JPG, PNG, макс. 10 МБ кожне)",
           "unsavedChanges": "Незбережені зміни",
           "unsavedChangesDescription": "У вас є незбережені зміни. Ви впевнені, що хочете закрити?",
-          "discardChanges": "Скасувати зміни"
+          "discardChanges": "Скасувати зміни",
+          "certificates": "Сертифікати",
+          "deleteCertificate": "Видалити сертифікат",
+          "updateSuccess": "Сертифікат успішно оновлено",
+          "certificateDeleted": "Сертифікат {name} був видалений!",
+          "certificateFallback": "Сертифікат без назви",
+          "deleteCertificateTitle": "Видалити сертифікат",
+          "deleteDescription": "Ви впевнені, що хочете назавжди видалити цей сертифікат? Цю дію неможливо скасувати.",
+          "deleteConfirm": "Видалити сертифікат"
         }
       },
       "ChangePasswordForm": {
@@ -706,7 +714,16 @@
           "addCertificatesDescription": "щоб підкреслити свою професійну кваліфікацію.",
           "addCertificatesRich": "<a>Додайте сертифікати</a>, щоб підкреслити свою професійну кваліфікацію.",
           "seeMore": "Показати більше",
-          "seeLess": "Показати менше"
+          "seeLess": "Показати менше",
+          "unsavedChanges": "Незбережені зміни",
+          "unsavedChangesDescription": "У вас є незбережені зміни. Ви впевнені, що хочете закрити?",
+          "discardChanges": "Скасувати зміни",
+          "updateSuccess": "Сертифікат успішно оновлено",
+          "certificateDeleted": "Сертифікат {name} було видалено!",
+          "certificateFallback": "Сертифікат без назви",
+          "deleteCertificateTitle": "Видалити сертифікат",
+          "deleteDescription": "Ви впевнені, що хочете назавжди видалити цей сертифікат? Цю дію неможливо скасувати.",
+          "deleteConfirm": "Видалити сертифікат"
         }
       },
       "ProfileEdit": {

@@ -326,7 +326,15 @@
           "fileDropzoneDescription": "Prześlij do 5 zdjęć (JPG, PNG, maks. 10 MB każde)",
           "unsavedChanges": "Niezapisane zmiany",
           "unsavedChangesDescription": "Masz niezapisane zmiany. Czy na pewno chcesz zamknąć?",
-          "discardChanges": "Odrzuć zmiany"
+          "discardChanges": "Odrzuć zmiany",
+          "certificates": "Certyfikaty",
+          "deleteCertificate": "Usuń certyfikat",
+          "updateSuccess": "Certyfikat został pomyślnie zaktualizowany",
+          "certificateDeleted": "Certyfikat {name} został usunięty!",
+          "certificateFallback": "Certyfikat bez nazwy",
+          "deleteCertificateTitle": "Usuń certyfikat",
+          "deleteDescription": "Czy na pewno chcesz trwale usunąć ten certyfikat? Ta czynność nie może być cofnięta.",
+          "deleteConfirm": "Usuń certyfikat"
         }
       },
       "ChangePasswordForm": {
@@ -702,7 +710,16 @@
           "addCertificatesDescription": "aby wyróżnić swoje kwalifikacje zawodowe.",
           "addCertificatesRich": "<a>Dodaj certyfikaty</a>, aby wyróżnić swoje kwalifikacje zawodowe.",
           "seeMore": "Zobacz więcej",
-          "seeLess": "Pokaż mniej"
+          "seeLess": "Pokaż mniej",
+          "unsavedChanges": "Niezapisane zmiany",
+          "unsavedChangesDescription": "Masz niezapisane zmiany. Czy na pewno chcesz zamknąć?",
+          "discardChanges": "Odrzuć zmiany",
+          "updateSuccess": "Certyfikat został pomyślnie zaktualizowany",
+          "certificateDeleted": "Certyfikat {name} został usunięty!",
+          "certificateFallback": "Certyfikat bez tytułu",
+          "deleteCertificateTitle": "Usuń certyfikat",
+          "deleteDescription": "Czy na pewno chcesz trwale usunąć ten certyfikat? Tej czynności nie można cofnąć.",
+          "deleteConfirm": "Usuń certyfikat"
         }
       },
       "ProfileEdit": {

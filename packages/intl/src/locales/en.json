@@ -325,7 +325,15 @@
           "fileDropzoneDescription": "Upload up to 5 images (JPG, PNG, max 10MB each)",
           "unsavedChanges": "Unsaved changes",
           "unsavedChangesDescription": "You have unsaved changes. Are you sure you want to close?",
-          "discardChanges": "Discard changes"
+          "discardChanges": "Discard changes",
+          "certificates": "Certificates",
+          "deleteCertificate": "Delete certificate",
+          "updateSuccess": "Certificate updated successfully",
+          "certificateDeleted": "Certificate {name} was deleted!",
+          "certificateFallback": "Untitled certificate",
+          "deleteCertificateTitle": "Delete certificate",
+          "deleteDescription": "Are you sure you want to permanently delete this certificate? This action cannot be undone.",
+          "deleteConfirm": "Delete certificate"
         }
       },
       "ChangePasswordForm": {
@@ -701,7 +709,10 @@
           "addCertificatesDescription": "to highlight your professional qualifications.",
           "addCertificatesRich": "<a>Add certificates</a> to highlight your professional qualifications.",
           "seeMore": "See more",
-          "seeLess": "See less"
+          "seeLess": "See less",
+          "unsavedChanges": "Unsaved changes",
+          "unsavedChangesDescription": "You have unsaved changes. Are you sure you want to close?",
+          "discardChanges": "Discard changes"
         }
       },
       "ProfileEdit": {
