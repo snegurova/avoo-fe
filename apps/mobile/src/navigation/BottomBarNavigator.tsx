@@ -1,21 +1,12 @@
-// BottomBarNavigator.tsx
 import { View } from 'react-native';
 
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
-import {
-  AutoAwesomeMosaicIcon,
-  BookIcon,
-  CalendarIcon,
-  CoPresentIcon,
-  GroupsIcon,
-  HomeIcon,
-} from '@/icons';
+import { BookIcon, CalendarIcon, CoPresentIcon, GroupsIcon, HomeIcon } from '@/icons';
 import { CalendarScreen } from '@/screens/CalendarScreen';
 import { ClientsScreen } from '@/screens/ClientsScreen';
 import { HomeScreen } from '@/screens/HomeScreen';
 import MastersScreen from '@/screens/MastersScreen';
-import { PostsScreen } from '@/screens/PostsScreen';
 import { ServicesScreen } from '@/screens/ServicesScreen';
 import { BottomBarScreens, BottomBarStackParamList } from '@/types/navigation';
 
@@ -71,14 +62,6 @@ const BottomBarNavigator = () => {
           options={{
             tabBarLabel: 'Masters',
             tabBarIcon: ({ color }) => <GroupsIcon size={24} color={color} />,
-          }}
-        />
-        <BottomTab.Screen
-          name={BottomBarScreens.Posts}
-          component={PostsScreen}
-          options={{
-            tabBarLabel: 'Posts',
-            tabBarIcon: ({ color }) => <AutoAwesomeMosaicIcon size={24} color={color} />,
           }}
         />
       </BottomTab.Navigator>

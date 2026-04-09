@@ -64,7 +64,7 @@ export default function SelectButton(props: Props) {
 
   return (
     <div className='relative' ref={selectRef}>
-      <button className={selectButton({ type })} onClick={toggleOpen}>
+      <button type='button' className={selectButton({ type })} onClick={toggleOpen}>
         <span className='capitalize'>{label}</span>
         <ArrowDownIcon className={selectIcon({ open: isOpen, type })} />
       </button>

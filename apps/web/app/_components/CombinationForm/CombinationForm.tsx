@@ -39,6 +39,7 @@ type Props = {
 export default function CombinationForm(props: Props) {
   const tCommon = useTranslations('private.components.CombinationForm.CombinationForm');
   const t = useTranslations('private.orders.create');
+  const tCalendar = useTranslations('private.calendar.calendar');
   const {
     value,
     onChange,
@@ -66,6 +67,7 @@ export default function CombinationForm(props: Props) {
 
   const { getAvailableDate } = calendarHooks.useGetPrivateAvailability();
   const setDate = useCalendarStore((state) => state.setDate);
+  const setToDate = useCalendarStore((state) => state.setToDate);
   const slots = useCalendarStore((state) => state.slots);
   const setSlots = useCalendarStore((state) => state.setSlots);
 
@@ -113,7 +115,14 @@ export default function CombinationForm(props: Props) {
       return;
     }
 
+    if (
+      new Date(availableDate).getTime() !== new Date(availabilityParams.rangeFromTime).getTime()
+    ) {
+      toast.info(tCalendar('dateNotAvailable'));
+    }
+
     setDate(timeUtils.toDayBegin(new Date(availableDate)));
+    setToDate(timeUtils.toDayEnd(new Date(availableDate)));
 
     newOrders[0] = { ...newOrders[0], masterId: val.id, date: availableDate };
     onChange(newOrders);
@@ -159,7 +168,14 @@ export default function CombinationForm(props: Props) {
       return;
     }
 
+    if (
+      new Date(availableDate).getTime() !== new Date(availabilityParams.rangeFromTime).getTime()
+    ) {
+      toast.info(tCalendar('dateNotAvailable'));
+    }
+
     setDate(timeUtils.toDayBegin(new Date(availableDate)));
+    setToDate(timeUtils.toDayEnd(new Date(availableDate)));
 
     const newOrders = [...value];
     newOrders[0] = {

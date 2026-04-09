@@ -1,3 +1,4 @@
+export { formDataUtils } from '../utils/formDataUtils';
 export { apiClient } from './apiClient';
 export { authApi, type ForgotPasswordRequest, type RegisterCustomRequest } from './modules/auth';
 export { calendarApi } from './modules/calendar';

@@ -38,6 +38,11 @@ export type GetServiceResponse = {
   pagination: components['schemas']['PaginationDto'];
 };
 
+export type GetPublicServicesGroupedByCategoriesParams =
+  operations['ServicesPublicController_getGroupByCategories']['parameters']['query'];
+export type GetPublicServicesGroupedByCategoriesResponse =
+  components['schemas']['PublicServicesGroupByCategoriesResponseDto'];
+
 export type GetCategoriesResponse = Category[];
 export type GetPrivateCategoriesResponse =
   components['schemas']['ServicesGroupByCategoriesResponseDto'];
@@ -71,6 +76,14 @@ export type UserMediaResponse = {
 export type UserUpdateAvatarResponse = components['schemas']['UserEntity'];
 
 export type CertificateResponse = components['schemas']['CertificateEntity'];
+export type UploadCertificateRequest = components['schemas']['UploadCertificateDto'];
+
+export type GetPublicCertificatesQueryParams =
+  operations['CertificatesPublicController_getAll']['parameters']['query'];
+export type GetPublicCertificatesResponse = {
+  items: components['schemas']['CertificateEntity'][];
+  pagination: components['schemas']['PaginationDto'];
+};
 
 export type UpdateProfile = Omit<
   components['schemas']['UpdateProfileDto'],
@@ -159,7 +172,7 @@ export type CalendarItem = Omit<components['schemas']['PrivateCalendarResponseDt
 
 export type GetCalendarResponse = CalendarItem[];
 
-type PublicWorkingDay = Omit<
+export type PublicWorkingDay = Omit<
   components['schemas']['PrivateWorkingDayDto'],
   'events' | 'exceptions'
 >;

@@ -97,7 +97,8 @@
         "Sat": "Sat",
         "Sun": "Sun",
         "noSchedules": "No schedules",
-        "noSchedulesDescription": "There are currently no schedules to display. Choose masters to see their schedules here."
+        "noSchedulesDescription": "There are currently no schedules to display. Choose masters to see their schedules here.",
+        "dateNotAvailable": "Date is not available, choosing the closest available date."
       },
       "comboServiceTime": {
         "loading": "Loading...",
@@ -169,7 +170,9 @@
         "totalDurationMessage": "The total appointment duration will be",
         "minutes": "minutes",
         "bookSeparately": "Book separately",
-        "applyCombination": "Apply combination"
+        "applyCombination": "Apply combination",
+        "workingTimeOnly": "Working hours only",
+        "anyTime": "Any hours"
       }
     },
     "addPost": {
@@ -237,7 +240,7 @@
     "components": {
       "AppNavigation": {
         "AppNavigation": {
-          "avoo": "Avoo"
+          "avoo": "AVOO"
         }
       },
       "AuthorizationWrapper": {
@@ -289,20 +292,26 @@
       "CertificateAdd": {
         "CertificateAdd": {
           "addCertificate": "Add Certificate",
+          "addNewCertificate": "Add new certificate",
+          "fileDropzoneButton": "Select file or drag here",
           "title": "Title",
+          "titlePlaceholder": "Title of certificate",
           "enterCertTitle": "Enter certificate title",
           "description": "Description",
+          "descriptionPlaceholder": "Add certificate details",
           "enterCertDesc": "Enter certificate description",
           "issueDate": "Issue Date",
+          "issuedDate": "Issued date",
           "master": "Master",
+          "selectMaster": "Select master",
           "uploadCertFile": "Upload certificate file",
           "fileUploadHint": "JPG, PNG only, file size no more than 10MB",
           "selectFileCaps": "SELECT FILE",
-          "cancel": "Cancel",
+          "close": "Close",
           "save": "Save",
           "titleRequired": "Title is required",
           "titleTooShort": "Title is too short",
-          "maxLength500": "Max length is 500",
+          "maxLength200": "Max length is 200",
           "issueDateRequired": "Issue date is required",
           "invalidDateFormat": "Invalid date format",
           "dateNotInFuture": "Date cannot be in the future",
@@ -311,7 +320,12 @@
           "chooseMasterError": "Please choose a master",
           "uploadFileError": "Please upload a file",
           "unsupportedFileType": "Unsupported file type. Use: {types}.",
-          "fileTooLarge": "File is too large. Max {maxSizeMb}MB."
+          "fileTooLarge": "File is too large. Max {maxSizeMb}MB.",
+          "fileDropzoneTitle": "Select a file or drag and drop here",
+          "fileDropzoneDescription": "Upload up to 5 images (JPG, PNG, max 10MB each)",
+          "unsavedChanges": "Unsaved changes",
+          "unsavedChangesDescription": "You have unsaved changes. Are you sure you want to close?",
+          "discardChanges": "Discard changes"
         }
       },
       "ChangePasswordForm": {
@@ -409,7 +423,8 @@
           "cancel": "Cancel",
           "add": "Add",
           "masters": "Masters *",
-          "serviceCreated": "Service has been created!",
+          "combinationCreated": "Combo service has been created!",
+          "combinationAlreadyExists": "Combo service already exists!",
           "serviceCreateError": "Failed to create service: {error}"
         }
       },
@@ -509,6 +524,8 @@
           "close": "Close",
           "add": "Add",
           "addSuccess": "New master added successfully",
+          "emailAlreadyExists": "Email already exists",
+          "defaultFailError": "Something went wrong. Please try again later.",
           "infoDisplayPlatform": "Information will display on the platform."
         }
       },
@@ -560,6 +577,9 @@
         }
       },
       "MasterListItem": {
+        "editMaster": "Edit master",
+        "share": "Share",
+        "delete": "Delete",
         "MasterListItem": {
           "editMaster": "Edit master",
           "share": "Share",
@@ -650,7 +670,8 @@
       },
       "OrderListItem": {
         "OrderListItem": {
-          "client": "Client"
+          "client": "Client",
+          "master": "Master"
         }
       },
       "ConfirmationModal": {
@@ -677,12 +698,14 @@
           "certificates": "Certificates",
           "noCertificates": "No certificates added",
           "addCertificates": "Add certificates",
-          "addCertificatesRich": "<a>Add certificates</a> to highlight your professional qualifications."
+          "addCertificatesDescription": "to highlight your professional qualifications.",
+          "addCertificatesRich": "<a>Add certificates</a> to highlight your professional qualifications.",
+          "seeMore": "See more",
+          "seeLess": "See less"
         }
       },
       "ProfileEdit": {
-        "EditProfileForm": {
-          "businessProfile": "Business profile",
+        "ProfileEditForm": {
           "displayName": "Display Name",
           "phone": "Phone",
           "address": "Address",
@@ -694,6 +717,7 @@
           "saving": "Saving...",
           "save": "Save",
           "profilePreview": "Profile Preview",
+          "businessProfile": "Business Profile",
           "businessName": "Business name",
           "headline": "Headline",
           "emailAddress": "Email address",
@@ -703,10 +727,22 @@
       },
       "ProfileGallery": {
         "ProfileGallery": {
+          "seeMore": "See more",
+          "seeLess": "See less",
           "gallery": "Gallery",
           "galleryEmpty": "Your gallery is empty",
           "addPhotos": "Add photos",
-          "addPhotosRich": "<a>Add photos</a> to highlight your professional qualifications and salon atmosphere."
+          "addPhotosDescription": "to highlight your professional qualifications and salon atmosphere.",
+          "addPhotosRich": "<a>Add photos</a> to highlight your professional qualifications and salon atmosphere.",
+          "close": "Close",
+          "save": "Save",
+          "mediaUploaded": "Media has been uploaded!",
+          "mediaUploadError": "Failed to upload media: {error}",
+          "mediaDeleted": "Media has been deleted!",
+          "mediaDeleteError": "Failed to delete media: {error}",
+          "unsavedChanges": "Unsaved changes",
+          "unsavedChangesDescription": "You have unsaved changes. Are you sure you want to leave?",
+          "discardChanges": "Discard changes"
         }
       },
       "ProfileInfo": {
@@ -855,7 +891,8 @@
         "ServiceCard": {
           "editSm": "Edit",
           "shareService": "Share Service",
-          "deleteSm": "Delete"
+          "deleteSm": "Delete",
+          "copiedToClipboard": "Link copied to clipboard!"
         }
       },
       "ServiceControls": {
@@ -1283,7 +1320,9 @@
         "book": "Book",
         "select": "Select",
         "change": "Change",
-        "selected": "Selected"
+        "selected": "Selected",
+        "master": "master",
+        "masters": "masters"
       },
       "createOrder": {
         "bookingForm": "Booking form",
@@ -1296,10 +1335,10 @@
         "date": "Date",
         "notes": "Notes",
         "notesHelper": "Additional information for the master",
-        "selectService": "Select a service",
+        "selectservice": "Select a service",
         "select": "Select",
         "change": "Change",
-        "selectMaster": "Select a master",
+        "selectmaster": "Select a master",
         "selectDate": "Select a date",
         "selectTime": "Select a time",
         "morning": "Morning",
@@ -1328,14 +1367,25 @@
         "searchMasters": "Search for masters",
         "anyMasterHeadline": "for maximum availability",
         "euro": "Euro",
-        "selectDateTime": "Select date and time",
+        "selectdateTime": "Select date and time",
         "selectValidTimeSlot": "Please select a valid time slot",
         "noAvailableSlots": "No available time slots for the selected date. Please choose another date or select 'Any master' for more options.",
         "search": "Search",
         "remove": "Remove",
         "clear": "Clear",
         "splitBooking": "Split booking",
-        "selectedServices": "Selected services"
+        "selectedServices": "Selected services",
+        "noAvailableDates": "No available dates for the selected service and master. Please choose another service, master or date.",
+        "dateTime": "Date and time",
+        "combineProposition": "Would you like to book services for a one-time visit?",
+        "yes": "Yes",
+        "no": "No, book separately"
+      },
+      "confirmation": {
+        "successTitle": "Booking Confirmed!",
+        "successMessage": "Your booking was successful. We look forward to seeing you!",
+        "bookMore": "Book More",
+        "returnToSalon": "Return to Salon"
       }
     },
     "forgotPassword": {
@@ -1364,7 +1414,8 @@
         "emailPlaceholder": "Email",
         "passwordLabel": "Password *",
         "passwordPlaceholder": "Password",
-        "button": "Log in"
+        "button": "Log in",
+        "loginFailed": "Login failed. Please check your email and password and try again."
       }
     },
     "signUp": {
@@ -1386,7 +1437,9 @@
         "confirmPasswordLabel": "Confirm Password *",
         "confirmPasswordPlaceholder": "Confirm Password",
         "agreeToTerms": "I agree to the Privacy Policy, Terms of Service and Terms of Business.",
-        "button": "Create Account"
+        "button": "Create Account",
+        "registerError": "Something went wrong. Please check your data and try again.",
+        "welcomeMessage": "Welcome to AVOO! Your account has been created. Set up your profile, schedule and services to get started."
       }
     },
     "authorizationWrapper": {

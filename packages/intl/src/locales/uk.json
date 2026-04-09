@@ -10,7 +10,8 @@
       "youHaveUnsavedChangesInThisWindow": "У вас є незбережені зміни. Ви впевнені, що хочете закрити вікно?",
       "leaveWindow": "Закрити",
       "defaultFailError": "Сталося щось дивне. Спробуйте пізніше.",
-      "ok": "Ок"
+      "ok": "Ок",
+      "master": "Майстер"
     },
     "profile": {
       "changePassword": {
@@ -97,7 +98,8 @@
         "Sat": "Сб",
         "Sun": "Нд",
         "noSchedules": "Немає розкладів",
-        "noSchedulesDescription": "Наразі немає розкладів для відображення. Виберіть майстрів, щоб побачити їх розклади тут."
+        "noSchedulesDescription": "Наразі немає розкладів для відображення. Виберіть майстрів, щоб побачити їх розклади тут.",
+        "dateNotAvailable": "Дата недоступна, вибирається найближча доступна дата."
       },
       "comboServiceTime": {
         "loading": "Завантаження...",
@@ -173,7 +175,9 @@
         "totalDurationMessage": "Загальна тривалість запису складе",
         "minutes": "хвилин",
         "bookSeparately": "Забронювати окремо",
-        "applyCombination": "Застосувати комбінацію"
+        "applyCombination": "Застосувати комбінацію",
+        "workingTimeOnly": "Тільки робочі години",
+        "anyTime": "Будь-який час"
       }
     },
     "addPost": {
@@ -241,7 +245,7 @@
     "components": {
       "AppNavigation": {
         "AppNavigation": {
-          "avoo": "Avoo"
+          "avoo": "AVOO"
         }
       },
       "AuthorizationWrapper": {
@@ -293,20 +297,26 @@
       "CertificateAdd": {
         "CertificateAdd": {
           "addCertificate": "Додати сертифікат",
+          "addNewCertificate": "Додати новий сертифікат",
+          "fileDropzoneButton": "Вибрати файл або перетягнути сюди",
           "title": "Назва",
+          "titlePlaceholder": "Назва сертифіката",
           "enterCertTitle": "Введіть назву сертифіката",
           "description": "Опис",
+          "descriptionPlaceholder": "Додайте деталі сертифіката",
           "enterCertDesc": "Введіть опис сертифіката",
           "issueDate": "Дата видачі",
+          "issuedDate": "Дата видачі",
           "master": "Майстер",
+          "selectMaster": "Виберіть майстра",
           "uploadCertFile": "Завантажити файл сертифіката",
           "fileUploadHint": "Тільки JPG, PNG, розмір файлу не більше 10МБ",
           "selectFileCaps": "ВИБРАТИ ФАЙЛ",
-          "cancel": "Скасувати",
+          "close": "Закрити",
           "save": "Зберегти",
           "titleRequired": "Назва обов'язкова",
           "titleTooShort": "Назва занадто коротка",
-          "maxLength500": "Максимальна довжина — 500",
+          "maxLength200": "Максимальна довжина — 200",
           "issueDateRequired": "Дата видачі обов'язкова",
           "invalidDateFormat": "Невірний формат дати",
           "dateNotInFuture": "Дата не може бути в майбутньому",
@@ -315,7 +325,12 @@
           "chooseMasterError": "Будь ласка, виберіть майстра",
           "uploadFileError": "Будь ласка, завантажте файл",
           "unsupportedFileType": "Непідтримуваний тип файлу. Використовуйте: {types}.",
-          "fileTooLarge": "Файл занадто великий. Максимум {maxSizeMb} МБ."
+          "fileTooLarge": "Файл занадто великий. Максимум {maxSizeMb} МБ.",
+          "fileDropzoneTitle": "Виберіть файл або перетягніть сюди",
+          "fileDropzoneDescription": "Завантажте до 5 зображень (JPG, PNG, макс. 10 МБ кожне)",
+          "unsavedChanges": "Незбережені зміни",
+          "unsavedChangesDescription": "У вас є незбережені зміни. Ви впевнені, що хочете закрити?",
+          "discardChanges": "Скасувати зміни"
         }
       },
       "ChangePasswordForm": {
@@ -413,7 +428,8 @@
           "cancel": "Скасувати",
           "add": "Додати",
           "masters": "Майстри *",
-          "serviceCreated": "Послугу створено!",
+          "combinationCreated": "Комбо-послугу створено!",
+          "combinationAlreadyExists": "Комбо-послуга вже існує!",
           "serviceCreateError": "Не вдалося створити послугу: {error}"
         }
       },
@@ -513,6 +529,8 @@
           "close": "Закрити",
           "add": "Додати",
           "addSuccess": "Нового майстра успішно додано",
+          "emailAlreadyExists": "Електронна пошта вже існує",
+          "defaultFailError": "Сталося щось дивне. Спробуйте пізніше.",
           "infoDisplayPlatform": "Інформація буде відображатися на платформі."
         }
       },
@@ -564,6 +582,9 @@
         }
       },
       "MasterListItem": {
+        "editMaster": "Редагувати майстра",
+        "share": "Поділитися",
+        "delete": "Видалити",
         "MasterListItem": {
           "editMaster": "Редагувати майстра",
           "share": "Поділитися",
@@ -654,7 +675,8 @@
       },
       "OrderListItem": {
         "OrderListItem": {
-          "client": "Клієнт"
+          "client": "Клієнт",
+          "master": "Майстер"
         }
       },
       "ConfirmationModal": {
@@ -681,12 +703,14 @@
           "certificates": "Сертифікати",
           "noCertificates": "Сертифікати не додано",
           "addCertificates": "Додати сертифікати",
-          "addCertificatesRich": "<a>Додайте сертифікати</a>, щоб підкреслити свою професійну кваліфікацію."
+          "addCertificatesDescription": "щоб підкреслити свою професійну кваліфікацію.",
+          "addCertificatesRich": "<a>Додайте сертифікати</a>, щоб підкреслити свою професійну кваліфікацію.",
+          "seeMore": "Показати більше",
+          "seeLess": "Показати менше"
         }
       },
       "ProfileEdit": {
-        "EditProfileForm": {
-          "businessProfile": "Бізнес-профіль",
+        "ProfileEditForm": {
           "displayName": "Відображуване ім'я",
           "phone": "Телефон",
           "address": "Адреса",
@@ -697,7 +721,8 @@
           "search": "Пошук",
           "saving": "Збереження...",
           "save": "Зберегти",
-          "profilePreview": "Попередній перегляд профілю",
+          "profilePreview": "Прев'ю профілю",
+          "businessProfile": "Бізнес-профіль",
           "businessName": "Назва бізнесу",
           "headline": "Заголовок",
           "emailAddress": "Електронна пошта",
@@ -707,15 +732,27 @@
       },
       "ProfileGallery": {
         "ProfileGallery": {
+          "seeMore": "Показати більше",
+          "seeLess": "Показати менше",
           "gallery": "Галерея",
           "galleryEmpty": "Ваша галерея порожня",
           "addPhotos": "Додати фотографії",
-          "addPhotosRich": "<a>Додайте фотографії</a>, щоб підкреслити свою професійну кваліфікацію та атмосферу салону."
+          "addPhotosDescription": "щоб підкреслити свою професійну кваліфікацію та атмосферу салону.",
+          "addPhotosRich": "<a>Додайте фотографії</a>, щоб підкреслити свою професійну кваліфікацію та атмосферу салону.",
+          "close": "Закрити",
+          "save": "Зберегти",
+          "mediaUploaded": "Медіафайли завантажено!",
+          "mediaUploadError": "Не вдалося завантажити медіа: {error}",
+          "mediaDeleted": "Медіафайл видалено!",
+          "mediaDeleteError": "Не вдалося видалити медіафайл: {error}",
+          "unsavedChanges": "Незбережені зміни",
+          "unsavedChangesDescription": "У вас є незбережені зміни. Ви впевнені, що хочете вийти?",
+          "discardChanges": "Відхилити зміни"
         }
       },
       "ProfileInfo": {
         "ProfileInfo": {
-          "profilePreview": "Попередній перегляд профілю",
+          "profilePreview": "Прев'ю профілю",
           "about": "Про"
         }
       },
@@ -860,7 +897,8 @@
         "ServiceCard": {
           "editSm": "Редагувати",
           "shareService": "Поділитися послугою",
-          "deleteSm": "Видалити"
+          "deleteSm": "Видалити",
+          "copiedToClipboard": "Скопійовано в буфер обміну"
         }
       },
       "ServiceControls": {
@@ -897,7 +935,7 @@
       },
       "SortOptions": {
         "SortOptions": {
-          "sortBy": "Сортувати за:"
+          "sortBy": "Сортування:"
         }
       },
       "ServiceList": {
@@ -1289,7 +1327,9 @@
         "select": "Вибрати",
         "change": "Змінити",
         "selected": "Вибрано",
-        "search": "Пошук"
+        "search": "Пошук",
+        "master": "майстер",
+        "masters": "майстри"
       },
       "createOrder": {
         "bookingForm": "Форма бронювання",
@@ -1302,10 +1342,10 @@
         "date": "Дата",
         "notes": "Нотатки",
         "notesHelper": "Додаткова інформація для майстра",
-        "selectService": "Виберіть послугу",
+        "selectservice": "Виберіть послугу",
         "select": "Вибрати",
         "change": "Змінити",
-        "selectMaster": "Виберіть майстра",
+        "selectmaster": "Виберіть майстра",
         "selectDate": "Виберіть дату",
         "selectTime": "Виберіть час",
         "morning": "Ранок",
@@ -1334,14 +1374,25 @@
         "searchMasters": "Пошук майстрів",
         "anyMasterHeadline": "для максимальної доступності",
         "euro": "Євро",
-        "selectDateTime": "Виберіть дату та час",
+        "selectdateTime": "Виберіть дату та час",
         "selectValidTimeSlot": "Будь ласка, виберіть дійсний часовий слот",
         "noAvailableSlots": "Немає доступних часових слотів на вибрану дату. Будь ласка, виберіть іншу дату або оберіть 'Будь-який майстер' для додаткових варіантів.",
         "search": "Пошук",
         "remove": "Видалити",
         "clear": "Очистити",
         "splitBooking": "Розділити бронювання",
-        "selectedServices": "Вибрані послуги"
+        "selectedServices": "Вибрані послуги",
+        "noAvailableDates": "Немає доступних дат для вибраної послуги та майстра. Виберіть іншу послугу, майстра або дату.",
+        "dateTime": "Дата та час",
+        "combineProposition": "Ви хочете забронювати послуги на один візит?",
+        "yes": "Так",
+        "no": "Ні, бронювати окремо"
+      },
+      "confirmation": {
+        "successTitle": "Бронювання підтверджено!",
+        "successMessage": "Ваше бронювання успішно підтверджено. Чекаємо на вас!",
+        "bookMore": "Забронювати ще",
+        "returnToSalon": "Повернутися до салону"
       }
     },
     "forgotPassword": {
@@ -1370,7 +1421,8 @@
         "emailPlaceholder": "Електронна пошта",
         "passwordLabel": "Пароль *",
         "passwordPlaceholder": "Пароль",
-        "button": "Увійти"
+        "button": "Увійти",
+        "loginFailed": "Помилка входу. Перевірте адресу електронної пошти та пароль та спробуйте знову."
       }
     },
     "signUp": {
@@ -1392,7 +1444,9 @@
         "confirmPasswordLabel": "Підтвердіть пароль *",
         "confirmPasswordPlaceholder": "Підтвердіть пароль",
         "agreeToTerms": "Я погоджуюсь з Політикою конфіденційності, Умовами користування та Бізнес-умовами.",
-        "button": "Створити акаунт"
+        "button": "Створити акаунт",
+        "registerError": "От халепа, сталась якась дивна помилка. Перевірте будь ласка дані та спробуйте знову.",
+        "welcomeMessage": "Ласкаво просимо до AVOO! Ваш акаунт створено. Налаштуйте свій профіль, розклад та сервіси щоб почати."
       }
     },
     "authorizationWrapper": {

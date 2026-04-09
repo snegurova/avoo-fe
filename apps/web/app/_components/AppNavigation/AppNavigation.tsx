@@ -16,7 +16,6 @@ import CoPresentIcon from '@/_icons/CoPresentIcon';
 import GroupIcon from '@/_icons/GroupIcon';
 import GroupsIcon from '@/_icons/GroupsIcon';
 import HomeIcon from '@/_icons/HomeIcon';
-import MosaicIcon from '@/_icons/MosaicIcon';
 import { AppRoutes } from '@/_routes/routes';
 
 import AppNavigationItem from '../AppNavigationItem/AppNavigationItem';
@@ -84,11 +83,6 @@ export default function AppNavigation({ menuOpen, setMenuOpen }: Props) {
       label: t('masters'),
     },
     {
-      href: localizationHooks.useWithLocale(AppRoutes.Posts),
-      icon: <MosaicIcon />,
-      label: t('posts'),
-    },
-    {
       href: localizationHooks.useWithLocale(AppRoutes.Orders),
       icon: <GroupIcon />,
       label: t('orders'),
@@ -142,7 +136,7 @@ export default function AppNavigation({ menuOpen, setMenuOpen }: Props) {
           <div className='px-8 shrink-0'>
             <Link
               href={localizationHooks.useWithLocale(AppRoutes.Home)}
-              className='font-inter font-semibold text-4xl text-gray-600'
+              className='font-semibold text-4xl text-gray-600 inline-flex items-center font-advent-pro text-center'
               onClick={handleCloseMenu}
             >
               {tCommon('avoo')}

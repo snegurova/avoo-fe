@@ -1,7 +1,6 @@
 'use client';
 
 import { useCallback, useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 
 import { userHooks } from '@avoo/hooks';
@@ -19,7 +18,6 @@ import { AppRoutes } from '@/_routes/routes';
 
 export const ProfileInfo = () => {
   const t = useTranslations('private.components.ProfileInfo.ProfileInfo');
-  const router = useRouter();
   const { visualProfileInfo, userId } = userHooks.useGetUserProfile();
   const publicSalonPath = localizationHooks.useWithLocale(AppRoutes.PublicSalon);
   const [isProfileEditOpen, setIsProfileEditOpen] = useState(false);
@@ -34,9 +32,8 @@ export const ProfileInfo = () => {
 
   const handleNavigateToPreview = useCallback(() => {
     if (!userId) return;
-
-    router.push(`${publicSalonPath}/${userId}`);
-  }, [publicSalonPath, router, userId]);
+    window.open(`${publicSalonPath}/${userId}`, '_blank', 'noopener');
+  }, [publicSalonPath, userId]);
 
   const { handleUpdateProfileAvatar, isPending: isAvatarPending } =
     userHooks.useUpdateProfileAvatar();
@@ -46,7 +43,7 @@ export const ProfileInfo = () => {
       <div className='flex flex-col md:flex-row md:items-start md:gap-16'>
         <div className='mt-6 md:mt-0 mb-8 md:mb-0 flex flex-col items-center gap-4 relative  md:shrink-0'>
           <AvatarUpload
-            imageUri={visualProfileInfo.avatarUrl}
+            imageUri={visualProfileInfo?.avatarPreviewUrl ?? visualProfileInfo?.avatarUrl}
             isLoading={isAvatarPending}
             onAvatarSave={handleUpdateProfileAvatar}
             size={AvatarSize.PROFILE}

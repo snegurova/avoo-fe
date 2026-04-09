@@ -29,6 +29,7 @@ type HistoryItem = {
   title: string;
   duration: string;
   master: string;
+  masterAvatarUrl?: string | null;
   price: string;
   note?: string;
 };
@@ -45,6 +46,7 @@ export default function ClientOrdersHistory(props: Readonly<Props>) {
       const title =
         order.service?.name ?? order.combination?.name ?? order.name ?? t('bookingFallback');
       const note = typeof order.notes === 'string' ? order.notes : undefined;
+      const masterAvatarUrl = order.master?.avatarPreviewUrl ?? order.master?.avatarUrl ?? null;
 
       return {
         id: order.id,
@@ -54,7 +56,10 @@ export default function ClientOrdersHistory(props: Readonly<Props>) {
         title,
         duration: formatLocalizedDuration(order.duration, locale),
         master: order.master?.name ?? t('anyMaster'),
-        price: formatLocalizedCurrency(order.price, CURRENCY, locale, 'name'),
+        masterAvatarUrl,
+        price: formatLocalizedCurrency(order.price, CURRENCY, locale, 'name', {
+          withoutFractionDigits: true,
+        }),
         note,
       };
     },
@@ -110,6 +115,7 @@ export default function ClientOrdersHistory(props: Readonly<Props>) {
                   title={item.title}
                   duration={item.duration}
                   master={item.master}
+                  masterAvatarUrl={item.masterAvatarUrl}
                   price={item.price}
                   note={item.note}
                 />
@@ -137,6 +143,7 @@ export default function ClientOrdersHistory(props: Readonly<Props>) {
                   title={item.title}
                   duration={item.duration}
                   master={item.master}
+                  masterAvatarUrl={item.masterAvatarUrl}
                   price={item.price}
                   note={item.note}
                 />

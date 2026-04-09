@@ -30,7 +30,13 @@ const SERVICES_KEY_IN_ORDER_CREATE = 'ordersData';
 const WRAPPER_HEADER_HEIGHT = '62px';
 
 export default function OrderCreate() {
+  useEffect(() => {
+    setTimeout(() => {
+      useApiStatusStore.getState().setIsPending(false);
+    }, 0);
+  }, []);
   const t = useTranslations('private.orders.create');
+  const tCalendar = useTranslations('private.calendar.calendar');
   const isPending = useApiStatusStore((state) => state.isPending);
   const errorMessage = useApiStatusStore((s) => s.errorMessage);
   const isError = useApiStatusStore((s) => s.isError);
@@ -46,6 +52,7 @@ export default function OrderCreate() {
 
   const setMasterIds = useCalendarStore((state) => state.setMasterIds);
   const setDate = useCalendarStore((state) => state.setDate);
+  const setToDate = useCalendarStore((state) => state.setToDate);
   const setType = useCalendarStore((state) => state.setType);
   const setStatuses = useCalendarStore((state) => state.setStatuses);
   const setOrderIsOutOfSchedule = useCalendarStore((state) => state.setOrderIsOutOfSchedule);
@@ -72,10 +79,28 @@ export default function OrderCreate() {
   }, [searchParams]);
 
   useEffect(() => {
-    if (initialParams.date) {
-      setStartDate(initialParams.date);
-    }
-  }, [initialParams.date]);
+    const checkAndSetDate = async () => {
+      if (initialParams.date && initialParams.masterId) {
+        const availableDate = await getAvailableDate({
+          rangeFromTime: initialParams.date,
+          masterIds: [initialParams.masterId],
+          index: 0,
+        });
+        if (availableDate) {
+          setStartDate(availableDate);
+
+          if (new Date(availableDate).getTime() !== new Date(initialParams.date).getTime()) {
+            toast.info(tCalendar('dateNotAvailable'));
+          }
+        } else {
+          setStartDate(initialParams.date);
+        }
+      } else if (initialParams.date) {
+        setStartDate(initialParams.date);
+      }
+    };
+    checkAndSetDate();
+  }, [initialParams.date, initialParams.masterId]);
 
   useEffect(() => {
     if (searchParams.toString()) {
@@ -129,6 +154,7 @@ export default function OrderCreate() {
     if (fields[activeOrder]) {
       const activeOrderData = fields[activeOrder];
       setDate(new Date(activeOrderData.date));
+      setToDate(new Date(activeOrderData.date));
       setType(CalendarViewType.DAY);
       setStatuses(undefined);
       setOrderIsOutOfSchedule(undefined);
@@ -312,6 +338,10 @@ export default function OrderCreate() {
     if (!availableDate) {
       toast.error(t('noAvailableDateAndTime'));
       return;
+    }
+
+    if (new Date(availableDate).getTime() !== new Date(params.rangeFromTime).getTime()) {
+      toast.info(tCalendar('dateNotAvailable'));
     }
 
     setMasterIds([master.id]);

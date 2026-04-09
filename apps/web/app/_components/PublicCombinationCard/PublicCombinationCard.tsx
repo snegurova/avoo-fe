@@ -29,7 +29,7 @@ export default function PublicCombinationCard(props: Props) {
             className='flex items-center gap-4 justify-between'
           >
             <div className='flex items-center gap-2'>
-              <span className='text-sm font-medium'>{service.name}</span>
+              <span className='text-sm font-medium text-black'>{service.name}</span>
               <span className='text-gray-600 line-through text-xs'>
                 {timeUtils.convertDuration(service.durationMinutes)}
               </span>
@@ -41,14 +41,14 @@ export default function PublicCombinationCard(props: Props) {
         ))}
       </ul>
       <div className='flex items-center gap-4 justify-between'>
-        <p className=' text-gray-600'>{timeUtils.convertDuration(item.durationMinutes)}</p>
-        <p className='text-base'>{currencyUtils.formatPrice(price, CURRENCY)}</p>
+        <p className=' text-black'>{timeUtils.convertDuration(item.durationMinutes)}</p>
+        <p className='text-base text-black'>{currencyUtils.formatPrice(price, CURRENCY)}</p>
       </div>
 
       <button
         type='button'
         onClick={onClick}
-        className='font-semibold bg-black rounded-lg py-3.5 px-5 justify-center text-white border-black transition-colors hover:bg-white focus:bg-white hover:text-black focus:text-black border cursor-pointer leading-none self-end'
+        className='cursor-pointer transition-colors text-gray-600 font-medium text-sm leading-base hover:text-black focus:text-black underline self-end'
       >
         {t('splitBooking')}
       </button>

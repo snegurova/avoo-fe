@@ -1,6 +1,7 @@
 import React, { useRef } from 'react';
 import { useTranslations } from 'next-intl';
 
+import { twMerge } from 'tailwind-merge';
 import { tv } from 'tailwind-variants';
 
 type Props = {
@@ -12,11 +13,14 @@ type Props = {
   displayButton?: boolean;
   variant?: 'outline' | 'base';
   accept?: string;
-  onFilePicked: (file: File | null) => void;
+  onFilePicked?: (file: File | null) => void;
+  onFilesPicked?: (files: File[]) => void;
   fileError?: string;
   file?: File | null;
   icon?: React.ReactNode;
   className?: string;
+  titleClassName?: string;
+  descriptionClassName?: string;
 };
 
 export default function DragAndDropZone(props: Props) {
@@ -27,6 +31,7 @@ export default function DragAndDropZone(props: Props) {
     buttonTitle = t('defaultButtonTitle'),
     accept = '.jpg,.png',
     onFilePicked,
+    onFilesPicked,
     fileError,
     icon,
     isUploading,
@@ -34,8 +39,16 @@ export default function DragAndDropZone(props: Props) {
     variant = 'base',
     displayButton = true,
     className,
+    titleClassName,
+    descriptionClassName,
   } = props;
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+
+  const handleFiles = (files: FileList | null) => {
+    const arr = Array.from(files ?? []);
+    if (onFilesPicked) onFilesPicked(arr);
+    if (onFilePicked) onFilePicked(arr[0] ?? null);
+  };
 
   const buttonVariants = tv({
     base: 'drag-and-drop-zone',
@@ -73,8 +86,7 @@ export default function DragAndDropZone(props: Props) {
         onDragOver={(e) => e.preventDefault()}
         onDrop={(e) => {
           e.preventDefault();
-          const dropped = e.dataTransfer?.files?.[0] ?? null;
-          onFilePicked(dropped);
+          handleFiles(e.dataTransfer?.files ?? null);
         }}
         onClick={() => fileInputRef.current?.click()}
         disabled={isUploading}
@@ -84,12 +96,12 @@ export default function DragAndDropZone(props: Props) {
           <div className={iconVariants({ isUploading, variant, isSmall })}>{icon}</div>
         ) : null}
 
-        <p className='lg:mb-2 text-xs lg:text-sm font-semibold '>
+        <p className={twMerge('lg:mb-2 text-xs lg:text-sm font-semibold', titleClassName)}>
           {isUploading ? t('uploading') : title}
         </p>
 
         {description && (
-          <p className='text-xs lg:text-sm text-gray-500 lg:mb-4'>
+          <p className={twMerge('text-xs lg:text-sm text-gray-500 lg:mb-4', descriptionClassName)}>
             {isUploading ? t('uploadingDescription') : description}
           </p>
         )}
@@ -102,8 +114,9 @@ export default function DragAndDropZone(props: Props) {
           name='dndFile'
           type='file'
           accept={accept}
+          multiple={!!onFilesPicked}
           className='hidden'
-          onChange={(e) => onFilePicked(e.target.files?.[0] ?? null)}
+          onChange={(e) => handleFiles(e.target.files)}
           disabled={isUploading}
         />
         {fileError && <p className='text-sm text-red-500 mt-2'>{fileError}</p>}

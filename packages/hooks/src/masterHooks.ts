@@ -16,6 +16,7 @@ import {
   ApiStatus,
   BaseResponse,
   CreateMasterRequest,
+  ErrorResponse,
   GetMastersQueryParams,
   GetMastersResponse,
   MasterWithRelationsEntityResponse,
@@ -29,6 +30,29 @@ import { useDebounce } from './useDebounce';
 
 type UseCreateMasterFormParams = {
   onSuccess?: () => void;
+  onError?: (errorType: CreateMasterErrorType, error: ErrorResponse) => void;
+};
+
+export enum CreateMasterErrorType {
+  DuplicateEmail = 'duplicate-email',
+  Unknown = 'unknown',
+}
+
+const isDuplicateEmailCreateMasterError = (error: ErrorResponse) => {
+  const isDuplicateEmailCode = error.errorCode === 5;
+  const hasEmailError = error.errors?.some((item) => item.field === 'email');
+  const normalizedErrorMessage = error.errorMessage.toLowerCase();
+  const isDuplicateEmailMessage = normalizedErrorMessage.includes('email already in use');
+
+  return isDuplicateEmailCode || hasEmailError || isDuplicateEmailMessage;
+};
+
+const getCreateMasterErrorType = (error: ErrorResponse): CreateMasterErrorType => {
+  if (isDuplicateEmailCreateMasterError(error)) {
+    return CreateMasterErrorType.DuplicateEmail;
+  }
+
+  return CreateMasterErrorType.Unknown;
 };
 
 type UseUpdateMasterFormParams = {
@@ -91,13 +115,15 @@ export const masterHooks = {
 
     return query;
   },
-  useMasterQuery() {
+  useMasterQuery(firstServiceId?: number) {
     const [searchTerm, setSearchTerm] = useState('');
     const debouncedSearch = useDebounce(searchTerm);
-    const masterQuery = masterHooks.useGetMastersInfinite({ search: debouncedSearch });
+    const masterQuery = masterHooks.useGetMastersInfinite({
+      search: debouncedSearch,
+      serviceId: firstServiceId,
+    });
 
     const masters = masterQuery.data?.pages.flatMap((page) => page.data?.items ?? []) ?? [];
-
     return {
       masters,
       searchTerm,
@@ -137,11 +163,13 @@ export const masterHooks = {
       ...masterQuery,
     };
   },
-  useCreateMasterForm: ({ onSuccess }: UseCreateMasterFormParams = {}) => {
+  useCreateMasterForm: ({ onSuccess, onError }: UseCreateMasterFormParams = {}) => {
     const {
       control,
       handleSubmit,
       setValue,
+      setError,
+      clearErrors,
       watch,
       formState: { errors },
     } = useForm<CreateMasterFormData>({
@@ -163,7 +191,7 @@ export const masterHooks = {
 
     const { mutate: createMasterMutation, isPending } = useMutation<
       BaseResponse<MasterWithRelationsEntityResponse>,
-      Error,
+      ErrorResponse,
       CreateMasterRequest
     >({
       mutationFn: masterApi.createMaster,
@@ -173,6 +201,9 @@ export const masterHooks = {
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: queryKeys.masters.all });
         onSuccess?.();
+      },
+      onError: (error) => {
+        onError?.(getCreateMasterErrorType(error), error);
       },
     });
 
@@ -184,6 +215,8 @@ export const masterHooks = {
         utils.submitAdapter<CreateMasterRequest, CreateMasterFormData>(createMasterMutation),
       ),
       setValue,
+      setError,
+      clearErrors,
       watch,
       errors,
       isPending,

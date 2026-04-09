@@ -2,6 +2,8 @@ import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import { CompositeScreenProps, NavigatorScreenParams } from '@react-navigation/native';
 import { NativeStackNavigationProp, NativeStackScreenProps } from '@react-navigation/native-stack';
 
+import { OrderStatus } from '@avoo/hooks/types/orderStatus';
+
 export enum RootScreens {
   LoginScreen = 'LoginScreen',
   ConfirmCodeScreen = 'ConfirmCodeScreen',
@@ -12,16 +14,13 @@ export enum RootScreens {
   Storybook = 'Storybook',
   CertificatesScreen = 'CertificatesScreen',
   WorkingHoursScreen = 'WorkingHoursScreen',
-  PostsScreen = 'PostsScreen',
   GalleryScreen = 'GalleryScreen',
   EditLanguagesScreen = 'EditLanguagesScreen',
   EditProfileScreen = 'EditProfileScreen',
-  AddPostScreen = 'AddPostScreen',
   AddBookingScreen = 'AddBookingScreen',
+  OrdersScreen = 'OrdersScreen',
   ProfileScreen = 'ProfileScreen',
   WorkingScheduleScreen = 'WorkingScheduleScreen',
-  ScheduleExceptionScreen = 'ScheduleExceptionScreen',
-  ComboServiceTimeScreen = 'ComboServiceTimeScreen',
 }
 
 export enum BottomBarScreens {
@@ -30,7 +29,6 @@ export enum BottomBarScreens {
   Clients = 'Clients',
   Services = 'Services',
   Masters = 'Masters',
-  Posts = 'Posts',
   Profile = 'Profile',
 }
 
@@ -44,7 +42,6 @@ export type BottomBarStackParamList = {
   [BottomBarScreens.Clients]: undefined;
   [BottomBarScreens.Services]: undefined;
   [BottomBarScreens.Masters]: undefined;
-  [BottomBarScreens.Posts]: undefined;
 };
 
 export type RootStackParamList = {
@@ -57,16 +54,13 @@ export type RootStackParamList = {
   [RootScreens.Storybook]: undefined;
   [RootScreens.CertificatesScreen]: undefined;
   [RootScreens.WorkingHoursScreen]: undefined;
-  [RootScreens.PostsScreen]: undefined;
   [RootScreens.GalleryScreen]: undefined;
   [RootScreens.EditLanguagesScreen]: undefined;
   [RootScreens.EditProfileScreen]: undefined;
-  [RootScreens.AddPostScreen]: undefined;
   [RootScreens.AddBookingScreen]: undefined;
+  [RootScreens.OrdersScreen]: { initialStatus?: OrderStatus } | undefined;
   [RootScreens.ProfileScreen]: undefined;
   [RootScreens.WorkingScheduleScreen]: undefined;
-  [RootScreens.ScheduleExceptionScreen]: undefined;
-  [RootScreens.ComboServiceTimeScreen]: undefined;
 };
 
 export type RootStackScreenProps<T extends keyof RootStackParamList> = NativeStackScreenProps<

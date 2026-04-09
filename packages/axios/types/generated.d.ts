@@ -420,6 +420,22 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  '/public/certificates': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: operations['CertificatesPublicController_getAll'];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/services': {
     parameters: {
       query?: never;
@@ -476,6 +492,22 @@ export interface paths {
       cookie?: never;
     };
     get: operations['ServicesPublicController_findAll'];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/public/services/group-by-categories': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: operations['ServicesPublicController_getGroupByCategories'];
     put?: never;
     post?: never;
     delete?: never;
@@ -950,7 +982,7 @@ export interface components {
       /** @example Email is not valid */
       message: string;
       /** @enum {number} */
-      code?: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16;
+      code?: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18;
       /** @example 1 */
       value: number;
     };
@@ -963,7 +995,7 @@ export interface components {
       /** @example Bad request */
       errorMessage: string;
       /** @enum {number} */
-      errorCode: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16;
+      errorCode: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18;
       /** @example null */
       data: Record<string, never> | null;
       /** @example [] */
@@ -1065,6 +1097,15 @@ export interface components {
       masters: components['schemas']['MasterEntity'][];
       userId: number;
     };
+    MediaEntity: {
+      id: number;
+      url: string;
+      previewUrl: string | null;
+      /** Format: date-time */
+      createdAt: string;
+      /** Format: date-time */
+      updatedAt: string;
+    };
     ServiceEntity: {
       id: number;
       name: string;
@@ -1076,6 +1117,7 @@ export interface components {
       masters: components['schemas']['MasterEntity'][];
       combinations: components['schemas']['CombinationEntity'][];
       user: components['schemas']['UserEntity'];
+      medias: components['schemas']['MediaEntity'][];
     };
     CustomerInfoDto: {
       id: number;
@@ -1251,15 +1293,6 @@ export interface components {
         | 'zh'
         | 'fa';
       masters: components['schemas']['ShortMasterInfoDto'][];
-    };
-    MediaEntity: {
-      id: number;
-      url: string;
-      previewUrl: string | null;
-      /** Format: date-time */
-      createdAt: string;
-      /** Format: date-time */
-      updatedAt: string;
     };
     UploadMediaDto: {
       /** @enum {string} */
@@ -1533,6 +1566,14 @@ export interface components {
        *     ]
        */
       masterIds?: number[];
+    };
+    PublicServiceWithCategoryDto: {
+      category: components['schemas']['CategoryEntity'];
+      totalServices: number;
+    };
+    PublicServicesGroupByCategoriesResponseDto: {
+      categories: components['schemas']['PublicServiceWithCategoryDto'][];
+      total: number;
     };
     CombinationDto: {
       /**
@@ -2272,7 +2313,7 @@ export interface components {
        * @description Calendar exception start date (local, YYYY-MM-DD)
        * @example 2026-01-09
        */
-      endAt?: string;
+      endAt: string;
       /** @description List of working hours ( Mon-Fri (Sunday, Saturday Day off)), if start date is Monday */
       workingHours?: components['schemas']['UpdateWorkingHourDto'][];
     };
@@ -3622,6 +3663,47 @@ export interface operations {
       };
     };
   };
+  CertificatesPublicController_getAll: {
+    parameters: {
+      query: {
+        /** @description Master ID to filter by (optional). If omitted, returns salon-level certificates */
+        masterId?: number;
+        page?: number;
+        limit?: number;
+        /** @description Salon ID */
+        userId: number;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description All certificates */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['SuccessResponseDto'] & {
+            data?: {
+              items?: components['schemas']['CertificateEntity'][];
+              pagination?: components['schemas']['PaginationDto'];
+            };
+          };
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ErrorResponseDto'];
+        };
+      };
+    };
+  };
   ServicesController_findAllByOwner: {
     parameters: {
       query?: {
@@ -3882,6 +3964,42 @@ export interface operations {
               items?: components['schemas']['ServiceEntity'][];
               pagination?: components['schemas']['PaginationDto'];
             };
+          };
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ErrorResponseDto'];
+        };
+      };
+    };
+  };
+  ServicesPublicController_getGroupByCategories: {
+    parameters: {
+      query: {
+        /** @description Search by service name */
+        search?: string;
+        /** @description Salon ID */
+        userId: number;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Count of services in all categories */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['SuccessResponseDto'] & {
+            data?: components['schemas']['PublicServicesGroupByCategoriesResponseDto'];
           };
         };
       };

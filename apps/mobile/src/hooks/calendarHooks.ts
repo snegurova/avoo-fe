@@ -1,9 +1,13 @@
 import { useMemo } from 'react';
 
+import { useQuery } from '@tanstack/react-query';
+
+import { calendarApi } from '@avoo/axios';
 import type {
   CalendarItem,
   GetCalendarResponse,
   OrderStatusValue,
+  PrivateGetAvailabilityQueryParams,
   ShortMasterInfo,
 } from '@avoo/axios/types/apiTypes';
 import { timeUtils } from '@avoo/shared';
@@ -18,6 +22,8 @@ export type Appointment = {
   status: OrderStatusValue;
   master: ShortMasterInfo;
 };
+
+const MS_IN_MINUTE = 60000;
 
 export const calendarMobileHooks = {
   useCalendarMasters(calendarData: GetCalendarResponse | null | undefined): ShortMasterInfo[] {
@@ -55,7 +61,7 @@ export const calendarMobileHooks = {
               date: dayDate,
               startTime,
               endTime,
-              clientName: event.customerName || '',
+              clientName: typeof event.customerName === 'string' ? event.customerName : '',
               service: event.title || 'Service',
               status: event.status,
               master,
@@ -66,5 +72,96 @@ export const calendarMobileHooks = {
 
       return result.sort((a, b) => a.startTime.localeCompare(b.startTime));
     }, [calendarData]);
+  },
+
+  useGetAvailableSlots: (
+    params: {
+      serviceId?: number;
+      masterIds?: number[];
+      date: string | null;
+      duration: number;
+      rangeFromTime?: string;
+    },
+    options?: { enabled?: boolean },
+  ) => {
+    const { data, isLoading } = useQuery({
+      queryKey: ['availableSlots', params],
+      queryFn: async (): Promise<string[]> => {
+        if (!params.date || !params.serviceId) return [];
+
+        const selectedDayUTC = new Date(`${params.date}T00:00:00Z`);
+
+        const isSameDayUTC = (a: Date, b: Date): boolean =>
+          a.getUTCFullYear() === b.getUTCFullYear() &&
+          a.getUTCMonth() === b.getUTCMonth() &&
+          a.getUTCDate() === b.getUTCDate();
+
+        const now = new Date();
+        const isToday = isSameDayUTC(selectedDayUTC, now);
+
+        let rangeFrom: Date;
+        if (params.rangeFromTime) {
+          rangeFrom = new Date(params.rangeFromTime);
+        } else if (isToday) {
+          const mins = now.getUTCMinutes();
+          const roundedMins = Math.ceil(mins / 15) * 15;
+          rangeFrom = new Date(now);
+          if (roundedMins >= 60) {
+            rangeFrom.setUTCHours(now.getUTCHours() + 1, 0, 0, 0);
+          } else {
+            rangeFrom.setUTCMinutes(roundedMins, 0, 0);
+          }
+        } else {
+          rangeFrom = selectedDayUTC;
+        }
+
+        const slots: string[] = [];
+        const MAX_ITERATIONS = 24;
+        let iteration = 0;
+
+        while (iteration < MAX_ITERATIONS) {
+          iteration++;
+
+          const apiParams: PrivateGetAvailabilityQueryParams = {
+            rangeFromTime: rangeFrom.toISOString().slice(0, 16) + ':00Z',
+            workingTimeOnly: true,
+          };
+          if (params.serviceId) apiParams.serviceId = params.serviceId;
+          if (params.masterIds?.length) apiParams.masterIds = params.masterIds;
+
+          const res = await calendarApi.getPrivateAvailability(apiParams);
+          const windowStart = res?.data?.availability?.start;
+          const windowEnd = res?.data?.availability?.end;
+
+          if (!windowStart || !windowEnd) break;
+
+          const windowStartDate = new Date(windowStart);
+          const windowEndDate = new Date(windowEnd);
+
+          if (!isSameDayUTC(windowStartDate, selectedDayUTC)) break;
+
+          const durationMs = params.duration * MS_IN_MINUTE;
+          let chip = windowStartDate.getTime();
+          const endMs = windowEndDate.getTime();
+
+          while (chip + durationMs <= endMs) {
+            const chipDate = new Date(chip);
+            if (!isSameDayUTC(chipDate, selectedDayUTC)) break;
+            slots.push(timeUtils.convertDateToString(chipDate));
+            chip += 15 * MS_IN_MINUTE;
+          }
+
+          rangeFrom = windowEndDate;
+
+          if (!isSameDayUTC(windowEndDate, selectedDayUTC)) break;
+        }
+
+        return slots;
+      },
+      enabled: !!params.date && !!params.serviceId && options?.enabled !== false,
+      staleTime: 30 * 1000,
+    });
+
+    return { slots: data ?? [], isLoading };
   },
 };

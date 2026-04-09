@@ -1,11 +1,14 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
-import { userApi } from '@avoo/axios';
+import { formDataUtils, userApi } from '@avoo/axios';
+import { FILE_UPLOAD_TYPE_ENUM } from '@avoo/axios/types/apiEnums';
 import {
   ApiStatus,
   BaseResponse,
   CertificateResponse,
   FileEntity,
+  GetPublicCertificatesQueryParams,
+  GetPublicCertificatesResponse,
   GetPublicUserProfileResponse,
   GetPublicUsersResponse,
   UpdateProfile,
@@ -18,8 +21,9 @@ import { MediaType } from '@avoo/hooks/types/mediaType';
 import { FileInput } from '@avoo/shared';
 
 import { utils } from './../utils/utils';
-import { appendFileToForm, buildCertificateForm } from './utils/formDataHelpers';
 import { queryKeys } from './queryKeys';
+
+const DEFAULT_CERTIFICATES_LIMIT = 6;
 
 export const userHooks = {
   useGetUserProfile: () => {
@@ -43,11 +47,7 @@ export const userHooks = {
       email: profileInfo?.email ?? null,
       phone: profileInfo?.businessInfo?.phone ?? null,
       policy: profileInfo?.businessInfo?.policy ?? null,
-      avatarUrl:
-        profileInfo?.avatarUrl ??
-        profileInfo?.businessInfo?.avatarUrl ??
-        profileInfo?.avatarPreviewUrl ??
-        null,
+      avatarUrl: profileInfo?.avatarUrl ?? profileInfo?.avatarPreviewUrl ?? null,
       avatarPreviewUrl: profileInfo?.avatarPreviewUrl ?? null,
       languages: profileInfo?.businessInfo?.languages ?? null,
       location_lat: profileInfo?.businessInfo?.location_lat ?? null,
@@ -62,14 +62,18 @@ export const userHooks = {
       userId: profileInfo?.id ?? null,
     };
   },
-  useGetUserMedia: () => {
+  useGetUserMedia: (page?: number, limit?: number) => {
     const { userId } = userHooks.useGetUserProfile();
 
-    const { data: userMediaData, isPending } = useQuery<BaseResponse<UserMediaResponse>, Error>({
-      queryKey: queryKeys.user.media(),
+    const {
+      data: userMediaData,
+      isPending,
+      isFetching,
+    } = useQuery<BaseResponse<UserMediaResponse>, Error>({
+      queryKey: [...queryKeys.user.media(), userId, page, limit],
       queryFn: () => {
         if (!userId) throw new Error('userId is required');
-        return userApi.getUserMedia(MediaType.USER, userId);
+        return userApi.getUserMedia(MediaType.USER, userId, page, limit);
       },
       enabled: !!userId,
     });
@@ -77,10 +81,59 @@ export const userHooks = {
     utils.useSetPendingApi(isPending);
 
     if (userMediaData?.status === ApiStatus.SUCCESS) {
-      return userMediaData.data;
+      return { ...userMediaData.data, isFetching };
     }
 
     return null;
+  },
+  useGetUserMediaList: (limit?: number) => {
+    const { userId } = userHooks.useGetUserProfile();
+
+    const query = useInfiniteQuery<BaseResponse<UserMediaResponse>, Error>({
+      queryKey: [queryKeys.user.media(), userId, limit],
+      queryFn: ({ pageParam = 1 }) => {
+        if (!userId) throw new Error('userId is required');
+        return userApi.getUserMedia(MediaType.USER, userId, pageParam as number, limit);
+      },
+      initialPageParam: 1,
+      getNextPageParam: (lastPage) => {
+        const { currentPage, total } = lastPage.data?.pagination || { currentPage: 0, total: 0 };
+        return currentPage * (limit ?? 0) < total ? currentPage + 1 : undefined;
+      },
+      enabled: !!userId,
+    });
+
+    utils.useSetPendingApi(query.isFetching);
+
+    return query;
+  },
+  useGetAllUserMedia: (
+    userId: number | null,
+    totalMedias: number | null,
+    enabled: boolean = true,
+  ) => {
+    const shouldFetchAll =
+      enabled && typeof userId === 'number' && typeof totalMedias === 'number' && totalMedias > 0;
+
+    const { data: userMediaData, isPending } = useQuery<BaseResponse<UserMediaResponse>, Error>({
+      queryKey: [queryKeys.user.media(), 'all', userId, totalMedias],
+      queryFn: () => {
+        if (typeof userId !== 'number') throw new Error('userId is required');
+        if (typeof totalMedias !== 'number') throw new Error('totalMedias is required');
+        return userApi.getUserMedia(MediaType.USER, userId, 1, totalMedias);
+      },
+      enabled: shouldFetchAll,
+    });
+
+    utils.useSetPendingApi(isPending);
+
+    const allUserMedias =
+      userMediaData?.status === ApiStatus.SUCCESS ? userMediaData.data.items : null;
+
+    return {
+      allUserMedias,
+      isPending,
+    };
   },
   useGetUserCertificates: () => {
     const { data: certificatesData, isPending } = useQuery<
@@ -108,8 +161,10 @@ export const userHooks = {
       isPending,
     } = useMutation<BaseResponse<UserUpdateAvatarResponse>, Error, FileInput>({
       mutationFn: async (file) => {
-        const form = new FormData();
-        await appendFileToForm(form, 'file', file);
+        const form = formDataUtils.getFileFormData({
+          file,
+          type: FILE_UPLOAD_TYPE_ENUM.AVATAR,
+        });
         return userApi.updateAvatar(form);
       },
       onSuccess: () => {
@@ -132,12 +187,7 @@ export const userHooks = {
       Error,
       CreateCertificatePayload
     >({
-      mutationFn: (payload) => {
-        return (async () => {
-          const form = await buildCertificateForm(payload);
-          return userApi.createCertificate(form);
-        })();
-      },
+      mutationFn: (payload) => userApi.createCertificate(payload),
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: queryKeys.user.profile() });
         queryClient.invalidateQueries({ queryKey: queryKeys.user.certificates() });
@@ -236,5 +286,25 @@ export const userHooks = {
     }
 
     return null;
+  },
+  useGetPublicCertificatesInfinite: (params: GetPublicCertificatesQueryParams) => {
+    const query = useInfiniteQuery<BaseResponse<GetPublicCertificatesResponse>, Error>({
+      queryKey: queryKeys.user.publicCertificates(params),
+      queryFn: ({ pageParam = 1 }) =>
+        userApi.getPublicCertificates({ ...params, page: pageParam as number }),
+      initialPageParam: 1,
+      getNextPageParam: (lastPage) => {
+        const { currentPage, total } = lastPage.data?.pagination || { currentPage: 0, total: 0 };
+        return currentPage * (params?.limit || DEFAULT_CERTIFICATES_LIMIT) < total
+          ? currentPage + 1
+          : undefined;
+      },
+    });
+
+    const isPending = query.isFetching;
+
+    utils.useSetPendingApi(isPending);
+
+    return query;
   },
 };

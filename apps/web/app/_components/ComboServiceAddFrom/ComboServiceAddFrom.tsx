@@ -1,4 +1,5 @@
-import { useState } from 'react';
+'use client';
+import { useMemo, useState } from 'react';
 import { Controller } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
@@ -33,22 +34,37 @@ export default function ComboServiceAddForm() {
   const [openConfirmDialog, setOpenConfirmDialog] = useState(false);
 
   const comboServicePath = localizationHooks.useWithLocale(AppRoutes.ComboServiceTime);
-  const { masters, searchTerm, setSearchTerm } = masterHooks.useMasterQuery();
 
   const { control, watch, setValue, handleSubmit, isDirty, errors } =
     combinationHooks.useCreateCombinationForm({
       onSuccess: () => {
-        toast.success(t('serviceCreated'));
+        toast.success(t('combinationCreated'));
         router.replace(comboServicePath);
       },
       onError: (error) => {
-        toast.error(t('serviceCreateError', { error: error.message }));
+        if (error.errorCode === 18) {
+          toast.error(t('combinationAlreadyExists'));
+          return;
+        }
+        toast.error(tCommon('defaultFailError'));
       },
     });
 
   const selectedServices = watch('serviceIds');
   const currentComboName = watch('name');
   const masterIds = watch('masterIds');
+  const { masters, searchTerm, setSearchTerm } = masterHooks.useMasterQuery(selectedServices?.[0]);
+
+  const activeMasterIdsForFilter = useMemo(() => {
+    if (masterIds.length > 0) {
+      return masterIds;
+    }
+    if (selectedServices.length > 0 && masters.length > 0) {
+      return masters.map((m) => m.id);
+    }
+    return [];
+  }, [masterIds, selectedServices.length, masters]);
+
   const errorsList = getAllErrorMessages(errors);
 
   const handleCancel = () => {
@@ -129,7 +145,7 @@ export default function ComboServiceAddForm() {
                   render={({ field }) => (
                     <ComboServiceSelector
                       value={field.value}
-                      masterIds={masterIds}
+                      masterIds={activeMasterIdsForFilter}
                       onChange={field.onChange}
                       items={null}
                       currentComboName={currentComboName}

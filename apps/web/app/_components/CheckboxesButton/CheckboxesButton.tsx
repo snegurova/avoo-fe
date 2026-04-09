@@ -70,7 +70,7 @@ export default function CheckboxesButton(props: Props) {
 
   return (
     <div className='relative h-full' ref={ref}>
-      <button className={selectButton()} onClick={toggleOpen}>
+      <button type='button' className={selectButton()} onClick={toggleOpen}>
         {addCount &&
           (options[0].items?.length ? (
             <span className='w-5 h-5 flex items-center justify-center rounded-full bg-primary-500 text-white text-sm font-medium -mr-1'>

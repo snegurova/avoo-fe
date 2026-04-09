@@ -1,10 +1,12 @@
 'use client';
 import React from 'react';
+import { useEffect } from 'react';
 import Link from 'next/link';
-import { useParams } from 'next/navigation';
+import { useParams, useSearchParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 
 import { userHooks } from '@avoo/hooks';
+import { useReferralStore } from '@avoo/store';
 
 import PublicWrapper from '@/_components/PublicWrapper/PublicWrapper';
 import SalonPageTabsPanel from '@/_components/SalonPageTabsPanel/SalonPageTabsPanel';
@@ -14,7 +16,16 @@ import { AppRoutes } from '@/_routes/routes';
 
 export default function SalonPublicPage() {
   const params = useParams();
+  const searchParams = useSearchParams();
   const userId = params.userId;
+  const setReferralCode = useReferralStore((s) => s.setReferralCode);
+
+  useEffect(() => {
+    const code = searchParams.get('referralCode');
+    if (code) {
+      setReferralCode(code);
+    }
+  }, [searchParams, setReferralCode]);
 
   const data = userHooks.useGetPublicUser(userId ? Number(userId) : 0);
 

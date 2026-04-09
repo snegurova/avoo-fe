@@ -24,10 +24,12 @@ type Props = {
   setStep: (step: number) => void;
   selectedService: Service | null;
   ref: React.Ref<HTMLDivElement>;
+  userId: number;
+  error?: string;
 };
 
 const button = tv({
-  base: 'px-5.5 py-3 rounded-full  border transition-colors text-sm leading-none text-black flex justify-between items-center gap-2 bg-white',
+  base: 'px-5.5 py-2 rounded-full  border transition-colors text-sm leading-none text-black flex justify-between items-center gap-6 bg-white',
   variants: {
     active: {
       true: 'border-black',
@@ -49,6 +51,8 @@ export default function PublicServiceSearch(props: Props) {
     fetchNextPage,
     hasMore,
     ref,
+    userId,
+    error,
   } = props;
   const t = useTranslations('public.salon.page');
   const listRef = useRef<HTMLDivElement>(null);
@@ -56,7 +60,7 @@ export default function PublicServiceSearch(props: Props) {
 
   const [selectedCategory, setSelectedCategory] = useState<number | undefined>(undefined);
 
-  const categories = categoriesHooks.useGetPublicCategories();
+  const categories = categoriesHooks.useGetPublicCategoriesForUser({ userId });
 
   const handleCategoryClick = (categoryId?: number) => {
     setSelectedCategory(categoryId);
@@ -86,29 +90,40 @@ export default function PublicServiceSearch(props: Props) {
     <div ref={ref}>
       <PublicOrderTitle
         isActive={isActive}
-        title='selectService'
+        title='service'
         search={search}
         setSearch={setSearch}
         placeholder='searchServices'
       />
+      {error && <div className='my-1 text-sm text-red-500'>{error}</div>}
       {isActive && (
         <div className='flex flex-col'>
           <div className='sticky lg:static top-0 flex gap-y-2 gap-x-3 py-4 overflow-x-auto lg:overflow-visible whitespace-nowrap lg:flex-wrap'>
             <button
+              type='button'
               className={button({ active: selectedCategory === undefined })}
               onClick={() => handleCategoryClick(undefined)}
             >
               <span>{t('allCategories')}</span>
+              <span className='w-5 h-5 rounded-full border border-gray-100 flex items-center justify-center text-xs text-black shrink-0'>
+                {categories?.total}
+              </span>
             </button>
-            {categories?.map((cat) => (
-              <button
-                key={cat.id}
-                className={button({ active: selectedCategory === cat.id })}
-                onClick={() => handleCategoryClick(cat.id)}
-              >
-                <span>{t(cat.name)}</span>
-              </button>
-            ))}
+            {categories?.categories.map((cat) =>
+              cat.totalServices ? (
+                <button
+                  type='button'
+                  key={cat.category.id}
+                  className={button({ active: selectedCategory === cat.category.id })}
+                  onClick={() => handleCategoryClick(cat.category.id)}
+                >
+                  <span>{t(cat.category.name)}</span>
+                  <span className='w-5 h-5 rounded-full border border-gray-100 flex items-center justify-center text-xs text-black shrink-0'>
+                    {cat.totalServices}
+                  </span>
+                </button>
+              ) : null,
+            )}
           </div>
           <div
             className='flex flex-col gap-3 max-h-[calc(100vh-200px)] overflow-y-auto'

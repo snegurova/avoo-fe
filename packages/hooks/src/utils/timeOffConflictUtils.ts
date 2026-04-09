@@ -100,6 +100,7 @@ export const timeOffConflictUtils = {
       const masterId = masterSchedule.master?.id;
       const masterName =
         masterSchedule.master?.name ?? (masterId === undefined ? '' : `Master #${masterId}`);
+      const masterAvatarUrl = masterSchedule.master?.avatarPreviewUrl ?? null;
 
       masterSchedule.days.forEach((day) => {
         day.events.forEach((event) => {
@@ -125,6 +126,7 @@ export const timeOffConflictUtils = {
               price: event.price,
               note: typeof event.notes === 'string' ? event.notes : undefined,
               masterName,
+              masterAvatarUrl,
             });
           }
         });

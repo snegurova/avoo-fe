@@ -8,7 +8,7 @@ import { useTranslations } from 'next-intl';
 import { Button, Typography } from '@mui/material';
 
 import { FileEntity } from '@avoo/axios/types/apiTypes';
-import { masterHooks, phoneHooks } from '@avoo/hooks';
+import { CreateMasterErrorType, masterHooks, phoneHooks } from '@avoo/hooks';
 
 import { AvatarSize, AvatarUpload } from '@/_components/AvatarUpload/AvatarUpload';
 import FormInput from '@/_components/FormInput/FormInput';
@@ -30,12 +30,24 @@ export default function MasterAddForm() {
   }, [router, mastersPath]);
 
   const toast = useToast();
-  const { control, handleSubmit, isPending } = masterHooks.useCreateMasterForm({
-    onSuccess: () => {
-      toast.success(t('addSuccess'));
-      handleNavigateToMasters();
-    },
-  });
+  const { control, handleSubmit, isPending, errors, setError, clearErrors } =
+    masterHooks.useCreateMasterForm({
+      onSuccess: () => {
+        toast.success(t('addSuccess'));
+        handleNavigateToMasters();
+      },
+      onError: (errorType) => {
+        if (errorType === CreateMasterErrorType.DuplicateEmail) {
+          setError('email', {
+            type: 'server',
+            message: t('emailAlreadyExists'),
+          });
+          return;
+        }
+
+        toast.error(t('defaultFailError'));
+      },
+    });
 
   const onCancel = useCallback(() => {
     handleNavigateToMasters();
@@ -46,6 +58,14 @@ export default function MasterAddForm() {
   const { field: bioField } = useController({ name: 'bio', control });
   const { field: emailField } = useController({ name: 'email', control });
   const { field: phoneField } = useController({ name: 'phone', control });
+
+  const handleEmailChange = useCallback(
+    (evt: React.ChangeEvent<HTMLInputElement>) => {
+      emailField.onChange(evt);
+      clearErrors('email');
+    },
+    [emailField, clearErrors],
+  );
 
   const { countryCode, phoneNumber, setCountryCode, setPhoneNumber } =
     phoneHooks.usePhoneField(phoneField);
@@ -114,7 +134,14 @@ export default function MasterAddForm() {
             <label htmlFor='email' className='text-sm block mb-1'>
               {t('email')}
             </label>
-            <FormInput id='email' type='email' {...emailField} value={emailField.value ?? ''} />
+            <FormInput
+              id='email'
+              type='email'
+              {...emailField}
+              value={emailField.value ?? ''}
+              onChange={handleEmailChange}
+              error={errors.email?.message}
+            />
           </div>
 
           <div>

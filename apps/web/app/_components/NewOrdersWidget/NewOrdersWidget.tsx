@@ -1,12 +1,15 @@
 'use client';
 
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 
+import { Order } from '@avoo/axios/types/apiTypes';
 import { orderHooks } from '@avoo/hooks';
 import { OrderStatus } from '@avoo/hooks/types/orderStatus';
 
+import AsideModal from '@/_components/AsideModal/AsideModal';
+import OrderData, { Mode } from '@/_components/OrderData/OrderData';
 import OrderListItem from '@/_components/OrderListItem/OrderListItem';
 import { localizationHooks } from '@/_hooks/localizationHooks';
 import ArrowForwardIcon from '@/_icons/ArrowForwardIcon';
@@ -16,6 +19,8 @@ export default function NewOrdersWidget() {
   const t = useTranslations('private.components.NewOrdersWidget.NewOrdersWidget');
 
   const dateFrom = useMemo(() => new Date().toISOString(), []);
+
+  const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
 
   const { data } = orderHooks.useGetOrdersInfinite({
     dateFrom,
@@ -34,20 +39,22 @@ export default function NewOrdersWidget() {
     </div>
   ) : (
     <>
-      <div className='px-4 py-2 flex gap-2 flex-col'>
+      <ul className='px-4 py-2 flex gap-2 flex-col'>
         {orders.map((order) => (
-          <OrderListItem
-            key={order.id}
-            id={order.id}
-            name={order.name}
-            date={order.date}
-            client={order.customer}
-            status={order.status}
-            master={order.master}
-            hideClientName
-          />
+          <li key={order.id} onClick={() => setSelectedOrder(order)}>
+            <OrderListItem
+              key={order.id}
+              id={order.id}
+              name={order.name}
+              date={order.date}
+              client={order.customer}
+              status={order.status}
+              master={order.master}
+              variant='compact'
+            />
+          </li>
         ))}
-      </div>
+      </ul>
       <div className='flex justify-end px-4 py-2'>
         <Link
           href={{
@@ -60,6 +67,18 @@ export default function NewOrdersWidget() {
           <ArrowForwardIcon className='h-3.5 w-3.5 fill-gray-800' />
         </Link>
       </div>
+      <AsideModal open={!!selectedOrder} handleClose={() => setSelectedOrder(null)}>
+        {selectedOrder && (
+          <OrderData
+            orderId={selectedOrder.id}
+            onClose={() => setSelectedOrder(null)}
+            refetchCalendar={() => {}}
+            isOutOfSchedule={false}
+            initialMode={Mode.View}
+            showStatus={true}
+          />
+        )}
+      </AsideModal>
     </>
   );
 }

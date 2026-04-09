@@ -2,6 +2,8 @@ import { apiClient } from '@avoo/axios';
 import {
   BaseResponse,
   CertificateResponse,
+  GetPublicCertificatesQueryParams,
+  GetPublicCertificatesResponse,
   GetPublicUserProfileResponse,
   GetPublicUsersResponse,
   UpdateProfile,
@@ -9,6 +11,7 @@ import {
   UserProfileResponse,
   UserUpdateAvatarResponse,
 } from '@avoo/axios/types/apiTypes';
+import { CreateCertificatePayload } from '@avoo/axios/types/certificate';
 import { MediaType } from '@avoo/hooks/types/mediaType';
 
 const UPDATE_AVATAR_ENDPOINT = '/update-avatar';
@@ -16,15 +19,16 @@ const PROFILE_ENDPOINT = '/profile';
 const GET_USER_MEDIA_ENDPOINT = '/media';
 const CERTIFICATES_ENDPOINT = '/certificates';
 const PUBLIC_USERS_ENDPOINT = '/public/users';
+const PUBLIC_CERTIFICATES_ENDPOINT = '/public/certificates';
 
 export const userApi = {
   async getUserProfile() {
     const response = await apiClient.get<BaseResponse<UserProfileResponse>>(PROFILE_ENDPOINT);
     return response.data;
   },
-  async getUserMedia(type: MediaType, typeEntityId: number) {
+  async getUserMedia(type: MediaType, typeEntityId: number, page?: number, limit?: number) {
     const response = await apiClient.get<BaseResponse<UserMediaResponse>>(GET_USER_MEDIA_ENDPOINT, {
-      params: { type, typeEntityId },
+      params: { type, typeEntityId, ...(page ? { page } : {}), ...(limit ? { limit } : {}) },
     });
     return response.data;
   },
@@ -40,15 +44,10 @@ export const userApi = {
     );
     return response.data;
   },
-  async createCertificate(body: FormData) {
+  async createCertificate(body: CreateCertificatePayload) {
     const response = await apiClient.post<BaseResponse<CertificateResponse>>(
       CERTIFICATES_ENDPOINT,
       body,
-      {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      },
     );
 
     return response.data;
@@ -76,6 +75,13 @@ export const userApi = {
   async getPublicUser(userId: number) {
     const response = await apiClient.get<BaseResponse<GetPublicUserProfileResponse>>(
       `${PUBLIC_USERS_ENDPOINT}/${userId}`,
+    );
+    return response.data;
+  },
+  async getPublicCertificates(params: GetPublicCertificatesQueryParams) {
+    const response = await apiClient.get<BaseResponse<GetPublicCertificatesResponse>>(
+      PUBLIC_CERTIFICATES_ENDPOINT,
+      { params },
     );
     return response.data;
   },

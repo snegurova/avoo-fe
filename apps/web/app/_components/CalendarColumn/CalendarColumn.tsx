@@ -45,7 +45,7 @@ const col = tv({
     },
     isSingleWeek: {
       false: '',
-      true: '2xl:min-w-55',
+      true: '',
     },
     calendarType: {
       [CalendarType.REGULAR]: '',
@@ -58,6 +58,12 @@ const col = tv({
       calendarType: CalendarType.REGULAR,
       type: CalendarViewType.DAY,
       className: 'md:min-w-55 2xl:min-w-90',
+    },
+    {
+      calendarType: CalendarType.REGULAR,
+      isSingleWeek: true,
+      type: CalendarViewType.DAY,
+      className: '2xl:min-w-55',
     },
     {
       calendarType: CalendarType.WIDGET,
@@ -120,7 +126,7 @@ export default function CalendarColumn(props: Props) {
   const date = useCalendarStore((state) => state.date);
   const setDate = useCalendarStore((state) => state.setDate);
   const setToDate = useCalendarStore((state) => state.setToDate);
-  const type = useCalendarStore((state) => state.type);
+  const type = isSingleWeek ? CalendarViewType.DAY : useCalendarStore((state) => state.type);
   const setType = useCalendarStore((state) => state.setType);
   const setMasterIds = useCalendarStore((state) => state.setMasterIds);
   const ref = useRef<HTMLDivElement | null>(null);
@@ -293,7 +299,7 @@ export default function CalendarColumn(props: Props) {
               />
             ))}
           {calendarType === CalendarType.SELECTOR && <CalendarSlots masterId={master.id} />}
-          {timeUtils.isSameDay(date, new Date()) && (
+          {timeUtils.isSameDay(new Date(data?.days[0].date || date), new Date()) && (
             <CalendarCurrentTime time={time} setTime={setTime} isSingleWeek={isSingleWeek} />
           )}
         </div>

@@ -26,17 +26,12 @@ export default function AppProfileDropdown(props: Props) {
   const { visualProfileInfo } = userHooks.useGetUserProfile();
 
   const profilePath = localizationHooks.useWithLocale(AppRoutes.Profile);
-  const accountSettingsPath = localizationHooks.useWithLocale(AppRoutes.AccountSettings);
   const securitySettingsPath = localizationHooks.useWithLocale(AppRoutes.SecuritySettings);
 
   const links = [
     {
       label: t('profile'),
       link: profilePath,
-    },
-    {
-      label: t('accountSettings'),
-      link: accountSettingsPath,
     },
     {
       label: t('securitySettings'),

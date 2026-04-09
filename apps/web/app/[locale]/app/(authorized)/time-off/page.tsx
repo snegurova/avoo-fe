@@ -23,13 +23,14 @@ export default function TimeOffPage() {
   const t = useTranslations('private.timeOff');
   const isPending = useApiStatusStore((state) => state.isPending);
   const [searchQuery, setSearchQuery] = useState('');
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc' | undefined>(undefined);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [selectedTimeOff, setSelectedTimeOff] = useState<Exception | null>(null);
   const DEFAULT_LIMIT = 10;
-  const debouncedSearch = useDebounce(searchQuery, 400);
+  const debouncedSearch = useDebounce(searchQuery);
   const queryParams = useMemo(
-    () => ({ limit: DEFAULT_LIMIT, search: debouncedSearch }),
-    [debouncedSearch],
+    () => ({ limit: DEFAULT_LIMIT, search: debouncedSearch || undefined, sort: sortDirection }),
+    [debouncedSearch, sortDirection],
   );
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
     exceptionHooks.useGetExceptionsInfinite(queryParams);
@@ -51,34 +52,11 @@ export default function TimeOffPage() {
   }, [exceptions]);
 
   useEffect(() => {
-    if (!debouncedSearch.trim()) return;
-    if (!hasNextPage || isFetchingNextPage) return;
-
-    fetchNextPage();
-  }, [debouncedSearch, fetchNextPage, hasNextPage, isFetchingNextPage]);
-
-  useEffect(() => {
-    if (debouncedSearch.trim()) return;
     if (currentAndFutureExceptions.length > 0) return;
     if (!hasNextPage || isFetchingNextPage) return;
 
     fetchNextPage();
-  }, [
-    currentAndFutureExceptions.length,
-    debouncedSearch,
-    fetchNextPage,
-    hasNextPage,
-    isFetchingNextPage,
-  ]);
-
-  const filteredExceptions = useMemo(() => {
-    const normalizedQuery = searchQuery.trim().toLowerCase();
-    if (!normalizedQuery) return currentAndFutureExceptions;
-
-    return currentAndFutureExceptions.filter((item) =>
-      (item.master?.name ?? '').toLowerCase().includes(normalizedQuery),
-    );
-  }, [currentAndFutureExceptions, searchQuery]);
+  }, [currentAndFutureExceptions.length, fetchNextPage, hasNextPage, isFetchingNextPage]);
 
   const router = useRouter();
   const addTimeOffPath = localizationHooks.useWithLocale(AppRoutes.AddTimeOff);
@@ -112,7 +90,7 @@ export default function TimeOffPage() {
         />
 
         <div className='px-5 md:px-11 pb-11 lg:flex-1 lg:min-h-0 lg:overflow-hidden'>
-          {filteredExceptions.length === 0 ? (
+          {currentAndFutureExceptions.length === 0 ? (
             <AppPlaceholder
               title={isPending ? t('loading') : t('noTimeOff')}
               icon={<EditCalendarIcon className='w-20 h-20 xl:w-25 xl:h-25 fill-primary-300' />}
@@ -130,10 +108,12 @@ export default function TimeOffPage() {
             />
           ) : (
             <TimeOffList
-              items={filteredExceptions}
+              items={currentAndFutureExceptions}
               incrementPage={fetchNextPage}
-              hasMore={!searchQuery.trim() && !!hasNextPage}
+              hasMore={!!hasNextPage}
               onEdit={handleEditTimeOff}
+              sortDirection={sortDirection ?? null}
+              onSortChange={setSortDirection}
             />
           )}
         </div>

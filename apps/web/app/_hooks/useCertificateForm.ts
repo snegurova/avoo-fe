@@ -2,38 +2,30 @@
 
 import { useCallback, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 
-import { masterHooks, userHooks } from '@avoo/hooks';
-import { FileInput } from '@avoo/shared';
+import dayjs from 'dayjs';
 
-import { OwnerType } from '@/_components/CertificateAdd/CertificateAdd';
-import { localizationHooks } from '@/_hooks/localizationHooks';
-import { AppRoutes } from '@/_routes/routes';
+import { FILE_UPLOAD_TYPE_ENUM } from '@avoo/axios/types/apiEnums';
+import { VALUE_DATE_FORMAT } from '@avoo/constants';
+import { filesHooks, masterHooks, userHooks } from '@avoo/hooks';
+
+import { CertificateFormValues, OwnerType } from '@/_hooks/types/certificateType';
 import {
   DEFAULT_IMAGE_TYPES,
   DEFAULT_MAX_IMAGE_SIZE,
   getFileValidationError,
 } from '@/_utils/fileUtils';
 
-type Values = {
-  title: string;
-  description: string;
-  issueDate: string;
-  ownerType: OwnerType;
-  masterId: number | null;
-};
-
-export function useCertificateForm() {
+export function useCertificateForm(onClose?: () => void) {
   const t = useTranslations('private.components.CertificateAdd.CertificateAdd');
-  const router = useRouter();
   const { handleAddCertificate } = userHooks.usePostCertificate();
   const masters = masterHooks.useGetMastersProfileInfo()?.items;
   const [fileError, setFileError] = useState<string | null>(null);
   const [file, setFile] = useState<File | null>(null);
+  const [isUploading, setIsUploading] = useState(false);
 
-  const form = useForm<Values>({
+  const form = useForm<CertificateFormValues>({
     defaultValues: {
       title: '',
       description: '',
@@ -45,17 +37,43 @@ export function useCertificateForm() {
 
   const { handleSubmit, setValue, reset, watch } = form;
 
-  const onSubmit = (values: Values) => {
+  const { uploadFileAsync, isPending: isFileUploading } = filesHooks.useUploadFile({
+    onError: (error) => setFileError(error.message),
+  });
+
+  const onSubmit = async (values: CertificateFormValues) => {
+    if (!file) {
+      setFileError(t('uploadFileError'));
+      return;
+    }
+
+    setIsUploading(true);
+    const uploaded = await uploadFileAsync({
+      file,
+      type: FILE_UPLOAD_TYPE_ENUM.CERTIFICATE,
+    }).catch(() => null);
+    setIsUploading(false);
+
+    if (!uploaded) return;
+
+    const parsedIssueDate = new Date(values.issueDate);
+    const issueDate = Number.isNaN(parsedIssueDate.getTime())
+      ? values.issueDate
+      : dayjs(parsedIssueDate).format(VALUE_DATE_FORMAT);
+
     const payload: {
       title: string;
       description?: string;
       issueDate: string;
       masterId?: number;
-      file?: FileInput;
+      url: string;
+      previewUrl?: string;
     } = {
       title: values.title,
       description: values.description || undefined,
-      issueDate: values.issueDate,
+      issueDate,
+      url: uploaded.url,
+      previewUrl: uploaded.previewUrl,
     };
 
     if (values.ownerType === OwnerType.Master) {
@@ -66,20 +84,12 @@ export function useCertificateForm() {
       payload.masterId = values.masterId;
     }
 
-    // require file upload
-    if (!file) {
-      setFileError(t('uploadFileError'));
-      return;
-    }
-
-    payload.file = file;
-    const sertificatesRedirect = localizationHooks.useWithLocale(AppRoutes.Certificates);
     handleAddCertificate(payload, {
       onSuccess: () => {
         reset();
         setFile(null);
         setFileError(null);
-        router.push(sertificatesRedirect);
+        if (onClose) onClose();
       },
     });
   };
@@ -105,8 +115,6 @@ export function useCertificateForm() {
     setFile(f);
   }, []);
 
-  const onCancel = useCallback(() => router.back(), [router]);
-
   return {
     form,
     handleSubmit: handleSubmit(onSubmit),
@@ -116,6 +124,6 @@ export function useCertificateForm() {
     file,
     fileError,
     onFilePicked,
-    onCancel,
+    isUploading: isUploading || isFileUploading,
   };
 }

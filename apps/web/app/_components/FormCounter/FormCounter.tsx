@@ -32,7 +32,7 @@ export default function FormCounter(props: Props) {
       <button type='button' onClick={onDecrease} className={buttonStyles({ type: 'left' })}>
         <RemoveIcon className='w-3.5 h-3.5' />
       </button>
-      <span className='h-8.5 flex items-center justify-center border-t border-b border-gray-200 w-25 text-sm tracking-wider'>
+      <span className='h-8.5 flex items-center justify-center border-t border-b border-gray-200 w-30 text-sm tracking-wider'>
         {value ? formatLocalizedDuration(value, locale) : ''}
       </span>
       <button type='button' onClick={onIncrease} className={buttonStyles({ type: 'right' })}>

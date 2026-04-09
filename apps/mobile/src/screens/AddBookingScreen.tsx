@@ -1,5 +1,4 @@
-import { Text } from 'react-native';
-
+import { CreateOrderForm } from '@/components/CreateOrderForm/CreateOrderForm';
 import Layout from '@/shared/Layout/Layout';
 import { RootScreens, RootStackScreenProps } from '@/types/navigation';
 
@@ -10,7 +9,7 @@ export const AddBookingScreen = (props: Props) => {
 
   return (
     <Layout showBack={true} onBackPress={() => navigation.goBack()}>
-      <Text>Add Booking</Text>
+      <CreateOrderForm navigation={navigation} />
     </Layout>
   );
 };

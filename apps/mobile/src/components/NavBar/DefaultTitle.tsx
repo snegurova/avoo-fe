@@ -12,7 +12,6 @@ export default function DefaultTitle() {
   const theme = useTheme();
 
   const defaultItems: MenuItem[] = [
-    { label: 'New Post', onPress: () => navigation.navigate(RootScreens.AddPostScreen) },
     { label: 'Add Booking', onPress: () => navigation.navigate(RootScreens.AddBookingScreen) },
   ];
 

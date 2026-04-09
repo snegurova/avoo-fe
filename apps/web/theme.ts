@@ -271,6 +271,14 @@ const theme = createTheme({
             fullWidth: true,
           },
           openPickerIcon: { className: 'fill-gray-800 w-4 h-4' },
+          dialog: {
+            maxWidth: false,
+            sx: {
+              '& .MuiDialog-paper': {
+                maxWidth: 'fit-content',
+              },
+            },
+          },
         },
       },
     },

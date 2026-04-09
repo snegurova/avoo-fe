@@ -11,8 +11,11 @@ import {
 } from '@avoo/axios/types/apiTypes';
 import { TimeOfDay } from '@avoo/hooks/types/timeOfDay';
 import { timeUtils } from '@avoo/shared';
+import { useCalendarStore } from '@avoo/store';
 
 import TimeSlotOption from '../TimeSlotOption/TimeSlotOption';
+
+const MS_IN_MINUTE = 60000;
 
 type Props = {
   selectedSlot: Date | null;
@@ -50,6 +53,16 @@ export default function TimeSlotField(props: Props) {
   const [morningSlots, setMorningSlots] = useState<Date[]>([]);
   const [afternoonSlots, setAfternoonSlots] = useState<Date[]>([]);
   const [eveningSlots, setEveningSlots] = useState<Date[]>([]);
+  const slots = useCalendarStore((state) => state.slots) || [];
+
+  let currentIndex = -1;
+  if (selectedSlot) {
+    const selectedTime = selectedSlot.getTime();
+    currentIndex = slots.findIndex((slot) => {
+      const slotDate = new Date(slot.date);
+      return Math.abs(slotDate.getTime() - selectedTime) < MS_IN_MINUTE;
+    });
+  }
   const [activeGroup, setActiveGroup] = useState<TimeOfDay>(TimeOfDay.Morning);
 
   useEffect(() => {
@@ -69,6 +82,17 @@ export default function TimeSlotField(props: Props) {
     const afternoonArr: Date[] = [];
     const eveningArr: Date[] = [];
 
+    function isOverlapping(slotStart: Date, slotDuration: number, other: (typeof slots)[0]) {
+      if (!other) return false;
+      const otherStart = new Date(other.date);
+      const otherEnd = new Date(otherStart.getTime() + (other.duration || 15) * MS_IN_MINUTE);
+      const slotEnd = new Date(slotStart.getTime() + slotDuration * MS_IN_MINUTE);
+      return slotStart < otherEnd && slotEnd > otherStart;
+    }
+
+    const now = new Date();
+    const minAllowedTime = new Date(now.getTime() + 2 * 60 * MS_IN_MINUTE);
+
     availability.forEach((period) => {
       const start = timeUtils.getMinutesInDay(period.start);
       const end = timeUtils.getMinutesInDay(period.end);
@@ -77,8 +101,17 @@ export default function TimeSlotField(props: Props) {
         return;
       }
 
+      const [year, month, day] = calendarParams.rangeFromDate.split('-').map(Number);
+      const localMidnight = new Date(year, month - 1, day, 0, 0, 0, 0);
       for (let time = start; time <= end - serviceDuration; time += step) {
-        const slotDate = timeUtils.addMinutesToDate(new Date(calendarParams.rangeFromDate), time);
+        const slotDate = timeUtils.addMinutesToDate(localMidnight, time);
+
+        if (slotDate < minAllowedTime) continue;
+
+        const overlaps = slots.some(
+          (slot, idx) => idx !== currentIndex && isOverlapping(slotDate, serviceDuration, slot),
+        );
+        if (overlaps) continue;
         slotsArr.push(slotDate);
         const hour = slotDate.getHours();
         if (hour < 12) {
@@ -94,7 +127,7 @@ export default function TimeSlotField(props: Props) {
     setMorningSlots(morningArr);
     setAfternoonSlots(afternoonArr);
     setEveningSlots(eveningArr);
-  }, [calendar, selectedService]);
+  }, [calendar, selectedService, slots, currentIndex]);
 
   useEffect(() => {
     if (activeGroup === TimeOfDay.Morning && morningSlots.length === 0) {
@@ -124,10 +157,11 @@ export default function TimeSlotField(props: Props) {
   };
 
   return (
-    <div className='flex-1 flex flex-col items-center pt-5'>
+    <div className='flex-1 flex flex-col items-center pt-5 w-full'>
       <div className='flex gap-4 mb-6'>
         {Object.values(TimeOfDay).map((timeOfDay) => (
           <button
+            type='button'
             key={timeOfDay}
             className={button({ active: activeGroup === timeOfDay })}
             onClick={() => setActiveGroup(timeOfDay)}

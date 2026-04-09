@@ -1,7 +1,8 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { tv } from 'tailwind-variants';
 
+import { PrivateEvent } from '@avoo/axios/types/apiTypes';
 import { PrivateCalendarByDatesQueryParams } from '@avoo/axios/types/apiTypes';
 import { calendarHooks } from '@avoo/hooks';
 import { CalendarViewType } from '@avoo/hooks/types/calendarViewType';
@@ -12,6 +13,7 @@ import { useCalendarStore } from '@avoo/store';
 import CalendarEvent from '../CalendarEvent/CalendarEvent';
 type Props = {
   params: PrivateCalendarByDatesQueryParams;
+  selectOrder?: (event: PrivateEvent | null) => void;
 };
 
 const dayCell = tv({
@@ -32,6 +34,10 @@ const dateValue = tv({
       past: 'text-gray-500',
       future: 'text-black',
     },
+    isCurrentMonth: {
+      true: '',
+      false: 'opacity-30',
+    },
   },
 });
 
@@ -47,7 +53,7 @@ const grid = tv({
 });
 
 export default function CalendarMonthView(props: Props) {
-  const { params } = props;
+  const { params, selectOrder } = props;
   const setDate = useCalendarStore((state) => state.setDate);
   const setToDate = useCalendarStore((state) => state.setToDate);
   const setType = useCalendarStore((state) => state.setType);
@@ -87,6 +93,18 @@ export default function CalendarMonthView(props: Props) {
     setType(CalendarViewType.DAY);
   };
 
+  const handleOrderSelect = useCallback(
+    (event: PrivateEvent) => {
+      if (selectOrder) selectOrder(event);
+    },
+    [selectOrder],
+  );
+
+  const currentMonth = useMemo(() => {
+    if (!calendar) return null;
+    return new Date(calendar.days[8].date).getMonth();
+  }, [calendar]);
+
   return (
     <div
       ref={ref}
@@ -97,6 +115,7 @@ export default function CalendarMonthView(props: Props) {
           const dayDate = new Date(date);
           const day: DateStatus = timeUtils.getDateStatus(dayDate);
           const slicedEvents = events.length > showEvents ? events.slice(0, showEvents) : events;
+          const isCurrentMonth = dayDate.getMonth() === currentMonth;
           return (
             <div
               key={idx}
@@ -104,12 +123,17 @@ export default function CalendarMonthView(props: Props) {
               data-date={date}
               onClick={onDayClick}
             >
-              <div className={dateValue({ day })}>{dayDate.getDate()}</div>
+              <div className={dateValue({ day, isCurrentMonth })}>{dayDate.getDate()}</div>
               {events && (
                 <div className='flex flex-col flex-1 gap-1 justify-between'>
                   <div className='flex flex-col gap-0.5'>
                     {slicedEvents.map((event, eIdx) => (
-                      <CalendarEvent key={eIdx} event={event} type={CalendarViewType.MONTH} />
+                      <CalendarEvent
+                        key={eIdx}
+                        event={event}
+                        type={CalendarViewType.MONTH}
+                        onEventSelect={handleOrderSelect}
+                      />
                     ))}
                   </div>
                   {showEvents < totalEvents && (

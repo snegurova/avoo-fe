@@ -12,6 +12,7 @@ import { timeUtils } from '@avoo/shared';
 import { FormTimeSelect } from '@/_components/FormTimeSelect/FormTimeSelect';
 import AddOutlinedIcon from '@/_icons/AddOutlinedIcon';
 import CloseIcon from '@/_icons/CloseIcon';
+import SearchActivity from '@/_icons/SearchActivity';
 
 type Props = {
   index: number;
@@ -126,9 +127,7 @@ export const WorkingDayRow = (props: Props) => {
             className='grid grid-cols-[1fr_auto_1fr] items-center px-4 py-2 gap-2'
           >
             <div className='flex items-center gap-2'>
-              <Typography variant='h4' color={colors.gray[600]}>
-                {tCommon('break')}
-              </Typography>
+              <SearchActivity className='w-10 h-10 fill-primary-800' />
               <FormTimeSelect
                 name={`breakStart-${index}-${brIndex}`}
                 value={String(br.breakStartTimeMinutes)}

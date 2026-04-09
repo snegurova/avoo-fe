@@ -1,6 +1,8 @@
 import { DAYS_NAME } from '@avoo/constants';
 import { DateStatus } from '@avoo/hooks/types/dateStatus';
 
+const MS_IN_MINUTE = 60000;
+
 export const timeUtils = {
   toDayBegin(date: Date): Date {
     const d = new Date(date);
@@ -222,11 +224,11 @@ export const timeUtils = {
   getMinutesDifference(start: string, end: string): number {
     const startDate = new Date(start);
     const endDate = new Date(end);
-    return Math.floor((endDate.getTime() - startDate.getTime()) / 60000);
+    return Math.floor((endDate.getTime() - startDate.getTime()) / MS_IN_MINUTE);
   },
   getEndTime(start: string, durationMinutes: number): string {
     const startDate = new Date(start);
-    const endDate = new Date(startDate.getTime() + durationMinutes * 60000);
+    const endDate = new Date(startDate.getTime() + durationMinutes * MS_IN_MINUTE);
 
     const hours = endDate.getHours().toString().padStart(2, '0');
     const minutes = endDate.getMinutes().toString().padStart(2, '0');
@@ -247,7 +249,7 @@ export const timeUtils = {
     return `${year}-${month}-${day}`;
   },
   addMinutesToDate(date: Date, minutes: number): Date {
-    return new Date(date.getTime() + minutes * 60000);
+    return new Date(date.getTime() + minutes * MS_IN_MINUTE);
   },
   convertDateToTimeString(date: Date | string): string {
     const d = typeof date === 'string' ? new Date(date) : date;
@@ -260,5 +262,23 @@ export const timeUtils = {
     const date = new Date(dateStr).toUTCString();
 
     return new Date(date).toISOString().slice(0, 16) + ':00Z';
+  },
+  formatDateToIssuedDate(date: string): string {
+    const dateObj = new Date(date);
+    const day = dateObj.getDate().toString().padStart(2, '0');
+    const month = (dateObj.getMonth() + 1).toString().padStart(2, '0');
+    const year = dateObj.getFullYear();
+    return `${day}/${month}/${year}`;
+  },
+  getTimeAgo(dateStr: string): string {
+    const diff = Date.now() - new Date(dateStr).getTime();
+    const mins = Math.floor(diff / 60000);
+    if (mins < 60) return `${mins} min ago`;
+    const hours = Math.floor(mins / 60);
+    if (hours < 24) return `${hours}h ago`;
+    return `${Math.floor(hours / 24)}d ago`;
+  },
+  getUserTimezone() {
+    return Intl.DateTimeFormat().resolvedOptions().timeZone.replace('Kiev', 'Kyiv');
   },
 };

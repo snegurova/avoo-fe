@@ -10,7 +10,8 @@
       "leaveWindow": "Zamknij",
       "cancel": "Anuluj",
       "defaultFailError": "Coś poszło nie tak. Spróbuj ponownie później.",
-      "ok": "Ok"
+      "ok": "Ok",
+      "master": "Pracownic"
     },
     "profile": {
       "changePassword": {
@@ -97,7 +98,8 @@
         "Sat": "Sob",
         "Sun": "Nie",
         "noSchedules": "Brak grafików",
-        "noSchedulesDescription": "Aktualnie nie ma grafików do wyświetlenia. Wybierz pracowników, aby zobaczyć ich grafiki tutaj."
+        "noSchedulesDescription": "Aktualnie nie ma grafików do wyświetlenia. Wybierz pracowników, aby zobaczyć ich grafiki tutaj.",
+        "dateNotAvailable": "Data jest niedostępna, wybierana jest najbliższa dostępna data."
       },
       "comboServiceTime": {
         "loading": "Wczytywanie...",
@@ -169,7 +171,9 @@
         "totalDurationMessage": "Całkowity czas wizyty będzie wynosił",
         "minutes": "minut",
         "bookSeparately": "Rezerwuj osobno",
-        "applyCombination": "Zastosuj kombinację"
+        "applyCombination": "Zastosuj kombinację",
+        "workingTimeOnly": "Tylko godziny pracy",
+        "anyTime": "Dowolne godziny"
       }
     },
     "addPost": {
@@ -237,7 +241,7 @@
     "components": {
       "AppNavigation": {
         "AppNavigation": {
-          "avoo": "Avoo"
+          "avoo": "AVOO"
         }
       },
       "AuthorizationWrapper": {
@@ -289,20 +293,26 @@
       "CertificateAdd": {
         "CertificateAdd": {
           "addCertificate": "Dodaj certyfikat",
+          "addNewCertificate": "Dodaj nowy certyfikat",
+          "fileDropzoneButton": "Wybierz plik lub przeciągnij tutaj",
           "title": "Tytuł",
+          "titlePlaceholder": "Tytuł certyfikatu",
           "enterCertTitle": "Wprowadź tytuł certyfikatu",
           "description": "Opis",
+          "descriptionPlaceholder": "Dodaj szczegóły certyfikatu",
           "enterCertDesc": "Wprowadź opis certyfikatu",
           "issueDate": "Data wydania",
+          "issuedDate": "Data wydania",
           "master": "Mistrz",
+          "selectMaster": "Wybierz mistrza",
           "uploadCertFile": "Prześlij plik certyfikatu",
           "fileUploadHint": "Tylko JPG, PNG, rozmiar pliku nie większy niż 10 MB",
           "selectFileCaps": "WYBIERZ PLIK",
-          "cancel": "Anuluj",
+          "close": "Zamknij",
           "save": "Zapisz",
           "titleRequired": "Tytuł jest wymagany",
           "titleTooShort": "Tytuł jest za krótki",
-          "maxLength500": "Maksymalna długość to 500",
+          "maxLength200": "Maksymalna długość to 200",
           "issueDateRequired": "Data wydania jest wymagana",
           "invalidDateFormat": "Nieprawidłowy format daty",
           "dateNotInFuture": "Data nie może być w przyszłości",
@@ -311,7 +321,12 @@
           "chooseMasterError": "Wybierz pracownika",
           "uploadFileError": "Prześlij plik",
           "unsupportedFileType": "Nieobsługiwany typ pliku. Użyj: {types}.",
-          "fileTooLarge": "Plik jest za duży. Maksymalny rozmiar: {maxSizeMb} MB."
+          "fileTooLarge": "Plik jest za duży. Maksymalny rozmiar: {maxSizeMb} MB.",
+          "fileDropzoneTitle": "Wybierz plik lub przeciągnij i upuść tutaj",
+          "fileDropzoneDescription": "Prześlij do 5 zdjęć (JPG, PNG, maks. 10 MB każde)",
+          "unsavedChanges": "Niezapisane zmiany",
+          "unsavedChangesDescription": "Masz niezapisane zmiany. Czy na pewno chcesz zamknąć?",
+          "discardChanges": "Odrzuć zmiany"
         }
       },
       "ChangePasswordForm": {
@@ -409,7 +424,8 @@
           "cancel": "Anuluj",
           "add": "Dodaj",
           "masters": "Pracownicy *",
-          "serviceCreated": "Usługa została utworzona!",
+          "combinationCreated": "Pakiet został utworzony!",
+          "combinationAlreadyExists": "Pakiet już istnieje!",
           "serviceCreateError": "Nie udało się utworzyć usługi: {error}"
         }
       },
@@ -509,6 +525,8 @@
           "close": "Zamknij",
           "add": "Dodaj",
           "addSuccess": "Nowy pracownik został pomyślnie dodany",
+          "emailAlreadyExists": "Adres e-mail już istnieje",
+          "defaultFailError": "Coś poszło nie tak. Spróbuj ponownie później.",
           "infoDisplayPlatform": "Informacje będą wyświetlane na platformie."
         }
       },
@@ -560,6 +578,9 @@
         }
       },
       "MasterListItem": {
+        "editMaster": "Edytuj mistrza",
+        "share": "Udostępnij",
+        "delete": "Usuń",
         "MasterListItem": {
           "editMaster": "Edytuj mistrza",
           "share": "Udostępnij",
@@ -650,7 +671,8 @@
       },
       "OrderListItem": {
         "OrderListItem": {
-          "client": "Klient"
+          "client": "Klient",
+          "master": "Master"
         }
       },
       "ConfirmationModal": {
@@ -677,12 +699,14 @@
           "certificates": "Certyfikaty",
           "noCertificates": "Brak dodanych certyfikatów",
           "addCertificates": "Dodaj certyfikaty",
-          "addCertificatesRich": "<a>Dodaj certyfikaty</a>, aby wyróżnić swoje kwalifikacje zawodowe."
+          "addCertificatesDescription": "aby wyróżnić swoje kwalifikacje zawodowe.",
+          "addCertificatesRich": "<a>Dodaj certyfikaty</a>, aby wyróżnić swoje kwalifikacje zawodowe.",
+          "seeMore": "Zobacz więcej",
+          "seeLess": "Pokaż mniej"
         }
       },
       "ProfileEdit": {
-        "EditProfileForm": {
-          "businessProfile": "Profil biznesowy",
+        "ProfileEditForm": {
           "displayName": "Wyświetlana nazwa",
           "phone": "Telefon",
           "address": "Adres",
@@ -694,6 +718,7 @@
           "saving": "Zapisywanie...",
           "save": "Zapisz",
           "profilePreview": "Podgląd profilu",
+          "businessProfile": "Profil biznesowy",
           "businessName": "Nazwa firmy",
           "headline": "Nagłówek",
           "emailAddress": "Adres e-mail",
@@ -703,10 +728,22 @@
       },
       "ProfileGallery": {
         "ProfileGallery": {
+          "seeMore": "Pokaż więcej",
+          "seeLess": "Pokaż mniej",
           "gallery": "Galeria",
           "galleryEmpty": "Twoja galeria jest pusta",
           "addPhotos": "Dodaj zdjęcia",
-          "addPhotosRich": "<a>Dodaj zdjęcia</a>, aby wyróżnić swoje kwalifikacje zawodowe i atmosferę salonu."
+          "addPhotosDescription": "aby wyróżnić swoje kwalifikacje zawodowe i atmosferę salonu.",
+          "addPhotosRich": "<a>Dodaj zdjęcia</a>, aby wyróżnić swoje kwalifikacje zawodowe i atmosferę salonu.",
+          "close": "Zamknij",
+          "save": "Zapisz",
+          "mediaUploaded": "Multimedia zostały przesłane!",
+          "mediaUploadError": "Nie udało się przesłać multimediów: {error}",
+          "mediaDeleted": "Multimedia zostały usunięte!",
+          "mediaDeleteError": "Nie udało się usunąć multimediów: {error}",
+          "unsavedChanges": "Niezapisane zmiany",
+          "unsavedChangesDescription": "Masz niezapisane zmiany. Czy na pewno chcesz wyjść?",
+          "discardChanges": "Odrzuć zmiany"
         }
       },
       "ProfileInfo": {
@@ -856,7 +893,8 @@
         "ServiceCard": {
           "editSm": "Edytuj",
           "shareService": "Udostępnij usługę",
-          "deleteSm": "Usuń"
+          "deleteSm": "Usuń",
+          "copiedToClipboard": "Skopiowano do schowka!"
         }
       },
       "ServiceControls": {
@@ -893,7 +931,7 @@
       },
       "SortOptions": {
         "SortOptions": {
-          "sortBy": "Sortuj według:"
+          "sortBy": "Sortuj:"
         }
       },
       "ServiceList": {
@@ -1284,7 +1322,9 @@
         "book": "Rezerwuj",
         "select": "Wybierz",
         "change": "Zmień",
-        "selected": "Wybrane"
+        "selected": "Wybrane",
+        "master": "mistrz",
+        "masters": "mistrzowie"
       },
       "createOrder": {
         "bookingForm": "Formularz rezerwacji",
@@ -1297,10 +1337,10 @@
         "date": "Data",
         "notes": "Notatki",
         "notesHelper": "Dodatkowe informacje dla mistrza",
-        "selectService": "Wybierz usługę",
+        "selectservice": "Wybierz usługę",
         "select": "Wybierz",
         "change": "Zmień",
-        "selectMaster": "Wybierz mistrza",
+        "selectmaster": "Wybierz mistrza",
         "selectDate": "Wybierz datę",
         "selectTime": "Wybierz godzinę",
         "morning": "Rano",
@@ -1329,14 +1369,25 @@
         "searchMasters": "Szukaj mistrzów",
         "anyMasterHeadline": "dla maksymalnej dostępności",
         "euro": "Euro",
-        "selectDateTime": "Wybierz datę i godzinę",
+        "selectdateTime": "Wybierz datę i godzinę",
         "selectValidTimeSlot": "Wybierz prawidłowy przedział czasu",
         "noAvailableSlots": "Brak dostępnych przedziałów czasowych na wybrany dzień. Wybierz inny dzień lub 'Dowolny mistrz', aby uzyskać więcej opcji.",
         "search": "Szukaj",
         "remove": "Usuń",
         "clear": "Wyczyść",
         "splitBooking": "Podziel rezerwację",
-        "selectedServices": "Wybrane usługi"
+        "selectedServices": "Wybrane usługi",
+        "noAvailableDates": "Brak dostępnych terminów dla wybranej usługi i mistrza. Wybierz inną usługę, mistrza lub datę.",
+        "dateTime": "Data i godzina",
+        "combineProposition": "Czy chcesz zarezerwować usługi na jedną wizytę?",
+        "yes": "Tak",
+        "no": "Nie, rezerwuj osobno"
+      },
+      "confirmation": {
+        "successTitle": "Rezerwacja potwierdzona!",
+        "successMessage": "Twoja rezerwacja została pomyślnie złożona. Czekamy na Ciebie!",
+        "bookMore": "Zarezerwuj więcej",
+        "returnToSalon": "Wróć do salonu"
       }
     },
     "forgotPassword": {
@@ -1365,7 +1416,8 @@
         "emailPlaceholder": "E-mail",
         "passwordLabel": "Hasło *",
         "passwordPlaceholder": "Hasło",
-        "button": "Zaloguj się"
+        "button": "Zaloguj się",
+        "loginFailed": "Logowanie nie powiodło się. Sprawdź adres e-mail i hasło i spróbuj ponownie."
       }
     },
     "signUp": {
@@ -1387,7 +1439,9 @@
         "confirmPasswordLabel": "Potwierdź hasło *",
         "confirmPasswordPlaceholder": "Potwierdź hasło",
         "agreeToTerms": "Akceptuję Politykę Prywatności, Regulamin i Warunki Biznesowe.",
-        "button": "Utwórz konto"
+        "button": "Utwórz konto",
+        "registerError": "Ot chalypa, wystąpiła jakaś dziwna błąd. Sprawdź proszę dane i spróbuj ponownie.",
+        "welcomeMessage": "Witaj w AVOO! Twoje konto zostało utworzone. Skonfiguruj swój profil, harmonogram i usługi, aby rozpocząć."
       }
     },
     "authorizationWrapper": {

@@ -71,6 +71,7 @@ type UseCreateOrderFormParams = {
     date?: string;
   };
   onSuccess?: () => void;
+  referralCode?: string | null;
 };
 
 type UseUpdateOrderParams = {
@@ -82,6 +83,32 @@ type UseUpdateOrderParams = {
 const DEFAULT_LIMIT = 10;
 
 export const orderHooks = {
+  useCreateOrderMutation: ({ onSuccess }: { onSuccess?: () => void } = {}) => {
+    const queryClient = useQueryClient();
+    const { mutate, mutateAsync, isPending } = useMutation<
+      BaseResponse<Order[]>,
+      Error,
+      CreatePrivateOrdersRequest
+    >({
+      mutationFn: (data) => {
+        const dataWithUTC = convertOrdersDataDatesToUTC(data);
+        return orderApi.createOrder(dataWithUTC);
+      },
+      onSuccess: async () => {
+        await Promise.all([
+          queryClient.invalidateQueries({ queryKey: queryKeys.calendar.all }),
+          queryClient.invalidateQueries({ queryKey: queryKeys.monthCalendar.all }),
+          queryClient.invalidateQueries({ queryKey: queryKeys.orders.all }),
+          queryClient.invalidateQueries({ queryKey: queryKeys.customers.all }),
+        ]);
+        onSuccess?.();
+      },
+    });
+
+    utils.useSetPendingApi(isPending);
+
+    return { mutate, mutateAsync, isPending };
+  },
   useGetOrders: (params: PrivateOrderQueryParams) => {
     const memoParams = useMemo<PrivateOrderQueryParams>(
       () => ({
@@ -269,7 +296,15 @@ export const orderHooks = {
       setValue,
     };
   },
-  useCreatePublicOrder: ({ onSuccess, userId }: { onSuccess?: () => void; userId: number }) => {
+  useCreatePublicOrder: ({
+    onSuccess,
+    userId,
+    referralCode,
+  }: {
+    onSuccess?: () => void;
+    userId: number;
+    referralCode?: string | null;
+  }) => {
     const [selectedServices, setSelectedServices] = useState<(Service | null)[]>([null]);
     const [selectedCombinations, setSelectedCombinations] = useState<Combination[]>([]);
     const {
@@ -298,6 +333,7 @@ export const orderHooks = {
           email: '',
         },
         userId,
+        referralCode: referralCode || undefined,
       },
     });
 
@@ -326,7 +362,10 @@ export const orderHooks = {
     return {
       control,
       handleSubmit: handleSubmit((formData) => {
-        const dataWithUTC = convertOrdersDataDatesToUTC(formData);
+        const dataWithUTC = convertOrdersDataDatesToUTC({
+          ...formData,
+          referralCode: referralCode || formData.referralCode || undefined,
+        });
         utils.submitAdapter<CreatePublicOrdersRequest, CreatePublicOrdersData>(mutate)(dataWithUTC);
       }),
       getValues,
@@ -367,11 +406,17 @@ export const orderHooks = {
     return {
       control,
       handleSubmit: handleSubmit((data) => {
-        const cleanedData: UpdateOrderRequest = {
+        let cleanedData: UpdateOrderRequest = {
           ...data,
           masterId: data.masterId ?? undefined,
         };
 
+        if (data.date && data.date !== order.date) {
+          cleanedData = {
+            ...cleanedData,
+            date: timeUtils.convertLocalToUTC(data.date),
+          };
+        }
         mutate(cleanedData);
       }),
       errors,

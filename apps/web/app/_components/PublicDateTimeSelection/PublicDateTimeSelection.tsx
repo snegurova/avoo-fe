@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import {
   Combination,
   GetPublicCalendarResponse,
+  MasterWithRelationsEntity,
   PublicCalendarQueryParams,
   Service,
 } from '@avoo/axios/types/apiTypes';
@@ -26,6 +27,7 @@ type Props = {
   calendar: GetPublicCalendarResponse | null;
   calendarParams: PublicCalendarQueryParams;
   setStep: (step: number) => void;
+  selectedMaster: MasterWithRelationsEntity | null;
 };
 
 export default function PublicDateTimeSelection(props: Props) {
@@ -42,16 +44,30 @@ export default function PublicDateTimeSelection(props: Props) {
     calendar,
     calendarParams,
     setStep,
+    selectedMaster,
   } = props;
+
+  useEffect(() => {
+    if (selectedSlot && date && !timeUtils.isSameDay(new Date(date), selectedSlot)) {
+      setSelectedSlot(null);
+    }
+  }, [date]);
 
   return (
     <div ref={ref}>
-      <PublicOrderTitle isActive={isActive} title='selectDateTime' />
+      <PublicOrderTitle isActive={isActive} title='dateTime' />
+      {error && <div className='my-1 text-sm text-red-500'>{error}</div>}
 
       {isActive && (
-        <div className='flex gap-6 mt-6'>
+        <div className='flex flex-col md:flex-row items-center md:items-start gap-6 mt-6'>
           <div className=' flex-1 max-w-120'>
-            <PublicCalendar date={date} onChange={onChange} />
+            <PublicCalendar
+              date={date}
+              onChange={onChange}
+              selectedService={selectedService}
+              userId={userId}
+              selectedMaster={selectedMaster}
+            />
           </div>
 
           <TimeSlotField

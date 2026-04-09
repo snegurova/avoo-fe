@@ -42,6 +42,7 @@ export default function TimeOffConflictsSection({
           title: booking.title || t('bookingFallback'),
           duration: formatLocalizedDuration(booking.duration, locale),
           master: booking.masterName,
+          masterAvatarUrl: booking.masterAvatarUrl,
           price: formatLocalizedCurrency(booking.price, CURRENCY, locale, 'name'),
           note: booking.note,
         };
@@ -68,6 +69,7 @@ export default function TimeOffConflictsSection({
                   title={item.title}
                   duration={item.duration}
                   master={item.master}
+                  masterAvatarUrl={item.masterAvatarUrl}
                   price={item.price}
                   note={item.note}
                 />

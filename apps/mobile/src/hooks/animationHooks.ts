@@ -23,6 +23,8 @@ export const animationHooks = {
   useBottomSheetAnimation({ onClose, disableSwipeToClose = false }: UseBottomSheetAnimationProps) {
     const translateY = useRef(new Animated.Value(400)).current;
     const backdropOpacity = useRef(new Animated.Value(0)).current;
+    const disableSwipeRef = useRef(disableSwipeToClose);
+    disableSwipeRef.current = disableSwipeToClose;
 
     const open = useCallback(() => {
       Animated.parallel([
@@ -60,15 +62,15 @@ export const animationHooks = {
 
     const panResponder = useRef(
       PanResponder.create({
-        onStartShouldSetPanResponder: () => !disableSwipeToClose,
-        onMoveShouldSetPanResponder: (_, g) => !disableSwipeToClose && g.dy > 8,
+        onStartShouldSetPanResponder: () => !disableSwipeRef.current,
+        onMoveShouldSetPanResponder: (_, g) => !disableSwipeRef.current && g.dy > 8,
         onPanResponderMove: (_, g) => {
           if (g.dy > 0) {
             translateY.setValue(g.dy);
           }
         },
         onPanResponderRelease: (_, g) => {
-          if (!disableSwipeToClose && g.dy > 120) {
+          if (!disableSwipeRef.current && g.dy > 120) {
             close();
           } else {
             Animated.spring(translateY, {

@@ -1,11 +1,10 @@
 import { View } from 'react-native';
 import { Text } from 'react-native-paper';
 
-import { OrderStatusEnum } from '@avoo/axios/types/apiEnums';
 import { colors } from '@avoo/design-tokens';
 
 import { Avatar } from '@/shared/Avatar/Avatar';
-import { StatusChip } from '@/shared/StatusChip/StatusChip';
+import { STATUS_COLORS, StatusChip } from '@/shared/StatusChip/StatusChip';
 
 import { Appointment } from '../AppointmentsSection/AppointmentsSection';
 
@@ -13,20 +12,9 @@ type AppointmentCardProps = {
   appointment: Appointment;
 };
 
-const getStatusColor = (status?: string) => {
-  if (!status) return colors.gray[500];
-
-  if (status === OrderStatusEnum.CANCELED) return colors.red[800];
-  if (status === OrderStatusEnum.PENDING) return colors.orange[500];
-  if (status === OrderStatusEnum.CONFIRMED) return colors.blue[700];
-  if (status === OrderStatusEnum.COMPLETED) return colors.green[800];
-  if (status === OrderStatusEnum.EXPIRED) return colors.gray[500];
-
-  return colors.gray[500];
-};
-
 export const AppointmentCard = ({ appointment }: AppointmentCardProps) => {
-  const statusColor = getStatusColor(appointment.status);
+  const statusColor =
+    (appointment.status ? STATUS_COLORS[appointment.status] : undefined) ?? colors.gray[500];
   return (
     <View className='rounded-2xl border border-gray-200 p-4 flex-row'>
       <View className='w-1.5 rounded-full mr-3' style={{ backgroundColor: statusColor }} />
@@ -40,7 +28,7 @@ export const AppointmentCard = ({ appointment }: AppointmentCardProps) => {
             </Text>
           </View>
 
-          <StatusChip status={appointment.status} color={getStatusColor(appointment.status)} />
+          <StatusChip status={appointment.status} />
         </View>
 
         <View className='mt-3'>
