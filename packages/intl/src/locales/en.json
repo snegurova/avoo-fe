@@ -1466,5 +1466,17 @@
         "notation": "Use at least 8 characters, including a number and a symbol."
       }
     }
+  },
+  "category": {
+    "name": {
+      "all": "All categories",
+      "Hair": "Hair",
+      "Nails": "Nails",
+      "Skin Care": "Skin Care",
+      "Makeup": "Makeup",
+      "Massage & Spa": "Massage & Spa",
+      "Eyebrows & Eyelashes": "Eyebrows & Eyelashes",
+      "Body Treatments": "Body Treatments"
+    }
   }
 }

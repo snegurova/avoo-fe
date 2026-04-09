@@ -11,7 +11,7 @@ export default function WorkingHoursCreatePage() {
   const t = useTranslations('private.calendar.workingHours.create');
   return (
     <AppWrapper withPadding>
-      <Typography variant='h1'>{t('setupNewSchedule')}</Typography>
+      <Typography variant='formTitle'>{t('setupNewSchedule')}</Typography>
       <ScheduleAddForm />
     </AppWrapper>
   );

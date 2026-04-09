@@ -1,3 +1,5 @@
+import React from 'react';
+
 import '@mui/material/styles';
 import '@mui/material/Chip';
 
@@ -84,6 +86,16 @@ declare module '@mui/material/styles' {
     borderRadiusLg: number;
     borderRadiusXl: number;
   }
+
+  interface TypographyVariants {
+    fromSectionTitle: React.CSSProperties;
+    formTitle: React.CSSProperties;
+  }
+
+  interface TypographyVariantsOptions {
+    fromSectionTitle?: React.CSSProperties;
+    formTitle?: React.CSSProperties;
+  }
 }
 
 declare module '@mui/material/Chip' {
@@ -97,5 +109,12 @@ declare module '@mui/material/Chip' {
 declare module '@mui/material/Button' {
   interface ButtonPropsVariantOverrides {
     chip: true;
+  }
+}
+
+declare module '@mui/material/Typography' {
+  interface TypographyPropsVariantOverrides {
+    fromSectionTitle: true;
+    formTitle: true;
   }
 }

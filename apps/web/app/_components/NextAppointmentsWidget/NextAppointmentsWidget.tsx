@@ -177,7 +177,7 @@ export default function NextAppointmentsWidget() {
           dateLabel: formatDateLabel(appointment.date),
           timeLabel: `${timeUtils.getTime(appointment.date)}-${endTime}`,
           serviceName,
-          durationLabel: timeUtils.getHumanDuration(appointment.duration),
+          durationLabel: timeUtils.getHumanDuration(appointment.duration, locale),
           masterAvatarUrl: appointment.master?.avatarPreviewUrl ?? null,
           masterName: appointment.master?.name ?? tHistory('anyMaster'),
           clientName: appointment.customer.name || tCreate('Client'),

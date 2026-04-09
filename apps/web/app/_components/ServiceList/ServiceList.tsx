@@ -31,6 +31,7 @@ type Props = {
 
 export default function ServiceList(props: Props) {
   const t = useTranslations('private.components.ServiceList.ServiceList');
+  const tCategory = useTranslations('category.name');
   const tCommon = useTranslations('private.common');
   const {
     categorySidebarItems,
@@ -114,10 +115,10 @@ export default function ServiceList(props: Props) {
             {categorySidebarItems?.length !== 1 && (
               <li key={'all'}>
                 <CategoryFilterItem
-                  name={t('allCategories')}
+                  name={tCategory('all')}
                   count={allServicesCount}
                   isActive={selectedCategoryId === null}
-                  onClick={() => setSelectedCategory(null, t('allCategories'))}
+                  onClick={() => setSelectedCategory(null, tCategory('all'))}
                 />
               </li>
             )}
@@ -125,12 +126,12 @@ export default function ServiceList(props: Props) {
             {categorySidebarItems?.map((category) => (
               <li key={category.id}>
                 <CategoryFilterItem
-                  name={category.name}
+                  name={tCategory(category.name)}
                   count={category.totalServices}
                   isActive={
                     selectedCategoryId === category.id || categorySidebarItems?.length === 1
                   }
-                  onClick={() => setSelectedCategory(category.id, category.name)}
+                  onClick={() => setSelectedCategory(category.id, tCategory(category.name))}
                 />
               </li>
             ))}

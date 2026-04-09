@@ -72,6 +72,7 @@ const top = tv({
 export default function ServiceFormItem(props: Props) {
   const tCommon = useTranslations('private.components.ServiceFormItem.ServiceFormItem');
   const tCalendar = useTranslations('private.calendar.calendar');
+  const tCategory = useTranslations('category.name');
   const t = useTranslations('private.orders.create');
   const {
     order,
@@ -97,7 +98,9 @@ export default function ServiceFormItem(props: Props) {
   const [isActiveServiceSearch, setIsActiveServiceSearch] = useState(false);
   const toast = useToast();
 
-  const { params, queryParams, setSearchQuery, setMasterIds } = servicesHooks.useServicesQuery();
+  const { params, queryParams, setSearchQuery, setMasterIds } = servicesHooks.useServicesQuery(
+    tCategory('all'),
+  );
 
   const { getAvailableDate } = calendarHooks.useGetPrivateAvailability();
   const setDate = useCalendarStore((state) => state.setDate);

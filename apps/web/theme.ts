@@ -165,6 +165,16 @@ const theme = createTheme({
       fontWeight: typography.fontWeight.medium,
       textTransform: 'uppercase',
     },
+    fromSectionTitle: {
+      fontSize: typography.fontSize.xl,
+      fontWeight: typography.fontWeight.medium,
+      letterSpacing: '0.04em',
+    },
+    formTitle: {
+      fontSize: typography.fontSize['2xl'],
+      fontWeight: typography.fontWeight.medium,
+      letterSpacing: '0.04em',
+    },
   },
   palette: {
     primary: {

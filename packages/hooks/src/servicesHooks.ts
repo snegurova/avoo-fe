@@ -83,7 +83,7 @@ export const servicesHooks = {
 
     return query;
   },
-  useServicesQuery() {
+  useServicesQuery(defaultCategoryName: string) {
     const [params, setParams] = useState<ServicesQueryStateParams>({
       limit: DEFAULT_LIMIT,
       categoryId: null,
@@ -91,7 +91,7 @@ export const servicesHooks = {
       masterIds: [],
     });
 
-    const [selectedCategoryName, setSelectedCategoryName] = useState<string>('All categories');
+    const [selectedCategoryName, setSelectedCategoryName] = useState<string>(defaultCategoryName);
 
     const setSearchQuery = (value: string) => {
       setParams((prev) => ({
@@ -99,10 +99,10 @@ export const servicesHooks = {
         categoryId: null,
         search: value,
       }));
-      setSelectedCategoryName('All categories');
+      setSelectedCategoryName(defaultCategoryName);
     };
 
-    const setCategory = (categoryId: number | null, name = 'All categories') => {
+    const setCategory = (categoryId: number | null, name = defaultCategoryName) => {
       setParams((prev) => ({
         ...prev,
         categoryId,

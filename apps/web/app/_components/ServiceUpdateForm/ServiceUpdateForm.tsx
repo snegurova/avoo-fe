@@ -22,6 +22,7 @@ import { timeUtils } from '@avoo/shared';
 import CategorySelect from '@/_components/CategorySelect/CategorySelect';
 import MasterAutocompleteCardSelect from '@/_components/MasterAutoCompleteCardSelect/MasterAutoCompleteCardSelect';
 import ServiceGalleryUpload from '@/_components/ServiceGalleryUpload/ServiceGalleryUpload';
+import { localizationHooks } from '@/_hooks/localizationHooks';
 import { useToast } from '@/_hooks/useToast';
 import { getAllErrorMessages } from '@/_utils/formError';
 
@@ -37,10 +38,11 @@ export default function ServiceUpdateForm(props: Props) {
   const { service, onCancel, onDirtyChange, onClose } = props;
   const toast = useToast();
   const categories = categoriesHooks.useGetPublicCategories();
+  const locale = localizationHooks.useGetLocale();
 
   const { masters, searchTerm, setSearchTerm } = masterHooks.useMasterQuery();
 
-  const durationOptions = timeUtils.getDurationOptionsRange(15, 300, 15);
+  const durationOptions = timeUtils.getDurationOptionsRange(15, 300, 15, locale);
 
   const [addedMedias, setAddedMedias] = useState<UploadMediaResponse[]>([]);
   const [removedMediaIds, setRemovedMediaIds] = useState<number[]>([]);
