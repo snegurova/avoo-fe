@@ -1,6 +1,5 @@
 'use client';
 
-import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 
@@ -21,8 +20,6 @@ export default function RegisterForm() {
   const t = useTranslations('public.signUp.form');
   const isPending = useApiStatusStore((state) => state.isPending);
   const toast = useToast();
-  const errorMessage = useApiStatusStore((s) => s.errorMessage);
-  const isError = useApiStatusStore((s) => s.isError);
 
   const router = useRouter();
   const homeRedirect = localizationHooks.useWithLocale(AppRoutes.Home);
@@ -30,18 +27,16 @@ export default function RegisterForm() {
   const { register, handleSubmit, errors } = authHooks.useRegisterForm({
     onSuccess: () => {
       router.push(homeRedirect);
+      toast.success(t('welcomeMessage'));
+    },
+    onError: () => {
+      toast.error(t('registerError'));
     },
   });
 
   const { value: isShowPassword, toggleValue: toggleShowPassword } = utils.useBooleanState(false);
   const { value: isShowConfirmPassword, toggleValue: toggleConfirmPassword } =
     utils.useBooleanState(false);
-
-  useEffect(() => {
-    if (isError && !!errorMessage) {
-      toast.error(errorMessage);
-    }
-  }, [isError, errorMessage]);
 
   return (
     <form onSubmit={handleSubmit} className='w-full flex flex-col gap-6'>

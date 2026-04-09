@@ -6,12 +6,18 @@ import { OrderType } from '@avoo/hooks/types/orderType';
 import { TimeOffMode, WholeDay } from '@avoo/hooks/types/timeOffType';
 
 export const registerSchema = yup.object({
-  name: yup.string().nullable().trim(),
-  email: yup.string().required('Email is required').email('Please enter a valid email').trim(),
+  name: yup.string().nullable().trim().max(50, 'Name must be less than 50 characters'),
+  email: yup
+    .string()
+    .required('Email is required')
+    .email('Please enter a valid email')
+    .max(50, 'Email must be less than 50 characters')
+    .trim(),
   password: yup
     .string()
     .required('Password is required')
-    .min(8, 'Password must be at least 8 characters'),
+    .min(8, 'Password must be at least 8 characters')
+    .max(100, 'Password must be less than 100 characters'),
   confirmPassword: yup
     .string()
     .required('Please confirm your password')
@@ -20,6 +26,7 @@ export const registerSchema = yup.object({
     .boolean()
     .oneOf([true], 'You must agree to the terms')
     .required('You must agree to the terms'),
+  timezone: yup.string(),
 });
 
 export const loginSchema = yup.object({

@@ -67,6 +67,7 @@ export default function CombinationForm(props: Props) {
 
   const { getAvailableDate } = calendarHooks.useGetPrivateAvailability();
   const setDate = useCalendarStore((state) => state.setDate);
+  const setToDate = useCalendarStore((state) => state.setToDate);
   const slots = useCalendarStore((state) => state.slots);
   const setSlots = useCalendarStore((state) => state.setSlots);
 
@@ -121,6 +122,7 @@ export default function CombinationForm(props: Props) {
     }
 
     setDate(timeUtils.toDayBegin(new Date(availableDate)));
+    setToDate(timeUtils.toDayEnd(new Date(availableDate)));
 
     newOrders[0] = { ...newOrders[0], masterId: val.id, date: availableDate };
     onChange(newOrders);
@@ -173,6 +175,7 @@ export default function CombinationForm(props: Props) {
     }
 
     setDate(timeUtils.toDayBegin(new Date(availableDate)));
+    setToDate(timeUtils.toDayEnd(new Date(availableDate)));
 
     const newOrders = [...value];
     newOrders[0] = {

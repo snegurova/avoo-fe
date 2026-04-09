@@ -39,6 +39,19 @@ type Props = {
   calendarType: CalendarType;
 };
 
+const calendarButtonStyles = {
+  opacity: 0,
+  position: 'absolute',
+  top: '0',
+  right: '0',
+  bottom: '0',
+  left: '0',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'flex-end',
+  marginRight: 0,
+};
+
 const controlsButton = tv({
   base: 'cursor-pointer text-gray-800 border border-gray-200 bg-transparent px-3 py-2.5 text-sm leading-none transition-colors hover:bg-primary-200 focus:bg-primary-200',
   variants: {
@@ -257,6 +270,14 @@ export default function CalendarControls(props: Props) {
     [],
   );
 
+  const displayDate = useMemo(() => {
+    if (!date) return null;
+    if (type === CalendarViewType.MONTH) {
+      return dayjs(date).add(15, 'day');
+    }
+    return dayjs(date);
+  }, [date, type]);
+
   const statusesOptions = useMemo(
     () => ({
       label: t('allStatusesLabel'),
@@ -340,18 +361,15 @@ export default function CalendarControls(props: Props) {
     [orderIsOutOfSchedule],
   );
 
-  const calendarButtonStyles = {
-    opacity: 0,
-    position: 'absolute',
-    top: '0',
-    right: '0',
-    bottom: '0',
-    left: '0',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'flex-end',
-    marginRight: 0,
-  };
+  const allOptions = useMemo(() => {
+    const options = [];
+    if (masters?.length > 1) {
+      options.push(mastersOptions);
+    }
+    options.push(statusesOptions);
+    options.push(outOfCheduleOptions);
+    return options;
+  }, [masters, mastersOptions, statusesOptions, outOfCheduleOptions]);
 
   return (
     <div className='bg-primary-50 px-4 py-3 flex gap-3 relative'>
@@ -374,8 +392,11 @@ export default function CalendarControls(props: Props) {
           <ArrowBackIcon className='fill-gray-800 w-3.5 h-3.5' />
         </button>
         <DatePicker
-          value={dayjs(date)}
-          format={DATE_PICKER_FORMAT}
+          value={displayDate}
+          format={type === CalendarViewType.MONTH ? 'MMMM YYYY' : DATE_PICKER_FORMAT}
+          views={type === CalendarViewType.MONTH ? ['year', 'month'] : ['day']}
+          openTo={type === CalendarViewType.MONTH ? 'month' : 'day'}
+          showDaysOutsideCurrentMonth={true}
           onChange={handleChangeDate}
           sx={{
             '& .MuiButtonBase-root': calendarButtonStyles,
@@ -406,12 +427,14 @@ export default function CalendarControls(props: Props) {
       ) : null}
       {showOptions ? (
         <>
-          <CheckboxesButton
-            addCount
-            label={t('mastersLabel')}
-            options={[mastersOptions]}
-            values={[masterIds]}
-          />
+          {masters?.length > 1 && (
+            <CheckboxesButton
+              addCount
+              label={t('mastersLabel')}
+              options={[mastersOptions]}
+              values={[masterIds]}
+            />
+          )}
           <CheckboxesButton
             addCount
             label={t('statusesLabel')}
@@ -423,8 +446,8 @@ export default function CalendarControls(props: Props) {
         <div className={showOptionsWrapper({ calendarType })}>
           <CheckboxesButton
             label={t('optionsLabel')}
-            options={[mastersOptions, statusesOptions, outOfCheduleOptions]}
-            values={[masterIds, statuses, orderIsOutOfSchedule]}
+            options={allOptions}
+            values={[...(masters?.length > 1 ? [masterIds] : []), statuses, orderIsOutOfSchedule]}
             Item={
               (!mobileLargeUp ||
                 (!desktopExtraLargeUp && calendarType === CalendarType.SELECTOR)) && (

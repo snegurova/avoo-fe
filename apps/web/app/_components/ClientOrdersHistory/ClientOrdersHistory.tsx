@@ -57,7 +57,9 @@ export default function ClientOrdersHistory(props: Readonly<Props>) {
         duration: formatLocalizedDuration(order.duration, locale),
         master: order.master?.name ?? t('anyMaster'),
         masterAvatarUrl,
-        price: formatLocalizedCurrency(order.price, CURRENCY, locale, 'name'),
+        price: formatLocalizedCurrency(order.price, CURRENCY, locale, 'name', {
+          withoutFractionDigits: true,
+        }),
         note,
       };
     },

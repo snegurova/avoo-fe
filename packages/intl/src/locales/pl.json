@@ -533,6 +533,8 @@
           "close": "Zamknij",
           "add": "Dodaj",
           "addSuccess": "Nowy pracownik został pomyślnie dodany",
+          "emailAlreadyExists": "Adres e-mail już istnieje",
+          "defaultFailError": "Coś poszło nie tak. Spróbuj ponownie później.",
           "infoDisplayPlatform": "Informacje będą wyświetlane na platformie."
         }
       },
@@ -1431,7 +1433,8 @@
         "emailPlaceholder": "E-mail",
         "passwordLabel": "Hasło *",
         "passwordPlaceholder": "Hasło",
-        "button": "Zaloguj się"
+        "button": "Zaloguj się",
+        "loginFailed": "Logowanie nie powiodło się. Sprawdź adres e-mail i hasło i spróbuj ponownie."
       }
     },
     "signUp": {
@@ -1453,7 +1456,9 @@
         "confirmPasswordLabel": "Potwierdź hasło *",
         "confirmPasswordPlaceholder": "Potwierdź hasło",
         "agreeToTerms": "Akceptuję Politykę Prywatności, Regulamin i Warunki Biznesowe.",
-        "button": "Utwórz konto"
+        "button": "Utwórz konto",
+        "registerError": "Ot chalypa, wystąpiła jakaś dziwna błąd. Sprawdź proszę dane i spróbuj ponownie.",
+        "welcomeMessage": "Witaj w AVOO! Twoje konto zostało utworzone. Skonfiguruj swój profil, harmonogram i usługi, aby rozpocząć."
       }
     },
     "authorizationWrapper": {
@@ -1479,6 +1484,18 @@
         "saveButton": "Zapisz nowe hasło",
         "notation": "Użyj co najmniej 8 znaków, w tym cyfry i symbolu."
       }
+    }
+  },
+  "category": {
+    "name": {
+      "all": "Wszystkie kategorie",
+      "Hair": "Włosy",
+      "Nails": "Paznokcie",
+      "Skin Care": "Opieka o skórę",
+      "Makeup": "Makeup",
+      "Massage & Spa": "Masaż i SPA",
+      "Eyebrows & Eyelashes": "Brwi i rzęsy",
+      "Body Treatments": "Procedury ciała"
     }
   }
 }

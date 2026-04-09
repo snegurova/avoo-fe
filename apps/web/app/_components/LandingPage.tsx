@@ -26,7 +26,7 @@ import CloseIcon from '@/_icons/CloseIcon';
 import MenuIcon from '@/_icons/MenuIcon';
 import NotificationsIcon from '@/_icons/NotificationsIcon';
 import VisibilityIcon from '@/_icons/VisibilityIcon';
-import decorImage from '@/_images/decor.webp';
+import decorImage from '@/_images/beautiful-shot-makeup-brush-isolated-black-background.webp';
 import review1Image from '@/_images/review-1.webp';
 import review2Image from '@/_images/review-2.webp';
 import { AppRoutes } from '@/_routes/routes';
@@ -672,11 +672,11 @@ export default function LandingPage() {
             src={decorImage.src}
             className='absolute inset-0 h-full w-full object-cover brightness-[1.03]'
           />
-          <div className='absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.92)_0%,rgba(255,255,255,0.86)_38%,rgba(255,255,255,0.52)_68%,rgba(255,255,255,0.22)_84%,rgba(255,255,255,0.08)_100%)]' />
+          <div className='absolute inset-0 bg-black/30'></div>
           <div className='relative container mx-auto px-5 py-16 lg:px-8 lg:py-24'>
             <div className='px-6 py-16 text-center sm:px-10 lg:-translate-y-20 lg:py-20'>
               <div className='mx-auto max-w-5xl'>
-                <h2 className='font-montserrat text-balance text-[2rem] font-normal uppercase tracking-[0.12em] text-gray-600 sm:text-[2.7rem]'>
+                <h2 className='font-montserrat text-balance text-[2rem] font-bold uppercase tracking-[0.12em] text-fuchsia-50 sm:text-[2.7rem]'>
                   {t('decor.title')}
                 </h2>
               </div>

@@ -1,7 +1,34 @@
 import { DAYS_NAME } from '@avoo/constants';
 import { DateStatus } from '@avoo/hooks/types/dateStatus';
-
+import { Locale } from '@avoo/intl';
 const MS_IN_MINUTE = 60000;
+
+const localeMap: Record<
+  Locale,
+  { h: string; hour: string; hours: string; min: string; mins: string }
+> = {
+  en: {
+    h: 'h',
+    hour: 'hour',
+    hours: 'hours',
+    min: 'min',
+    mins: 'mins',
+  },
+  uk: {
+    h: 'г',
+    hour: 'година',
+    hours: 'годин',
+    min: 'хв',
+    mins: 'хв',
+  },
+  pl: {
+    h: 'g',
+    hour: 'godzina',
+    hours: 'godzin',
+    min: 'min',
+    mins: 'min',
+  },
+};
 
 export const timeUtils = {
   toDayBegin(date: Date): Date {
@@ -106,23 +133,25 @@ export const timeUtils = {
     const shift = dateValue.getDay() - new Date(monday).getDay();
     return ((shift % 7) + 7) % 7;
   },
-  convertDuration(duration: number): string {
+  convertDuration(duration: number, locale: Locale): string {
     const hours = Math.floor(duration / 60);
     const minutes = duration % 60;
     if (hours === 0) {
-      const minuteText = minutes === 1 ? 'min' : 'mins';
+      const minuteText = minutes === 1 ? localeMap[locale].min : localeMap[locale].mins;
       return `${minutes} ${minuteText}`;
     }
     if (minutes === 0) {
-      const hourText = hours === 1 ? 'hour' : 'hours';
+      const hourText = hours === 1 ? localeMap[locale].hour : localeMap[locale].hours;
       return `${hours} ${hourText}`;
     }
-    return `${hours}h ${minutes} mins`;
+
+    return `${hours}${localeMap[locale].h} ${minutes} ${localeMap[locale].mins}`;
   },
   getDurationOptionsRange(
     minutesMin: number,
     minutesMax: number,
     step: number = 15,
+    locale: Locale,
   ): { label: string; value: number }[] {
     if (minutesMin > minutesMax) {
       return [];
@@ -133,7 +162,7 @@ export const timeUtils = {
     for (let minutes = minutesMin; minutes <= minutesMax; minutes += step) {
       options.push({
         value: minutes,
-        label: this.convertDuration(minutes),
+        label: this.convertDuration(minutes, locale),
       });
     }
 
@@ -214,11 +243,12 @@ export const timeUtils = {
     };
     return dateObj.toLocaleDateString('en-US', options);
   },
-  getHumanDuration(durationMinutes: number): string {
+  getHumanDuration(durationMinutes: number, locale: Locale = 'en'): string {
     const hours = Math.floor(durationMinutes / 60);
     const minutes = durationMinutes % 60;
-    const hoursPart = hours > 0 ? `${hours}h` : '';
-    const minutesPart = minutes > 0 ? ` ${minutes} mins` : '00 mins';
+    const hoursPart = hours > 0 ? `${hours}${localeMap[locale].h}` : '';
+    const minutesPart =
+      minutes > 0 ? ` ${minutes} ${localeMap[locale].mins}` : ` 00 ${localeMap[locale].mins}`;
     return `${hoursPart} ${minutesPart}`.trim();
   },
   getMinutesDifference(start: string, end: string): number {
@@ -277,5 +307,8 @@ export const timeUtils = {
     const hours = Math.floor(mins / 60);
     if (hours < 24) return `${hours}h ago`;
     return `${Math.floor(hours / 24)}d ago`;
+  },
+  getUserTimezone() {
+    return Intl.DateTimeFormat().resolvedOptions().timeZone.replace('Kiev', 'Kyiv');
   },
 };

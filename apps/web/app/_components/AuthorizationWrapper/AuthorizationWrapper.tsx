@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 
 import { LocalizedLink } from '@/_components/LocalizedLink/LocalizedLink';
-import bg from '@/_images/auth-bg.jpg';
+import bg from '@/_images/decor_powder.webp';
 import { AppRoutes } from '@/_routes/routes';
 
 type Props = {
@@ -25,9 +25,9 @@ export default function AuthorizationWrapper(props: Props) {
           <div className=''>
             <LocalizedLink
               href={AppRoutes.Home}
-              className='font-inter font-semibold text-4xl text-gray-600'
+              className='font-semibold text-4xl text-gray-600 inline-flex items-center font-advent-pro text-center'
             >
-              {tCommon('avoo')}
+              {tCommon('avooCaps')}
             </LocalizedLink>
           </div>
           <div className='flex flex-col justify-center xl:px-5 2xl:px-15 w-full'>
@@ -54,17 +54,18 @@ export default function AuthorizationWrapper(props: Props) {
           </div>
         </div>
       </div>
+
       <div
-        className='bg-center bg-cover hidden md:block'
+        className='bg-[20%] bg-cover hidden md:flex items-center justify-center bg-black/70'
         style={{
-          backgroundImage: `url(${bg.src})`,
+          backgroundImage: `linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url(${bg.src})`,
         }}
       >
-        <div className='px-8 pt-[30%]'>
-          <p className='text-8xl xl:text-[8.375rem] font-advent-pro text-gray-800 mb-7 text-center leading-none'>
+        <div className='px-8 text-center'>
+          <p className='text-8xl xl:text-[8.375rem] font-advent-pro font-medium text-fuchsia-50 mb-7 leading-none'>
             {tCommon('avooCaps')}
           </p>
-          <p className='font-montserrat text-2xl text-gray-600 capitalize text-center'>
+          <p className='font-montserrat font-medium text-2xl text-fuchsia-50 capitalize'>
             {t('slogan')}
           </p>
         </div>

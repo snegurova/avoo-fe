@@ -38,7 +38,7 @@ export default function ModalActions(props: Readonly<Props>) {
 
   return (
     <div className={`${baseClassName} ${className}`.trim()}>
-      <Button onClick={onCancel} color='secondary' variant='outlined'>
+      <Button type='button' onClick={onCancel} color='secondary' variant='outlined'>
         {cancelText}
       </Button>
 

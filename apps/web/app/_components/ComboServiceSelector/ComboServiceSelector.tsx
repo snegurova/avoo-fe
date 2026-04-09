@@ -26,6 +26,8 @@ type Props = {
 
 export default function ComboServiceSelector(props: Props) {
   const t = useTranslations('private.components.ComboServiceSelector.ComboServiceSelector');
+  const tCategory = useTranslations('category.name');
+
   const {
     value = [],
     onChange,
@@ -42,7 +44,9 @@ export default function ComboServiceSelector(props: Props) {
       ? 'flex flex-col gap-4 mb-2 pt-4 pr-3'
       : 'flex flex-col gap-4 mb-2 overflow-y-auto overflow-x-hidden max-h-[400px] pr-6 -mr-6 pt-4';
 
-  const { queryParams, setSearchQuery, setMasterIds } = servicesHooks.useServicesQuery();
+  const { queryParams, setSearchQuery, setMasterIds } = servicesHooks.useServicesQuery(
+    tCategory('all'),
+  );
   const { data } = servicesHooks.useGetServicesInfinite(queryParams);
   const [inputText, setInputText] = useState('');
   const [selectedObjects, setSelectedObjects] = useState<Service[]>(items || []);

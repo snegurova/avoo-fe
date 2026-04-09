@@ -14,8 +14,10 @@ export default function ServicesCreatePage() {
 
   return (
     <AppWrapper withPadding>
-      <Typography variant='h1'>{t('addService')}</Typography>
-      <ServiceAddForm categories={categories || []} />
+      <Typography variant='formTitle' sx={{ pb: 2 }}>
+        {t('addService')}
+      </Typography>
+      <ServiceAddForm categories={categories || []} className='mt-8' />
     </AppWrapper>
   );
 }

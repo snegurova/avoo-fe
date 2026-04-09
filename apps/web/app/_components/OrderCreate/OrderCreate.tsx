@@ -52,6 +52,7 @@ export default function OrderCreate() {
 
   const setMasterIds = useCalendarStore((state) => state.setMasterIds);
   const setDate = useCalendarStore((state) => state.setDate);
+  const setToDate = useCalendarStore((state) => state.setToDate);
   const setType = useCalendarStore((state) => state.setType);
   const setStatuses = useCalendarStore((state) => state.setStatuses);
   const setOrderIsOutOfSchedule = useCalendarStore((state) => state.setOrderIsOutOfSchedule);
@@ -153,6 +154,7 @@ export default function OrderCreate() {
     if (fields[activeOrder]) {
       const activeOrderData = fields[activeOrder];
       setDate(new Date(activeOrderData.date));
+      setToDate(new Date(activeOrderData.date));
       setType(CalendarViewType.DAY);
       setStatuses(undefined);
       setOrderIsOutOfSchedule(undefined);

@@ -64,6 +64,8 @@ export const ScheduleAddForm = () => {
 
   const { mastersOptions, optionsPool, setSearchTerm, isLoading } =
     masterHooks.useMasterQueryWithOptions();
+  const { data: masters } = masterHooks.useGetMastersInfinite({ limit: 1 });
+  const isSingleMaster = masters?.pages[0]?.data?.pagination?.total === 1;
 
   const scheduleType = watch('patternType');
 
@@ -169,23 +171,25 @@ export const ScheduleAddForm = () => {
                 )}
               />
 
-              <Controller
-                name='masterIds'
-                control={control}
-                render={({ field }) => (
-                  <FormSearchAutocomplete
-                    label={t('applyTo')}
-                    placeholder={t('searchMasters')}
-                    error={errors.masterIds?.message}
-                    value={field.value ?? undefined}
-                    onChange={field.onChange}
-                    options={mastersOptions}
-                    optionsPool={optionsPool}
-                    onSearchChange={setSearchTerm}
-                    loading={isLoading}
-                  />
-                )}
-              />
+              {!isSingleMaster && (
+                <Controller
+                  name='masterIds'
+                  control={control}
+                  render={({ field }) => (
+                    <FormSearchAutocomplete
+                      label={t('applyTo')}
+                      placeholder={t('searchMasters')}
+                      error={errors.masterIds?.message}
+                      value={field.value ?? undefined}
+                      onChange={field.onChange}
+                      options={mastersOptions}
+                      optionsPool={optionsPool}
+                      onSearchChange={setSearchTerm}
+                      loading={isLoading}
+                    />
+                  )}
+                />
+              )}
               <Controller
                 name='startAt'
                 control={control}

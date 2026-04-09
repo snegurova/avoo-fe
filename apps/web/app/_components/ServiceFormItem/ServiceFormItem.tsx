@@ -72,6 +72,7 @@ const top = tv({
 export default function ServiceFormItem(props: Props) {
   const tCommon = useTranslations('private.components.ServiceFormItem.ServiceFormItem');
   const tCalendar = useTranslations('private.calendar.calendar');
+  const tCategory = useTranslations('category.name');
   const t = useTranslations('private.orders.create');
   const {
     order,
@@ -97,10 +98,13 @@ export default function ServiceFormItem(props: Props) {
   const [isActiveServiceSearch, setIsActiveServiceSearch] = useState(false);
   const toast = useToast();
 
-  const { params, queryParams, setSearchQuery, setMasterIds } = servicesHooks.useServicesQuery();
+  const { params, queryParams, setSearchQuery, setMasterIds } = servicesHooks.useServicesQuery(
+    tCategory('all'),
+  );
 
   const { getAvailableDate } = calendarHooks.useGetPrivateAvailability();
   const setDate = useCalendarStore((state) => state.setDate);
+  const setToDate = useCalendarStore((state) => state.setToDate);
 
   useEffect(() => {
     if (order.masterId) {
@@ -228,6 +232,7 @@ export default function ServiceFormItem(props: Props) {
     }
 
     setDate(timeUtils.toDayBegin(new Date(availableDate)));
+    setToDate(timeUtils.toDayEnd(new Date(availableDate)));
 
     newOrders[index] = { ...newOrders[index], serviceId: val.id, date: availableDate };
     onChange(newOrders);
@@ -294,6 +299,7 @@ export default function ServiceFormItem(props: Props) {
     }
 
     setDate(timeUtils.toDayBegin(new Date(availableDate)));
+    setToDate(timeUtils.toDayEnd(new Date(availableDate)));
 
     newOrders[index] = { ...newOrders[index], masterId: val.id, date: availableDate };
     onChange(newOrders);
@@ -367,6 +373,7 @@ export default function ServiceFormItem(props: Props) {
     }
 
     setDate(timeUtils.toDayBegin(new Date(availableDate)));
+    setToDate(timeUtils.toDayEnd(new Date(availableDate)));
 
     const newOrders = [...value];
     newOrders[index] = {

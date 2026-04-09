@@ -10,8 +10,6 @@ export * from './types/profile';
 export * from './types/sort';
 export * from './utils/address';
 export * from './utils/avatar';
-export * from './utils/fetchAllAndSort';
 export * from './utils/formatAddress';
-export * from './utils/sort';
 export * from './utils/typeGuardsHooks';
 export * from './utils/validateTimeOffDates';

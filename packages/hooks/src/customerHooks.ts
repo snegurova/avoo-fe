@@ -80,7 +80,7 @@ export const customerHooks = {
 
     const {
       data: customerData,
-      isPending,
+      isFetching,
       isSuccess,
     } = useQuery<BaseResponse<CustomerInfoResponse> | null, Error>({
       queryKey: ['customer', id ?? null],
@@ -120,7 +120,7 @@ export const customerHooks = {
       enabled: !!id,
     });
 
-    utils.useSetPendingApi(isPending);
+    utils.useSetPendingApi(isFetching);
 
     if (isSuccess && !!customerData && customerData.status === ApiStatus.SUCCESS) {
       return customerData.data;

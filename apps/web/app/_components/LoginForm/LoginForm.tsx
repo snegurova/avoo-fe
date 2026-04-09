@@ -23,8 +23,6 @@ export default function LoginForm() {
   const searchParams = useSearchParams();
   const [returnUrl, setReturnUrl] = useState<string | null>(null);
   const toast = useToast();
-  const errorMessage = useApiStatusStore((s) => s.errorMessage);
-  const isError = useApiStatusStore((s) => s.isError);
 
   useEffect(() => {
     const url = searchParams.get('returnUrl');
@@ -32,12 +30,6 @@ export default function LoginForm() {
       setReturnUrl(decodeURIComponent(url));
     }
   }, [searchParams, router]);
-
-  useEffect(() => {
-    if (isError && !!errorMessage) {
-      toast.error(errorMessage);
-    }
-  }, [isError, errorMessage]);
 
   const homeRedirect = localizationHooks.useWithLocale(AppRoutes.Home);
 
@@ -48,6 +40,9 @@ export default function LoginForm() {
           ? routerUtils.toRoute(returnUrl)
           : homeRedirect;
       router.replace(targetUrl);
+    },
+    onError: () => {
+      toast.error(t('loginFailed'));
     },
   });
 

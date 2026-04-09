@@ -16,9 +16,13 @@ import AutoStoriesIcon from '@/_icons/AutoStoriesIcon';
 import { AppRoutes } from '@/_routes/routes';
 
 export default function ServicesPage() {
+  const t = useTranslations('private.services');
+  const tCategory = useTranslations('category.name');
+
   const isPending = useApiStatusStore((state) => state.isPending);
+
   const { params, queryParams, selectedCategoryName, setSearchQuery, setCategory } =
-    servicesHooks.useServicesQuery();
+    servicesHooks.useServicesQuery(tCategory('all'));
 
   const { data, fetchNextPage, hasNextPage } = servicesHooks.useGetServicesInfinite(queryParams);
   const categoriesResponse = categoriesHooks.useGetCategories(queryParams.search || '');
@@ -28,7 +32,6 @@ export default function ServicesPage() {
     [data],
   );
 
-  const t = useTranslations('private.services');
   return (
     <AppWrapper withPadding>
       <ServiceControls setSearchQuery={setSearchQuery} />

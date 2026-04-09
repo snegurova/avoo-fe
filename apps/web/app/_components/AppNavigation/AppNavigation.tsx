@@ -16,7 +16,6 @@ import CoPresentIcon from '@/_icons/CoPresentIcon';
 import GroupIcon from '@/_icons/GroupIcon';
 import GroupsIcon from '@/_icons/GroupsIcon';
 import HomeIcon from '@/_icons/HomeIcon';
-import MosaicIcon from '@/_icons/MosaicIcon';
 import { AppRoutes } from '@/_routes/routes';
 
 import AppNavigationItem from '../AppNavigationItem/AppNavigationItem';
@@ -82,11 +81,6 @@ export default function AppNavigation({ menuOpen, setMenuOpen }: Props) {
       href: localizationHooks.useWithLocale(AppRoutes.Masters),
       icon: <GroupsIcon />,
       label: t('masters'),
-    },
-    {
-      href: localizationHooks.useWithLocale(AppRoutes.Posts),
-      icon: <MosaicIcon />,
-      label: t('posts'),
     },
     {
       href: localizationHooks.useWithLocale(AppRoutes.Orders),

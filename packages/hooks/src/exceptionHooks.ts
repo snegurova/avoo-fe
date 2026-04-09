@@ -185,7 +185,7 @@ export const exceptionHooks = {
     const { mutate, isPending } = useMutation<
       BaseResponse<Exception[]>,
       Error,
-      { id: number; data: CreateExceptionRequest }
+      { id: number; data: CreateExceptionRequest; rollbackData?: CreateExceptionRequest }
     >({
       mutationFn: async ({ id, data }) => {
         await exceptionApi.deleteException(id);
@@ -194,12 +194,25 @@ export const exceptionHooks = {
       onSuccess: () => {
         exceptionHooks.invalidateOnSuccess(queryClient, onSuccess);
       },
+      onError: (_error, { rollbackData }) => {
+        if (rollbackData) {
+          exceptionApi.createException(rollbackData).finally(() => {
+            exceptionHooks.invalidateOnSuccess(queryClient);
+          });
+        } else {
+          exceptionHooks.invalidateOnSuccess(queryClient);
+        }
+      },
     });
 
     utils.useSetPendingApi(isPending);
 
     return {
-      updateException: (id: number, data: CreateExceptionRequest) => mutate({ id, data }),
+      updateException: (
+        id: number,
+        data: CreateExceptionRequest,
+        rollbackData?: CreateExceptionRequest,
+      ) => mutate({ id, data, rollbackData }),
       isPending,
       mutate,
     };

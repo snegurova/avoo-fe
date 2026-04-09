@@ -5,6 +5,7 @@ import { Combination } from '@avoo/axios/types/apiTypes';
 import { currencyUtils, timeUtils } from '@avoo/shared';
 
 import { CURRENCY } from '@/_constants/currency';
+import { localizationHooks } from '@/_hooks/localizationHooks';
 
 type Props = {
   item: Combination;
@@ -14,6 +15,7 @@ type Props = {
 export default function PublicCombinationCard(props: Props) {
   const { item, onClick } = props;
   const t = useTranslations('public.salon.createOrder');
+  const locale = localizationHooks.useGetLocale();
 
   const price = useMemo(() => {
     return item.services.reduce((acc, service) => acc + service.price, 0);
@@ -31,7 +33,7 @@ export default function PublicCombinationCard(props: Props) {
             <div className='flex items-center gap-2'>
               <span className='text-sm font-medium text-black'>{service.name}</span>
               <span className='text-gray-600 line-through text-xs'>
-                {timeUtils.convertDuration(service.durationMinutes)}
+                {timeUtils.convertDuration(service.durationMinutes, locale)}
               </span>
             </div>
             <span className='text-sm text-gray-600'>
@@ -41,7 +43,7 @@ export default function PublicCombinationCard(props: Props) {
         ))}
       </ul>
       <div className='flex items-center gap-4 justify-between'>
-        <p className=' text-black'>{timeUtils.convertDuration(item.durationMinutes)}</p>
+        <p className=' text-black'>{timeUtils.convertDuration(item.durationMinutes, locale)}</p>
         <p className='text-base text-black'>{currencyUtils.formatPrice(price, CURRENCY)}</p>
       </div>
 
