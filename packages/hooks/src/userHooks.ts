@@ -12,6 +12,7 @@ import {
   GetPublicUserProfileResponse,
   GetPublicUsersResponse,
   UpdateProfile,
+  UploadCertificateRequest,
   UserMediaResponse,
   UserProfileResponse,
   UserUpdateAvatarResponse,
@@ -198,6 +199,52 @@ export const userHooks = {
 
     return {
       handleAddCertificate,
+    };
+  },
+  usePutCertificate: ({ onSuccess }: { onSuccess?: () => void } = {}) => {
+    const queryClient = useQueryClient();
+
+    const { mutate: handleUpdateCertificate, isPending } = useMutation<
+      BaseResponse<CertificateResponse>,
+      Error,
+      { id: number; payload: UploadCertificateRequest }
+    >({
+      mutationFn: ({ id, payload }) => userApi.updateCertificate(id, payload),
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: queryKeys.user.profile() });
+        queryClient.invalidateQueries({ queryKey: queryKeys.user.certificates() });
+        onSuccess?.();
+      },
+    });
+
+    utils.useSetPendingApi(isPending);
+
+    return {
+      handleUpdateCertificate,
+      isPending,
+    };
+  },
+  useDeleteCertificate: ({ onSuccess }: { onSuccess?: () => void } = {}) => {
+    const queryClient = useQueryClient();
+
+    const { mutate: handleDeleteCertificate, isPending } = useMutation<
+      BaseResponse<CertificateResponse>,
+      Error,
+      number
+    >({
+      mutationFn: (id) => userApi.deleteCertificate(id),
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: queryKeys.user.profile() });
+        queryClient.invalidateQueries({ queryKey: queryKeys.user.certificates() });
+        onSuccess?.();
+      },
+    });
+
+    utils.useSetPendingApi(isPending);
+
+    return {
+      handleDeleteCertificate,
+      isPending,
     };
   },
   useUpdateProfile: () => {

@@ -114,7 +114,7 @@ export const ProfileCertificateAdd = ({ open, onClose }: ProfileCertificateAddPr
                   id='title'
                   type='text'
                   placeholder={t('titlePlaceholder', { defaultValue: 'Title of certificate' })}
-                  error={errors.title?.message as string | undefined}
+                  error={errors.title?.message}
                   {...form.register('title', {
                     required: t('titleRequired'),
                     minLength: { value: 2, message: t('titleTooShort') },
@@ -138,7 +138,7 @@ export const ProfileCertificateAdd = ({ open, onClose }: ProfileCertificateAddPr
                   {...form.register('description', {
                     maxLength: { value: 200, message: t('maxLength200') },
                   })}
-                  error={errors.description?.message as string | undefined}
+                  error={errors.description?.message}
                 />
               </div>
               <div>

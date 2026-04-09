@@ -7,6 +7,7 @@ import {
   GetPublicUserProfileResponse,
   GetPublicUsersResponse,
   UpdateProfile,
+  UploadCertificateRequest,
   UserMediaResponse,
   UserProfileResponse,
   UserUpdateAvatarResponse,
@@ -58,6 +59,23 @@ export const userApi = {
       await apiClient.get<
         BaseResponse<{ items: CertificateResponse[]; pagination?: { total?: number } }>
       >(CERTIFICATES_ENDPOINT);
+
+    return response.data;
+  },
+
+  async updateCertificate(id: number, body: UploadCertificateRequest) {
+    const response = await apiClient.put<BaseResponse<CertificateResponse>>(
+      `${CERTIFICATES_ENDPOINT}/${id}`,
+      body,
+    );
+
+    return response.data;
+  },
+
+  async deleteCertificate(id: number) {
+    const response = await apiClient.delete<BaseResponse<CertificateResponse>>(
+      `${CERTIFICATES_ENDPOINT}/${id}`,
+    );
 
     return response.data;
   },
