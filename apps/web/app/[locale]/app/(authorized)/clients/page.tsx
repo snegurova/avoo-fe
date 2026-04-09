@@ -4,20 +4,28 @@ import React from 'react';
 import { useTranslations } from 'next-intl';
 
 import type { CustomerInfoResponse } from '@avoo/axios/types/apiTypes';
-import { customerHooks } from '@avoo/hooks';
+import { customerHooks, useDebounce } from '@avoo/hooks';
 
 import AppWrapper from '@/_components/AppWrapper/AppWrapper';
 import { ClientEditModal } from '@/_components/ClientEditModal/ClientEditModal';
 import { ClientsList } from '@/_components/ClientsList/ClientsList';
-import Controls from '@/_components/Controls/Controls';
+import Controls, { ControlsVariant } from '@/_components/Controls/Controls';
 
 export default function ClientsPage() {
   const t = useTranslations('private.clients');
   const [searchQuery, setSearchQuery] = React.useState('');
-
-  const customers = customerHooks.useGetCustomers()?.items ?? null;
-
-  const filtered = customerHooks.useFilterCustomers(customers, searchQuery);
+  const [sortDirection, setSortDirection] = React.useState<'asc' | 'desc' | undefined>(undefined);
+  const DEFAULT_LIMIT = 10;
+  const debouncedSearch = useDebounce(searchQuery);
+  const queryParams = React.useMemo(
+    () => ({ limit: DEFAULT_LIMIT, search: debouncedSearch || undefined, sort: sortDirection }),
+    [debouncedSearch, sortDirection],
+  );
+  const { data, fetchNextPage, hasNextPage } = customerHooks.useGetCustomersInfinite(queryParams);
+  const customers = React.useMemo(
+    () => data?.pages.flatMap((page) => page.data?.items ?? []) ?? [],
+    [data],
+  );
 
   const [editingClient, setEditingClient] = React.useState<CustomerInfoResponse | null>(null);
 
@@ -37,20 +45,20 @@ export default function ClientsPage() {
           searchValue={searchQuery}
           onSearchChange={setSearchQuery}
           placeholder={t('searchNamePhoneEmail')}
-          titleClassName={'self-center md:self-auto text-center md:text-left'}
-          searchContainerClassName={
-            'order-3 md:order-2 w-auto mx-auto md:mx-0 md:ml-auto max-w-[135px] focus-within:max-w-full overflow-hidden transition-[max-width] duration-300 ease-in-out md:max-w-none md:overflow-visible md:transition-none'
-          }
-          searchClassName={
-            'w-full md:w-[306px] md:mr-8 lg:mr-12 truncate transition-all duration-300'
-          }
+          titleClassName='self-center md:self-auto text-center md:text-left'
+          searchClassName='w-full md:w-[306px] truncate transition-all duration-300'
+          variant={ControlsVariant.StackedSearch}
         />
 
         <div className='bg-white rounded-md p-4 flex-1 min-h-0 overflow-hidden'>
           <ClientsList
             onEdit={handleEdit}
-            customers={filtered}
+            customers={customers}
             selectedId={editingClient?.id ?? null}
+            incrementPage={fetchNextPage}
+            hasMore={!!hasNextPage}
+            sortDirection={sortDirection ?? null}
+            onSortChange={setSortDirection}
           />
         </div>
 

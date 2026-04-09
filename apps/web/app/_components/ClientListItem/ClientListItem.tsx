@@ -36,7 +36,7 @@ const ClientListItem: React.FC<Props> = ({ client, onEdit, isSelected }) => {
 
   return (
     <div
-      className={`rounded-lg lg:rounded-none p-4 lg:py-6 lg:px-8 border lg:border-l-0 lg:border-r-0 transition-colors duration-300 ease-in-out ${
+      className={`rounded-lg lg:rounded-none p-4 lg:py-6 lg:px-8 border lg:border-l-0 lg:border-r-0 lg:border-t-0 transition-colors duration-300 ease-in-out ${
         isSelected ? 'bg-primary-50 border-primary-200' : 'bg-white border-gray-200'
       }`}
       data-selected={isSelected ? 'true' : 'false'}

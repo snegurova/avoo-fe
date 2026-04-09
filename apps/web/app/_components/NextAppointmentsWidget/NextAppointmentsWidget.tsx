@@ -178,6 +178,7 @@ export default function NextAppointmentsWidget() {
           timeLabel: `${timeUtils.getTime(appointment.date)}-${endTime}`,
           serviceName,
           durationLabel: timeUtils.getHumanDuration(appointment.duration, locale),
+          masterAvatarUrl: appointment.master?.avatarPreviewUrl ?? null,
           masterName: appointment.master?.name ?? tHistory('anyMaster'),
           clientName: appointment.customer.name || tCreate('Client'),
           phone,
@@ -238,7 +239,11 @@ export default function NextAppointmentsWidget() {
                       <span>{appointment.durationLabel}</span>
                       <span className='text-sm leading-none text-black'>|</span>
                       <span className='inline-flex items-center gap-1'>
-                        <Avatar name={appointment.masterName} size={AvatarSize.Small} />
+                        <Avatar
+                          name={appointment.masterName}
+                          src={appointment.masterAvatarUrl}
+                          size={AvatarSize.Small}
+                        />
                         <span className='text-xs text-gray-700'>{appointment.masterName}</span>
                       </span>
                       <span className='text-sm leading-none text-black'>|</span>

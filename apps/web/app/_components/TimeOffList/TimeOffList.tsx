@@ -1,11 +1,10 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 import { useTranslations } from 'next-intl';
 
-import { exceptionApi } from '@avoo/axios';
 import { Exception } from '@avoo/axios/types/apiTypes';
-import { fetchAllAndSort, SortDirection } from '@avoo/shared';
+import { SortDirection } from '@avoo/shared';
 
 import { IconButton } from '@/_components/IconButton/IconButton';
 import ArrowDownIcon from '@/_icons/ArrowDownIcon';
@@ -19,59 +18,46 @@ type Props = {
   onEdit?: (item: Exception) => void;
   incrementPage?: () => void;
   hasMore?: boolean;
+  sortDirection?: SortDirection;
+  onSortChange?: (direction: 'asc' | 'desc' | undefined) => void;
 };
 
-const TimeOffList = ({ items, onEdit, incrementPage, hasMore }: Props) => {
+const TimeOffList = ({
+  items,
+  onEdit,
+  incrementPage,
+  hasMore,
+  sortDirection = null,
+  onSortChange,
+}: Props) => {
   const t = useTranslations('private.components.TimeOffList.TimeOffList');
-  const [sortDirection, setSortDirection] = useState<SortDirection>(null);
 
-  const [list, setList] = useState(() => items ?? []);
-  const [error, setError] = useState<string | null>(null);
+  const isAscActive = sortDirection === 'asc';
+  const isDescActive = sortDirection === 'desc';
 
-  React.useEffect(() => {
-    if (!sortDirection) {
-      setList(items ?? []);
-      setError(null);
-    }
-  }, [items, sortDirection]);
+  const handleAscSortClick = React.useCallback(() => {
+    onSortChange?.(isAscActive ? undefined : 'asc');
+  }, [isAscActive, onSortChange]);
 
-  React.useEffect(() => {
-    if (!sortDirection) return;
-
-    let isComponentMounted = true;
-    const fetchAndSort = async () => {
-      setError(null);
-      const sorted = await fetchAllAndSort(
-        (params) => exceptionApi.getExceptions(params),
-        (item: Exception) => item.master?.name ?? '',
-        sortDirection,
-      );
-      if (isComponentMounted) setList(sorted);
-    };
-
-    fetchAndSort();
-
-    return () => {
-      isComponentMounted = false;
-    };
-  }, [sortDirection]);
+  const handleDescSortClick = React.useCallback(() => {
+    onSortChange?.(isDescActive ? undefined : 'desc');
+  }, [isDescActive, onSortChange]);
 
   const uniqueList = React.useMemo(() => {
     const uniqueById = new Map<number, Exception>();
-    for (const item of list) {
+    for (const item of items ?? []) {
       if (!uniqueById.has(item.id)) {
         uniqueById.set(item.id, item);
       }
     }
 
     return Array.from(uniqueById.values());
-  }, [list]);
+  }, [items]);
 
   if (uniqueList.length === 0) return null;
 
   return (
     <div className='h-full min-h-0 flex flex-col'>
-      {error ? <div className='px-8 py-2 text-sm'>{error}</div> : null}
       <InfiniteList
         className='flex flex-col overflow-y-auto h-full min-h-0 max-h-full'
         hasMore={hasMore}
@@ -84,14 +70,14 @@ const TimeOffList = ({ items, onEdit, incrementPage, hasMore }: Props) => {
               <div className='flex flex-col'>
                 <IconButton
                   ariaLabel={t('sortAsc')}
-                  onClick={() => setSortDirection('asc')}
-                  className='p-0 text-sm text-gray-400 hover:text-gray-700'
+                  onClick={handleAscSortClick}
+                  className={`p-0 text-sm hover:text-gray-700 ${isAscActive ? 'text-gray-700' : 'text-gray-400'}`}
                   icon={<ArrowUpIcon width={14} height={14} />}
                 />
                 <IconButton
                   ariaLabel={t('sortDesc')}
-                  onClick={() => setSortDirection('desc')}
-                  className='p-0 text-sm text-gray-400 hover:text-gray-700'
+                  onClick={handleDescSortClick}
+                  className={`p-0 text-sm hover:text-gray-700 ${isDescActive ? 'text-gray-700' : 'text-gray-400'}`}
                   icon={<ArrowDownIcon width={14} height={14} />}
                 />
               </div>

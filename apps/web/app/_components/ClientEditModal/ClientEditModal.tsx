@@ -50,7 +50,7 @@ export const ClientEditModal: React.FC<Props> = ({ id, client, open, onClose }) 
 
   return (
     <>
-      <Modal isOpen={open} onClose={onClose} variant={ModalVariant.PANEL}>
+      <Modal isOpen={open} onClose={handleRequestClose} variant={ModalVariant.PANEL}>
         {open ? (
           <ClientEditForm
             initial={initial}
