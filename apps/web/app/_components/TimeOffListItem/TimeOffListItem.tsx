@@ -24,9 +24,10 @@ import ConfirmationModal from '../ConfirmationModal/ConfirmationModal';
 type Props = {
   item: Exception;
   onEdit?: (item: Exception) => void;
+  isSelected?: boolean;
 };
 
-const TimeOffListItem = ({ item, onEdit }: Props) => {
+const TimeOffListItem = ({ item, onEdit, isSelected }: Props) => {
   const t = useTranslations('private.components.TimeOffListItem.TimeOffListItem');
   const locale = useLocale();
   const toast = useToast();
@@ -141,7 +142,12 @@ const TimeOffListItem = ({ item, onEdit }: Props) => {
   };
 
   return (
-    <div className='bg-white rounded-lg lg:rounded-none p-4 lg:py-6 lg:px-8 border border-gray-200 lg:border-l-0 lg:border-r-0'>
+    <div
+      className={`rounded-lg lg:rounded-none p-4 lg:py-6 lg:px-8 border lg:border-l-0 lg:border-r-0 transition-colors duration-300 ease-in-out ${
+        isSelected ? 'bg-primary-50 border-primary-200' : 'bg-white border-gray-200'
+      }`}
+      data-selected={isSelected ? 'true' : 'false'}
+    >
       <button
         type='button'
         className='flex flex-col md:flex-row gap-3 items-start md:items-center w-full lg:hidden cursor-pointer text-left'

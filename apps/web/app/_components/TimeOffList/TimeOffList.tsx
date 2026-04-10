@@ -20,6 +20,7 @@ type Props = {
   hasMore?: boolean;
   sortDirection?: SortDirection;
   onSortChange?: (direction: 'asc' | 'desc' | undefined) => void;
+  selectedId?: number | null;
 };
 
 const TimeOffList = ({
@@ -29,6 +30,7 @@ const TimeOffList = ({
   hasMore,
   sortDirection = null,
   onSortChange,
+  selectedId,
 }: Props) => {
   const t = useTranslations('private.components.TimeOffList.TimeOffList');
 
@@ -92,7 +94,7 @@ const TimeOffList = ({
         <ul className='flex flex-col gap-4 lg:gap-0 mb-4'>
           {uniqueList.map((item) => (
             <li key={item.id}>
-              <TimeOffListItem item={item} onEdit={onEdit} />
+              <TimeOffListItem item={item} onEdit={onEdit} isSelected={item.id === selectedId} />
             </li>
           ))}
         </ul>
