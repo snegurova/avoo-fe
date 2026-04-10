@@ -114,6 +114,7 @@ export default function TimeOffPage() {
               onEdit={handleEditTimeOff}
               sortDirection={sortDirection ?? null}
               onSortChange={setSortDirection}
+              selectedId={selectedTimeOff?.id ?? null}
             />
           )}
         </div>
