@@ -10,7 +10,7 @@ import type { Dayjs } from 'dayjs';
 
 import type { ShortMasterInfo } from '@avoo/axios/types/apiTypes';
 import { VALUE_DATE_FORMAT } from '@avoo/constants';
-import { exceptionHooks, masterHooks, timeOffConflictHooks } from '@avoo/hooks';
+import { exceptionHooks, masterHooks } from '@avoo/hooks';
 import { TimeOffMode, timeOffTypes, WholeDay } from '@avoo/hooks/types/timeOffType';
 import { validateEndDateFactory } from '@avoo/shared';
 
@@ -24,7 +24,7 @@ import { FormMultiSelect } from '../FormMultiSelect/FormMultiSelect';
 import { FormSelect } from '../FormSelect/FormSelect';
 import FormTextarea from '../FormTextArea/FormTextArea';
 import ModeToggle from '../ModeToggle/ModeToggle';
-import TimeOffConflictsSection from '../TimeOffConflictsSection/TimeOffConflictsSection';
+import TimeOffConflictsContainer from '../TimeOffConflictsContainer/TimeOffConflictsContainer';
 
 export default function TimeOffAddForm() {
   const t = useTranslations('private.components.TimeOffAddForm.TimeOffAddForm');
@@ -77,11 +77,8 @@ export default function TimeOffAddForm() {
     });
 
   const values = watch();
-  const { conflictMessage, isConflictsLoading, affectedBookings } =
-    timeOffConflictHooks.useTimeOffConflicts({
-      values,
-      masters,
-    });
+  const selectedStaffValues = useMemo(() => values.staff ?? [], [values.staff]);
+  const hasSelectedStaff = selectedStaffValues.length > 0;
 
   const timeOffTypeOptions = useMemo(
     () =>
@@ -148,6 +145,16 @@ export default function TimeOffAddForm() {
     [values.staff],
   );
 
+  const handleStaffValueChange = useCallback(
+    (nextSelected: string[]) => {
+      setValue('staff', handleStaffChange(nextSelected), {
+        shouldDirty: true,
+        shouldValidate: true,
+      });
+    },
+    [handleStaffChange, setValue],
+  );
+
   return (
     <div className='py-7 px-5 md:px-11 flex-1 min-h-0 overflow-auto hide-scrollbar w-full'>
       <h2 className='text-[20px] lg:text-[24px] font-semibold'>{t('scheduleException')}</h2>
@@ -184,19 +191,13 @@ export default function TimeOffAddForm() {
               <label htmlFor='staff' className='block text-sm font-medium text-gray-700'>
                 {t('master')}
               </label>
-              <Controller
+              <FormMultiSelect
+                id='staff'
                 name='staff'
-                control={control}
-                render={({ field, fieldState }) => (
-                  <FormMultiSelect
-                    id='staff'
-                    name='staff'
-                    options={mastersOptions}
-                    selected={field.value}
-                    onChange={(nextSelected) => field.onChange(handleStaffChange(nextSelected))}
-                    error={fieldState.error?.message}
-                  />
-                )}
+                options={mastersOptions}
+                selected={selectedStaffValues}
+                onChange={handleStaffValueChange}
+                error={errors.staff?.message}
               />
             </div>
 
@@ -307,11 +308,9 @@ export default function TimeOffAddForm() {
 
         <div className='grid grid-cols-1 xl:grid-cols-2 gap-6 md:gap-8'>
           <div className='flex flex-col gap-4'>
-            <TimeOffConflictsSection
-              isConflictsLoading={isConflictsLoading}
-              conflictMessage={conflictMessage}
-              affectedBookings={affectedBookings}
-            />
+            {hasSelectedStaff ? (
+              <TimeOffConflictsContainer values={values} masters={masters} />
+            ) : null}
           </div>
         </div>
 
@@ -329,7 +328,7 @@ export default function TimeOffAddForm() {
             color='secondary'
             variant='contained'
             sx={{ width: { xs: 130, md: 170 }, height: 45 }}
-            disabled={isPending || isConflictsLoading}
+            disabled={isPending}
           >
             {t('save')}
           </Button>

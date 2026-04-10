@@ -24,7 +24,6 @@ import { FormMultiSelect } from '../FormMultiSelect/FormMultiSelect';
 import { FormSelect } from '../FormSelect/FormSelect';
 import FormTextarea from '../FormTextArea/FormTextArea';
 import ModalActions from '../ModalActions/ModalActions';
-import ModeToggle from '../ModeToggle/ModeToggle';
 import TimeOffConflictsSection from '../TimeOffConflictsSection/TimeOffConflictsSection';
 import type { TimeOffItem } from '../TimeOffEditModal/TimeOffEditModal';
 
@@ -197,7 +196,7 @@ export default function TimeOffEditForm({
         timeOffTypeOptions.find((option) => option.value === values.type)?.label ?? t('timeOff')
       );
     }
-    return t('workingTime');
+    return t('workingTimeDetails');
   }, [values.mode, values.type, timeOffTypeOptions]);
 
   const handleStartTimeChange = useCallback(
@@ -247,13 +246,6 @@ export default function TimeOffEditForm({
     [setValue],
   );
 
-  const handleModeChange = useCallback(
-    (mode: TimeOffMode) => {
-      setValue('mode', mode, { shouldDirty: true, shouldValidate: true });
-    },
-    [setValue],
-  );
-
   const handleCancel = useCallback(() => {
     (onRequestClose ?? onClose)();
   }, [onRequestClose, onClose]);
@@ -295,8 +287,10 @@ export default function TimeOffEditForm({
         <div className='flex-1 min-h-0 overflow-y-auto overflow-x-hidden pr-4 -mr-4'>
           <div className='space-y-6 md:space-y-8'>
             <div className='max-w-4xl space-y-6 md:space-y-8'>
-              <div className='flex justify-between'>
-                <h2 className='text-2xl'>{t('scheduleException')}</h2>
+              <div className='flex justify-between items-center'>
+                <h2 className='text-2xl'>
+                  {values.mode === TimeOffMode.TimeOff ? t('timeOff') : t('extraWorkingTime')}
+                </h2>
                 <div>
                   <IconButton
                     ariaLabel={t('delete')}
@@ -306,8 +300,6 @@ export default function TimeOffEditForm({
                   />
                 </div>
               </div>
-
-              <ModeToggle value={values.mode} onChange={handleModeChange} />
 
               <div className='flex flex-col gap-6 border border-gray-200 rounded-lg p-4'>
                 {values.mode === TimeOffMode.TimeOff && (
