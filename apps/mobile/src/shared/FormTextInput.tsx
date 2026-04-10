@@ -15,7 +15,9 @@ type Props<T extends FieldValues> = TextInputProps & {
   accessoryRight?: React.ReactNode;
   onAccessoryRightPress?: () => void;
   containerStyle?: ViewStyle;
+  inputContainerStyle?: ViewStyle;
   error?: string;
+  hideErrorText?: boolean;
   style?: StyleProp<TextStyle>;
   name: Path<T>;
   control: Control<T>;
@@ -28,8 +30,10 @@ export default function FormTextInput<T extends FieldValues>(props: Props<T>) {
     accessoryRight,
     onAccessoryRightPress,
     containerStyle,
+    inputContainerStyle,
     style,
     error,
+    hideErrorText = false,
     ...rest
   } = props;
   const { field } = useController({
@@ -41,9 +45,10 @@ export default function FormTextInput<T extends FieldValues>(props: Props<T>) {
     <View className='w-full' style={containerStyle}>
       <View
         className={`flex-row items-center border rounded-lg bg-white ${error ? 'border-red-500' : 'border-gray-200'}`}
+        style={inputContainerStyle}
       >
         <TextInput
-          className='flex-1 text-base text-gray-900 p-4'
+          className='flex-1 text-base text-gray-900 px-4'
           placeholderTextColor='#94A3B8'
           value={field.value}
           onChangeText={field.onChange}
@@ -62,7 +67,7 @@ export default function FormTextInput<T extends FieldValues>(props: Props<T>) {
           </TouchableOpacity>
         )}
       </View>
-      {error && <Text className='text-red-500 text-xs mt-1 ml-1'>{error}</Text>}
+      {error && !hideErrorText && <Text className='text-red-500 text-xs mt-1 ml-1'>{error}</Text>}
     </View>
   );
 }

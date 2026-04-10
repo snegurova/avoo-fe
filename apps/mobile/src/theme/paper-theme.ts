@@ -91,6 +91,12 @@ const paperTheme: MD3Theme = {
       fontSize: typography.fontSize.xs,
       fontWeight: typography.fontWeight.medium,
     },
+    labelLarge: {
+      ...MD3LightTheme.fonts.labelLarge,
+      fontFamily: getFontFamily(typography.fontWeight.medium),
+      fontSize: typography.fontSize.md,
+      fontWeight: typography.fontWeight.medium,
+    },
   },
 };
 

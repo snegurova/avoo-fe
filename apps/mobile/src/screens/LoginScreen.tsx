@@ -10,58 +10,84 @@ export default function LoginScreen(props: Props) {
   const { navigation } = props;
 
   return (
-    <Layout isHeaderHidden={true} centerContent={true}>
+    <Layout
+      isHeaderHidden={true}
+      isScrollableDisabled={true}
+      style={{ backgroundColor: '#ffffff' }}
+    >
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <View className='w-full'>
-          <Text className='text-3xl font-bold text-center'>AVOO App</Text>
-          <Text className='text-lg text-slate-500 text-center mb-12'>
-            Sign in to your AVOO account
-          </Text>
+        <View className='w-full flex-1 pt-5'>
+          <Text className='text-3xl font-semibold text-gray-600'>AVOO</Text>
 
-          <LoginForm />
-          <View className='mt-6' />
-          <View className='flex-row justify-between items-center '>
-            <Pressable
-              onPress={() =>
-                navigation.reset({
-                  index: 0,
-                  routes: [{ name: RootScreens.RegisterScreen }],
-                })
-              }
-              accessibilityRole='button'
-              accessibilityLabel='Sign up for a new account'
-              accessibilityHint='Navigates to registration screen'
-              hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+          <View style={{ flex: 1, justifyContent: 'center' }}>
+            <Text
+              className='text-xl font-medium text-gray-900 text-center'
+              style={{ lineHeight: 30, letterSpacing: 0.8 }}
             >
-              <Text className='text-blue-500'>Create an account</Text>
-            </Pressable>
-            <Pressable
-              onPress={() =>
-                navigation.reset({
-                  index: 0,
-                  routes: [{ name: RootScreens.ForgotPasswordScreen }],
-                })
-              }
-              accessibilityRole='button'
-              accessibilityLabel='Forgot password'
-              accessibilityHint='Navigates to forgot password screen'
-              hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+              Log In
+            </Text>
+            <View style={{ marginTop: 24 }} />
+            <Text
+              className='text-sm font-regular text-gray-900 text-center'
+              style={{ lineHeight: 21 }}
             >
-              <Text className='text-blue-500'>Forgot password?</Text>
-            </Pressable>
+              Access your dashboard and manage your business.
+            </Text>
+            <View style={{ marginTop: 56 }} />
+
+            <LoginForm />
+            <View style={{ marginTop: 56 }} />
+            <View className='flex-row justify-between items-center'>
+              <Pressable
+                onPress={() =>
+                  navigation.reset({
+                    index: 0,
+                    routes: [{ name: RootScreens.RegisterScreen }],
+                  })
+                }
+                accessibilityRole='button'
+                accessibilityLabel='Sign up for a new account'
+                accessibilityHint='Navigates to registration screen'
+                hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+              >
+                <Text
+                  className='text-md font-regular text-gray-700'
+                  style={{ lineHeight: 24, letterSpacing: 0.64 }}
+                >
+                  Create an account
+                </Text>
+              </Pressable>
+              <Pressable
+                onPress={() =>
+                  navigation.reset({
+                    index: 0,
+                    routes: [{ name: RootScreens.ForgotPasswordScreen }],
+                  })
+                }
+                accessibilityRole='button'
+                accessibilityLabel='Forgot password'
+                accessibilityHint='Navigates to forgot password screen'
+                hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+              >
+                <Text
+                  className='text-md font-regular text-gray-700'
+                  style={{ lineHeight: 24, letterSpacing: 0.64 }}
+                >
+                  Reset Password
+                </Text>
+              </Pressable>
+            </View>
           </View>
-          <View className='mt-6' />
-          <Pressable
-            onPress={() =>
-              navigation.reset({
-                index: 0,
-                routes: [{ name: RootScreens.Storybook }],
-              })
-            }
-            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-          >
-            <Text className='text-blue-500'>Open Storybook</Text>
-          </Pressable>
+          <View className='flex-row justify-between items-center' style={{ paddingBottom: 20 }}>
+            <Text className='text-xs font-regular text-gray-600' style={{ lineHeight: 18 }}>
+              © 2026 Avoo. All rights reserved.
+            </Text>
+            <Text
+              style={{ fontFamily: 'Roboto-Bold', fontSize: 14, lineHeight: 21, color: '#5D3774' }}
+            >
+              Privacy Policy
+            </Text>
+          </View>
         </View>
       </TouchableWithoutFeedback>
     </Layout>

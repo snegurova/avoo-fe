@@ -19,6 +19,8 @@ type Props = {
   disabled?: boolean;
   loading?: boolean;
   style?: StyleProp<ViewStyle>;
+  buttonColor?: string;
+  textColor?: string;
 } & Omit<PaperButtonProps, 'onPress' | 'children' | 'mode' | 'buttonColor' | 'textColor' | 'style'>;
 
 function Button(props: Props) {
@@ -29,6 +31,8 @@ function Button(props: Props) {
     disabled = false,
     loading = false,
     style,
+    buttonColor: buttonColorProp,
+    textColor: textColorProp,
     ...rest
   } = props;
 
@@ -69,8 +73,8 @@ function Button(props: Props) {
   return (
     <PaperButton
       mode={buttonConfig.mode}
-      buttonColor={buttonConfig.buttonColor}
-      textColor={buttonConfig.textColor}
+      buttonColor={buttonColorProp ?? buttonConfig.buttonColor}
+      textColor={textColorProp ?? buttonConfig.textColor}
       onPress={onPress}
       disabled={disabled || loading}
       loading={loading}

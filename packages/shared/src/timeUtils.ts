@@ -134,18 +134,19 @@ export const timeUtils = {
     return ((shift % 7) + 7) % 7;
   },
   convertDuration(duration: number, locale: Locale): string {
+    const map = localeMap[locale] ?? localeMap['en'];
     const hours = Math.floor(duration / 60);
     const minutes = duration % 60;
     if (hours === 0) {
-      const minuteText = minutes === 1 ? localeMap[locale].min : localeMap[locale].mins;
+      const minuteText = minutes === 1 ? map.min : map.mins;
       return `${minutes} ${minuteText}`;
     }
     if (minutes === 0) {
-      const hourText = hours === 1 ? localeMap[locale].hour : localeMap[locale].hours;
+      const hourText = hours === 1 ? map.hour : map.hours;
       return `${hours} ${hourText}`;
     }
 
-    return `${hours}${localeMap[locale].h} ${minutes} ${localeMap[locale].mins}`;
+    return `${hours}${map.h} ${minutes} ${map.mins}`;
   },
   getDurationOptionsRange(
     minutesMin: number,
@@ -244,11 +245,11 @@ export const timeUtils = {
     return dateObj.toLocaleDateString('en-US', options);
   },
   getHumanDuration(durationMinutes: number, locale: Locale = 'en'): string {
+    const map = localeMap[locale] ?? localeMap['en'];
     const hours = Math.floor(durationMinutes / 60);
     const minutes = durationMinutes % 60;
-    const hoursPart = hours > 0 ? `${hours}${localeMap[locale].h}` : '';
-    const minutesPart =
-      minutes > 0 ? ` ${minutes} ${localeMap[locale].mins}` : ` 00 ${localeMap[locale].mins}`;
+    const hoursPart = hours > 0 ? `${hours}${map.h}` : '';
+    const minutesPart = minutes > 0 ? ` ${minutes} ${map.mins}` : ` 00 ${map.mins}`;
     return `${hoursPart} ${minutesPart}`.trim();
   },
   getMinutesDifference(start: string, end: string): number {
