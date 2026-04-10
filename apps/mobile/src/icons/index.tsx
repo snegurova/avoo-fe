@@ -22,3 +22,5 @@ export { SearchActivityIcon } from './SearchActivityIcon';
 export { SettingsIcon } from './SettingsIcon';
 export { ViewDayIcon } from './ViewDayIcon';
 export { ViewWeekIcon } from './ViewWeekIcon';
+export { VisibilityIcon } from './VisibilityIcon';
+export { VisibilityOffIcon } from './VisibilityOffIcon';

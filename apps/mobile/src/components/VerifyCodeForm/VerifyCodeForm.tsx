@@ -2,6 +2,7 @@ import { Text, View } from 'react-native';
 
 import { useNavigation } from '@react-navigation/native';
 
+import { colors } from '@avoo/design-tokens';
 import { authHooks } from '@avoo/hooks';
 import { useApiStatusStore } from '@avoo/store';
 
@@ -28,11 +29,20 @@ export default function VerifyCodeForm(props: Props) {
   });
 
   return (
-    <View>
+    <View style={{ gap: 24 }}>
       <SixCodeInput control={control} name='code' />
-      {errors.code && <Text className='text-red-500 text-center'>{errors.code.message}</Text>}
-      <View className='mt-6' />
-      <Button onPress={handleSubmit} title='Verify' loading={isPending} disabled={isPending} />
+      {errors.code && (
+        <Text className='text-red-500 text-center text-sm'>{errors.code.message}</Text>
+      )}
+      <Button
+        onPress={handleSubmit}
+        title='Verify'
+        loading={isPending}
+        disabled={isPending}
+        buttonColor={colors.gray['900']}
+        textColor={colors.white}
+        style={{ borderRadius: 8, height: 44 }}
+      />
     </View>
   );
 }

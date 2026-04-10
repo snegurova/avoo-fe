@@ -1,6 +1,8 @@
 import { Control, FieldValues, Path, useController } from 'react-hook-form';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
+import { colors } from '@avoo/design-tokens';
+
 import { MaterialIcons } from '@/shared/icons';
 
 type Props<T extends FieldValues> = {
@@ -18,23 +20,20 @@ export default function FormCheckBox<T extends FieldValues>(props: Props<T>) {
   });
 
   return (
-    <View>
-      <View style={styles.container}>
-        <Pressable
-          onPress={() => field.onChange(!field.value)}
-          style={[
-            styles.checkbox,
-            {
-              borderColor: field.value ? '#2563EB' : error ? 'red' : '#999',
-              backgroundColor: field.value ? '#2563EB' : 'transparent',
-            },
-          ]}
-        >
-          {field.value && <MaterialIcons name='check' size={16} color='#fff' />}
-        </Pressable>
-        <Text style={styles.label}>{label}</Text>
-      </View>
-      {error && <Text style={styles.errorText}>{error}</Text>}
+    <View style={styles.container}>
+      <Pressable
+        onPress={() => field.onChange(!field.value)}
+        style={[
+          styles.checkbox,
+          {
+            borderColor: error && !field.value ? colors.red['500'] : colors.gray['900'],
+            backgroundColor: field.value ? colors.gray['900'] : 'transparent',
+          },
+        ]}
+      >
+        {field.value && <MaterialIcons name='check' size={16} color={colors.white} />}
+      </Pressable>
+      <Text style={styles.label}>{label}</Text>
     </View>
   );
 }
@@ -42,12 +41,6 @@ export default function FormCheckBox<T extends FieldValues>(props: Props<T>) {
 FormCheckBox.displayName = 'FormCheckBox';
 
 const styles = StyleSheet.create({
-  errorText: {
-    color: '#EF4444',
-    fontSize: 12,
-    marginTop: 4,
-    marginLeft: 4,
-  },
   container: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -62,8 +55,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   label: {
-    fontSize: 14,
-    color: '#64748B',
+    fontFamily: 'Roboto-Regular',
+    fontSize: 16,
+    lineHeight: 24,
+    letterSpacing: 0.64,
+    color: colors.gray['900'],
     flex: 1,
   },
 });

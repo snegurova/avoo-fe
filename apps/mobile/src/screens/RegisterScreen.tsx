@@ -10,21 +10,42 @@ export default function RegisterScreen(props: Props) {
   const { navigation } = props;
 
   return (
-    <Layout centerContent={true} isHeaderHidden={true}>
+    <Layout isHeaderHidden={true} style={{ backgroundColor: '#ffffff' }}>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View className='w-full'>
-          <Text className='text-3xl font-bold text-center mb-2'>AVOO App</Text>
-          <Text className='text-lg text-slate-500 text-center mb-12'>
+          <Text className='text-3xl font-semibold text-gray-600'>AVOO</Text>
+
+          <View style={{ marginTop: 40 }} />
+          <Text
+            className='text-xl font-medium text-gray-900 text-center'
+            style={{ lineHeight: 30, letterSpacing: 0.8 }}
+          >
             Create a professional account
           </Text>
-          <Text className='text-lg text-slate-500 text-center mb-12'>
-            Create an account or login in your busines
+          <View style={{ marginTop: 12 }} />
+          <Text
+            className='text-sm font-regular text-gray-900 text-center'
+            style={{ lineHeight: 21 }}
+          >
+            You are almost there! Create your new account by completing these details.
           </Text>
+          <View style={{ marginTop: 32 }} />
 
           <RegistrationForm />
 
-          <View className='flex-row justify-center items-center mt-4 gap-1'>
-            <Text className='text-base text-slate-500'>Having account?</Text>
+          <View style={{ marginTop: 40 }} />
+          <View className='flex-row justify-center items-center' style={{ gap: 4 }}>
+            <Text
+              style={{
+                fontFamily: 'Roboto-Regular',
+                fontSize: 16,
+                lineHeight: 24,
+                letterSpacing: 0.64,
+                color: '#141A23',
+              }}
+            >
+              Having account?
+            </Text>
             <Pressable
               onPress={() =>
                 navigation.reset({
@@ -33,17 +54,35 @@ export default function RegisterScreen(props: Props) {
                 })
               }
               accessibilityRole='button'
-              accessibilityLabel='Sign up for a new account'
-              accessibilityHint='Navigates to registration screen'
+              accessibilityLabel='Log in to existing account'
+              accessibilityHint='Navigates to login screen'
               hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
             >
-              <Text className='text-base text-blue-600 underline p-1'>Log in</Text>
+              <Text
+                style={{
+                  fontFamily: 'Roboto-Bold',
+                  fontSize: 16,
+                  lineHeight: 24,
+                  letterSpacing: 0.64,
+                  color: '#5D3774',
+                  textDecorationLine: 'underline',
+                }}
+              >
+                Log in
+              </Text>
             </Pressable>
           </View>
 
-          <View className='flex-row justify-between items-center'>
-            <Text className='text-sm text-slate-500'>© 2025 Avoo</Text>
-            <Text className='text-sm text-blue-600'>Privacy Policy</Text>
+          <View style={{ marginTop: 32 }} />
+          <View className='flex-row justify-between items-center' style={{ paddingBottom: 20 }}>
+            <Text className='text-xs font-regular text-gray-600' style={{ lineHeight: 18 }}>
+              © 2026 Avoo. All rights reserved.
+            </Text>
+            <Text
+              style={{ fontFamily: 'Roboto-Bold', fontSize: 14, lineHeight: 21, color: '#5D3774' }}
+            >
+              Privacy Policy
+            </Text>
           </View>
         </View>
       </TouchableWithoutFeedback>

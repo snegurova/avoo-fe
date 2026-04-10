@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { Control, FieldValues, Path, useController } from 'react-hook-form';
 import { Pressable, TextInput, TextInputProps } from 'react-native';
 
@@ -17,6 +17,7 @@ function SixCodeInput<T extends FieldValues>(props: Props<T>) {
   } = useController({ control, name });
 
   const inputRef = useRef<TextInput>(null);
+  const [isFocused, setIsFocused] = useState(false);
 
   return (
     <Pressable className='items-center justify-center' onPress={() => inputRef.current?.focus()}>
@@ -31,10 +32,14 @@ function SixCodeInput<T extends FieldValues>(props: Props<T>) {
         selectionColor='transparent'
         textContentType='none'
         className='w-full h-20 absolute z-20 color-transparent'
-        onBlur={onBlur}
+        onFocus={() => setIsFocused(true)}
+        onBlur={() => {
+          setIsFocused(false);
+          onBlur();
+        }}
       />
 
-      <SixCodeInputBoxes code={value} />
+      <SixCodeInputBoxes code={value} isFocused={isFocused} />
     </Pressable>
   );
 }
