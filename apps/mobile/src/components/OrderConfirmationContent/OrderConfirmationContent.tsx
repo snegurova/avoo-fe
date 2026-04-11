@@ -190,27 +190,40 @@ export const OrderConfirmationContent = ({ order, endTime, onClose, refetch }: P
           </Text>
           <Switch
             value={order.customer?.isNotificationEnable ?? false}
-            disabled
-            trackColor={{ true: colors.primary[400] }}
+            trackColor={{ true: colors.gray[900], false: colors.gray[300] }}
           />
         </View>
       </ScrollView>
 
       <View className='pb-6 pt-3 px-5 flex-row' style={{ gap: 12 }}>
         <Pressable
-          className='flex-1 rounded-xl py-4 items-center border border-gray-200'
+          style={{
+            flex: 1,
+            height: 44,
+            borderRadius: 8,
+            borderWidth: 1,
+            borderColor: colors.gray[900],
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
           onPress={handleReject}
           disabled={isPending}
         >
           {pendingAction === 'reject' ? (
-            <ActivityIndicator color={colors.gray[600]} />
+            <ActivityIndicator color={colors.gray[900]} />
           ) : (
-            <Text className='text-base font-semibold text-gray-700'>Reject</Text>
+            <Text className='text-base font-semibold text-gray-900'>Reject</Text>
           )}
         </Pressable>
         <Pressable
-          className='flex-1 rounded-xl py-4 items-center'
-          style={{ backgroundColor: colors.primary[700] }}
+          style={{
+            flex: 1,
+            height: 44,
+            borderRadius: 8,
+            backgroundColor: colors.gray[900],
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
           onPress={handleConfirm}
           disabled={isPending}
         >

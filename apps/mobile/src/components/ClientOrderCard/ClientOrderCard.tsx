@@ -27,7 +27,7 @@ export const ClientOrderCard = (props: Props) => {
   return (
     <View className='border border-gray-200 rounded-xl px-4 py-3 mb-2'>
       <View className='flex-row gap-3'>
-        <View className='items-center' style={{ width: 36 }}>
+        <View className='items-center' style={{ width: 44 }}>
           <Text
             style={{
               fontSize: 16,
@@ -43,10 +43,10 @@ export const ClientOrderCard = (props: Props) => {
             {dateMonth}
           </Text>
           <Text
+            numberOfLines={1}
             style={{
               fontSize: 12,
               fontWeight: '400',
-              lineHeight: 12,
               letterSpacing: 0.48,
               color: '#141A23',
               textAlign: 'center',

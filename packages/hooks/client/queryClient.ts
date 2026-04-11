@@ -7,7 +7,9 @@ import { useApiStatusStore } from '@avoo/store';
 const mutationCache = new MutationCache({
   onError: (error) => {
     if (axios.isAxiosError(error)) {
-      useApiStatusStore.getState().setError(true, error.response?.data.errorMessage);
+      useApiStatusStore.getState().setError(true, error.response?.data?.errorMessage);
+    } else if (error && typeof error === 'object' && 'errorMessage' in error) {
+      useApiStatusStore.getState().setError(true, (error as { errorMessage: string }).errorMessage);
     }
   },
   onSuccess: (_data, _variables, _context, mutation) => {

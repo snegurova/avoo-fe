@@ -82,7 +82,7 @@ const VARIANT_LAYOUT_CLASS: Record<Props['variant'], string> = {
   [CALENDAR_ORDER_VARIANT.WEEK]: 'mb-1 rounded-md px-1 py-0.5 overflow-hidden',
   [CALENDAR_ORDER_VARIANT.MONTH]:
     'mb-1 rounded-md px-0.5 overflow-hidden flex-row items-center gap-0.5',
-  [CALENDAR_ORDER_VARIANT.DAY]: 'absolute mx-1 rounded-lg p-2 overflow-hidden min-h-[40px]',
+  [CALENDAR_ORDER_VARIANT.DAY]: 'absolute mx-1 rounded-lg overflow-hidden',
   [CALENDAR_ORDER_VARIANT.WIDGET]:
     'rounded-md px-0.5 overflow-hidden flex-row items-center gap-0.5',
 };
@@ -115,6 +115,8 @@ export function CalendarOrder(props: Props) {
           height: props.height,
           width: props.width ?? 112,
           zIndex: props.zIndex ?? 1,
+          padding: props.height < 50 ? 4 : 8,
+          justifyContent: 'center' as const,
         }
       : undefined;
 
@@ -143,6 +145,16 @@ export function CalendarOrder(props: Props) {
             {appointment.startTime}
           </Text>
         </>
+      ) : variant === CALENDAR_ORDER_VARIANT.DAY && props.height < 50 ? (
+        <Text
+          variant='labelSmall'
+          numberOfLines={1}
+          ellipsizeMode='tail'
+          style={{ color: textColor, fontSize: 10 }}
+        >
+          {appointment.startTime}
+          {appointment.clientName ? ` ${appointment.clientName}` : ''}
+        </Text>
       ) : (
         <>
           <Text

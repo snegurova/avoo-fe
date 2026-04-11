@@ -19,7 +19,9 @@ export const DurationStepper = ({ value, onChange }: Props) => (
     >
       <Text className='text-xl text-gray-500'>−</Text>
     </Pressable>
-    <Text className='text-sm font-medium text-gray-900'>{timeUtils.convertDuration(value)}</Text>
+    <Text className='text-sm font-medium text-gray-900'>
+      {timeUtils.convertDuration(value, 'en')}
+    </Text>
     <Pressable
       hitSlop={8}
       className='w-8 h-8 items-center justify-center'

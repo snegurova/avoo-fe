@@ -37,7 +37,7 @@ export default function LoginForm() {
           placeholder='Email'
           error={errors.email?.message}
           hideErrorText
-          inputContainerStyle={{ minHeight: 44, paddingVertical: 10, borderRadius: 8 }}
+          inputContainerStyle={{ minHeight: 44, borderRadius: 8 }}
           keyboardType='email-address'
           autoCapitalize='none'
           autoCorrect={false}
@@ -53,7 +53,7 @@ export default function LoginForm() {
           placeholder='Password'
           error={errors.password?.message}
           hideErrorText
-          inputContainerStyle={{ minHeight: 44, paddingVertical: 10, borderRadius: 8 }}
+          inputContainerStyle={{ minHeight: 44, borderRadius: 8 }}
           secureTextEntry={!isShowPassword}
           accessoryRight={icon}
           onAccessoryRightPress={toggleShowPassword}

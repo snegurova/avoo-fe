@@ -57,13 +57,13 @@ export const ServiceGalleryField = (props: Props) => {
               borderRadius: 8,
               borderWidth: 1.5,
               borderStyle: 'dashed',
-              borderColor: colors.primary[300],
+              borderColor: colors.gray[900],
               opacity: isUploading ? 0.6 : 1,
             }}
             onPress={onPickImage}
             disabled={isUploading}
           >
-            <MaterialIcons name='add' size={28} color={colors.primary[500]} />
+            <MaterialIcons name='add' size={28} color={colors.gray[900]} />
             <Text className='text-xs text-gray-500 mt-1'>Add photo</Text>
           </Pressable>
         )}

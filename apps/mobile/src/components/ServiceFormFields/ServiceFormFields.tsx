@@ -127,7 +127,7 @@ export const ServiceFormFields = (props: Props) => {
           control={control}
           render={({ field }) => (
             <LockedField
-              value={timeUtils.convertDuration(field.value ?? 15)}
+              value={timeUtils.convertDuration(field.value ?? 15, 'en')}
               error={!!errors.durationMinutes}
               onPress={() => setIsDurationPickerVisible(true)}
             />
@@ -244,7 +244,7 @@ export const ServiceFormFields = (props: Props) => {
             <Switch
               value={field.value ?? true}
               onValueChange={field.onChange}
-              trackColor={{ false: colors.gray[300], true: colors.primary[700] }}
+              trackColor={{ false: colors.gray[300], true: colors.gray[900] }}
               thumbColor={colors.white}
               ios_backgroundColor={colors.gray[300]}
             />

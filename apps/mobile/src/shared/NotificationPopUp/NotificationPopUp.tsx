@@ -26,20 +26,26 @@ export function NotificationPopUp() {
   const visible = hasError || hasSuccess;
 
   const [variant, setVariant] = useState<NotificationPopUpVariant | null>(null);
+  const variantRef = useRef<NotificationPopUpVariant | null>(null);
   const opacity = useRef(new Animated.Value(0)).current;
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const { bottom } = useSafeAreaInsets();
 
   const message = variant === NotificationPopUpVariant.ERROR ? errorMessage : successMessage;
 
+  useEffect(() => {
+    variantRef.current = variant;
+  }, [variant]);
+
   const dismiss = () => {
     Animated.timing(opacity, { toValue: 0, duration: 200, useNativeDriver: true }).start(() => {
-      if (variant === NotificationPopUpVariant.ERROR) {
+      if (variantRef.current === NotificationPopUpVariant.ERROR) {
         useApiStatusStore.getState().clearError();
-      } else if (variant === NotificationPopUpVariant.SUCCESS) {
+      } else if (variantRef.current === NotificationPopUpVariant.SUCCESS) {
         useApiStatusStore.getState().clearSuccess();
       }
       setVariant(null);
+      variantRef.current = null;
     });
   };
 
@@ -54,13 +60,14 @@ export function NotificationPopUp() {
   useEffect(() => {
     if (visible) {
       if (timerRef.current) clearTimeout(timerRef.current);
+      opacity.setValue(0);
       Animated.timing(opacity, { toValue: 1, duration: 200, useNativeDriver: true }).start();
       timerRef.current = setTimeout(dismiss, DURATION);
     }
     return () => {
       if (timerRef.current) clearTimeout(timerRef.current);
     };
-  }, [visible]);
+  }, [visible, errorMessage, successMessage]);
 
   if (!variant) return null;
 

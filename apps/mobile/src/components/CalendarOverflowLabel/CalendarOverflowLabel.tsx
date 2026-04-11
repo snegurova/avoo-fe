@@ -11,9 +11,10 @@ type Props = {
 
 export const CalendarOverflowLabel = (props: Props) => {
   const { total, maxShown, style } = props;
+
   if (total <= maxShown) return null;
   return (
-    <Text variant='labelSmall' style={[{ color: colors.gray[500] }, style]}>
+    <Text variant='labelSmall' numberOfLines={1} style={[{ color: colors.gray[500] }, style]}>
       +{total - maxShown} more
     </Text>
   );

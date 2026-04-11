@@ -55,9 +55,11 @@ export const ProfileScreen = () => {
         <View className='bg-white rounded-2xl p-5 border border-gray-200'>
           <ProfileInfo />
         </View>
-        <View className='bg-white rounded-2xl p-5 border border-gray-200'>
-          <ProfileLanguages languages={visualLanguages} />
-        </View>
+        {visualLanguages && visualLanguages.length > 0 && (
+          <View className='bg-white rounded-2xl p-5 border border-gray-200'>
+            <ProfileLanguages languages={visualLanguages} />
+          </View>
+        )}
         <View className='bg-white rounded-2xl p-5 border border-gray-200'>
           <ProfileGallery />
         </View>

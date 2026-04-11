@@ -59,7 +59,7 @@ export default function LanguageSelector<T extends FieldValues>({
         <Pressable
           onPress={handleOpenModal}
           className='w-8 h-8 rounded-full items-center justify-center'
-          style={{ backgroundColor: colors.primary[400] }}
+          style={{ backgroundColor: colors.gray[900] }}
           hitSlop={8}
         >
           <MaterialIcons name='add' size={26} color={colors.white} />
@@ -112,9 +112,7 @@ const styles = StyleSheet.create({
   },
   chipText: {
     fontFamily: 'Roboto-Regular',
-    lineHeight: 14,
     color: colors.black,
-    marginVertical: 10,
   },
 });
 

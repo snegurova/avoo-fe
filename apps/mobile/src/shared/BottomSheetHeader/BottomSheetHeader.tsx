@@ -18,28 +18,50 @@ export const BottomSheetHeader = ({ handleClose, handleConfirm, handleEdit }: Pr
           {handleClose && (
             <Pressable
               onPress={handleClose}
-              className='w-11 h-11 rounded-full bg-primary-400 items-center justify-center'
+              style={{
+                width: 44,
+                height: 44,
+                borderRadius: 22,
+                borderWidth: 1,
+                borderColor: '#141A23',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
               hitSlop={8}
             >
-              <MaterialIcons name='close' size={30} color='white' />
+              <MaterialIcons name='close' size={24} color='#141A23' />
             </Pressable>
           )}
           {handleConfirm && (
             <Pressable
               onPress={handleConfirm}
-              className='w-11 h-11 rounded-full bg-primary-400 items-center justify-center'
+              style={{
+                width: 44,
+                height: 44,
+                borderRadius: 22,
+                backgroundColor: '#141A23',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
               hitSlop={8}
             >
-              <MaterialIcons name='check' size={30} color='white' />
+              <MaterialIcons name='check' size={24} color='white' />
             </Pressable>
           )}
           {handleEdit && (
             <Pressable
               onPress={handleEdit}
-              className='w-11 h-11 rounded-full bg-primary-400 items-center justify-center'
+              style={{
+                width: 44,
+                height: 44,
+                borderRadius: 22,
+                backgroundColor: '#141A23',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
               hitSlop={8}
             >
-              <MaterialIcons name='edit' size={24} color='white' />
+              <MaterialIcons name='edit' size={20} color='white' />
             </Pressable>
           )}
         </View>
