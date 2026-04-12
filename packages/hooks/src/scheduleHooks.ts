@@ -134,7 +134,7 @@ export const scheduleHooks = {
       enabled: !!id && (options?.enabled ?? true),
     });
 
-    utils.useSetPendingApi(query.isPending);
+    utils.useSetPendingApi(query.isFetching);
 
     return {
       ...query,
