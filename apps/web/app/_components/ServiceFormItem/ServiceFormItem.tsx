@@ -238,12 +238,13 @@ export default function ServiceFormItem(props: Props) {
     onChange(newOrders);
 
     setSelectedService(newService);
+
     setMasterParams((prev) => ({
       ...prev,
       serviceId: newService?.id || undefined,
     }));
 
-    if (isActive) {
+    if (isActive && !selectedMasters[index]) {
       const masterIdsProvideService = newService?.masters.map((master) => master.id) || undefined;
       setMasterIdsInStore(masterIdsProvideService);
     }

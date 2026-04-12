@@ -101,6 +101,7 @@ export default function Calendar(props: Props) {
   const setToDate = useCalendarStore((state) => state.setToDate);
   const masterIds = useCalendarStore((state) => state.masterIds);
   const statuses = useCalendarStore((state) => state.statuses);
+  const resetStorage = useCalendarStore((state) => state.resetStorage);
   const orderIsOutOfSchedule = useCalendarStore((state) => state.orderIsOutOfSchedule);
   const type = useCalendarStore((state) => state.type);
   const [params, setParams] = useState<PrivateCalendarQueryParams>({
@@ -111,6 +112,12 @@ export default function Calendar(props: Props) {
   const [selectedOrder, setSelectedOrder] = useState<PrivateEvent | null>(null);
   const router = useRouter();
   const searchParams = useSearchParams();
+
+  useEffect(() => {
+    if (calendarType !== CalendarType.SELECTOR) {
+      resetStorage();
+    }
+  }, []);
 
   useEffect(() => {
     setParams((prev) => ({
