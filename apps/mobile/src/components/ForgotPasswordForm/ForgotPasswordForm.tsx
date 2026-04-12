@@ -43,7 +43,7 @@ export default function ForgotPasswordForm() {
           placeholder='Email'
           error={errors.email?.message}
           hideErrorText
-          inputContainerStyle={{ minHeight: 44, paddingVertical: 10, borderRadius: 8 }}
+          inputContainerStyle={{ minHeight: 44, borderRadius: 8 }}
           keyboardType='email-address'
           autoCapitalize='none'
           autoCorrect={false}

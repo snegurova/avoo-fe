@@ -193,10 +193,17 @@ export const CreateOrderForm = (props: Props) => {
 
         {canAddService && (
           <Pressable
-            className='flex-row items-center justify-center rounded-xl border border-dashed border-primary-400 py-3 mb-4'
+            className='flex-row items-center justify-center mb-4'
+            style={{
+              borderRadius: 8,
+              borderWidth: 1,
+              borderStyle: 'dashed',
+              borderColor: colors.gray[900],
+              height: 44,
+            }}
             onPress={addService}
           >
-            <Text variant='labelLarge' style={{ color: colors.primary[700] }}>
+            <Text variant='labelLarge' style={{ color: colors.gray[900] }}>
               + Add service
             </Text>
           </Pressable>
@@ -204,8 +211,13 @@ export const CreateOrderForm = (props: Props) => {
 
         <View className='mt-2'>
           <Pressable
-            className='rounded-xl py-4 items-center'
-            style={{ backgroundColor: canCreate ? colors.primary[700] : colors.gray[200] }}
+            className='items-center'
+            style={{
+              backgroundColor: canCreate ? colors.gray[900] : colors.gray[200],
+              borderRadius: 8,
+              height: 44,
+              justifyContent: 'center',
+            }}
             onPress={handleSubmit}
             disabled={!canCreate || isPending}
           >

@@ -48,7 +48,7 @@ export default function FormTextInput<T extends FieldValues>(props: Props<T>) {
         style={inputContainerStyle}
       >
         <TextInput
-          className='flex-1 text-base text-gray-900 px-4'
+          className='flex-1 text-base text-gray-900 p-4'
           placeholderTextColor='#94A3B8'
           value={field.value}
           onChangeText={field.onChange}

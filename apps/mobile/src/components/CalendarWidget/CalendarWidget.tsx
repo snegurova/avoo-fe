@@ -12,7 +12,6 @@ import { timeUtils } from '@avoo/shared';
 import CalendarMaster, { CALENDAR_MASTER_LAYOUT } from '@/components/CalendarMaster/CalendarMaster';
 import { CALENDAR_ORDER_VARIANT, CalendarOrder } from '@/components/CalendarOrder/CalendarOrder';
 import { calendarMobileHooks } from '@/hooks/calendarHooks';
-import { PillText } from '@/shared/PillText/PillText';
 import { BottomBarScreens, RootNavigationProp, RootScreens } from '@/types/navigation';
 
 import { CalendarOverflowLabel } from '../CalendarOverflowLabel/CalendarOverflowLabel';
@@ -60,9 +59,7 @@ export const CalendarWidget = () => {
         <View className='w-full flex-row items-center justify-between gap-2'>
           <Text variant='titleLarge'>Calendar</Text>
           {todayEvents.length > 0 && (
-            <PillText>
-              <CalendarOverflowLabel total={totalTodayCount} maxShown={MAX_ITEMS} />
-            </PillText>
+            <CalendarOverflowLabel total={totalTodayCount} maxShown={MAX_ITEMS} />
           )}
         </View>
         <Text variant='bodySmall' style={{ color: colors.gray[700] }}>

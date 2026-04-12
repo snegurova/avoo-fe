@@ -11,6 +11,7 @@ import {
   UpdateOrderRequest,
 } from '@avoo/axios/types/apiTypes';
 import { colors } from '@avoo/design-tokens';
+import { orderHooks } from '@avoo/hooks';
 import { timeUtils } from '@avoo/shared';
 
 import { DatePickerSheet } from '@/components/DatePickerSheet/DatePickerSheet';
@@ -22,6 +23,7 @@ import { calendarMobileHooks } from '@/hooks/calendarHooks';
 import { masterMobileHooks } from '@/hooks/masterHooks';
 import { uiHooks } from '@/hooks/uiHooks';
 import { BottomSheetHeader } from '@/shared/BottomSheetHeader/BottomSheetHeader';
+import { ConfirmModal } from '@/shared/ConfirmModal/ConfirmModal';
 import { FormField } from '@/shared/FormField';
 import { NotesInput } from '@/shared/NotesInput';
 import { invalidateOrderQueries } from '@/utils/invalidateOrderQueries';
@@ -38,6 +40,10 @@ export const OrderEditContent = ({ order, onClose, refetch }: Props) => {
   const [selectedMaster, setSelectedMaster] = useState<MasterWithRelationsEntity>(order.master);
   const [selectedSlot, setSelectedSlot] = useState<string | null>(order.date);
   const [isMasterPickerVisible, setMasterPickerVisible] = useState(false);
+  const [overlapModal, setOverlapModal] = useState<{ visible: boolean; description: string }>({
+    visible: false,
+    description: '',
+  });
 
   const {
     tempDate,
@@ -68,6 +74,9 @@ export const OrderEditContent = ({ order, onClose, refetch }: Props) => {
 
   const queryClient = useQueryClient();
 
+  const customerId = order.customer?.id ?? null;
+  const customerOrders = orderHooks.useGetCustomerOrderHistory(customerId, 200);
+
   const { mutate, isPending } = useMutation<BaseResponse<Order>, Error, UpdateOrderRequest>({
     mutationFn: (data) => orderApi.updateOrder(order.id, data),
     onSuccess: async () => {
@@ -77,7 +86,7 @@ export const OrderEditContent = ({ order, onClose, refetch }: Props) => {
     },
   });
 
-  const handleSave = () => {
+  const doSave = () => {
     if (!selectedSlot) return;
     mutate({
       notes: notes.trim() || undefined,
@@ -85,6 +94,40 @@ export const OrderEditContent = ({ order, onClose, refetch }: Props) => {
       masterId: selectedMaster.id,
       date: timeUtils.convertLocalToUTC(selectedSlot),
     });
+  };
+
+  const handleSave = () => {
+    if (!selectedSlot) return;
+
+    const newStart = new Date(selectedSlot).getTime();
+    const newEnd = newStart + duration * 60_000;
+
+    const overlapping = (customerOrders ?? []).filter((o) => {
+      if (o.id === order.id) return false;
+      if (!['PENDING', 'CONFIRMED'].includes(o.status)) return false;
+      const oStart = new Date(o.date).getTime();
+      const oEnd = oStart + o.duration * 60_000;
+      return newStart < oEnd && newEnd > oStart;
+    });
+
+    if (overlapping.length > 0) {
+      const clientName = order.customer?.name ?? order.customer?.email ?? 'this client';
+      const conflictList = overlapping
+        .map((o) => {
+          const svcName = o.service?.name ?? o.combination?.name ?? 'another service';
+          const t = timeUtils.getTime(o.date);
+          return `"${svcName}" at ${t}`;
+        })
+        .join(', ');
+
+      setOverlapModal({
+        visible: true,
+        description: `Changing this booking will cause a time overlap for ${clientName} with: ${conflictList}. Do you want to proceed anyway?`,
+      });
+      return;
+    }
+
+    doSave();
   };
 
   const handleMasterSelect = (ids: number[]) => {
@@ -100,6 +143,16 @@ export const OrderEditContent = ({ order, onClose, refetch }: Props) => {
 
   return (
     <>
+      <ConfirmModal
+        visible={overlapModal.visible}
+        onClose={() => setOverlapModal({ visible: false, description: '' })}
+        title='Time overlap'
+        description={overlapModal.description}
+        onConfirmText='Proceed'
+        onCancelText='Cancel'
+        onConfirm={doSave}
+      />
+
       <MastersSheet
         visible={isMasterPickerVisible}
         onClose={() => setMasterPickerVisible(false)}

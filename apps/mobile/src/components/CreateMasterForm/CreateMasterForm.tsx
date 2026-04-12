@@ -2,7 +2,7 @@ import { Text, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 
 import { FILE_UPLOAD_TYPE_ENUM } from '@avoo/axios/types/apiEnums';
-import { filesHooks, masterHooks } from '@avoo/hooks';
+import { CreateMasterErrorType, filesHooks, masterHooks } from '@avoo/hooks';
 import { UploadFile } from '@avoo/shared';
 
 import { BottomSheetHeader } from '@/shared/BottomSheetHeader/BottomSheetHeader';
@@ -17,9 +17,15 @@ type Props = {
 };
 
 const CreateMasterForm = ({ onClose }: Props) => {
-  const { control, errors, handleSubmit, setValue, watch } = masterHooks.useCreateMasterForm({
-    onSuccess: onClose,
-  });
+  const { control, errors, handleSubmit, setValue, setError, watch } =
+    masterHooks.useCreateMasterForm({
+      onSuccess: onClose,
+      onError: (errorType) => {
+        if (errorType === CreateMasterErrorType.DuplicateEmail) {
+          setError('email', { message: 'This email is already in use' });
+        }
+      },
+    });
 
   const { uploadFile, isPending: isUploadingAvatar } = filesHooks.useUploadFile({
     onSuccess: (data) => {

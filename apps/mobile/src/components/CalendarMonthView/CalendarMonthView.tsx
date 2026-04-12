@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { ScrollView, View } from 'react-native';
 import { Text } from 'react-native-paper';
 
@@ -13,6 +13,7 @@ import { calendarUtils } from '@/utils/calendarUtils';
 import CalendarOrder, { CALENDAR_ORDER_VARIANT } from '../CalendarOrder/CalendarOrder';
 import { CalendarOverflowLabel } from '../CalendarOverflowLabel/CalendarOverflowLabel';
 import { calendarConfig } from '../CalendarSection/calendarConfig';
+import { OrderBottomSheet } from '../OrderBottomSheet/OrderBottomSheet';
 
 type Props = {
   appointments: Appointment[];
@@ -51,6 +52,7 @@ const rowStyles = tv({
 
 export const CalendarMonthView = (props: Props) => {
   const { appointments, month } = props;
+  const [selectedOrderId, setSelectedOrderId] = useState<number | null>(null);
   const days = calendarUtils.getMonthGridDays(month);
   const rows = calendarUtils.getMonthGridRows(days);
 
@@ -65,67 +67,74 @@ export const CalendarMonthView = (props: Props) => {
   }, [appointments]);
 
   return (
-    <ScrollView showsVerticalScrollIndicator={false} stickyHeaderIndices={[0]} className='flex-1'>
-      <View className='flex-row border-b border-gray-200 bg-white'>
-        {WEEK_DAYS.map((day) => (
-          <View key={day} className='flex-1 py-2 items-center'>
-            <Text variant='labelSmall' style={{ color: colors.gray[600] }}>
-              {day}
-            </Text>
-          </View>
-        ))}
-      </View>
-
-      <View>
-        {rows.map((row, rowIndex) => {
-          const isLastRow = rowIndex === rows.length - 1;
-          return (
-            <View key={`row-${rowIndex}`} className={rowStyles({ isLastRow })}>
-              {row.map((day, colIndex) => {
-                const dateKey = calendarUtils.toDateKeyLocal(day);
-                const dayAppointments = appointmentsByDate.get(dateKey) ?? [];
-                const isLastCol = colIndex === 6;
-
-                return (
-                  <View key={dateKey} className={cell({ hasRightBorder: !isLastCol })}>
-                    <View className={dayBadge({ isToday: calendarUtils.isToday(day) })}>
-                      <Text
-                        variant='labelSmall'
-                        style={{
-                          color: calendarUtils.isToday(day)
-                            ? colors.white
-                            : calendarUtils.isSameMonth(day, month)
-                              ? colors.gray[900]
-                              : colors.gray[400],
-                        }}
-                      >
-                        {day.getDate()}
-                      </Text>
-                    </View>
-
-                    {dayAppointments
-                      .slice(0, calendarConfig.monthView.maxEventsPerDay)
-                      .map((apt) => (
-                        <CalendarOrder
-                          key={apt.id}
-                          variant={CALENDAR_ORDER_VARIANT.MONTH}
-                          appointment={apt}
-                          onPress={() => {}}
-                        />
-                      ))}
-
-                    <CalendarOverflowLabel
-                      total={dayAppointments.length}
-                      maxShown={calendarConfig.monthView.maxEventsPerDay}
-                      style={{ marginTop: 2, fontSize: 9 }}
-                    />
-                  </View>
-                );
-              })}
+    <>
+      <OrderBottomSheet
+        visible={selectedOrderId !== null}
+        onClose={() => setSelectedOrderId(null)}
+        orderId={selectedOrderId}
+      />
+      <ScrollView showsVerticalScrollIndicator={false} stickyHeaderIndices={[0]} className='flex-1'>
+        <View className='flex-row border-b border-gray-200 bg-white'>
+          {WEEK_DAYS.map((day) => (
+            <View key={day} className='flex-1 py-2 items-center'>
+              <Text variant='labelSmall' style={{ color: colors.gray[600] }}>
+                {day}
+              </Text>
             </View>
-          );
-        })}
-      </View>
-    </ScrollView>
+          ))}
+        </View>
+
+        <View>
+          {rows.map((row, rowIndex) => {
+            const isLastRow = rowIndex === rows.length - 1;
+            return (
+              <View key={`row-${rowIndex}`} className={rowStyles({ isLastRow })}>
+                {row.map((day, colIndex) => {
+                  const dateKey = calendarUtils.toDateKeyLocal(day);
+                  const dayAppointments = appointmentsByDate.get(dateKey) ?? [];
+                  const isLastCol = colIndex === 6;
+
+                  return (
+                    <View key={dateKey} className={cell({ hasRightBorder: !isLastCol })}>
+                      <View className={dayBadge({ isToday: calendarUtils.isToday(day) })}>
+                        <Text
+                          variant='labelSmall'
+                          style={{
+                            color: calendarUtils.isToday(day)
+                              ? colors.white
+                              : calendarUtils.isSameMonth(day, month)
+                                ? colors.gray[900]
+                                : colors.gray[400],
+                          }}
+                        >
+                          {day.getDate()}
+                        </Text>
+                      </View>
+
+                      {dayAppointments
+                        .slice(0, calendarConfig.monthView.maxEventsPerDay)
+                        .map((apt) => (
+                          <CalendarOrder
+                            key={apt.id}
+                            variant={CALENDAR_ORDER_VARIANT.MONTH}
+                            appointment={apt}
+                            onPress={() => setSelectedOrderId(parseInt(apt.id, 10))}
+                          />
+                        ))}
+
+                      <CalendarOverflowLabel
+                        total={dayAppointments.length}
+                        maxShown={calendarConfig.monthView.maxEventsPerDay}
+                        style={{ marginTop: 2, fontSize: 9 }}
+                      />
+                    </View>
+                  );
+                })}
+              </View>
+            );
+          })}
+        </View>
+      </ScrollView>
+    </>
   );
 };

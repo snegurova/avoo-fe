@@ -51,7 +51,7 @@ export default function RegistrationForm() {
           placeholder='Enter your Name'
           error={errors.name?.message}
           hideErrorText
-          inputContainerStyle={{ minHeight: 44, paddingVertical: 10, borderRadius: 8 }}
+          inputContainerStyle={{ minHeight: 44, borderRadius: 8 }}
           autoCapitalize='words'
           keyboardType='default'
           placeholderTextColor='#4D5560'
@@ -66,7 +66,7 @@ export default function RegistrationForm() {
           placeholder='Email'
           error={errors.email?.message}
           hideErrorText
-          inputContainerStyle={{ minHeight: 44, paddingVertical: 10, borderRadius: 8 }}
+          inputContainerStyle={{ minHeight: 44, borderRadius: 8 }}
           keyboardType='email-address'
           autoCapitalize='none'
           autoCorrect={false}
@@ -82,7 +82,7 @@ export default function RegistrationForm() {
           placeholder='Password'
           error={errors.password?.message}
           hideErrorText
-          inputContainerStyle={{ minHeight: 44, paddingVertical: 10, borderRadius: 8 }}
+          inputContainerStyle={{ minHeight: 44, borderRadius: 8 }}
           secureTextEntry={!isShowPassword}
           accessoryRight={iconPassword}
           onAccessoryRightPress={toggleShowPassword}
@@ -101,7 +101,7 @@ export default function RegistrationForm() {
           placeholder='Confirm Password'
           error={errors.confirmPassword?.message}
           hideErrorText
-          inputContainerStyle={{ minHeight: 44, paddingVertical: 10, borderRadius: 8 }}
+          inputContainerStyle={{ minHeight: 44, borderRadius: 8 }}
           secureTextEntry={!isShowConfirmPassword}
           accessoryRight={iconConfirmPassword}
           onAccessoryRightPress={toggleConfirmPassword}
