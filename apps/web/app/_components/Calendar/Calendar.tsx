@@ -101,6 +101,7 @@ export default function Calendar(props: Props) {
   const setToDate = useCalendarStore((state) => state.setToDate);
   const masterIds = useCalendarStore((state) => state.masterIds);
   const statuses = useCalendarStore((state) => state.statuses);
+  const resetStorage = useCalendarStore((state) => state.resetStorage);
   const orderIsOutOfSchedule = useCalendarStore((state) => state.orderIsOutOfSchedule);
   const type = useCalendarStore((state) => state.type);
   const [params, setParams] = useState<PrivateCalendarQueryParams>({
@@ -111,6 +112,12 @@ export default function Calendar(props: Props) {
   const [selectedOrder, setSelectedOrder] = useState<PrivateEvent | null>(null);
   const router = useRouter();
   const searchParams = useSearchParams();
+
+  useEffect(() => {
+    if (calendarType !== CalendarType.SELECTOR) {
+      resetStorage();
+    }
+  }, []);
 
   useEffect(() => {
     setParams((prev) => ({
@@ -171,14 +178,13 @@ export default function Calendar(props: Props) {
 
   useEffect(() => {
     if (
-      calendarType !== CalendarType.REGULAR ||
       type === CalendarViewType.MONTH ||
       (type === CalendarViewType.WEEK && filteredMasters.length !== 1)
     )
       return;
 
     const date = searchParams.get(OrderQueryParams.Date);
-    if (date) {
+    if (date && calendarType === CalendarType.REGULAR) {
       const parsedDate = timeUtils.toDayBegin(new Date(date));
       setDate(parsedDate);
       setToDate(timeUtils.toDayEnd(parsedDate));
@@ -187,6 +193,17 @@ export default function Calendar(props: Props) {
         router.replace(calendarPath);
       }
 
+      if (!scrollRef.current) return;
+
+      let scrollOptions: ScrollOptions = {
+        behavior: 'smooth',
+        top:
+          timeUtils.getMinutesInDay(date) * PX_IN_MINUTE -
+          (scrollRef.current.clientHeight - 76) / 2,
+      };
+
+      scrollRef.current.scrollTo(scrollOptions);
+    } else if (date && calendarType === CalendarType.SELECTOR) {
       if (!scrollRef.current) return;
 
       let scrollOptions: ScrollOptions = {

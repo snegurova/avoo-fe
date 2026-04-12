@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl';
 import { tv } from 'tailwind-variants';
 
 import { CalendarItem, MasterWithRelationsEntity, PrivateEvent } from '@avoo/axios/types/apiTypes';
+import { calendarHooks } from '@avoo/hooks';
 import { CalendarType } from '@avoo/hooks/types/calendarType';
 import { CalendarViewType } from '@avoo/hooks/types/calendarViewType';
 import { timeUtils } from '@avoo/shared';
@@ -135,6 +136,7 @@ export default function CalendarColumn(props: Props) {
   const t = useTranslations('private.components.CalendarColumn.CalendarColumn');
 
   const [showEvents, setShowEvents] = useState<number>(1);
+  const { getAvailableDate } = calendarHooks.useGetPrivateAvailability();
 
   const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
     if (!ref.current) return;
@@ -181,7 +183,7 @@ export default function CalendarColumn(props: Props) {
 
   const orderCreatePath = localizationHooks.useWithLocale(AppRoutes.OrderCreate);
 
-  const onAvailableTimeClick = (e: React.MouseEvent<HTMLDivElement>) => {
+  const onAvailableTimeClick = async (e: React.MouseEvent<HTMLDivElement>) => {
     if (!availableBooking) return;
     const parent = e.currentTarget.parentElement;
     if (!parent) return;
@@ -221,10 +223,22 @@ export default function CalendarColumn(props: Props) {
       setMasterIds([master.id]);
       setType(CalendarViewType.DAY);
 
+      const params: {
+        rangeFromTime: string;
+        masterIds?: number[];
+        serviceId?: number;
+        combinationId?: number;
+        index: number;
+      } = {
+        rangeFromTime: timeUtils.formatDateTimeRounded(date, hours * 60 + mins),
+        masterIds: [master.id],
+        index: 0,
+      };
+
+      const availableDate = await getAvailableDate(params);
+
       router.push(
-        `${orderCreatePath}?masterId=${master.id}&date=${encodeURIComponent(
-          timeUtils.formatDateTimeRounded(date, hours * 60 + mins),
-        )}`,
+        `${orderCreatePath}?masterId=${master.id}${availableDate ? `&date=${encodeURIComponent(availableDate)}` : ''}`,
       );
     }
   };

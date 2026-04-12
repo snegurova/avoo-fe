@@ -141,7 +141,7 @@ export default function ServiceFormItem(props: Props) {
     const allServices = (data?.pages.flatMap((page) => page?.data?.items) || []).filter(
       (item): item is Service => item !== undefined,
     );
-    // Exclude services already selected, except the current one
+
     const selectedIds = selectedServices.filter((s, i) => s && i !== index).map((s) => s!.id);
     return allServices.filter((service) => !selectedIds.includes(service.id));
   }, [data, selectedServices, index]);
@@ -238,12 +238,13 @@ export default function ServiceFormItem(props: Props) {
     onChange(newOrders);
 
     setSelectedService(newService);
+
     setMasterParams((prev) => ({
       ...prev,
       serviceId: newService?.id || undefined,
     }));
 
-    if (isActive) {
+    if (isActive && !selectedMasters[index]) {
       const masterIdsProvideService = newService?.masters.map((master) => master.id) || undefined;
       setMasterIdsInStore(masterIdsProvideService);
     }
