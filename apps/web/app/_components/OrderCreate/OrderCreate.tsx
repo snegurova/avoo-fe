@@ -59,7 +59,6 @@ export default function OrderCreate() {
   const slots = useCalendarStore((state) => state.slots);
   const setSlots = useCalendarStore((state) => state.setSlots);
 
-  const orderCreatePath = localizationHooks.useWithLocale(AppRoutes.OrderCreate);
   const calendarPath = localizationHooks.useWithLocale(AppRoutes.Calendar);
 
   const { getAvailableDate } = calendarHooks.useGetPrivateAvailability();
@@ -101,12 +100,6 @@ export default function OrderCreate() {
     };
     checkAndSetDate();
   }, [initialParams.date, initialParams.masterId]);
-
-  useEffect(() => {
-    if (searchParams.toString()) {
-      router.replace(orderCreatePath);
-    }
-  }, []);
 
   const {
     control,
