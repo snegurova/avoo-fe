@@ -47,7 +47,7 @@ const image = tv({
 });
 
 const modal = tv({
-  base: 'relative bg-white md:rounded-[18px] w-full h-full md:w-[calc(100%-1rem)] xl:w-[calc(100%-10rem)] md:h-[calc(100%-2rem)] max-w-7xl pb-5 md:p-11 flex flex-col items-center gap-4 xl:gap-6 overflow-auto',
+  base: 'relative bg-white md:rounded-[18px]  pb-5 md:p-11 flex flex-col items-center gap-4 xl:gap-6 overflow-auto w-full h-full',
   variants: {
     withImages: {
       true: '',
@@ -152,7 +152,7 @@ export default function GalleryModal(props: Props) {
       className='fixed inset-0 z-50 flex items-center justify-center bg-black/50'
       onClick={handleOverlayClick}
     >
-      <div className={modal({ withImages: !!images })}>
+      <div className='relative w-full h-full md:w-[calc(100%-1rem)] xl:w-[calc(100%-10rem)] md:h-[calc(100%-2rem)] max-w-7xl'>
         {onClose && (
           <button
             className='absolute top-3 right-3 md:top-1.5 md:right-1.5 cursor-pointer w-11 h-11  rounded-full transition-colors hover:bg-gray-100 focus:bg-gray-100 flex items-center justify-center z-1 bg-white '
@@ -162,59 +162,61 @@ export default function GalleryModal(props: Props) {
             <CloseIcon className='fill-black' />
           </button>
         )}
-        {images && (
-          <div
-            className={imageWrapper({ fullImages })}
-            ref={imageAreaRef}
-            style={{ touchAction: 'pan-y' }}
-          >
-            <button
-              className='disabled:opacity-30 absolute left-5.5 cursor-pointer top-1/2 -translate-y-1/2 rounded-full bg-white border border-black transition-colors hover:bg-gray-100 focus:bg-gray-100 w-11 h-11 flex items-center justify-center'
-              onClick={handlePrev}
-              disabled={current === 0}
-              aria-label='Previous image'
+        <div className={modal({ withImages: !!images })}>
+          {images && (
+            <div
+              className={imageWrapper({ fullImages })}
+              ref={imageAreaRef}
+              style={{ touchAction: 'pan-y' }}
             >
-              <ArrowReturnBackIcon className='2xl:w-7 2xl:h-7' />
-            </button>
-            <img
-              src={images[current].url}
-              alt={`Image ${current + 1}`}
-              className={image({ fullImages })}
-            />
-            <button
-              className='disabled:opacity-30 absolute right-5.5 cursor-pointer top-1/2 -translate-y-1/2 rounded-full bg-white border border-black transition-colors hover:bg-gray-100 focus:bg-gray-100 w-11 h-11 flex items-center justify-center'
-              onClick={handleNext}
-              disabled={current === images.length - 1}
-              aria-label='Next image'
-            >
-              <ArrowReturnBackIcon className='rotate-180 2xl:w-7 2xl:h-7' />
-            </button>
-          </div>
-        )}
-        {images && (
-          <div
-            className='flex gap-0.5 md:gap-1.5 overflow-x-auto w-full px-2 shrink-0'
-            ref={thumbnailsRef}
-            style={{ scrollSnapType: 'x mandatory' }}
-          >
-            {images.map((img, idx) => (
               <button
-                key={img.url + idx}
-                className={thumbnail({ active: idx === current })}
-                onClick={() => handleThumbnailClick(idx)}
-                aria-label={`Show image ${idx + 1}`}
-                style={{ scrollSnapAlign: 'center', flex: '0 0 auto' }}
+                className='disabled:opacity-30 absolute left-5.5 cursor-pointer top-1/2 -translate-y-1/2 rounded-full bg-white border border-black transition-colors hover:bg-gray-100 focus:bg-gray-100 w-11 h-11 flex items-center justify-center'
+                onClick={handlePrev}
+                disabled={current === 0}
+                aria-label='Previous image'
               >
-                <img
-                  src={img.url}
-                  alt={`Thumbnail ${idx + 1}`}
-                  className={thumbnailImage({ fullImages })}
-                />
+                <ArrowReturnBackIcon className='2xl:w-7 2xl:h-7' />
               </button>
-            ))}
-          </div>
-        )}
-        {children && <div className='w-full'>{children}</div>}
+              <img
+                src={images[current].url}
+                alt={`Image ${current + 1}`}
+                className={image({ fullImages })}
+              />
+              <button
+                className='disabled:opacity-30 absolute right-5.5 cursor-pointer top-1/2 -translate-y-1/2 rounded-full bg-white border border-black transition-colors hover:bg-gray-100 focus:bg-gray-100 w-11 h-11 flex items-center justify-center'
+                onClick={handleNext}
+                disabled={current === images.length - 1}
+                aria-label='Next image'
+              >
+                <ArrowReturnBackIcon className='rotate-180 2xl:w-7 2xl:h-7' />
+              </button>
+            </div>
+          )}
+          {images && (
+            <div
+              className='flex gap-0.5 md:gap-1.5 overflow-x-auto w-full px-2 shrink-0'
+              ref={thumbnailsRef}
+              style={{ scrollSnapType: 'x mandatory' }}
+            >
+              {images.map((img, idx) => (
+                <button
+                  key={img.url + idx}
+                  className={thumbnail({ active: idx === current })}
+                  onClick={() => handleThumbnailClick(idx)}
+                  aria-label={`Show image ${idx + 1}`}
+                  style={{ scrollSnapAlign: 'center', flex: '0 0 auto' }}
+                >
+                  <img
+                    src={img.url}
+                    alt={`Thumbnail ${idx + 1}`}
+                    className={thumbnailImage({ fullImages })}
+                  />
+                </button>
+              ))}
+            </div>
+          )}
+          {children && <div className='w-full'>{children}</div>}
+        </div>
       </div>
     </div>
   );
