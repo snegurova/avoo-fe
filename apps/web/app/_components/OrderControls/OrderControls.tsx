@@ -39,7 +39,7 @@ export default function OrderControls(props: Props) {
 
   return (
     <div className='mb-4'>
-      <div className='gap-y-2 px-5 pt-4 md:px-11 md:pt-14 pb-4'>
+      <div className='gap-y-2 px-5 pt-4 md:px-11 pb-4'>
         <div className='flex flex-row gap-2 w-full items-center justify-between'>
           <Typography component='h1' variant='h1'>
             {t('orders')}

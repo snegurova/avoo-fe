@@ -5,6 +5,7 @@ import {
   GetMastersQueryParams,
   GetMastersResponse,
   MasterWithRelationsEntityResponse,
+  UpdateMasterRequest,
 } from '@avoo/axios/types/apiTypes';
 
 const MASTERS_ENDPOINT = '/masters/';
@@ -24,7 +25,7 @@ export const masterApi = {
     );
     return response.data;
   },
-  async updateMaster(id: number, data: CreateMasterRequest) {
+  async updateMaster(id: number, data: UpdateMasterRequest) {
     const response = await apiClient.put<BaseResponse<MasterWithRelationsEntityResponse>>(
       `${MASTERS_ENDPOINT}${id}`,
       data,

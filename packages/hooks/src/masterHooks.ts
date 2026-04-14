@@ -20,6 +20,7 @@ import {
   GetMastersQueryParams,
   GetMastersResponse,
   MasterWithRelationsEntityResponse,
+  UpdateMasterRequest,
 } from '@avoo/axios/types/apiTypes';
 import { utils } from '@avoo/hooks/utils/utils';
 import { Option } from '@avoo/shared';
@@ -58,6 +59,74 @@ const getCreateMasterErrorType = (error: ErrorResponse): CreateMasterErrorType =
 type UseUpdateMasterFormParams = {
   master: MasterWithRelationsEntityResponse;
   onSuccess?: () => void;
+};
+
+const normalizeStringValue = (value: string | null | undefined) => {
+  if (value == null) return null;
+  const trimmed = value.trim();
+  return trimmed.length > 0 ? trimmed : null;
+};
+
+const normalizeLanguagesValue = (
+  value: MasterWithRelationsEntityResponse['languages'] | CreateMasterFormData['languages'],
+) => (Array.isArray(value) ? value : []);
+
+const areLanguagesEqual = (
+  current: MasterWithRelationsEntityResponse['languages'] | CreateMasterFormData['languages'],
+  initial: MasterWithRelationsEntityResponse['languages'] | CreateMasterFormData['languages'],
+) => {
+  const currentValue = normalizeLanguagesValue(current);
+  const initialValue = normalizeLanguagesValue(initial);
+  return (
+    currentValue.length === initialValue.length &&
+    currentValue.every((language, index) => language === initialValue[index])
+  );
+};
+
+const buildUpdateMasterPayload = (
+  data: CreateMasterFormData,
+  master: MasterWithRelationsEntityResponse,
+): UpdateMasterRequest => {
+  const payload: UpdateMasterRequest = {
+    email: data.email,
+    name: data.name,
+  };
+
+  const nextHeadline = normalizeStringValue(data.headline);
+  const initialHeadline = normalizeStringValue(master.headline);
+  if (nextHeadline !== initialHeadline) {
+    payload.headline = nextHeadline;
+  }
+
+  const nextBio = normalizeStringValue(data.bio);
+  const initialBio = normalizeStringValue(master.bio);
+  if (nextBio !== initialBio) {
+    payload.bio = nextBio;
+  }
+
+  const nextPhone = normalizeStringValue(data.phone);
+  const initialPhone = normalizeStringValue(master.phone);
+  if (nextPhone !== initialPhone) {
+    payload.phone = nextPhone;
+  }
+
+  const nextAvatarUrl = normalizeStringValue(data.avatarUrl);
+  const initialAvatarUrl = normalizeStringValue(master.avatarUrl);
+  if (nextAvatarUrl !== initialAvatarUrl) {
+    payload.avatarUrl = nextAvatarUrl;
+  }
+
+  const nextAvatarPreviewUrl = normalizeStringValue(data.avatarPreviewUrl);
+  const initialAvatarPreviewUrl = normalizeStringValue(master.avatarPreviewUrl);
+  if (nextAvatarPreviewUrl !== initialAvatarPreviewUrl) {
+    payload.avatarPreviewUrl = nextAvatarPreviewUrl;
+  }
+
+  if (!areLanguagesEqual(data.languages, master.languages)) {
+    payload.languages = normalizeLanguagesValue(data.languages);
+  }
+
+  return payload;
 };
 
 export const masterHooks = {
@@ -250,9 +319,10 @@ export const masterHooks = {
     const { mutate: updateMasterMutation, isPending } = useMutation<
       BaseResponse<MasterWithRelationsEntityResponse>,
       Error,
-      CreateMasterRequest
+      CreateMasterFormData
     >({
-      mutationFn: (data: CreateMasterRequest) => masterApi.updateMaster(master.id, data),
+      mutationFn: (data: CreateMasterFormData) =>
+        masterApi.updateMaster(master.id, buildUpdateMasterPayload(data, master)),
       meta: {
         successMessage: 'Master updated successfully',
       },
@@ -266,7 +336,7 @@ export const masterHooks = {
     return {
       control,
       handleSubmit: handleSubmit(
-        utils.submitAdapter<CreateMasterRequest, CreateMasterFormData>(updateMasterMutation),
+        utils.submitAdapter<CreateMasterFormData, CreateMasterFormData>(updateMasterMutation),
       ),
       setValue,
       watch,

@@ -56,7 +56,7 @@ export default function MastersPage() {
 
   return (
     <AppWrapper>
-      <div className='flex-1 min-h-0 overflow-auto lg:overflow-hidden hide-scrollbar flex flex-col'>
+      <div className='flex-1 min-h-0 overflow-y-auto overflow-x-hidden lg:overflow-hidden hide-scrollbar flex flex-col'>
         <Controls
           title={t('masters')}
           onAddItem={handleAddMaster}
@@ -65,10 +65,10 @@ export default function MastersPage() {
           onSearchChange={setSearchQuery}
           placeholder={t('searchNamePhoneEmail')}
           variant={ControlsVariant.Default}
-          className='sticky top-0 z-10 bg-white px-5 md:px-11 lg:px-11 pt-6 lg:pt-14 lg:pb-8'
+          className='sticky top-0 z-10 bg-white px-5 md:px-11 lg:px-5 xl:px-11 pt-4 lg:pb-8'
         />
 
-        <div className='px-5 md:px-11 pb-11 lg:flex-1 lg:min-h-0 lg:overflow-hidden'>
+        <div className='px-5 md:px-11 lg:px-5 xl:px-11 pb-11 lg:flex-1 lg:min-h-0 lg:overflow-hidden overflow-x-hidden'>
           <MasterList
             masters={filtered}
             onEdit={handleEditMaster}

@@ -16,7 +16,7 @@ export default function CreateOrderPage() {
 
   return (
     <AppWrapper>
-      <div className='px-4 lg:pr-30 py-3 flex gap-4 items-center justify-between'>
+      <div className='px-4 lg:pr-30 py-4 flex gap-4 items-center justify-between'>
         <Typography component='h1' variant='h1'>
           {t('title')}
         </Typography>

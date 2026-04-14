@@ -17,7 +17,7 @@ const controlsContainer = tv({
   variants: {
     variant: {
       [ControlsVariant.Default]: 'pt-4 pb-4 lg:p-4 flex flex-wrap items-center gap-y-3',
-      [ControlsVariant.StackedSearch]: 'w-full flex flex-col gap-3 pt-8 pb-8 lg:p-4',
+      [ControlsVariant.StackedSearch]: 'w-full flex flex-col gap-3 px-4 lg:p-4',
     },
   },
   defaultVariants: {

@@ -86,7 +86,7 @@ export default function TimeOffPage() {
           onSearchChange={setSearchQuery}
           placeholder={t('searchByMasterName')}
           variant={ControlsVariant.StackedSearch}
-          className='sticky top-0 z-10 bg-white px-5 md:px-11 lg:px-11 pt-6 lg:pt-14 lg:pb-8'
+          className='sticky top-0 z-10 bg-white px-5 md:px-11 lg:px-11 pt-4 lg:pb-8'
         />
 
         <div className='px-5 md:px-11 pb-11 lg:flex-1 lg:min-h-0 lg:overflow-hidden'>

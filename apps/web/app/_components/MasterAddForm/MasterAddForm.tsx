@@ -97,110 +97,109 @@ export default function MasterAddForm() {
   );
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className='flex-1 flex flex-col md:flex-row md:flex-wrap gap-6 md:gap-8 lg:gap-6 min-h-0'
-    >
-      <div className='flex-1 max-w-4xl space-y-6 md:space-y-8 xl:mx-auto'>
-        <Typography sx={{ fontSize: 16, fontWeight: 500 }}>{t('personalInfo')}</Typography>
-        <div className='flex items-center gap-4 py-8 md:py-6'>
-          <AvatarUpload
-            imageUri={null}
-            isLoading={false}
-            size={AvatarSize.XLARGE}
-            onAvatarSave={onAvatarSave}
-            showEditIcon
-          />
-        </div>
-
-        <div className='grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8 lg:gap-x-6 lg:gap-y-8'>
-          <div>
-            <label htmlFor='name' className='text-sm block mb-1'>
-              {t('displayName')}
-            </label>
-            <FormInput id='name' {...nameField} value={nameField.value ?? ''} />
-          </div>
-
-          <div>
-            <label htmlFor='headline' className='text-sm block mb-1'>
-              {t('headline')}
-            </label>
-            <FormInput id='headline' {...headlineField} value={headlineField.value ?? ''} />
-          </div>
-        </div>
-
-        <div className='grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8 lg:gap-x-6 lg:gap-y-8'>
-          <div>
-            <label htmlFor='email' className='text-sm block mb-1'>
-              {t('email')}
-            </label>
-            <FormInput
-              id='email'
-              type='email'
-              {...emailField}
-              value={emailField.value ?? ''}
-              onChange={handleEmailChange}
-              error={errors.email?.message}
+    <form onSubmit={handleSubmit} className='flex-1 flex flex-col min-h-0'>
+      <div className='flex-1 min-h-0 overflow-y-auto overflow-x-hidden pr-4 -mr-4'>
+        <div className='space-y-6 md:space-y-8 pb-2'>
+          <Typography sx={{ fontSize: 16, fontWeight: 500 }}>{t('personalInfo')}</Typography>
+          <div className='flex items-center gap-4 py-8 md:py-6'>
+            <AvatarUpload
+              imageUri={null}
+              isLoading={false}
+              size={AvatarSize.XLARGE}
+              onAvatarSave={onAvatarSave}
+              showEditIcon
             />
           </div>
 
-          <div>
-            <label htmlFor='phone' className='text-sm block mb-1'>
-              {t('phone')}
-            </label>
-            <div className='flex items-stretch gap-3'>
-              <div className='w-[84px] flex-shrink-0'>
-                <PhoneCodeSelect
-                  id='phone-code'
-                  value={countryCode}
-                  onChange={handlePhoneCodeChange}
-                />
-              </div>
+          <div className='grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8 lg:gap-x-6 lg:gap-y-8'>
+            <div>
+              <label htmlFor='name' className='text-sm block mb-1'>
+                {t('displayName')}
+              </label>
+              <FormInput id='name' {...nameField} value={nameField.value ?? ''} />
+            </div>
 
-              <div className='flex-1'>
-                <FormInput
-                  id='phone'
-                  type='tel'
-                  value={phoneNumber}
-                  onChange={handlePhoneNumberChange}
-                  onBlur={phoneField.onBlur}
-                />
+            <div>
+              <label htmlFor='headline' className='text-sm block mb-1'>
+                {t('headline')}
+              </label>
+              <FormInput id='headline' {...headlineField} value={headlineField.value ?? ''} />
+            </div>
+          </div>
+
+          <div className='grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8 lg:gap-x-6 lg:gap-y-8'>
+            <div>
+              <label htmlFor='email' className='text-sm block mb-1'>
+                {t('email')}
+              </label>
+              <FormInput
+                id='email'
+                type='email'
+                {...emailField}
+                value={emailField.value ?? ''}
+                onChange={handleEmailChange}
+                error={errors.email?.message}
+              />
+            </div>
+
+            <div>
+              <label htmlFor='phone' className='text-sm block mb-1'>
+                {t('phone')}
+              </label>
+              <div className='flex items-stretch gap-3'>
+                <div className='w-[84px] flex-shrink-0'>
+                  <PhoneCodeSelect
+                    id='phone-code'
+                    value={countryCode}
+                    onChange={handlePhoneCodeChange}
+                  />
+                </div>
+
+                <div className='flex-1'>
+                  <FormInput
+                    id='phone'
+                    type='tel'
+                    value={phoneNumber}
+                    onChange={handlePhoneNumberChange}
+                    onBlur={phoneField.onBlur}
+                  />
+                </div>
               </div>
             </div>
           </div>
-        </div>
 
-        <div>
-          <FormTextarea
-            id='bio'
-            name={bioField.name}
-            value={bioField.value ?? ''}
-            onChange={bioField.onChange}
-            onBlur={bioField.onBlur}
-            ref={bioField.ref}
-            label={t('about')}
-            helperText={t('infoDisplayPlatform')}
-            maxLength={200}
-            classNames={{
-              textarea:
-                'block w-full text-sm text-gray-600 border border-gray-200 p-3 rounded-lg min-h-[70px] focus:outline-none focus:ring-1 focus:ring-purple-800',
-            }}
+          <div>
+            <FormTextarea
+              id='bio'
+              name={bioField.name}
+              value={bioField.value ?? ''}
+              onChange={bioField.onChange}
+              onBlur={bioField.onBlur}
+              ref={bioField.ref}
+              label={t('about')}
+              helperText={t('infoDisplayPlatform')}
+              maxLength={200}
+              classNames={{
+                textarea:
+                  'block w-full text-sm text-gray-600 border border-gray-200 p-3 rounded-lg min-h-[70px] focus:outline-none focus:ring-1 focus:ring-purple-800',
+              }}
+            />
+          </div>
+
+          <label htmlFor='languages' className='text-sm block mb-1'>
+            {t('languages')}
+          </label>
+          <p className='text-xs text-gray-500'>{t('addLanguagesOffer')}</p>
+          <FormLanguageSearch
+            name={languagesField.name}
+            control={control}
+            className='w-full'
+            error={languagesFieldState.error?.message}
           />
         </div>
-
-        <label htmlFor='languages' className='text-sm block mb-1'>
-          {t('languages')}
-        </label>
-        <p className='text-xs text-gray-500'>{t('addLanguagesOffer')}</p>
-        <FormLanguageSearch
-          name={languagesField.name}
-          control={control}
-          className='w-full'
-          error={languagesFieldState.error?.message}
-        />
       </div>
 
-      <div className='w-full mt-auto flex justify-center md:justify-end items-end gap-6 md:gap-8'>
+      <div className='w-full mt-6 flex justify-between md:justify-end items-end gap-6 md:gap-8'>
         <Button
           onClick={onCancel}
           color='secondary'
