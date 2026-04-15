@@ -109,15 +109,43 @@ const icon = tv({
   },
 });
 
+const iconErrorWrapper = tv({
+  base: 'shrink-0 rounded-full',
+  variants: {
+    status: {
+      [OrderStatus.PENDING]: 'bg-orange-50',
+      [OrderStatus.CONFIRMED]: 'bg-blue-50',
+      [OrderStatus.COMPLETED]: 'bg-purple-50',
+    },
+  },
+});
+
 const iconError = tv({
   base: 'shrink-0 fill-red-800',
   variants: {
     type: {
-      [CalendarViewType.DAY]: 'w-3 h-3 lg:w-4.5 lg:h-4.5',
+      [CalendarViewType.DAY]: 'w-3 h-3',
       [CalendarViewType.WEEK]: 'w-3 h-3',
       [CalendarViewType.MONTH]: 'w-3 h-3',
     },
+    calendarType: {
+      [CalendarType.WIDGET]: '',
+      [CalendarType.REGULAR]: '',
+      [CalendarType.SELECTOR]: '',
+    },
   },
+  compoundVariants: [
+    {
+      calendarType: CalendarType.WIDGET,
+      type: CalendarViewType.DAY,
+      className: 'xl:w-4.5 xl:h-4.5',
+    },
+    {
+      calendarType: CalendarType.REGULAR,
+      type: CalendarViewType.DAY,
+      className: ' lg:w-4.5 lg:h-4.5',
+    },
+  ],
 });
 
 export default function CalendarEvent(props: Props) {
@@ -131,6 +159,17 @@ export default function CalendarEvent(props: Props) {
   };
 
   const desktop = useMediaQuery('(min-width:1024px)');
+  const largeDesktop = useMediaQuery('(min-width:1280px)');
+
+  const showSmallIcons = React.useMemo(() => {
+    if (calendarType === CalendarType.SELECTOR) {
+      return true;
+    }
+    if (calendarType === CalendarType.WIDGET) {
+      return !largeDesktop;
+    }
+    return !desktop;
+  }, [calendarType, desktop, largeDesktop]);
 
   return (
     <>
@@ -157,16 +196,20 @@ export default function CalendarEvent(props: Props) {
             })}
             onClick={onEventClick}
           >
-            <div className='hidden lg:flex absolute top-0.5 right-0.5 items-center gap-1 pointer-events-none'>
-              {type === CalendarViewType.DAY && event.isOutOfSchedule && (
-                <ErrorIcon className={iconError({ type })} />
-              )}
-              {type === CalendarViewType.DAY && event.status === OrderStatus.PENDING && (
-                <OrderStatusChip status={event.status} />
-              )}
-            </div>
-            {(type !== CalendarViewType.DAY || !desktop) && (
-              <div className='flex gap-0.5  pointer-events-none'>
+            {!showSmallIcons && (
+              <div className='hidden lg:flex absolute top-0.5 right-0.5 items-center gap-1 pointer-events-none'>
+                {type === CalendarViewType.DAY && event.isOutOfSchedule && (
+                  <div className={iconErrorWrapper({ status: event.status })}>
+                    <ErrorIcon className={iconError({ type, calendarType })} />
+                  </div>
+                )}
+                {type === CalendarViewType.DAY && event.status === OrderStatus.PENDING && (
+                  <OrderStatusChip status={event.status} />
+                )}
+              </div>
+            )}
+            {(type !== CalendarViewType.DAY || showSmallIcons) && (
+              <div className='flex gap-0.5 pointer-events-none'>
                 {event.status === OrderStatus.PENDING && (
                   <SearchActivity className={icon({ status: event.status })} />
                 )}
@@ -177,9 +220,9 @@ export default function CalendarEvent(props: Props) {
                   <CheckCircle className={icon({ status: event.status })} />
                 )}
                 {type === CalendarViewType.DAY && event.isOutOfSchedule && (
-                  <ErrorIcon className={iconError({ type })} />
+                  <ErrorIcon className={iconError({ type, calendarType })} />
                 )}
-                {type === CalendarViewType.DAY && !desktop && (
+                {type === CalendarViewType.DAY && showSmallIcons && (
                   <span className='text-xs font-medium text-inherit text-start leading-[1.15]'>
                     {timeUtils.getTime(event.start)}
                   </span>
@@ -187,7 +230,7 @@ export default function CalendarEvent(props: Props) {
               </div>
             )}
             <div className={textWrapper({ type, calendarType })}>
-              {(type !== CalendarViewType.DAY || desktop) && (
+              {(type !== CalendarViewType.DAY || !showSmallIcons) && (
                 <span className='text-xs font-medium text-inherit text-start leading-[1.15]'>
                   {timeUtils.getTime(event.start)}
                 </span>
@@ -199,7 +242,7 @@ export default function CalendarEvent(props: Props) {
               )}
             </div>
             {type === CalendarViewType.DAY && (
-              <h3 className='text-xs font-inherit text-inherit leading-[1.15] text-start  pointer-events-none'>
+              <h3 className='text-xs font-inherit text-inherit leading-[1.15] text-start pointer-events-none'>
                 {event.title}
               </h3>
             )}
