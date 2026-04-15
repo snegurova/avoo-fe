@@ -66,6 +66,7 @@ export default function LanguageSwitcher({ type = 'private' }: Props) {
   const options = useMemo(() => {
     return SUPPORTED_LOCALES.map((locale) => ({
       label: t(locale as Parameters<typeof t>[0]),
+      value: locale,
       handler: () => handleLocaleChange(locale),
     }));
   }, [SUPPORTED_LOCALES]);
@@ -92,7 +93,7 @@ export default function LanguageSwitcher({ type = 'private' }: Props) {
         {t(currLocale as Parameters<typeof t>[0])}
       </button>
       {isOpen && (
-        <div className='absolute top-full w-full overflow-hidden rounded-xl z-15 right-0 bg-white border border-gray-200 flex flex-col'>
+        <div className='absolute top-full w-full overflow-hidden rounded-xl z-15 right-0 bg-white border border-gray-200 flex flex-col p-1'>
           {options.map((option, index) => (
             <button
               key={`language-option-${index}`}
@@ -106,6 +107,9 @@ export default function LanguageSwitcher({ type = 'private' }: Props) {
               }}
               className={button({ type })}
               tabIndex={0}
+              style={{
+                display: currLocale.toLowerCase() === option.value.toLowerCase() ? 'none' : 'block',
+              }}
             >
               {option.label}
             </button>

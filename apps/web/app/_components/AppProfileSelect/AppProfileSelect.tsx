@@ -32,7 +32,11 @@ export default function AppProfileSelect() {
 
   return (
     <div className='relative select-profile-container'>
-      <button type='button' className='rounded-full cursor-pointer' onClick={toggleOpen}>
+      <button
+        type='button'
+        className='rounded-full cursor-pointer flex items-center justify-center border border-gray-200'
+        onClick={toggleOpen}
+      >
         <Avatar
           name={visualProfileInfo.name}
           size={AvatarSize.Large}

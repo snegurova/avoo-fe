@@ -14,23 +14,23 @@ type Props = {
 };
 
 export default function AuthorizationWrapper(props: Props) {
-  const tCommon = useTranslations('private.components.AuthorizationWrapper.AuthorizationWrapper');
+  const tCommon = useTranslations('common');
   const t = useTranslations('public.authorizationWrapper.index');
   const { children, title, description } = props;
 
   return (
     <div className='grid md:grid-cols-[480px_1fr] lg:grid-cols-2 h-screen'>
-      <div className='flex justify-end h-full'>
-        <div className='px-5 xl:px-10 2xl:px-15 py-6 flex flex-col justify-between gap-12 h-full w-full max-w-180 '>
+      <div className='flex h-full'>
+        <div className='px-5 lg:px-8 2xl:px-15 pt-9 pb-6 flex flex-col justify-between gap-12 h-full w-full max-w-180'>
           <div className=''>
             <LocalizedLink
               href={AppRoutes.Home}
               className='font-semibold text-4xl text-gray-600 inline-flex items-center font-advent-pro text-center'
             >
-              {tCommon('avooCaps')}
+              {tCommon('avoo')}
             </LocalizedLink>
           </div>
-          <div className='flex flex-col justify-center xl:px-5 2xl:px-15 w-full'>
+          <div className='flex flex-col justify-center xl:px-5 lg:px-8 2xl:px-15 w-full'>
             <div className={`w-full ${description ? 'mb-8 2xl:mb-14' : 'mb-6'}`}>
               <h1 className='text-center text-xl xl:text-3xl font-medium tracking-tight '>
                 {title}
@@ -63,7 +63,7 @@ export default function AuthorizationWrapper(props: Props) {
       >
         <div className='px-8 text-center'>
           <p className='text-8xl xl:text-[8.375rem] font-advent-pro font-medium text-fuchsia-50 mb-7 leading-none'>
-            {tCommon('avooCaps')}
+            {tCommon('avoo')}
           </p>
           <p className='font-montserrat font-medium text-2xl text-fuchsia-50 capitalize'>
             {t('slogan')}
