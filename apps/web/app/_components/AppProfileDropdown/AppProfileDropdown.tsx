@@ -54,7 +54,7 @@ export default function AppProfileDropdown(props: Props) {
           </p>
         </div>
       </div>
-      <div className='border-b border-primary-100'>
+      <div className='border-b border-primary-100 py-1'>
         {links.map((option, index) => (
           <Link
             key={`profile-menu-${index}`}
@@ -68,7 +68,7 @@ export default function AppProfileDropdown(props: Props) {
           </Link>
         ))}
       </div>
-      <div className='border-b border-primary-100'>
+      <div className='border-b border-primary-100 py-1'>
         <button
           type='button'
           className={button()}
@@ -80,7 +80,7 @@ export default function AppProfileDropdown(props: Props) {
           {t('logout')}
         </button>
       </div>
-      <div className=''>
+      <div className='pt-1'>
         <LanguageSwitcher />
       </div>
     </div>

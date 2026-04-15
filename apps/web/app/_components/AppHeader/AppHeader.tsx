@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useMemo } from 'react';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 
@@ -8,7 +9,6 @@ import { userHooks } from '@avoo/hooks';
 
 import AppProfileSelect from '@/_components/AppProfileSelect/AppProfileSelect';
 import { IconButton } from '@/_components/IconButton/IconButton';
-import { LocalizedLink } from '@/_components/LocalizedLink/LocalizedLink';
 import SelectButton from '@/_components/SelectButton/SelectButton';
 import { localizationHooks } from '@/_hooks/localizationHooks';
 import { useToast } from '@/_hooks/useToast';
@@ -64,12 +64,12 @@ export default function AppHeader({ setMenuOpen }: Props) {
           <div className='hidden lg:block'>
             <SelectButton label={t('add')} options={options} />
           </div>
-          <LocalizedLink
-            href={AppRoutes.OrderCreate}
+          <Link
+            href={localizationHooks.useWithLocale(AppRoutes.OrderCreate)}
             className='w-15 h-15 rounded-full bg-primary-300 flex items-center justify-center fixed bottom-6 right-2 lg:hidden z-40'
           >
             <AddIcon className='w-8 h-8 fill-primary-900' />
-          </LocalizedLink>
+          </Link>
           <div className='flex items-center gap-2'>
             <IconButton icon={<ShareIcon className='transition-colors' />} onClick={onShareClick} />
             <AppProfileSelect />

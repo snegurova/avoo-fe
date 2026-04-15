@@ -48,7 +48,7 @@ const sidebarStyles = tv({
 });
 
 export default function AppNavigation({ menuOpen, setMenuOpen }: Props) {
-  const tCommon = useTranslations('private.components.AppNavigation.AppNavigation');
+  const tCommon = useTranslations('common');
   const t = useTranslations('private.navigation.navigation');
   const desktopAbove = useMediaQuery('(min-width:1024px)');
   const isOpen = desktopAbove || menuOpen;
@@ -132,7 +132,7 @@ export default function AppNavigation({ menuOpen, setMenuOpen }: Props) {
   return (
     <aside className={overlayStyles({ open: isOpen })} onClick={handleCloseMenu}>
       <div className={sidebarStyles({ open: isOpen })} onClick={(e) => e.stopPropagation()}>
-        <nav className='flex h-full flex-col py-7 gap-15'>
+        <nav className='flex h-full flex-col py-6 md:py-9 gap-6 md:gap-9'>
           <div className='px-8 shrink-0'>
             <Link
               href={localizationHooks.useWithLocale(AppRoutes.Home)}
