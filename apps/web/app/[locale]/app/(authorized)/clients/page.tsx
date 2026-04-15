@@ -39,7 +39,7 @@ export default function ClientsPage() {
 
   return (
     <AppWrapper>
-      <div className='p-6 flex-1 min-h-0 overflow-auto lg:overflow-hidden hide-scrollbar flex flex-col'>
+      <div className='pt-4 lg:pt-0 pb-6 px-6 flex-1 min-h-0 overflow-auto lg:overflow-hidden hide-scrollbar flex flex-col'>
         <Controls
           title={t('clients')}
           searchValue={searchQuery}

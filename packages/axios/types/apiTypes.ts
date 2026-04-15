@@ -112,6 +112,18 @@ export type CreateMasterRequest = components['schemas']['CreateMasterDto'] & {
   languages?: components['schemas']['Language'][];
 };
 
+export type UpdateMasterRequest = Omit<
+  components['schemas']['UpdateMasterDto'],
+  'headline' | 'bio' | 'phone' | 'avatarUrl' | 'avatarPreviewUrl' | 'languages'
+> & {
+  headline?: string | null;
+  bio?: string | null;
+  phone?: string | null;
+  avatarUrl?: string | null;
+  avatarPreviewUrl?: string | null;
+  languages?: components['schemas']['Language'][];
+};
+
 export type MasterLanguages = components['schemas']['MasterEntity']['languages'];
 
 export type MasterWithRelationsEntity = components['schemas']['MasterEntity'];

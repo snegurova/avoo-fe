@@ -65,7 +65,7 @@ export const MasterListItem = ({ master, onEdit, isSelected }: Props) => {
   };
   return (
     <div
-      className={`rounded-lg lg:rounded-none p-4 lg:py-6 lg:px-8 border lg:border-l-0 lg:border-r-0 transition-colors duration-300 ease-in-out ${
+      className={`rounded-lg lg:rounded-none p-4 lg:py-6 lg:px-5 xl:px-8 border lg:border-l-0 lg:border-r-0 transition-colors duration-300 ease-in-out ${
         isSelected ? 'bg-primary-50 border-primary-200' : 'bg-white border-gray-200'
       }`}
       data-selected={isSelected ? 'true' : 'false'}
@@ -139,19 +139,19 @@ export const MasterListItem = ({ master, onEdit, isSelected }: Props) => {
             icon={<EditSquareIcon />}
             ariaLabel={t('editMaster')}
             onClick={handleOpenDetails}
-            className='flex items-center justify-center p-2.5'
+            className='flex items-center justify-center lg:p-1.5 xl:p-2.5'
           />
           <IconButton
             icon={<ShareIcon />}
             ariaLabel={t('share')}
-            className='flex items-center justify-center p-2.5'
+            className='flex items-center justify-center lg:p-1.5 xl:p-2.5'
             onClick={onShareClick}
           />
           <IconButton
             icon={<DeleteIcon />}
             ariaLabel={t('delete')}
             onClick={handleDeleteClick}
-            className='flex items-center justify-center p-2.5'
+            className='flex items-center justify-center lg:p-1.5 xl:p-2.5'
           />
         </div>
       </div>

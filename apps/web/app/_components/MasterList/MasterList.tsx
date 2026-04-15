@@ -48,9 +48,7 @@ export const MasterList = ({
   const uniqueList = React.useMemo(() => {
     const uniqueById = new Map<number, MasterWithRelationsEntityResponse>();
     for (const item of masters ?? []) {
-      if (!uniqueById.has(item.id)) {
-        uniqueById.set(item.id, item);
-      }
+      uniqueById.set(item.id, item);
     }
 
     return Array.from(uniqueById.values());
@@ -63,11 +61,11 @@ export const MasterList = ({
   return (
     <div className='h-full min-h-0 flex flex-col'>
       <InfiniteList
-        className='flex flex-col overflow-y-auto h-full min-h-0 max-h-full'
+        className='flex flex-col overflow-y-auto overflow-x-hidden h-full min-h-0 max-h-full'
         hasMore={hasMore}
         onLoadMore={incrementPage}
       >
-        <div className='hidden lg:flex sticky top-0 z-9 items-center gap-3 px-8 py-3 text-sm text-black font-semibold bg-primary-50'>
+        <div className='hidden lg:flex sticky top-0 z-9 items-center gap-3 lg:px-5 xl:px-8 py-3 text-sm text-black font-semibold bg-primary-50'>
           <div className='w-1/5'>
             <div className='flex items-center gap-4 pl-2.5'>
               <span>{t('masterName')}</span>
@@ -93,7 +91,7 @@ export const MasterList = ({
           <div className='w-12 text-right'>{t('actions')}</div>
         </div>
 
-        <ul className='flex flex-col gap-4 lg:gap-0 mb-4'>
+        <ul className='flex flex-col gap-4 lg:gap-0 mb-4 overflow-x-hidden'>
           {uniqueList.map((master) => (
             <li key={master.id}>
               <MasterListItem

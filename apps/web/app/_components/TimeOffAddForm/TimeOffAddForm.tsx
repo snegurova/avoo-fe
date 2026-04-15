@@ -156,165 +156,179 @@ export default function TimeOffAddForm() {
   );
 
   return (
-    <div className='py-7 px-5 md:px-11 flex-1 min-h-0 overflow-auto hide-scrollbar w-full'>
+    <div className='py-7 px-5 md:px-11 flex-1 min-h-0 w-full flex flex-col'>
       <h2 className='text-[20px] lg:text-[24px] font-semibold'>{t('scheduleException')}</h2>
       <p className='text-xs lg:text-sm text-gray-500'>{t('addTimeOffExtraHours')}</p>
 
       <ModeToggle value={values.mode} onChange={(mode) => setValue('mode', mode)} />
 
-      <form onSubmit={handleSubmit} className='flex-1 flex flex-col gap-6 md:gap-8 min-h-0'>
-        <div className='grid grid-cols-1 xl:grid-cols-2 gap-6 md:gap-8'>
-          <div className='flex flex-col gap-6 border border-gray-200 rounded-lg p-4'>
-            {values.mode === TimeOffMode.TimeOff && (
-              <div className=''>
-                <label htmlFor='type' className='block text-sm font-medium text-gray-700'>
-                  {t('typeOfTimeOff')}
-                </label>
-                <Controller
-                  name='type'
-                  control={control}
-                  render={({ field, fieldState }) => (
-                    <FormSelect
-                      id='type'
+      <form onSubmit={handleSubmit} className='flex-1 flex flex-col min-h-0'>
+        <div className='flex-1 min-h-0 overflow-y-auto overflow-x-hidden pr-4 -mr-4'>
+          <div className='flex flex-col gap-6 md:gap-8 pb-2'>
+            <div className='grid grid-cols-1 xl:grid-cols-2 gap-6 md:gap-8'>
+              <div className='flex flex-col gap-6 border border-gray-200 rounded-lg p-4'>
+                {values.mode === TimeOffMode.TimeOff && (
+                  <div className=''>
+                    <label htmlFor='type' className='block text-sm font-medium text-gray-700'>
+                      {t('typeOfTimeOff')}
+                    </label>
+                    <Controller
                       name='type'
-                      options={timeOffTypeOptions}
-                      value={field.value}
-                      onChange={field.onChange}
-                      error={fieldState.error?.message}
+                      control={control}
+                      render={({ field, fieldState }) => (
+                        <FormSelect
+                          id='type'
+                          name='type'
+                          options={timeOffTypeOptions}
+                          value={field.value}
+                          onChange={field.onChange}
+                          error={fieldState.error?.message}
+                        />
+                      )}
                     />
-                  )}
-                />
-              </div>
-            )}
-
-            <div className=''>
-              <label htmlFor='staff' className='block text-sm font-medium text-gray-700'>
-                {t('master')}
-              </label>
-              <FormMultiSelect
-                id='staff'
-                name='staff'
-                options={mastersOptions}
-                selected={selectedStaffValues}
-                onChange={handleStaffValueChange}
-                error={errors.staff?.message}
-              />
-            </div>
-
-            <div>
-              <FormTextarea
-                id='note'
-                name={noteField.name}
-                value={noteField.value ?? ''}
-                onChange={noteField.onChange}
-                onBlur={noteField.onBlur}
-                ref={noteField.ref}
-                label={t('note')}
-                helperText={t('optional')}
-                maxLength={200}
-                error={errors.note?.message}
-                classNames={{
-                  textarea:
-                    'block w-full text-sm text-gray-600 border border-gray-200 p-3 rounded-lg min-h-[50px] focus:outline-none focus:ring-1 focus:ring-purple-800',
-                }}
-              />
-            </div>
-          </div>
-
-          <div className='flex flex-col gap-6 border border-gray-200 rounded-lg'>
-            <div className='h-12 w-full flex items-center justify-between px-3 bg-primary-50'>
-              <h3>{headerLabel}</h3>
-              <Controller
-                name='wholeDay'
-                control={control}
-                render={({ field }) => (
-                  <FormControlLabel
-                    labelPlacement='start'
-                    label={
-                      <div style={{ marginRight: 10 }} className='text-gray-600 text-xs'>
-                        {t('wholeDay')}
-                      </div>
-                    }
-                    control={
-                      <Switch
-                        size='small'
-                        color='primary'
-                        checked={field.value === WholeDay.Whole}
-                        onChange={(_e, checked) =>
-                          field.onChange(checked ? WholeDay.Whole : WholeDay.Partial)
-                        }
-                        slotProps={{ input: { 'aria-label': t('wholeDayAriaLabel') } }}
-                      />
-                    }
-                  />
+                  </div>
                 )}
-              />
-            </div>
 
-            <div className='flex flex-col gap-4 p-4'>
-              <div className=''>
-                <label htmlFor='startDate' className='block text-sm font-medium text-gray-700 mb-1'>
-                  {t('startDate')}
-                </label>
-                <Controller
-                  name='startDate'
-                  control={control}
-                  render={({ field, fieldState }) => (
-                    <>
-                      <DateTimePickers
-                        dateValue={field.value}
-                        timeValue={values.startTime}
-                        wholeDay={values.wholeDay === WholeDay.Whole}
-                        hasError={Boolean(fieldState.error)}
-                        onDateChange={handleStartDateChange}
-                        onTimeChange={handleStartTimeChange}
-                      />
-                      {fieldState.error && (
-                        <p className='text-sm text-red-600'>{String(fieldState.error.message)}</p>
-                      )}
-                    </>
-                  )}
-                />
+                <div className=''>
+                  <label htmlFor='staff' className='block text-sm font-medium text-gray-700'>
+                    {t('master')}
+                  </label>
+                  <FormMultiSelect
+                    id='staff'
+                    name='staff'
+                    options={mastersOptions}
+                    selected={selectedStaffValues}
+                    onChange={handleStaffValueChange}
+                    error={errors.staff?.message}
+                  />
+                </div>
+
+                <div>
+                  <FormTextarea
+                    id='note'
+                    name={noteField.name}
+                    value={noteField.value ?? ''}
+                    onChange={noteField.onChange}
+                    onBlur={noteField.onBlur}
+                    ref={noteField.ref}
+                    label={t('note')}
+                    helperText={t('optional')}
+                    maxLength={200}
+                    error={errors.note?.message}
+                    classNames={{
+                      textarea:
+                        'block w-full text-sm text-gray-600 border border-gray-200 p-3 rounded-lg min-h-[50px] focus:outline-none focus:ring-1 focus:ring-purple-800',
+                    }}
+                  />
+                </div>
               </div>
 
-              <div className=''>
-                <label htmlFor='endDate' className='block text-sm font-medium text-gray-700 mb-1'>
-                  {t('endDate')}
-                </label>
-                <Controller
-                  name='endDate'
-                  control={control}
-                  rules={{ validate: validateEndDateFactory(getValues) }}
-                  render={({ field, fieldState }) => (
-                    <>
-                      <DateTimePickers
-                        dateValue={field.value}
-                        timeValue={values.endTime}
-                        wholeDay={values.wholeDay === WholeDay.Whole}
-                        hasError={Boolean(fieldState.error)}
-                        onDateChange={handleEndDateChange}
-                        onTimeChange={handleEndTimeChange}
+              <div className='flex flex-col gap-6 border border-gray-200 rounded-lg'>
+                <div className='h-12 w-full flex items-center justify-between px-3 bg-primary-50'>
+                  <h3>{headerLabel}</h3>
+                  <Controller
+                    name='wholeDay'
+                    control={control}
+                    render={({ field }) => (
+                      <FormControlLabel
+                        labelPlacement='start'
+                        label={
+                          <div style={{ marginRight: 10 }} className='text-gray-600 text-xs'>
+                            {t('wholeDay')}
+                          </div>
+                        }
+                        control={
+                          <Switch
+                            size='small'
+                            color='primary'
+                            checked={field.value === WholeDay.Whole}
+                            onChange={(_e, checked) =>
+                              field.onChange(checked ? WholeDay.Whole : WholeDay.Partial)
+                            }
+                            slotProps={{ input: { 'aria-label': t('wholeDayAriaLabel') } }}
+                          />
+                        }
                       />
-                      {fieldState.error && (
-                        <p className='text-sm text-red-600'>{String(fieldState.error.message)}</p>
+                    )}
+                  />
+                </div>
+
+                <div className='flex flex-col gap-4 p-4'>
+                  <div className=''>
+                    <label
+                      htmlFor='startDate'
+                      className='block text-sm font-medium text-gray-700 mb-1'
+                    >
+                      {t('startDate')}
+                    </label>
+                    <Controller
+                      name='startDate'
+                      control={control}
+                      render={({ field, fieldState }) => (
+                        <>
+                          <DateTimePickers
+                            dateValue={field.value}
+                            timeValue={values.startTime}
+                            wholeDay={values.wholeDay === WholeDay.Whole}
+                            hasError={Boolean(fieldState.error)}
+                            onDateChange={handleStartDateChange}
+                            onTimeChange={handleStartTimeChange}
+                          />
+                          {fieldState.error && (
+                            <p className='text-sm text-red-600'>
+                              {String(fieldState.error.message)}
+                            </p>
+                          )}
+                        </>
                       )}
-                    </>
-                  )}
-                />
+                    />
+                  </div>
+
+                  <div className=''>
+                    <label
+                      htmlFor='endDate'
+                      className='block text-sm font-medium text-gray-700 mb-1'
+                    >
+                      {t('endDate')}
+                    </label>
+                    <Controller
+                      name='endDate'
+                      control={control}
+                      rules={{ validate: validateEndDateFactory(getValues) }}
+                      render={({ field, fieldState }) => (
+                        <>
+                          <DateTimePickers
+                            dateValue={field.value}
+                            timeValue={values.endTime}
+                            wholeDay={values.wholeDay === WholeDay.Whole}
+                            hasError={Boolean(fieldState.error)}
+                            onDateChange={handleEndDateChange}
+                            onTimeChange={handleEndTimeChange}
+                          />
+                          {fieldState.error && (
+                            <p className='text-sm text-red-600'>
+                              {String(fieldState.error.message)}
+                            </p>
+                          )}
+                        </>
+                      )}
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className='grid grid-cols-1 xl:grid-cols-2 gap-6 md:gap-8'>
+              <div className='flex flex-col gap-4'>
+                {hasSelectedStaff ? (
+                  <TimeOffConflictsContainer values={values} masters={masters} />
+                ) : null}
               </div>
             </div>
           </div>
         </div>
 
-        <div className='grid grid-cols-1 xl:grid-cols-2 gap-6 md:gap-8'>
-          <div className='flex flex-col gap-4'>
-            {hasSelectedStaff ? (
-              <TimeOffConflictsContainer values={values} masters={masters} />
-            ) : null}
-          </div>
-        </div>
-
-        <div className='w-full mt-auto flex justify-between md:justify-end items-end gap-6 md:gap-8'>
+        <div className='w-full mt-6 flex justify-between md:justify-end items-end gap-6 md:gap-8'>
           <Button
             onClick={handleCancel}
             color='secondary'
