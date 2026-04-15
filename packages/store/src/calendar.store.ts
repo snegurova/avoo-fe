@@ -13,6 +13,7 @@ export type CalendarStore = {
   type: CalendarViewType;
   slots: CalendarSlot[] | null;
   workingTimeOnly: boolean;
+  scrollToTimeValue: string | null;
   setMasterIds: (masterIds: number[] | undefined) => void;
   setStatuses: (statuses: OrderStatus[] | undefined) => void;
   setDate: (date: Date) => void;
@@ -21,6 +22,7 @@ export type CalendarStore = {
   setType: (type: CalendarViewType) => void;
   setWorkingTimeOnly: (workingTimeOnly: boolean) => void;
   setSlots: (slots: CalendarSlot[] | null) => void;
+  triggerScrollToTime: (dateTime: string) => void;
   resetStorage: () => void;
 };
 
@@ -32,6 +34,7 @@ const initialState = {
   orderIsOutOfSchedule: undefined,
   type: CalendarViewType.DAY,
   workingTimeOnly: true,
+  scrollToTimeValue: null,
 };
 
 export const useCalendarStore = create<CalendarStore>()(
@@ -47,6 +50,7 @@ export const useCalendarStore = create<CalendarStore>()(
     setType: (type: CalendarViewType) => set({ type }),
     setWorkingTimeOnly: (workingTimeOnly: boolean) => set({ workingTimeOnly }),
     setSlots: (slots: CalendarSlot[] | null) => set({ slots }),
+    triggerScrollToTime: (dateTime: string) => set({ scrollToTimeValue: dateTime }),
     resetStorage: () =>
       set({
         ...initialState,

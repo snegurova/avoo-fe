@@ -58,6 +58,7 @@ export default function OrderCreate() {
   const setOrderIsOutOfSchedule = useCalendarStore((state) => state.setOrderIsOutOfSchedule);
   const slots = useCalendarStore((state) => state.slots);
   const setSlots = useCalendarStore((state) => state.setSlots);
+  const triggerScrollToTime = useCalendarStore((state) => state.triggerScrollToTime);
 
   const calendarPath = localizationHooks.useWithLocale(AppRoutes.Calendar);
 
@@ -333,11 +334,14 @@ export default function OrderCreate() {
       return;
     }
 
+    setDate(timeUtils.toDayBegin(new Date(availableDate)));
+    setToDate(timeUtils.toDayEnd(new Date(availableDate)));
+    triggerScrollToTime(availableDate);
+    setMasterIds([master.id]);
+
     if (new Date(availableDate).getTime() !== new Date(params.rangeFromTime).getTime()) {
       toast.info(tCalendar('dateNotAvailable'));
     }
-
-    setMasterIds([master.id]);
 
     const updatedOrders = [...field.value];
     const isMasterProvidesService = selectedServices[activeOrder]?.masters.some(
@@ -352,7 +356,6 @@ export default function OrderCreate() {
       newMasters[activeOrder] = master;
       return newMasters;
     });
-    setMasterIds([master.id]);
     updatedOrders[activeOrder] = {
       ...updatedOrders[activeOrder],
       date: availableDate,

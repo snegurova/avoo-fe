@@ -105,6 +105,7 @@ export default function ServiceFormItem(props: Props) {
   const { getAvailableDate } = calendarHooks.useGetPrivateAvailability();
   const setDate = useCalendarStore((state) => state.setDate);
   const setToDate = useCalendarStore((state) => state.setToDate);
+  const triggerScrollToTime = useCalendarStore((state) => state.triggerScrollToTime);
 
   useEffect(() => {
     if (order.masterId) {
@@ -233,6 +234,7 @@ export default function ServiceFormItem(props: Props) {
 
     setDate(timeUtils.toDayBegin(new Date(availableDate)));
     setToDate(timeUtils.toDayEnd(new Date(availableDate)));
+    triggerScrollToTime(availableDate);
 
     newOrders[index] = { ...newOrders[index], serviceId: val.id, date: availableDate };
     onChange(newOrders);
@@ -301,6 +303,7 @@ export default function ServiceFormItem(props: Props) {
 
     setDate(timeUtils.toDayBegin(new Date(availableDate)));
     setToDate(timeUtils.toDayEnd(new Date(availableDate)));
+    triggerScrollToTime(availableDate);
 
     newOrders[index] = { ...newOrders[index], masterId: val.id, date: availableDate };
     onChange(newOrders);
@@ -375,6 +378,7 @@ export default function ServiceFormItem(props: Props) {
 
     setDate(timeUtils.toDayBegin(new Date(availableDate)));
     setToDate(timeUtils.toDayEnd(new Date(availableDate)));
+    triggerScrollToTime(availableDate);
 
     const newOrders = [...value];
     newOrders[index] = {
