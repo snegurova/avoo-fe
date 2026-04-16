@@ -31,6 +31,7 @@ import CalendarClockIcon from '@/_icons/CalendarClockIcon';
 import { AppRoutes } from '@/_routes/routes';
 
 const LOWER_MONTH_TIME_MINUS_TWO_DAYS_MS = 26 * 24 * 60 * 60 * 1000;
+const CALENDAR_HEADER_HEIGHT = 76;
 
 const calendarWrapper = tv({
   base: 'flex w-full',
@@ -104,6 +105,7 @@ export default function Calendar(props: Props) {
   const resetStorage = useCalendarStore((state) => state.resetStorage);
   const orderIsOutOfSchedule = useCalendarStore((state) => state.orderIsOutOfSchedule);
   const type = useCalendarStore((state) => state.type);
+  const scrollToTimeValue = useCalendarStore((state) => state.scrollToTimeValue);
   const [params, setParams] = useState<PrivateCalendarQueryParams>({
     rangeFromDate: timeUtils.formatDate(date),
     rangeToDate: timeUtils.formatDate(toDate),
@@ -112,6 +114,31 @@ export default function Calendar(props: Props) {
   const [selectedOrder, setSelectedOrder] = useState<PrivateEvent | null>(null);
   const router = useRouter();
   const searchParams = useSearchParams();
+
+  useEffect(() => {
+    if (!scrollToTimeValue || !scrollRef.current) return;
+    if (
+      type === CalendarViewType.MONTH ||
+      (type === CalendarViewType.WEEK && filteredMasters.length !== 1)
+    )
+      return;
+    const dateObj = new Date(scrollToTimeValue);
+    if (isNaN(dateObj.getTime())) return;
+    const minutes = timeUtils.getMinutesInDay(dateObj.toString());
+
+    setTime(minutes);
+    let scrollOptions: ScrollOptions = {
+      behavior: 'smooth',
+      top: minutes * PX_IN_MINUTE - (scrollRef.current.clientHeight - CALENDAR_HEADER_HEIGHT) / 2,
+    };
+    if (type === CalendarViewType.WEEK && filteredMasters.length === 1) {
+      const dayOfWeek = dateObj.getDay();
+      const dayIndex = dayOfWeek === 0 ? 6 : dayOfWeek - 1;
+      const columnWidth = scrollRef.current.scrollWidth / 7;
+      scrollOptions.left = dayIndex * columnWidth;
+    }
+    scrollRef.current.scrollTo(scrollOptions);
+  }, [scrollToTimeValue, type]);
 
   useEffect(() => {
     if (calendarType !== CalendarType.SELECTOR) {
@@ -149,9 +176,8 @@ export default function Calendar(props: Props) {
         filteredMasters.length === 1 &&
         timeUtils.isCurrentWeek(date))
     ) {
-      scrollOptions.top = time * PX_IN_MINUTE - (scrollRef.current.clientHeight - 76) / 2;
-    } else {
-      scrollOptions.top = 0;
+      scrollOptions.top =
+        time * PX_IN_MINUTE - (scrollRef.current.clientHeight - CALENDAR_HEADER_HEIGHT) / 2;
     }
 
     if (type === CalendarViewType.WEEK && filteredMasters.length === 1) {
@@ -199,20 +225,30 @@ export default function Calendar(props: Props) {
         behavior: 'smooth',
         top:
           timeUtils.getMinutesInDay(date) * PX_IN_MINUTE -
-          (scrollRef.current.clientHeight - 76) / 2,
+          (scrollRef.current.clientHeight - CALENDAR_HEADER_HEIGHT) / 2,
       };
 
       scrollRef.current.scrollTo(scrollOptions);
     } else if (date && calendarType === CalendarType.SELECTOR) {
       if (!scrollRef.current) return;
 
+      let scrollTarget = scrollToTimeValue || date;
+      const minutes = timeUtils.getMinutesInDay(scrollTarget);
+      setTime(minutes);
       let scrollOptions: ScrollOptions = {
         behavior: 'smooth',
-        top:
-          timeUtils.getMinutesInDay(date) * PX_IN_MINUTE -
-          (scrollRef.current.clientHeight - 76) / 2,
+        top: minutes * PX_IN_MINUTE - (scrollRef.current.clientHeight - CALENDAR_HEADER_HEIGHT) / 2,
       };
 
+      scrollRef.current.scrollTo(scrollOptions);
+    } else if (calendarType === CalendarType.SELECTOR) {
+      if (!scrollRef.current || !scrollToTimeValue) return;
+      const minutes = timeUtils.getMinutesInDay(scrollToTimeValue);
+      setTime(minutes);
+      let scrollOptions: ScrollOptions = {
+        behavior: 'smooth',
+        top: minutes * PX_IN_MINUTE - (scrollRef.current.clientHeight - CALENDAR_HEADER_HEIGHT) / 2,
+      };
       scrollRef.current.scrollTo(scrollOptions);
     } else {
       scrollToCurrentTime();
