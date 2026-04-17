@@ -39,6 +39,7 @@ export default function ServiceUpdateForm(props: Props) {
   const toast = useToast();
   const categories = categoriesHooks.useGetPublicCategories();
   const locale = localizationHooks.useGetLocale();
+  const [isFormDirty, setIsFormDirty] = useState(false);
 
   const { masters, searchTerm, setSearchTerm } = masterHooks.useMasterQuery();
 
@@ -72,7 +73,7 @@ export default function ServiceUpdateForm(props: Props) {
       },
     });
 
-  const { uploadMedia, isUploading } = mediaHooks.useUploadMedia({
+  const { uploadMedia, isUploading, isUploaded } = mediaHooks.useUploadMedia({
     onSuccess: (data) => {
       toast.success(t('mediaUploaded'));
       setAddedMedias((prev) => [data, ...prev]);
@@ -92,7 +93,7 @@ export default function ServiceUpdateForm(props: Props) {
     }
   };
 
-  const { deleteMedia } = mediaHooks.useDeleteMedia({
+  const { deleteMedia, isDeleted } = mediaHooks.useDeleteMedia({
     onSuccess: (mediaId) => {
       setRemovedMediaIds((prev) => [...prev, mediaId]);
       setAddedMedias((prev) => prev.filter((media) => media.id !== mediaId));
@@ -125,8 +126,10 @@ export default function ServiceUpdateForm(props: Props) {
   const errorsList = getAllErrorMessages(errors);
 
   useEffect(() => {
-    onDirtyChange(isDirty);
-  }, [isDirty, onDirtyChange]);
+    const isDirtyValue = Boolean(isDirty || isDeleted || isUploaded);
+    setIsFormDirty(isDirtyValue);
+    onDirtyChange(isDirtyValue);
+  }, [isDirty, isDeleted, isUploaded, onDirtyChange]);
 
   return (
     <>
@@ -312,7 +315,7 @@ export default function ServiceUpdateForm(props: Props) {
           type='submit'
           color='secondary'
           variant='contained'
-          disabled={!isDirty}
+          disabled={!isFormDirty}
         >
           {t('edit')}
         </Button>
