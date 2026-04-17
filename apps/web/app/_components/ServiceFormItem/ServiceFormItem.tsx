@@ -12,7 +12,7 @@ import {
 import { calendarHooks, masterHooks, servicesHooks } from '@avoo/hooks';
 import { timeUtils } from '@avoo/shared';
 import { isEmptyObject } from '@avoo/shared';
-import { useCalendarStore } from '@avoo/store';
+import { useApiStatusStore, useCalendarStore } from '@avoo/store';
 
 import FormDatePicker from '@/_components/FormDatePicker/FormDatePicker';
 import FormTextArea from '@/_components/FormTextArea/FormTextArea';
@@ -184,7 +184,33 @@ export default function ServiceFormItem(props: Props) {
   }, [masters]);
 
   const selectService = async (val: { id: number } | null) => {
-    if (!val) return;
+    if (!val || typeof val.id !== 'number') {
+      setSelectedService(null);
+
+      setTimeout(() => {
+        useApiStatusStore.getState().setIsPending(false);
+      }, 100);
+
+      const newOrders = [...value];
+      newOrders[index] = { ...newOrders[index], serviceId: undefined };
+      onChange(newOrders);
+      setMasterParams((prev) => ({
+        ...prev,
+        serviceId: undefined,
+      }));
+
+      if (slots && slots[index]) {
+        const newSlot = {
+          ...slots[index],
+          title: null,
+          duration: 15,
+        };
+        const newSlots = [...slots];
+        newSlots[index] = newSlot;
+        setSlots(newSlots);
+      }
+      return;
+    }
 
     const newOrders = [...value];
     const newService = services?.find((service) => service?.id === val.id) || null;
