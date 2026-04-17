@@ -76,9 +76,10 @@ export default function ServiceList(props: Props) {
   useEffect(() => {
     const el = listRef.current;
     if (!el || !hasMore) return;
-    if (el.scrollHeight <= el.clientHeight) {
-      incrementPage();
-    }
+
+    if (el.scrollHeight > el.clientHeight) return;
+
+    incrementPage();
   }, [services?.length, hasMore]);
 
   const handleServiceClick = (service: Service) => {
@@ -138,15 +139,15 @@ export default function ServiceList(props: Props) {
           </ul>
         </div>
 
-        <div className='flex flex-col gap-6 overflow-y-hidden max-h-[calc(100vh-300px)]'>
+        <div className='flex flex-col gap-6 overflow-hidden max-h-[calc(100vh-300px)] min-h-0'>
           {services && services.length > 0 ? (
-            <section key={selectedCategoryId}>
+            <section key={selectedCategoryId} className='flex flex-col flex-1 min-h-0'>
               <Typography variant='h6' className='hidden lg:block' sx={{ mb: 2 }}>
                 {selectedCategoryName}
               </Typography>
               <div
                 ref={listRef}
-                className='flex flex-col overflow-y-auto gap-4 max-h-[70vh]'
+                className='flex flex-col gap-4 overflow-y-auto flex-1 min-h-0'
                 onScroll={(e) => {
                   const el = e.currentTarget;
                   if (el.scrollHeight - el.scrollTop <= el.clientHeight + 1 && hasMore) {

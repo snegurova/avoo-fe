@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 import { useInfiniteQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { mediaApi } from '@avoo/axios';
@@ -44,6 +46,7 @@ export const mediaHooks = {
   },
 
   useUploadMedia: ({ onSuccess, onError }: UseUploadMediaParams = {}) => {
+    const [isUploaded, setIsUploaded] = useState(false);
     const { mutate, isPending } = useMutation<
       BaseResponse<UploadMediaResponse>,
       Error,
@@ -54,6 +57,7 @@ export const mediaHooks = {
         successMessage: 'Media uploaded successfully',
       },
       onSuccess: (response) => {
+        setIsUploaded(true);
         if (response.status === ApiStatus.SUCCESS) onSuccess?.(response.data);
       },
       onError: (error) => {
@@ -66,12 +70,14 @@ export const mediaHooks = {
     return {
       uploadMedia: mutate,
       isUploading: isPending,
+      isUploaded,
     };
   },
   useDeleteMedia: (params?: {
     onSuccess?: (mediaId: number) => void;
     onError?: (error: Error) => void;
   }) => {
+    const [isDeleted, setIsDeleted] = useState(false);
     const queryClient = useQueryClient();
 
     const deleteMediaMutation = useMutation({
@@ -80,6 +86,7 @@ export const mediaHooks = {
       },
 
       onSuccess: (_, data) => {
+        setIsDeleted(true);
         queryClient.invalidateQueries({
           queryKey: queryKeys.medias.all,
         });
@@ -97,6 +104,7 @@ export const mediaHooks = {
       deleteMedia: deleteMediaMutation.mutate,
       deleteMediaAsync: deleteMediaMutation.mutateAsync,
       ...deleteMediaMutation,
+      isDeleted,
     };
   },
   useGetPublicMedia: (params: GetPublicMediaParams) => {
