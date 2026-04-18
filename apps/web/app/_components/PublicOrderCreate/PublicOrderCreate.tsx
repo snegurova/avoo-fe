@@ -245,7 +245,7 @@ export default function PublicOrderCreate() {
   }
 
   return (
-    <form className='flex flex-col gap-6 pt-4 pb-35' onSubmit={handleSubmit}>
+    <form className='flex flex-col gap-6 pt-4 pb-16 lg:pb-20 xl:pb-35' onSubmit={handleSubmit}>
       <Controller
         name='ordersData'
         control={control}

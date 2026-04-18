@@ -15,7 +15,7 @@ type Props = {
 };
 
 const titleWrapper = tv({
-  base: 'py-2 transition-colors flex gap-10 items-center pr-4 rounded-lg',
+  base: 'py-2 transition-colors flex flex-col md:flex-row gap-1 md:gap-10 items-start md:items-center pr-4 rounded-lg',
   variants: {
     active: {
       true: 'bg-gray-200 ',

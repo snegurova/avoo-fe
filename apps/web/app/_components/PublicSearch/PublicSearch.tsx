@@ -14,7 +14,7 @@ export default function PublicSearch(props: Props) {
   const t = useTranslations('public.salon.createOrder');
 
   return (
-    <div className='relative'>
+    <div className='relative translate-x-4 md:translate-x-0 '>
       <input
         name='service-search'
         type='text'
