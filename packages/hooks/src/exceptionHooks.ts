@@ -31,10 +31,14 @@ import { masterHooks } from './masterHooks';
 import { queryKeys } from './queryKeys';
 
 export const exceptionHooks = {
-  invalidateOnSuccess: (queryClient: QueryClient, callback?: () => void) => {
-    queryClient.invalidateQueries({ queryKey: queryKeys.exceptions.all });
-    queryClient.invalidateQueries({ queryKey: queryKeys.calendar.all });
-    queryClient.invalidateQueries({ queryKey: queryKeys.monthCalendar.all });
+  invalidateOnSuccess: async (queryClient: QueryClient, callback?: () => void) => {
+    await Promise.all([
+      queryClient.invalidateQueries({ queryKey: queryKeys.exceptions.all, refetchType: 'all' }),
+      queryClient.invalidateQueries({ queryKey: queryKeys.calendar.all, refetchType: 'all' }),
+      queryClient.invalidateQueries({ queryKey: queryKeys.monthCalendar.all, refetchType: 'all' }),
+      queryClient.invalidateQueries({ queryKey: ['monthCalendar', 'timeOff'], refetchType: 'all' }),
+    ]);
+
     callback?.();
   },
 
@@ -87,8 +91,8 @@ export const exceptionHooks = {
       CreateExceptionRequest
     >({
       mutationFn: (data: CreateExceptionRequest) => exceptionApi.createException(data),
-      onSuccess: () => {
-        exceptionHooks.invalidateOnSuccess(queryClient, onSuccess);
+      onSuccess: async () => {
+        await exceptionHooks.invalidateOnSuccess(queryClient, onSuccess);
       },
     });
 
@@ -144,10 +148,10 @@ export const exceptionHooks = {
       const payload = exceptionUtils.formValuesToPayload(data, masters);
       const mastersLabel = exceptionUtils.buildMastersLabel(data.staff, masters);
       mutate(payload, {
-        onSuccess: () => {
+        onSuccess: async () => {
+          await exceptionHooks.invalidateOnSuccess(queryClient);
           reset();
           onSuccess?.({ mastersLabel });
-          exceptionHooks.invalidateOnSuccess(queryClient);
         },
       });
     };
@@ -168,8 +172,8 @@ export const exceptionHooks = {
     const queryClient = useQueryClient();
     const { mutate, isPending } = useMutation<BaseResponse<Exception>, Error, number>({
       mutationFn: (id: number) => exceptionApi.deleteException(id),
-      onSuccess: () => {
-        exceptionHooks.invalidateOnSuccess(queryClient, onSuccess);
+      onSuccess: async () => {
+        await exceptionHooks.invalidateOnSuccess(queryClient, onSuccess);
       },
     });
 
@@ -191,16 +195,16 @@ export const exceptionHooks = {
         await exceptionApi.deleteException(id);
         return exceptionApi.createException(data);
       },
-      onSuccess: () => {
-        exceptionHooks.invalidateOnSuccess(queryClient, onSuccess);
+      onSuccess: async () => {
+        await exceptionHooks.invalidateOnSuccess(queryClient, onSuccess);
       },
       onError: (_error, { rollbackData }) => {
         if (rollbackData) {
           exceptionApi.createException(rollbackData).finally(() => {
-            exceptionHooks.invalidateOnSuccess(queryClient);
+            void exceptionHooks.invalidateOnSuccess(queryClient);
           });
         } else {
-          exceptionHooks.invalidateOnSuccess(queryClient);
+          void exceptionHooks.invalidateOnSuccess(queryClient);
         }
       },
     });
