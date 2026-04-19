@@ -26,7 +26,7 @@ type DashboardPreviewProps = {
 };
 
 const previewCard = tv({
-  base: 'rounded-[2rem] border border-gray-100 bg-white shadow-[0_24px_60px_-45px_rgba(12,16,21,0.4)]',
+  base: 'min-w-0 rounded-[2rem] border border-gray-100 bg-white shadow-[0_24px_60px_-45px_rgba(12,16,21,0.4)]',
 });
 
 const sidebarItem = tv({
@@ -50,10 +50,10 @@ const topActionButton = tv({
 });
 
 const filterChip = tv({
-  base: 'inline-flex items-center gap-2 rounded-full border border-gray-200 bg-white text-[17px] text-gray-700',
+  base: 'inline-flex shrink-0 items-center gap-2 rounded-full border border-gray-200 bg-white text-[17px] text-gray-700 max-[445px]:text-[15px]',
   variants: {
     size: {
-      default: 'px-4 py-[7px]',
+      default: 'px-4 py-[7px] max-[445px]:px-3',
       segmented: '',
     },
   },
@@ -135,7 +135,7 @@ const tinyInitialBadge = tv({
 });
 
 const appointmentAccent = tv({
-  base: 'w-1 rounded-full',
+  base: 'w-1 shrink-0 rounded-full',
   variants: {
     status: {
       confirmed: 'bg-[#1B5192]',
@@ -219,9 +219,9 @@ export default function DashboardPreview(props: DashboardPreviewProps) {
   return (
     <div
       ref={previewRef}
-      className='mx-auto overflow-hidden rounded-[2rem] border border-primary-100 bg-[#f5effb] shadow-[0_40px_110px_-70px_rgba(12,16,21,0.7)]'
+      className='mx-auto w-full min-w-0 overflow-hidden rounded-[2rem] border border-primary-100 bg-[#f5effb] shadow-[0_40px_110px_-70px_rgba(12,16,21,0.7)]'
     >
-      <div className='grid xl:grid-cols-[260px_minmax(0,1fr)]'>
+      <div className='grid min-w-0 xl:grid-cols-[260px_minmax(0,1fr)]'>
         <aside className='hidden min-h-full border-r border-gray-200 bg-white xl:flex xl:flex-col xl:justify-between'>
           <div>
             <div className='border-b border-gray-200 px-9 py-8 text-[2rem] font-semibold tracking-[-0.05em] text-gray-700'>
@@ -248,7 +248,7 @@ export default function DashboardPreview(props: DashboardPreviewProps) {
           </div>
         </aside>
 
-        <div className='p-4 sm:p-6 xl:p-8'>
+        <div className='min-w-0 p-3 sm:p-6 xl:p-8'>
           <div className='flex flex-col gap-4 xl:flex-row xl:items-start xl:justify-between'>
             <div className='flex items-start justify-between gap-3 rounded-2xl bg-primary-100/70 px-5 py-4 pr-1.5 text-sm leading-6 text-gray-700 xl:max-w-[720px]'>
               <p className='pr-2'>{t('notification')}</p>
@@ -278,31 +278,35 @@ export default function DashboardPreview(props: DashboardPreviewProps) {
             </div>
           </div>
 
-          <div className='mt-6 grid gap-6 2xl:grid-cols-[minmax(0,1.08fr)_420px]'>
+          <div className='mt-6 grid min-w-0 gap-6 2xl:grid-cols-[minmax(0,1.08fr)_420px]'>
             <div className={previewCard({ className: 'overflow-hidden' })}>
-              <div className='px-5 pb-5 pt-6 sm:px-7'>
-                <h3 className='text-[2rem] font-semibold tracking-[-0.04em] text-black'>
+              <div className='flex items-center justify-between gap-4 px-4 pb-5 pt-6 sm:px-7'>
+                <h3 className='text-[2rem] font-semibold tracking-[-0.04em] text-black max-[445px]:text-[1.65rem]'>
                   {t('calendar')}
                 </h3>
+                <div className={filterChip({ className: 'md:hidden' })}>
+                  <span>{t('options')}</span>
+                  <ArrowDownIcon className='size-4 fill-gray-500' />
+                </div>
               </div>
-              <div className='flex flex-nowrap gap-2 border-y border-primary-100 bg-primary-50/55 px-4 py-3 sm:px-5'>
+              <div className='hide-scrollbar flex min-w-0 flex-nowrap gap-2 overflow-x-auto border-y border-primary-100 bg-primary-50/55 px-4 py-3 sm:px-5 max-[445px]:px-3'>
                 <div className={filterChip()}>{t('today')}</div>
-                <div className='flex items-center overflow-hidden rounded-full border border-gray-200 bg-white'>
-                  <button type='button' className='px-3 py-[9px]'>
+                <div className='flex shrink-0 items-center overflow-hidden rounded-full border border-gray-200 bg-white'>
+                  <button type='button' className='px-3 py-[9px] max-[445px]:px-2'>
                     <ArrowBackIcon className='size-5 fill-gray-700' />
                   </button>
-                  <span className='border-x border-gray-200 px-5 py-[7px] text-[17px] text-gray-700'>
+                  <span className='border-x border-gray-200 px-5 py-[7px] text-[17px] text-gray-700 max-[445px]:px-3 max-[445px]:text-[15px]'>
                     {t('date')}
                   </span>
-                  <button type='button' className='px-3 py-[9px]'>
+                  <button type='button' className='px-3 py-[9px] max-[445px]:px-2'>
                     <ArrowForwardIcon className='size-5 fill-gray-700' />
                   </button>
                 </div>
-                <div className={filterChip()}>
+                <div className={filterChip({ className: 'hidden md:inline-flex' })}>
                   <span>{t('day')}</span>
                   <ArrowDownIcon className='size-4 fill-gray-500' />
                 </div>
-                <div className={filterChip()}>
+                <div className={filterChip({ className: 'hidden md:inline-flex' })}>
                   <span>{t('options')}</span>
                   <ArrowDownIcon className='size-4 fill-gray-500' />
                 </div>
@@ -443,9 +447,9 @@ export default function DashboardPreview(props: DashboardPreviewProps) {
               </div>
             </div>
 
-            <div className='grid gap-6'>
-              <div className={previewCard({ className: 'p-6' })}>
-                <h3 className='text-[2rem] font-semibold tracking-[-0.04em] text-black'>
+            <div className='grid min-w-0 gap-6'>
+              <div className={previewCard({ className: 'p-4 sm:p-6' })}>
+                <h3 className='text-[2rem] font-semibold tracking-[-0.04em] text-black max-[445px]:text-[1.65rem]'>
                   {t('newNotifications')}
                 </h3>
                 <div className='mt-6 space-y-4'>
@@ -454,16 +458,18 @@ export default function DashboardPreview(props: DashboardPreviewProps) {
                       key={`notification-${item.id}`}
                       className={notificationCard({ highlighted: item.highlighted })}
                     >
-                      <div className='flex items-start justify-between gap-4'>
-                        <div>
-                          <p className='text-[1.05rem] leading-6 text-black'>
+                      <div className='flex min-w-0 items-start justify-between gap-4'>
+                        <div className='min-w-0'>
+                          <p className='text-[1.05rem] leading-6 text-black max-[445px]:text-[0.95rem]'>
                             {item.time} {t('date2')} | {t('Manicure')}
                           </p>
-                          <p className='text-[1.05rem] leading-6 text-black'>
+                          <p className='text-[1.05rem] leading-6 text-black max-[445px]:text-[0.95rem]'>
                             {t('client')}: {item.client}
                           </p>
                         </div>
-                        <p className='text-sm text-gray-400'>{t('minAgo')}</p>
+                        <p className='shrink-0 text-sm text-gray-400 max-[445px]:text-xs'>
+                          {t('minAgo')}
+                        </p>
                       </div>
                       <div className='mt-2 flex justify-end'>
                         <div className='inline-flex items-center gap-2 rounded-full bg-white/80 px-3 py-1 text-sm text-gray-600'>
@@ -487,9 +493,9 @@ export default function DashboardPreview(props: DashboardPreviewProps) {
                 </div>
               </div>
 
-              <div className={previewCard({ className: 'p-6' })}>
+              <div className={previewCard({ className: 'p-4 sm:p-6' })}>
                 <div className='w-full'>
-                  <h3 className='whitespace-nowrap text-[2rem] font-semibold tracking-[-0.04em] text-black'>
+                  <h3 className='whitespace-nowrap text-[2rem] font-semibold tracking-[-0.04em] text-black max-[445px]:text-[1.65rem]'>
                     {t('nextAppointments')}
                   </h3>
                 </div>
@@ -502,22 +508,26 @@ export default function DashboardPreview(props: DashboardPreviewProps) {
                     }}
                   >
                     {appointmentSlides.map((slide) => (
-                      <div key={`${slide.date}-${slide.time}`} className='w-1/2 p-4'>
-                        <div className='flex gap-4'>
+                      <div key={`${slide.date}-${slide.time}`} className='w-1/2 p-3 sm:p-4'>
+                        <div className='flex min-w-0 gap-3 sm:gap-4'>
                           <div className={appointmentAccent({ status: slide.status })} />
                           <div className='min-w-0 flex-1'>
                             <div className='flex flex-wrap items-center gap-x-4 gap-y-2'>
-                              <p className='text-[1.1rem] font-medium text-black'>{slide.date}</p>
-                              <p className='text-[1.1rem] text-gray-600'>{slide.time}</p>
+                              <p className='text-[1.1rem] font-medium text-black max-[445px]:text-[1rem]'>
+                                {slide.date}
+                              </p>
+                              <p className='text-[1.1rem] text-gray-600 max-[445px]:text-[1rem]'>
+                                {slide.time}
+                              </p>
                               <span className={appointmentStatus({ status: slide.status })}>
                                 {slide.statusLabel}
                               </span>
                             </div>
 
-                            <p className='mt-5 text-[1.15rem] font-medium text-black'>
+                            <p className='mt-5 text-[1.15rem] font-medium text-black max-[445px]:text-[1rem]'>
                               {slide.service}
                             </p>
-                            <div className='mt-2 flex flex-wrap items-center gap-x-4 gap-y-2 text-[1.05rem] text-gray-600'>
+                            <div className='mt-2 flex flex-wrap items-center gap-x-4 gap-y-2 text-[1.05rem] text-gray-600 max-[445px]:text-[0.95rem]'>
                               <span>{slide.duration}</span>
                               <span>|</span>
                               <span className='inline-flex items-center gap-2'>
@@ -530,11 +540,11 @@ export default function DashboardPreview(props: DashboardPreviewProps) {
                               <span>{slide.price}</span>
                             </div>
 
-                            <div className='mt-6 flex flex-wrap gap-x-4 gap-y-2 text-[1.05rem] text-black'>
+                            <div className='mt-6 flex flex-wrap gap-x-4 gap-y-2 text-[1.05rem] text-black max-[445px]:text-[0.95rem]'>
                               <span className='font-medium'>{slide.clientLabel}</span>
                               <span>{slide.clientValue}</span>
                             </div>
-                            <p className='mt-2 max-w-[28rem] text-[1.02rem] leading-6 text-gray-500'>
+                            <p className='mt-2 max-w-[28rem] text-[1.02rem] leading-6 text-gray-500 max-[445px]:text-[0.95rem]'>
                               {slide.note}
                             </p>
                           </div>
@@ -544,19 +554,19 @@ export default function DashboardPreview(props: DashboardPreviewProps) {
                   </div>
                 </div>
 
-                <div className='mt-6 flex items-center justify-between'>
+                <div className='mt-6 flex items-center justify-between gap-2'>
                   <button
                     type='button'
-                    className='inline-flex items-center gap-2 rounded-full border border-gray-200 bg-white px-5 py-2 text-lg text-gray-600'
+                    className='inline-flex shrink-0 items-center gap-2 rounded-full border border-gray-200 bg-white px-5 py-2 text-lg text-gray-600 max-[445px]:px-3 max-[445px]:text-sm'
                   >
                     <ArrowBackIcon className='size-4 fill-gray-500' />
                     <span>{t('back')}</span>
                   </button>
-                  <div className='flex items-center gap-3'>
+                  <div className='flex min-w-0 items-center gap-3 max-[445px]:gap-2'>
                     {[0, 1, 2, 3, 4].map((index) => (
                       <span
                         key={`dot-${index}`}
-                        className={`h-3 w-3 rounded-full ${
+                        className={`h-3 w-3 rounded-full max-[445px]:h-2.5 max-[445px]:w-2.5 ${
                           index === activeAppointmentSlide ? 'bg-gray-400' : 'bg-gray-200'
                         }`}
                       />
@@ -564,7 +574,7 @@ export default function DashboardPreview(props: DashboardPreviewProps) {
                   </div>
                   <button
                     type='button'
-                    className='inline-flex items-center gap-2 rounded-full border border-gray-200 bg-white px-5 py-2 text-lg text-gray-600'
+                    className='inline-flex shrink-0 items-center gap-2 rounded-full border border-gray-200 bg-white px-5 py-2 text-lg text-gray-600 max-[445px]:px-3 max-[445px]:text-sm'
                   >
                     <span>{t('next')}</span>
                     <ArrowForwardIcon className='size-4 fill-gray-500' />

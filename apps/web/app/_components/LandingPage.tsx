@@ -4,6 +4,9 @@ import { type MouseEventHandler, useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 
+import { authHooks } from '@avoo/hooks';
+import { useApiStatusStore } from '@avoo/store';
+
 import AnchorButton from '@/_components/AnchorButton/AnchorButton';
 import DashboardPreview from '@/_components/DashboardPreview/DashboardPreview';
 import FaqItem from '@/_components/FaqItem/FaqItem';
@@ -19,6 +22,7 @@ import TestimonialSpotlight, {
   type ReviewSlide,
 } from '@/_components/TestimonialSpotlight/TestimonialSpotlight';
 import { localizationHooks } from '@/_hooks/localizationHooks';
+import { useToast } from '@/_hooks/useToast';
 import ArrowBackIcon from '@/_icons/ArrowBackIcon';
 import ArrowForwardIcon from '@/_icons/ArrowForwardIcon';
 import CalendarClockIcon from '@/_icons/CalendarClockIcon';
@@ -43,8 +47,11 @@ const appointmentSwipeTriggerPoint = 0.58;
 
 export default function LandingPage() {
   const t = useTranslations('public.home');
+  const tSignUp = useTranslations('public.signUp.form');
   const router = useRouter();
-  const signUpHref = localizationHooks.useWithLocale(AppRoutes.SignUp);
+  const toast = useToast();
+  const isPending = useApiStatusStore((state) => state.isPending);
+  const homeRedirect = localizationHooks.useWithLocale(AppRoutes.Home);
   const headerRef = useRef<HTMLElement>(null);
   const dashboardPreviewRef = useRef<HTMLDivElement>(null);
   const calendarHeaderScrollRef = useRef<HTMLDivElement>(null);
@@ -57,7 +64,19 @@ export default function LandingPage() {
   const [isShowPassword, setIsShowPassword] = useState(false);
   const [isShowConfirmPassword, setIsShowConfirmPassword] = useState(false);
 
-  const goToSignUp = () => router.push(signUpHref);
+  const {
+    register: registerSignupField,
+    handleSubmit: handleSignupSubmit,
+    errors: signupErrors,
+  } = authHooks.useRegisterForm({
+    onSuccess: () => {
+      router.push(homeRedirect);
+      toast.success(tSignUp('welcomeMessage'));
+    },
+    onError: () => {
+      toast.error(tSignUp('registerError'));
+    },
+  });
 
   const scrollToCreateProfileButton: MouseEventHandler<HTMLButtonElement> = (event) => {
     event.preventDefault();
@@ -596,30 +615,34 @@ export default function LandingPage() {
                 description={t('signup.description')}
               />
 
-              <form
-                className='mx-auto mt-16 max-w-3xl lg:mt-20'
-                onSubmit={(event) => {
-                  event.preventDefault();
-                  goToSignUp();
-                }}
-              >
+              <form className='mx-auto mt-16 max-w-3xl lg:mt-20' onSubmit={handleSignupSubmit}>
                 <div className='grid gap-6'>
                   <label className='block'>
                     <span className='mb-2 block text-sm text-gray-700'>{t('signup.fullName')}</span>
-                    <FormInput name='fullName' classNames={landingFieldClassNames} />
+                    <FormInput
+                      {...registerSignupField('name')}
+                      classNames={landingFieldClassNames}
+                      error={signupErrors.name?.message}
+                    />
                   </label>
 
                   <label className='block'>
                     <span className='mb-2 block text-sm text-gray-700'>{t('signup.email')}</span>
-                    <FormInput name='email' type='email' classNames={landingFieldClassNames} />
+                    <FormInput
+                      {...registerSignupField('email')}
+                      type='email'
+                      classNames={landingFieldClassNames}
+                      error={signupErrors.email?.message}
+                    />
                   </label>
 
                   <label className='block'>
                     <span className='mb-2 block text-sm text-gray-700'>{t('signup.password')}</span>
                     <FormInput
-                      name='password'
+                      {...registerSignupField('password')}
                       type={isShowPassword ? 'text' : 'password'}
                       classNames={landingFieldClassNames}
+                      error={signupErrors.password?.message}
                       accessory={
                         <ShowPasswordToggler
                           value={isShowPassword}
@@ -634,9 +657,10 @@ export default function LandingPage() {
                       {t('signup.confirmPassword')}
                     </span>
                     <FormInput
-                      name='confirmPassword'
+                      {...registerSignupField('confirmPassword')}
                       type={isShowConfirmPassword ? 'text' : 'password'}
                       classNames={landingFieldClassNames}
+                      error={signupErrors.confirmPassword?.message}
                       accessory={
                         <ShowPasswordToggler
                           value={isShowConfirmPassword}
@@ -649,15 +673,20 @@ export default function LandingPage() {
 
                 <label className='mt-8 flex items-center gap-3 text-sm text-gray-700 lg:mt-10'>
                   <input
+                    {...registerSignupField('agreeToTerms')}
                     type='checkbox'
                     className='size-[18px] rounded border border-gray-300 text-primary-600 focus:ring-primary-500'
                   />
                   <span>{t('signup.terms')}</span>
                 </label>
+                {signupErrors.agreeToTerms ? (
+                  <p className='mt-1 text-sm text-red-500'>{signupErrors.agreeToTerms.message}</p>
+                ) : null}
 
                 <button
                   type='submit'
-                  className='mt-10 inline-flex h-12 w-full items-center justify-center rounded-lg bg-gray-500 px-5 text-sm font-medium text-white transition-colors hover:bg-gray-600 lg:mt-12'
+                  disabled={isPending}
+                  className='mt-10 inline-flex h-12 w-full items-center justify-center rounded-lg border border-black bg-black px-6 text-sm font-medium text-white whitespace-nowrap transition-colors duration-300 hover:border-primary-500 hover:bg-primary-500 focus:border-primary-500 disabled:cursor-not-allowed disabled:opacity-70 lg:mt-12'
                 >
                   {t('signup.cta')}
                 </button>
