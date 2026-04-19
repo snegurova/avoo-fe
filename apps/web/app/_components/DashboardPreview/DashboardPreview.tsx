@@ -280,10 +280,14 @@ export default function DashboardPreview(props: DashboardPreviewProps) {
 
           <div className='mt-6 grid gap-6 2xl:grid-cols-[minmax(0,1.08fr)_420px]'>
             <div className={previewCard({ className: 'overflow-hidden' })}>
-              <div className='px-5 pb-5 pt-6 sm:px-7'>
+              <div className='flex items-center justify-between gap-4 px-5 pb-5 pt-6 sm:px-7'>
                 <h3 className='text-[2rem] font-semibold tracking-[-0.04em] text-black'>
                   {t('calendar')}
                 </h3>
+                <div className={filterChip({ className: 'md:hidden' })}>
+                  <span>{t('options')}</span>
+                  <ArrowDownIcon className='size-4 fill-gray-500' />
+                </div>
               </div>
               <div className='flex flex-nowrap gap-2 border-y border-primary-100 bg-primary-50/55 px-4 py-3 sm:px-5'>
                 <div className={filterChip()}>{t('today')}</div>
@@ -298,11 +302,11 @@ export default function DashboardPreview(props: DashboardPreviewProps) {
                     <ArrowForwardIcon className='size-5 fill-gray-700' />
                   </button>
                 </div>
-                <div className={filterChip()}>
+                <div className={filterChip({ className: 'hidden md:inline-flex' })}>
                   <span>{t('day')}</span>
                   <ArrowDownIcon className='size-4 fill-gray-500' />
                 </div>
-                <div className={filterChip()}>
+                <div className={filterChip({ className: 'hidden md:inline-flex' })}>
                   <span>{t('options')}</span>
                   <ArrowDownIcon className='size-4 fill-gray-500' />
                 </div>
