@@ -174,7 +174,7 @@ export default function TimeOffEditForm({
 
   const values = watch();
 
-  const { conflictMessage, hasConflict, isConflictsLoading, affectedBookings } =
+  const { conflictMessage, isConflictsLoading, affectedBookings } =
     timeOffConflictHooks.useTimeOffConflicts({
       values,
       masters,
@@ -484,7 +484,7 @@ export default function TimeOffEditForm({
           onCancel={handleCancel}
           submitType='submit'
           loading={isUpdatePending}
-          submitDisabled={!hasChanges || hasConflict || isConflictsLoading}
+          submitDisabled={!hasChanges || isConflictsLoading}
           className='justify-center'
         />
       </form>
